@@ -1,5 +1,25 @@
-img{
+
+body{
+    width: 1000%;
+    min-width: 800px;
+    display: block;
+    block-size: 60%;
+    background-color: gainsboro;
+    
+}
+
+header{
+    flex:5%;
+    margin-bottom: 10px;
     display: flex;
-    width: 128px;
-    max-height: 128px;
+    flex-flow: nowrap;
+    padding: 1%;
+    box-shadow: 4px;
+}
+
+img {
+    display: flex;
+    display: inline;
+    width:5%;
+    min-width: 128px;
 }
