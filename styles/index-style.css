@@ -1,17 +1,5 @@
-
-body {
-    margin: 12;
-    text-indent: 1ch;
-}
-
-img {
+img{
     display: flex;
-    width: 180px;
-    height: 180px;
-    padding: 2px;
-    justify-content: center;
-    align-items: center;
-    align-content: center;
-    gap: 6px;
-    flex-wrap: wrap;
+    width: 128px;
+    max-height: 128px;
 }
