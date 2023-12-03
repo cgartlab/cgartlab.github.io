@@ -1,20 +1,20 @@
-
-body{
-    width: 1000%;
-    min-width: 800px;
-    display: block;
-    block-size: 60%;
-    background-color: gainsboro;
-    
+html{
+    background-color: antiquewhite;
+    margin:20%;
+    border-radius: 4%;
+    border-color:blanchedalmond;
 }
 
-header{
-    flex:5%;
-    margin-bottom: 10px;
-    display: flex;
-    flex-flow: nowrap;
-    padding: 1%;
-    box-shadow: 4px;
+body{
+    background-color: rgb(255, 248, 238);
+    margin: 10px;
+    border: 10px;
+    border-color: black;
+    padding: 5%;
+}
+
+nav{
+    align-self: center;
 }
 
 img {
