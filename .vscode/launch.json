@@ -7,7 +7,7 @@
         {
             "type": "msedge",
             "request": "launch",
-            "name": "Open index.html",
+            "name": "使用本机 edge 调试",
             "file": "c:\\Users\\cgart\\cgartlab-github\\cgartlab.github.io\\index.html"
         }
     ]
