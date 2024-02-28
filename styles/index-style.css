@@ -1,20 +1,18 @@
 html{
-    background-color: antiquewhite;
-    margin:20%;
-    border-radius: 4%;
-    border-color:blanchedalmond;
+    background-color: rgb(242, 242, 242);
+    margin: 10px;
+    border: radius 2px;
+    border-color:rgb(255, 255, 255);
 }
 
 body{
-    background-color: rgb(255, 248, 238);
-    margin: 10px;
-    border: 10px;
-    border-color: black;
-    padding: 5%;
+    background-color: rgb(237, 237, 237);
+    margin: 4px;
+    padding: 4%;
 }
 
 nav{
-    align-self: center;
+    background-color: rgb(226, 226, 226);
 }
 
 img {
