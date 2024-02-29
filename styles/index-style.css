@@ -1,21 +1,36 @@
 html{
-    background-color: rgb(242, 242, 242);
-    margin: 10px;
-    border: radius 2px;
-    border-color:rgb(255, 255, 255);
+    background-color:white;
+    margin: 0%;
 }
 
 body{
-    background-color: rgb(237, 237, 237);
-    margin: 4px;
-    padding: 4%;
+    background-color:gainsboro;
+    margin:2% ;
+    padding: 2%;
 }
 
 nav{
-    background-color: rgb(226, 226, 226);
+    background-color: silver;
+    margin:auto;
+    font-weight: bold;
+}
+
+ul{
+    padding: 1%;
+    text-transform: uppercase;
+}
+
+a{
+    color:cadetblue;
+}
+
+blockquote{
+    font-style: italic;
+    margin-left: 0%;
 }
 
 img {
+    margin-top: 4px;
     display: flex;
     display: inline;
     width:5%;
