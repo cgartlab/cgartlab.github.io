@@ -1,18 +1,26 @@
 html{
-    background-color:white;
+    background-color:whitesmoke;
     margin: 0%;
 }
 
 body{
-    background-color:gainsboro;
-    margin:2% ;
-    padding: 2%;
+    background-color:whitesmoke;
+    margin-top: 12%;
+    padding: 1%;
 }
 
 nav{
-    background-color: silver;
-    margin:auto;
-    font-weight: bold;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    padding: 15px 0;
+    z-index: 999;
+    background-color: rgba(255,255,255,0.65);
+    transition: background-color .5s linear;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px)
+
 }
 
 ul{
@@ -21,18 +29,10 @@ ul{
 }
 
 a{
-    color:cadetblue;
+    color:slategray;
 }
 
 blockquote{
     font-style: italic;
     margin-left: 0%;
-}
-
-img {
-    margin-top: 4px;
-    display: flex;
-    display: inline;
-    width:5%;
-    min-width: 128px;
 }
