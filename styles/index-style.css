@@ -1,6 +1,11 @@
 html{
     background-color:whitesmoke;
-    margin: 0%;
+    margin: 10%;
+}
+
+header{
+  background-color: whitesmoke;
+  margin: 10%;
 }
 
 body{
