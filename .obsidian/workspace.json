@@ -13,24 +13,10 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "content/bear.md",
+                "file": "content/blog/2024-09-17.md",
                 "mode": "source",
                 "source": false
               }
-            }
-          }
-        ]
-      },
-      {
-        "id": "389f1bdbaf7770d9",
-        "type": "tabs",
-        "children": [
-          {
-            "id": "486c170377404a67",
-            "type": "leaf",
-            "state": {
-              "type": "hugo-preview-view",
-              "state": {}
             }
           }
         ]
@@ -99,7 +85,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "content/bear.md",
+                "file": "content/blog/2024-09-17.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -116,7 +102,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "content/bear.md",
+                "file": "content/blog/2024-09-17.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -139,7 +125,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "content/bear.md"
+                "file": "content/blog/2024-09-17.md"
               }
             }
           }
@@ -157,12 +143,16 @@
       "canvas:新建白板": false,
       "daily-notes:打开/创建今天的日记": false,
       "templates:插入模板": false,
-      "command-palette:打开命令面板": false,
-      "hugo-publish:hugo sync": false
+      "command-palette:打开命令面板": false
     }
   },
-  "active": "486c170377404a67",
+  "active": "104646be52b83b05",
   "lastOpenFiles": [
+    "content/blog/111.md",
+    "content/blog/2024-09-17.md",
+    "模板库/文章模板.md",
+    "模板库",
+    "content/bear.md",
     "content/_index.md",
     "content/blog/_index.md",
     "111.md",
@@ -173,12 +163,10 @@
     "static/ob",
     "cgartlab.github.io/public",
     "cgartlab.github.io",
-    "content/bear.md",
     "public/blog/markdown/index.xml",
     "public/blog/markdown/index.html",
     "public/blog/syntax/index.xml",
     "public/blog/syntax/index.html",
-    "public/blog/markdown",
     "public/images/share.png",
     "public/images/favicon.png"
   ]

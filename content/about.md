@@ -1,5 +1,5 @@
 +++
-title = "Bear"
+title = "About"
 menu = "main"
 +++
 
