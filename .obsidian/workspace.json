@@ -1,0 +1,157 @@
+{
+  "main": {
+    "id": "07448d68fe5b59c7",
+    "type": "split",
+    "children": [
+      {
+        "id": "0cd0c15bcce81812",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "d6d3e4eff1fc851a",
+            "type": "leaf",
+            "state": {
+              "type": "empty",
+              "state": {}
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "c3a86dc1e50bed55",
+    "type": "split",
+    "children": [
+      {
+        "id": "f8502de562fcc5a8",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "b8cae79f0a0a4bc4",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical"
+              }
+            }
+          },
+          {
+            "id": "c599b2838eb1ca69",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              }
+            }
+          },
+          {
+            "id": "9b4748609a43a623",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {}
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "24eb173b7a56653d",
+    "type": "split",
+    "children": [
+      {
+        "id": "412cdba9b61fdaae",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "5593addf81829582",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          },
+          {
+            "id": "f0b24020da16bc07",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          },
+          {
+            "id": "c270d6f09203bf2e",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true
+              }
+            }
+          },
+          {
+            "id": "f86ace3edffe8ffe",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {}
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:打开快速切换": false,
+      "graph:查看关系图谱": false,
+      "canvas:新建白板": false,
+      "daily-notes:打开/创建今天的日记": false,
+      "templates:插入模板": false,
+      "command-palette:打开命令面板": false
+    }
+  },
+  "active": "b8cae79f0a0a4bc4",
+  "lastOpenFiles": [
+    "public/blog/markdown/index.xml",
+    "public/blog/markdown/index.html",
+    "public/blog/syntax/index.xml",
+    "public/blog/syntax/index.html",
+    "public/blog/markdown",
+    "public/markdown-syntax-guide/index.html",
+    "public/blog/syntax",
+    "public/blog/index.xml",
+    "public/hugo/index.html",
+    "public/blog/index.html",
+    "public/images/share.png",
+    "public/images/favicon.png",
+    "public/bear/index.html"
+  ]
+}
