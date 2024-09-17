@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Test on CGArtLab</title>
-    <link>https://blog.cgartlab.com/blog/test/</link>
+    <link>http://localhost:1313/blog/test/</link>
     <description>Recent content in Test on CGArtLab</description>
     <generator>Hugo</generator>
     <language>zh-cn</language>
     <copyright>Copyright © 2024, Jane Doe.</copyright>
-    <atom:link href="https://blog.cgartlab.com/blog/test/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://localhost:1313/blog/test/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Hello World!</title>
-      <link>https://blog.cgartlab.com/hello-world/</link>
+      <link>http://localhost:1313/hello-world/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://blog.cgartlab.com/hello-world/</guid>
+      <guid>http://localhost:1313/hello-world/</guid>
       <description>&lt;h1 id=&#34;hello-world&#34;&gt;Hello world&lt;/h1&gt;&#xA;&lt;p&gt;I&amp;rsquo;m Chenyang, my main job is running a small design company call Polygon Animate.Ltd in China,&#xA;and other time, I&amp;rsquo;m a digtal artist, DIYer, teacher and Bloger.&lt;/p&gt;&#xA;&lt;p&gt;In is homepage, I&amp;rsquo;ll recording and sharing my learning progress about CG Art, Digital&#xA;painting, Front end dev, and so on&amp;hellip;&lt;/p&gt;&#xA;&lt;p&gt;Of course, by the way, learning English.&lt;/p&gt;&#xA;&lt;p&gt;OK, so be it&lt;/p&gt;</description>
     </item>
   </channel>
