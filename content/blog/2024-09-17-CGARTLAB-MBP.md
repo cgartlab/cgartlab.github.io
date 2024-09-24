@@ -8,8 +8,6 @@ tags = [
 ]
 +++
 
-# Hello world
-
 I'm Chenyang, my main job is running a small design company call Polygon Animate.Ltd in China, 
 and other time, I'm a digtal artist, DIYer, teacher and Bloger.
 

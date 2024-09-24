@@ -13,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "content/blog/2024-09-17.md",
+                "file": "content/work.md",
                 "mode": "source",
                 "source": false
               }
@@ -85,7 +85,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "content/blog/2024-09-17.md",
+                "file": "content/work.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -102,7 +102,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "content/blog/2024-09-17.md",
+                "file": "content/work.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -125,16 +125,24 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "content/blog/2024-09-17.md"
+                "file": "content/work.md"
               }
             }
+          },
+          {
+            "id": "68c89bfb5c5d67be",
+            "type": "leaf",
+            "state": {
+              "type": "git-view",
+              "state": {}
+            }
           }
-        ]
+        ],
+        "currentTab": 4
       }
     ],
     "direction": "horizontal",
-    "width": 300,
-    "collapsed": true
+    "width": 300
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -143,20 +151,24 @@
       "canvas:新建白板": false,
       "daily-notes:打开/创建今天的日记": false,
       "templates:插入模板": false,
-      "command-palette:打开命令面板": false
+      "command-palette:打开命令面板": false,
+      "obsidian-git:Open Git source control": false
     }
   },
   "active": "104646be52b83b05",
   "lastOpenFiles": [
-    "content/blog/111.md",
+    "content/_index.md",
+    "content/work.md",
+    "content/about.md",
+    "content/blog/markdown-syntax.md",
+    "content/blog/2024-09-17-CGARTLAB-MBP.md",
     "content/blog/2024-09-17.md",
     "模板库/文章模板.md",
+    "content/blog/111.md",
     "模板库",
     "content/bear.md",
-    "content/_index.md",
     "content/blog/_index.md",
     "111.md",
-    "content/blog/markdown-syntax 666.md",
     "static/blog.cgartlab.com/static",
     "static/blog.cgartlab.com",
     "content/hugo.md",
