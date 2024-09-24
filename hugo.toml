@@ -6,9 +6,9 @@ baseURL = "https://cgartlab.com"
 theme = 'hugo-bearblog'
 
 # Basic metadata configuration for your blog.
-title = "CGArtLab"
+title = "CG艺术实验室"
 author = "ChenYang"
-copyright = "Copyright © 2024, Jane Doe."
+copyright = "Copyright © 2024, CGArtLab."
 languageCode = "zh-cn"
 
 # Generate a nice robots.txt for SEO
@@ -23,7 +23,7 @@ ignoreErrors = ["error-disable-taxonomy"]
 
 [params]
   # The "description" of your website. This is used in the meta data of your generated html.
-  description = "Hugo + Bear = :heart:"
+  description = "数字艺术 | 视觉设计 | 技术分享 | 知识管理"
 
   # The path to your "favicon". This should be a square (at least 32px x 32px) png-file.
   # Hint: It's good practise to also put a "favicon.ico"-file into your "static"-folder.
@@ -38,7 +38,7 @@ ignoreErrors = ["error-disable-taxonomy"]
   # Another "title" :-). This one is used as the site_name on the Hugo's internal
   # opengraph structured data template.
   # See https://ogp.me/ and https://gohugo.io/templates/internal#open-graph.
-  title = "Hugo ʕ•ᴥ•ʔ Bear"
+  title = "CGArtLab"
 
   # This theme will, by default, inject a made-with-line at the bottom of the page.
   # You can turn it off, but we would really appreciate if you don’t :-).
