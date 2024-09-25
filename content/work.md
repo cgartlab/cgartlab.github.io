@@ -3,24 +3,30 @@ title = "Work"
 menu = "main"
 +++
 
-# Hugo
+最全的都发在[站酷](https://asky1992.zcool.com.cn/)上了，这里的作品还在缓慢迁移。
 
-Website: https://gohugo.io 
+---
 
-Written in Go, Hugo is an open-source static site generator available under the [Apache Licence 2.0.](https://github.com/gohugoio/hugo/blob/master/LICENSE) Hugo supports TOML, YAML, and JSON data file types, Markdown and HTML content files, and uses shortcodes to add rich content. Other notable features are taxonomies, multilingual mode, image processing, custom output formats, HTML/CSS/JS minification, and support for Sass SCSS workflows.
+> ## SHOWREEL
 
-Hugo makes use of a variety of open source projects including:
+尝试搭建一个网站，放上自己的文字、画作、幕后花絮。
 
-* https://github.com/yuin/goldmark
-* https://github.com/alecthomas/chroma
-* https://github.com/muesli/smartcrop
-* https://github.com/spf13/cobra
-* https://github.com/spf13/viper
+尝试把自己接触过每个领域里的毕生所学汇聚在一起，看看能碰撞出什么新鲜玩意儿。 尝试用更高质量的输出，去倒逼自己输入更高质量的原料。 尝试去规划在不同平台，发布不同的内容，了解每个平台的游戏规则。 尝试去认识来自世界各地的人，和他们谈论记录和分享创作过程的价值。 尝试拥抱一切可能性。
 
-Hugo is ideal for blogs, corporate websites, creative portfolios, online magazines, single-page applications, or even a website with thousands of pages.
+> ## 冥想系列
 
-Hugo is for people who want to hand-code their own website without worrying about setting up complicated runtimes, dependencies, and databases.
+冥想是一种改变意识的形式 是解剖自己内心的过程。
 
-Websites built with Hugo are swift, secure and can be deployed anywhere including, AWS, GitHub Pages, Heroku, Netlify, and any other hosting provider.
+是让人无限接近实相的道路 第一次接触这个概念是在 2013 年 在随后的工作生活中 它慢慢变成了我与自己交流的一种习惯 这种奇妙的体验很适合用数字绘画的形式表达出来 在接下来的几年里 我用自己的业余时间创作了这个系列 每一幅作品都聊到了我经历的不同阶段 每个阶段我选择不同的主题与自己的内心交谈 从画面上也能感觉到 人类底层的内心绝谈不上美好 但也没有那么不堪 繁重的压迫，对立的矛盾，复杂的冲突 都是真实的自己
 
-Learn more and contribute on [GitHub](https://github.com/gohugoio).
+> ## SCP 系列
+
+终于有时间可以开发一套SCP（详情自行搜索SCP基金会）系列了， 可以说之前所有的绘画作品都在为这个系列作技术储备。
+
+此为该系列第一张概念稿。 整个创作过程时间（一周半）其实一开始比较零散，这就会导致 中期走了一些弯路，很多色彩和元素都是一边画一边调整推敲出来的。 所以，过程图有一段会显得跳跃性很大。 嗯，可能是纯商业的东西做久了，已经快习惯不改到面目全非不好意思发出来吧。 你想问我这种绘画作品有什么含义 我只能说带有足够艺术成分的创作描绘的内容基本都是作者自己的生命体验 他看到的，听到的 ，震撼到的，领悟到的各种生命体验 毫无保留地分享给你 文字如果能说得清楚还费这么大劲画什么呢对不， 无论作品描绘的是美丽还是丑陋，真实还是虚幻，混乱还是秩序 无论你看完感受是难过还是开心，享受还是折磨，顿开还是疑惑 也都是它想告诉你的 去感受吧 就酱，Happy Painting!
+
+> ## 【Covid-19】
+
+一张静帧习作。
+
+创作使用的是 C4D 标准渲染器和 PS 板绘。“你是否注意过展翅高飞的鸟儿，它们一点也不需要挥动羽翼，而只是随风飞翔。它们的喜悦似乎那么无限，它们并不关心死亡。它们生活在每一个刹那，从不担心将会发生什么事，不是吗？只有人类永远担忧着死亡，因为我们根本不是真正地活着，我们是死的。”——克里希那穆提 病毒的表演还没结束，大家还要多加小心，安全第一。
