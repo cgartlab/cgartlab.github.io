@@ -1,12 +1,12 @@
 # Base URL used when generating links to your pages
 # Set to the URL for your site
-baseURL = "https://cgartlab.com"
+baseURL = "https://blog.cgartlab.com"
 
 # The name of this wonderful theme ;-).
 theme = 'hugo-bearblog'
 
 # Basic metadata configuration for your blog.
-title = "CG艺术实验室"
+title = "CGArtLab"
 author = "ChenYang"
 copyright = "Copyright © 2024, CGArtLab."
 languageCode = "zh-cn"
