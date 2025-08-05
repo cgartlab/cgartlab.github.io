@@ -1,8 +1,0 @@
-{
-  "alwaysUpdateLinks": true,
-  "newFileLocation": "folder",
-  "newFileFolderPath": "src/content",
-  "newLinkFormat": "absolute",
-  "useMarkdownLinks": true,
-  "attachmentFolderPath": "public/images"
-}
