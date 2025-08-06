@@ -5,7 +5,7 @@ updated: 2025-03-23
 tags:
   - 指南
 pin: 98
-toc: false
+toc: true
 lang: zh
 abbrlink: markdown-style-guide
 ---
