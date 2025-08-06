@@ -60,7 +60,8 @@ export const themeConfig: ThemeConfig = {
     // not fill in the locale code above again, can be an empty array []
     moreLocales: ['en', 'zh-tw'], // ['de', 'en', 'es', 'fr', 'ja', 'ko', 'pl', 'pt', 'ru', 'zh', 'zh-tw']
     // font styles for post text
-    fontStyle: 'sans', // sans, serif
+    fontStyle: 'serif', // sans, serif
+
     // date format for posts
     dateFormat: 'YYYY-MM-DD', // YYYY-MM-DD, MM-DD-YYYY, DD-MM-YYYY, MONTH DAY YYYY, DAY MONTH YYYY
     // table of contents for posts
@@ -117,7 +118,7 @@ export const themeConfig: ThemeConfig = {
   // SEO SETTINGS >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> START
   seo: {
     // @twitter ID
-    twitterID: '@radishzz_',
+    twitterID: '@cgartlab',
     // site verification
     verification: {
       // google search console
@@ -163,16 +164,28 @@ export const themeConfig: ThemeConfig = {
         url: '/rss.xml', // or /rss.xml
       },
       {
-        name: 'GitHub',
-        url: 'https://github.com/cgartlab',
-      },
-      {
         name: 'Email',
         url: 'co@cgartlab.com',
       },
       {
+        name: 'GitHub',
+        url: 'https://github.com/cgartlab',
+      },
+      {
         name: 'X',
         url: 'https://x.com/cgartlab',
+      },
+      {
+        name: 'sspai',
+        url: 'https://sspai.com/u/cgartlab/updates',
+      },
+      {
+        name: 'Bilibili',
+        url: 'https://space.bilibili.com/38043072',
+      },
+      {
+        name: 'Zhihu',
+        url: 'https://www.zhihu.com/people/asky1992',
       },
     ],
     // year of website start

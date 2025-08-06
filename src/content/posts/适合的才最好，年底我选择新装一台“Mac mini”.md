@@ -1,0 +1,213 @@
+---
+title: "适合的才最好，年底我选择新装一台“Mac mini”"
+published: 2024-11-30
+description: "9 月底入手了一台零刻 SER5 Max 迷你主机，至今重度使用 3 个月左右，基本调教顺手。"
+updated: 2024-11-30
+tags: ["随笔"]
+draft: false
+pin: 0
+toc: true
+lang: zh
+---
+![适合的才最好，年底我选择新装一台“Mac mini”-20241201022747124.webp](https://cgartlab.com/wp-content/uploads/2024/12/e6275750ca48ad6.webp)
+
+## 写在前面
+
+9 月底入手了一台零刻 SER5 Max 迷你主机，至今重度使用 3 个月左右，基本调教顺手。
+
+其实早就想买一台 Mac mini 用来做开发测试机，MacBook Pro 的 16G 内存不太够用。如果你对迷你主机市场有所了解，可能会问，所谓“买新不买旧”，刚出的新款 M4 Mac mini，为什么这个时间节点依然选择一款两年前的型号？
+
+很简单，看需求：
+
+- 据我所知，这是目前黑苹果方案相对成熟稳定的 AMD 迷你主机。
+- ![适合的才最好，年底我选择新装一台“Mac mini”-20241201000310103.webp](https://cgartlab.com/wp-content/uploads/2024/12/1e30a5bd6814b0a-scaled.webp)
+- 前些年折腾过一套台式双平台 Hackintosh（现放在老家作为备用工作站），至今依然保持小幅更新，所以还是会偶尔翻翻论坛和 Discord，居然发现最近支持了 AMD 平台，居然还驱动了核显，居然有大佬开源了引导文件。
+- 极致性价比，自己搞 32G+1T+2T SSD 的配置才两千出头，同配置的 Mac mini 要 1.3w，我宁愿来年配一张 50 系的 N 卡给台式。
+- 已经有了一台主力台式工作站，不打游戏。
+- 闲置了一台 27 寸 4k 显示器，卖掉可惜了。
+- Windows 平台自由度更高，扩展性好，未来可作为电视盒子（其实随时都可以）或者小型服务器使用。
+
+遂下单。
+
+这里强调一下，除非你有特定的 **macOS** 软件或开发和设计等需求，**否则“黑白”苹果都不应该是你考虑的对象**。
+
+## 硬件配置
+
+![适合的才最好，年底我选择新装一台“Mac mini”-20241201022850804.webp](https://cgartlab.com/wp-content/uploads/2024/12/b6284abd6cf3773.webp)
+
+![适合的才最好，年底我选择新装一台“Mac mini”-20241201031202451.webp](https://cgartlab.com/wp-content/uploads/2024/12/a3ff01fc1f5ac6c.webp)
+
+![适合的才最好，年底我选择新装一台“Mac mini”-20241201022925710.webp](https://cgartlab.com/wp-content/uploads/2024/12/2f4ac7ca3dae685.webp)
+
+外观很小巧精致，挑的灰色，重度使用已经可以看到顶部进风口已经开始堆积灰尘了，但设计师职业病，死活看不得黑色款那个大红色的开机按钮。
+
+![适合的才最好，年底我选择新装一台“Mac mini”-20241201031045559.webp](https://cgartlab.com/wp-content/uploads/2024/12/9547eae8d5ca5b5.webp)
+
+厚度刚好，可以跟 68 配列键盘一起放在显示器支架下面。
+
+配置如下：
+
+| 型号  | Beelink SER5 Max               |     |
+| --- | ------------------------------ | --- |
+| CPU | AMD 5800H                      |     |
+| GPU | AMD Radeon RX Vega 8           |     |
+| 内存  | JUHOR 玖合 16GB DDR4 3200MHz x 2 |     |
+| 固态  | 影驰 星耀 X4 Pro M 1T              |     |
+| 固态  | Colorful 七彩虹 CF500 2T          |     |
+
+看了下 [CPU 的详细性能测试]([AMD Ryzen 7 5800H Processor - Benchmarks and Specs - NotebookCheck.net Tech](https://www.notebookcheck.net/AMD-Ryzen-7-5800H-Processor-Benchmarks-and-Specs.512759.0.html)) ，5800H 8 核 16 线程，7nm 工艺，够用，省电倒不至于，可以通过 BIOS 调整，第一次用 AMD 的处理器，发现冬天待机温度都有 50 多度，不是一般的高啊，随便开几个网页，风扇也动不动就上 2500 转以上，因此在装双系统之前做了一些优化。
+
+## 功耗噪音调教
+
+1. 进入 BIOS
+2. 在 Advanced 一栏找到 Smart Fan Function
+3. 在 Smart Fan Function 种找到 Smart CPU Fan Mode，选择 Automatic Mode
+4. 将 Fan start PWM 的数值改为 50，PWM SLOPE SETTING 的数值改为 2 PWM，Fan full speed temperature limit 的数值改为 80
+
+这样设置下来，出场自带的 54 瓦满载性能模式不用动，保证可以跑到最高速，同时大大降低轻负载下的噪音，这样的代价就是待机温度更高了一些（55-65 度）。迷你主机其实温度高点不怕的，坏不了，它热又不是我热。相比之下，我更在意的是风扇噪音。
+
+如果实在看着难受，想把待机温度也降下来，可以考虑在控制面板新建一个电源模式，在电源高级选项中关闭 CPU 睿频，其实就是把 CPU 最高性能从 100 改到 99 即可。需要注意的是，这样单核极限性能会损失 5-10%（macOS 内也有类似的调整方法，但我做开发需要满功率跑，就不设置了）。
+
+## 修改核显显存
+
+这个最大建议不要超过 8G，因为核显的显存实际就是内存，主机用的是 DDR4 的内存通道性能一般，设置过高的显存反而会拖累性能。
+
+## 安装 Win11
+
+如果你和我一样买的是准系统版本，则需要自己安装操作系统，Windows 的安装相对简单就不赘述了，相信能看到这里的你不存在这个问题。
+
+![适合的才最好，年底我选择新装一台“Mac mini”-20241201023946489.webp](https://cgartlab.com/wp-content/uploads/2024/12/5abc1220e354891.webp)
+
+值得一提的是，主机随包装附带了一个系统安装 U 盘，版本号是 23H2，包含了所有的出厂官方硬件驱动，一键安装很方便。
+
+## 安装 macOS
+
+macOS 安装之前首先需要对磁盘进行分区，我把 1T 的 nvme 固态对半划分作为系统盘，这里要注意安装 Win11 的时候系统会自动划分出一个 efi 启动分区，空间一般为 200M，建议扩大到 300M。
+
+![适合的才最好，年底我选择新装一台“Mac mini”-20241201025146378.webp](https://cgartlab.com/wp-content/uploads/2024/12/c80932eab2d0ea5.webp)
+
+图片是 macOS 的磁盘工具下我的系统盘划分情况，其中 disk0s3 就是 Win11 分区，调整分区大小建议在 win11 内使用 DiskGenius 或其他第三方工具调整。
+
+### 准备工具
+
+- 一台正常工作的 WindowsPC
+- MacOS 系统镜像
+	- 下载的镜像可以自己做，也可以网上找别人做好的一键安装版镜像，比较知名的是黑果小兵的，我的引导文件就是在他的基础上修改的版本。
+- OpenCore 引导文件
+	- 引导文件可以直接用我的 https://github.com/cgartlab/Beelink-SER5-Max-Hackintosh ，也可以自己上网找更合适的。
+	- **⚠️注意：我使用的是官方自带的 Intel ax200 网卡，上网正常但无法使用隔空投送、随航等功能（因为我不用）。如需使用，请某宝购买 apple 免驱网卡**
+- 一个闲置的 16G U 盘
+
+### 制作系统安装盘
+
+写入镜像实际上也有很多工具，推荐 [balenaEthcher](https://www.balena.io/etcher) ，开源免费。
+
+![适合的才最好，年底我选择新装一台“Mac mini”-20241201024357864.webp](https://cgartlab.com/wp-content/uploads/2024/12/d562990267e8d65.webp)
+
+官方支持 Windows、macOS、Linux 的版本，下载即可使用。
+
+使用方法很简单：选择镜像，选择 U 盘，写入。十分钟左右就做好了。
+
+![适合的才最好，年底我选择新装一台“Mac mini”-20241201024541561.webp](https://cgartlab.com/wp-content/uploads/2024/12/c93288d9aaa8f8e.webp)
+
+### U 盘引导开机
+
+开机按 `del` 或 `F7`，进入 BIOS 或引导菜单，选择 U 盘启动。
+
+不出意外的话就会出现安装选项。
+
+![适合的才最好，年底我选择新装一台“Mac mini”-20241201031431732.webp](https://cgartlab.com/wp-content/uploads/2024/12/b694289aca22fba.webp)
+
+之后正常安装 macOS 即可，目前引导文件已经支持了 Sequoia，但为了确保稳定性我选择的是 Ventura，安装成功之后版本号可以直接更新到 13.7.1。
+
+对磁盘进行格式化的时候，建议系统分区依旧选择 apfs 格式，如果你和我一样装了 sata 固态，建议格式化成 exfat 格式，这样两个系统就可以共享同一个仓库盘了，互相读写也不干扰。
+
+![适合的才最好，年底我选择新装一台“Mac mini”-20241201043607068.webp](https://cgartlab.com/wp-content/uploads/2024/12/03bc2645b96d615.webp)
+
+这里切记先不要登录 Apple ID 账号，因为之后要修改系统注册码。
+
+![适合的才最好，年底我选择新装一台“Mac mini”-20241201043205261.webp](https://cgartlab.com/wp-content/uploads/2024/12/058039ee2fc59b4.webp)
+
+### 替换引导文件
+
+下载 [OC AuxiliaryTools](https://github.com/ic005k/OCAuxiliaryTools) ，这是用来修改和替换引导文件的关键工具，也是 macOS 正常工作的前提。
+
+安装打开后，菜单栏内：编辑➡️挂载 ESP➡️U 盘➡️挂载。
+
+别忘了目前是用的 U 盘启动的系统，修改的引导分区也是 U 盘内部的。实现双系统需要把 macOS 和 Win11 的引导文件放在一起。
+
+打开 Finder ，把 U 盘内 EFI 分区内的文件全部拷贝到系统 EFI 分区即可，这时 U 盘就可以拔掉了。如果之后出现了不能启动的问题，依然可以使用 U 盘引导开机。
+
+![适合的才最好，年底我选择新装一台“Mac mini”-20241201040457136.webp](https://cgartlab.com/wp-content/uploads/2024/12/bbe37a054eac908.webp)
+
+### 更新驱动和引导文件
+
+同样在菜单栏内：编辑➡️挂载 ESP➡️系统盘➡️挂载并打开 xxx 配置文件。
+
+![适合的才最好，年底我选择新装一台“Mac mini”-20241201032440561.webp](https://cgartlab.com/wp-content/uploads/2024/12/2f4be89fbd1434d.webp)
+
+打开后首先设置系统注册码，随机生成一个后最好去官网检查下是否可用。
+
+![适合的才最好，年底我选择新装一台“Mac mini”-20241201033643787.webp](https://cgartlab.com/wp-content/uploads/2024/12/64b257813fc4e17.webp)
+
+之后选择“升级 OpenCore 和 kexts”，OpenCore 就是引导的核心组件，kexts 为硬件驱动文件。
+
+![适合的才最好，年底我选择新装一台“Mac mini”-20241201033845528.webp](https://cgartlab.com/wp-content/uploads/2024/12/d70bc4d405684a8.webp)
+
+检查 Kexts 更新，可更新版本的文件会显示红色小方块，勾选之后更新即可，这里不建议选择开发版驱动。
+
+![适合的才最好，年底我选择新装一台“Mac mini”-20241201034007612.webp](https://cgartlab.com/wp-content/uploads/2024/12/053110c915430c2.webp)
+
+更新好之后保存 EFI 文件，退出即可。
+
+### 重建缓存和修复系统权限
+
+下载安装 [Hackintool](https://www.baker76.com/hackintool/) 软件。
+
+打开后首先选择“电源”一栏，检查休眠唤醒参数是否为“0”，如果不是可以点下面的螺丝刀按钮修复，保证系统实现休眠唤醒。
+
+![适合的才最好，年底我选择新装一台“Mac mini”-20241201034744667.webp](https://cgartlab.com/wp-content/uploads/2024/12/f3406a72d8c0eea.webp)
+
+之后选择工具一栏，点击右下角的白色方块，提示输入系统密码，确定。即可修复系统权限和驱动缓存。一般这样操作是最不容易出错的。
+
+最后重启，选择 macOS 就可以正常登录 Apple ID 用了。
+
+## 实现效果和软件兼容性
+
+系统信息。
+
+![适合的才最好，年底我选择新装一台“Mac mini”-20241201041258178.webp](https://cgartlab.com/wp-content/uploads/2024/12/3c8d10c84a02eed.webp)
+
+这是我正在写这篇文章时候的状态。
+
+软件兼容性，至少下图里我用下来的这些软件，除了被我自己用崩掉之外，自己没出现过死机重启的现象。
+
+![适合的才最好，年底我选择新装一台“Mac mini”-20241201042405566.webp](https://cgartlab.com/wp-content/uploads/2024/12/31026d2f4df6ec3-scaled.webp)
+
+![适合的才最好，年底我选择新装一台“Mac mini”-20241201042430136.webp](https://cgartlab.com/wp-content/uploads/2024/12/9d46f188e396b70-scaled.webp)
+
+![适合的才最好，年底我选择新装一台“Mac mini”-20241201042513666.webp](https://cgartlab.com/wp-content/uploads/2024/12/aa05a0aa603f741-scaled.webp)
+
+## 小结
+
+合适的才是最好的，按需选择和个性化配置的关键意义在于：
+
+1. 精准满足使用需求
+	每个人的工作和生活场景各异，比如我有开发测试、多系统使用、利用闲置设备等需求。按需选择和个性化配置能确保设备在性能、功能等方面与自身需求高度契合，避免资源浪费或功能缺失。像对于开发工作，足够的内存（如文中自行配置较高内存）和稳定的系统（通过精心安装和优化）至关重要；对于日常娱乐或备用场景，Windows 系统的自由度和扩展性又能发挥优势，如可将设备改造为电视盒子或小型服务器。
+2. 优化成本效益
+	不同配置的设备价格差异较大，文中同配置的 Mac mini 官方价格远高于自行组装的方案。通过按需选择，能够在满足自身功能要求的前提下，找到性价比最高的组合。如选择 AMD 平台的迷你主机并自行配置存储，以较低成本实现了类似甚至超越高价设备的使用体验，使资金投入更合理，实现成本效益的最大化。
+3. 提升使用体验与灵活性
+	个性化配置可以根据个人习惯和偏好调整设备性能，如优化功耗噪音、调整核显显存等，让设备在运行时更加符合使用者的期望。同时，多系统安装（如 Win11 和 macOS 双系统）提供了更大的灵活性，使用者可以根据不同任务切换系统，无缝衔接不同的工作和娱乐环境，充分发挥各系统的优势，从而提升整体使用体验。
+4. 激发技术探索与自主掌控
+	这一过程促使我深入了解硬件和软件知识，像文中涉及 BIOS 设置、系统分区、引导文件处理等技术操作。通过自主研究和实践，不仅能够解决实际问题，还能增强对设备的掌控感，激发技术探索精神，为未来应对更多技术挑战和个性化需求奠定基础，实现从设备使用者到技术“驾驭者”的转变。
+
+希望我的经历能为有需求者提供借鉴，助大家在设备选择与配置时少走弯路，更好地满足自身工作与使用需求。
+
+参考资料：
+
+- https://heipg.cn
+- https://blog.daliansky.net
+- https://post.smzdm.com/p/a8p7k0m6/
+- https://github.com/cgartlab/Beelink-SER5-Max-Hackintosh
+
+本文首发在 [CGArtLb](https://cgartlab.com) 
