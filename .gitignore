@@ -28,3 +28,4 @@ pnpm-debug.log*
 
 # obsidian
 .obsidian/*
+src/content/templates/博客文章模板.md

@@ -15,6 +15,7 @@ To meet personalization needs, I've created several color schemes for the theme.
 ## Scallion White
 
 ![Light mode](../_images/1-light.jpeg)
+
 ![Dark mode](../_images/1-dark.jpeg)
 
 ```
@@ -35,6 +36,7 @@ dark: {
 ## Raven Teal
 
 ![Light mode](../_images/2-light.jpeg)
+
 ![Dark mode](../_images/2-dark.jpeg)
 
 ```
@@ -55,6 +57,7 @@ dark: {
 ## Ink Blue
 
 ![Light mode](../_images/4-light.jpeg)
+
 ![Dark mode](../_images/4-dark.jpeg)
 
 ```
@@ -75,6 +78,7 @@ dark: {
 ## Ecru
 
 ![Light mode](../_images/3-light.jpeg)
+
 ![Dark mode](../_images/3-dark.jpeg)
 
 ```

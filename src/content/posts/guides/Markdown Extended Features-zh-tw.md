@@ -69,15 +69,21 @@ abbrlink: markdown-extended-features
 > 用戶成功所需的關鍵信息。
 
 :::warning
+
 由於存在潛在風險，需要用戶立即關注的關鍵內容。
+
 :::
 
 :::caution
+
 某些操作可能帶來的負面後果。
+
 :::
 
 :::note[自定義標題]
+
 這是一個自定義標題的提示塊。
+
 :::
 
 ## 折疊部分
@@ -95,7 +101,9 @@ abbrlink: markdown-extended-features
 ### 效果
 
 :::fold[使用提示]
+
 如果需要添加並非所有讀者都會感興趣的內容，可以將其放在折疊部分。
+
 :::
 
 ## 畫廊
@@ -117,11 +125,17 @@ abbrlink: markdown-extended-features
 ### 效果
 
 :::gallery
+
 ![羊駝](https://image.radishzz.cc/image/gallery/sheep-1.jpg)
+
 ![轉頭](https://image.radishzz.cc/image/gallery/sheep-2.jpg)
+
 ![對視](https://image.radishzz.cc/image/gallery/sheep-3.jpg)
+
 ![小羊駝](https://image.radishzz.cc/image/gallery/sheep-4.jpg)
+
 ![可愛捏](https://image.radishzz.cc/image/gallery/sheep-5.jpg)
+
 :::
 
 ## GitHub 倉庫

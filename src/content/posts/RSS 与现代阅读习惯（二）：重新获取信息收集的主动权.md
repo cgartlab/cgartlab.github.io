@@ -14,7 +14,8 @@ pin: 0
 toc: true
 lang: zh
 ---
-![RSS 与现代阅读习惯（二）：重新获取信息收集的主动权-1750338865708.webp](https://cgartlab.com/wp-content/uploads/2025/06/30f24c6296e4571.webp)
+
+![RSS 与现代阅读习惯（二）：重新获取信息收集的主动权 -1750338865708.webp](https://cgartlab.com/wp-content/uploads/2025/06/30f24c6296e4571.webp)
 
 ## 写在前面
 
@@ -44,9 +45,9 @@ lang: zh
 
 这些兴趣关键词就是一个个标签，通常，每一个订阅源都至少伴随一个链接。我个人的整理方式主要是以内容形式进行分类，目前还比较粗略：
 
-- IT （科技数码）
-- News （财经，各种早报）
-- Blog （独立博客，什么都有，比较杂乱）
+- IT（科技数码）
+- News（财经，各种早报）
+- Blog（独立博客，什么都有，比较杂乱）
 - Design（大型设计工作室官网，设计师个人网站，社交媒体，等）
 
 这是我个人的分类方法，实际上每个人的身份本身就自带一个明确的目标：学习、工作、爱好、娱乐或研究等等，也可以按照自己的目的去划分这些兴趣领域。其实写到这一步，相信你对自己的答案已经心里有数了。
@@ -95,7 +96,7 @@ lang: zh
 
 年初，我了解到一款新的 [GPU 渲染器](https://weekly.cgartlab.com/p/04-repair-gpu-and-new-renderer)，由于这个渲染器还处于早期开发阶段，有很多技术流程还没有和行业标准对齐，然而，我在他们的官网上发现，他们团队非常注重用户的使用反馈，主创在 Telegram 上直接开了一个讨论群，无须任何门槛。于是我直接进群向他咨询问题，未开发完成的功能大概在什么时候上线，几乎十分钟左右就得到了回复。这就是我用过最直接有效的方法，乍一看这个方法和 RSS 没什么联系，但是想想看，每个订阅源的背后终究都是活生生的人不是么？
 
-![RSS 与现代阅读习惯（二）：重新获取信息收集的主动权-1750338891586.webp](https://cgartlab.com/wp-content/uploads/2025/06/050801ba2aa4260.webp)
+![RSS 与现代阅读习惯（二）：重新获取信息收集的主动权 -1750338891586.webp](https://cgartlab.com/wp-content/uploads/2025/06/050801ba2aa4260.webp)
 
 ### 方法 2：关键词扩展
 
@@ -123,7 +124,7 @@ lang: zh
 
 以上所谈的都是「心法」，下一篇会详细聊聊具体的「术法」——信息收集工具链整合方案。
 
-本文首发在 [CG艺术实验室](https://cgartlab.com/)
+本文首发在 [CG 艺术实验室](https://cgartlab.com/)
 
 ## **资源推荐**
 
@@ -150,9 +151,9 @@ lang: zh
 
 ## 相关链接：
 
-- [知道RSS的人越少，我就越希望它能被人知道！ - 知乎](https://zhuanlan.zhihu.com/p/349349861)
+- [知道 RSS 的人越少，我就越希望它能被人知道！ - 知乎](https://zhuanlan.zhihu.com/p/349349861)
 - [RSS 入门全面指南 - 聚合信息源 - 少数派](https://sspai.com/post/86501#!#)
 - [RSS 简介 | 菜鸟教程](https://www.runoob.com/rss/rss-intro.html)
-- [RSS应该被时代遗忘吗？RSS详细使用教程都在这！ - 哔哩哔哩](https://www.bilibili.com/opus/540546768350299744)
-- [如何使用RSS - 阮一峰的网络日志](https://ruanyifeng.com/blog/2006/01/rss.html)
-- [AI 复兴 RSS ？ - 少数派](https://sspai.com/post/89494)
+- [RSS 应该被时代遗忘吗？RSS 详细使用教程都在这！ - 哔哩哔哩](https://www.bilibili.com/opus/540546768350299744)
+- [如何使用 RSS - 阮一峰的网络日志](https://ruanyifeng.com/blog/2006/01/rss.html)
+- [AI 复兴 RSS？ - 少数派](https://sspai.com/post/89494)

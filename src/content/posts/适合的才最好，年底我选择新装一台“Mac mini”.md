@@ -9,6 +9,7 @@ pin: 0
 toc: true
 lang: zh
 ---
+
 ![适合的才最好，年底我选择新装一台“Mac mini”-20241201022747124.webp](https://cgartlab.com/wp-content/uploads/2024/12/e6275750ca48ad6.webp)
 
 ## 写在前面
@@ -94,7 +95,7 @@ macOS 安装之前首先需要对磁盘进行分区，我把 1T 的 nvme 固态�
 - MacOS 系统镜像
 	- 下载的镜像可以自己做，也可以网上找别人做好的一键安装版镜像，比较知名的是黑果小兵的，我的引导文件就是在他的基础上修改的版本。
 - OpenCore 引导文件
-	- 引导文件可以直接用我的 https://github.com/cgartlab/Beelink-SER5-Max-Hackintosh ，也可以自己上网找更合适的。
+	- 引导文件可以直接用我的 https://github.com/cgartlab/Beelink-SER5-Max-Hackintosh，也可以自己上网找更合适的。
 	- **⚠️注意：我使用的是官方自带的 Intel ax200 网卡，上网正常但无法使用隔空投送、随航等功能（因为我不用）。如需使用，请某宝购买 apple 免驱网卡**
 - 一个闲置的 16G U 盘
 
@@ -136,7 +137,7 @@ macOS 安装之前首先需要对磁盘进行分区，我把 1T 的 nvme 固态�
 
 别忘了目前是用的 U 盘启动的系统，修改的引导分区也是 U 盘内部的。实现双系统需要把 macOS 和 Win11 的引导文件放在一起。
 
-打开 Finder ，把 U 盘内 EFI 分区内的文件全部拷贝到系统 EFI 分区即可，这时 U 盘就可以拔掉了。如果之后出现了不能启动的问题，依然可以使用 U 盘引导开机。
+打开 Finder，把 U 盘内 EFI 分区内的文件全部拷贝到系统 EFI 分区即可，这时 U 盘就可以拔掉了。如果之后出现了不能启动的问题，依然可以使用 U 盘引导开机。
 
 ![适合的才最好，年底我选择新装一台“Mac mini”-20241201040457136.webp](https://cgartlab.com/wp-content/uploads/2024/12/bbe37a054eac908.webp)
 
@@ -210,4 +211,4 @@ macOS 安装之前首先需要对磁盘进行分区，我把 1T 的 nvme 固态�
 - https://post.smzdm.com/p/a8p7k0m6/
 - https://github.com/cgartlab/Beelink-SER5-Max-Hackintosh
 
-本文首发在 [CGArtLb](https://cgartlab.com) 
+本文首发在 [CGArtLb](https://cgartlab.com)
