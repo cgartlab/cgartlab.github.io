@@ -2,9 +2,9 @@
 title: Windows 11 如何使用 winget 包管理器
 published: 2024-03-01
 description: Windows 11 winget包管理器完整使用指南，包含安装、搜索、更新、卸载软件等核心功能，以及自动化脚本配置
-updated: 2024-12-12
+updated: 2024-03-09
 tags:
-  - Windows 11
+  - Windows
   - winget
   - 包管理器
   - 系统管理
@@ -15,20 +15,22 @@ toc: true
 lang: zh
 ---
 
-# 什么是 Winget
+![封面](./_images/Windows%2011%20 如何使用%20winget%20 包管理器 -1754567460839.webp)
 
-winget 是微软推出运行在 [[Windows 终端]] 中的一个软件管理工具，仅在 Windows 10 1709 及更高版本中支持，核心命令是 `winget` 。
+## 什么是 Winget
+
+winget 是微软推出运行在 Windows 终端中的一个软件管理工具，仅在 Windows 10 1709 及更高版本中支持，核心命令是 `winget`。
 
 在终端输入 `winget` 你会看到：
 
-```xml
+```shell
 PS C:\Users\cgart> winget
 Windows 程序包管理器 v1.7.10582
 版权所有 (C) Microsoft Corporation。保留所有权利。
 
 WinGet 命令行实用工具可从命令行安装应用程序和其他程序包。
 
-使用情况: winget  [<命令>] [<选项>]
+使用情况：winget  [<命令>] [<选项>]
 
 下列命令有效:
   install    安装给定的程序包
@@ -60,10 +62,10 @@ WinGet 命令行实用工具可从命令行安装应用程序和其他程序包�
   --verbose,--verbose-logs  启用 WinGet 的详细日志记录
   --disable-interactivity   禁用交互式提示
 
-可在此找到更多帮助: "https://aka.ms/winget-command-help"
+可在此找到更多帮助："https://aka.ms/winget-command-help"
 ```
 
-# 为什么推荐使用 Winget
+## 为什么推荐使用 Winget
 
 ## Winget 的优势
 
@@ -100,13 +102,13 @@ WinGet 命令行实用工具可从命令行安装应用程序和其他程序包�
 
 例如安装微信，可以使用搜索命令 `winget search 微信`，得到如上结果。
 
-```xml
+```shell
 PowerShell 7.4.1
 PS C:\Users\cgart> winget search 微信
 名称                  ID                     版本         匹配      源
 ---------------------------------------------------------------------------
 微信输入法            XPFFFP686NDRDZ         Unknown                msstore
-金舟多聊-微信多开分身 XPFCVS08QJF2ZH         Unknown                msstore
+金舟多聊 - 微信多开分身 XPFCVS08QJF2ZH         Unknown                msstore
 万兴数据管家          Wondershare.WXRecovery 3.5.20.4     Tag: 微信 winget
 微信开发者工具        Tencent.WeixinDevTools 1.06.2402021 Tag: 微信 winget
 企业微信              Tencent.WeCom          4.1.20.6024  Tag: 微信 winget
@@ -115,17 +117,17 @@ WeChat                Tencent.WeChat         3.9.9.43     Tag: 微信 winget
 PS C:\Users\cgart>
 ```
 
-因为带有“微信”关键词的安装包有很多，因此安装特定安装包的时候应输入安装包的 ID，这里微信的 ID 是 `Tencent.WeChat` ，因此我们输入命令 `winget install Tencent.WeChat` 即可。微信会自动安装，整个过程方便，安全，安静。
+因为带有“微信”关键词的安装包有很多，因此安装特定安装包的时候应输入安装包的 ID，这里微信的 ID 是 `Tencent.WeChat`，因此我们输入命令 `winget install Tencent.WeChat` 即可。微信会自动安装，整个过程方便，安全，安静。
 
 举一反三，你可以尝试使用其他命令，对软件进行搜索，安装，更新，卸载。
 
 # 自动化安装脚本
 
-虽然我们只需要敲几个字母，不再需要到浏览器里搜索下载常用的安装包了，但是每次重装系统的时候还要一行一行的敲命令，也是挺麻烦的，所以我自己写了一个自动运行命令的安装脚本，放在 GitHub 上，可以免费下载使用。[传送门在此]([cgartlab/Software_Install_Script: 这是我自用的一个常用软件批量安装脚本，基于 Winget 包管理器。 (github.com)](https://github.com/cgartlab/Software_Install_Script))
+虽然我们只需要敲几个字母，不再需要到浏览器里搜索下载常用的安装包了，但是每次重装系统的时候还要一行一行的敲命令，也是挺麻烦的，所以我自己写了一个自动运行命令的安装脚本，放在 GitHub 上，可以免费下载使用。[传送门在此](https://github.com/cgartlab/Software_Install_Script)
 
 整个脚本结构其实非常简单：
 
-```xml
+```shell
 @echo off
 
 REM 检查是否存在软件列表文件

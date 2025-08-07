@@ -69,15 +69,21 @@ This is a note with a custom title.
 > Key information users need to know to achieve their goal.
 
 :::warning
+
 Urgent info that needs immediate user attention to avoid problems.
+
 :::
 
 :::caution
+
 Advises about risks or negative outcomes of certain actions.
+
 :::
 
 :::note[YOUR CUSTOM TITLE]
+
 This is a note with a custom title.
+
 :::
 
 ## Collapsible Sections
@@ -95,7 +101,9 @@ Content that may not interest all readers can be placed in a collapsible section
 ### Output
 
 :::fold[Usage Tips]
+
 Content that may not interest all readers can be placed in a collapsible section.
+
 :::
 
 ## Galleries
@@ -117,11 +125,17 @@ To create image galleries, use the container directive `:::gallery`. Scroll hori
 ### Output
 
 :::gallery
+
 ![Alpaca](https://image.radishzz.cc/image/gallery/sheep-1.jpg)
+
 ![Turning head](https://image.radishzz.cc/image/gallery/sheep-2.jpg)
+
 ![Eye contact](https://image.radishzz.cc/image/gallery/sheep-3.jpg)
+
 ![Baby alpaca](https://image.radishzz.cc/image/gallery/sheep-4.jpg)
+
 ![Aww, so cute!](https://image.radishzz.cc/image/gallery/sheep-5.jpg)
+
 :::
 
 ## GitHub Repositories

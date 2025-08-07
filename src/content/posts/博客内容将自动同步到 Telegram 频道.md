@@ -113,7 +113,7 @@ lang: zh
 - 一个 Telegram 机器人，在 Telegram 中可以通过 [@BotFather](https://t.me/BotFather) 来创建
 - 你的 WordPress 站点
 
-插件下载链接： https://wordpress.org/plugins/wptelegram/
+插件下载链接：https://wordpress.org/plugins/wptelegram/
 
 操作步骤：
 
@@ -121,8 +121,8 @@ lang: zh
 2. 完成步骤后，@BotFather 将为你提供机器人令牌。
 3. 复制该令牌并粘贴到下面的“机器人令牌”字段中。
 4. 为了方便起见，可以使用 Telegram 桌面版。
-5. 在下面测试你的机器人令牌。 激活你想要使用的模块。
-6. 配置已激活的模块。 点击下面的“保存更改”。
+5. 在下面测试你的机器人令牌。激活你想要使用的模块。
+6. 配置已激活的模块。点击下面的“保存更改”。
 
 完成以上操作之后，一旦发布新文章或旧的文章/页面有内容更新（可选），都会同步到对应的 Telegram 频道。
 

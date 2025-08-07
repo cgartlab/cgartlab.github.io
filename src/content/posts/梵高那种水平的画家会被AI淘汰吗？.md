@@ -11,7 +11,7 @@ toc: true
 lang: zh
 ---
 
-![cover](./_images/梵高那种水平的画家会被AI淘汰吗？-1754479458229.webp)
+![cover](./_images/梵高那种水平的画家会被 AI 淘汰吗？-1754479458229.webp)
 
 ## 引子
 

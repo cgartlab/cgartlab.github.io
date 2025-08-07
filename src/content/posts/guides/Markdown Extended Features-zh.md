@@ -69,15 +69,21 @@ abbrlink: markdown-extended-features
 > 用户成功所需的关键信息。
 
 :::warning
+
 由于存在潜在风险，需要用户立即关注的关键内容。
+
 :::
 
 :::caution
+
 某些操作可能带来的负面后果。
+
 :::
 
 :::note[自定义标题]
+
 这是一个自定义标题的提示块。
+
 :::
 
 ## 折叠部分
@@ -95,7 +101,9 @@ abbrlink: markdown-extended-features
 ### 效果
 
 :::fold[使用提示]
+
 如果需要添加并非所有读者都会感兴趣的内容，可以将其放在折叠部分。
+
 :::
 
 ## 画廊
@@ -117,11 +125,17 @@ abbrlink: markdown-extended-features
 ### 效果
 
 :::gallery
+
 ![羊驼](https://image.radishzz.cc/image/gallery/sheep-1.jpg)
+
 ![转头](https://image.radishzz.cc/image/gallery/sheep-2.jpg)
+
 ![对视](https://image.radishzz.cc/image/gallery/sheep-3.jpg)
+
 ![小羊驼](https://image.radishzz.cc/image/gallery/sheep-4.jpg)
+
 ![可爱捏](https://image.radishzz.cc/image/gallery/sheep-5.jpg)
+
 :::
 
 ## GitHub 仓库

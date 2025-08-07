@@ -30,10 +30,15 @@ To create headings, add number signs `#` in front of a word or phrase. The numbe
 ### Output
 
 # Heading 1
+
 ## Heading 2
+
 ### Heading 3
+
 #### Heading 4
+
 ##### Heading 5
+
 ###### Heading 6
 
 ## Paragraphs

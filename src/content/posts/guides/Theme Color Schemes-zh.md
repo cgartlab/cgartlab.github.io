@@ -15,6 +15,7 @@ Retypeset 基于 [OKLCH](https://oklch.com/) 颜色空间来定义主题配色�
 ## 葱白
 
 ![Light mode](../_images/1-light.jpeg)
+
 ![Dark mode](../_images/1-dark.jpeg)
 
 ```
@@ -35,6 +36,7 @@ dark: {
 ## 鸦青
 
 ![Light mode](../_images/2-light.jpeg)
+
 ![Dark mode](../_images/2-dark.jpeg)
 
 ```
@@ -55,6 +57,7 @@ dark: {
 ## 墨蓝
 
 ![Light mode](../_images/4-light.jpeg)
+
 ![Dark mode](../_images/4-dark.jpeg)
 
 ```
@@ -75,6 +78,7 @@ dark: {
 ## 米黄
 
 ![Light mode](../_images/3-light.jpeg)
+
 ![Dark mode](../_images/3-dark.jpeg)
 
 ```

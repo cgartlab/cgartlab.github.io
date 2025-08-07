@@ -10,7 +10,9 @@ pin: 0
 toc: true
 lang: en
 ---
-![](./_images/再来码字，再见山西-1754470929070.webp)
+
+![](./_images/再来码字，再见山西 -1754470929070.webp)
+
 Long time no see, I've started writing again.
 
 Writing sounds more elegant when you call it "writing"—as soon as you change the term, it feels like the thing you're about to talk about is different, as if all the actions surrounding writing become sacred. But actually, compared to writing, I was more willing to draw at first. The main reason was that I told myself: a picture is worth a thousand words—if you can express something clearly with one drawing, why write a bunch of words?
