@@ -15,7 +15,7 @@ toc: true
 lang: zh
 ---
 
-![封面](./_images/Windows%2011%20 如何使用%20winget%20 包管理器 -1754567460839.webp)
+![封面](./_images/Windows%2011%20如何使用%20winget%20包管理器-1754567460839.webp)
 
 ## 什么是 Winget
 

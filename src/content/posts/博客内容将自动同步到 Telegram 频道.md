@@ -10,9 +10,7 @@ toc: true
 lang: zh
 ---
 
-[[17d6e8f7464f55471de582906020fce4_MD5.webp|Open: Pasted image 20240906225853.png]]
-
-![[17d6e8f7464f55471de582906020fce4_MD5.webp]]
+![封面](./_images/博客内容将自动同步到%20Telegram%20频道-1754591621567.webp)
 
 # 写在前面
 
