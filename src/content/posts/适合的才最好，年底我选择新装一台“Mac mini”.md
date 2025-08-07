@@ -1,16 +1,17 @@
 ---
-title: "适合的才最好，年底我选择新装一台“Mac mini”"
-published: 2024-11-30
-description: "9 月底入手了一台零刻 SER5 Max 迷你主机，至今重度使用 3 个月左右，基本调教顺手。"
-updated: 2024-11-30
-tags: ["随笔"]
+title: 适合的才最好，年底我选择新装一台“Mac mini”
+published: 2024-12-01
+description: 9 月底入手了一台零刻 SER5 Max 迷你主机，至今重度使用 3 个月左右，基本调教顺手。
+updated: 2024-12-01
+tags:
+  - 随笔
 draft: false
 pin: 0
 toc: true
 lang: zh
 ---
 
-![适合的才最好，年底我选择新装一台“Mac mini”-20241201022747124.webp](https://cgartlab.com/wp-content/uploads/2024/12/e6275750ca48ad6.webp)
+![封面](./_images/适合的才最好，年底我选择新装一台“Mac%20mini”-1754592163345.webp)
 
 ## 写在前面
 
@@ -34,15 +35,15 @@ lang: zh
 
 ## 硬件配置
 
-![适合的才最好，年底我选择新装一台“Mac mini”-20241201022850804.webp](https://cgartlab.com/wp-content/uploads/2024/12/b6284abd6cf3773.webp)
+![](./_images/适合的才最好，年底我选择新装一台“Mac%20mini”-1754592194079.webp)
 
-![适合的才最好，年底我选择新装一台“Mac mini”-20241201031202451.webp](https://cgartlab.com/wp-content/uploads/2024/12/a3ff01fc1f5ac6c.webp)
+![](./_images/适合的才最好，年底我选择新装一台“Mac%20mini”-1754592202748.webp)
 
-![适合的才最好，年底我选择新装一台“Mac mini”-20241201022925710.webp](https://cgartlab.com/wp-content/uploads/2024/12/2f4ac7ca3dae685.webp)
+![](./_images/适合的才最好，年底我选择新装一台“Mac%20mini”-1754593201679.webp)
 
 外观很小巧精致，挑的灰色，重度使用已经可以看到顶部进风口已经开始堆积灰尘了，但设计师职业病，死活看不得黑色款那个大红色的开机按钮。
 
-![适合的才最好，年底我选择新装一台“Mac mini”-20241201031045559.webp](https://cgartlab.com/wp-content/uploads/2024/12/9547eae8d5ca5b5.webp)
+![](./_images/适合的才最好，年底我选择新装一台“Mac%20mini”-1754592228596.webp)
 
 厚度刚好，可以跟 68 配列键盘一起放在显示器支架下面。
 
@@ -77,7 +78,7 @@ lang: zh
 
 如果你和我一样买的是准系统版本，则需要自己安装操作系统，Windows 的安装相对简单就不赘述了，相信能看到这里的你不存在这个问题。
 
-![适合的才最好，年底我选择新装一台“Mac mini”-20241201023946489.webp](https://cgartlab.com/wp-content/uploads/2024/12/5abc1220e354891.webp)
+![](./_images/适合的才最好，年底我选择新装一台“Mac%20mini”-1754592263015.webp)
 
 值得一提的是，主机随包装附带了一个系统安装 U 盘，版本号是 23H2，包含了所有的出厂官方硬件驱动，一键安装很方便。
 
@@ -85,7 +86,7 @@ lang: zh
 
 macOS 安装之前首先需要对磁盘进行分区，我把 1T 的 nvme 固态对半划分作为系统盘，这里要注意安装 Win11 的时候系统会自动划分出一个 efi 启动分区，空间一般为 200M，建议扩大到 300M。
 
-![适合的才最好，年底我选择新装一台“Mac mini”-20241201025146378.webp](https://cgartlab.com/wp-content/uploads/2024/12/c80932eab2d0ea5.webp)
+![](./_images/适合的才最好，年底我选择新装一台“Mac%20mini”-1754593268652.webp)
 
 图片是 macOS 的磁盘工具下我的系统盘划分情况，其中 disk0s3 就是 Win11 分区，调整分区大小建议在 win11 内使用 DiskGenius 或其他第三方工具调整。
 
@@ -95,7 +96,7 @@ macOS 安装之前首先需要对磁盘进行分区，我把 1T 的 nvme 固态�
 - MacOS 系统镜像
 	- 下载的镜像可以自己做，也可以网上找别人做好的一键安装版镜像，比较知名的是黑果小兵的，我的引导文件就是在他的基础上修改的版本。
 - OpenCore 引导文件
-	- 引导文件可以直接用我的 https://github.com/cgartlab/Beelink-SER5-Max-Hackintosh，也可以自己上网找更合适的。
+	- 引导文件可以直接用我的 https://github.com/cgartlab/Beelink-SER5-Max-Hackintosh ，也可以自己上网找更合适的。
 	- **⚠️注意：我使用的是官方自带的 Intel ax200 网卡，上网正常但无法使用隔空投送、随航等功能（因为我不用）。如需使用，请某宝购买 apple 免驱网卡**
 - 一个闲置的 16G U 盘
 
@@ -103,13 +104,13 @@ macOS 安装之前首先需要对磁盘进行分区，我把 1T 的 nvme 固态�
 
 写入镜像实际上也有很多工具，推荐 [balenaEthcher](https://www.balena.io/etcher) ，开源免费。
 
-![适合的才最好，年底我选择新装一台“Mac mini”-20241201024357864.webp](https://cgartlab.com/wp-content/uploads/2024/12/d562990267e8d65.webp)
+![](./_images/适合的才最好，年底我选择新装一台“Mac%20mini”-1754592284478.webp)
 
 官方支持 Windows、macOS、Linux 的版本，下载即可使用。
 
 使用方法很简单：选择镜像，选择 U 盘，写入。十分钟左右就做好了。
 
-![适合的才最好，年底我选择新装一台“Mac mini”-20241201024541561.webp](https://cgartlab.com/wp-content/uploads/2024/12/c93288d9aaa8f8e.webp)
+![](./_images/适合的才最好，年底我选择新装一台“Mac%20mini”-1754592772660.webp)
 
 ### U 盘引导开机
 
@@ -117,17 +118,17 @@ macOS 安装之前首先需要对磁盘进行分区，我把 1T 的 nvme 固态�
 
 不出意外的话就会出现安装选项。
 
-![适合的才最好，年底我选择新装一台“Mac mini”-20241201031431732.webp](https://cgartlab.com/wp-content/uploads/2024/12/b694289aca22fba.webp)
+![](./_images/适合的才最好，年底我选择新装一台“Mac%20mini”-1754592761617.webp)
 
 之后正常安装 macOS 即可，目前引导文件已经支持了 Sequoia，但为了确保稳定性我选择的是 Ventura，安装成功之后版本号可以直接更新到 13.7.1。
 
 对磁盘进行格式化的时候，建议系统分区依旧选择 apfs 格式，如果你和我一样装了 sata 固态，建议格式化成 exfat 格式，这样两个系统就可以共享同一个仓库盘了，互相读写也不干扰。
 
-![适合的才最好，年底我选择新装一台“Mac mini”-20241201043607068.webp](https://cgartlab.com/wp-content/uploads/2024/12/03bc2645b96d615.webp)
+![](./_images/适合的才最好，年底我选择新装一台“Mac%20mini”-1754592748300.webp)
 
 这里切记先不要登录 Apple ID 账号，因为之后要修改系统注册码。
 
-![适合的才最好，年底我选择新装一台“Mac mini”-20241201043205261.webp](https://cgartlab.com/wp-content/uploads/2024/12/058039ee2fc59b4.webp)
+![](./_images/适合的才最好，年底我选择新装一台“Mac%20mini”-1754592737930.webp)
 
 ### 替换引导文件
 
@@ -139,13 +140,13 @@ macOS 安装之前首先需要对磁盘进行分区，我把 1T 的 nvme 固态�
 
 打开 Finder，把 U 盘内 EFI 分区内的文件全部拷贝到系统 EFI 分区即可，这时 U 盘就可以拔掉了。如果之后出现了不能启动的问题，依然可以使用 U 盘引导开机。
 
-![适合的才最好，年底我选择新装一台“Mac mini”-20241201040457136.webp](https://cgartlab.com/wp-content/uploads/2024/12/bbe37a054eac908.webp)
+![](./_images/适合的才最好，年底我选择新装一台“Mac%20mini”-1754592707550.webp)
 
 ### 更新驱动和引导文件
 
 同样在菜单栏内：编辑➡️挂载 ESP➡️系统盘➡️挂载并打开 xxx 配置文件。
 
-![适合的才最好，年底我选择新装一台“Mac mini”-20241201032440561.webp](https://cgartlab.com/wp-content/uploads/2024/12/2f4be89fbd1434d.webp)
+![](./_images/适合的才最好，年底我选择新装一台“Mac%20mini”-1754592720341.webp)
 
 打开后首先设置系统注册码，随机生成一个后最好去官网检查下是否可用。
 
@@ -153,11 +154,11 @@ macOS 安装之前首先需要对磁盘进行分区，我把 1T 的 nvme 固态�
 
 之后选择“升级 OpenCore 和 kexts”，OpenCore 就是引导的核心组件，kexts 为硬件驱动文件。
 
-![适合的才最好，年底我选择新装一台“Mac mini”-20241201033845528.webp](https://cgartlab.com/wp-content/uploads/2024/12/d70bc4d405684a8.webp)
+![](./_images/适合的才最好，年底我选择新装一台“Mac%20mini”-1754592648900.webp)
 
 检查 Kexts 更新，可更新版本的文件会显示红色小方块，勾选之后更新即可，这里不建议选择开发版驱动。
 
-![适合的才最好，年底我选择新装一台“Mac mini”-20241201034007612.webp](https://cgartlab.com/wp-content/uploads/2024/12/053110c915430c2.webp)
+![](./_images/适合的才最好，年底我选择新装一台“Mac%20mini”-1754592624013.webp)
 
 更新好之后保存 EFI 文件，退出即可。
 
@@ -167,7 +168,7 @@ macOS 安装之前首先需要对磁盘进行分区，我把 1T 的 nvme 固态�
 
 打开后首先选择“电源”一栏，检查休眠唤醒参数是否为“0”，如果不是可以点下面的螺丝刀按钮修复，保证系统实现休眠唤醒。
 
-![适合的才最好，年底我选择新装一台“Mac mini”-20241201034744667.webp](https://cgartlab.com/wp-content/uploads/2024/12/f3406a72d8c0eea.webp)
+![](./_images/适合的才最好，年底我选择新装一台“Mac%20mini”-1754592608215.webp)
 
 之后选择工具一栏，点击右下角的白色方块，提示输入系统密码，确定。即可修复系统权限和驱动缓存。一般这样操作是最不容易出错的。
 
@@ -177,17 +178,17 @@ macOS 安装之前首先需要对磁盘进行分区，我把 1T 的 nvme 固态�
 
 系统信息。
 
-![适合的才最好，年底我选择新装一台“Mac mini”-20241201041258178.webp](https://cgartlab.com/wp-content/uploads/2024/12/3c8d10c84a02eed.webp)
+![](./_images/适合的才最好，年底我选择新装一台“Mac%20mini”-1754592593051.webp)
 
 这是我正在写这篇文章时候的状态。
 
 软件兼容性，至少下图里我用下来的这些软件，除了被我自己用崩掉之外，自己没出现过死机重启的现象。
 
-![适合的才最好，年底我选择新装一台“Mac mini”-20241201042405566.webp](https://cgartlab.com/wp-content/uploads/2024/12/31026d2f4df6ec3-scaled.webp)
+![](./_images/适合的才最好，年底我选择新装一台“Mac%20mini”-1754592576870.webp)
 
-![适合的才最好，年底我选择新装一台“Mac mini”-20241201042430136.webp](https://cgartlab.com/wp-content/uploads/2024/12/9d46f188e396b70-scaled.webp)
+![](./_images/适合的才最好，年底我选择新装一台“Mac%20mini”-1754592564637.webp)
 
-![适合的才最好，年底我选择新装一台“Mac mini”-20241201042513666.webp](https://cgartlab.com/wp-content/uploads/2024/12/aa05a0aa603f741-scaled.webp)
+![](./_images/适合的才最好，年底我选择新装一台“Mac%20mini”-1754592548286.webp)
 
 ## 小结
 

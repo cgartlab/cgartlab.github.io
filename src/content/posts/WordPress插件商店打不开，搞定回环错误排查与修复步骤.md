@@ -9,16 +9,16 @@ pin: 0
 toc: true
 lang: zh
 ---
-
+![封面](./_images/WordPress插件商店打不开，搞定回环错误排查与修复步骤-1754594730853.webp)
 ## 写在前面
 
 最近在给博客后台（WordPress）安装更换页面缓存插件的时候，插件商店打不开了。站点健康页面提示遇到了回环错误问题。看提示信息说是 DNS 解析错误，但检查了宿主服务器系统的 DNS 配置依然是默认配置。
 
-![解决 WordPress 回环错误 -1752140731592.webp](https://cgartlab.com/wp-content/uploads/2025/07/cc97e0f4b91426b.webp)
+![](./_images/WordPress插件商店打不开，搞定回环错误排查与修复步骤-1754594749932.webp)
 
 ## 方法一：宝塔面板安装 Linux 工具箱
 
-![宝塔面板修正 WordPress 回环错误 -1753019963910.webp](https://cgartlab.com/wp-content/uploads/2025/07/eb56439ccb1e011.webp)
+![](./_images/WordPress插件商店打不开，搞定回环错误排查与修复步骤-1754594761033.webp)
 
 问了 DeepSeek 后，如果服务器安装的是宝塔面板，可以直接在软件商店里，搜索「Linux」安装 Linux 工具箱。打开工具箱可以很方便地修改默认的 DNS（如阿里 DNS 223.5.5.5 或 腾讯 `119.29.29.29`）。
 
