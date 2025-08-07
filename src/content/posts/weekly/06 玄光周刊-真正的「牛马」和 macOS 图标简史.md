@@ -5,7 +5,7 @@ description: 从打工人的「牛马」自嘲到真实牛马的自在生存，�
 updated: 2025-08-08
 tags:
   - 随笔
-draft: true
+draft: false
 pin: 0
 toc: true
 lang: zh
