@@ -126,17 +126,17 @@ export const themeConfig: ThemeConfig = {
       google: '8khbCpQMGCKsofofozhN4HiFiJdTgh4thMH4hPjAEX8',
       // bing webmaster tools
       // https://www.bing.com/webmasters
-      bing: '',
+      bing: '0a1a438e5ad54d9aa13d951bd5278ab2',
       // yandex webmaster
       // https://webmaster.yandex.com
       yandex: '',
       // baidu search
       // https://ziyuan.baidu.com
-      baidu: '',
+      baidu: 'sffrpCwYKC8GZmmT',
     },
     // google analytics
     // https://analytics.google.com
-    googleAnalyticsID: '',
+    googleAnalyticsID: 'G-P11QJ5R11Z',
     // umami analytics
     // https://cloud.umami.is
     umamiAnalyticsID: '',
@@ -144,9 +144,9 @@ export const themeConfig: ThemeConfig = {
     // https://follow.is/
     follow: {
       // feed ID
-      feedID: '',
+      feedID: '176704877999810560',
       // user ID
-      userID: '',
+      userID: '41489823027795968',
     },
     // apiflash access key
     // automatically generate website screenshots for open graph images
