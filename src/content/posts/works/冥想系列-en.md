@@ -12,6 +12,7 @@ draft: false
 pin: 0
 toc: true
 lang: en
+abbrlink: meditation-series
 ---
 
 ## About the Work
