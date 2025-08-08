@@ -1,8 +1,8 @@
 ---
 title: Meditation Series
-published: 2025-08-08
+published: 2019-08-08
 description: Meditation is a form of consciousness transformation, a process of dissecting one's inner self, and a path to approaching reality infinitely. I first encountered this concept in 2013, and in the subsequent years of work and life, it gradually became a habit of communicating with myself.
-updated: 2025-08-08
+updated: 2019-08-08
 tags:
   - 作品
   - meditation

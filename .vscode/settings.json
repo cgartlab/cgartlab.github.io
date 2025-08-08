@@ -129,5 +129,7 @@
     "Переверстка",
     "Русский"
   ],
-  "markdown.validate.enabled": true
+  "markdown.validate.enabled": true,
+  "trae.tab.enableRename": false,
+  "trae.tab.enableAutoImport": false
 }
