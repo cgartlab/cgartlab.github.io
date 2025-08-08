@@ -4,11 +4,7 @@ published: 2024-07-07
 description: 2024年Windows PC使用指南，从系统优化到软件配置，打造高效优雅的Windows使用体验
 updated: 2024-12-15
 tags:
-  - Windows
-  - 系统优化
-  - 软件推荐
-  - 生产力工具
-  - 使用技巧
+  - 技术分享
 draft: false
 pin: 0
 toc: true

@@ -4,10 +4,6 @@ published: 2024-12-05
 description: 探讨如何在碎片化时代通过RSS重塑深度阅读体验，从理念到实践的全面指南
 updated: 2024-12-15
 tags:
-  - RSS
-  - 阅读
-  - 信息获取
-  - 深度阅读
   - 知识管理
 draft: false
 pin: 0

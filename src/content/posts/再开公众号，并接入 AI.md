@@ -3,12 +3,7 @@ title: 再开公众号，并接入 AI
 published: 2024-12-22
 description: 重新开通微信公众号并接入AI助手的完整经验分享，包含智能体配置、知识库设置和多平台内容分发策略
 updated: 2024-12-23
-tags:
-  - 公众号
-  - AI助手
-  - 内容创作
-  - 智谱清言
-  - 多平台分发
+tags: ["技术分享"]
 draft: false
 pin: 0
 toc: true
