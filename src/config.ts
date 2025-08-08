@@ -14,7 +14,7 @@ export const themeConfig: ThemeConfig = {
     // author name
     author: 'ChenYang',
     // site url
-    url: 'https://astro.cgartlab.com',
+    url: 'https://cgartlab.com',
     // favicon url
     // recommended formats: svg, png or ico
     favicon: '/icons/favicon.svg', // or https://example.com/favicon.svg
@@ -123,7 +123,7 @@ export const themeConfig: ThemeConfig = {
     verification: {
       // google search console
       // https://search.google.com/search-console
-      google: '',
+      google: '8khbCpQMGCKsofofozhN4HiFiJdTgh4thMH4hPjAEX8',
       // bing webmaster tools
       // https://www.bing.com/webmasters
       bing: '',
