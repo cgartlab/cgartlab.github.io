@@ -60,7 +60,7 @@ export const themeConfig: ThemeConfig = {
     // not fill in the locale code above again, can be an empty array []
     moreLocales: ['en', 'zh-tw'], // ['de', 'en', 'es', 'fr', 'ja', 'ko', 'pl', 'pt', 'ru', 'zh', 'zh-tw']
     // font styles for post text
-    fontStyle: 'serif', // sans, serif
+    fontStyle: 'sans', // sans, serif
 
     // date format for posts
     dateFormat: 'YYYY-MM-DD', // YYYY-MM-DD, MM-DD-YYYY, DD-MM-YYYY, MONTH DAY YYYY, DAY MONTH YYYY
