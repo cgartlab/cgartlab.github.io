@@ -6,6 +6,7 @@ export const ui = {
     posts: 'Posts',
     tags: 'Tags',
     about: 'About',
+    works: 'Works',
     toc: 'Table of Contents',
   },
   'zh': {
@@ -15,6 +16,7 @@ export const ui = {
     posts: '文章',
     tags: '标签',
     about: '关于',
+    works: '作品',
     toc: '目录',
   },
   'zh-tw': {
@@ -24,6 +26,7 @@ export const ui = {
     posts: '文章',
     tags: '標籤',
     about: '關於',
+    works: '作品',
     toc: '目錄',
   },
 }
