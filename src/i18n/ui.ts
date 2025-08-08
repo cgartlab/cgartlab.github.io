@@ -20,7 +20,7 @@ export const ui = {
     toc: '目录',
   },
   'zh-tw': {
-    title: 'CG藝術實驗室',
+    title: 'CGArtLab',
     subtitle: '探索數位藝術的邊界',
     description: 'CG藝術實驗室（cgartlab.com）是一個專注於數位藝術、視覺設計、技術分享和知識管理的視覺設計機構。致力於為數位藝術愛好者、專業設計師和初學者以及商業客戶，提供最新、最全面的資訊、教程、作品展示以及設計服務。',
     posts: '文章',

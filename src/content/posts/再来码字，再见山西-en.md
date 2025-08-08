@@ -9,6 +9,7 @@ draft: false
 pin: 0
 toc: true
 lang: en
+abbrlink: zaijianshanxi
 ---
 
 ![](./_images/再来码字，再见山西-1754470929070.webp)

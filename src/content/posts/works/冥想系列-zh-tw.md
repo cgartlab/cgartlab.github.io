@@ -12,6 +12,7 @@ draft: false
 pin: 0
 toc: true
 lang: zh-tw
+abbrlink: meditation-series
 ---
 
 ## 作品介紹
