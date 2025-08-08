@@ -4,7 +4,7 @@ published: 2024-12-01
 description: 9 月底入手了一台零刻 SER5 Max 迷你主机，至今重度使用 3 个月左右，基本调教顺手。
 updated: 2024-12-01
 tags:
-  - 随笔
+  - 技术分享
 draft: false
 pin: 0
 toc: true

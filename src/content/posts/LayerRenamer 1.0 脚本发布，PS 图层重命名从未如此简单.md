@@ -4,11 +4,7 @@ published: 2024-09-10
 description: Photoshop图层批量重命名脚本LayerRenamer 1.0发布，支持自定义命名规则和编号格式，提升设计工作效率
 updated: 2024-12-11
 tags:
-  - Photoshop
-  - 脚本
-  - 设计工具
-  - 效率工具
-  - JavaScript
+  - 技术分享
 draft: false
 pin: 0
 toc: true

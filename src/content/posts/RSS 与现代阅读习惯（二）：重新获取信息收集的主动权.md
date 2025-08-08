@@ -4,11 +4,7 @@ published: 2025-06-30
 description: 基于RSS构建个人碎片信息收集系统的实践经验分享，包含优质RSS源推荐和工具使用心得
 updated: 2025-06-30
 tags:
-  - RSS
-  - 信息收集
   - 知识管理
-  - 工具推荐
-  - 工作流
 draft: false
 pin: 0
 toc: true

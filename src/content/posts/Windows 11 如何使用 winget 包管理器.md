@@ -4,11 +4,7 @@ published: 2024-03-01
 description: Windows 11 winget包管理器完整使用指南，包含安装、搜索、更新、卸载软件等核心功能，以及自动化脚本配置
 updated: 2024-03-09
 tags:
-  - Windows
-  - winget
-  - 包管理器
-  - 系统管理
-  - 自动化脚本
+  - 技术分享
 draft: false
 pin: 0
 toc: true
