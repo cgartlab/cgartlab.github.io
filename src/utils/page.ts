@@ -35,6 +35,10 @@ export function isWorksPage(path: string) {
   return isPageType(path, 'works')
 }
 
+export function isWeeklyPage(path: string) {
+  return isPageType(path, 'weekly')
+}
+
 // Returns page context with language, page types and localization helper
 export function getPageInfo(path: string) {
   const currentLang = getLangFromPath(path)
@@ -43,6 +47,7 @@ export function getPageInfo(path: string) {
   const isTag = isTagPage(path)
   const isAbout = isAboutPage(path)
   const isWorks = isWorksPage(path)
+  const isWeekly = isWeeklyPage(path)
 
   return {
     currentLang,
@@ -51,6 +56,7 @@ export function getPageInfo(path: string) {
     isTag,
     isAbout,
     isWorks,
+    isWeekly,
     getLocalizedPath: (targetPath: string) =>
       getLocalizedPath(targetPath, currentLang),
   }

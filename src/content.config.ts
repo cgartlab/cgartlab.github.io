@@ -34,4 +34,19 @@ const about = defineCollection({
   }),
 })
 
-export const collections = { posts, about }
+const weekly = defineCollection({
+  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/weekly' }),
+  schema: z.object({
+    title: z.string(),
+    published: z.date(),
+    description: z.string().optional().default(''),
+    updated: z.preprocess(
+      val => val === '' ? undefined : val,
+      z.date().optional(),
+    ),
+    draft: z.boolean().optional().default(false),
+    lang: z.enum(['', ...allLocales]).optional().default(''),
+  }),
+})
+
+export const collections = { posts, about, weekly }
