@@ -96,7 +96,7 @@ macOS 安装之前首先需要对磁盘进行分区，我把 1T 的 nvme 固态�
 - MacOS 系统镜像
 	- 下载的镜像可以自己做，也可以网上找别人做好的一键安装版镜像，比较知名的是黑果小兵的，我的引导文件就是在他的基础上修改的版本。
 - OpenCore 引导文件
-	- 引导文件可以直接用我的 https://github.com/cgartlab/Beelink-SER5-Max-Hackintosh ，也可以自己上网找更合适的。
+	- 引导文件可以直接用我的 https://github.com/cgartlab/Beelink-SER5-Max-Hackintosh，也可以自己上网找更合适的。
 	- **⚠️注意：我使用的是官方自带的 Intel ax200 网卡，上网正常但无法使用隔空投送、随航等功能（因为我不用）。如需使用，请某宝购买 apple 免驱网卡**
 - 一个闲置的 16G U 盘
 
