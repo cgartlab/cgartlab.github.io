@@ -7,6 +7,7 @@ export const ui = {
     tags: 'Tags',
     about: 'About',
     works: 'Works',
+    weekly: 'Weekly',
     toc: 'Table of Contents',
   },
   'zh': {
@@ -17,6 +18,7 @@ export const ui = {
     tags: '标签',
     about: '关于',
     works: '作品',
+    weekly: '周刊',
     toc: '目录',
   },
   'zh-tw': {
@@ -27,6 +29,7 @@ export const ui = {
     tags: '標籤',
     about: '關於',
     works: '作品',
+    weekly: '週刊',
     toc: '目錄',
   },
 }

@@ -4,7 +4,7 @@ published: 2025-08-02
 description: 本期周刊主要讨论了OpenAI新推出的学习模式、Newsletter传播形式的优势，以及推荐了IGLOO公司的创意网站设计。
 updated: 2025-08-02
 tags:
-  - 玄光周刊
+  - 周刊
 draft: false
 pin: 0
 toc: true

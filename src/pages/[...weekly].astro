@@ -1,0 +1,48 @@
+---
+import PostList from '@/components/PostList.astro'
+import { defaultLocale, moreLocales } from '@/config'
+import Layout from '@/layouts/Layout.astro'
+import { getPostsByTag, getTagSupportedLangs } from '@/utils/content'
+
+export async function getStaticPaths() {
+  type PathItem = {
+    params: { weekly: string }
+    props: { lang: string }
+  }
+
+  const paths: PathItem[] = []
+
+  // Default locale
+  paths.push({
+    params: { weekly: 'weekly/' },
+    props: { lang: defaultLocale },
+  })
+
+  // More locales
+  for (const lang of moreLocales) {
+    paths.push({
+      params: { weekly: `${lang}/weekly/` },
+      props: { lang },
+    })
+  }
+
+  return paths
+}
+
+const { lang } = Astro.props
+const posts = await getPostsByTag('周刊', lang)
+const supportedLangs = await getTagSupportedLangs('周刊')
+---
+
+<Layout supportedLangs={supportedLangs}>
+  <!-- Decorative Line -->
+  <div class="uno-decorative-line" />
+
+  <!-- Posts List -->
+  <div class="mt-10.5">
+    <PostList
+      posts={posts}
+      lang={lang}
+    />
+  </div>
+</Layout>
