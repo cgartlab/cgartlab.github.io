@@ -5,7 +5,7 @@ updated: 2025-04-13
 tags:
   - Blog Theme
   - Guide
-pin: 99
+pin: 0
 lang: en
 abbrlink: theme-guide
 ---
