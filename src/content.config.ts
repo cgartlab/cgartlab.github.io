@@ -35,7 +35,7 @@ const about = defineCollection({
 })
 
 const weekly = defineCollection({
-  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/weekly' }),
+  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/posts/weekly' }),
   schema: z.object({
     title: z.string(),
     published: z.date(),
