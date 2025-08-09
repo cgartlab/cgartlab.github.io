@@ -23,7 +23,7 @@ lang: zh
 
 数据显示，美国青少年用 ChatGPT 做作业的比例已从 13% 涨至 26%，但过度依赖 AI 可能导致学生缺乏独立思考。学习模式由此诞生，目标是通过引导理解知识而非复制答案，帮助学生实现有效学习。
 
-有意思的是，在 [这期周刊]([参与造梦的艺术：电影制作幕后与AI工具革新](https://cgartlab.com/05-the-art-of-dreammaking-behind-the-scenes-of-film-production-and-the-innovation-of-ai-tools/)) 提到的 notebooklm 也推出了根据笔记生成教学视频的功能，生成的视频内容就是音频讲解和自动播放的 PPT，我估计国内大厂会很快跟进这个领域，不久 AI 就会开始影响到教育培训行业。
+有意思的是，在 [这期周刊]([参与造梦的艺术：电影制作幕后与 AI 工具革新](https://cgartlab.com/05-the-art-of-dreammaking-behind-the-scenes-of-film-production-and-the-innovation-of-ai-tools/)) 提到的 notebooklm 也推出了根据笔记生成教学视频的功能，生成的视频内容就是音频讲解和自动播放的 PPT，我估计国内大厂会很快跟进这个领域，不久 AI 就会开始影响到教育培训行业。
 
 在我看来这算好事，国内教培行业依然会存在，且质量可以提升一大截。
 
@@ -61,8 +61,8 @@ lang: zh
 
 ---
 
-本文首发在 [玄光周刊](https://weekly.cgartlab.com) 同时连载在 [CG艺术实验室](https://cgartlab.com)
+本文首发在 [玄光周刊](https://weekly.cgartlab.com) 同时连载在 [CG 艺术实验室](https://cgartlab.com)
 
 > 关于玄光周刊
 >
-> 这是一份专注知识管理，涵盖数字艺术、视觉设计、前端开发领域的电子周刊，发布频率目前为每周 1 期，每期精选一个细分话题展开思考。 其中会分享我写的关于创业、产品的笔记，包括我的所思所想、摘抄与批注、读书笔记、优质内容推荐。
+> 这是一份专注知识管理，涵盖数字艺术、视觉设计、前端开发领域的电子周刊，发布频率目前为每周 1 期，每期精选一个细分话题展开思考。其中会分享我写的关于创业、产品的笔记，包括我的所思所想、摘抄与批注、读书笔记、优质内容推荐。
