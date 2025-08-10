@@ -14,7 +14,8 @@
     "new-post": "tsx scripts/new-post.ts",
     "apply-lqip": "tsx scripts/apply-lqip.ts",
     "format-posts": "tsx scripts/format-posts.ts",
-    "update-theme": "tsx scripts/update-theme.ts"
+    "update-theme": "tsx scripts/update-theme.ts",
+    "fix-internal-links": "tsx scripts/fix-internal-links.ts"
   },
   "dependencies": {
     "@astrojs/mdx": "^4.3.3",
