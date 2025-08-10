@@ -9,6 +9,7 @@ draft: false
 pin: 0
 toc: true
 lang: zh
+abbrlink: rss-1
 ---
 
 ![封面](./_images/RSS%20与现代阅读习惯（一）：如何在碎片化时代重塑深度阅读体验-1754593562740.webp)
