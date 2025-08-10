@@ -9,6 +9,7 @@ draft: false
 pin: 0
 toc: true
 lang: zh
+abbrlink: use-winget-on-win11
 ---
 
 ![封面](./_images/Windows%2011%20如何使用%20winget%20包管理器-1754567460839.webp)

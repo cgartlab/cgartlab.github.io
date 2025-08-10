@@ -8,6 +8,7 @@ draft: false
 pin: 0
 toc: true
 lang: zh
+abbrlink: setup-wechat-channel-again
 ---
 
 ![封面](./_images/再开公众号，并接入%20AI-1754591833063.webp)

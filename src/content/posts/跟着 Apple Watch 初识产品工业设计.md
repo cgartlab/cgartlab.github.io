@@ -9,6 +9,7 @@ draft: false
 pin: 0
 toc: true
 lang: zh
+abbrlink: apple-watch-design
 ---
 
 ![封面：Apple Watch 的设计稿 - Apple Watch 工业设计图纸展示精密制造工艺](./_images/跟着%20Apple%20Watch%20初识产品工业设计-1754584361183.webp)

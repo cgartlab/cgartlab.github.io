@@ -9,6 +9,7 @@ draft: false
 pin: 0
 toc: true
 lang: zh
+abbrlink: build-a-macmini
 ---
 
 ![封面](./_images/适合的才最好，年底我选择新装一台“Mac%20mini”-1754592163345.webp)
