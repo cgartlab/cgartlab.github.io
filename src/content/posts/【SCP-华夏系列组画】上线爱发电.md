@@ -10,6 +10,7 @@ draft: false
 pin: 0
 toc: true
 lang: zh
+abbrlink: scp-digital-artwork
 ---
 
 如你所见，[这是一套基于 SCP 基金会的创作理念，同时结合华夏古典文化所创作的一套数字绘画作品](https://cgartlab.com/artwork "这是一套基于 SCP 基金会的创作理念，同时结合华夏古典文化所创作的一套数字绘画作品")。

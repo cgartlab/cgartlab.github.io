@@ -9,6 +9,7 @@ draft: false
 pin: 0
 toc: true
 lang: zh
+abbrlink: blog-to-telegram-channel
 ---
 
 ![封面](./_images/博客内容将自动同步到%20Telegram%20频道-1754591621567.webp)

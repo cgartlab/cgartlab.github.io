@@ -8,6 +8,7 @@ draft: false
 pin: 0
 toc: true
 lang: zh
+abbrlink: fix-wordpress-plugin-store
 ---
 ![封面](./_images/WordPress插件商店打不开，搞定回环错误排查与修复步骤-1754594730853.webp)
 ## 写在前面

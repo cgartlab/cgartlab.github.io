@@ -9,6 +9,7 @@ draft: false
 pin: 0
 toc: true
 lang: zh
+abbrlink: vangogh-level-artists-ai-replacement
 ---
 
 ![cover](./_images/梵高那种水平的画家会被AI淘汰吗？-1754479458229.webp)

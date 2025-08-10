@@ -9,6 +9,7 @@ draft: false
 pin: 0
 toc: true
 lang: zh
+abbrlink: 2024-elegant-use-windows
 ---
 
 ![](./_images/2024年，如何优雅使用WindowsPC-1754581781794.webp)

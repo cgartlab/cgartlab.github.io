@@ -9,6 +9,7 @@ draft: false
 pin: 0
 toc: true
 lang: zh
+abbrlink: weekly-09
 ---
 
 ![封面](../_images/09%20玄光周刊-OpenAI推出学习模式-1754681868774.webp)

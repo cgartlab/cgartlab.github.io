@@ -9,6 +9,7 @@ draft: false
 pin: 0
 toc: true
 lang: zh
+abbrlink: weekly-06
 ---
 > 关于玄光周刊
 >
