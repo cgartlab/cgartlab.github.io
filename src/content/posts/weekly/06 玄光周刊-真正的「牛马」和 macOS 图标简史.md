@@ -14,7 +14,8 @@ lang: zh
 >
 > 这是一份专注知识管理，涵盖数字艺术、视觉设计、前端开发领域的电子周刊，发布频率目前为每周 1 期，每期精选一个细分话题展开思考。其中会分享我写的关于创业、产品的笔记，包括我的所思所想、摘抄与批注、读书笔记、优质内容推荐。
 >
-> 如果你觉得这里的内容还不错，欢迎使用 [RSS](https://weekly.cgartlab.com/feed/atom) 或 [邮件订阅](https://weekly.cgartlab.com/) ，我们每周把这些笔记汇总为一封邮件发送给你。当然也欢迎你的 [来信](https://cgartlab.com/06-the-true-ox-and-horse-and-the-brief-history-of-macos-icons/) 。
+> 如果你觉得这里的内容还不错，欢迎使用 [RSS](https://weekly.cgartlab.com/feed/atom) 或 [邮件订阅](https://weekly.cgartlab.com/) ，我们每周把这些笔记汇总为一封邮件发送给你。当然也欢迎你的 [来信](mailto:info@cgartlab.com) 。
+
 
 ![青岛东方影都](../_images/06-真正的「牛马」和%20macOS%20图标简史-1754596615417.webp)
 
@@ -87,6 +88,6 @@ Centileo 渲染器是一个俄罗斯小型团队开发的无偏差 GPU 渲染器
 
 ---
 
-OK，本期就到这里。如果你觉得这里的内容还不错，欢迎使用 [RSS](https://weekly.cgartlab.com/feed/atom) 或 [邮件订阅](https://weekly.cgartlab.com/) ，我们每周把这些笔记汇总为一封邮件发送给你。当然也欢迎你的 [来信](https://cgartlab.com/06-the-true-ox-and-horse-and-the-brief-history-of-macos-icons/) ，我们会尽全力回复的。
+OK，本期就到这里。如果你觉得这里的内容还不错，欢迎使用 [RSS](https://weekly.cgartlab.com/feed/atom) 或 [邮件订阅](https://weekly.cgartlab.com/) ，我们每周把这些笔记汇总为一封邮件发送给你。当然也欢迎你的 [来信](mailto:info@cgartlab.com) ，我们会尽全力回复的。
 
 本文首发在 [玄光周刊](https://weekly.cgartlab.com/) 也会同时连载在 [CG 艺术实验室](https://cgartlab.com/)
