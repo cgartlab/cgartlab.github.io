@@ -250,7 +250,7 @@ Notion + Obsidian 能做的事情真的太多，Notion 深入骨髓的模块化�
 
 ![Obsidian 中的双链知识结构](./_images/2024年，如何优雅使用WindowsPC-1754582943756.webp)
 
-我近两年里的所有文章都是在 Notion 里编辑的，更具体的介绍可以看这篇《[解析设计师的第二大脑：从理念到实践](/posts/解析设计师的第二大脑从理念到实践/)》。
+我近两年里的所有文章都是在 Notion 里编辑的，更具体的介绍可以看这篇《[解析设计师的第二大脑：从理念到实践](/posts/second-brain-for-designer/)》。
 
 [**Traffic Monitor](https://github.com/zhongyang219/TrafficMonitor) ：硬件资源监控**
 

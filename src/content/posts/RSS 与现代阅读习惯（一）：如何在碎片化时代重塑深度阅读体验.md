@@ -108,7 +108,7 @@ RSS 的设计理念十分纯粹，就是人们获取信息的过程。通过 RSS
 
 如果说 RSS 是一个通知栏，订阅源就是它的本来面目。
 
-一般的门户网站、博客或企业官网，都会提供对应的 RSS 订阅源，通常它是一个链接，结构是 `网址+/feed` 或 `网址+/rss`，例如我自己的博客订阅源是 https://cgartlab.com/feed（欢迎订阅啊）。
+一般的门户网站、博客或企业官网，都会提供对应的 RSS 订阅源，通常它是一个链接，结构是 `网址+/feed` 或 `网址+/rss`，例如我自己的博客订阅源是 https://cgartlab.com/rss.xml （欢迎订阅啊）。
 
 当你点击这个链接，其实打开的是一个 xml 格式的文件，仔细观察可以看到里面包含了文章的标题（title），地址（link），发布日期（pubDate）等很多信息。
 
@@ -138,7 +138,7 @@ RSS 的设计理念十分纯粹，就是人们获取信息的过程。通过 RSS
 
 有的订阅平台也会推出自家的阅读器，不过因为 RSS 自身的纯粹理念，我还是更喜欢第三方阅读器。它们通常界面更美观，功能也更强大。
 
-例如我一开始是苹果全家桶用户，必须承认 macOS 和 iOS 的字体渲染十分养眼，因此常用的阅读器就是 [前文](https://cgartlab.com/in-2024-how-can-one-use-a-mac-more-elegantly/) 推荐过的 [Reeder](https://reederapp.com/)。后来由于工作涉及的任务更繁杂，不得不使用 Windows 和 Android 设备，逐渐开始把目光转向更多的阅读器，例如 [另一篇前文](https://cgartlab.com/how-to-use-windows-pc-elegantly-in-2024/) 也推荐过的 [Fluent Reader](https://github.com/yang991178/fluent-reader)，引用描述如下：
+例如我一开始是苹果全家桶用户，必须承认 macOS 和 iOS 的字体渲染十分养眼，因此常用的阅读器就是 [前文](/posts/2024-elegant-use-mac/) 推荐过的 [Reeder](https://reederapp.com/)。后来由于工作涉及的任务更繁杂，不得不使用 Windows 和 Android 设备，逐渐开始把目光转向更多的阅读器，例如 [另一篇前文](/posts/2024-elegant-use-windows/) 也推荐过的 [Fluent Reader](https://github.com/yang991178/fluent-reader)，引用描述如下：
 
 > 简洁美观的开源 RSS 阅读器，设计灵感来自 Fluent Design System。可以本地阅读，也能与兼容 Fever 或 Google Reader API 的自托管服务进行同步。支持与包括 Inoreader、Feedbin、The Old Reader、BazQux Reader 等在内的多种 RSS 服务进行同步，功能比较完善。
 >
