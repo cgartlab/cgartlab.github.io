@@ -145,6 +145,6 @@ pause
 
 这样每次面对一台刚刚重装系统或者刚买的电脑，只需要运行这个脚本，就可以把常用的软件一次性安装好了。
 
-所有的列表保存在这个 [txt 文档]([Software_Install_Script/Windows/software_list.txt at main · cgartlab/Software_Install_Script (github.com)](https://github.com/cgartlab/Software_Install_Script/blob/main/Windows/software_list.txt)) 里，每一行是一个软件 ID。脚本运行的时候会逐一读取每一行的 ID，执行安装命令。注意，如果已经安装的软件则会检查更新并升级到最新版本。默认情况下，列表里的软件是我自己常用的，你可以根据需要自己增减定制。
+所有的列表保存在这个 [txt 文档](https://github.com/cgartlab/Software_Install_Script/blob/main/Windows/software_list.txt) 里，每一行是一个软件 ID。脚本运行的时候会逐一读取每一行的 ID，执行安装命令。注意，如果已经安装的软件则会检查更新并升级到最新版本。默认情况下，列表里的软件是我自己常用的，你可以根据需要自己增减定制。
 
 哦对了，mac 的我也做了一个 :) 。

@@ -3,7 +3,8 @@ title: "WordPress插件商店打不开，搞定回环错误排查与修复步骤
 published: 2025-07-01
 description: "WordPress插件商店打不开的回环错误排查与修复步骤，包含宝塔面板和终端命令两种解决方案。"
 updated: 2025-07-01
-tags: ["技术分享"]
+tags: 
+- 技术分享
 draft: false
 pin: 0
 toc: true
