@@ -108,7 +108,7 @@ export const getPosts = memoize(_getPosts)
  */
 async function _getRegularPosts(lang?: string) {
   const posts = await getPosts(lang)
-  return posts.filter(post => !post.data.pin)
+  return posts.filter(post => !post.data.pin && !post.data.tags?.includes('周刊'))
 }
 
 export const getRegularPosts = memoize(_getRegularPosts)
@@ -122,7 +122,7 @@ export const getRegularPosts = memoize(_getRegularPosts)
 async function _getPinnedPosts(lang?: string) {
   const posts = await getPosts(lang)
   return posts
-    .filter(post => post.data.pin && post.data.pin > 0)
+    .filter(post => post.data.pin && post.data.pin > 0 && !post.data.tags?.includes('weekly'))
     .sort((a, b) => (b.data.pin ?? 0) - (a.data.pin ?? 0))
 }
 
