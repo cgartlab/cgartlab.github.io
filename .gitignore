@@ -34,7 +34,7 @@ Thumbs.db
 *.swo
 
 # Obsidian
-.obsidian/*
+src/content/posts/.obsidian/*
 
 # Trash
 .trash/*
