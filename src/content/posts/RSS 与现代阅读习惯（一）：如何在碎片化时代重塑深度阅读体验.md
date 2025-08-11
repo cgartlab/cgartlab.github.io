@@ -16,7 +16,7 @@ abbrlink: rss-1
 
 ## 前言：加速的时代，何去何从
 
-先说个暴露年龄的词：“[网上冲浪](/posts/15-years-browser-troubleshooting)”。如果你和我一样还记得这个词，应该至少也是个 90 后了。
+先说个暴露年龄的词：“[网上冲浪](https://cgartlab.com/posts/15-years-browser-troubleshooting)”。如果你和我一样还记得这个词，应该至少也是个 90 后了。
 
 “网上冲浪”这个词确实承载了一代人的记忆，它曾是互联网初期人们对上网行为的形象描述。这个词流行于上世纪 90 年代末到 21 世纪初期，那时候互联网刚开始在国内普及，上网对于很多人来说是一种新奇而充满探索的体验。
 
@@ -76,7 +76,7 @@ RSS 的设计理念十分纯粹，就是人们获取信息的过程。通过 RSS
 
 ![信息采集思路](./_images/RSS%20与现代阅读习惯（一）：如何在碎片化时代重塑深度阅读体验-1754593593515.webp)
 
-上图是 [我之前为自己规划的一套信息处理思路](/posts/second-brain-for-designer)，截取的信息采集部分。可以看到顶层便是 RSS、Web3.0 和 Newsletter 三驾马车，而如今的实际情况几乎只剩 RSS 一个了。（Web 3.0 实际也是 RSS3，这里先按下不表）
+上图是 [我之前为自己规划的一套信息处理思路](https://cgartlab.com/posts/second-brain-for-designer)，截取的信息采集部分。可以看到顶层便是 RSS、Web3.0 和 Newsletter 三驾马车，而如今的实际情况几乎只剩 RSS 一个了。（Web 3.0 实际也是 RSS3，这里先按下不表）
 
 我很早知道 RSS 这个东西，真正认真使用它还不到三年，可以确定的是使用过程中日渐感受以前的自己有种无知的傲慢。
 
@@ -138,7 +138,7 @@ RSS 的设计理念十分纯粹，就是人们获取信息的过程。通过 RSS
 
 有的订阅平台也会推出自家的阅读器，不过因为 RSS 自身的纯粹理念，我还是更喜欢第三方阅读器。它们通常界面更美观，功能也更强大。
 
-例如我一开始是苹果全家桶用户，必须承认 macOS 和 iOS 的字体渲染十分养眼，因此常用的阅读器就是 [前文](/posts/2024-elegant-use-mac/) 推荐过的 [Reeder](https://reederapp.com/)。后来由于工作涉及的任务更繁杂，不得不使用 Windows 和 Android 设备，逐渐开始把目光转向更多的阅读器，例如 [另一篇前文](/posts/2024-elegant-use-windows/) 也推荐过的 [Fluent Reader](https://github.com/yang991178/fluent-reader)，引用描述如下：
+例如我一开始是苹果全家桶用户，必须承认 macOS 和 iOS 的字体渲染十分养眼，因此常用的阅读器就是 [前文](https://cgartlab.com/posts/2024-elegant-use-mac/) 推荐过的 [Reeder](https://reederapp.com/)。后来由于工作涉及的任务更繁杂，不得不使用 Windows 和 Android 设备，逐渐开始把目光转向更多的阅读器，例如 [另一篇前文](https://cgartlab.com/posts/2024-elegant-use-windows/) 也推荐过的 [Fluent Reader](https://github.com/yang991178/fluent-reader)，引用描述如下：
 
 > 简洁美观的开源 RSS 阅读器，设计灵感来自 Fluent Design System。可以本地阅读，也能与兼容 Fever 或 Google Reader API 的自托管服务进行同步。支持与包括 Inoreader、Feedbin、The Old Reader、BazQux Reader 等在内的多种 RSS 服务进行同步，功能比较完善。
 >
