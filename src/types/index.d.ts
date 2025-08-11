@@ -81,6 +81,7 @@ export interface ThemeConfig {
       url: string
     }[]
     startYear: number
+    showWordCount: boolean
   }
   preload?: {
     imageHostURL?: string
