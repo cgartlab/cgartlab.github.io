@@ -1,9 +1,10 @@
 ---
 import { defaultLocale, themeConfig } from '@/config'
 import { getLangFromPath } from '@/i18n/lang'
+import { getTotalWordCount } from '@/utils/content'
 
 const { author } = themeConfig.site
-const { links: socialLinks, startYear } = themeConfig.footer
+const { links: socialLinks, startYear, showWordCount } = themeConfig.footer
 
 const currentYear = new Date().getFullYear()
 const year = Number(startYear) === currentYear ? startYear : `${startYear}-${currentYear}`
@@ -23,6 +24,12 @@ const links = socialLinks.map(({ name, url, ...rest }) => {
 })
 
 const footerLinkClass = 'highlight-hover py-0.8 transition-colors after:bottom-0.35em hover:c-primary'
+
+// 获取总字数
+let totalWords = 0
+if (showWordCount) {
+  totalWords = await getTotalWordCount(currentLang)
+}
 ---
 
 <footer
@@ -38,6 +45,6 @@ const footerLinkClass = 'highlight-hover py-0.8 transition-colors after:bottom-0
   </p>
 
   <p>
-    © {year} {author}
+    © {year} {author}{showWordCount && <> · 累计发表字数：{totalWords.toLocaleString()} 字</>}
   </p>
 </footer>
