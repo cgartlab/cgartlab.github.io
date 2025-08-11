@@ -173,7 +173,7 @@ Windows 11 针对 Intel 12 代之后的 CPU 提供了许多高级电源设置选
 
 # 目录结构与文件管理
 
-正如在之前《[流水的程序，铁打的数据](/posts/流水的程序铁打的数据/)》里提到过，对于目录结构和文件管理我定下的核心原则：
+正如在之前《[流水的程序，铁打的数据](https://cgartlab.com/posts/流水的程序铁打的数据/)》里提到过，对于目录结构和文件管理我定下的核心原则：
 
 > **非必要不增加分类：**前提是这个分类可以穷尽，例如文件类型无非是那么几种，但格式有无数种。
 
@@ -250,7 +250,7 @@ Notion + Obsidian 能做的事情真的太多，Notion 深入骨髓的模块化�
 
 ![Obsidian 中的双链知识结构](./_images/2024年，如何优雅使用WindowsPC-1754582943756.webp)
 
-我近两年里的所有文章都是在 Notion 里编辑的，更具体的介绍可以看这篇《[解析设计师的第二大脑：从理念到实践](/posts/second-brain-for-designer/)》。
+我近两年里的所有文章都是在 Notion 里编辑的，更具体的介绍可以看这篇《[解析设计师的第二大脑：从理念到实践](https://cgartlab.com/posts/second-brain-for-designer/)》。
 
 [**Traffic Monitor](https://github.com/zhongyang219/TrafficMonitor) ：硬件资源监控**
 
