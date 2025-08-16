@@ -18,11 +18,11 @@
     "fix-internal-links": "tsx scripts/fix-internal-links.ts"
   },
   "dependencies": {
-    "@astrojs/mdx": "^4.3.3",
+    "@astrojs/mdx": "^4.3.4",
     "@astrojs/partytown": "^2.1.4",
-    "@astrojs/sitemap": "^3.4.2",
+    "@astrojs/sitemap": "^3.5.0",
     "@waline/client": "^3.6.0",
-    "astro": "^5.12.9",
+    "astro": "^5.13.2",
     "astro-compress": "^2.3.8",
     "astro-og-canvas": "^0.7.0",
     "canvaskit-wasm": "^0.40.0",
