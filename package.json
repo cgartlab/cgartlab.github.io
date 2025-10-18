@@ -62,7 +62,7 @@
     "simple-git-hooks": "^2.13.1",
     "tsx": "^4.20.3",
     "typescript": "~5.9.2",
-    "unocss": "66.4.1",
+    "unocss": "66.5.2",
     "unocss-preset-theme": "^0.14.1"
   },
   "pnpm": {
