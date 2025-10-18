@@ -108,8 +108,8 @@ importers:
         specifier: 66.4.1
         version: 66.4.1
       '@unocss/reset':
-        specifier: 66.4.1
-        version: 66.4.1
+        specifier: 66.5.2
+        version: 66.5.2
       astro-eslint-parser:
         specifier: ^1.2.2
         version: 1.2.2
