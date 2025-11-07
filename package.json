@@ -18,7 +18,7 @@
     "fix-internal-links": "tsx scripts/fix-internal-links.ts"
   },
   "dependencies": {
-    "@astrojs/mdx": "^4.3.7",
+    "@astrojs/mdx": "^4.3.10",
     "@astrojs/partytown": "^2.1.4",
     "@astrojs/sitemap": "^3.5.0",
     "@waline/client": "^3.6.0",
@@ -38,20 +38,20 @@
     "remark-directive": "^4.0.0",
     "remark-math": "^6.0.0",
     "sanitize-html": "^2.17.0",
-    "sharp": "^0.34.4",
+    "sharp": "^0.34.5",
     "twikoo": "^1.6.44",
     "unist-util-visit": "^5.0.0"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^5.1.0",
-    "@astrojs/check": "^0.9.4",
+    "@astrojs/check": "^0.9.5",
     "@lokesh.dhakar/quantize": "^1.4.0",
     "@types/markdown-it": "^14.1.2",
     "@types/node": "^24.2.0",
     "@types/sanitize-html": "^2.16.0",
     "@unocss/eslint-plugin": "66.4.1",
     "@unocss/preset-attributify": "66.4.1",
-    "@unocss/reset": "66.5.4",
+    "@unocss/reset": "66.5.5",
     "astro-eslint-parser": "^1.2.2",
     "autocorrect-node": "^2.14.0",
     "eslint": "^9.32.0",
@@ -62,7 +62,7 @@
     "simple-git-hooks": "^2.13.1",
     "tsx": "^4.20.6",
     "typescript": "~5.9.3",
-    "unocss": "66.5.4",
+    "unocss": "66.5.5",
     "unocss-preset-theme": "^0.14.1"
   },
   "pnpm": {
