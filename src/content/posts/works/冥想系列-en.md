@@ -6,7 +6,6 @@ updated: 2019-08-08
 tags:
   - 作品
   - meditation
-  - mental health
   - mindfulness
 draft: false
 pin: 0
