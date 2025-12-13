@@ -2,14 +2,14 @@
 
 > 探索数字艺术的边界，分享CG技术与创作经验
 
-CG艺术实验室是一个基于 [Astro](https://astro.build) 构建的现代化静态网站，专注于计算机图形学、数字艺术创作、技术分享和知识管理。
+CG艺术实验室是一个基于 [Astro](https://astro.build) 构建的现代化静态网站，使用 [Retypeset](https://github.com/radishzzz/astro-theme-retypeset) 主题，专注于计算机图形学、数字艺术创作、技术分享和知识管理。
 
 ## 🌟 项目特色
 
 - **🎨 专业内容** - 专注于CG艺术、3D建模、渲染技术等专业领域
 - **🌐 多语言支持** - 支持简体中文、繁体中文和英文
 - **📚 内容集合管理** - 使用 Astro 的内容集合功能管理文章、周刊、作品等
-- **⚡ 现代技术栈** - Astro + TypeScript + TailwindCSS
+- **⚡ 现代技术栈** - Astro + TypeScript + UnoCSS
 - **🔍 SEO优化** - 内置完善的 SEO 和元数据管理
 - **📱 响应式设计** - 完美适配桌面和移动设备
 - **📰 RSS订阅** - 支持 RSS/Atom 订阅源
@@ -18,12 +18,12 @@ CG艺术实验室是一个基于 [Astro](https://astro.build) 构建的现代化
 
 | 技术 | 用途 | 版本 |
 |------|------|------|
-| [Astro](https://astro.build) | 静态站点生成器 | 最新稳定版 |
-| [TypeScript](https://www.typescriptlang.org/) | 类型安全开发 | 5.0+ |
-| [TailwindCSS](https://tailwindcss.com) | 实用优先的 CSS 框架 | 3.0+ |
-| [lucide-react](https://lucide.dev) | 美观的图标库 | 最新版 |
-| [Prism](https://prismjs.com) | 代码语法高亮 | 最新版 |
-| [Vite](https://vitejs.dev) | 快速构建工具 | 5.0+ |
+| [Astro](https://astro.build) | 静态站点生成器 | ^5.16.5 |
+| [TypeScript](https://www.typescriptlang.org/) | 类型安全开发 | ~5.9.2 |
+| [UnoCSS](https://unocss.dev) | 原子化 CSS 引擎 | 66.4.1 |
+| [lucide](https://lucide.dev) | 美观的图标库 | 最新版 |
+| [KaTeX](https://katex.org) | 数学公式渲染 | ^0.16.22 |
+| [Mermaid](https://mermaid-js.github.io) | 图表绘制 | ^11.12.2 |
 
 ## 📁 项目结构
 
@@ -31,28 +31,40 @@ CG艺术实验室是一个基于 [Astro](https://astro.build) 构建的现代化
 cgartlab.github.io/
 ├── .astro/                    # Astro 缓存和配置
 ├── public/                    # 静态资源
+│   ├── feeds/                # RSS/Atom 样式表
+│   ├── fonts/                # 字体文件
+│   ├── giscus/               # Giscus 评论系统样式
+│   ├── icons/                # 网站图标
 │   ├── images/               # 图片资源
+│   ├── sounds/               # 音频资源
 │   ├── favicon.ico           # 网站图标
 │   └── robots.txt            # 搜索引擎爬虫配置
 ├── src/
 │   ├── components/           # 可复用的 Astro 组件
-│   ├── content/             # 内容集合
-│   │   ├── posts/           # 博客文章
-│   │   ├── weekly/          # 玄光周刊
-│   │   ├── works/           # 作品展示
-│   │   ├── guides/          # 使用指南
-│   │   ├── about/           # 关于页面
-│   │   └── templates/       # 内容模板
-│   ├── layouts/             # 页面布局
-│   ├── pages/               # 路由页面
-│   ├── styles/              # 全局样式
-│   ├── utils/               # 工具函数
-│   └── types/               # TypeScript 类型定义
-├── .gitignore               # Git 忽略文件配置
-├── astro.config.mjs         # Astro 配置文件
-├── package.json             # 项目依赖配置
-├── tailwind.config.mjs      # TailwindCSS 配置
-└── tsconfig.json            # TypeScript 配置
+│   ├── content/              # 内容集合
+│   │   ├── about/            # 关于页面
+│   │   ├── guides/           # 使用指南
+│   │   ├── posts/            # 博客文章
+│   │   ├── templates/        # 内容模板
+│   │   ├── weekly/           # 玄光周刊
+│   │   └── works/            # 作品展示
+│   ├── i18n/                 # 国际化配置
+│   ├── layouts/              # 页面布局
+│   ├── pages/                # 路由页面
+│   ├── plugins/              # Markdown 插件
+│   ├── styles/               # 全局样式
+│   ├── utils/                # 工具函数
+│   ├── types/                # TypeScript 类型定义
+│   ├── config.ts             # 主题配置文件
+│   ├── content.config.ts     # 内容集合配置
+│   └── env.d.ts              # 环境类型声明
+├── scripts/                  # 脚本工具
+├── .gitignore                # Git 忽略文件配置
+├── astro.config.ts           # Astro 配置文件
+├── package.json              # 项目依赖配置
+├── pnpm-lock.yaml            # pnpm 锁文件
+├── tsconfig.json             # TypeScript 配置
+└── uno.config.ts             # UnoCSS 配置
 ```
 
 ## 🛠️ 开发指南
@@ -100,7 +112,11 @@ cgartlab.github.io/
 | `pnpm build` | 构建生产版本 | 生成优化的静态文件 |
 | `pnpm preview` | 预览构建结果 | 在生产环境中预览网站 |
 | `pnpm astro check` | 类型检查 | 检查 TypeScript 类型错误 |
-| `pnpm astro sync` | 同步类型定义 | 更新 TypeScript 类型定义 |
+| `pnpm new-post` | 创建新文章 | 使用脚本快速创建文章 |
+| `pnpm format-posts` | 格式化文章 | 自动优化 Markdown 格式 |
+| `pnpm update-theme` | 更新主题 | 同步上游主题更新 |
+| `pnpm lint` | 代码检查 | 检查代码风格问题 |
+| `pnpm lint:fix` | 自动修复代码风格 | 自动修复可修复的问题 |
 
 ### 开发工具配置
 
@@ -121,14 +137,18 @@ cgartlab.github.io/
 | **作品展示** | `src/content/works/` | 个人作品、项目展示 | 3D模型、渲染作品 |
 | **使用指南** | `src/content/guides/` | 软件使用、工作流程 | Blender教程、Substance指南 |
 | **关于页面** | `src/content/about/` | 个人介绍、联系方式 | 实验室介绍、团队成员 |
+| **内容模板** | `src/content/templates/` | 内容创建模板 | 各类内容的标准模板 |
 
 ### 创建新内容
 
-1. **使用模板**
+1. **使用脚本创建**
 
    ```bash
-   # 复制模板文件
-   cp src/content/templates/博客文章模板.md src/content/posts/新文章.md
+   # 使用脚本创建新文章
+   pnpm new-post 文章名称
+   
+   # 创建指定路径的文章
+   pnpm new-post 2025/03/文章名称
    ```
 
 2. **编辑元数据**
@@ -136,17 +156,19 @@ cgartlab.github.io/
    ```yaml
    ---
    title: "文章标题"
-   description: "文章描述"
-   published: "2024-01-01"  # 发布日期
-   tags: ["标签1", "标签2"]  # 标签列表
-   draft: false              # 是否为草稿
-   pin: 0                    # 置顶权重 (0-10)
-   toc: true                 # 是否显示目录
-   lang: zh                  # 语言代码
+   published: "2025-01-01"     # 发布日期 (必填)
+   updated: "2025-01-15"       # 最后更新日期 (可选)
+   description: "文章描述"     # 自动摘要或手动指定 (可选)
+   tags: ["标签1", "标签2"]     # 标签列表 (可选)
+   draft: false                # 是否为草稿 (默认: false)
+   pin: 0                      # 置顶权重 (0-99，默认: 0)
+   toc: true                   # 是否显示目录 (默认: true)
+   lang: zh                    # 语言代码 (可选)
+   abbrlink: custom-link       # 自定义永久链接 (可选)
    ---
    ```
 
-3. **编写内容** - 使用 Markdown 语法
+3. **编写内容** - 使用 Markdown 语法和扩展功能
 
 ### 内容格式规范
 
@@ -156,19 +178,23 @@ cgartlab.github.io/
 - **强调**: `**粗体**`、`*斜体*`、`~~删除线~~`
 - **列表**: `- 项目`、`1. 编号`
 - **代码**: \`行内代码\`、\`\`\`语言\n代码\n\`\`\`
+- **链接**: `[文本](链接)`、`![图片](图片链接)`
 
 #### 扩展功能
 
-- **提示块**: `> [!NOTE]` 或 `:::note`
-- **折叠内容**: `:::fold[标题]`
+- **容器指令**: `:::note`、`:::tip`、`:::warning`、`:::danger`
+- **折叠内容**: `:::details[标题]`
 - **GitHub仓库卡片**: `::github{repo="owner/repo"}`
 - **视频嵌入**: `::youtube{id="视频ID"}` 和 `::bilibili{id="BV号"}`
 - **X推文**: `::tweet{url="推文链接"}`
+- **数学公式**: `$行内公式$` 和 `$$块级公式$$`
+- **图表**: 使用 Mermaid 语法 ````mermaid\n图表代码\n````
 
 #### 图片和资源
 
 - 图片放在 `public/images/` 目录
 - 使用相对路径引用：`/images/图片名称.jpg`
+- 支持 LQIP (低质量图片占位符) 技术优化加载体验
 
 ## 🌐 多语言支持
 
@@ -179,32 +205,30 @@ cgartlab.github.io/
 | 简体中文 | `zh` | ✅ | 主要语言 |
 | 繁体中文 | `zh-tw` | ❌ | 繁体中文版本 |
 | 英文 | `en` | ❌ | 国际版本 |
+| 日文 | `ja` | ❌ | 日文版本 |
+| 俄文 | `ru` | ❌ | 俄文版本 |
+| 西班牙文 | `es` | ❌ | 西班牙文版本 |
 
 ### 语言配置
 
-语言配置位于 `src/i18n/ui.ts` 文件中：
-
-```typescript
-export const languages = {
-  zh: { title: '简体中文' },
-  'zh-tw': { title: '繁體中文' },
-  en: { title: 'English' }
-};
-
-export const defaultLang = 'zh';
-```
+语言配置位于 `src/i18n/ui.ts` 文件中，可以根据需要添加更多语言支持。
 
 ### 多语言内容创建
 
-创建多语言内容时，需要在文件名中包含语言代码：
+创建多语言内容时，可以在 Frontmatter 中指定语言：
 
-```bash
-# 简体中文版本
-src/content/posts/文章名称.zh.md
-
-# 英文版本  
-src/content/posts/article-name.en.md
+```yaml
+---
+title: "文章标题"
+published: "2025-01-01"
+lang: en  # 指定语言代码
+---
 ```
+
+或者使用文件名后缀方式：
+
+- `文章名称.zh.md` - 简体中文版本
+- `article-name.en.md` - 英文版本
 
 ## 📊 内容管理
 
@@ -327,14 +351,18 @@ on:
 
 ### 环境变量配置
 
-部署时需要配置的环境变量：
+部署时可能需要配置的环境变量：
 
 - `SITE_URL` - 网站域名
 - `PUBLIC_SITE_URL` - 公开网站地址
+- `APIFLASH_KEY` - APIFlash 访问密钥（用于 Open Graph 图片生成）
 
 ## 📄 许可证
 
-本项目采用 [MIT License](LICENSE) 开源许可证。
+本项目采用双重许可证：
+
+1. 文章内容采用 [知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议](LICENSE)
+2. 代码部分采用 [MIT License](LICENSE)
 
 ### 许可证条款
 
@@ -353,6 +381,7 @@ on:
 2. **修复问题** - 提交 Pull Request
 3. **改进文档** - 完善 README 和文档
 4. **翻译内容** - 帮助翻译多语言内容
+5. **创作内容** - 提交原创技术文章
 
 ### 提交 Pull Request
 
@@ -397,20 +426,21 @@ on:
 |------|------|------|
 | **开发状态** | 🟢 活跃开发 | 持续更新和维护 |
 | **版本** | v1.0.0 | 稳定版本 |
-| **测试覆盖率** | 85% | 单元测试和集成测试 |
-| **文档完整性** | 90% | 完善的文档和示例 |
+| **主题** | Retypeset | 基于 Astro 的静态博客主题 |
+| **文档完整性** | 95% | 完善的文档和示例 |
 
 ## 🙏 致谢
 
 感谢以下开源项目和社区的支持：
 
 - [Astro](https://astro.build) - 优秀的静态站点生成器
-- [TailwindCSS](https://tailwindcss.com) - 实用的 CSS 框架
+- [UnoCSS](https://unocss.dev) - 高性能原子化 CSS 引擎
 - [TypeScript](https://www.typescriptlang.org/) - 类型安全的 JavaScript
 - [Vercel](https://vercel.com) - 优秀的部署平台
+- [Retypeset Theme](https://github.com/radishzzz/astro-theme-retypeset) - 优秀的 Astro 博客主题
 
 ---
 
 *本项目由 [CG艺术实验室](https://cgartlab.com) 团队维护，致力于推动数字艺术和个人创作的发展。*
 
-*最后更新: 2025年10月*
+最后更新: 2025年12月
