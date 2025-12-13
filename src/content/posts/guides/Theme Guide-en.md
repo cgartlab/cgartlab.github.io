@@ -26,11 +26,14 @@ site: {
   // site description
   description: 'Retypeset is a static blog theme...'
   // use i18n title/subtitle/description from src/i18n/ui.ts instead of static ones above
-  i18nTitle: true // true, false
+  i18nTitle: true // true | false
   // author name
   author: 'radishzz'
   // site url
   url: 'https://retypeset.radishzz.cc'
+  // base path
+  // root directory for all pages and assets
+  base: '/' // e.g., '/blog', '/docs'
   // favicon url
   // recommended formats: svg, png or ico
   favicon: '/icons/favicon.svg' // or https://example.com/favicon.svg
@@ -42,7 +45,7 @@ site: {
 ```ts
 color: {
   // default theme mode
-  mode: 'light' // light, dark, auto
+  mode: 'light' // light | dark | auto
   // light mode
   light: {
     // primary color
@@ -77,23 +80,23 @@ color: {
 global: {
   // default language
   // language of the site root path '/'
-  locale: 'zh' // de, en, es, fr, ja, ko, pl, pt, ru, zh, zh-tw
+  locale: 'zh' // de | en | es | fr | ja | ko | pl | pt | ru | zh | zh-tw
   // more languages
   // generate multi-language paths such as '/en/' '/es/'
   // not fill in the locale code above again, can be an empty array []
   moreLocales: ['en', 'es', 'ja', 'ru', 'zh-tw'] // ['de', 'en', 'es', 'fr', 'ja', 'ko', 'pl', 'pt', 'ru', 'zh', 'zh-tw']
-  // font style
-  fontStyle: 'sans' // sans, serif
-  // date format for posts
-  // YYYY-MM-DD, MM-DD-YYYY, DD-MM-YYYY, MONTH DAY YYYY, DAY MONTH YYYY
+  // post font style
+  fontStyle: 'sans' // sans | serif
+  // post date format
+  // YYYY-MM-DD | MM-DD-YYYY | DD-MM-YYYY | MMM D YYYY | D MMM YYYY
   // 2025-04-13, 04-13-2025, 13-04-2025, Apr 13 2025，13 Apr 2025
   dateFormat: 'YYYY-MM-DD'
-  // table of contents for posts
-  toc: true // true, false
-  // KaTeX math rendering
-  katex: true // true, false
+  // enable table of contents
+  toc: true // true | false
+  // enable katex math rendering
+  katex: true // true | false
   // reduce motion
-  reduceMotion: false // true, false
+  reduceMotion: false // true | false
 }
 ```
 
@@ -102,7 +105,7 @@ global: {
 ```ts
 comment: {
   // enable comment system
-  enabled: true // true, false
+  enabled: true // true | false
   // giscus comment system
   giscus: {
     repo: ''
@@ -131,9 +134,9 @@ comment: {
       // more emojis: https://waline.js.org/en/guide/features/emoji.html
     ]
     // gif search
-    search: false // true, false
+    search: false // true | false
     // image uploader
-    imageUploader: false // true, false
+    imageUploader: false // true | false
   }
 }
 ```
@@ -158,7 +161,7 @@ seo: {
   // google analytics
   googleAnalyticsID: ''
   // umami analytics
-  umamiAnalyticsID: '520af332-bfb7-4e7c-9386-5f273ee3d697'
+  umamiAnalyticsID: 'dab0e4b9-9cbf-43c3-af60-b09d3b545c38'
   // follow verification
   follow: {
     // feed ID
@@ -167,7 +170,7 @@ seo: {
     userID: ''
   }
   // apiflash access key
-  // automatically generate website screenshots for open graph images
+  // generate website screenshots for open graph images
   // get your access key at: https://apiflash.com/
   apiflashKey: ''
 }
@@ -206,14 +209,14 @@ footer: {
 ```ts
 preload: {
   // image hosting url
-  // optimize remote images in Markdown files to avoid cumulative layout shift
+  // optimize remote images and generate low-quality placeholders
   imageHostURL: 'image.radishzz.cc'
   // custom google analytics js
-  // for users who route analytics javascript to a customized domain
+  // for users who proxy tracking scripts to a custom domain
   customGoogleAnalyticsJS: ''
   // custom umami analytics js
-  // for users who deploy umami on their own, or route analytics javascript to a customized domain
-  customUmamiAnalyticsJS: 'https://js.radishzz.cc/jquery.min.js'
+  // for users who self-deploy umami or proxy tracking scripts to a custom domain
+  customUmamiAnalyticsJS: 'https://views.radishzz.cc/script.js'
 }
 ```
 

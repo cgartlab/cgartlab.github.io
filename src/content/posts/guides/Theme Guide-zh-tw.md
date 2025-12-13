@@ -27,11 +27,14 @@ site: {
   // 站點描述
   description: 'Retypeset is a static blog theme...'
   // 使用 src/i18n/ui.ts 中的多語言標題/副標題/站點描述，代替上方靜態配置
-  i18nTitle: true // true, false
+  i18nTitle: true // true | false
   // 作者名稱
   author: 'radishzz'
   // 站點地址
   url: 'https://retypeset.radishzz.cc'
+  // 基礎路徑
+  // 所有頁面和資產的根目錄
+  base: '/' // 例如 '/blog', '/docs'
   // 站點圖標
   // 推薦格式：svg, png, ico
   favicon: '/icons/favicon.svg' // 或 https://example.com/favicon.svg
@@ -42,8 +45,8 @@ site: {
 
 ```ts
 color: {
-  // 默認主題
-  mode: 'light' // light, dark, auto
+  // 預設主題
+  mode: 'light' // light | dark | auto
   // 亮色模式
   light: {
     // 主要顏色
@@ -76,25 +79,25 @@ color: {
 
 ```ts
 global: {
-  // 默認語言
+  // 預設語言
   // 站點根路徑 '/' 的語言
-  locale: 'zh' // de, en, es, fr, ja, ko, pl, pt, ru, zh, zh-tw
+  locale: 'zh' // de | en | es | fr | ja | ko | pl | pt | ru | zh | zh-tw
   // 更多語言
   // 生成 '/en/' '/es/' 等多語言路徑
-  // 不要重複填寫默認語言，可以為空 []
+  // 不要重複填寫預設語言，可以為空 []
   moreLocales: ['en', 'es', 'ja', 'ru', 'zh-tw'] // ['de', 'en', 'es', 'fr', 'ja', 'ko', 'pl', 'pt', 'ru', 'zh', 'zh-tw']
-  // 字體樣式
-  fontStyle: 'sans' // sans, serif
+  // 文章字體樣式
+  fontStyle: 'sans' // sans | serif
   // 文章日期格式
-  // YYYY-MM-DD, MM-DD-YYYY, DD-MM-YYYY, MONTH DAY YYYY, DAY MONTH YYYY
+  // YYYY-MM-DD | MM-DD-YYYY | DD-MM-YYYY | MMM D YYYY | D MMM YYYY
   // 2025-04-13, 04-13-2025, 13-04-2025, Apr 13 2025，13 Apr 2025
   dateFormat: 'YYYY-MM-DD'
-  // 文章目錄
-  toc: true // true, false
-  // KaTeX 數學渲染
-  katex: true // true, false
+  // 啟用文章目錄
+  toc: true // true | false
+  // 啟用 katex 數學渲染
+  katex: true // true | false
   // 減少動畫效果
-  reduceMotion: false // true, false
+  reduceMotion: false // true | false
 }
 ```
 
@@ -102,8 +105,8 @@ global: {
 
 ```ts
 comment: {
-  // 開啟評論系統
-  enabled: true // true, false
+  // 啟用評論系統
+  enabled: true // true | false
   // giscus 評論系統
   giscus: {
     repo: ''
@@ -132,9 +135,9 @@ comment: {
       // 更多表情：https://waline.js.org/en/guide/features/emoji.html
     ]
     // gif 搜索
-    search: false // true, false
+    search: false // true | false
     // 圖片上傳
-    imageUploader: false // true, false
+    imageUploader: false // true | false
   }
 }
 ```
@@ -159,7 +162,7 @@ seo: {
   // google 網站分析
   googleAnalyticsID: ''
   // umami 網站分析
-  umamiAnalyticsID: '520af332-bfb7-4e7c-9386-5f273ee3d697'
+  umamiAnalyticsID: 'dab0e4b9-9cbf-43c3-af60-b09d3b545c38'
   // follow 驗證
   follow: {
     // 訂閱 ID
@@ -167,8 +170,8 @@ seo: {
     // 用戶 ID
     userID: ''
   }
-  // apiflash access key 訪問密鑰
-  // 自動生成網站截圖用於 open graph
+  // apiflash 訪問密鑰
+  // 生成網站截圖用於 open graph
   // 獲取訪問密鑰：https://apiflash.com/
   apiflashKey: ''
 }
@@ -207,14 +210,14 @@ footer: {
 ```ts
 preload: {
   // 圖床地址
-  // 優化 Markdown 文件中的遠程圖片以避免佈局抖動
+  // 優化遠程圖片並生成低質量占位圖
   imageHostURL: 'image.radishzz.cc'
-  // 定制 google analytics js
-  // 適用於路由 google analytics js 到自定義域名的用戶
+  // 定制 google analytics 跟蹤腳本
+  // 適用於代理跟蹤腳本到自定義域名的用戶
   customGoogleAnalyticsJS: ''
-  // 定制 umami analytics js
-  // 適用於自部署 umami，或路由 umami analytics js 到自定義域名的用戶
-  customUmamiAnalyticsJS: 'https://js.radishzz.cc/jquery.min.js'
+  // 定制 umami 跟蹤腳本
+  // 適用於自部署 umami 或代理跟蹤腳本到自定義域名的用戶
+  customUmamiAnalyticsJS: 'https://views.radishzz.cc/script.js'
 }
 ```
 
@@ -231,7 +234,7 @@ preload: {
 
 shikiConfig: {
   // 可選主題：https://shiki.style/themes
-  // 背景色默認跟隨部落格主題，而非語法高亮主題
+  // 背景色預設跟隨部落格主題，而非語法高亮主題
   themes: {
     light: 'github-light' // 亮色主題
     dark: 'github-dark' // 暗色主題
