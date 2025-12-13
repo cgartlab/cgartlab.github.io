@@ -30,7 +30,7 @@ abbrlink: markdown-extended-features
 
 ## 提示塊
 
-使用 GitHub 語法 `> [!TYPE]` 或三冒號語法 `:::type`，即可創建提示塊。支援 `note`、`tip`、`important`、`warning` 和 `caution` 五種類型。
+使用 GitHub 語法 `> [!TYPE]` 或三冒號語法 `:::type`，即可創建提示塊。支援 `note`、`tip`、`important`、`warning`、`caution` 五種類型。
 
 ### 語法
 
@@ -86,15 +86,15 @@ abbrlink: markdown-extended-features
 
 :::
 
-## 折疊部分
+## 折疊塊
 
-使用三冒號語法 `:::fold[title]`，即可創建折疊部分。點擊標題可以展開或收起。
+使用三冒號語法 `:::fold[title]`，即可創建折疊塊。點擊標題可以展開或收起。
 
 ### 語法
 
 ```
 :::fold[使用提示]
-如果需要添加並非所有讀者都會感興趣的內容，可以將其放在折疊部分。
+如果需要添加並非所有讀者都會感興趣的內容，可以將其放在折疊塊中。
 :::
 ```
 
@@ -105,6 +105,32 @@ abbrlink: markdown-extended-features
 如果需要添加並非所有讀者都會感興趣的內容，可以將其放在折疊部分。
 
 :::
+
+## Mermaid 圖表
+
+使用代碼塊包裹 Mermaid 語法，並標註語言類型 `mermaid`，即可創建 Mermaid 圖表。
+
+### 語法
+
+``````
+```mermaid
+graph TD;
+    A-->B;
+    A-->C;
+    B-->D;
+    C-->D;
+```
+``````
+
+### 效果
+
+```mermaid
+graph TD;
+    A-->B;
+    A-->C;
+    B-->D;
+    C-->D;
+```
 
 ## 畫廊
 
@@ -140,7 +166,7 @@ abbrlink: markdown-extended-features
 
 ## GitHub 倉庫
 
-使用雙冒號語法 `::github{repo="owner/repo"}`，即可創建 GitHub 倉庫卡片。在頁面載入後，從 GitHub API 中即時獲取倉庫數據。
+使用雙冒號語法 `::github{repo="owner/repo"}`，即可嵌入 GitHub 倉庫。
 
 ### 語法
 
@@ -154,7 +180,7 @@ abbrlink: markdown-extended-features
 
 ## 視頻
 
-使用雙冒號語法 `::youtube{id="videoId"}`，即可嵌入視頻。
+使用雙冒號語法 `::youtube{id="video-id"}`，即可嵌入視頻。
 
 ### 語法
 
@@ -169,10 +195,28 @@ abbrlink: markdown-extended-features
 ::youtube{id="9pP0pIgP2kE"}
 
 ::bilibili{id="BV1sK4y1Z7KG"}
+
+## Spotify
+
+使用雙冒號語法 `::spotify{url="spotify-url"}`，即可嵌入 Spotify 內容。
+
+### 語法
+
+```
+::spotify{url="https://open.spotify.com/track/0HYAsQwJIO6FLqpyTeD3l6"}
+
+::spotify{url="https://open.spotify.com/album/03QiFOKDh6xMiSTkOnsmMG"}
+```
+
+### 效果
+
+::spotify{url="https://open.spotify.com/track/0HYAsQwJIO6FLqpyTeD3l6"}
+
+::spotify{url="https://open.spotify.com/album/03QiFOKDh6xMiSTkOnsmMG"}
 
 ## X 推文
 
-使用雙冒號語法 `::tweet{url="tweetUrl"}`，即可嵌入 X 推文卡片。
+使用雙冒號語法 `::tweet{url="tweet-url"}`，即可嵌入 X 推文。
 
 ### 語法
 
@@ -183,3 +227,17 @@ abbrlink: markdown-extended-features
 ### 效果
 
 ::tweet{url="https://x.com/hachi_08/status/1906456524337123549"}
+
+## CodePen
+
+使用雙冒號語法 `::codepen{url="codepen-url"}`，即可嵌入 CodePen 範例。
+
+### 語法
+
+```
+::codepen{url="https://codepen.io/jh3y/pen/NWdNMBJ"}
+```
+
+### 效果
+
+::codepen{url="https://codepen.io/jh3y/pen/NWdNMBJ"}

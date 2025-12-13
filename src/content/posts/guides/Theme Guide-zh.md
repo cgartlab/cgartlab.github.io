@@ -27,11 +27,14 @@ site: {
   // 站点描述
   description: 'Retypeset is a static blog theme...'
   // 使用 src/i18n/ui.ts 中的多语言标题/副标题/站点描述，代替上方静态配置
-  i18nTitle: true // true, false
+  i18nTitle: true // true | false
   // 作者名称
   author: 'radishzz'
   // 站点地址
   url: 'https://retypeset.radishzz.cc'
+  // 基础路径
+  // 所有页面和资产的根目录
+  base: '/' // 例如 '/blog', '/docs'
   // 站点图标
   // 推荐格式：svg, png, ico
   favicon: '/icons/favicon.svg' // 或 https://example.com/favicon.svg
@@ -43,7 +46,7 @@ site: {
 ```ts
 color: {
   // 默认主题
-  mode: 'light' // light, dark, auto
+  mode: 'light' // light | dark | auto
   // 亮色模式
   light: {
     // 主要颜色
@@ -78,23 +81,23 @@ color: {
 global: {
   // 默认语言
   // 站点根路径 '/' 的语言
-  locale: 'zh' // de, en, es, fr, ja, ko, pl, pt, ru, zh, zh-tw
+  locale: 'zh' // de | en | es | fr | ja | ko | pl | pt | ru | zh | zh-tw
   // 更多语言
   // 生成 '/en/' '/es/' 等多语言路径
   // 不要重复填写默认语言，可以为空 []
   moreLocales: ['en', 'es', 'ja', 'ru', 'zh-tw'] // ['de', 'en', 'es', 'fr', 'ja', 'ko', 'pl', 'pt', 'ru', 'zh', 'zh-tw']
   // 字体样式
-  fontStyle: 'sans' // sans, serif
+  fontStyle: 'sans' // sans | serif
   // 文章日期格式
-  // YYYY-MM-DD, MM-DD-YYYY, DD-MM-YYYY, MONTH DAY YYYY, DAY MONTH YYYY
+  // YYYY-MM-DD | MM-DD-YYYY | DD-MM-YYYY | MMM D YYYY | D MMM YYYY
   // 2025-04-13, 04-13-2025, 13-04-2025, Apr 13 2025，13 Apr 2025
   dateFormat: 'YYYY-MM-DD'
-  // 文章目录
-  toc: true // true, false
-  // KaTeX 数学渲染
-  katex: true // true, false
+  // 开启文章目录
+  toc: true // true | false
+  // 开启 KaTeX 数学渲染
+  katex: true // true | false
   // 减少动画效果
-  reduceMotion: false // true, false
+  reduceMotion: false // true | false
 }
 ```
 
@@ -103,7 +106,7 @@ global: {
 ```ts
 comment: {
   // 开启评论系统
-  enabled: true // true, false
+  enabled: true // true | false
   // giscus 评论系统
   giscus: {
     repo: ''
@@ -132,9 +135,9 @@ comment: {
       // 更多表情：https://waline.js.org/en/guide/features/emoji.html
     ]
     // gif 搜索
-    search: false // true, false
+    search: false // true | false
     // 图片上传
-    imageUploader: false // true, false
+    imageUploader: false // true | false
   }
 }
 ```
@@ -159,7 +162,7 @@ seo: {
   // google 网站分析
   googleAnalyticsID: ''
   // umami 网站分析
-  umamiAnalyticsID: '520af332-bfb7-4e7c-9386-5f273ee3d697'
+  umamiAnalyticsID: 'dab0e4b9-9cbf-43c3-af60-b09d3b545c38'
   // follow 验证
   follow: {
     // 订阅 ID
@@ -167,8 +170,8 @@ seo: {
     // 用户 ID
     userID: ''
   }
-  // apiflash access key 访问密钥
-  // 自动生成网站截图用于 open graph
+  // apiflash 访问密钥
+  // 生成网站截图用于 open graph
   // 获取访问密钥：https://apiflash.com/
   apiflashKey: ''
 }
@@ -207,14 +210,14 @@ footer: {
 ```ts
 preload: {
   // 图床地址
-  // 优化 Markdown 文件中的远程图片以避免布局抖动
+  // 优化远程图片并生成低质量占位符
   imageHostURL: 'image.radishzz.cc'
-  // 定制 google analytics js
-  // 适用于路由 google analytics js 到自定义域名的用户
+  // 定制 google analytics 跟踪脚本
+  // 适用于代理跟踪脚本到自定义域名的用户
   customGoogleAnalyticsJS: ''
-  // 定制 umami analytics js
-  // 适用于自部署 umami，或路由 umami analytics js 到自定义域名的用户
-  customUmamiAnalyticsJS: 'https://js.radishzz.cc/jquery.min.js'
+  // 定制 umami 跟踪脚本
+  // 适用于自部署 umami 或代理跟踪脚本到自定义域名的用户
+  customUmamiAnalyticsJS: 'https://views.radishzz.cc/script.js'
 }
 ```
 

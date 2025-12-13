@@ -106,6 +106,32 @@ Content that may not interest all readers can be placed in a collapsible section
 
 :::
 
+## Mermaid Diagrams
+
+To create Mermaid diagrams, wrap Mermaid syntax in code blocks and specify the language type as `mermaid`.
+
+### Syntax
+
+``````
+```mermaid
+graph TD;
+    A-->B;
+    A-->C;
+    B-->D;
+    C-->D;
+```
+``````
+
+### Output
+
+```mermaid
+graph TD;
+    A-->B;
+    A-->C;
+    B-->D;
+    C-->D;
+```
+
 ## Galleries
 
 To create image galleries, use the container directive `:::gallery`. Scroll horizontally to view more images.
@@ -140,7 +166,7 @@ To create image galleries, use the container directive `:::gallery`. Scroll hori
 
 ## GitHub Repositories
 
-To create GitHub repository cards, use the leaf directive `::github{repo="owner/repo"}`. Repository data is fetched in real-time from the GitHub API after the page loads.
+To embed GitHub repositories, use the leaf directive `::github{repo="owner/repo"}`.
 
 ### Syntax
 
@@ -154,7 +180,7 @@ To create GitHub repository cards, use the leaf directive `::github{repo="owner/
 
 ## Videos
 
-To embed videos, use the leaf directive `::youtube{id="videoId"}`.
+To embed videos, use the leaf directive `::youtube{id="video-id"}`.
 
 ### Syntax
 
@@ -169,10 +195,28 @@ To embed videos, use the leaf directive `::youtube{id="videoId"}`.
 ::youtube{id="9pP0pIgP2kE"}
 
 ::bilibili{id="BV1sK4y1Z7KG"}
+
+## Spotify
+
+To embed Spotify content, use the leaf directive `::spotify{url="spotify-url"}`.
+
+### Syntax
+
+```
+::spotify{url="https://open.spotify.com/track/0HYAsQwJIO6FLqpyTeD3l6"}
+
+::spotify{url="https://open.spotify.com/album/03QiFOKDh6xMiSTkOnsmMG"}
+```
+
+### Output
+
+::spotify{url="https://open.spotify.com/track/0HYAsQwJIO6FLqpyTeD3l6"}
+
+::spotify{url="https://open.spotify.com/album/03QiFOKDh6xMiSTkOnsmMG"}
 
 ## Tweets
 
-To embed tweet cards, use the leaf directive `::tweet{url="tweetUrl"}`.
+To embed tweets, use the leaf directive `::tweet{url="tweet-url"}`.
 
 ### Syntax
 
@@ -183,3 +227,17 @@ To embed tweet cards, use the leaf directive `::tweet{url="tweetUrl"}`.
 ### Output
 
 ::tweet{url="https://x.com/hachi_08/status/1906456524337123549"}
+
+## CodePen
+
+To embed CodePen demos, use the leaf directive `::codepen{url="codepen-url"}`.
+
+### Syntax
+
+```
+::codepen{url="https://codepen.io/jh3y/pen/NWdNMBJ"}
+```
+
+### Output
+
+::codepen{url="https://codepen.io/jh3y/pen/NWdNMBJ"}
