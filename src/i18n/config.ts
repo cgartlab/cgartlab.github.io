@@ -1,3 +1,5 @@
+export type Language = 'en' | 'zh' | 'zh-tw'
+
 // Global Language Map
 export const langMap: Record<string, string[]> = {
   'en': ['en-US'],
