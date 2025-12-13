@@ -3,28 +3,29 @@ import PostList from '@/components/PostList.astro'
 import { defaultLocale, moreLocales } from '@/config'
 import Layout from '@/layouts/Layout.astro'
 import { getPostsByTag, getTagSupportedLangs } from '@/utils/content'
+import type { Language } from '@/i18n/config'
 
 export async function getStaticPaths() {
   type PathItem = {
     params: { works: string }
-    props: { lang: string }
+    props: { lang: Language }
   }
 
   const paths: PathItem[] = []
 
   // Default locale
   paths.push({
-    params: { works: 'works/' },
-    props: { lang: defaultLocale },
+    params: { works: '' },
+    props: { lang: defaultLocale as Language },
   })
 
   // More locales
-  for (const lang of moreLocales) {
+  moreLocales.forEach((lang) => {
     paths.push({
-      params: { works: `${lang}/works/` },
-      props: { lang },
+      params: { works: lang },
+      props: { lang: lang as Language },
     })
-  }
+  })
 
   return paths
 }

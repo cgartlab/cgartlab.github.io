@@ -43,11 +43,11 @@ export function isAboutPage(path: string) {
 }
 
 export function isWorksPage(path: string) {
-  return isPageType(path, 'works')
+  return matchPageType(path, 'works')
 }
 
 export function isWeeklyPage(path: string) {
-  return isPageType(path, 'weekly')
+  return matchPageType(path, 'weekly')
 }
 
 // Returns page context with language, page types and localization helper

@@ -238,24 +238,24 @@ async function _getTagSupportedLangs(tag: string): Promise<Language[]> {
 export const getTagSupportedLangs = memoize(_getTagSupportedLangs)
 
 /**
- * 统计所有文章的字数
- * 汉字、中文标点和英文单词各算一个字
+ * Get total word count of all posts
+ * Count Chinese characters, punctuation and English words as one character each
  *
  * @param lang The language code to filter by, defaults to site's default language
- * @returns 总字数
+ * @returns Total word count
  */
-async function _getTotalWordCount(lang?: string): Promise<number> {
+async function _getTotalWordCount(lang?: Language): Promise<number> {
   const posts = await getPosts(lang)
   let totalWords = 0
 
   for (const post of posts) {
-    // 获取文章正文内容
+    // Get post body content
     const textContent = post.body || ''
 
-    // 统计中文字数（包含汉字和中文标点）
+    // Count Chinese characters (including Chinese characters and punctuation)
     const chineseChars = textContent.match(/[\u4E00-\u9FA5\u3000-\u303F\uFF00-\uFFEF]/g) || []
 
-    // 统计英文单词数
+    // Count English words
     const englishWords = textContent.match(/[a-z]+/gi) || []
 
     totalWords += chineseChars.length + englishWords.length
