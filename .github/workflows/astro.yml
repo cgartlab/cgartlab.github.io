@@ -67,18 +67,17 @@ jobs:
             echo "Unable to determine package manager"
             exit 1
           fi
+      - name: Ensure pnpm available
+        run: |
+          corepack enable
+          corepack prepare pnpm@10.14.0 --activate
+        shell: bash
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: "20"
           cache: ${{ steps.detect-package-manager.outputs.manager }}
           cache-dependency-path: ${{ env.BUILD_PATH }}/${{ steps.detect-package-manager.outputs.lockfile }}
-      - name: Ensure pnpm available
-        if: steps.detect-package-manager.outputs.manager == 'pnpm'
-        run: |
-          corepack enable
-          corepack prepare pnpm@10.14.0 --activate
-        shell: bash
       - name: Setup Pages
         id: pages
         uses: actions/configure-pages@v5
