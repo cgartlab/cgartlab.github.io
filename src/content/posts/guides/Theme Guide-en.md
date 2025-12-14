@@ -7,6 +7,7 @@ tags:
 pin: 0
 lang: en
 abbrlink: theme-guide
+draft: true
 ---
 
 Retypeset is a static blog theme based on the [Astro](https://astro.build/) framework. This guide introduces how to modify theme configuration and create new posts, helping you quickly set up your personal blog.

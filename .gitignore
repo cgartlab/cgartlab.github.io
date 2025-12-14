@@ -34,6 +34,7 @@ Thumbs.db
 *.swo
 
 # Obsidian
+src/content/posts/.copilot-index/*
 src/content/posts/.obsidian/*
 
 # Trash

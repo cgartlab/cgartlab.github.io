@@ -1,9 +1,9 @@
 ---
+import type { Language } from '@/i18n/config'
 import PostList from '@/components/PostList.astro'
 import { defaultLocale, moreLocales } from '@/config'
 import Layout from '@/layouts/Layout.astro'
 import { getPostsByTag, getTagSupportedLangs } from '@/utils/content'
-import type { Language } from '@/i18n/config'
 
 export async function getStaticPaths() {
   type PathItem = {
@@ -13,16 +13,16 @@ export async function getStaticPaths() {
 
   const paths: PathItem[] = []
 
-  // Default locale
+  // Default locale - 'weekly' is the base path
   paths.push({
-    params: { weekly: '' },
+    params: { weekly: 'weekly' },
     props: { lang: defaultLocale as Language },
   })
 
-  // More locales
+  // More locales - 'weekly/lang'
   moreLocales.forEach((lang) => {
     paths.push({
-      params: { weekly: lang },
+      params: { weekly: `weekly/${lang}` },
       props: { lang: lang as Language },
     })
   })
