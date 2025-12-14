@@ -1,7 +1,7 @@
 /**
- * Generate and apply LQIP (Low-Quality Image Placeholders) to images
- * Source: https://frzi.medium.com/lqip-css-73dc6dda2529
- * Usage: pnpm apply-lqip
+ * 生成并应用LQIP（低质量图像占位符）到图像
+ * 来源: https://frzi.medium.com/lqip-css-73dc6dda2529
+ * 用法: pnpm apply-lqip
  */
 
 import type { HTMLElement } from 'node-html-parser'
@@ -31,7 +31,7 @@ interface FileMapping {
   webUrl: string
 }
 
-// Pack RGB color into 11 bits (4 bits R, 4 bits G, 3 bits B)
+// 将RGB颜色打包为11位（4位R，4位G，3位B）
 function packColor11Bit(r: number, g: number, b: number): number {
   const pr = Math.round((r / 255) * 15)
   const pg = Math.round((g / 255) * 15)
@@ -39,7 +39,7 @@ function packColor11Bit(r: number, g: number, b: number): number {
   return (pr << 7) | (pg << 3) | pb
 }
 
-// Pack RGB color into 10 bits (3 bits R, 4 bits G, 3 bits B)
+// 将RGB颜色打包为10位（3位R，4位G，3位B）
 function packColor10Bit(r: number, g: number, b: number): number {
   const pr = Math.round((r / 255) * 7)
   const pg = Math.round((g / 255) * 15)
@@ -51,16 +51,16 @@ async function generateLqipValue(imagePath: string): Promise<string | null> {
   try {
     const instance = sharp(imagePath)
 
-    // Resize to 3x3 to get key colors (Top-Left, Center, Bottom-Right)
+    // 调整为3x3以获取关键颜色（左上角、中心、右下角）
     const buffer = await instance
       .resize(3, 3, { fit: 'fill' })
-      .removeAlpha() // Force RGB output
+      .removeAlpha() // 强制RGB输出
       .raw()
       .toBuffer()
 
-    // Extract colors at specific positions
-    // 0: Top-Left, 4: Center, 8: Bottom-Right
-    // Each pixel is 3 bytes (RGB)
+    // 在特定位置提取颜色
+    // 0: 左上角, 4: 中心, 8: 右下角
+    // 每个像素为3个字节（RGB）
     const getPixel = (index: number) => ({
       r: buffer[index * 3],
       g: buffer[index * 3 + 1],
@@ -71,26 +71,26 @@ async function generateLqipValue(imagePath: string): Promise<string | null> {
     const c1 = getPixel(4)
     const c2 = getPixel(8)
 
-    // Pack colors: [Color0 11b] [Color1 11b] [Color2 10b]
+    // 打包颜色: [颜色0 11位] [颜色1 11位] [颜色2 10位]
     const pc0 = packColor11Bit(c0.r, c0.g, c0.b)
     const pc1 = packColor11Bit(c1.r, c1.g, c1.b)
     const pc2 = packColor10Bit(c2.r, c2.g, c2.b)
 
-    // Combine into a 32-bit integer
+    // 组合成一个32位整数
     const combined = (BigInt(pc0) << 21n) | (BigInt(pc1) << 10n) | BigInt(pc2)
 
-    // Convert to 8-digit hex string
+    // 转换为8位十六进制字符串
     return combined.toString(16).padStart(8, '0')
   }
   catch (error) {
-    console.error(`⚠️ Failed to process image: ${imagePath}`, error)
+    console.error(`⚠️ 处理图像失败: ${imagePath}`, error)
     return null
   }
 }
 
 /**
- * LQIP processing functions
- * Image analysis, mapping generation, and HTML application
+ * LQIP处理函数
+ * 图像分析、映射生成和HTML应用
  */
 async function loadExistingLqipMap(): Promise<LqipMap> {
   try {
@@ -150,7 +150,7 @@ async function processNewImages(fileMappings: FileMapping[], stats: ImageStats, 
     }
     processed++
     if (processed % 10 === 0 || processed === stats.new) {
-      console.log(`🔄 Processing: ${processed}/${stats.new}`)
+      console.log(`🔄 处理中: ${processed}/${stats.new}`)
     }
   }
 
@@ -161,11 +161,11 @@ async function processNewImages(fileMappings: FileMapping[], stats: ImageStats, 
     await Promise.all(batch.map(processFile))
   }
 
-  console.log(`✅ Generated LQIP styles for ${stats.new} new images`)
+  console.log(`✅ 为${stats.new}个新图像生成了LQIP样式`)
 
   const isNewFile = Object.keys(cleanedMap).length === 0
   await fs.writeFile(lqipMapPath, `${JSON.stringify(newMap, null, 2)}\n`)
-  console.log(`📁 LQIP mapping ${isNewFile ? 'saved to' : 'updated in'} ${lqipMapPath}`)
+  console.log(`📁 LQIP映射${isNewFile ? '保存到' : '更新于'} ${lqipMapPath}`)
 
   return newMap
 }
@@ -222,7 +222,7 @@ async function applyLqipToHtml(lqipMap: LqipMap): Promise<number> {
       }
     }
     catch (error) {
-      console.warn(`⚠️ Failed to process ${htmlFile}:`, error)
+      console.warn(`⚠️ 处理${htmlFile}失败:`, error)
       continue
     }
   }
@@ -231,20 +231,20 @@ async function applyLqipToHtml(lqipMap: LqipMap): Promise<number> {
 }
 
 /**
- * Main workflow
- * Coordinates LQIP generation and application process
+ * 主工作流程
+ * 协调LQIP生成和应用过程
  */
 async function main() {
-  console.log('🔍 Starting LQIP processing...')
+  console.log('🔍 开始LQIP处理...')
 
   const { fileMappings, imageStats, existingMap } = await scanAndAnalyzeImages()
 
   if (imageStats.total === 0) {
-    console.log('✨ No images found to process')
+    console.log('✨ 没有找到需要处理的图像')
     return
   }
 
-  console.log(`📦 Found ${imageStats.total} images (${imageStats.cached} cached, ${imageStats.new} new)`)
+  console.log(`📦 找到${imageStats.total}个图像（${imageStats.cached}个已缓存，${imageStats.new}个新增）`)
 
   const cleanedMap = cleanLqipMap(existingMap, fileMappings)
 
@@ -263,14 +263,14 @@ async function main() {
   const appliedCount = await applyLqipToHtml(lqipMap)
 
   if (appliedCount === 0) {
-    console.log('✨ All images already have LQIP styles')
+    console.log('✨ 所有图像已具有LQIP样式')
     return
   }
 
-  console.log(`✨ Successfully applied LQIP styles to ${appliedCount} images`)
+  console.log(`✨ 成功为${appliedCount}个图像应用了LQIP样式`)
 }
 
 main().catch((error) => {
-  console.error('❌ LQIP processing failed:', error)
+  console.error('❌ LQIP处理失败:', error)
   process.exit(1)
 })

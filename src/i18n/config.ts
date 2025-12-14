@@ -1,13 +1,13 @@
 export type Language = 'en' | 'zh' | 'zh-tw'
 
-// Global Language Map
+// 全局语言映射
 export const langMap: Record<string, string[]> = {
   'en': ['en-US'],
   'zh': ['zh-CN'],
   'zh-tw': ['zh-TW'],
 }
 
-// Giscus Language Map
+// Giscus 语言映射
 // https://giscus.app/
 export const giscusLocaleMap: Record<string, string> = {
   'en': 'en',
@@ -15,7 +15,7 @@ export const giscusLocaleMap: Record<string, string> = {
   'zh-tw': 'zh-TW',
 }
 
-// Twikoo Language Map
+// Twikoo 语言映射
 // https://github.com/twikoojs/twikoo/blob/main/src/client/utils/i18n/index.js
 export const twikooLocaleMap: Record<string, string> = {
   'en': 'en',
@@ -23,7 +23,7 @@ export const twikooLocaleMap: Record<string, string> = {
   'zh-tw': 'zh-tw',
 }
 
-// Waline Language Map
+// Waline 语言映射
 // https://waline.js.org/en/guide/features/i18n.html
 export const walineLocaleMap: Record<string, string> = {
   'en': 'en-US',
@@ -31,5 +31,5 @@ export const walineLocaleMap: Record<string, string> = {
   'zh-tw': 'zh-TW',
 }
 
-// Supported Languages
+// 支持的语言
 export const supportedLangs = Object.keys(langMap).flat()

@@ -163,19 +163,23 @@ const embedHandlers = {
 export function remarkLeafDirectives() {
   return (tree) => {
     visit(tree, 'leafDirective', (node) => {
+      // 获取处理器
       const handler = embedHandlers[node.name]
       if (!handler) {
         return
       }
 
+      // 获取HTML内容
       const htmlContent = handler(node)
       if (!htmlContent) {
         return
       }
 
+      // 转换节点为HTML
       node.type = 'html'
       node.value = htmlContent
 
+      // 删除原始属性
       delete node.name
       delete node.attributes
       delete node.children

@@ -47,16 +47,19 @@ const checkIcon = {
 export function rehypeCodeCopyButton() {
   return (tree) => {
     visit(tree, 'element', (node, index, parent) => {
+      // 检查是否是代码块
       if (node.tagName !== 'pre' || node.children?.[0]?.tagName !== 'code' || !parent) {
         return
       }
 
+      // 避免重复添加按钮
       if (node._hasCopyButton) {
         return
       }
 
       node._hasCopyButton = true
 
+      // 包装代码块并添加复制按钮
       parent.children[index] = {
         type: 'element',
         tagName: 'div',
@@ -68,7 +71,7 @@ export function rehypeCodeCopyButton() {
             properties: {
               'className': ['code-copy-button'],
               'type': 'button',
-              'aria-label': 'Copy code',
+              'aria-label': '复制代码',
             },
             children: [copyIcon, checkIcon],
           },
