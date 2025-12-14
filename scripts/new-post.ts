@@ -1,6 +1,6 @@
 /**
- * Create a new post with frontmatter
- * Usage: pnpm new-post <title>
+ * 创建带有前置事项的新文章
+ * 用法: pnpm new-post <title>
  */
 
 import { existsSync, mkdirSync, writeFileSync } from 'node:fs'
@@ -8,7 +8,7 @@ import { basename, dirname, extname, join } from 'node:path'
 import process from 'node:process'
 import { themeConfig } from '../src/config'
 
-// Process file path
+// 处理文件路径
 const rawPath = process.argv[2] ?? 'new-post'
 const baseName = basename(rawPath).replace(/\.(md|mdx)$/, '')
 const targetFile = ['.md', '.mdx'].includes(extname(rawPath))
@@ -16,16 +16,16 @@ const targetFile = ['.md', '.mdx'].includes(extname(rawPath))
   : `${rawPath}.md`
 const fullPath = join('src/content/posts', targetFile)
 
-// Check if file already exists
+// 检查文件是否已存在
 if (existsSync(fullPath)) {
-  console.error(`❌ File already exists: ${fullPath}`)
+  console.error(`❌ 文件已存在: ${fullPath}`)
   process.exit(1)
 }
 
-// Create directory structure
+// 创建目录结构
 mkdirSync(dirname(fullPath), { recursive: true })
 
-// Prepare file content
+// 准备文件内容
 const content = `---
 title: ${baseName}
 published: ${new Date().toISOString()}
@@ -41,12 +41,12 @@ abbrlink: ''
 ---
 `
 
-// Write to file
+// 写入文件
 try {
   writeFileSync(fullPath, content)
-  console.log(`✅ Post created: ${fullPath}`)
+  console.log(`✅ 文章已创建: ${fullPath}`)
 }
 catch (error) {
-  console.error('❌ Failed to create post:', error)
+  console.error('❌ 创建文章失败:', error)
   process.exit(1)
 }

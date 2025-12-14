@@ -1,6 +1,6 @@
 /**
- * Update theme from upstream repository
- * Usage: pnpm update-theme
+ * 从上游仓库更新主题
+ * 用法: pnpm update-theme
  */
 
 import { execSync } from 'node:child_process'
@@ -8,7 +8,7 @@ import fs from 'node:fs'
 import path from 'node:path'
 import process from 'node:process'
 
-// Check and set up the remote repository
+// 检查并设置远程仓库
 try {
   execSync('git remote get-url upstream', { stdio: 'ignore' })
 }
@@ -16,7 +16,7 @@ catch {
   execSync('git remote add upstream https://github.com/radishzzz/astro-theme-retypeset.git', { stdio: 'inherit' })
 }
 
-// Update theme from upstream repository
+// 从上游仓库更新主题
 try {
   execSync('git fetch upstream', { stdio: 'inherit' })
 
@@ -25,22 +25,22 @@ try {
   const afterHash = execSync('git rev-parse HEAD', { encoding: 'utf8' }).trim()
 
   if (beforeHash === afterHash) {
-    console.log('✅ Already up to date')
+    console.log('✅ 已经是最新版本')
   }
   else {
-    console.log('✨ Updated successfully')
+    console.log('✨ 更新成功')
   }
 }
 catch (error) {
-  // Check if there's a merge conflict
+  // 检查是否存在合并冲突
   const gitDir = execSync('git rev-parse --git-dir', { encoding: 'utf8' }).trim()
   const mergeHeadPath = path.join(gitDir, 'MERGE_HEAD')
 
   if (fs.existsSync(mergeHeadPath)) {
-    console.log('⚠️ Update fetched with merge conflicts. Please resolve manually')
+    console.log('⚠️ 更新获取完成但存在合并冲突，请手动解决')
   }
   else {
-    console.error('❌ Update failed:', error)
+    console.error('❌ 更新失败:', error)
     process.exit(1)
   }
 }

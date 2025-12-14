@@ -1,8 +1,8 @@
 /**
- * Memoizes an async function, caching results by arguments
+ * 记忆化异步函数，按参数缓存结果
  *
- * @param fn - The async function to memoize
- * @returns Memoized function that caches results
+ * @param fn - 需要记忆化的异步函数
+ * @returns 记忆化后的函数，会缓存结果
  */
 export function memoize<Args extends any[], T>(
   fn: (...args: Args) => Promise<T>,
@@ -10,19 +10,19 @@ export function memoize<Args extends any[], T>(
   const cache = new Map<string, Promise<T>>()
 
   return async (...args: Args): Promise<T> => {
-    // Generate cache key from function arguments
+    // 根据函数参数生成缓存键
     const key = JSON.stringify(args)
 
-    // Return cached promise if it exists
+    // 如果存在缓存的Promise则返回
     if (cache.has(key)) {
       return cache.get(key)!
     }
 
-    // Execute the original function and cache the promise
+    // 执行原始函数并将Promise存入缓存
     const promise = fn(...args)
     cache.set(key, promise)
 
-    // Remove failed promises from cache to allow retry
+    // 从缓存中删除失败的Promise以允许重试
     promise.catch(() => {
       cache.delete(key)
     })

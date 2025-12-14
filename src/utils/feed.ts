@@ -17,20 +17,20 @@ const { title, description, i18nTitle, url, author } = themeConfig.site
 const { follow } = themeConfig.seo ?? {}
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-// Dynamically import all images from /src/content/posts/_images
+// 动态导入 /src/content/posts/_images 下的所有图像
 const imagesGlob = import.meta.glob<{ default: ImageMetadata }>(
   '/src/content/posts/_images/**/*.{jpeg,jpg,png,gif,webp}',
 )
 
 /**
- * Converts relative image paths to absolute URLs
+ * 将相对图像路径转换为绝对URL
  *
- * @param srcPath - Relative image path from markdown content
- * @param baseUrl - Site base URL
- * @returns Optimized image URL or null if processing fails
+ * @param srcPath - 来自markdown内容的相对图像路径
+ * @param baseUrl - 站点基础URL
+ * @returns 优化后的图像URL，如果处理失败则返回null
  */
 async function _getAbsoluteImageUrl(srcPath: string, baseUrl: string) {
-  // Remove relative path prefixes (../ and ./) from image source path
+  // 从图像源路径中移除相对路径前缀 (../ 和 ./)
   const prefixRemoved = srcPath.replace(/^(?:\.\.\/)+|^\.\//, '')
   const absolutePath = `/src/content/posts/${prefixRemoved}`
   const imageImporter = imagesGlob[absolutePath]
@@ -39,11 +39,11 @@ async function _getAbsoluteImageUrl(srcPath: string, baseUrl: string) {
     return null
   }
 
-  // Import image module and extract its metadata
+  // 导入图像模块并提取其元数据
   const imageMetadata = await imageImporter()
     .then(importedModule => importedModule.default)
     .catch((error) => {
-      console.warn(`Failed to import image: ${absolutePath}`, error)
+      console.warn(`导入图像失败: ${absolutePath}`, error)
       return null
     })
 
@@ -51,20 +51,20 @@ async function _getAbsoluteImageUrl(srcPath: string, baseUrl: string) {
     return null
   }
 
-  // Create optimized image from metadata
+  // 从元数据创建优化图像
   const optimizedImage = await getImage({ src: imageMetadata })
   return new URL(optimizedImage.src, baseUrl).toString()
 }
 
-// Export memoized version
+// 导出记忆化版本
 const getAbsoluteImageUrl = memoize(_getAbsoluteImageUrl)
 
 /**
- * Fix relative image paths in HTML content
+ * 修复HTML内容中的相对图像路径
  *
- * @param htmlContent HTML content string
- * @param baseUrl Base URL of the site
- * @returns Processed HTML string with all image paths converted to absolute URLs
+ * @param htmlContent HTML内容字符串
+ * @param baseUrl 站点的基础URL
+ * @returns 处理后的HTML字符串，其中所有图像路径都已转换为绝对URL
  */
 async function fixRelativeImagePaths(htmlContent: string, baseUrl: string): Promise<string> {
   const htmlDoc = parse(htmlContent)
@@ -79,19 +79,19 @@ async function fixRelativeImagePaths(htmlContent: string, baseUrl: string): Prom
 
     imagePromises.push((async () => {
       try {
-        // Skip if not a relative path to src/content/posts/_images directory
+        // 如果不是指向src/content/posts/_images目录的相对路径则跳过
         if (!src.startsWith('./') && !src.startsWith('../') && !src.startsWith('_images/')) {
           return
         }
 
-        // Process images from src/content/posts/_images directory
+        // 处理来自src/content/posts/_images目录的图像
         const absoluteImageUrl = await getAbsoluteImageUrl(src, baseUrl)
         if (absoluteImageUrl) {
           img.setAttribute('src', absoluteImageUrl)
         }
       }
       catch (error) {
-        console.warn(`Failed to convert relative image path to absolute URL: ${src}`, error)
+        console.warn(`无法将相对图像路径转换为绝对URL: ${src}`, error)
       }
     })())
   }
@@ -103,24 +103,24 @@ async function fixRelativeImagePaths(htmlContent: string, baseUrl: string): Prom
 
 /**
  * >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
- * Generate a feed object supporting both RSS and Atom formats
+ * 生成支持RSS和Atom格式的订阅源对象
  *
- * @param options Feed generation options
- * @param options.lang Optional language code
- * @returns A Feed instance ready for RSS or Atom output
+ * @param options 订阅源生成选项
+ * @param options.lang 可选的语言代码
+ * @returns 已准备好用于RSS或Atom输出的Feed实例
  */
 export async function generateFeed({ lang }: { lang?: Language } = {}) {
   const currentUI = ui[lang as keyof typeof ui] ?? ui[defaultLocale as keyof typeof ui] ?? {}
   const siteURL = lang ? `${url}${base}/${lang}/` : `${url}${base}/`
 
-  // Create Feed instance
+  // 创建Feed实例
   const feed = new Feed({
     title: i18nTitle ? currentUI.title : title,
     description: i18nTitle ? currentUI.description : description,
     id: siteURL,
     link: siteURL,
     language: lang ?? themeConfig.global.locale,
-    copyright: `Copyright © ${new Date().getFullYear()} ${author}`,
+    copyright: `版权所有 © ${new Date().getFullYear()} ${author}`,
     updated: new Date(),
     generator: 'Astro-Theme-Retypeset with Feed for Node.js',
 
@@ -135,7 +135,7 @@ export async function generateFeed({ lang }: { lang?: Language } = {}) {
     },
   })
 
-  // Filter posts by language and exclude drafts
+  // 按语言筛选文章并排除草稿
   const posts = await getCollection(
     'posts',
     ({ data }: { data: CollectionEntry<'posts'>['data'] }) => {
@@ -148,26 +148,26 @@ export async function generateFeed({ lang }: { lang?: Language } = {}) {
     },
   )
 
-  // Sort posts by published date in descending order and limit to the latest 25
+  // 按发布日期降序排列文章并限制为最新的25篇
   const recentPosts = [...posts]
     .sort((a, b) => new Date(b.data.published).getTime() - new Date(a.data.published).getTime())
     .slice(0, 25)
 
-  // Add posts to feed
+  // 将文章添加到订阅源
   for (const post of recentPosts) {
     const slug = post.data.abbrlink || post.id
     const link = new URL(`posts/${slug}/`, siteURL).toString()
 
-    // Optimize content processing
+    // 优化内容处理
     const postContent = post.body
       ? sanitizeHtml(
           await fixRelativeImagePaths(
-            // Remove HTML comments before rendering markdown
+            // 渲染markdown之前移除HTML注释
             markdownParser.render(post.body.replace(/<!--[\s\S]*?-->/g, '')),
             `${url}${base}/`,
           ),
           {
-            // Allow <img> tags in feed content
+            // 在订阅源内容中允许<img>标签
             allowedTags: sanitizeHtml.defaults.allowedTags.concat(['img']),
           },
         )
@@ -175,7 +175,7 @@ export async function generateFeed({ lang }: { lang?: Language } = {}) {
 
     // publishDate -> Atom:<published>, RSS:<pubDate>
     const publishDate = new Date(post.data.published)
-    // updateDate -> Atom:<updated>, RSS has no update tag
+    // updateDate -> Atom:<updated>, RSS没有更新标签
     const updateDate = post.data.updated ? new Date(post.data.updated) : publishDate
 
     feed.addItem({
@@ -193,7 +193,7 @@ export async function generateFeed({ lang }: { lang?: Language } = {}) {
     })
   }
 
-  // Add follow verification if available
+  // 如果可用，添加关注验证
   if (follow?.feedID && follow?.userID) {
     feed.addExtension({
       name: 'follow_challenge',
@@ -208,13 +208,13 @@ export async function generateFeed({ lang }: { lang?: Language } = {}) {
 }
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-// Generate RSS 2.0 format feed
+// 生成RSS 2.0格式的订阅源
 export async function generateRSS(context: APIContext) {
   const feed = await generateFeed({
     lang: context.params?.lang as Language | undefined,
   })
 
-  // Add XSLT stylesheet to RSS feed
+  // 为RSS订阅源添加XSLT样式表
   let rssXml = feed.rss2()
   rssXml = rssXml.replace(
     '<?xml version="1.0" encoding="utf-8"?>',
@@ -228,13 +228,13 @@ export async function generateRSS(context: APIContext) {
   })
 }
 
-// Generate Atom 1.0 format feed
+// 生成Atom 1.0格式的订阅源
 export async function generateAtom(context: APIContext) {
   const feed = await generateFeed({
     lang: context.params?.lang as Language | undefined,
   })
 
-  // Add XSLT stylesheet to Atom feed
+  // 为Atom订阅源添加XSLT样式表
   let atomXml = feed.atom1()
   atomXml = atomXml.replace(
     '<?xml version="1.0" encoding="utf-8"?>',

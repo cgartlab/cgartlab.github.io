@@ -8,7 +8,7 @@ const admonitionTypes = {
   caution: 'CAUTION',
 }
 
-// Extract text from directive label
+// 从指令标签中提取文本
 function getLabelText(node) {
   return node?.children
     ?.map(child => child.type === 'text' ? child.value : '')
@@ -16,7 +16,7 @@ function getLabelText(node) {
     .trim() || ''
 }
 
-// Admonition Blocks
+// 警告块
 function createAdmonition(node, type, title) {
   const titleSpan = `<span class="admonition-title">${title}</span>`
 
@@ -32,7 +32,7 @@ function createAdmonition(node, type, title) {
   })
 }
 
-// Collapsible Sections
+// 可折叠部分
 function createFoldSection(node, title) {
   const summary = `<summary>${title}</summary>`
 
@@ -45,7 +45,7 @@ function createFoldSection(node, title) {
   })
 }
 
-// Gallery Containers
+// 画廊容器
 function createGallery(node) {
   node.data ??= {}
   node.data.hName = 'div'
@@ -61,14 +61,14 @@ export function remarkContainerDirectives() {
   )
 
   return (tree) => {
-    // Handle :::type[title] syntax
+    // 处理 :::type[title] 语法
     visit(tree, 'containerDirective', (node) => {
       const type = node.name
       const labelNode = node.children?.[0]
 
-      // Admonition Blocks
+      // 警告块
       if (admonitionTypes[type]) {
-        // Optional [title] for admonitions
+        // 警告块的可选 [title]
         let title = admonitionTypes[type]
 
         if (labelNode?.data?.directiveLabel) {
@@ -83,12 +83,12 @@ export function remarkContainerDirectives() {
         return
       }
 
-      // Collapsible Sections
+      // 可折叠部分
       if (type === 'fold') {
-        // Require non-empty [title]
+        // 需要非空的 [title]
         const title = getLabelText(labelNode)
         if (!labelNode?.data?.directiveLabel || !title) {
-          console.warn(`:::fold syntax requires [title] brackets with non-empty content`)
+          console.warn(`:::fold 语法需要带有非空内容的 [title] 括号`)
           return
         }
 
@@ -97,9 +97,9 @@ export function remarkContainerDirectives() {
         return
       }
 
-      // Gallery Containers
+      // 画廊容器
       if (type === 'gallery') {
-        // Remove label if exists
+        // 移除存在的标签
         if (labelNode?.data?.directiveLabel) {
           node.children.shift()
         }
@@ -108,7 +108,7 @@ export function remarkContainerDirectives() {
       }
     })
 
-    // Handle > [!TYPE] syntax
+    // 处理 > [!TYPE] 语法
     visit(tree, 'blockquote', (node) => {
       const firstTextNode = node.children?.[0]?.children?.[0]
       if (firstTextNode?.type !== 'text') {

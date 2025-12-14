@@ -4,13 +4,13 @@ export function rehypeHeadingAnchor() {
   return (tree) => {
     visit(tree, 'element', (node) => {
       if (['h1', 'h2', 'h3', 'h4'].includes(node.tagName) && node.properties?.id) {
-        // Extract heading text
+        // 提取标题文本
         let headingText = ''
         visit(node, 'text', (textNode) => {
           headingText += textNode.value
         })
 
-        // Create anchor link
+        // 创建锚点链接
         node.children.push({
           type: 'element',
           tagName: 'a',
@@ -18,7 +18,7 @@ export function rehypeHeadingAnchor() {
             href: `#${node.properties.id}`,
             className: ['heading-anchor-link'],
             ariaLabel: headingText
-              ? `Link to ${headingText.replace(/["']/g, char => char === '"' ? '&quot;' : '&#39;')}`
+              ? `链接到 ${headingText.replace(/["']/g, char => char === '"' ? '&quot;' : '&#39;')}`
               : undefined,
           },
           children: [{

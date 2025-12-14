@@ -34,30 +34,30 @@ const htmlEntityMap: Record<string, string> = {
   '&nbsp;': ' ',
 }
 
-// Creates a clean text excerpt with length limits by language and scene
+// 根据语言和场景创建指定长度的纯净文本摘要
 function getExcerpt(text: string, lang: Language, scene: ExcerptScene): string {
   const isCJK = (lang: Language) => ['zh', 'zh-tw', 'ja', 'ko'].includes(lang)
   const length = isCJK(lang)
     ? excerptLengths[scene].cjk
     : excerptLengths[scene].other
 
-  // Remove HTML tags
+  // 移除HTML标签
   let cleanText = text.replace(/<[^>]*>/g, '')
 
-  // Decode HTML entities
+  // 解码HTML实体
   Object.entries(htmlEntityMap).forEach(([entity, char]) => {
     cleanText = cleanText.replace(new RegExp(entity, 'g'), char)
   })
 
-  // Normalize whitespace
+  // 规范化空白字符
   cleanText = cleanText.replace(/\s+/g, ' ')
 
-  // Normalize CJK punctuation spacing
+  // 规范化CJK标点符号间距
   cleanText = cleanText.replace(/([。？！："」』])\s+/g, '$1')
 
   const excerpt = cleanText.slice(0, length).trim()
 
-  // Remove trailing punctuation and add ellipsis
+  // 移除尾部标点符号并添加省略号
   if (cleanText.length > length) {
     return `${excerpt.replace(/\p{P}+$/u, '')}...`
   }
@@ -65,7 +65,7 @@ function getExcerpt(text: string, lang: Language, scene: ExcerptScene): string {
   return excerpt
 }
 
-// Generates post description from existing description or content
+// 从现有描述或内容生成文章描述
 export function getPostDescription(
   post: CollectionEntry<'posts'>,
   scene: ExcerptScene,
@@ -73,7 +73,7 @@ export function getPostDescription(
   const lang = (post.data.lang || defaultLocale) as Language
 
   if (post.data.description) {
-    // Only truncate for og scene, return full description for other scenes
+    // 仅为og场景截断，其他场景返回完整描述
     return scene === 'og'
       ? getExcerpt(post.data.description, lang, scene)
       : post.data.description
@@ -81,12 +81,12 @@ export function getPostDescription(
 
   const rawContent = post.body || ''
   const cleanContent = rawContent
-    .replace(/<!--[\s\S]*?-->/g, '') // Remove HTML comments
-    .replace(/```[\s\S]*?```/g, '') // Remove code blocks
-    .replace(/^\s*#{1,6}\s+\S.*$/gm, '') // Remove Markdown headings
-    .replace(/^\s*::.*$/gm, '') // Remove directive containers
-    .replace(/^\s*>\s*\[!.*\]$/gm, '') // Remove GitHub admonition markers
-    .replace(/\n{2,}/g, '\n\n') // Normalize newlines
+    .replace(/<!--[\s\S]*?-->/g, '') // 移除HTML注释
+    .replace(/```[\s\S]*?```/g, '') // 移除代码块
+    .replace(/^\s*#{1,6}\s+\S.*$/gm, '') // 移除Markdown标题
+    .replace(/^\s*::.*$/gm, '') // 移除指令容器
+    .replace(/^\s*>\s*\[!.*\]$/gm, '') // 移除GitHub警告标记
+    .replace(/\n{2,}/g, '\n\n') // 规范化换行符
 
   const renderedContent = markdownParser.render(cleanContent)
   return getExcerpt(renderedContent, lang, scene)

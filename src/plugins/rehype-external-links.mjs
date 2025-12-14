@@ -8,7 +8,7 @@ export function rehypeExternalLinks() {
           node.properties.target = '_blank'
           node.properties.rel = ['noopener', 'noreferrer']
 
-          // Add Umami outbound link tracking
+          // 添加 Umami 外链跟踪
           node.properties.dataUmamiEvent = 'outbound-link-click'
           node.properties.dataUmamiEventUrl = node.properties.href
         }

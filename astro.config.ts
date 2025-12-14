@@ -28,7 +28,7 @@ const imageConfig = imageHostURL
 export default defineConfig({
   site,
   base,
-  trailingSlash: 'always', // Not recommended to change
+  trailingSlash: 'always', // 不建议更改
   prefetch: {
     prefetchAll: true,
     defaultStrategy: 'viewport', // hover, tap, viewport, load
@@ -82,7 +82,7 @@ export default defineConfig({
       excludeLangs: ['mermaid'],
     },
     shikiConfig: {
-      // Available themes: https://shiki.style/themes
+      // 可用主题: https://shiki.style/themes
       themes: {
         light: 'github-light',
         dark: 'github-dark',
