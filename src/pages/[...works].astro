@@ -1,6 +1,6 @@
 ---
 import type { Language } from '@/i18n/config'
-import PostList from '@/components/PostList.astro'
+import WorksGallery from '@/components/WorksGallery.astro'
 import { defaultLocale, moreLocales } from '@/config'
 import Layout from '@/layouts/Layout.astro'
 import { getPostsByTag, getTagSupportedLangs } from '@/utils/content'
@@ -39,9 +39,23 @@ const supportedLangs = await getTagSupportedLangs('作品')
   <!-- Decorative Line -->
   <div class="uno-decorative-line" />
 
-  <!-- Posts List -->
+  <!-- Page Header -->
+  <div class="mt-10.5 text-center">
+    <h1 class="mb-4 text-6 c-primary font-bold">
+      {lang === 'zh' ? '作品展示' : lang === 'zh-tw' ? '作品展示' : 'Works Gallery'}
+    </h1>
+    <p class="mx-auto max-w-2xl text-lg opacity-80">
+      {lang === 'zh'
+? '探索我的创作历程，从数字艺术到项目实践'
+       : lang === 'zh-tw'
+? '探索我的創作歷程，從數字藝術到項目實踐'
+       : 'Explore my creative journey, from digital art to project practice'}
+    </p>
+  </div>
+
+  <!-- Works Gallery -->
   <div class="mt-10.5">
-    <PostList
+    <WorksGallery
       posts={posts}
       lang={lang}
     />

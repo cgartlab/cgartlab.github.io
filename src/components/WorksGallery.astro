@@ -1,0 +1,228 @@
+---
+import type { ImageMetadata } from 'astro'
+import type { Language } from '@/i18n/config'
+import type { Post } from '@/types'
+import { getPostPath } from '@/i18n/path'
+
+interface Props {
+  posts: Post[]
+  lang: Language
+}
+
+const { posts, lang } = Astro.props
+
+// 动态导入 src/content/posts/_images 目录下的所有图片
+const imagesGlob = import.meta.glob<{ default: ImageMetadata }>(
+  '/src/content/posts/_images/**/*.{jpeg,jpg,png,gif,webp}',
+  { eager: true },
+)
+
+// 提取文章的第一张图片
+async function getThumbnail(post: Post): Promise<{ type: 'image', src: string } | null> {
+  const content = post.body || ''
+
+  // 检查是否有第一张图片
+  const imageMatch = content.match(/!\[.*?\]\((.*?\.(?:webp|jpg|jpeg|png|gif))\)/)
+  if (imageMatch) {
+    const imagePath = imageMatch[1]
+
+    // 处理相对路径，转换为绝对路径
+    if (imagePath.startsWith('./_images/') || imagePath.startsWith('../_images/')) {
+      // 解码URL编码的字符（如%20）
+      const decodedPath = decodeURIComponent(imagePath)
+      const imageName = decodedPath.replace(/^\.\.?\/_images\//, '')
+      const absolutePath = `/src/content/posts/_images/${imageName}`
+
+      // 查找对应的图片模块
+      const imageImporter = imagesGlob[absolutePath]
+      if (imageImporter) {
+        const imageMetadata = imageImporter.default
+        // 直接返回图片路径，Astro会自动处理优化
+        return { type: 'image', src: imageMetadata.src }
+      }
+    }
+
+    // 如果是外部链接，直接使用
+    if (imagePath.startsWith('http')) {
+      return { type: 'image', src: imagePath }
+    }
+
+    // 其他情况返回原路径
+    return { type: 'image', src: imagePath }
+  }
+
+  return null
+}
+
+// 获取文章描述
+function getDescription(post: Post): string {
+  return post.data.description || '暂无描述'
+}
+---
+
+<div class="works-gallery">
+  <div class="gallery-grid">
+    {await Promise.all(posts.map(async (post) => {
+      const slug = post.data.abbrlink || post.id
+      const thumbnail = await getThumbnail(post)
+      const description = getDescription(post)
+
+      return (
+        <a
+          href={getPostPath(slug, lang)}
+          class="gallery-item"
+          transition:name={`post-${slug}${lang ? `-${lang}` : ''}`}
+          data-disable-theme-toggle-transition
+        >
+          <div class="thumbnail-container">
+            {thumbnail
+? (
+                <img
+                  src={thumbnail.src}
+                  alt={post.data.title}
+                  loading="lazy"
+                  class="thumbnail"
+                />
+            )
+: (
+              <div class="thumbnail-placeholder">
+                <span class="placeholder-text">暂无图片</span>
+              </div>
+            )}
+            <div class="overlay">
+              <h3 class="title">{post.data.title}</h3>
+              <p class="description">{description}</p>
+              <div class="date">
+                {post.data.published.toLocaleDateString(lang === 'zh' ? 'zh-CN' : 'en-US')}
+              </div>
+            </div>
+          </div>
+        </a>
+      )
+    }))}
+  </div>
+</div>
+
+<style>
+  .works-gallery {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+  }
+
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+  }
+
+  .gallery-item {
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border-radius: 12px;
+    overflow: hidden;
+    background: var(--bg-secondary);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  .gallery-item:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  }
+
+  .thumbnail-container {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16/9;
+    overflow: hidden;
+  }
+
+  .thumbnail {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease, filter 0.3s ease;
+  }
+
+  .gallery-item:hover .thumbnail {
+    transform: scale(1.05);
+    filter: blur(2px) brightness(0.8);
+  }
+
+  .thumbnail-placeholder {
+    width: 100%;
+    height: 100%;
+    background: var(--bg-tertiary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-secondary);
+  }
+
+  .placeholder-text {
+    font-size: 0.9rem;
+    opacity: 0.7;
+  }
+
+  .overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+    color: white;
+    padding: 1.5rem 1rem 1rem;
+    transform: translateY(100%);
+    transition: transform 0.3s ease;
+  }
+
+  .gallery-item:hover .overlay {
+    transform: translateY(0);
+  }
+
+  .title {
+    margin: 0 0 0.5rem 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+    line-height: 1.3;
+  }
+
+  .description {
+    margin: 0 0 0.5rem 0;
+    font-size: 0.9rem;
+    opacity: 0.9;
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .date {
+    font-size: 0.8rem;
+    opacity: 0.7;
+  }
+
+
+
+  /* 响应式设计 */
+  @media (max-width: 768px) {
+    .gallery-grid {
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .works-gallery {
+      padding: 1rem 0.5rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .gallery-grid {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+  }
+</style>
