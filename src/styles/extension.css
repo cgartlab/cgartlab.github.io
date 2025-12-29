@@ -142,6 +142,9 @@ details[open] summary::before {
 .gallery-container .gallery-item {
   --at-apply: 'my-0 max-w-80% flex-shrink-0 lg:max-w-70%';
 }
+.gallery-container .gallery-item img {
+  --at-apply: 'rounded-2';
+}
 :is(h1, h2, h3, h4, h5, h6, .gallery-container) + .gallery-container {
   --at-apply: 'mt-4';
 }

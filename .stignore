@@ -53,6 +53,7 @@ Thumbs.db
 # ===========================================
 src/content/posts/.obsidian/
 src/content/posts/.copilot-index/
+.obsidian
 
 # ===========================================
 # Git相关文件
