@@ -56,10 +56,10 @@
 
 /* Images */
 .heti :where(img:not(.no-heti):not(.no-heti *)) {
-  --at-apply: 'mx-auto cursor-zoom-in';
+  --at-apply: 'mx-auto cursor-zoom-in rounded-2';
 }
 .heti :where(img:not(figure img):not(.no-heti):not(.no-heti *)) {
-  --at-apply: 'my-6';
+  --at-apply: 'my-6 rounded-2';
 }
 .heti :where(figure) {
   --at-apply: 'my-6 w-full';
