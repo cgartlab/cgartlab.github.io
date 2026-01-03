@@ -58,97 +58,304 @@ async function getThumbnail(post: Post): Promise<{ type: 'image', src: string } 
 function getDescription(post: Post): string {
   return post.data.description || '暂无描述'
 }
+
+// 获取所有分类标签
+function getCategories(posts: Post[]): string[] {
+  const categories = new Set<string>()
+  posts.forEach((post) => {
+    if (post.data.tags && post.data.tags.length > 0) {
+      post.data.tags.forEach(tag => categories.add(tag))
+    }
+  })
+  return Array.from(categories).sort()
+}
 ---
 
 <div class="works-gallery">
-  <div class="gallery-grid">
-    {await Promise.all(posts.map(async (post) => {
+  <!-- 分类标签 -->
+  <div class="category-tags">
+    <div class="no-heti flex flex-wrap gap-x-3 gap-y-3.2">
+      <button
+        class="category-tag active"
+        data-category="all"
+      >
+        <span class="category-text">{lang === 'zh' ? '全部' : lang === 'zh-tw' ? '全部' : 'All'}</span>
+      </button>
+      {getCategories(posts).map(category => (
+        <button
+          class="category-tag"
+          data-category={category}
+        >
+          <span class="category-text">{category}</span>
+        </button>
+      ))}
+    </div>
+  </div>
+
+  <!-- 相册列表 -->
+  <div class="album-list">
+    {await Promise.all(posts.map(async (post, index) => {
       const slug = post.data.abbrlink || post.id
       const thumbnail = await getThumbnail(post)
       const description = getDescription(post)
+      const postCategories = post.data.tags || []
 
       return (
-        <a
-          href={getPostPath(slug, lang)}
-          class="gallery-item"
-          transition:name={`post-${slug}${lang ? `-${lang}` : ''}`}
-          data-disable-theme-toggle-transition
+        <div
+          class="album-item"
+          data-categories={postCategories.join(',')}
         >
-          <div class="thumbnail-container">
-            {thumbnail
-? (
-                <img
-                  src={thumbnail.src}
-                  alt={post.data.title}
-                  loading="lazy"
-                  class="thumbnail"
-                />
-            )
-: (
-              <div class="thumbnail-placeholder">
-                <span class="placeholder-text">暂无图片</span>
+          <a
+            href={getPostPath(slug, lang)}
+            class="album-link"
+            transition:name={`post-${slug}${lang ? `-${lang}` : ''}`}
+            data-disable-theme-toggle-transition
+          >
+            <div class="album-content">
+              <!-- 左侧：文章信息 -->
+              <div class="album-info">
+                <h3 class="album-title">{post.data.title}</h3>
+                <p class="album-description">{description}</p>
+                <div class="album-meta">
+                  <span class="album-date">
+                    {post.data.published.toLocaleDateString(lang === 'zh' ? 'zh-CN' : 'en-US')}
+                  </span>
+                  {postCategories.length > 0 && (
+                    <span class="album-category">
+                      {postCategories[0]}
+                    </span>
+                  )}
+                </div>
               </div>
-            )}
-            <div class="overlay">
-              <h3 class="title">{post.data.title}</h3>
-              <p class="description">{description}</p>
-              <div class="date">
-                {post.data.published.toLocaleDateString(lang === 'zh' ? 'zh-CN' : 'en-US')}
+
+              <!-- 右侧：缩略图 -->
+              <div class="album-thumbnail">
+                {thumbnail
+? (
+                    <img
+                      src={thumbnail.src}
+                      alt={post.data.title}
+                      loading="lazy"
+                      class="thumbnail-image"
+                    />
+                )
+: (
+                  <div class="thumbnail-placeholder">
+                    <span class="placeholder-text">暂无图片</span>
+                  </div>
+                )}
               </div>
             </div>
-          </div>
-        </a>
+          </a>
+
+          <!-- 分割线（除了最后一项） -->
+          {index < posts.length - 1 && <div class="album-divider"></div>}
+        </div>
       )
     }))}
   </div>
+
+  <!-- 分类筛选脚本 -->
+  <script>
+document.addEventListener('DOMContentLoaded', () => {
+  const categoryTags = document.querySelectorAll('.category-tag')
+  const albumItems = document.querySelectorAll('.album-item')
+
+  categoryTags.forEach((tag) => {
+    tag.addEventListener('click', (event) => {
+      const target = event.target as HTMLElement
+
+      // 移除所有标签的激活状态
+      categoryTags.forEach(t => t.classList.remove('active'))
+      // 添加当前标签的激活状态
+      target.classList.add('active')
+
+      const selectedCategory = target.dataset.category || 'all'
+
+      // 筛选作品
+      albumItems.forEach((item) => {
+        const itemElement = item as HTMLElement
+        if (selectedCategory === 'all') {
+          itemElement.style.display = 'block'
+        }
+        else {
+          const categories = itemElement.dataset.categories?.split(',') || []
+          if (categories.includes(selectedCategory)) {
+            itemElement.style.display = 'block'
+          }
+          else {
+            itemElement.style.display = 'none'
+          }
+        }
+      })
+
+      // 重新显示分割线
+      setTimeout(() => {
+        const visibleItems = Array.from(albumItems).filter(item =>
+          (item as HTMLElement).style.display !== 'none',
+        )
+
+        visibleItems.forEach((item, index) => {
+          const divider = (item as HTMLElement).querySelector('.album-divider') as HTMLElement
+          if (divider) {
+            if (index === visibleItems.length - 1) {
+              divider.style.display = 'none'
+            }
+            else {
+              divider.style.display = 'block'
+            }
+          }
+        })
+      }, 10)
+    })
+  })
+})
+</script>
 </div>
 
 <style>
   .works-gallery {
-    max-width: 1200px;
+    max-width: 1000px;
     margin: 0 auto;
     padding: 2rem 1rem;
   }
 
-  .gallery-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 2rem;
-    margin-top: 2rem;
+  /* 分类标签样式 */
+  .category-tags {
+    margin-bottom: 3rem;
+    text-align: center;
   }
 
-  .gallery-item {
+  .category-tag {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    padding: 0.6rem 1.8rem;
+    background: transparent;
+    color: var(--text-color);
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin: 0.3rem;
+    min-height: 2.5rem;
+  }
+
+  .category-tag:hover {
+    border-color: #000;
+  }
+
+  .category-tag.active {
+    border-color: #000;
+  }
+
+  /* 相册列表样式 */
+  .album-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .album-item {
+    width: 100%;
+  }
+
+  .album-link {
     text-decoration: none;
     color: inherit;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    border-radius: 12px;
+    display: block;
+    padding: 2rem 0;
+    transition: background-color 0.3s ease;
+  }
+
+  .album-link:hover {
+    background-color: var(--bg-secondary);
+  }
+
+  .album-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+    max-width: 100%;
+  }
+
+  .album-info {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .album-title {
+    margin: 0 0 0.8rem 0;
+    font-size: 1.4rem;
+    font-weight: 600;
+    line-height: 1.3;
+    color: var(--text-color);
+  }
+
+  .album-description {
+    margin: 0 0 1rem 0;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: var(--text-secondary);
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
     overflow: hidden;
-    background: var(--bg-secondary);
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   }
 
-  .gallery-item:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  .album-meta {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    font-size: 0.9rem;
+    color: var(--text-tertiary);
   }
 
-  .thumbnail-container {
+  .album-date {
+    font-weight: 500;
+  }
+
+  .album-category {
+    background: transparent;
+    border: 1px solid #d1d5db;
+    padding: 0.4rem 1rem;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 1.8rem;
+  }
+
+  .album-meta:hover .album-category {
+    border-color: #000;
+  }
+
+  .album-thumbnail {
+    flex-shrink: 0;
+    width: 200px;
+    height: 120px;
+    border-radius: 8px;
+    overflow: hidden;
     position: relative;
-    width: 100%;
-    aspect-ratio: 16/9;
-    overflow: hidden;
   }
 
-  .thumbnail {
+  .thumbnail-image {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 0.3s ease, filter 0.3s ease;
+    filter: grayscale(100%);
+    transition: all 0.4s ease;
   }
 
-  .gallery-item:hover .thumbnail {
+  .album-link:hover .thumbnail-image {
+    filter: grayscale(0%);
     transform: scale(1.05);
-    filter: blur(2px) brightness(0.8);
   }
 
   .thumbnail-placeholder {
@@ -166,63 +373,64 @@ function getDescription(post: Post): string {
     opacity: 0.7;
   }
 
-  .overlay {
+  .album-divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent 0%, var(--border-color) 20%, var(--border-color) 80%, transparent 100%);
+    opacity: 0.4;
+    margin: 0;
+    position: relative;
+  }
+
+  .album-divider::before {
+    content: '';
     position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
-    color: white;
-    padding: 1.5rem 1rem 1rem;
-    transform: translateY(100%);
-    transition: transform 0.3s ease;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 1px;
+    background: var(--primary-color);
+    opacity: 0.6;
   }
-
-  .gallery-item:hover .overlay {
-    transform: translateY(0);
-  }
-
-  .title {
-    margin: 0 0 0.5rem 0;
-    font-size: 1.1rem;
-    font-weight: 600;
-    line-height: 1.3;
-  }
-
-  .description {
-    margin: 0 0 0.5rem 0;
-    font-size: 0.9rem;
-    opacity: 0.9;
-    line-height: 1.4;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-  }
-
-  .date {
-    font-size: 0.8rem;
-    opacity: 0.7;
-  }
-
-
 
   /* 响应式设计 */
   @media (max-width: 768px) {
-    .gallery-grid {
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 1.5rem;
-    }
-
     .works-gallery {
       padding: 1rem 0.5rem;
+    }
+
+    .album-content {
+      flex-direction: column-reverse;
+      gap: 1rem;
+      text-align: center;
+    }
+
+    .album-thumbnail {
+      width: 100%;
+      max-width: 300px;
+      height: 180px;
+    }
+
+    .album-meta {
+      justify-content: center;
+    }
+
+    .category-tags {
+      margin-bottom: 2rem;
     }
   }
 
   @media (max-width: 480px) {
-    .gallery-grid {
-      grid-template-columns: 1fr;
-      gap: 1rem;
+    .album-title {
+      font-size: 1.2rem;
+    }
+
+    .album-description {
+      font-size: 0.9rem;
+    }
+
+    .album-thumbnail {
+      height: 150px;
     }
   }
 </style>
