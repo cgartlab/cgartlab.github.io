@@ -16,22 +16,14 @@ const { tags, currentTag = '', lang } = Astro.props
     <a
       href={getTagPath(tag, lang)}
       class:list={[
-        'relative inline-block border border-secondary/25 rounded-full px-3.2 py-0.7 ring-secondary/80',
-        'transition-[colors,box-shadow] ease-out hover:(border-secondary/80 c-primary font-medium ring-0.2)',
+        'inline-flex items-center justify-center border border-gray-300 rounded-lg px-4 py-2',
+        'transition-all ease-out duration-300 hover:border-black',
         currentTag === tag
-          ? 'border-secondary/80 c-primary font-medium ring-0.2'
-          : 'ring-0',
+          ? 'border-black'
+          : '',
       ]}
     >
-      <span class="absolute inset-0 flex items-center justify-center whitespace-nowrap transition-font-weight">
-        {tag}
-      </span>
-      <span
-        class="inline-block font-medium opacity-0"
-        aria-hidden="true"
-      >
-        {tag}
-      </span>
+      {tag}
     </a>
   ))}
 </div>
