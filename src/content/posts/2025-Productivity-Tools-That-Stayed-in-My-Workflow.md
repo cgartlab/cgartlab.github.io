@@ -139,7 +139,7 @@ Library criteria: fully read + well-written.
 
 Used iReader, Duokan, WeChat Reading over years. While total completed books isn't high, realizing need for personal knowledge system led to unified e-book management platform. After decade-plus, only self-controlled data feels truly free. Reading platforms can't contain all book copyrights, requiring manual searches for niche/specific editions.
 
-![[2025年，我的生产力设备里留下了这些优秀工具-1768144670820.webp]]
+![Calibre 网页端阅读效果](./_images/2025年，我的生产力设备里留下了这些优秀工具-1768144670820.webp)
 
 Calibre's reading experience? Not exceptional. Strength lies in format conversion for device compatibility. Weakness: multi-device sync for reading progress/highlights. Current method: iPad Safari accessing web interface. Initially uncomfortable, sought replacement apps. Gradually realized it's sufficient - important thing is finishing books and recording noteworthy content.
 
