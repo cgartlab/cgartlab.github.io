@@ -149,7 +149,7 @@ Books per year, reading days, weekly hours - like screen time stats - don't moti
 
 ### Eagle: Design Asset Management
 
-![[_images/2025年，我的生产力设备里留下了这些优秀工具-1767097551459.webp]]
+![Eagle](./_images/2025年，我的生产力设备里留下了这些优秀工具-1767097551459.webp)
 
 Desktop design asset management tool, no comprehensive alternatives found. Bought licensed version (two-device authorization sufficient). Single asset library on NAS, desktop/laptop access via WebDAV protocol for external reading. Maximizes storage efficiency, secure image storage.
 
