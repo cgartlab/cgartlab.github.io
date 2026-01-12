@@ -1,5 +1,0 @@
-# This directory is a Syncthing folder marker.
-# Do not delete.
-
-folderID: gsiz4-qffks
-created: 2025-12-29T16:01:17+08:00
