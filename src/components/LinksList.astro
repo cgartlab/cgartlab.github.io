@@ -1,0 +1,67 @@
+---
+import LinkCard from '@/components/LinkCard.astro'
+import { linksData } from '@/data/links'
+import { getLangFromPath } from '@/i18n/lang'
+
+interface Props {
+  lang?: string
+}
+
+const lang = Astro.props.lang || getLangFromPath(Astro.url.pathname)
+const categories = linksData[lang as keyof typeof linksData] || linksData.zh
+---
+
+<div class="links-container">
+  {Object.entries(categories).map(([category, links]) => (
+    <section class="links-section">
+      <h2 class="links-category-title">{category}</h2>
+      <div class="links-grid">
+        {links.map(link => (
+          <LinkCard
+            title={link.title}
+            description={link.description}
+            url={link.url}
+            icon={link.icon}
+          />
+        ))}
+      </div>
+    </section>
+  ))}
+</div>
+
+<style>
+.links-container {
+  width: 100%;
+}
+
+.links-section {
+  margin-bottom: 3rem;
+}
+
+.links-category-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0 0 1.5rem 0;
+  color: oklch(var(--un-preset-theme-colors-primary));
+  position: relative;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid oklch(var(--un-preset-theme-colors-highlight));
+}
+
+.links-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+}
+
+@media (max-width: 640px) {
+  .links-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .links-category-title {
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+  }
+}
+</style>
