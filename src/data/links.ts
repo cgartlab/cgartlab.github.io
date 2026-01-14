@@ -31,13 +31,13 @@ export const linksData: Record<string, Record<string, LinkItem[]>> = {
         title: 'Tw93',
         description: '新一代工程师的破局与发展',
         url: 'https://tw93.fun/',
-        icon: 'https://tw93.fun/favicon.ico',
+        icon: 'https://gw.alicdn.com/imgextra/i4/O1CN01XYYPwL1uheeXASHIQ_!!6000000006069-2-tps-420-420.png',
       },
       {
         title: 'Richard Chan',
         description: '产品设计师',
         url: 'https://richardchan.cc/',
-        icon: 'https://richardchan.cc/favicon.ico',
+        icon: 'https://richardchan.cc/static/upload/image/20250404/1743752960262266.png',
       },
       {
         title: 'Yihui Xie',
@@ -55,7 +55,7 @@ export const linksData: Record<string, Record<string, LinkItem[]>> = {
         title: 'ColorHunt',
         description: '配色方案灵感库',
         url: 'https://colorhunt.co',
-        icon: 'https://colorhunt.co/favicon.ico',
+        icon: 'https://colorhunt.co/img/colorhunt-favicon.svg?2',
       },
     ],
     设计创作: [
@@ -63,7 +63,7 @@ export const linksData: Record<string, Record<string, LinkItem[]>> = {
         title: 'Figma',
         description: '专业设计协作工具',
         url: 'https://figma.com',
-        icon: 'https://figma.com/favicon.ico',
+        icon: 'https://static.figma.com/app/icon/1/favicon.png',
       },
     ],
     学习资源: [
@@ -77,7 +77,7 @@ export const linksData: Record<string, Record<string, LinkItem[]>> = {
         title: 'Freecodecamp',
         description: '免费编程教程',
         url: 'https://freecodecamp.org',
-        icon: 'https://freecodecamp.org/favicon.ico',
+        icon: 'https://www.freecodecamp.org/favicon-32x32.png',
       },
     ],
   },
@@ -105,13 +105,13 @@ export const linksData: Record<string, Record<string, LinkItem[]>> = {
         title: 'Tw93',
         description: 'New generation engineer development',
         url: 'https://tw93.fun/',
-        icon: 'https://tw93.fun/favicon.ico',
+        icon: 'https://gw.alicdn.com/imgextra/i4/O1CN01XYYPwL1uheeXASHIQ_!!6000000006069-2-tps-420-420.png',
       },
       {
         title: 'Richard Chan',
         description: 'Product designer',
         url: 'https://richardchan.cc/',
-        icon: 'https://richardchan.cc/favicon.ico',
+        icon: 'https://richardchan.cc/static/upload/image/20250404/1743752960262266.png',
       },
       {
         title: 'Yihui Xie',
@@ -125,48 +125,16 @@ export const linksData: Record<string, Record<string, LinkItem[]>> = {
         url: 'https://www.craftz.dog/',
         icon: 'https://www.craftz.dog/favicon.ico',
       },
-      {
-        title: 'ColorHunt',
-        description: 'Color palette inspiration',
-        url: 'https://colorhunt.co',
-        icon: 'https://colorhunt.co/favicon.ico',
-      },
     ],
-    'Resources & Tools': [
-      {
-        title: 'Unsplash',
-        description: 'High-quality free images',
-        url: 'https://unsplash.com',
-        icon: 'https://unsplash.com/favicon.ico',
-      },
+    'Design & Creation': [
       {
         title: 'Figma',
         description: 'Professional design collaboration',
         url: 'https://figma.com',
-        icon: 'https://figma.com/favicon.ico',
+        icon: 'https://static.figma.com/app/icon/1/favicon.png',
       },
     ],
-    'Content Creation': [
-      {
-        title: 'Medium',
-        description: 'Publishing platform',
-        url: 'https://medium.com',
-        icon: 'https://medium.com/favicon.ico',
-      },
-      {
-        title: 'Dev.to',
-        description: 'Developer community',
-        url: 'https://dev.to',
-        icon: 'https://dev.to/favicon.ico',
-      },
-      {
-        title: 'Hashnode',
-        description: 'Blogging for developers',
-        url: 'https://hashnode.com',
-        icon: 'https://hashnode.com/favicon.ico',
-      },
-    ],
-    'Learning': [
+    'Learning Resources': [
       {
         title: 'MDN Web Docs',
         description: 'Web technology reference',
@@ -177,13 +145,7 @@ export const linksData: Record<string, Record<string, LinkItem[]>> = {
         title: 'Freecodecamp',
         description: 'Free coding tutorials',
         url: 'https://freecodecamp.org',
-        icon: 'https://freecodecamp.org/favicon.ico',
-      },
-      {
-        title: 'Web.dev',
-        description: 'Web platform guidance',
-        url: 'https://web.dev',
-        icon: 'https://web.dev/favicon.ico',
+        icon: 'https://www.freecodecamp.org/favicon-32x32.png',
       },
     ],
   },
@@ -211,13 +173,13 @@ export const linksData: Record<string, Record<string, LinkItem[]>> = {
         title: 'Tw93',
         description: '新一代工程師的破局與發展',
         url: 'https://tw93.fun/',
-        icon: 'https://tw93.fun/favicon.ico',
+        icon: 'https://gw.alicdn.com/imgextra/i4/O1CN01XYYPwL1uheeXASHIQ_!!6000000006069-2-tps-420-420.png',
       },
       {
         title: 'Richard Chan',
         description: '產品設計師',
         url: 'https://richardchan.cc/',
-        icon: 'https://richardchan.cc/favicon.ico',
+        icon: 'https://richardchan.cc/static/upload/image/20250404/1743752960262266.png',
       },
       {
         title: 'Yihui Xie',
@@ -231,19 +193,13 @@ export const linksData: Record<string, Record<string, LinkItem[]>> = {
         url: 'https://www.craftz.dog/',
         icon: 'https://www.craftz.dog/favicon.ico',
       },
-      {
-        title: 'ColorHunt',
-        description: '配色方案靈感庫',
-        url: 'https://colorhunt.co',
-        icon: 'https://colorhunt.co/favicon.ico',
-      },
     ],
     設計創作: [
       {
         title: 'Figma',
         description: '專業設計協作工具',
         url: 'https://figma.com',
-        icon: 'https://figma.com/favicon.ico',
+        icon: 'https://static.figma.com/app/icon/1/favicon.png',
       },
     ],
     學習資源: [
@@ -257,7 +213,7 @@ export const linksData: Record<string, Record<string, LinkItem[]>> = {
         title: 'Freecodecamp',
         description: '免費程式設計教程',
         url: 'https://freecodecamp.org',
-        icon: 'https://freecodecamp.org/favicon.ico',
+        icon: 'https://www.freecodecamp.org/favicon-32x32.png',
       },
     ],
   },
