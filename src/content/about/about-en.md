@@ -2,48 +2,72 @@
 lang: en
 ---
 
-![](../posts/_images/冥想系列-1754664780351.webp)
+![Meditation Series](../posts/_images/冥想系列-1754664780351.webp)
 
-> Tools are extensions of human limbs, computers are extensions of the brain, and writing is thinking itself.
+*Tools are extensions of human limbs, computers are extensions of the brain, and writing is thinking itself.*
 
-About the Author
-I am a designer, and since you’ve clicked on this page, you must have already seen my portfolio.
+## About the Author
 
-An INFJ homebody who enjoys reading, writing, fishkeeping, painting, and all kinds of electronic gadgets.
+I'm a designer, and if you've made it to this page, you've probably seen some of my work already.
 
-Currently, my work revolves around two main areas:
+As an [INFJ](https://www.16personalities.com/personality-types/infj-personality), I spend my free time reading, writing, keeping fish, painting, and exploring various electronic gadgets.
 
-The commercial operations of my own company
-Personal projects
-The commercial side is purely about making a living—getting paid to get things done. Most of the work (about 80-90%) never makes it into my portfolio because, although it’s my creation, it involves collaboration with clients and colleagues. I don’t consider it my design. It’s not a work of art; it’s a product. The remaining 10-20% that does end up in my portfolio consists of projects I feel are relatively well-executed and worth the extra effort. These are usually projects that align with my interests, resonate with the client’s aesthetic, or challenge my skills in some way.
+My professional focus spans several areas:
 
-I might sound a bit arrogant saying this, but since around 2019, I’ve rarely worried about not having clients. This sense of security led to a period of complacency, where I often procrastinated. Another reason, I think, is that commercial design is essentially the art of negotiation—and negotiation is, at its core, the art of compromise. I still have a long way to go in mastering this art.
+1. Digital Motion Visual Design
+2. Front-end Product Development  
+3. Writing
+4. Personal Fine Art
 
-Fortunately, this period of scattered downtime wasn’t entirely wasted.
+When it comes to commercial work, I see it as simply earning a living. Most client projects don't make it into my portfolio—even though I created them, the collaborative nature with clients and colleagues means I rarely consider them purely "my" designs. They're products, not personal artworks. The few projects that do end up in my portfolio are those that genuinely resonate with me—either because they touch on areas I'm passionate about, align with a client's aesthetic vision, or challenge my skills in meaningful ways.
 
-Working with computers all day, I’ve naturally developed a deep fascination with them. I often feel grateful to live in an era where computers exist. This curiosity led me to explore all sorts of computer-related hobbies that I found interesting.
+To be honest, since around 2019 I've rarely worried about finding clients. This stability, while comfortable, led to some complacency and procrastination at times. I've come to realize that commercial design is fundamentally a negotiation—an art of compromise that I'm still learning to master.
 
-It’s like skating barefoot on an endless, dark icy lake—no skates needed. From setting up private servers and DIY NAS systems to building my first truly personal website, I gradually discovered the elegance and efficiency of controlling a computer solely through keyboard commands and shortcuts (as a designer who relies heavily on mice and drawing tablets, this felt oddly liberating). The process was indescribably satisfying. This brings me to the second point: personal projects.
+But those periods of relative slack weren't wasted. Working with computers daily, I've developed a genuine fascination with the technology itself. I feel fortunate to live in an era where such powerful tools are accessible.
 
-About This Site
-This site is one of my personal projects, a long-held idea to create a container of my own on the internet.
+It's like skating across an endless dark ice lake without skates—thrilling and slightly precarious. From building private servers and DIY NAS systems to creating my first personal website, I've discovered the elegant simplicity of keyboard-driven computing. (As someone who primarily uses mouse and graphics tablet for design work, this keyboard-centric approach feels refreshingly different.) This journey has brought me immense satisfaction and led me to what truly excites me: creative expression.
 
-The content within this container is my publicly shared inner world.
+## About This Site
 
-The primary medium for creating this inner world is CG art. The entire creative process is also a mental experiment, hence the name: CG Art Lab.
+This website represents a long-held dream of mine—to have a personal space online where I can share my creative journey.
 
-Tools Are Extensions of Human Limbs
-I once heard the saying, “Tools are extensions of human limbs.” For example, a fan is an extension of the hand, a wheel is an extension of the legs, and a telephone is an extension of the mouth and ears. By that logic, a computer is an extension of the brain. I once wrote an article titled How to Build a Second Brain, where I briefly discussed my perspective on digital note-taking as a tool. Broadly speaking, whether it’s design, writing, or coding, it all comes down to how we use computers to create better, understand them more deeply, and refine them to make them more obedient and efficient.
+Think of it as a container for my public creative world.
 
-Computers are designed by some of the smartest people on the planet. For most ordinary folks like me, it’s hard to make computers truly adapt to us—often, we don’t even know where to start. My underlying philosophy here is: identify the right problems, improve your skills, and grow worthy of the tools you want to use.
+The primary medium for this exploration is [CG Art](https://en.wikipedia.org/wiki/Computer_graphics), and since the entire process feels like a continuous experiment in creativity, "CG Art Lab" felt like the perfect name.
 
-Finding *a* problem is easy; finding the right problem is harder. Once you’ve put in the effort to identify it, documenting both the problem and the process of solving it is inherently valuable.
+## Website Sections
 
-Writing Is Thinking Itself
-In the past, I never bothered to document the solutions to the problems I encountered—whether it was searching for a keyboard shortcut or building a Hackintosh. I thought it was too much trouble, and I assumed these methods would become obsolete quickly as technology evolved. Now, I realize how wrong I was.
+This site is organized into several key areas:
 
-These techniques and methods may be mere “tactics,” but dismissing them outright goes against the “principle.”
+- **Posts**: Where I share my experiences and insights across technology, design, and knowledge management—everything from technical tutorials to design philosophy and tool evaluations.
+- **Works**: A showcase of my personal design projects and artistic creations, spanning digital visual design and front-end development work.
+- **Links**: A curated collection of websites, tools, and resources that have inspired me, forming a personal knowledge network.
+- **About**: This section—where I introduce myself and share the vision behind this website.
 
-I’ve decided to diligently record these processes. After all, they are my own creations, skills, experiences, and reflections. The journey is mine alone, and publishing them publicly is a way to hold myself accountable—to ensure the content meets my own standards first.
+## Disclaimer
 
-Then, it’s up to you to decide if you like it.
+- **Original Content**: Unless otherwise noted, all content on this site is my original work. When referencing others' work, I properly cite sources and respect copyright.
+- **Personal Views**: The opinions expressed here are my own and don't represent any organization. They're not intended as professional advice.
+- **Technical Content**: Code snippets, tutorials, and technical guides are provided for educational purposes. Please adapt them to your specific needs—I'm not responsible for any issues that may arise from their use.
+- **External Links**: While I may link to third-party sites, I don't control their content. Please use your own judgment when visiting external resources.
+- **Privacy**: This site doesn't collect personal information. Comments are handled through third-party services like Giscus—please review their privacy policies for details.
+
+## Tools as Extensions of Human Limbs
+
+There's a saying that "tools are extensions of human limbs"—fans extend our hands, wheels extend our legs, telephones extend our voices and ears. By that logic, computers extend our minds. I've explored this idea in [several articles](https://cgartlab.com/en/tags/knowledge-management/) about digital note-taking as a tool for thinking.
+
+Ultimately, whether I'm designing, writing, or coding, it's about leveraging computers as creative tools—learning to understand, master, and refine them to solve real problems more effectively.
+
+Computers were created by some of the brightest minds on Earth. Like most people, I often struggle to make technology work exactly the way I want. My approach is simple: **identify the right problems, develop the necessary skills, and grow to deserve the tools I want to use.**
+
+Finding problems is easy; asking the right questions is harder. Once I've invested the effort to identify meaningful challenges, documenting both the questions and their solutions becomes inherently valuable.
+
+## Writing is Thinking Itself
+
+I used to avoid documenting my problem-solving processes—whether it was finding a keyboard shortcut or building a Hackintosh system. It seemed tedious, and I assumed the information would quickly become outdated in our fast-moving tech landscape.
+
+I now realize this was a mistake. While specific techniques (the "how") may change, the underlying principles (the "why") remain relevant.
+
+So I've committed to documenting my journey—the creative processes, technical discoveries, and personal insights that shape my work. This documentation serves primarily as a way to hold myself accountable to high standards.
+
+Whether you find value in it too—well, that's a conversation I'd love to have.
