@@ -8,6 +8,7 @@ export const ui = {
     about: 'About',
     works: 'Works',
     weekly: 'Weekly',
+    links: 'Links',
     toc: 'Table of Contents',
   },
   'zh': {
@@ -19,6 +20,7 @@ export const ui = {
     about: '关于',
     works: '作品',
     weekly: '周刊',
+    links: '友链',
     toc: '目录',
   },
   'zh-tw': {
@@ -30,6 +32,7 @@ export const ui = {
     about: '關於',
     works: '作品',
     weekly: '週刊',
+    links: '友鏈',
     toc: '目錄',
   },
 }
