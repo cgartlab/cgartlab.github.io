@@ -12,7 +12,7 @@ lang: zh-tw
 abbrlink: zaijianshanxi
 ---
 
-![](./_images/再来码字，再见山西-1754470929070.webp)
+![cover](./_images/再来码字，再见山西-1754470929070.webp)
 
 好久不見，我又開始碼字了。
 

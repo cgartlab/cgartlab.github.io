@@ -12,9 +12,9 @@ lang: zh
 abbrlink: layerrenamer-1
 ---
 
-![封面](./_images/LayerRenamer%201.0%20脚本发布，PS%20图层重命名从未如此简单-1754591673573.webp)
+![LayerRenamer脚本封面图，展示Photoshop图层批量重命名功能](_images/LayerRenamer%201.0%20脚本发布，PS%20图层重命名从未如此简单-1754591673573.webp)
 
-# 引言
+## 引言
 
 平面设计在使用 Photoshop 处理图层数较多的 `.psd` 文件时，挨个对图层重命名是非常繁琐耗时的工作。
 
@@ -49,7 +49,7 @@ function changeLayerName(layer){
 
 ```
 
-# 而我需要的功能是
+## 而我需要的功能是
 
 - 只修改我当前选中的图层
 - 图层支持任意层级
@@ -61,7 +61,7 @@ function changeLayerName(layer){
 使用文本编辑器新建文本文件，粘贴下面的代码，可以通过 Adobe Photoshop 2023 的脚本功能实现批量重命名图层。该脚本可以遍历当前文档中所有所选的图层，并提示用户输入自定义的图层名称和编号的格式，然后按照用户指定的格式为每个图层进行命名。脚本会自动处理图层是否位于图层组中。
 
 ```json
-#target photoshop
+//target photoshop
 app.bringToFront();
 
 if (app.documents.length === 0) {
@@ -142,28 +142,30 @@ function zeroPad(num, width) {
 
 以上代码实现了基本的图层重命名和编号排序功能，将文件保存名为 `xxx.jsx` 的脚本文件即可。
 
-## 使用步骤：
+## 使用步骤
 
 1. 打开 Adobe Photoshop 2023。
 2. 选择要重命名的图层（可以在图层面板中多选，支持嵌套在图层组中的图层）。
 3. 进入 `文件` -> `脚本` -> `浏览…`，选择你保存的脚本文件。
 4. 执行脚本后，会出现三个提示框：
-![](./_images/LayerRenamer%201.0%20脚本发布，PS%20图层重命名从未如此简单-1754591711857.webp)
-  - 第一个提示框要求输入基础图层名称，例如 "Layer"。
-  - 第二个提示框要求输入编号的起始值，例如 "1"。
-  - 第三个提示框要求输入编号格式，例如 "001"，确保编号保持一致的位数。
-5. 选择确认后，脚本会自动按照你设定的格式重命名所选图层。
+![Photoshop脚本执行时显示的三个输入提示框，用于设置图层名称、起始编号和编号格式](_images/LayerRenamer%201.0%20脚本发布，PS%20图层重命名从未如此简单-1754591711857.webp)
+
+- 第一个提示框要求输入基础图层名称，例如 "Layer"。
+- 第二个提示框要求输入编号的起始值，例如 "1"。
+- 第三个提示框要求输入编号格式，例如 "001"，确保编号保持一致的位数。
+
+选择确认后，脚本会自动按照你设定的格式重命名所选图层。
 
 ## 进阶版
 
 以上功能基本够用了，如果需要加入同时修改颜色标签可下载进阶版。效果如下所示：
 
-![](./_images/LayerRenamer%201.0%20脚本发布，PS%20图层重命名从未如此简单-1754591720351.webp)
+![LayerRenamer进阶版功能演示，展示批量重命名图层并设置颜色标签的效果](_images/LayerRenamer%201.0%20脚本发布，PS%20图层重命名从未如此简单-1754591720351.webp)
 
 下载链接:
 
 【LayerRenamer_PS-2023.jsx】
 
-https://16b87ca7d6.znas.cn/AppH5/share/?nid=LIYDEMJQGBBDEOCELBIFU&code=r1DtQDtFZobo1ai8Jd0UylatvnNkQ3xcodyiJBPo4ejLcOfybeyVGW0o3LOTKTHF&mode=file&display=list
+<https://16b87ca7d6.znas.cn/AppH5/share/?nid=LIYDEMJQGBBDEOCELBIFU&code=r1DtQDtFZobo1ai8Jd0UylatvnNkQ3xcodyiJBPo4ejLcOfybeyVGW0o3LOTKTHF&mode=file&display=list>
 
 有效期 7 天，提取密码：6633

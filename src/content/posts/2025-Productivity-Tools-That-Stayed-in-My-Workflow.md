@@ -15,7 +15,7 @@ abbrlink: good-tools-for-production-in-my-2025
 
 ## Introduction
 
-![my productivity devices](./_images/2025年，我的生产力设备里留下了这些优秀工具-1768218148512.webp)
+![作者的生产力设备集合，包括笔记本电脑、平板和手机等设备](./_images/2025年，我的生产力设备里留下了这些优秀工具-1768218148512.webp)
 
 After years as a designer, I've never systematically shared the "hammers and wrenches" in my digital toolbox. In today's information explosion era with tool overload, simply listing a "best apps ranking" feels meaningless. Only tools that survive countless real-world challenges can truly be considered problem-solvers.
 
@@ -52,7 +52,7 @@ My biggest 2025 shift was "from cloud to local." Inspired by DIY enthusiasm, I b
 
 ### Notion: Large-Scale Business Project Collaboration Hub
 
-![Ongoing business projects](./_images/2025年，我的生产力设备里留下了这些优秀工具-1768054924704.webp)
+![Notion中的商业项目管理界面，展示数据库和协作功能](./_images/2025年，我的生产力设备里留下了这些优秀工具-1768054924704.webp)
 
 Notion's recent developments - Chinese version, forms, Layouts, better automation, powerful AI, web sharing - keep it as my absolute main tool for remote collaboration.
 
@@ -72,7 +72,7 @@ Multi-device sync is simple: Syncthing (mentioned later) syncs via NAS as centra
 
 Desktop periodically pushes to GitHub repository via Git for version control. For recording, searching, organizing - no better experience than Obsidian yet. Likely sticking with it.
 
-![Embedding RSS and Memos pages simultaneously](./_images/2025年，我的生产力设备里留下了这些优秀工具-1768054847394.webp)
+![Obsidian中同时嵌入RSS和Memos页面的界面，展示多平台信息整合能力](./_images/2025年，我的生产力设备里留下了这些优秀工具-1768054847394.webp)
 
 Early 2025, Obsidian added a heavyweight web view component. It's essentially embedding a browser, but for self-hosted service enthusiasts, this means any web-based app can run within Obsidian. As shown above, reading, recording, outputting flow seamlessly.
 
@@ -80,7 +80,7 @@ Late 2025 brought Base database functionality. While not as powerful as Notion's
 
 ### Memos: Pure, Focused Fragmented Note-Taking
 
-![My demo note](./_images/2025年，我的生产力设备里留下了这些优秀工具-1768054260816.webp)
+![Memos笔记应用界面，展示简洁的碎片化记录功能](./_images/2025年，我的生产力设备里留下了这些优秀工具-1768054260816.webp)
 
 Popular GitHub fragmented memo tool, similar to flomo. Main barrier: Docker deployment on server (higher beginner requirement). I keep it in browser sidebar for quick captures - paste interesting content, write thoughts immediately.
 
@@ -90,7 +90,7 @@ As Flomo's open-source alternative, Memos focuses solely on "quick recording." W
 
 ### Syncthing: Decentralized File Synchronization
 
-![NAS-centric file sync](./_images/2025年，我的生产力设备里留下了这些优秀工具-1768054689002.webp)
+![以NAS为中心的文件同步架构图，展示多设备间文件同步流程](./_images/2025年，我的生产力设备里留下了这些优秀工具-1768054689002.webp)
 
 Open-source free file sync tool where devices act as mutual "cloud." For external access, NAS with intranet penetration serves as temporary "sync center."
 
@@ -103,7 +103,7 @@ I sync these folder types:
 
 ### Miniflux: Lightweight RSS Information Aggregation
 
-![Miniflux category page](./_images/2025年，我的生产力设备里留下了这些优秀工具-1768055141048.webp)
+![Miniflux RSS阅读器分类页面，展示简洁的订阅源管理界面](./_images/2025年，我的生产力设备里留下了这些优秀工具-1768055141048.webp)
 
 Self-hosted RSS subscription platform, recently replaced FreshRSS. Found FreshRSS relatively clunky with slow web loading. Miniflux focuses on one thing: aggregating relevant information and timely delivery. Customizable styles make web interface sufficient unless offline reading needed.
 
@@ -119,11 +119,11 @@ Excellent open-source input engine by Chinese developer佛振, my main input met
 
 Android configuration complexity/stability varies by phone brand, so not recommended for beginners. iOS/iPadOS built-in input method works well.
 
-![Called Weasel on Windows](./_images/2025年，我的生产力设备里留下了这些优秀工具-1768055738564.webp)
+![Windows平台上的Rime输入法Weasel界面，展示高度可定制的输入体验](./_images/2025年，我的生产力设备里留下了这些优秀工具-1768055738564.webp)
 
 ### Winget/HomeBrew Package Managers: Minimalist App Stores
 
-![Winget command](./_images/2025年，我的生产力设备里留下了这些优秀工具-1768206224777.webp)
+![Winget命令行界面，展示软件批量安装和更新功能](./_images/2025年，我的生产力设备里留下了这些优秀工具-1768206224777.webp)
 
 Previously wrote [an article](https://cgartlab.com/posts/use-winget-on-win11/) about winget. While not productivity tool itself, it significantly reduces steps/time when batch installing/updating software after system reinstallation.
 
@@ -131,7 +131,7 @@ Last year, I optimized this by writing [a script](https://github.com/cgartlab/So
 
 ### Calibre: Digital Library Management
 
-![Web-based NAS library management](./_images/2025年，我的生产力设备里留下了这些优秀工具-1768055976527.webp)
+![基于NAS的网页端图书库管理界面，展示电子书分类和元数据](./_images/2025年，我的生产力设备里留下了这些优秀工具-1768055976527.webp)
 
 Powerful library management system for unified management, conversion, organization of ebooks, literature, movie/game artbooks (mainly EPUB/PDF formats). Adds accurate metadata (cover, author, description, sometimes ratings). Currently deployed as Docker container on NAS.
 
@@ -139,7 +139,7 @@ Library criteria: fully read + well-written.
 
 Used iReader, Duokan, WeChat Reading over years. While total completed books isn't high, realizing need for personal knowledge system led to unified e-book management platform. After decade-plus, only self-controlled data feels truly free. Reading platforms can't contain all book copyrights, requiring manual searches for niche/specific editions.
 
-![Calibre 网页端阅读效果](./_images/2025年，我的生产力设备里留下了这些优秀工具-1768144670820.webp)
+![Calibre网页端阅读效果，展示简洁的电子书阅读界面](./_images/2025年，我的生产力设备里留下了这些优秀工具-1768144670820.webp)
 
 Calibre's reading experience? Not exceptional. Strength lies in format conversion for device compatibility. Weakness: multi-device sync for reading progress/highlights. Current method: iPad Safari accessing web interface. Initially uncomfortable, sought replacement apps. Gradually realized it's sufficient - important thing is finishing books and recording noteworthy content.
 
@@ -149,7 +149,7 @@ Books per year, reading days, weekly hours - like screen time stats - don't moti
 
 ### Eagle: Design Asset Management
 
-![Eagle](./_images/2025年，我的生产力设备里留下了这些优秀工具-1767097551459.webp)
+![Eagle设计素材管理软件界面，展示素材分类和预览功能](./_images/2025年，我的生产力设备里留下了这些优秀工具-1767097551459.webp)
 
 Desktop design asset management tool, no comprehensive alternatives found. Bought licensed version (two-device authorization sufficient). Single asset library on NAS, desktop/laptop access via WebDAV protocol for external reading. Maximizes storage efficiency, secure image storage.
 
@@ -159,11 +159,11 @@ Minor dislike: Eagle's proprietary file directory structure requires software ac
 
 ### Sunflower & RustDesk: Remote Desktop
 
-![RustDesk](./_images/2025年，我的生产力设备里留下了这些优秀工具-1768056082307.webp)
+![RustDesk远程桌面软件界面，展示连接管理和设置选项](./_images/2025年，我的生产力设备里留下了这些优秀工具-1768056082307.webp)
 
 Initially used ToDesk and Sunflower. As screen resolutions increased, free Sunflower version couldn't meet remote assistance quality demands. Discovered RustDesk open-source remote desktop software.
 
-![Note FPS and latency](./_images/2025年，我的生产力设备里留下了这些优秀工具-1768057200058.webp)
+![RustDesk远程连接性能指标，显示FPS和延迟数据](./_images/2025年，我的生产力设备里留下了这些优秀工具-1768057200058.webp)
 
 Supports peer-to-peer direct connection. Latency/quality depend on broadband quality/speed. Supports h.265, h.264, AV1, vp8 hardware decoding. GPU rendering animations don't affect transmission quality. Tested home (mobile network) to school workstation (telecom network): 4K 60Hz with 60-80ms latency - impressive performance.
 
@@ -171,7 +171,7 @@ Sunflower retained for incredible screen recording compression algorithm: 10-min
 
 ### OBS Studio: Screen Recording & Live Streaming
 
-![OBS Studio](./_images/2025年，我的生产力设备里留下了这些优秀工具-1768206838777.webp)
+![OBS Studio界面，展示场景、源和混音器等主要功能区域](./_images/2025年，我的生产力设备里留下了这些优秀工具-1768206838777.webp)
 
 Familiar to live streamers, I use it mainly for recording advanced project techniques - tutorials for future self. Over time, nobody remembers messy project files. Speed-watching recordings provides clarity.
 
@@ -179,7 +179,7 @@ Occasionally records project specifications, creates template instructions for t
 
 ### Traffic Monitor: Real-time Hardware Monitoring
 
-![Traffic Monitor taskbar interface](./_images/2025年，我的生产力设备里留下了这些优秀工具-1766977269037.webp)
+![Traffic Monitor任务栏界面，展示CPU、内存、网络等系统资源使用情况](./_images/2025年，我的生产力设备里留下了这些优秀工具-1766977269037.webp)
 
 Basic hardware monitoring: CPU, GPU, memory, disk usage/temperature. Plugin support for extended functionality like power consumption/weather monitoring.
 
@@ -189,11 +189,11 @@ Similar to Windows Traffic Monitor, open-source free hardware monitoring tool. S
 
 Recent addition: manual fan speed control for dust cleaning. Known challenge: making M-chip Mac fans reach full speed under normal usage.
 
-![Stats menu bar](./_images/2025年，我的生产力设备里留下了这些优秀工具-1754923771375.webp)
+![Stats菜单栏监控界面，展示Mac系统资源监控模块](./_images/2025年，我的生产力设备里留下了这些优秀工具-1754923771375.webp)
 
 ### Handbrake: Video Format Conversion
 
-![Handbrake interface](./_images/2025年，我的生产力设备里留下了这些优秀工具-1768207001831.webp)
+![Handbrake视频转换界面，展示编码预设和输出设置](./_images/2025年，我的生产力设备里留下了这些优秀工具-1768207001831.webp)
 
 As animation designer, video transcoding tools essential. Previously used Adobe Encoder, replaced due to bulkiness. Handbrake's UI logic requires adaptation but avoids ffmpeg complexity and Adobe Encoder bloat. Encoding speed satisfactory.
 
@@ -201,7 +201,7 @@ As animation designer, video transcoding tools essential. Previously used Adobe 
 
 ### PowerToys: System Enhancement Toolbox
 
-![PowerToys main interface](./_images/2025年，我的生产力设备里留下了这些优秀工具-1768130507243.webp)
+![PowerToys主界面，展示各种系统增强工具选项](./_images/2025年，我的生产力设备里留下了这些优秀工具-1768130507243.webp)
 
 After PowerToys resumed development in 2019 (yes, it's ancient), used briefly but unstable with crashes/freezes. Switched to uTools for 4 years. Now PowerToys stable/complete, especially convenient for developers/designers. Free and functional enough to completely replace uTools in 2025 workflow.
 
@@ -215,7 +215,7 @@ These utilities run silently at startup, saving invisible time.
 
 ### Twinkle Tray: External Monitor Brightness Control
 
-![Use and forget](./_images/2025年，我的生产力设备里留下了这些优秀工具-1766977339137.webp)
+![Twinkle Tray亮度调节工具，展示多显示器亮度控制界面](./_images/2025年，我的生产力设备里留下了这些优秀工具-1766977339137.webp)
 
 Open-source tool adjusting brightness via monitor DDC/CI protocol. Controls multiple monitors simultaneously with linkage, timing, on/off functions. Like volume icon, mouse hover + scroll wheel enables precise brightness control.
 
@@ -249,7 +249,7 @@ Command-line tool but no complex commands needed. Each operation has guidance. L
 
 ### Reeder
 
-![Image from Reeder official website](./_images/2025年，我的生产力设备里留下了这些优秀工具-1768213942326.webp)
+![Reeder RSS阅读器界面，展示优雅的阅读体验](./_images/2025年，我的生产力设备里留下了这些优秀工具-1768213942326.webp)
 
 RSS reader used since initial RSS exposure, maintained at last classic version.
 
@@ -259,7 +259,7 @@ Created US Apple ID specifically for $5 purchase. Perfect support for mainstream
 
 ### Capy Reader
 
-![Capy Reader](./_images/2025年，我的生产力设备里留下了这些优秀工具-1767161542202.webp)
+![Capy Reader移动端界面，展示简洁的RSS阅读体验](./_images/2025年，我的生产力设备里留下了这些优秀工具-1767161542202.webp)
 
 Mobile RSS reader focusing on Miniflux service integration. Basic functionality sufficient, stability good. Timed/manual sync, upward scroll auto-mark read, customizable gestures included.
 

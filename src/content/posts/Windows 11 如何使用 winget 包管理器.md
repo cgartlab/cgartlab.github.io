@@ -81,7 +81,7 @@ WinGet 命令行实用工具可从命令行安装应用程序和其他程序包�
 - **更新速度**：winget 的更新速度可能不如一些第三方软件包管理工具快。这意味着一些新发布的软件包可能无法在第一时间通过 winget 进行安装或更新。不过对于软件版本来说，我反而不建议非要安装最新版，这点见仁见智吧。
 - **社区支持**：与一些流行的第三方软件包管理工具相比，winget 的社区支持可能相对较弱。这可能导致人们在遇到问题时难以找到解决方案或获得帮助。
 
-# 如何使用 Winget
+## 如何使用 Winget
 
 我们使用 winget 最常见的使用场景就是搜索，安装，卸载常用的软件。
 
@@ -118,7 +118,7 @@ PS C:\Users\cgart>
 
 举一反三，你可以尝试使用其他命令，对软件进行搜索，安装，更新，卸载。
 
-# 自动化安装脚本
+## 自动化安装脚本
 
 虽然我们只需要敲几个字母，不再需要到浏览器里搜索下载常用的安装包了，但是每次重装系统的时候还要一行一行的敲命令，也是挺麻烦的，所以我自己写了一个自动运行命令的安装脚本，放在 GitHub 上，可以免费下载使用。[传送门在此](https://github.com/cgartlab/Software_Install_Script)
 
@@ -136,7 +136,7 @@ if not exist "software_list.txt" (
 REM 逐行读取软件列表文件并安装软件
 for /f "tokens=*" %%a in (software_list.txt) do (
     echo Installing software: %%a
-    winget install %%a 
+    winget install %%a
 )
 
 echo All software is already installed!
