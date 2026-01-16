@@ -14,7 +14,7 @@ abbrlink: use-homebrew-in-macos
 
 上一篇写了 [Windows 11 如何使用 winget 包管理器](https://cgartlab.com/posts/use-winget-on-win11/) 结尾讲到了 macOS 端我也制作了一个小脚本，使用的正是 Homebrew 。
 
-# 介绍 Homebrew
+## 介绍 Homebrew
 
 Homebrew 是 macOS 端常用的一款运行在命令行中的软件管理程序，和 Linux、Windows 中的 apt 和 winget 一样，都是用来安装和管理常用软件的程序。 ^c8582c
 

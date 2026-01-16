@@ -3,7 +3,7 @@ title: "WordPress插件商店打不开，搞定回环错误排查与修复步骤
 published: 2025-07-01
 description: "WordPress插件商店打不开的回环错误排查与修复步骤，包含宝塔面板和终端命令两种解决方案。"
 updated: 2025-07-01
-tags: 
+tags:
 - 技术分享
 draft: false
 pin: 0
@@ -12,6 +12,7 @@ lang: zh
 abbrlink: fix-wordpress-plugin-store
 ---
 ![封面](./_images/WordPress插件商店打不开，搞定回环错误排查与修复步骤-1754594730853.webp)
+
 ## 写在前面
 
 最近在给博客后台（WordPress）安装更换页面缓存插件的时候，插件商店打不开了。站点健康页面提示遇到了回环错误问题。看提示信息说是 DNS 解析错误，但检查了宿主服务器系统的 DNS 配置依然是默认配置。
@@ -60,7 +61,7 @@ curl -I https://你的域名/wp-json/wp/v2/types/post?context=edit
 
 如果返回 `200` 或 `301` 状态码则修复成功。
 
-### 注意：
+### 注意
 
 - **备份配置文件**：修改前记得保存原文件，避免操作失误。
 - **定期检查网络**：回环错误可能反复出现，养成定期测试 DNS 和防火墙的习惯。

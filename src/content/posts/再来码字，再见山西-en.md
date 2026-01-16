@@ -12,7 +12,7 @@ lang: en
 abbrlink: zaijianshanxi
 ---
 
-![](./_images/再来码字，再见山西-1754470929070.webp)
+![cover](./_images/再来码字，再见山西-1754470929070.webp)
 
 Long time no see, I've started writing again.
 
