@@ -3,7 +3,7 @@ title: "博客内容将自动同步到 Telegram 频道"
 published: 2024-09-06
 description: "博客内容将自动同步到 Telegram 频道的实现方案和配置步骤。"
 updated: 2024-11-25
-tags: 
+tags:
 - 技术分享
 draft: false
 pin: 0
@@ -14,7 +14,7 @@ abbrlink: blog-to-telegram-channel
 
 ![封面](./_images/博客内容将自动同步到%20Telegram%20频道-1754591621567.webp)
 
-# 写在前面
+## 写在前面
 
 如果你已经订阅了本站的 [电报（Telegram）频道](https://t.me/cg_artlab)，会收到几篇测试信息。
 
@@ -22,7 +22,7 @@ abbrlink: blog-to-telegram-channel
 
 为什么会选择 Telegram？很简单，评估下来这个平台~~啥都能发~~限制最少。
 
-# 电报频道与博客内容的异同
+## 电报频道与博客内容的异同
 
 首先，会第一时间同步博客文章和顶级页面内容更新。
 
@@ -34,14 +34,13 @@ abbrlink: blog-to-telegram-channel
 
 欢迎订阅，我会尽可能长期运营维护下去。
 
-# 文章同步实现方案
+## 文章同步实现方案
 
 主要使用 WP Telegram 插件，配合另外一台 Shellclash 旁路由虚拟机做代理来实现，插件的免费功能已经足够用了。
 
 这是官方的功能介绍：
 
 > Integrate your WordPress website perfectly with Telegram. Send posts automatically to Telegram when published or updated, whether to a Telegram Channel, Group or private chat, with full control. Get your email notifications on Telegram.
-
 > 模块介绍：
 >
 > 1.发到 Telegram
@@ -113,7 +112,7 @@ abbrlink: blog-to-telegram-channel
 - 一个 Telegram 机器人，在 Telegram 中可以通过 [@BotFather](https://t.me/BotFather) 来创建
 - 你的 WordPress 站点
 
-插件下载链接：https://wordpress.org/plugins/wptelegram/
+插件下载链接：<https://wordpress.org/plugins/wptelegram/>
 
 操作步骤：
 
@@ -126,6 +125,6 @@ abbrlink: blog-to-telegram-channel
 
 完成以上操作之后，一旦发布新文章或旧的文章/页面有内容更新（可选），都会同步到对应的 Telegram 频道。
 
-# 写在后面
+## 写在后面
 
 社交平台其他内容的同步方案打算通过配合 IFTTT 实现，各个平台近期会陆续更新。全部完成之后会分享一篇如何使用 IFTTT 的介绍，敬请关注。

@@ -6,19 +6,46 @@ views:
         - '!file.inFolder("_files")'
         - '!file.inFolder("_images")'
         - '!file.inFolder("templates")'
+    groupBy:
+      property: file.folder
+      direction: ASC
     order:
       - file.name
       - file.folder
       - abbrlink
       - tags
       - published
-      - description
-      - file.embeds
     sort:
       - property: file.folder
         direction: DESC
-      - property: file.name
-        direction: ASC
+      - property: file.mtime
+        direction: DESC
     columnSize:
       note.abbrlink: 198
-      note.tags: 158
+      note.tags: 407
+  - type: table
+    name: 草稿
+    filters:
+      and:
+        - draft == true
+    groupBy:
+      property: file.folder
+      direction: ASC
+    order:
+      - file.name
+      - title
+      - abbrlink
+      - published
+      - file.folder
+      - draft
+      - tags
+    sort:
+      - property: published
+        direction: DESC
+      - property: file.ctime
+        direction: DESC
+    columnSize:
+      file.name: 313
+      note.abbrlink: 261
+      note.published: 117
+      note.tags: 407
