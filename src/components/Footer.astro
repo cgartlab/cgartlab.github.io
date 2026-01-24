@@ -54,4 +54,22 @@ const wordCountText = {
   <p>
     © {year} {author}{showWordCount && <> · {wordCountText}{totalWords.toLocaleString()}</>}
   </p>
+
+  <p class="mt-2 text-2.5 opacity-80">
+    {
+      {
+        'zh': '内容采用',
+        'en': 'Content licensed under',
+        'zh-tw': '內容採用',
+      }[currentLang] || '内容采用'
+    }
+    <a
+      href="https://creativecommons.org/licenses/by-nc-sa/4.0/"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="highlight-hover py-0.8 transition-colors after:bottom-0.35em hover:c-primary"
+    >
+      CC BY-NC-SA 4.0
+    </a>
+  </p>
 </footer>
