@@ -78,14 +78,14 @@ export const themeConfig: ThemeConfig = {
   // COMMENT SETTINGS >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> START
   comment: {
     // enable comment system
-    enabled: false, // true, false
+    enabled: true, // true, false
     // giscus
     // https://giscus.app/
     giscus: {
-      repo: '',
-      repoId: '',
-      category: '',
-      categoryId: '',
+      repo: 'cgartlab/cgartlab.github.io',
+      repoId: 'R_kgDOL7YQ8A',
+      category: 'Announcements',
+      categoryId: 'DIC_kwDOL7YQ8M4CgJ8u',
       mapping: 'pathname',
       strict: '0',
       reactionsEnabled: '1',
