@@ -83,9 +83,9 @@ export const themeConfig: ThemeConfig = {
     // https://giscus.app/
     giscus: {
       repo: 'cgartlab/cgartlab.github.io',
-      repoId: 'R_kgDOL7YQ8A',
+      repoId: 'R_kgDONjVYtg',
       category: 'Announcements',
-      categoryId: 'DIC_kwDOL7YQ8M4CgJ8u',
+      categoryId: 'DIC_kwDONjVYts4C1Xlr',
       mapping: 'pathname',
       strict: '0',
       reactionsEnabled: '1',
