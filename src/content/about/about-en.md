@@ -15,7 +15,7 @@ As an [INFJ](https://www.16personalities.com/personality-types/infj-personality)
 My professional focus spans several areas:
 
 1. Digital Motion Visual Design
-2. Front-end Product Development  
+2. Front-end Product Development
 3. Writing
 4. Personal Fine Art
 
@@ -35,22 +35,42 @@ Think of it as a container for my public creative world.
 
 The primary medium for this exploration is [CG Art](https://en.wikipedia.org/wiki/Computer_graphics), and since the entire process feels like a continuous experiment in creativity, "CG Art Lab" felt like the perfect name.
 
-## Website Sections
+## License Agreement
 
-This site is organized into several key areas:
+This website adopts a dual-licensing strategy:
 
-- **Posts**: Where I share my experiences and insights across technology, design, and knowledge management—everything from technical tutorials to design philosophy and tool evaluations.
-- **Works**: A showcase of my personal design projects and artistic creations, spanning digital visual design and front-end development work.
-- **Links**: A curated collection of websites, tools, and resources that have inspired me, forming a personal knowledge network.
-- **About**: This section—where I introduce myself and share the vision behind this website.
+### Content License
+
+**Articles, design works, images and other creative content** adopt the [Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License](https://creativecommons.org/licenses/by-nc-sa/4.0/) (CC BY-NC-SA 4.0)
+
+**This means you can:**
+
+- ✅ **Share** - Copy and redistribute the material in any medium or format
+- ✅ **Adapt** - Remix, transform, or build upon the material
+
+**Under the following terms:**
+
+- 📝 **Attribution** - You must give appropriate credit, provide a link to the license, and indicate if changes were made
+- 💰 **NonCommercial** - You may not use the material for commercial purposes
+- 🔄 **ShareAlike** - If you remix, transform, or build upon the material, you must distribute your contributions under the same license as the original
+
+### Code License
+
+**Theme code, scripts, configurations and other software components** adopt the [MIT License](https://opensource.org/licenses/MIT)
+
+### Usage Instructions
+
+- **When citing content**: Please credit "CG Art Lab" and link to the original article
+- **When modifying or creating derivative works**: Must adopt the same CC BY-NC-SA 4.0 license
+- **For commercial use**: Please contact the author for commercial authorization
 
 ## Disclaimer
 
-- **Original Content**: Unless otherwise noted, all content on this site is my original work. When referencing others' work, I properly cite sources and respect copyright.
-- **Personal Views**: The opinions expressed here are my own and don't represent any organization. They're not intended as professional advice.
-- **Technical Content**: Code snippets, tutorials, and technical guides are provided for educational purposes. Please adapt them to your specific needs—I'm not responsible for any issues that may arise from their use.
-- **External Links**: While I may link to third-party sites, I don't control their content. Please use your own judgment when visiting external resources.
-- **Privacy**: This site doesn't collect personal information. Comments are handled through third-party services like Giscus—please review their privacy policies for details.
+- **Content Originality**: Unless otherwise noted, all original content published on this website is my independent creation. When referencing others' work, I properly cite sources and comply with relevant copyright agreements.
+- **Opinion Expression**: The views expressed herein represent my personal stance only and are not associated with any organization or company, nor do they constitute professional advice.
+- **Technical Content**: Code snippets, tutorials, and technical articles are provided for learning reference only. Please adjust usage according to actual circumstances, and I am not responsible for any losses incurred from using related content.
+- **External Links**: This site may provide links to third-party websites but is not responsible for the content of these sites. Visitors need to judge content reliability themselves.
+- **Privacy Protection**: This website respects user privacy and does not collect personal information. Comment functionality uses third-party services (like Giscus)—please refer to the respective service's privacy policy.
 
 ## Tools as Extensions of Human Limbs
 
