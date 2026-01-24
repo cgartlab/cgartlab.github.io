@@ -41,14 +41,14 @@
     "sanitize-html": "^2.17.0",
     "sharp": "^0.34.5",
     "twikoo": "^1.6.44",
-    "unist-util-visit": "^5.0.0"
+    "unist-util-visit": "^5.1.0"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^6.7.3",
     "@astrojs/check": "^0.9.6",
     "@lokesh.dhakar/quantize": "^1.4.0",
     "@types/markdown-it": "^14.1.2",
-    "@types/node": "^25.0.9",
+    "@types/node": "^25.0.10",
     "@types/sanitize-html": "^2.16.0",
     "@unocss/eslint-plugin": "66.4.1",
     "@unocss/preset-attributify": "66.4.1",
@@ -60,7 +60,7 @@
     "fast-glob": "^3.3.3",
     "lint-staged": "^16.2.7",
     "ndarray-pixels": "^5.0.1",
-    "playwright": "^1.57.0",
+    "playwright": "^1.58.0",
     "rehype-mermaid": "^3.0.0",
     "simple-git-hooks": "^2.13.1",
     "tsx": "^4.21.0",
