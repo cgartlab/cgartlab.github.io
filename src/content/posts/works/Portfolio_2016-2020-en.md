@@ -1,6 +1,6 @@
 ---
-title: Demo_2016-2020
-description: This portfolio demo is a reflection of my years of creative work, covering digital art experiments from the early stages to recent project practices.
+title: Portfolio_2016-2020
+description: This portfolio is a reflection of my years of creative work, covering digital art experiments from the early stages to recent project practices.
 published: 2024-10-17
 updated: 2024-10-17
 tags:
@@ -26,6 +26,6 @@ abbrlink: demo-2020
 
 ---
 
-This portfolio demo is a reflection of my years of creative work, covering digital art experiments from the early stages to recent project practices.
+This portfolio is a reflection of my years of creative work, covering digital art experiments from the early stages to recent project practices.
 
 ![](../_images/Demo_2016-2020-1766953179643.webp)
