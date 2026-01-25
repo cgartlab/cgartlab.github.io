@@ -28,4 +28,4 @@ abbrlink: demo-2020
 
 This portfolio is a reflection of my years of creative work, covering digital art experiments from the early stages to recent project practices.
 
-![](../_images/Demo_2016-2020-1766953179643.webp)
+![Cover](../_images/作品集_2016-2020-1769351129058.webp)

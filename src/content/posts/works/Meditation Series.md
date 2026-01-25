@@ -14,6 +14,8 @@ lang: en
 abbrlink: meditation-series
 ---
 
+![Meditation Series](../_images/冥想系列-1754664741640.webp)
+
 ## About the Work
 
 Meditation is a form of consciousness transformation
@@ -48,7 +50,7 @@ Heavy oppression, contradictory conflicts, complex struggles
 
 All represent the authentic self
 
-![Meditation Series](../_images/冥想系列-1754664741640.webp)
+---
 
 ![Meditation Series 1](../_images/冥想系列-1754664750528.webp)
 
