@@ -4,7 +4,7 @@ title: 如何管理几十TB的电脑文件？职业选手真的想教会你
 abbrlink: how-to-manage-tens-of-tb-of-computer-files
 published: 2026-01-21
 tags:
-  - 随笔
+  - 技术分享
 description: 职业设计师如何管理几十TB的电脑文件？职业选手真的想教会你
 updated: 2025-08-06
 pin: 0
