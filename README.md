@@ -1,70 +1,70 @@
 # CG艺术实验室
 
-> 探索数字艺术的边界，分享CG技术与创作经验
+> 基于 Astro 构建的静态博客网站，专注于计算机图形艺术和生产力工具等技术分享
 
-CG艺术实验室是一个基于 [Astro](https://astro.build) 构建的现代化静态网站，使用 [Retypeset](https://github.com/radishzzz/astro-theme-retypeset) 主题，专注于计算机图形学、数字艺术创作、技术分享和知识管理。
+## ✨ 项目特色
 
-## 🌟 项目特色
+- 🎨 现代化设计，支持明暗主题
+- 📱 响应式布局，适配多设备
+- 🌐 中英文双语支持
+- ⚡ 极速性能，SEO 优化
+- 📖 支持博客、作品、周刊等内容
+- 💬 集成 Giscus 评论系统
 
-- **🎨 专业内容** - 专注于CG艺术、3D建模、渲染技术等专业领域
-- **🌐 多语言支持** - 支持简体中文、繁体中文和英文
-- **📚 内容集合管理** - 使用 Astro 的内容集合功能管理文章、周刊、作品等
-- **⚡ 现代技术栈** - Astro + TypeScript + UnoCSS
-- **🔍 SEO优化** - 内置完善的 SEO 和元数据管理
-- **📱 响应式设计** - 完美适配桌面和移动设备
-- **📰 RSS订阅** - 支持 RSS/Atom 订阅源
+## 🛠️ 技术栈
 
-## 🚀 技术栈
-
-| 技术                                          | 用途            | 版本     |
-| --------------------------------------------- | --------------- | -------- |
-| [Astro](https://astro.build)                  | 静态站点生成器  | ^5.16.5  |
-| [TypeScript](https://www.typescriptlang.org/) | 类型安全开发    | ~5.9.2   |
-| [UnoCSS](https://unocss.dev)                  | 原子化 CSS 引擎 | 66.4.1   |
-| [lucide](https://lucide.dev)                  | 美观的图标库    | 最新版   |
-| [KaTeX](https://katex.org)                    | 数学公式渲染    | ^0.16.22 |
-| [Mermaid](https://mermaid-js.github.io)       | 图表绘制        | ^11.12.2 |
+- **Astro** ^5.16.15 - 静态站点生成器
+- **TypeScript** ~5.9.3 - 类型安全
+- **UnoCSS** ^0.62.4 - 原子化 CSS
+- **MDX** ^4.3.13 - Markdown + JSX
+- **KaTeX** ^0.16.27 - 数学公式渲染
 
 ## 📁 项目结构
 
 ``` shell
 cgartlab.github.io/
 ├── .astro/                    # Astro 缓存和配置
-├── public/                    # 静态资源
-│   ├── feeds/                # RSS/Atom 样式表
-│   ├── fonts/                # 字体文件
-│   ├── giscus/               # Giscus 评论系统样式
-│   ├── icons/                # 网站图标
-│   ├── images/               # 图片资源
-│   ├── sounds/               # 音频资源
-│   ├── favicon.ico           # 网站图标
-│   └── robots.txt            # 搜索引擎爬虫配置
+├── .github/                   # GitHub 配置和工作流
+│   ├── workflows/            # CI/CD 工作流
+│   ├── ISSUE_TEMPLATE/       # Issue 模板
+│   └── FUNDING.yml           # 赞助配置
+├── dist/                     # 构建输出目录
+├── public/                   # 静态资源
+│   ├── feeds/               # RSS/Atom 样式表
+│   ├── fonts/               # 字体文件
+│   ├── giscus/              # Giscus 评论系统样式
+│   ├── icons/               # 网站图标
+│   ├── images/              # 图片资源
+│   ├── og/                  # Open Graph 图片
+│   ├── sounds/              # 音频资源
+│   ├── favicon.ico          # 网站图标
+│   └── robots.txt           # 搜索引擎爬虫配置
 ├── src/
-│   ├── components/           # 可复用的 Astro 组件
-│   ├── content/              # 内容集合
-│   │   ├── about/            # 关于页面
-│   │   ├── guides/           # 使用指南
-│   │   ├── posts/            # 博客文章
-│   │   ├── templates/        # 内容模板
-│   │   ├── weekly/           # 玄光周刊
-│   │   └── works/            # 作品展示
-│   ├── i18n/                 # 国际化配置
-│   ├── layouts/              # 页面布局
-│   ├── pages/                # 路由页面
-│   ├── plugins/              # Markdown 插件
-│   ├── styles/               # 全局样式
-│   ├── utils/                # 工具函数
-│   ├── types/                # TypeScript 类型定义
-│   ├── config.ts             # 主题配置文件
-│   ├── content.config.ts     # 内容集合配置
-│   └── env.d.ts              # 环境类型声明
-├── scripts/                  # 脚本工具
-├── .gitignore                # Git 忽略文件配置
-├── astro.config.ts           # Astro 配置文件
-├── package.json              # 项目依赖配置
-├── pnpm-lock.yaml            # pnpm 锁文件
-├── tsconfig.json             # TypeScript 配置
-└── uno.config.ts             # UnoCSS 配置
+│   ├── components/          # 可复用的 Astro 组件
+│   ├── content/             # 内容集合
+│   │   ├── about/           # 关于页面
+│   │   ├── posts/           # 博客文章
+│   │   ├── weekly/          # 玄光周刊
+│   │   └── works/           # 作品展示
+│   ├── i18n/                # 国际化配置
+│   ├── layouts/             # 页面布局
+│   ├── pages/               # 路由页面
+│   ├── plugins/             # Markdown 插件
+│   ├── styles/              # 全局样式
+│   ├── utils/               # 工具函数
+│   ├── types/               # TypeScript 类型定义
+│   ├── config.ts            # 主题配置文件
+│   ├── content.config.ts    # 内容集合配置
+│   └── env.d.ts             # 环境类型声明
+├── scripts/                 # 脚本工具
+├── .gitignore               # Git 忽略文件配置
+├── astro.config.ts          # Astro 配置文件
+├── package.json             # 项目依赖配置
+├── pnpm-lock.yaml           # pnpm 锁文件
+├── tsconfig.json            # TypeScript 配置
+├── uno.config.ts            # UnoCSS 配置
+├── eslint.config.mjs        # ESLint 配置
+└── IMPLEMENTATION_SUMMARY.md # 项目实现总结
 ```
 
 ## 🛠️ 开发指南
@@ -88,35 +88,55 @@ cgartlab.github.io/
 
    ```bash
    pnpm install
-   # 或使用 npm
-   npm install
    ```
 
 3. **启动开发服务器**
 
    ```bash
    pnpm dev
-   # 或使用 npm
-   npm run dev
    ```
 
-4. **访问网站**
-   - 开发服务器: <http://localhost:4321>
-   - 自动热重载，修改代码后实时更新
+   访问 <http://localhost:4321> 查看网站
 
-### 常用命令
+4. **构建生产版本**
 
-| 命令                | 功能             | 说明                     |
-| ------------------- | ---------------- | ------------------------ |
-| `pnpm dev`          | 启动开发服务器   | 支持热重载，用于本地开发 |
-| `pnpm build`        | 构建生产版本     | 生成优化的静态文件       |
-| `pnpm preview`      | 预览构建结果     | 在生产环境中预览网站     |
-| `pnpm astro check`  | 类型检查         | 检查 TypeScript 类型错误 |
-| `pnpm new-post`     | 创建新文章       | 使用脚本快速创建文章     |
-| `pnpm format-posts` | 格式化文章       | 自动优化 Markdown 格式   |
-| `pnpm update-theme` | 更新主题         | 同步上游主题更新         |
-| `pnpm lint`         | 代码检查         | 检查代码风格问题         |
-| `pnpm lint:fix`     | 自动修复代码风格 | 自动修复可修复的问题     |
+   ```bash
+   pnpm build
+   ```
+
+5. **预览构建结果**
+
+   ```bash
+   pnpm preview
+   ```
+
+### 开发脚本
+
+```bash
+# 开发模式
+pnpm dev
+
+# 构建生产版本
+pnpm build
+
+# 预览构建结果
+pnpm preview
+
+# 代码检查
+pnpm lint
+
+# 代码格式化
+pnpm format
+
+# 类型检查
+pnpm check
+
+# 清理构建缓存
+pnpm clean
+
+# 构建并生成站点地图
+pnpm build:sitemap
+```
 
 ### 开发工具配置
 
@@ -304,67 +324,66 @@ cover: "/images/cover.jpg"          # 封面图片 (可选)
 
 ## 📱 部署指南
 
-### 支持的托管平台
+### GitHub Pages 部署
 
-| 平台                                             | 配置难度 | 免费额度 | 推荐度 |
-| ------------------------------------------------ | -------- | -------- | ------ |
-| [Vercel](https://vercel.com)                     | ⭐        | 100GB/月 | ⭐⭐⭐⭐⭐  |
-| [Netlify](https://netlify.com)                   | ⭐⭐       | 100GB/月 | ⭐⭐⭐⭐   |
-| [GitHub Pages](https://pages.github.com)         | ⭐⭐⭐      | 1GB/月   | ⭐⭐⭐    |
-| [Cloudflare Pages](https://pages.cloudflare.com) | ⭐⭐       | 无限     | ⭐⭐⭐⭐   |
+本项目使用 GitHub Actions 自动部署到 GitHub Pages：
 
-### 部署步骤
+1. **配置仓库设置**
+   - 进入仓库 Settings → Pages
+   - 选择 "GitHub Actions" 作为部署源
+   - 选择 "Astro" 工作流进行部署
 
-#### 1. 构建生产版本
+2. **自动部署流程**
+   - 推送代码到 `main` 分支时自动触发构建
+   - 构建结果部署到 GitHub Pages
+   - 支持自定义域名配置
 
-```bash
-pnpm build
-# 构建结果输出到 dist/ 目录
-```
+### 手动部署
 
-#### 2. 部署到 Vercel (推荐)
+如需手动部署到其他平台：
 
-1. 连接 GitHub 仓库到 Vercel
-2. 配置构建命令：`pnpm build`
-3. 配置输出目录：`dist`
-4. 自动部署完成
+1. **构建项目**
 
-#### 3. 部署到 GitHub Pages
+   ```bash
+   pnpm build
+   ```
 
-1. 启用 GitHub Pages
-2. 配置源为 `gh-pages` 分支
-3. 使用 GitHub Actions 自动部署
-
-### 自动部署配置
-
-项目包含 GitHub Actions 工作流，实现自动部署：
-
-```yaml
-# .github/workflows/deploy.yml
-name: Deploy to GitHub Pages
-on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
-```
+2. **部署构建结果**
+   - 将 `dist` 目录内容上传到静态网站托管服务
+   - 配置正确的 base URL 和路由规则
 
 ### 环境变量配置
 
-部署时可能需要配置的环境变量：
+如需配置环境变量，创建 `.env` 文件：
 
-- `SITE_URL` - 网站域名
-- `PUBLIC_SITE_URL` - 公开网站地址
-- `APIFLASH_KEY` - APIFlash 访问密钥（用于 Open Graph 图片生成）
+```bash
+# 评论系统配置
+PUBLIC_GISCUS_REPO=
+PUBLIC_GISCUS_REPO_ID=
+PUBLIC_GISCUS_CATEGORY_ID=
+PUBLIC_GISCUS_CATEGORY=
+
+# 分析工具配置
+PUBLIC_GOOGLE_ANALYTICS_ID=
+
+# 社交媒体配置
+PUBLIC_TWITTER_USERNAME=
+PUBLIC_GITHUB_USERNAME=
+
+# 站点配置
+PUBLIC_SITE_URL=
+```
 
 ## 📄 许可证
 
 本项目采用双重许可证策略：
 
 ### 内容许可
+
 **文章内容、设计作品、图片等创意内容**采用 [知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议](LICENSE) (CC BY-NC-SA 4.0)
 
 **许可条款 (CC BY-NC-SA 4.0):**
+
 - ✅ **署名 (BY)** - 必须注明原作者和来源
 - ✅ **非商业性 (NC)** - 禁止商业用途
 - ✅ **相同方式共享 (SA)** - 衍生作品必须采用相同许可
@@ -372,15 +391,18 @@ on:
 - ❌ **禁止** - 未经许可的商业使用
 
 ### 代码许可
+
 **主题代码、脚本、配置等软件部分**采用 [MIT License](LICENSE)
 
 **许可条款 (MIT):**
+
 - ✅ **允许** - 商业使用、修改、分发、私人使用
 - ✅ **要求** - 包含许可证和版权声明
 - ✅ **允许** - 专利使用
 - ❌ **不提供** - 责任担保
 
 ### 使用说明
+
 - **引用内容时**：请注明来源 "CG艺术实验室" 并链接到原文章
 - **修改或衍生作品**：必须采用相同的 CC BY-NC-SA 4.0 许可
 - **商业用途**：请联系作者获取商业授权
@@ -443,28 +465,6 @@ on:
 | **主题**       | Retypeset  | 基于 Astro 的静态博客主题 |
 | **文档完整性** | 95%        | 完善的文档和示例          |
 
-## 🔗 链接页面
-
-网站提供丰富的资源链接，涵盖优质博主、设计创作工具和学习资源等多个类别。
-
-### 链接分类
-
-| 分类 | 内容 | 说明 |
-|------|------|------|
-| **优质博主** | 技术博客、个人网站 | 行业专家、技术领袖的优质内容 |
-| **设计创作** | 设计工具、创意资源 | 专业设计协作工具和创意资源 |
-| **学习资源** | 技术文档、教程网站 | 学习和提升技能的优质资源 |
-
-### 支持的语言
-
-链接页面支持多语言访问，与网站主体保持一致：
-
-| 语言 | 代码 | 默认 | 说明 |
-|------|------|------|------|
-| 简体中文 | `zh` | ✅ | 主要语言 |
-| 繁体中文 | `zh-tw` | ❌ | 繁体中文版本 |
-| 英文 | `en` | ❌ | 国际版本 |
-
 ### 链接管理
 
 链接数据存储在 `src/data/links.ts` 文件中，使用 TypeScript 接口定义：
@@ -506,4 +506,4 @@ export interface LinkItem {
 
 *本项目由 [CG艺术实验室](https://cgartlab.com) 团队维护，致力于推动数字艺术和个人创作的发展。*
 
-最后更新: 2025年12月
+最后更新: 2026年1月
