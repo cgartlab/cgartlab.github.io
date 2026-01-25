@@ -21,8 +21,10 @@ views:
       - property: file.mtime
         direction: DESC
     columnSize:
+      file.name: 442
       note.abbrlink: 198
       note.tags: 407
+      note.published: 117
   - type: table
     name: 草稿
     filters:
