@@ -1,6 +1,6 @@
 ---
 draft: false
-title: NAS 买回来只会存照片？创作者的第一台“私有云”该怎么玩
+title: NAS 买回来只会存照片？创作者的第一台“私有云”该怎么玩 - 上篇
 abbrlink: nas-beyond-photos-your-first-private-cloud-1
 published: 2026-01-24
 tags:
