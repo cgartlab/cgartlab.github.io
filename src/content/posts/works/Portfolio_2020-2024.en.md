@@ -28,4 +28,4 @@ abbrlink: demo-2024
 
 This portfolio demo is a snapshot of my creative journey over the past few years.
 
-![](../_images/Demo_2016-2020-1766953179643.webp)
+![Cover](../_images/作品集_2020-2024-1769351303312.webp)
