@@ -20,7 +20,7 @@ export const themeConfig: ThemeConfig = {
     base: '/', // e.g., '/blog', '/docs'
     // favicon url
     // recommended formats: svg, png or ico
-    favicon: '/icons/favicon.svg', // or https://example.com/favicon.svg
+    favicon: '/icons/favicon.svg', // or https://cgartlab.com/favicon.svg
   },
   // SITE INFORMATION >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> END
 
@@ -61,7 +61,7 @@ export const themeConfig: ThemeConfig = {
     locale: 'zh', // de | en | es | fr | ja | ko | pl | pt | ru | zh | zh-tw
     // more languages
     // not fill in the locale code above again, can be an empty array []
-    moreLocales: ['en', 'zh-tw'], // ['de', 'en', 'es', 'fr', 'ja', 'ko', 'pl', 'pt', 'ru', 'zh', 'zh-tw']
+    moreLocales: ['en'], // ['de', 'en', 'es', 'fr', 'ja', 'ko', 'pl', 'pt', 'ru', 'zh', 'zh-tw']
     // font styles for post text
     fontStyle: 'serif', // sans, serif
     // date format for posts
@@ -167,7 +167,7 @@ export const themeConfig: ThemeConfig = {
       },
       {
         name: 'Email',
-        url: 'co@cgartlab.com',
+        url: 'cgartlab@outlook.com',
       },
       {
         name: 'GitHub',
@@ -184,10 +184,6 @@ export const themeConfig: ThemeConfig = {
       {
         name: 'Bilibili',
         url: 'https://space.bilibili.com/38043072',
-      },
-      {
-        name: 'Zhihu',
-        url: 'https://www.zhihu.com/people/asky1992',
       },
     ],
     // year of website start
