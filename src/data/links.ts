@@ -8,7 +8,7 @@ export interface LinkItem {
 
 export const linksData: Record<string, Record<string, LinkItem[]>> = {
   'zh': {
-    优质博主: [
+    我喜欢的创作者: [
       {
         title: '阮一峰博客',
         description: '前端和计算机科普',
@@ -51,19 +51,19 @@ export const linksData: Record<string, Record<string, LinkItem[]>> = {
         url: 'https://www.craftz.dog/',
         icon: 'https://www.craftz.dog/favicon.ico',
       },
-      {
-        title: 'ColorHunt',
-        description: '配色方案灵感库',
-        url: 'https://colorhunt.co',
-        icon: 'https://colorhunt.co/img/colorhunt-favicon.svg?2',
-      },
     ],
-    设计创作: [
+    我常用的工具: [
       {
         title: 'Figma',
         description: '专业设计协作工具',
         url: 'https://figma.com',
         icon: 'https://static.figma.com/app/icon/1/favicon.png',
+      },
+      {
+        title: 'ColorHunt',
+        description: '配色方案灵感库',
+        url: 'https://colorhunt.co',
+        icon: 'https://colorhunt.co/img/colorhunt-favicon.svg?2',
       },
     ],
     学习资源: [
