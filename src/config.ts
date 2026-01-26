@@ -162,12 +162,12 @@ export const themeConfig: ThemeConfig = {
     // social links
     links: [
       {
-        name: 'RSS',
-        url: '/rss.xml', // or /rss.xml
+        name: '✉️',
+        url: 'cgartlab@outlook.com',
       },
       {
-        name: 'Email',
-        url: 'cgartlab@outlook.com',
+        name: 'RSS',
+        url: '/rss.xml', // or /rss.xml
       },
       {
         name: 'GitHub',
