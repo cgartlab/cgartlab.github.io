@@ -1,0 +1,30 @@
+---
+import PostList from '@/components/PostList.astro'
+import { allLocales } from '@/config'
+import { getLangFromLocale, getLangRouteParam } from '@/i18n/lang'
+import Layout from '@/layouts/Layout.astro'
+import { getPostsByTag, getTagSupportedLangs } from '@/utils/content'
+
+export async function getStaticPaths() {
+  return allLocales.map(lang => ({
+    params: { lang: getLangRouteParam(lang) },
+  }))
+}
+
+const currentLang = getLangFromLocale(Astro.currentLocale)
+const posts = await getPostsByTag('周刊', currentLang)
+const supportedLangs = await getTagSupportedLangs('周刊')
+---
+
+<Layout supportedLangs={supportedLangs}>
+  <!-- Decorative Line -->
+  <div class="uno-decorative-line" />
+
+  <!-- Posts List -->
+  <div class="mt-10.5">
+    <PostList
+      posts={posts}
+      lang={currentLang}
+    />
+  </div>
+</Layout>

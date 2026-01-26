@@ -227,9 +227,14 @@ async function _getTagSupportedLangs(tag: string): Promise<Language[]> {
   )
   const { allLocales } = await import('@/config')
 
+  // 对于作品页面，检查所有等效标签（作品和Works）
+  const equivalentTags = tag === '作品' || tag === 'Works' ? ['作品', 'Works'] : [tag]
+
   return allLocales.filter(locale =>
     posts.some(post =>
-      post.data.tags?.includes(tag)
+      equivalentTags.some(equivalentTag =>
+        post.data.tags?.includes(equivalentTag),
+      )
       && (post.data.lang === locale || post.data.lang === ''),
     ),
   )
