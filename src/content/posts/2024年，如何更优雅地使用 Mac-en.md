@@ -4,7 +4,7 @@ published: 2024-12-11
 description: A comprehensive guide to optimizing Mac usage in 2024, from system configuration to software selection, with practical tips to enhance Mac experience and work efficiency
 updated: 2024-12-11
 tags:
-- Technology Sharing
+  - tech-sharing
 draft: false
 pin: 0
 toc: true

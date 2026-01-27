@@ -4,7 +4,8 @@ description: Exploring how to reshape deep reading experience through RSS in the
 published: 2024-12-05
 updated: 2024-12-15
 tags:
-  - Knowledge Management
+  - knowledge-management
+  - tech-sharing
 draft: false
 pin: 0
 toc: true

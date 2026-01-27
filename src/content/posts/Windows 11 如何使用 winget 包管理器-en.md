@@ -4,7 +4,7 @@ description: Complete guide to using Windows 11 winget package manager, includin
 published: 2024-03-01
 updated: 2024-03-09
 tags:
-  - Technical Sharing
+  - tech-sharing
 draft: false
 pin: 0
 toc: true

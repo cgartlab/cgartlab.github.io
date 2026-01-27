@@ -4,7 +4,8 @@ published: 2025-06-30
 description: Practical experience sharing on building a personal fragmented information collection system based on RSS, including recommendations for quality RSS sources and tool usage insights
 updated: 2025-06-30
 tags:
-  - Knowledge Management
+  - knowledge-management
+  - tech-sharing
 draft: false
 pin: 0
 toc: true

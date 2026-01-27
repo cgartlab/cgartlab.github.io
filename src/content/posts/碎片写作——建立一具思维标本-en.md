@@ -1,10 +1,10 @@
 ---
-title: "Fragmented Writing - Building a Thinking Specimen"
+title: Fragmented Writing - Building a Thinking Specimen
 published: 2024-03-22
-description: "View writing as the process of building thinking specimens, systematically organizing and expressing thoughts through fragmented writing methods."
+description: View writing as the process of building thinking specimens, systematically organizing and expressing thoughts through fragmented writing methods.
 updated: 2024-11-25
 tags:
-- Knowledge Management
+  - knowledge-management
 draft: false
 pin: 0
 toc: true

@@ -4,7 +4,7 @@ published: 2024-09-10
 description: Photoshop batch layer renaming script LayerRenamer 1.0 released, supporting custom naming rules and numbering formats to improve design workflow efficiency
 updated: 2024-12-11
 tags:
-  - Technical Sharing
+  - tech-sharing
 draft: false
 pin: 0
 toc: true

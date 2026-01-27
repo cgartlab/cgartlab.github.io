@@ -5,7 +5,8 @@ published: 2024-06-11
 updated: 2024-11-24
 draft: false
 tags:
-- Tech Sharing
+  - tech-sharing
+  - knowledge-management
 pin: 0
 lang: en
 abbrlink: how-to-build-library

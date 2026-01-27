@@ -5,6 +5,7 @@ abbrlink: nas-beyond-photos-your-first-private-cloud-1
 published: 2026-01-24
 tags:
   - Essay
+  - knowledge-management
 description: It's not just a hard drive box, but your personal data center. Skip the complex command lines and learn how to establish the most basic creator storage logic.
 updated: 2026-01-24
 pin: 0
