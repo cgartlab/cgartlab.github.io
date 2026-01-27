@@ -3,7 +3,7 @@ title: Breaking the Binary Opposition of Emotions with Elementary School Math
 description: Re-examining emotional issues through the lens of elementary school math thinking, discovering that emotions are not black-and-white binary oppositions but calculable, balanceable continuous spectrums. A journey of emotional exploration through mathematical thinking.
 published: 2023-10-03
 tags:
-  - Knowledge Management
+  - Essay
 toc: true
 pin: 0
 draft: false

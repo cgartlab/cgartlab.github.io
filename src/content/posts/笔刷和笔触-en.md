@@ -4,7 +4,7 @@ description: Recent work has been leaning more towards painting direction, and d
 published: 2022-05-29
 updated: 2022-12-11
 tags:
-- Digital Art
+  - digital-art
 toc: true
 pin: 0
 draft: false

@@ -1,10 +1,10 @@
 ---
 title: "WordPress Plugin Store Won't Open: Complete Loop Error Troubleshooting and Fix Steps"
 published: 2025-07-01
-description: "Troubleshooting and fixing steps for WordPress plugin store loop errors, including two solutions using Baota Panel and terminal commands."
+description: Troubleshooting and fixing steps for WordPress plugin store loop errors, including two solutions using Baota Panel and terminal commands.
 updated: 2025-07-01
 tags:
-  - Technical Sharing
+  - tech-sharing
 draft: false
 pin: 0
 toc: true

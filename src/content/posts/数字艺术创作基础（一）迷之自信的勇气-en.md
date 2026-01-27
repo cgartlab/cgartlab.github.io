@@ -1,10 +1,10 @@
 ---
-title: "Digital Art Creation Basics (Part 1) The Courage of Mysterious Confidence"
+title: Digital Art Creation Basics (Part 1) The Courage of Mysterious Confidence
 published: 2024-05-05
-description: "Exploring confidence and courage in digital art creation, sharing experiences on taking the first step"
+description: Exploring confidence and courage in digital art creation, sharing experiences on taking the first step
 updated: 2024-11-25
 tags:
-  - Digital Art
+  - digital-art
 draft: false
 pin: 0
 toc: true

@@ -4,7 +4,7 @@ published: 2024-07-07
 description: A comprehensive guide to using Windows PC in 2024, from system optimization to software configuration, creating an efficient and elegant Windows experience
 updated: 2024-12-15
 tags:
-  - Tech Sharing
+  - tech-sharing
 draft: false
 pin: 0
 toc: true

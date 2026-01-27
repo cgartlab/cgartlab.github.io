@@ -4,7 +4,7 @@ published: 2023-03-12
 description: This article explains how to achieve whole-house scientific internet access using a router, including steps like unlocking SSH, calculating router root password, using Termius to enable SSH, and installing/configuring ShellClash. Using Redmi AX6S router as an example, but theoretically this process applies to various routers, provided you can find unlockable firmware and root password calculation methods for the specific model.
 updated: 2023-03-14
 tags:
-  - Tech Sharing
+  - tech-sharing
 draft: false
 pin: 0
 toc: true
