@@ -53,6 +53,7 @@ Thumbs.db
 src/content/posts/.copilot-index/*
 src/content/posts/.obsidian/*
 src/content/posts/.trash/*
+src/content/posts/_files/*
 
 # ===========================================
 # Trash and temporary files
