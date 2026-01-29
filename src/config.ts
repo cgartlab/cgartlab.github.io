@@ -6,9 +6,9 @@ export const themeConfig: ThemeConfig = {
     // site title
     title: 'CG艺术实验室',
     // site subtitle
-    subtitle: '探索数字艺术的边界',
+    subtitle: '探索数字创作的边界',
     // site description
-    description: 'CG艺术实验室（cgartlab.com）是一个专注于数字艺术、视觉设计、技术分享和知识管理的视觉设计机构。致力于为数字艺术爱好者、专业设计师和初学者以及商业客户，提供最新、最全面的资讯、教程、作品展示以及设计服务。',
+    description: 'CG艺术实验室（cgartlab.com）是一个专注于数字艺术、动态视觉设计、技术分享和知识管理的工作室。致力于为数字艺术爱好者、专业设计师和初学者以及商业客户，分享创作经验和培训服务。',
     // use i18n title/subtitle/description from src/i18n/ui.ts instead of static ones above
     i18nTitle: true, // true | false
     // author name
@@ -162,8 +162,8 @@ export const themeConfig: ThemeConfig = {
     // social links
     links: [
       {
-        name: '✉️',
-        url: 'cgartlab@outlook.com',
+        name: 'Email',
+        url: 'mailto:cgartlab@outlook.com',
       },
       {
         name: 'RSS',
