@@ -1,5 +1,5 @@
 ---
-title: 09 Xuan Guang Weekly - OpenAI Launches Learning Mode
+title: 09 Black Light Weekly - OpenAI Launches Learning Mode
 published: 2025-08-02
 description: This week's weekly mainly discusses OpenAI's newly launched learning mode, the advantages of newsletter dissemination format, and recommends IGLOO company's creative website design.
 updated: 2025-08-02
