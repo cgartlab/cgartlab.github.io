@@ -1,7 +1,7 @@
 ---
-title: 11 Xuan Guang Weekly - Google's UI Design Philosophy
+title: 11 Black Light Weekly - Google's UI Design Philosophy
 published: 2026-01-15
-description: Article summary
+description: Speaking of which, as the weather gets colder, 👆 this one eats more (and poops more too). Has grown from 2.25kg when first brought home last year to over 3.5kg now—definitely feels heavier when picked up. It's been a year and a half since bringing her home. Even if she becomes a "gas tank," it's fine as long as she's safe and healthy.
 updated: 2026-01-15
 tags:
   - Weekly
