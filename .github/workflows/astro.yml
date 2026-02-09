@@ -70,7 +70,7 @@ jobs:
       - name: Ensure pnpm available
         run: |
           corepack enable
-          corepack prepare pnpm@10.14.0 --activate
+          corepack prepare pnpm@10.28.1 --activate
         shell: bash
       - name: Setup Node
         uses: actions/setup-node@v4

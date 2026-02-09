@@ -4,7 +4,8 @@ published: 2026-01-31
 description: 换 Mac 吧。好了，不开玩笑......
 updated: 2026-01-31
 tags:
-  - 随笔
+  - 技术分享
+  - 生产力工具
 draft: true
 pin: 0
 toc: true
