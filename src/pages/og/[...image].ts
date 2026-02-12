@@ -54,7 +54,7 @@ export async function getStaticPaths() {
     }),
   })
 
-  return ogRoute.getStaticPaths()
+  return ogRoute.getStaticPaths
 }
 
 export async function GET(context: any) {
