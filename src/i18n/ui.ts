@@ -10,6 +10,9 @@ export const ui = {
     weekly: 'Weekly',
     links: 'Resources',
     toc: 'Table of Contents',
+    search: 'Search',
+    searchPlaceholder: 'Search posts, tags, content...',
+    searchEmpty: 'No results found',
   },
   'zh': {
     title: 'CGArtLab',
@@ -22,6 +25,9 @@ export const ui = {
     weekly: '周刊',
     links: '资源',
     toc: '目录',
+    search: '搜索',
+    searchPlaceholder: '搜索文章、标签、内容...',
+    searchEmpty: '未找到相关结果',
   },
   'zh-tw': {
     title: 'CGArtLab',
@@ -34,5 +40,8 @@ export const ui = {
     weekly: '週刊',
     links: '資源',
     toc: '目錄',
+    search: '搜尋',
+    searchPlaceholder: '搜尋文章、標籤、內容...',
+    searchEmpty: '未找到相關結果',
   },
 }

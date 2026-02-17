@@ -24,7 +24,7 @@ const navItems = [
     label: currentUI.posts,
     className: getNavItemClass(isPostActive),
   },
-    {
+  {
     href: '/works/',
     label: currentUI.works,
     className: getNavItemClass(isWorksActive),
@@ -61,6 +61,15 @@ const navItems = [
   ]}
 >
   <ul>
+    <li>
+      <button
+        id="search-trigger"
+        class="highlight-hover transition-[colors,font-weight] after:bottom-0.7em hover:(c-primary font-bold)"
+        aria-label={currentUI.search}
+      >
+        {currentUI.search}
+      </button>
+    </li>
     {navItems.map(item => (
       <li>
         <a
