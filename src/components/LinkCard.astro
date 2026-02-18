@@ -12,7 +12,16 @@ const { title, description, url, icon } = Astro.props
 <a href={url} target="_blank" rel="noopener noreferrer" class="link-card">
   <div class="link-card-content">
     {icon && (
-      <img src={icon} alt={title} class="link-card-icon" />
+      <img
+        src={icon}
+        alt={title}
+        class="link-card-icon"
+        width="40"
+        height="40"
+        loading="lazy"
+        decoding="async"
+        referrerpolicy="no-referrer"
+      />
     )}
     <div class="link-card-text">
       <h3 class="link-card-title">{title}</h3>

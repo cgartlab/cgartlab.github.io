@@ -1,6 +1,6 @@
 import type { APIRoute } from 'astro'
 import { getCollection } from 'astro:content'
-import { defaultLocale } from '@/config'
+import { allLocales } from '@/config'
 import {
   normalizePostLang,
   normalizeSearchLang,
@@ -17,9 +17,12 @@ interface SearchIndex {
   published: string
 }
 
-export const GET: APIRoute = async ({ request }) => {
-  const url = new URL(request.url)
-  const lang = normalizeSearchLang(url.searchParams.get('lang') || defaultLocale)
+export async function getStaticPaths() {
+  return allLocales.map(lang => ({ params: { lang } }))
+}
+
+export const GET: APIRoute = async ({ params }) => {
+  const lang = normalizeSearchLang(params.lang)
 
   const posts = await getCollection('posts', ({ data }) => {
     return shouldIncludePostForSearch(data, lang, import.meta.env.DEV)
