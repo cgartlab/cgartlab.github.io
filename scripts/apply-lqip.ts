@@ -82,8 +82,9 @@ async function generateLqipValue(imagePath: string): Promise<string | null> {
     // 转换为8位十六进制字符串
     return combined.toString(16).padStart(8, '0')
   }
-  catch (error) {
-    console.error(`⚠️ 处理图像失败: ${imagePath}`, error)
+  catch (error: unknown) {
+    const message = error instanceof Error ? error.message : String(error)
+    console.error(`⚠️ 处理图像失败: ${imagePath}`, message)
     return null
   }
 }
@@ -221,8 +222,9 @@ async function applyLqipToHtml(lqipMap: LqipMap): Promise<number> {
         await fs.writeFile(filePath, root.toString())
       }
     }
-    catch (error) {
-      console.warn(`⚠️ 处理${htmlFile}失败:`, error)
+    catch (error: unknown) {
+      const message = error instanceof Error ? error.message : String(error)
+      console.warn(`⚠️ 处理${htmlFile}失败:`, message)
       continue
     }
   }
@@ -270,7 +272,8 @@ async function main() {
   console.log(`✨ 成功为${appliedCount}个图像应用了LQIP样式`)
 }
 
-main().catch((error) => {
-  console.error('❌ LQIP处理失败:', error)
+main().catch((error: unknown) => {
+  const message = error instanceof Error ? error.message : String(error)
+  console.error('❌ LQIP处理失败:', message)
   process.exit(1)
 })

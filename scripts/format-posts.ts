@@ -12,13 +12,13 @@ import fg from 'fast-glob'
 // 配置常量
 const CONFIG = {
   IMAGE_PATTERNS: [
-    /!\[.*?\]\(.*?\)/g,  // Markdown图片格式 ![alt](src)
-    /<img[^>]*>/g          // HTML图片格式 <img ...>
+    /!\[.*?\]\(.*?\)/g, // Markdown图片格式 ![alt](src)
+    /<img[^>]*>/g, // HTML图片格式 <img ...>
   ],
   PLACEHOLDER_PREFIX: '__IMAGE_PLACEHOLDER_',
   MARKDOWN_EXTENSIONS: ['**/*.md', '**/*.mdx'],
   EXCLUDE_PATTERNS: ['!node_modules/**', '!.git/**', '!.astro/**'],
-  MAX_UNCHANGED_DISPLAY: 5
+  MAX_UNCHANGED_DISPLAY: 5,
 } as const
 
 // 类型定义
@@ -66,7 +66,7 @@ async function getMarkdownFiles(): Promise<string[]> {
   const patterns = [
     'src/content/**/*.{md,mdx}',
     '!src/content/**/node_modules/**',
-    '!src/content/**/.git/**'
+    '!src/content/**/.git/**',
   ]
   const files = await fg(patterns, { cwd: process.cwd() })
   console.log(`📦 找到 ${files.length} 个content目录下的Markdown文件`)
@@ -106,7 +106,7 @@ function restoreImageLinks(content: string, placeholders: string[]): string {
   placeholders.forEach((image, index) => {
     restoredContent = restoredContent.replace(
       `${CONFIG.PLACEHOLDER_PREFIX}${index}__`,
-      image
+      image,
     )
   })
   return restoredContent
@@ -127,7 +127,7 @@ async function formatSingleFile(filePath: string): Promise<FormatResult> {
       filePath,
       changed: false,
       originalContent,
-      formattedContent: originalContent
+      formattedContent: originalContent,
     }
   }
 
@@ -149,7 +149,7 @@ async function formatSingleFile(filePath: string): Promise<FormatResult> {
     filePath,
     changed: originalContent !== formattedContent,
     originalContent,
-    formattedContent
+    formattedContent,
   }
 }
 
@@ -168,7 +168,7 @@ function reportResults(results: FormatResult[]): void {
 
   if (changedFiles.length > 0) {
     console.log('\n🔧 已修改的文件:')
-    changedFiles.forEach(file => {
+    changedFiles.forEach((file) => {
       console.log(`  - ${file.filePath}`)
     })
   }
@@ -177,7 +177,7 @@ function reportResults(results: FormatResult[]): void {
     console.log('\n✅ 未修改的文件:')
     unchangedFiles
       .slice(0, CONFIG.MAX_UNCHANGED_DISPLAY)
-      .forEach(file => {
+      .forEach((file) => {
         console.log(`  - ${file.filePath}`)
       })
 
@@ -203,13 +203,15 @@ async function formatAllMarkdownFiles(): Promise<void> {
         await writeFile(filePath, result.formattedContent, 'utf8')
         console.log(`✅ 已格式化: ${filePath}`)
       }
-    } catch (error) {
-      console.error(`❌ 处理文件失败: ${filePath}`, error)
+    }
+    catch (error: unknown) {
+      const message = error instanceof Error ? error.message : String(error)
+      console.error(`❌ 处理文件失败: ${filePath}`, message)
       results.push({
         filePath,
         changed: false,
         originalContent: '',
-        formattedContent: ''
+        formattedContent: '',
       })
     }
   }
@@ -218,7 +220,8 @@ async function formatAllMarkdownFiles(): Promise<void> {
 }
 
 // 执行格式化
-formatAllMarkdownFiles().catch((error) => {
-  console.error('❌ 执行失败:', error)
+formatAllMarkdownFiles().catch((error: unknown) => {
+  const message = error instanceof Error ? error.message : String(error)
+  console.error('❌ 执行失败:', message)
   process.exit(1)
 })

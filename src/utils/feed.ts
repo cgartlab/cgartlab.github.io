@@ -42,8 +42,9 @@ async function _getAbsoluteImageUrl(srcPath: string, baseUrl: string) {
   // 导入图像模块并提取其元数据
   const imageMetadata = await imageImporter()
     .then(importedModule => importedModule.default)
-    .catch((error) => {
-      console.warn(`导入图像失败: ${absolutePath}`, error)
+    .catch((error: unknown) => {
+      const message = error instanceof Error ? error.message : String(error)
+      console.warn(`导入图像失败: ${absolutePath}`, message)
       return null
     })
 
@@ -90,8 +91,9 @@ async function fixRelativeImagePaths(htmlContent: string, baseUrl: string): Prom
           img.setAttribute('src', absoluteImageUrl)
         }
       }
-      catch (error) {
-        console.warn(`无法将相对图像路径转换为绝对URL: ${src}`, error)
+      catch (error: unknown) {
+        const message = error instanceof Error ? error.message : String(error)
+        console.warn(`无法将相对图像路径转换为绝对URL: ${src}`, message)
       }
     })())
   }

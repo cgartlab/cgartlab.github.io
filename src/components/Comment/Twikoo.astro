@@ -42,7 +42,17 @@ const twikooConfig = {
 ></script>
 
 <script>
-declare const twikoo: any
+interface TwikooInstance {
+  init: (options: {
+    envId: string
+    el: string
+    region?: string
+    path?: string
+    lang?: string
+  }) => void
+}
+
+declare const twikoo: TwikooInstance
 
 let twikooObserver: IntersectionObserver | null = null
 let twikooWrapper: HTMLElement | null = null
@@ -65,8 +75,9 @@ function setupTwikoo() {
       lang,
     })
   }
-  catch (error) {
-    console.error('[Twikoo] Failed to initialize:', error)
+  catch (error: unknown) {
+    const message = error instanceof Error ? error.message : String(error)
+    console.error('[Twikoo] Failed to initialize:', message)
   }
 }
 

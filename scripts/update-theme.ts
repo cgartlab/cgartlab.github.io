@@ -31,8 +31,8 @@ try {
     console.log('✨ 更新成功')
   }
 }
-catch (error) {
-  // 检查是否存在合并冲突
+catch (error: unknown) {
+  const message = error instanceof Error ? error.message : String(error)
   const gitDir = execSync('git rev-parse --git-dir', { encoding: 'utf8' }).trim()
   const mergeHeadPath = path.join(gitDir, 'MERGE_HEAD')
 
@@ -40,7 +40,7 @@ catch (error) {
     console.log('⚠️ 更新获取完成但存在合并冲突，请手动解决')
   }
   else {
-    console.error('❌ 更新失败:', error)
+    console.error('❌ 更新失败:', message)
     process.exit(1)
   }
 }
