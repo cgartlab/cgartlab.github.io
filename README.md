@@ -1,6 +1,6 @@
 # CG艺术实验室
 
-> 基于 Astro 构建的静态博客网站，专注于计算机图形艺术和生产力工具等技术分享
+> 基于 Astro 构建的静态网站，专注于数字艺术、动态视觉设计、技术分享和知识管理的工作室
 
 ## ✨ 项目特色
 
@@ -442,18 +442,16 @@ PUBLIC_SITE_URL=
 | ------------ | -------------------------------------------------- | -------- |
 | **官方网站** | [cgartlab.com](https://cgartlab.com)               | 主要网站 |
 | **GitHub**   | [github.com/cgartlab](https://github.com/cgartlab) | 代码仓库 |
-| **邮箱**     | <info@cgartlab.com>                                | 业务联系 |
+| **邮箱**     | <cgartlab@outlook.com>                             | 业务联系 |
 
 ### 社交媒体
 
-- **Twitter**: [@cgartlab](https://twitter.com/cgartlab)
-- **Instagram**: [@cgartlab](https://instagram.com/cgartlab)
-- **YouTube**: [CG艺术实验室](https://youtube.com/@cgartlab)
+- **X (Twitter)**: [@cgartlab](https://x.com/cgartlab)
+- **Bilibili**: [CG艺术实验室](https://space.bilibili.com/38043072)
+- **少数派**: [cgartlab](https://sspai.com/u/cgartlab/updates)
 
 ### 技术支持
 
-- **文档**: [docs.cgartlab.com](https://docs.cgartlab.com)
-- **社区**: [community.cgartlab.com](https://community.cgartlab.com)
 - **问题反馈**: [GitHub Issues](https://github.com/cgartlab/cgartlab.github.io/issues)
 
 ## 📈 项目状态
@@ -499,11 +497,11 @@ export interface LinkItem {
 - [Astro](https://astro.build) - 优秀的静态站点生成器
 - [UnoCSS](https://unocss.dev) - 高性能原子化 CSS 引擎
 - [TypeScript](https://www.typescriptlang.org/) - 类型安全的 JavaScript
-- [Vercel](https://vercel.com) - 优秀的部署平台
+- [GitHub Pages](https://pages.github.com) - 免费的静态网站托管服务
 - [Retypeset Theme](https://github.com/radishzzz/astro-theme-retypeset) - 优秀的 Astro 博客主题
 
 ---
 
 *本项目由 [CG艺术实验室](https://cgartlab.com) 团队维护，致力于推动数字艺术和个人创作的发展。*
 
-最后更新: 2026年1月
+最后更新: 2026年2月
