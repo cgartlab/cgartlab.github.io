@@ -1,19 +1,19 @@
+import type { APIRoute, GetStaticPaths } from 'astro'
 import type { CollectionEntry } from 'astro:content'
 import { OGImageRoute } from 'astro-og-canvas'
 import { getCollection } from 'astro:content'
 import { getPostDescription } from '@/utils/description'
 
-// Cache for the OG route result
-let ogRouteResult: any = null
+type OGRouteResult = Awaited<ReturnType<typeof OGImageRoute>>
 
-// Initialize the OG route
+let ogRouteResult: OGRouteResult | null = null
+
 async function initOGRouter() {
   if (ogRouteResult)
     return ogRouteResult
 
   const posts = await getCollection('posts')
 
-  // Create slug-to-metadata lookup object for blog posts
   const pages = Object.fromEntries(
     posts.map((post: CollectionEntry<'posts'>) => [
       post.id,
@@ -24,15 +24,14 @@ async function initOGRouter() {
     ]),
   )
 
-  // Configure Open Graph image generation route
   ogRouteResult = await OGImageRoute({
     param: 'image',
     pages,
-    getImageOptions: (_path, page) => ({
+    getImageOptions: (_path, page: { title: string, description: string }) => ({
       title: page.title,
       description: page.description,
       logo: {
-        path: './public/icons/og-logo.png', // Required local path and PNG format
+        path: './public/icons/og-logo.png',
         size: [250],
       },
       border: {
@@ -41,13 +40,13 @@ async function initOGRouter() {
       },
       font: {
         title: {
-          families: ['Noto Sans SC'], // or Noto Serif SC
+          families: ['Noto Sans SC'],
           weight: 'Bold',
           color: [34, 33, 36],
           lineHeight: 1.5,
         },
         description: {
-          families: ['Noto Sans SC'], // or Noto Serif SC
+          families: ['Noto Sans SC'],
           color: [72, 71, 74],
           lineHeight: 1.5,
         },
@@ -63,14 +62,12 @@ async function initOGRouter() {
   return ogRouteResult
 }
 
-// Export the getStaticPaths function
-export async function getStaticPaths() {
-  const { getStaticPaths } = await initOGRouter()
-  return getStaticPaths()
+export const getStaticPaths: GetStaticPaths = async (context) => {
+  const result = await initOGRouter()
+  return result.getStaticPaths(context)
 }
 
-// Export the GET function
-export async function GET(context: any) {
-  const { GET } = await initOGRouter()
-  return GET(context)
+export const GET: APIRoute = async (context) => {
+  const result = await initOGRouter()
+  return result.GET(context)
 }

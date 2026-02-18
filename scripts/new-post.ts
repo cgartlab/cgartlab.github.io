@@ -46,7 +46,8 @@ try {
   writeFileSync(fullPath, content)
   console.log(`✅ 文章已创建: ${fullPath}`)
 }
-catch (error) {
-  console.error('❌ 创建文章失败:', error)
+catch (error: unknown) {
+  const message = error instanceof Error ? error.message : String(error)
+  console.error('❌ 创建文章失败:', message)
   process.exit(1)
 }

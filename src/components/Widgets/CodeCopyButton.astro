@@ -20,8 +20,9 @@ async function handleCodeCopyClick(e: MouseEvent) {
   try {
     await navigator.clipboard.writeText(text)
   }
-  catch (error) {
-    console.error('[CodeCopyButton] Failed to copy:', error)
+  catch (error: unknown) {
+    const message = error instanceof Error ? error.message : String(error)
+    console.error('[CodeCopyButton] Failed to copy:', message)
     return
   }
 

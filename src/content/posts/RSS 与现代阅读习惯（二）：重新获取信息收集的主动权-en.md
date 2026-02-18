@@ -10,7 +10,7 @@ draft: false
 pin: 0
 toc: true
 lang: en
-abbrlink: rss-2-en
+abbrlink: rss-2
 ---
 
 ![Cover](./_images/RSS%20与现代阅读习惯（二）：重新获取信息收集的主动权-1754680839895.webp)

@@ -71,8 +71,9 @@ function updateGiscusTheme() {
       'https://giscus.app',
     )
   }
-  catch (error) {
-    console.error('[Giscus] Failed to update theme:', error)
+  catch (error: unknown) {
+    const message = error instanceof Error ? error.message : String(error)
+    console.error('[Giscus] Failed to update theme:', message)
   }
 }
 
@@ -101,8 +102,9 @@ function setupGiscus() {
     script.src = 'https://giscus.app/client.js'
     giscusContainer.appendChild(script)
   }
-  catch (error) {
-    console.error('[Giscus] Failed to initialize:', error)
+  catch (error: unknown) {
+    const message = error instanceof Error ? error.message : String(error)
+    console.error('[Giscus] Failed to initialize:', message)
   }
 }
 

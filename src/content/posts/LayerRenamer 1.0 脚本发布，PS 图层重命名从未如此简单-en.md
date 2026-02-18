@@ -9,7 +9,7 @@ draft: false
 pin: 0
 toc: true
 lang: en
-abbrlink: layerrenamer-1-en
+abbrlink: layerrenamer-1
 ---
 
 ![LayerRenamer script cover image, showcasing Photoshop batch layer renaming functionality](_images/LayerRenamer%201.0%20脚本发布，PS%20图层重命名从未如此简单-1754591673573.webp)

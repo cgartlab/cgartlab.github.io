@@ -70,8 +70,9 @@ async function setupWaline() {
       ...restConfig,
     })
   }
-  catch (error) {
-    console.error('[Waline] Failed to initialize:', error)
+  catch (error: unknown) {
+    const message = error instanceof Error ? error.message : String(error)
+    console.error('[Waline] Failed to initialize:', message)
   }
 }
 
