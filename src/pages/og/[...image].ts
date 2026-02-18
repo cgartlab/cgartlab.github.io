@@ -53,10 +53,8 @@ async function initOGRouter() {
         },
       },
       fonts: [
-        // 'https://cdn.jsdelivr.net/gh/notofonts/noto-cjk@main/Sans/SubsetOTF/SC/NotoSansSC-Bold.otf',
-        // 'https://cdn.jsdelivr.net/gh/notofonts/noto-cjk@main/Sans/SubsetOTF/SC/NotoSansSC-Regular.otf',
-        'https://gcore.jsdelivr.net/gh/notofonts/noto-cjk@main/Serif/SubsetOTF/SC/NotoSerifSC-Bold.otf',
-        'https://gcore.jsdelivr.net/gh/notofonts/noto-cjk@main/Serif/SubsetOTF/SC/NotoSerifSC-Regular.otf',
+        './public/fonts/NotoSansSC-Bold.otf',
+        './public/fonts/NotoSansSC-Regular.otf',
       ],
       bgGradient: [[242, 241, 245]],
     }),

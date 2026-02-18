@@ -337,8 +337,8 @@ const currentUI = ui[currentLang as keyof typeof ui] ?? {}
 
 <script is:inline>
 (function () {
+  const searchIndexCache = new Map()
   let searchIndex = []
-  let indexLoaded = false
   let debounceTimer = null
   let keydownHandler = null
   let inputHandler = null
@@ -385,18 +385,32 @@ const currentUI = ui[currentLang as keyof typeof ui] ?? {}
       els.empty.classList.remove('visible')
   }
 
+  function normalizeLang(lang) {
+    const normalized = (lang || 'zh').toLowerCase()
+    if (normalized.startsWith('zh-tw') || normalized.startsWith('zh-hk') || normalized.startsWith('zh-mo'))
+      return 'zh-tw'
+    if (normalized.startsWith('zh'))
+      return 'zh'
+    if (normalized.startsWith('en'))
+      return 'en'
+    return 'zh'
+  }
+
   async function loadIndex() {
-    if (indexLoaded)
+    const currentLang = normalizeLang(document.documentElement.lang)
+    if (searchIndexCache.has(currentLang)) {
+      searchIndex = searchIndexCache.get(currentLang)
       return
+    }
 
     const els = getElements()
     if (els.loading)
       els.loading.classList.add('visible')
     try {
-      const lang = document.documentElement.lang || 'zh'
-      const response = await fetch(`${base}api/search-index.json?lang=${lang}`)
-      searchIndex = await response.json()
-      indexLoaded = true
+      const response = await fetch(`${base}api/search-index/${currentLang}.json`)
+      const indexData = await response.json()
+      searchIndexCache.set(currentLang, indexData)
+      searchIndex = indexData
     }
     catch (error) {
       console.error('Failed to load search index:', error)
@@ -526,7 +540,8 @@ const currentUI = ui[currentLang as keyof typeof ui] ?? {}
     let html = ''
     for (let i = 0; i < topResults.length; i++) {
       const item = topResults[i].item
-      const href = item.lang === 'en' ? `/en/posts/${item.slug}/` : `/posts/${item.slug}/`
+      const prefix = item.lang === 'zh' ? '' : `/${item.lang}`
+      const href = `${prefix}/posts/${item.slug}/`
       const fullHref = base.replace(/\/$/, '') + href
 
       html += `<a href="${fullHref}" class="search-result-item">`
