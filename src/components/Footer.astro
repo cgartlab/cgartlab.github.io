@@ -37,6 +37,16 @@ const wordCountText = {
   'en': 'Total words: ',
   'zh-tw': '累計字數：',
 }[currentLang] || '累计字数：'
+
+// 关于页面路径（带锚点）
+const aboutPath = currentLang === defaultLocale ? '/about/#关于本站' : `/${currentLang}/about/#关于本站`
+
+// 公众号文本
+const wechatText = {
+  'zh': '公众号',
+  'en': 'WeChat',
+  'zh-tw': '公眾號',
+}[currentLang] || '公众号'
 ---
 
 <footer
@@ -49,10 +59,11 @@ const wordCountText = {
         <a class={footerLinkClass} href={link.url} target="_blank" rel="noopener noreferrer">{link.name}</a>&nbsp;{index < links.length - 1 && '/'}
       </>
     ))}
+    /&nbsp;<a class={footerLinkClass} href={aboutPath}><i>{wechatText}</i></a>
   </p>
 
   <p>
-    © {year} {author}{showWordCount && <> · {wordCountText}{totalWords.toLocaleString()}</>}
+    © {year} {author}{showWordCount && <> · <i>{wordCountText}</i>{totalWords.toLocaleString()}</>}
   </p>
 
   <p class="mt-2 text-2.5 opacity-80">
