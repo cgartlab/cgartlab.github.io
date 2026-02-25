@@ -89,7 +89,7 @@ const pageImage = postSlug
 
 <!-- JSON-LD Structured Data -->
 {postSlug ? (
-  <script type="application/ld+json" set:html={JSON.stringify({
+  <script is:inline type="application/ld+json" set:html={JSON.stringify({
     "@context": "https://schema.org",
     "@type": "Article",
     "headline": postTitle,
@@ -116,7 +116,7 @@ const pageImage = postSlug
     }
   })} />
 ) : (
-  <script type="application/ld+json" set:html={JSON.stringify({
+  <script is:inline type="application/ld+json" set:html={JSON.stringify({
     "@context": "https://schema.org",
     "@type": "WebSite",
     "name": siteTitle,
