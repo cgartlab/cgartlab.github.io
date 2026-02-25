@@ -1,29 +1,11 @@
 # CGArtLab Robots.txt
 # https://cgartlab.com
 
-User-agent: *
-Allow: /
-Disallow: /search?q=
-Crawl-delay: 1
-
-# OpenCrawl / agent-browser - Allow for AI agent web browsing
-User-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36
-Allow: /
-
-User-agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36
-Allow: /
-
-User-agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36
-Allow: /
-
 Sitemap: https://cgartlab.com/sitemap-index.xml
 Sitemap: https://cgartlab.com/sitemap-pages.xml
 
 # AI Crawlers - Block all for content protection
 User-agent: GPTBot
-Disallow: /
-
-User-agent: GPTBot-1
 Disallow: /
 
 User-agent: ChatGPT-User
@@ -62,31 +44,13 @@ Disallow: /
 User-agent: FacebookBot
 Disallow: /
 
-User-agent: FacebookBot/1.0
-Disallow: /
-
 User-agent: Embedly
-Disallow: /
-
-User-agent: GPTBot
-Disallow: /
-
-User-agent: crawler-4
 Disallow: /
 
 User-agent: diffbot
 Disallow: /
 
 User-agent: Discovery Engine
-Disallow: /
-
-User-agent: Google-Extended
-Disallow: /
-
-User-agent: GoogleOther
-Disallow: /
-
-User-agent: GoogleOther-bot
 Disallow: /
 
 User-agent: PerplexityBot
@@ -104,9 +68,6 @@ Disallow: /
 User-agent: NewsBot
 Disallow: /
 
-User-agent: NewsBot/2.0
-Disallow: /
-
 User-agent: SentiBot
 Disallow: /
 
@@ -116,7 +77,7 @@ Disallow: /
 User-agent: Nuzzel
 Disallow: /
 
-User-agent: Superfeedr bot/2.0
+User-agent: Superfeedr bot
 Disallow: /
 
 User-agent: feedburner
@@ -125,8 +86,8 @@ Disallow: /
 User-agent: feedvalidator
 Disallow: /
 
-# Allow search engines to index content but block AI training
-User-agent: Google
+# Allow search engines to index content
+User-agent: Googlebot
 Allow: /
 Disallow: /api/
 
@@ -189,6 +150,12 @@ Allow: /
 
 User-agent: XBot
 Allow: /
+
+# Generic crawler rules (placed last to ensure specific rules take precedence)
+User-agent: *
+Allow: /
+Disallow: /search?q=
+Crawl-delay: 1
 
 # Content Protection
 # This file protects CGArtLab content from unauthorized AI training
