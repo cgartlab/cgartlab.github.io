@@ -1,0 +1,13 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://cgartlab.com/sitemap-index.xml
+
+User-agent: GPTBot
+Disallow: /
+
+User-agent: CCBot
+Disallow: /
+
+User-agent: Google-Extended
+Disallow: /
