@@ -87,6 +87,61 @@ const pageImage = postSlug
 {yandex && <meta name="yandex-verification" content={yandex} />}
 {baidu && <meta name="baidu-site-verification" content={baidu} />}
 
+<!-- JSON-LD Structured Data -->
+{postSlug ? (
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": postTitle,
+    "description": pageDescription,
+    "image": pageImage.toString(),
+    "url": Astro.url.toString(),
+    "author": {
+      "@type": "Person",
+      "name": author
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": siteTitle,
+      "logo": {
+        "@type": "ImageObject",
+        "url": new URL(`${base}/icons/favicon.svg`, Astro.url.origin).toString()
+      }
+    },
+    "datePublished": new Date().toISOString(),
+    "dateModified": new Date().toISOString(),
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": Astro.url.toString()
+    }
+  })} />
+) : (
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": siteTitle,
+    "description": siteDescription,
+    "url": Astro.url.toString(),
+    "author": {
+      "@type": "Person",
+      "name": author
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": siteTitle
+    },
+    "inLanguage": currentLang,
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": {
+        "@type": "EntryPoint",
+        "urlTemplate": `${Astro.url.origin}${base}/search?q={search_term_string}`
+      },
+      "query-input": "required name=search_term_string"
+    }
+  })} />
+)}
+
 <!-- Global View Transition -->
 <ClientRouter fallback="none" />
 
