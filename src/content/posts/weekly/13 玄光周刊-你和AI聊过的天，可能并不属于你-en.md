@@ -1,15 +1,15 @@
 ---
-title: 13 Xuanguang Weekly - The Conversations You Had with AI Might Not Belong to You
+title: 13 Black Light Weekly - The Conversations You Had with AI Might Not Belong to You
 published: 2026-02-05
 description: Since I started using the internet in college, I've never trusted any cloud storage or cloud services. This feeling faded a lot after the development of mobile internet because the internet was everywhere. But after AI emerged, I truly realized how valuable personal data is. At the same time, I also think this is something that most people using these AI platforms easily overlook.
 updated: 2026-02-05
 tags:
   - Weekly
-draft: true
+draft: false
 pin: 0
 toc: true
 lang: en
-abbrlink: weekly-13-en
+abbrlink: weekly-13
 ---
 
 ![Cover](../_images/13%20玄光周刊-你和AI聊过的天，可能并不属于你-1772119824577.webp)
