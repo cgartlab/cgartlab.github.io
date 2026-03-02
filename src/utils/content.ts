@@ -215,6 +215,31 @@ async function _getPostsByTag(tag: string, lang?: Language) {
 export const getPostsByTag = memoize(_getPostsByTag)
 
 /**
+ * 获取包含多个标签中任意一个的所有文章（去重）
+ *
+ * @param tags 需要筛选文章的标签名称数组
+ * @param lang 需要筛选的语言代码，默认为站点默认语言
+ * @returns 包含指定标签的文章数组（去重并按日期排序）
+ */
+async function _getPostsByTags(tags: string[], lang?: Language) {
+  const tagMap = await getPostsGroupByTags(lang)
+  const postMap = new Map<string, Post>()
+
+  tags.forEach((tag) => {
+    const posts = tagMap.get(tag) ?? []
+    posts.forEach((post) => {
+      postMap.set(post.id, post)
+    })
+  })
+
+  return Array.from(postMap.values()).sort((a, b) =>
+    b.data.published.valueOf() - a.data.published.valueOf(),
+  )
+}
+
+export const getPostsByTags = memoize(_getPostsByTags)
+
+/**
  * 检查哪些语言支持特定标签
  *
  * @param tag 需要检查语言支持的标签名称
@@ -227,8 +252,16 @@ async function _getTagSupportedLangs(tag: string): Promise<Language[]> {
   )
   const { allLocales } = await import('@/config')
 
-  // 对于作品页面，检查所有等效标签（作品和Works）
-  const equivalentTags = tag === '作品' || tag === 'Works' ? ['作品', 'Works'] : [tag]
+  // 对于作品页面，检查所有等效标签
+  const equivalentTagMap: Record<string, string[]> = {
+    '作品': ['作品', 'Works'],
+    'Works': ['作品', 'Works'],
+    '作品集': ['作品集', 'Portfolio'],
+    'Portfolio': ['作品集', 'Portfolio'],
+    '数字绘画': ['数字绘画', 'Digital Painting'],
+    'Digital Painting': ['数字绘画', 'Digital Painting'],
+  }
+  const equivalentTags = equivalentTagMap[tag] || [tag]
 
   return allLocales.filter(locale =>
     posts.some(post =>

@@ -3,7 +3,7 @@ import WorksGallery from '@/components/WorksGallery.astro'
 import { allLocales } from '@/config'
 import { getLangFromLocale, getLangRouteParam } from '@/i18n/lang'
 import Layout from '@/layouts/Layout.astro'
-import { getPostsByTag, getTagSupportedLangs } from '@/utils/content'
+import { getPostsByTags, getTagSupportedLangs } from '@/utils/content'
 
 export async function getStaticPaths() {
   return allLocales.map(lang => ({
@@ -12,32 +12,20 @@ export async function getStaticPaths() {
 }
 
 const currentLang = getLangFromLocale(Astro.currentLocale)
-// 根据语言选择正确的标签
-const tag = currentLang === 'zh' || currentLang === 'zh-tw' ? '作品' : 'Works'
-const posts = await getPostsByTag(tag, currentLang)
-const supportedLangs = await getTagSupportedLangs(tag)
+// 根据语言选择正确的标签（作品集和数字绘画）
+const tags = currentLang === 'zh' || currentLang === 'zh-tw'
+  ? ['作品集', '数字绘画']
+  : ['Portfolio', 'Digital Painting']
+const posts = await getPostsByTags(tags, currentLang)
+const supportedLangs = await getTagSupportedLangs(tags[0])
 ---
 
 <Layout supportedLangs={supportedLangs}>
   <!-- Decorative Line -->
   <div class="uno-decorative-line" />
 
-  <!-- Page Header -->
-  <div class="mt-10.5 text-center">
-    <h1 class="mb-4 text-6 c-primary font-bold">
-      {currentLang === 'zh' ? '作品集' : currentLang === 'zh-tw' ? '作品集' : 'Works'}
-    </h1>
-    <p class="mx-auto max-w-2xl text-base opacity-80">
-      {currentLang === 'zh'
-        ? '写作是写作的回报，画画是画画的酬劳'
-        : currentLang === 'zh-tw'
-          ? '寫作是寫作的回報，畫畫是畫畫的酬勞'
-          : 'Writing is the reward of writing, painting is the reward of painting'}
-    </p>
-  </div>
-
   <!-- Works Gallery -->
-  <div class="mt-10.5">
+  <div class="mt-6 lg:mt-10.5">
     <WorksGallery
       posts={posts}
       lang={currentLang}

@@ -14,5 +14,10 @@ const currentLang = getLangFromLocale(Astro.currentLocale)
 ---
 
 <Layout>
-  <LinksList lang={currentLang} />
+  <!-- Decorative Line -->
+  <div class="uno-decorative-line" />
+
+  <div class="mt-6 lg:mt-10.5">
+    <LinksList lang={currentLang} />
+  </div>
 </Layout>

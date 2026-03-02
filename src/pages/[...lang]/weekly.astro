@@ -1,5 +1,5 @@
 ---
-import PostList from '@/components/PostList.astro'
+import WeeklyGallery from '@/components/WeeklyGallery.astro'
 import { allLocales } from '@/config'
 import { getLangFromLocale, getLangRouteParam } from '@/i18n/lang'
 import Layout from '@/layouts/Layout.astro'
@@ -20,9 +20,9 @@ const supportedLangs = await getTagSupportedLangs('周刊')
   <!-- Decorative Line -->
   <div class="uno-decorative-line" />
 
-  <!-- Posts List -->
-  <div class="mt-10.5">
-    <PostList
+  <!-- Weekly Gallery -->
+  <div class="mt-6 lg:mt-10.5">
+    <WeeklyGallery
       posts={posts}
       lang={currentLang}
     />
