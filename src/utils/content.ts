@@ -104,7 +104,12 @@ export const getPosts = memoize(_getPosts)
  */
 async function _getRegularPosts(lang?: Language) {
   const posts = await getPosts(lang)
-  return posts.filter(post => !post.data.pin && !post.data.tags?.includes('周刊'))
+  return posts.filter((post) => {
+    if (post.data.pin)
+      return false
+    const tags = post.data.tags || []
+    return !tags.some(tag => tag.toLowerCase() === '周刊' || tag.toLowerCase() === 'weekly')
+  })
 }
 
 export const getRegularPosts = memoize(_getRegularPosts)
@@ -118,7 +123,12 @@ export const getRegularPosts = memoize(_getRegularPosts)
 async function _getPinnedPosts(lang?: Language) {
   const posts = await getPosts(lang)
   return posts
-    .filter(post => post.data.pin && post.data.pin > 0 && !post.data.tags?.includes('weekly'))
+    .filter((post) => {
+      if (!post.data.pin || post.data.pin <= 0)
+        return false
+      const tags = post.data.tags || []
+      return !tags.some(tag => tag.toLowerCase() === '周刊' || tag.toLowerCase() === 'weekly')
+    })
     .sort((a, b) => (b.data.pin ?? 0) - (a.data.pin ?? 0))
 }
 
@@ -260,6 +270,8 @@ async function _getTagSupportedLangs(tag: string): Promise<Language[]> {
     'Portfolio': ['作品集', 'Portfolio'],
     '数字绘画': ['数字绘画', 'Digital Painting'],
     'Digital Painting': ['数字绘画', 'Digital Painting'],
+    '周刊': ['周刊', 'Weekly'],
+    'Weekly': ['周刊', 'Weekly'],
   }
   const equivalentTags = equivalentTagMap[tag] || [tag]
 
