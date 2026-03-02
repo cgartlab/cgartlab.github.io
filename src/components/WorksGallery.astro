@@ -30,7 +30,9 @@ async function getThumbnail(post: Post): Promise<{ type: 'image', src: string } 
     if (imagePath.startsWith('./_images/') || imagePath.startsWith('../_images/')) {
       // 解码 URL 编码的字符（如%20）
       const decodedPath = decodeURIComponent(imagePath)
-      const imageName = decodedPath.replace(/^\.\.?\/_images\//, '')
+      // 更安全地获取文件名，处理各种路径情况
+      const pathParts = decodedPath.split('/')
+      const imageName = pathParts[pathParts.length - 1]
       const absolutePath = `/src/content/posts/_images/${imageName}`
 
       // 查找对应的图片模块
