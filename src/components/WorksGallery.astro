@@ -187,13 +187,19 @@ function getCategories(posts: Post[]): string[] {
 .works-gallery {
   max-width: 1000px;
   margin: 0 auto;
-  padding: 2rem 0;
+  padding: 1.5rem 0;
+}
+
+@media (min-width: 1024px) {
+  .works-gallery {
+    padding: 2rem 0;
+  }
 }
 
 /* 分类标签样式 - 精致线框设计 */
 .category-tags {
   margin-bottom: 3rem;
-  padding: 0 2rem;
+  margin-top: -0.5rem;
 }
 
 .category-tags .no-heti {
@@ -219,8 +225,12 @@ function getCategories(posts: Post[]): string[] {
   letter-spacing: 0.01em;
 }
 
+.category-text {
+  transform: translateY(1px);
+}
+
 .category-tag:hover {
-  border-color: var(--text-color);
+  border-color: var(--text-secondary);
   color: var(--text-color);
   transform: translateY(-1px);
 }
@@ -236,7 +246,6 @@ function getCategories(posts: Post[]): string[] {
   display: flex;
   flex-direction: column;
   gap: 3rem;
-  padding: 0 2rem;
 }
 
 .album-item {
@@ -256,7 +265,7 @@ function getCategories(posts: Post[]): string[] {
 
 .album-link:hover {
   transform: translateY(-4px);
-  border-color: var(--text-color);
+  border-color: rgba(0, 0, 0, 0.5);
 }
 
 /* 大图区域 - 与按钮对齐 */
@@ -273,12 +282,12 @@ function getCategories(posts: Post[]): string[] {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  filter: grayscale(20%);
-  transition: all 0.5s ease;
+  filter: grayscale(100%) contrast(0.55) brightness(1.05) sepia(15%);
+  transition: all 0.6s ease;
 }
 
 .album-link:hover .thumbnail-image {
-  filter: grayscale(0%);
+  filter: grayscale(0%) contrast(1) brightness(1) sepia(0%);
   transform: scale(1.03);
 }
 
@@ -374,10 +383,6 @@ function getCategories(posts: Post[]): string[] {
   .works-gallery {
     padding: 1.5rem 0;
   }
-  .category-tags,
-  .album-list {
-    padding: 0 1.5rem;
-  }
   .album-thumbnail {
     height: 300px;
   }
@@ -397,10 +402,6 @@ function getCategories(posts: Post[]): string[] {
 }
 
 @media (max-width: 480px) {
-  .category-tags,
-  .album-list {
-    padding: 0 1rem;
-  }
   .album-thumbnail {
     height: 240px;
   }

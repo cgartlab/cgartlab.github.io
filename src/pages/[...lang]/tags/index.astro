@@ -18,9 +18,12 @@ const allTags = await getAllTags(currentLang)
 <Layout>
   <!-- Decorative Line -->
   <div class="uno-decorative-line" />
+
   <!-- Tag List -->
-  <TagList
-    tags={allTags}
-    lang={currentLang}
-  />
+  <div class="mt-6 lg:mt-10.5">
+    <TagList
+      tags={allTags}
+      lang={currentLang}
+    />
+  </div>
 </Layout>
