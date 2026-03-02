@@ -29,13 +29,13 @@ if (documents.length == 0) {
     alert("没有图层");
 }
 else {
-    var visibility = false; 
-    var docRef = activeDocument;     
+    var visibility = false;
+    var docRef = activeDocument;
         changeLayerName(docRef);
 }
 
 function changeLayerName(layer){
-    
+
     var layers = layer.layers;
 
     if(layers){
@@ -93,12 +93,12 @@ function getSelectedLayers() {
     var ref = new ActionReference();
     ref.putEnumerated(charIDToTypeID("Dcmn"), charIDToTypeID("Ordn"), charIDToTypeID("Trgt"));
     var desc = executeActionGet(ref);
-    
+
     if (desc.hasKey(stringIDToTypeID('targetLayers'))) {
         var targetLayers = desc.getList(stringIDToTypeID('targetLayers'));
         for (var i = 0; i < targetLayers.count; i++) {
             var layerIndex = targetLayers.getReference(i).getIndex();
-            selectedLayers.push(getLayerByIndex(layerIndex + 1)); 
+            selectedLayers.push(getLayerByIndex(layerIndex + 1));
         }
     } else {
         selectedLayers.push(doc.activeLayer);
@@ -136,7 +136,6 @@ function zeroPad(num, width) {
     }
     return num;
 }
-
 
 ```
 

@@ -79,10 +79,10 @@ pnpm preview
 
 ```yaml
 ---
-title: "文章标题"
-published: "2025-01-01"
-description: "文章描述"
-tags: ["标签1", "标签2"]
+title: 文章标题
+published: 2025-01-01
+description: 文章描述
+tags: [标签1, 标签2]
 draft: false
 ---
 ```
