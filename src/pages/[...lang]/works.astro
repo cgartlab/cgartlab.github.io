@@ -25,14 +25,14 @@ const supportedLangs = await getTagSupportedLangs(tag)
   <!-- Page Header -->
   <div class="mt-10.5 text-center">
     <h1 class="mb-4 text-6 c-primary font-bold">
-      {currentLang === 'zh' ? '作品展示' : currentLang === 'zh-tw' ? '作品展示' : 'Works Gallery'}
+      {currentLang === 'zh' ? '作品集' : currentLang === 'zh-tw' ? '作品集' : 'Works'}
     </h1>
-    <p class="mx-auto max-w-2xl text-lg opacity-80">
+    <p class="mx-auto max-w-2xl text-base opacity-80">
       {currentLang === 'zh'
-? '探索我的创作历程，从数字艺术到项目实践'
-       : currentLang === 'zh-tw'
-? '探索我的創作歷程，從數字藝術到項目實踐'
-       : 'Explore my creative journey, from digital art to project practice'}
+        ? '写作是写作的回报，画画是画画的酬劳'
+        : currentLang === 'zh-tw'
+          ? '寫作是寫作的回報，畫畫是畫畫的酬勞'
+          : 'Writing is the reward of writing, painting is the reward of painting'}
     </p>
   </div>
 

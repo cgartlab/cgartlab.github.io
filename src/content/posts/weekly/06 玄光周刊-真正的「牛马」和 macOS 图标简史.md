@@ -17,7 +17,6 @@ abbrlink: weekly-06
 >
 > 如果你觉得这里的内容还不错，欢迎使用 [RSS](https://weekly.cgartlab.com/feed/atom) 或 [邮件订阅](https://weekly.cgartlab.com/) ，我们每周把这些笔记汇总为一封邮件发送给你。当然也欢迎你的 [来信](mailto:info@cgartlab.com) 。
 
-
 ![青岛东方影都](../_images/06-真正的「牛马」和%20macOS%20图标简史-1754596615417.webp)
 
 本期封面拍摄自青岛东方影都，上班路上。
