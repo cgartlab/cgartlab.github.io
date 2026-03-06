@@ -1,209 +1,81 @@
-# ===========================================
 # Syncthing 忽略文件 - CGArtLab 知识库
-# 适用于 Obsidian + Astro + Syncthing 综合方案
-# ===========================================
 
-# ===========================================
-# 🔄 Syncthing 自身文件（不应同步）
-# ===========================================
+# Syncthing 元数据
 .stfolder/
 .stignore
 .stversions/
 .syncthing-*
 *.sync-conflict-*
 
-# ===========================================
-# 🏗️ 构建产物和缓存文件（设备特定）
-# ===========================================
+# Git 元数据（通过 Git 管理）
+.git/
+
+# 构建与缓存（每设备独立构建）
 .cache/
 .temp/
 .output/
 .astro/
 dist/
-
-# ===========================================
-# 📦 依赖文件（每个设备独立安装）
-# ===========================================
 node_modules/
-bower_components/
 
-# ===========================================
-# 📝 日志文件（设备特定）
-# ===========================================
+# 日志
 *.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
 
-# ===========================================
-# 🔐 环境配置文件（设备特定）
-# ===========================================
+# 环境配置（每设备独立配置）
 .env
-.env.production
-.env.local
-.env.development
 .env.*
+!.env.example
 
-# ===========================================
-# 💻 系统文件
-# ===========================================
-.DS_Store
+# 系统文件
+.DS_Store*
+._*
+.Spotlight-V100
+.Trashes
 Thumbs.db
+ehthumbs.db
+Desktop.ini
+*~
 
-# ===========================================
-# 🔧 编辑器/IDE文件（设备特定）
-# ===========================================
+# 编辑器（每设备独立配置）
 .idea/
 .vscode/
-.editorconfig
 *.swp
 *.swo
-*.sublime-*
 
-# ===========================================
-# 📚 Git 相关文件（通过Git管理版本）
-# ===========================================
-.git/
-.gitignore
-
-# ===========================================
-# 🗑️ 临时文件和垃圾文件
-# ===========================================
+# 临时文件
 .trash/
 *.tmp
 *.temp
 *.bak
 *.backup
 
-# ===========================================
-# 📋 包管理器锁文件（设备特定）
-# ===========================================
+# 锁文件
 package-lock.json
 yarn.lock
 pnpm-lock.yaml
 
-# ===========================================
-# 🖥️ 操作系统特定文件
-# ===========================================
-# Windows
-*.lnk
-ehthumbs.db
-Desktop.ini
+# 部署与测试
+.vercel/
+.netlify/
+.devcontainer/
+coverage/
 
-# macOS
-*.icloud
-.DS_Store?
-._*
-.Spotlight-V100
-.Trashes
-
-# Linux
-*~
-
-# ===========================================
-# 📚 Obsidian 配置（精细控制同步策略）
-# ===========================================
-# 忽略设备特定的工作区配置
+# Obsidian 设备特定配置
 src/content/posts/.obsidian/workspace*.json
-# 忽略设备特定的应用配置
 src/content/posts/.obsidian/app.json
 src/content/posts/.obsidian/appearance.json
 src/content/posts/.obsidian/hotkeys.json
 src/content/posts/.obsidian/graph.json
 src/content/posts/.obsidian/page-preview.json
-# 忽略 Copilot 索引（自动生成）
 src/content/posts/.copilot-index/
-# 忽略 Obsidian 垃圾箱
-src/content/posts/.trash/
-# 忽略 Obsidian 附件文件夹
-src/content/posts/_files/
+(?d)src/content/posts/.trash/
 
-# ===========================================
-# 🎯 项目特定忽略规则
-# ===========================================
-# 忽略 LQIP 地图文件（自动生成）
+# 项目特定
 src/assets/lqip-map.json
-# 忽略开发服务器文件
-.devcontainer/
 
-# ===========================================
-# 📊 性能分析文件
-# ===========================================
-*.cpuprofile
-*.heapsnapshot
-
-# ===========================================
-# 🧪 测试相关文件
-# ===========================================
-coverage/
-.nyc_output/
-
-# ===========================================
-# 🚀 部署相关文件
-# ===========================================
-.vercel/
-.netlify/
-
-# ===========================================
-# 📱 移动设备文件
-# ===========================================
-# iOS
-*.mobileprovision
-
-# Android
-*.apk
-*.aab
-
-# ===========================================
-# 🔍 高级忽略规则（正则表达式）
-# ===========================================
-# 忽略所有隐藏文件（除了 .stignore 本身）
-(?d).*
-!(?d).stignore
-
-# 忽略临时文件模式
-(?d)*.tmp$
-(?d)*.temp$
-(?d)*.cache$
-
-# ===========================================
-# ✅ 明确允许同步的重要文件
-# ===========================================
-# 允许同步 Obsidian 插件配置（共享插件）
+# 允许同步 Obsidian 共享配置
 !src/content/posts/.obsidian/plugins/
-# 允许同步 Obsidian 主题配置（共享主题）
 !src/content/posts/.obsidian/themes/
-# 允许同步 Obsidian 核心配置（共享设置）
 !src/content/posts/.obsidian/core-plugins.json
 !src/content/posts/.obsidian/community-plugins.json
 !src/content/posts/.obsidian/templates.json
-src/content/posts/.obsidian/webviewer.json
-
-# 忽略插件索引和缓存
-src/content/posts/.copilot-index/
-
-# 忽略垃圾箱（使用 (?d) 前缀处理已删除目录中的忽略文件）
-(?d)src/content/posts/.trash/
-
-# ===========================================
-# 同步重要内容说明
-# ===========================================
-# 此文件确保以下内容会被同步：
-# - src/content/posts/ 目录下的Markdown文件（文章内容）
-# - src/content/posts/_images/ 目录下的图片文件
-# - src/content/posts/_files/ 目录下的附件文件
-# - src/content/posts/.obsidian/plugins/ 目录下的插件配置（共享配置）
-# - src/content/posts/.obsidian/community-plugins.json（共享插件列表）
-# - src/content/posts/.obsidian/core-plugins.json（核心插件配置）
-# - src/content/posts/.obsidian/templates.json（模板配置）
-# - src/content/posts/.obsidian/themes/（主题配置）
-# - 其他源代码文件
-
-# 不同步的内容：
-# - 构建产物和缓存文件
-# - 依赖文件（每个设备独立安装）
-# - 环境配置文件（每个设备独立配置）
-# - Obsidian设备特定配置（每个设备独立设置）
-# - Git相关文件（通过Git管理版本）
-# - 编辑器配置（每个设备独立设置）
