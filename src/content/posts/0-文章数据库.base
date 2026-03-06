@@ -11,10 +11,10 @@ views:
       direction: ASC
     order:
       - file.name
+      - published
       - file.folder
       - abbrlink
       - tags
-      - published
     sort:
       - property: file.folder
         direction: DESC
