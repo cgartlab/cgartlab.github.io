@@ -47,7 +47,7 @@ views:
       - property: file.ctime
         direction: DESC
     columnSize:
-      file.name: 313
-      note.abbrlink: 261
+      file.name: 335
+      note.abbrlink: 218
       note.published: 117
       note.tags: 407
