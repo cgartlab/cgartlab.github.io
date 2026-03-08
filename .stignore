@@ -1,0 +1,81 @@
+# Syncthing 忽略文件 - CGArtLab 知识库
+
+# Syncthing 元数据
+.stfolder/
+.stignore
+.stversions/
+.syncthing-*
+*.sync-conflict-*
+
+# Git 元数据（通过 Git 管理）
+.git/
+
+# 构建与缓存（每设备独立构建）
+.cache/
+.temp/
+.output/
+.astro/
+dist/
+node_modules/
+
+# 日志
+*.log
+
+# 环境配置（每设备独立配置）
+.env
+.env.*
+!.env.example
+
+# 系统文件
+.DS_Store*
+._*
+.Spotlight-V100
+.Trashes
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+*~
+
+# 编辑器（每设备独立配置）
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# 临时文件
+.trash/
+*.tmp
+*.temp
+*.bak
+*.backup
+
+# 锁文件
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# 部署与测试
+.vercel/
+.netlify/
+.devcontainer/
+coverage/
+
+# Obsidian 设备特定配置
+src/content/posts/.obsidian/workspace*.json
+src/content/posts/.obsidian/app.json
+src/content/posts/.obsidian/appearance.json
+src/content/posts/.obsidian/hotkeys.json
+src/content/posts/.obsidian/graph.json
+src/content/posts/.obsidian/page-preview.json
+src/content/posts/.copilot-index/
+(?d)src/content/posts/.trash/
+
+# 项目特定
+src/assets/lqip-map.json
+
+# 允许同步 Obsidian 共享配置
+!src/content/posts/.obsidian/plugins/
+!src/content/posts/.obsidian/themes/
+!src/content/posts/.obsidian/core-plugins.json
+!src/content/posts/.obsidian/community-plugins.json
+!src/content/posts/.obsidian/templates.json

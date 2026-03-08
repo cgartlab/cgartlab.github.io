@@ -1,0 +1,643 @@
+---
+import { ui } from '@/i18n/ui'
+import { getPageInfo } from '@/utils/page'
+
+const { currentLang } = getPageInfo(Astro.url.pathname)
+const currentUI = ui[currentLang as keyof typeof ui] ?? {}
+---
+
+<div id="search-overlay" class="search-overlay" aria-hidden="true">
+  <div class="search-backdrop" id="search-backdrop"></div>
+  <div class="search-container">
+    <div class="search-box">
+      <div class="search-input-wrapper">
+        <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8" />
+          <path d="m21 21-4.35-4.35" />
+        </svg>
+        <input
+          type="text"
+          id="search-input"
+          class="search-input"
+          placeholder={currentUI.searchPlaceholder || 'Search...'}
+          autocomplete="off"
+          aria-label={currentUI.search || 'Search'}
+        />
+        <button id="search-close" class="search-close" aria-label="Close search">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M18 6 6 18M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+      <div id="search-results" class="search-results"></div>
+      <div id="search-empty" class="search-empty">
+        <span>{currentUI.searchEmpty || 'No results found'}</span>
+      </div>
+      <div id="search-loading" class="search-loading">
+        <div class="search-spinner"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style is:global>
+  .search-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.25s ease-out, visibility 0.25s ease-out;
+  }
+
+  .search-overlay.active {
+    visibility: visible;
+    opacity: 1;
+  }
+
+  .search-backdrop {
+    position: absolute;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(8px) saturate(120%);
+    -webkit-backdrop-filter: blur(8px) saturate(120%);
+  }
+
+  .search-container {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    padding-top: 15vh;
+    padding-inline: 1rem;
+  }
+
+  .search-box {
+    width: 100%;
+    max-width: 42rem;
+    background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.72) 0%,
+      rgba(255, 255, 255, 0.58) 50%,
+      rgba(255, 255, 255, 0.48) 100%
+    );
+    backdrop-filter: blur(40px) saturate(200%);
+    -webkit-backdrop-filter: blur(40px) saturate(200%);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    border-radius: 1.5rem;
+    box-shadow:
+      0 12px 40px rgba(0, 0, 0, 0.08),
+      0 4px 16px rgba(0, 0, 0, 0.04),
+      inset 0 1px 0 rgba(255, 255, 255, 0.6),
+      inset 0 -1px 0 rgba(0, 0, 0, 0.02);
+    overflow: hidden;
+    transform: translateY(-2rem);
+    opacity: 0;
+    transition: transform 0.3s cubic-bezier(0.165, 0.84, 0.44, 1), opacity 0.25s ease-out;
+  }
+
+  html.dark .search-box {
+    background: linear-gradient(
+      135deg,
+      rgba(30, 30, 30, 0.85) 0%,
+      rgba(40, 40, 40, 0.78) 50%,
+      rgba(35, 35, 35, 0.72) 100%
+    );
+    backdrop-filter: blur(40px) saturate(180%);
+    -webkit-backdrop-filter: blur(40px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    box-shadow:
+      0 12px 40px rgba(0, 0, 0, 0.35),
+      0 4px 16px rgba(0, 0, 0, 0.25),
+      inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  }
+
+  .search-overlay.active .search-box {
+    transform: translateY(0);
+    opacity: 1;
+  }
+
+  .search-input-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid rgba(128, 128, 128, 0.15);
+  }
+
+  .search-icon {
+    flex-shrink: 0;
+    width: 1.5rem;
+    height: 1.5rem;
+    color: var(--un-preset-theme-colors-secondary);
+    opacity: 0.6;
+  }
+
+  .search-input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    font-size: 1.125rem;
+    color: var(--un-preset-theme-colors-primary);
+    font-family: inherit;
+    text-align: left;
+  }
+
+  .search-input::placeholder {
+    color: var(--un-preset-theme-colors-secondary);
+    opacity: 0.35;
+    transform: translateY(2px);
+    display: inline-block;
+  }
+
+  .search-close {
+    flex-shrink: 0;
+    display: grid;
+    place-items: center;
+    width: 2rem;
+    height: 2rem;
+    border: none;
+    background: transparent;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    color: var(--un-preset-theme-colors-secondary);
+    opacity: 0.5;
+    transition: opacity 0.15s ease-out, background-color 0.15s ease-out;
+  }
+
+  .search-close:hover {
+    opacity: 1;
+    background-color: rgba(128, 128, 128, 0.1);
+  }
+
+  .search-close svg {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+
+  .search-results {
+    max-height: 60vh;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    padding: 0.5rem;
+  }
+
+  .search-results:empty {
+    display: none;
+  }
+
+  .search-result-item {
+    display: block;
+    padding: 1.25rem 1.5rem;
+    text-decoration: none;
+    color: inherit;
+    border-radius: 0.75rem;
+    transition: background-color 0.15s ease-out, transform 0.15s ease-out;
+  }
+
+  .search-result-item:hover {
+    background-color: rgba(128, 128, 128, 0.08);
+    transform: translateX(0.25rem);
+  }
+
+  .search-result-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--un-preset-theme-colors-primary);
+    margin-bottom: 0.625rem;
+    line-height: 1.5;
+  }
+
+  .search-result-title mark {
+    background-color: var(--un-preset-theme-colors-highlight);
+    color: var(--un-preset-theme-colors-primary);
+    padding: 0.125rem 0.375rem;
+    border-radius: 0.25rem;
+    opacity: 0.7;
+  }
+
+  .search-result-excerpt {
+    font-size: 0.9375rem;
+    color: var(--un-preset-theme-colors-secondary);
+    line-height: 1.6;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    margin-bottom: 0.5rem;
+  }
+
+  .search-result-excerpt mark {
+    background-color: var(--un-preset-theme-colors-highlight);
+    color: var(--un-preset-theme-colors-primary);
+    padding: 0.125rem 0.375rem;
+    border-radius: 0.25rem;
+    opacity: 0.7;
+  }
+
+  .search-result-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.75rem;
+    color: var(--un-preset-theme-colors-secondary);
+    opacity: 0.5;
+  }
+
+  .search-result-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.625rem;
+    margin-top: 0.25rem;
+  }
+
+  .search-result-tag {
+    font-size: 0.6875rem;
+    padding: 0.25rem 0.625rem;
+    background-color: color-mix(in srgb, var(--un-preset-theme-colors-highlight) 20%, transparent);
+    border: 1px solid color-mix(in srgb, var(--un-preset-theme-colors-highlight) 30%, transparent);
+    border-radius: 0.375rem;
+    color: var(--un-preset-theme-colors-primary);
+    transform: translateY(-4px);
+    line-height: 1.4;
+  }
+
+  .search-result-tag::before {
+    content: '';
+    display: inline-block;
+    margin-top: 3px;
+    vertical-align: top;
+  }
+
+  .search-empty,
+  .search-loading {
+    display: none;
+    padding: 3rem 1.5rem;
+    text-align: center;
+    color: var(--un-preset-theme-colors-secondary);
+    opacity: 0.6;
+  }
+
+  .search-empty.visible,
+  .search-loading.visible {
+    display: block;
+  }
+
+  .search-spinner {
+    width: 2rem;
+    height: 2rem;
+    margin: 0 auto;
+    border: 2px solid rgba(128, 128, 128, 0.2);
+    border-top-color: var(--un-preset-theme-colors-primary);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  @media (max-width: 640px) {
+    .search-container {
+      padding-top: 10vh;
+    }
+
+    .search-input-wrapper {
+      padding: 1rem 1.25rem;
+    }
+
+    .search-input {
+      font-size: 1rem;
+    }
+
+    .search-result-item {
+      padding: 1rem 1.25rem;
+    }
+
+    .search-result-title {
+      font-size: 1rem;
+    }
+
+    .search-result-excerpt {
+      font-size: 0.875rem;
+    }
+
+    .search-result-tags {
+      gap: 0.5rem;
+    }
+
+    .search-result-tag {
+      font-size: 0.625rem;
+      padding: 0.1875rem 0.5rem;
+    }
+  }
+</style>
+
+<script is:inline>
+(function () {
+  const searchIndexCache = new Map()
+  let searchIndex = []
+  let debounceTimer = null
+  let keydownHandler = null
+  let inputHandler = null
+  const base = document.querySelector('base')?.getAttribute('href') || '/'
+
+  function getElements() {
+    return {
+      overlay: document.getElementById('search-overlay'),
+      input: document.getElementById('search-input'),
+      results: document.getElementById('search-results'),
+      empty: document.getElementById('search-empty'),
+      loading: document.getElementById('search-loading'),
+      closeBtn: document.getElementById('search-close'),
+      backdrop: document.getElementById('search-backdrop'),
+    }
+  }
+
+  function open() {
+    const els = getElements()
+    if (!els.overlay)
+      return
+    els.overlay.classList.add('active')
+    els.overlay.setAttribute('aria-hidden', 'false')
+    document.body.style.overflow = 'hidden'
+    setTimeout(() => {
+      const currentInput = document.getElementById('search-input')
+      if (currentInput)
+        currentInput.focus()
+    }, 100)
+  }
+
+  function close() {
+    const els = getElements()
+    if (!els.overlay)
+      return
+    els.overlay.classList.remove('active')
+    els.overlay.setAttribute('aria-hidden', 'true')
+    document.body.style.overflow = ''
+    if (els.input)
+      els.input.value = ''
+    if (els.results)
+      els.results.innerHTML = ''
+    if (els.empty)
+      els.empty.classList.remove('visible')
+  }
+
+  function normalizeLang(lang) {
+    const normalized = (lang || 'zh').toLowerCase()
+    if (normalized.startsWith('zh-tw') || normalized.startsWith('zh-hk') || normalized.startsWith('zh-mo'))
+      return 'zh-tw'
+    if (normalized.startsWith('zh'))
+      return 'zh'
+    if (normalized.startsWith('en'))
+      return 'en'
+    return 'zh'
+  }
+
+  async function loadIndex() {
+    const currentLang = normalizeLang(document.documentElement.lang)
+    if (searchIndexCache.has(currentLang)) {
+      searchIndex = searchIndexCache.get(currentLang)
+      return
+    }
+
+    const els = getElements()
+    if (els.loading)
+      els.loading.classList.add('visible')
+    try {
+      const response = await fetch(`${base}api/search-index/${currentLang}.json`)
+      const indexData = await response.json()
+      searchIndexCache.set(currentLang, indexData)
+      searchIndex = indexData
+    }
+    catch (error) {
+      console.error('Failed to load search index:', error)
+    }
+    finally {
+      const els = getElements()
+      if (els.loading)
+        els.loading.classList.remove('visible')
+    }
+  }
+
+  function escapeHtml(text) {
+    const div = document.createElement('div')
+    div.textContent = text
+    return div.innerHTML
+  }
+
+  function highlight(text, query) {
+    if (!query)
+      return escapeHtml(text)
+    const escaped = escapeHtml(text)
+    const regex = new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi')
+    return escaped.replace(regex, '<mark>$1</mark>')
+  }
+
+  function getExcerpt(content, query) {
+    const cleanContent = content
+      .replace(/^---[\s\S]*?---/, '')
+      .replace(/[#*`[\]!]/g, '')
+      .replace(/\n+/g, ' ')
+      .trim()
+
+    if (!query) {
+      return escapeHtml(cleanContent.slice(0, 150))
+    }
+
+    const lowerContent = cleanContent.toLowerCase()
+    const lowerQuery = query.toLowerCase()
+    const index = lowerContent.indexOf(lowerQuery)
+
+    if (index === -1) {
+      return escapeHtml(cleanContent.slice(0, 150))
+    }
+
+    const start = Math.max(0, index - 50)
+    const end = Math.min(cleanContent.length, index + query.length + 100)
+    let excerpt = cleanContent.slice(start, end)
+
+    if (start > 0)
+      excerpt = `...${excerpt}`
+    if (end < cleanContent.length)
+      excerpt = `${excerpt}...`
+
+    return highlight(excerpt, query)
+  }
+
+  function formatDate(dateStr) {
+    const date = new Date(dateStr)
+    return date.toLocaleDateString(document.documentElement.lang || 'zh-CN', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+    })
+  }
+
+  async function search(query) {
+    const els = getElements()
+    if (!els.results || !els.empty)
+      return
+
+    if (!query.trim()) {
+      els.results.innerHTML = ''
+      els.empty.classList.remove('visible')
+      return
+    }
+
+    await loadIndex()
+
+    const lowerQuery = query.toLowerCase().trim()
+    const searchResults = []
+
+    for (let i = 0; i < searchIndex.length; i++) {
+      const item = searchIndex[i]
+      const titleLower = item.title.toLowerCase()
+      const descLower = item.description.toLowerCase()
+      const tagsLower = item.tags.map((t) => {
+        return t.toLowerCase()
+      })
+      const contentLower = item.content.toLowerCase()
+
+      let score = 0
+      const titleMatch = titleLower.includes(lowerQuery)
+      const tagMatch = tagsLower.some((t) => {
+        return t.includes(lowerQuery)
+      })
+      const descMatch = descLower.includes(lowerQuery)
+      const contentMatch = contentLower.includes(lowerQuery)
+
+      if (titleMatch)
+        score += 100
+      if (titleLower.startsWith(lowerQuery))
+        score += 50
+      if (tagMatch)
+        score += 80
+      if (descMatch)
+        score += 30
+      if (contentMatch)
+        score += 10
+
+      if (score > 0) {
+        searchResults.push({ item, score })
+      }
+    }
+
+    searchResults.sort((a, b) => {
+      return b.score - a.score
+    })
+    const topResults = searchResults.slice(0, 20)
+
+    if (topResults.length === 0) {
+      els.results.innerHTML = ''
+      els.empty.classList.add('visible')
+      return
+    }
+
+    els.empty.classList.remove('visible')
+    let html = ''
+    for (let i = 0; i < topResults.length; i++) {
+      const item = topResults[i].item
+      const prefix = item.lang === 'zh' ? '' : `/${item.lang}`
+      const href = `${prefix}/posts/${item.slug}/`
+      const fullHref = base.replace(/\/$/, '') + href
+
+      html += `<a href="${fullHref}" class="search-result-item">`
+      html += `<div class="search-result-title">${highlight(item.title, query)}</div>`
+      html += `<div class="search-result-excerpt">${getExcerpt(item.content, query)}</div>`
+
+      if (item.tags.length > 0) {
+        html += '<div class="search-result-tags">'
+        for (let j = 0; j < Math.min(item.tags.length, 5); j++) {
+          html += `<span class="search-result-tag">${escapeHtml(item.tags[j])}</span>`
+        }
+        html += '</div>'
+      }
+
+      html += '<div class="search-result-meta">'
+      html += `<span>${formatDate(item.published)}</span>`
+      html += '</div>'
+      html += '</a>'
+    }
+    els.results.innerHTML = html
+
+    const items = els.results.querySelectorAll('.search-result-item')
+    items.forEach((el) => {
+      el.addEventListener('click', () => {
+        close()
+      })
+    })
+  }
+
+  function setupEventListeners() {
+    if (keydownHandler) {
+      document.removeEventListener('keydown', keydownHandler)
+    }
+
+    keydownHandler = function (e) {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault()
+        open()
+      }
+      const els = getElements()
+      if (e.key === 'Escape' && els.overlay && els.overlay.classList.contains('active')) {
+        close()
+      }
+    }
+    document.addEventListener('keydown', keydownHandler)
+
+    const els = getElements()
+    if (els.closeBtn) {
+      els.closeBtn.onclick = close
+    }
+    if (els.backdrop) {
+      els.backdrop.onclick = close
+    }
+
+    if (els.input) {
+      if (inputHandler) {
+        els.input.removeEventListener('input', inputHandler)
+      }
+      inputHandler = function () {
+        if (debounceTimer)
+          clearTimeout(debounceTimer)
+        debounceTimer = setTimeout(() => {
+          const currentInput = document.getElementById('search-input')
+          if (currentInput)
+            search(currentInput.value)
+        }, 150)
+      }
+      els.input.addEventListener('input', inputHandler)
+    }
+  }
+
+  function bindSearchTriggers() {
+    const triggers = ['search-trigger', 'search-trigger-mobile']
+    triggers.forEach((id) => {
+      const el = document.getElementById(id)
+      if (el) {
+        el.onclick = function (e) {
+          e.preventDefault()
+          open()
+        }
+      }
+    })
+  }
+
+  function init() {
+    setupEventListeners()
+    bindSearchTriggers()
+  }
+
+  document.addEventListener('astro:page-load', init)
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init)
+  }
+  else {
+    init()
+  }
+})()
+</script>

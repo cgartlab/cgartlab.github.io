@@ -1,0 +1,53 @@
+views:
+  - type: table
+    name: 表格
+    filters:
+      and:
+        - '!file.inFolder("_files")'
+        - '!file.inFolder("_images")'
+        - '!file.inFolder("templates")'
+    groupBy:
+      property: file.folder
+      direction: ASC
+    order:
+      - file.name
+      - published
+      - file.folder
+      - abbrlink
+      - tags
+    sort:
+      - property: file.folder
+        direction: DESC
+      - property: file.mtime
+        direction: DESC
+    columnSize:
+      file.name: 442
+      note.abbrlink: 198
+      note.tags: 407
+      note.published: 117
+  - type: table
+    name: 草稿
+    filters:
+      and:
+        - draft == true
+    groupBy:
+      property: file.folder
+      direction: ASC
+    order:
+      - file.name
+      - title
+      - abbrlink
+      - published
+      - file.folder
+      - draft
+      - tags
+    sort:
+      - property: published
+        direction: DESC
+      - property: file.ctime
+        direction: DESC
+    columnSize:
+      file.name: 335
+      note.abbrlink: 218
+      note.published: 117
+      note.tags: 407
