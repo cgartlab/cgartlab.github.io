@@ -1,0 +1,86 @@
+---
+import { defaultLocale, themeConfig } from '@/config'
+import { getLangFromPath } from '@/i18n/lang'
+import { getTotalWordCount } from '@/utils/content'
+
+const { author } = themeConfig.site
+const { links: socialLinks, startYear, showWordCount } = themeConfig.footer
+
+const currentYear = new Date().getFullYear()
+const year = Number(startYear) === currentYear ? startYear : `${startYear}-${currentYear}`
+
+// i18n RSS Feed Path
+const currentLang = getLangFromPath(Astro.url.pathname)
+const links = socialLinks.map(({ name, url, ...rest }) => {
+  if (name === 'RSS') {
+    return { name, url: currentLang === defaultLocale ? url : `/${currentLang}${url}`, ...rest }
+  }
+
+  if (name === 'Email') {
+    return { name, url: url.startsWith('mailto:') ? url : `mailto:${url}`, ...rest }
+  }
+
+  return { name, url, ...rest }
+})
+
+const footerLinkClass = 'highlight-hover py-0.8 transition-colors after:bottom-0.35em hover:c-primary'
+
+// 获取总字数
+let totalWords = 0
+if (showWordCount) {
+  totalWords = await getTotalWordCount(currentLang)
+}
+
+// 字数统计文本
+const wordCountText = {
+  'zh': '累计字数：',
+  'en': 'Total words: ',
+  'zh-tw': '累計字數：',
+}[currentLang] || '累计字数：'
+
+// 关于页面路径（带锚点）
+const aboutPath = currentLang === defaultLocale ? '/about/#关于本站' : `/${currentLang}/about/#关于本站`
+
+// 公众号文本
+const wechatText = {
+  'zh': '公众号',
+  'en': 'WeChat',
+  'zh-tw': '公眾號',
+}[currentLang] || '公众号'
+---
+
+<footer
+  class="mt-6 text-3 leading-1.25em font-navbar lg:text-2.5"
+  lg="uno-desktop-column bottom-16"
+>
+  <p>
+    {links.map((link, index) => (
+      <>
+        <a class={footerLinkClass} href={link.url} target="_blank" rel="noopener noreferrer">{link.name}</a>&nbsp;{index < links.length - 1 && '/'}
+      </>
+    ))}
+    /&nbsp;<a class={footerLinkClass} href={aboutPath}><i>{wechatText}</i></a>
+  </p>
+
+  <p>
+    © {year} {author}{showWordCount && <> · <i>{wordCountText}</i>{totalWords.toLocaleString()}</>}
+  </p>
+
+  <p class="mt-2 text-2.5 opacity-80">
+    {
+      {
+        'zh': '内容采用',
+        'en': 'Content licensed under',
+        'zh-tw': '內容採用',
+      }[currentLang] || '内容采用'
+    }
+    <a
+      href="https://creativecommons.org/licenses/by-nc-sa/4.0/"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="highlight-hover py-0.8 transition-colors after:bottom-0.35em hover:c-primary"
+    >
+      CC BY-NC-SA 4.0 许可协议
+    </a>
+  </p>
+</footer>

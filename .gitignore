@@ -1,0 +1,60 @@
+# Git 忽略文件 - CGArtLab 知识库
+
+# 构建与缓存
+.cache/
+.temp/
+.output/
+.astro/
+dist/
+node_modules/
+
+# 日志
+*.log
+
+# 环境配置（每设备独立）
+.env
+.env.*
+!.env.example
+
+# 系统文件
+.DS_Store*
+._*
+Thumbs.db
+Desktop.ini
+*~
+
+# 编辑器（每设备独立）
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# 临时文件
+*.tmp
+*.temp
+*.bak
+*.backup
+
+# 锁文件
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# 部署与测试
+.vercel/
+.netlify/
+.devcontainer/
+coverage/
+
+# Syncthing 元数据
+.stfolder/
+.stversions/
+.syncthing-*
+
+# Obsidian 配置（设备特定）
+src/content/posts/.obsidian/
+src/content/posts/.copilot-index/
+src/content/posts/.trash/
+
+# 项目特定
+src/assets/lqip-map.json

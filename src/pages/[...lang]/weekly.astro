@@ -1,0 +1,32 @@
+---
+import WeeklyGallery from '@/components/WeeklyGallery.astro'
+import { allLocales } from '@/config'
+import { getLangFromLocale, getLangRouteParam } from '@/i18n/lang'
+import Layout from '@/layouts/Layout.astro'
+import { getPostsByTag, getTagSupportedLangs } from '@/utils/content'
+
+export async function getStaticPaths() {
+  return allLocales.map(lang => ({
+    params: { lang: getLangRouteParam(lang) },
+  }))
+}
+
+const currentLang = getLangFromLocale(Astro.currentLocale)
+// 根据语言选择正确的标签（周刊/Weekly）
+const weeklyTag = currentLang === 'zh' || currentLang === 'zh-tw' ? '周刊' : 'Weekly'
+const posts = await getPostsByTag(weeklyTag, currentLang)
+const supportedLangs = await getTagSupportedLangs(weeklyTag)
+---
+
+<Layout supportedLangs={supportedLangs}>
+  <!-- Decorative Line -->
+  <div class="uno-decorative-line" />
+
+  <!-- Weekly Gallery -->
+  <div class="mt-6 lg:mt-10.5">
+    <WeeklyGallery
+      posts={posts}
+      lang={currentLang}
+    />
+  </div>
+</Layout>

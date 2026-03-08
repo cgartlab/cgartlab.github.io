@@ -1,0 +1,85 @@
+---
+import { ui } from '@/i18n/ui'
+import { getPageInfo } from '@/utils/page'
+
+const { currentLang, isHome, isPost, isTag, isAbout, isWorks, isWeekly, isLinks, getLocalizedPath } = getPageInfo(Astro.url.pathname)
+const currentUI = ui[currentLang as keyof typeof ui] ?? {}
+
+const isPostActive = isHome || isPost
+const isTagActive = isTag
+const isAboutActive = isAbout
+const isWorksActive = isWorks
+const isWeeklyActive = isWeekly
+const isLinksActive = isLinks
+
+function getNavItemClass(isActive: boolean) {
+  return isActive
+    ? 'highlight-static c-primary font-bold after:bottom-0.7em'
+    : 'highlight-hover transition-[colors,font-weight] after:bottom-0.7em hover:(c-primary font-bold)'
+}
+
+const navItems = [
+  {
+    href: '/',
+    label: currentUI.posts,
+    className: getNavItemClass(isPostActive),
+  },
+  {
+    href: '/works/',
+    label: currentUI.works,
+    className: getNavItemClass(isWorksActive),
+  },
+  {
+    href: '/weekly/',
+    label: currentUI.weekly,
+    className: getNavItemClass(isWeeklyActive),
+  },
+  {
+    href: '/links/',
+    label: currentUI.links,
+    className: getNavItemClass(isLinksActive),
+  },
+  {
+    href: '/tags/',
+    label: currentUI.tags,
+    className: getNavItemClass(isTagActive),
+  },
+  {
+    href: '/about/',
+    label: currentUI.about,
+    className: getNavItemClass(isAboutActive),
+  },
+]
+---
+
+<nav
+  aria-label="Site Navigation"
+  class:list={[
+    'mb-10.5 text-4 font-semibold',
+    currentLang === 'en' ? '' : 'font-navbar',
+    'lg:(uno-desktop-column text-4 bottom-[min(9.04rem+3.85vw,12.5rem)] leading-2.45em) cjk:tracking-wide',
+    isPost ? 'hidden lg:block' : '',
+  ]}
+>
+  <ul class="flex flex-wrap gap-x-4 gap-y-2 lg:(flex-col gap-0)">
+    <li class="lg:leading-2.45em">
+      <button
+        id="search-trigger"
+        class="highlight-hover transition-[colors,font-weight] after:bottom-0.7em hover:(c-primary font-bold)"
+        aria-label={currentUI.search}
+      >
+        {currentUI.search}
+      </button>
+    </li>
+    {navItems.map(item => (
+      <li class="lg:leading-2.45em">
+        <a
+          href={getLocalizedPath(item.href)}
+          class={item.className}
+        >
+          {item.label}
+        </a>
+      </li>
+    ))}
+  </ul>
+</nav>
