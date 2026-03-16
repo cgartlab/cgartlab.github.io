@@ -1,5 +1,3 @@
-# Git 忽略文件 - CGArtLab 知识库
-
 # 构建与缓存
 .cache/
 .temp/
@@ -11,7 +9,7 @@ node_modules/
 # 日志
 *.log
 
-# 环境配置（每设备独立）
+# 环境配置
 .env
 .env.*
 !.env.example
@@ -23,7 +21,7 @@ Thumbs.db
 Desktop.ini
 *~
 
-# 编辑器（每设备独立）
+# 编辑器
 .idea/
 .vscode/
 *.swp
@@ -46,15 +44,17 @@ pnpm-lock.yaml
 .devcontainer/
 coverage/
 
-# Syncthing 元数据
+# Syncthing
 .stfolder/
 .stversions/
 .syncthing-*
 
-# Obsidian 配置（设备特定）
-src/content/posts/.obsidian/
-src/content/posts/.copilot-index/
-src/content/posts/.trash/
+# Obsidian - 仅阻止 Copilot 敏感配置
+.obsidian/plugins/copilot/data.json
+.obsidian/copilot-index-*.json
 
 # 项目特定
 src/assets/lqip-map.json
+
+# 数据库
+/src/content/posts/0-文章数据库.base

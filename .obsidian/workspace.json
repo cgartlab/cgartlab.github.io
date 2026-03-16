@@ -1,0 +1,175 @@
+{
+  "main": {
+    "id": "1a87e06de999769e",
+    "type": "split",
+    "children": [
+      {
+        "id": "1a10cad678f2bc56",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "79a2f5bbc30310e8",
+            "type": "leaf",
+            "state": {
+              "type": "split-diff-view",
+              "state": {
+                "aFile": ".gitignore",
+                "bFile": ".gitignore",
+                "aRef": ""
+              },
+              "icon": "diff",
+              "title": "Diff: .gitignore  (Working Tree)"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "0d186a446a85b90b",
+    "type": "split",
+    "children": [
+      {
+        "id": "187bb3621ccc3362",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "6ab9d0fb0291f960",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false
+              },
+              "icon": "lucide-folder-closed",
+              "title": "文件列表"
+            }
+          },
+          {
+            "id": "dd7bb0e76cbc8537",
+            "type": "leaf",
+            "state": {
+              "type": "git-view",
+              "state": {},
+              "icon": "git-pull-request",
+              "title": "Source Control"
+            }
+          }
+        ],
+        "currentTab": 1
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "19844fd2410b7196",
+    "type": "split",
+    "children": [
+      {
+        "id": "c5d37cbdc8053f5c",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "7f0a18150c65f2c8",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "标签"
+            }
+          },
+          {
+            "id": "87ddb3eece853c70",
+            "type": "leaf",
+            "state": {
+              "type": "all-properties",
+              "state": {
+                "sortOrder": "frequency",
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-archive",
+              "title": "添加笔记属性"
+            }
+          },
+          {
+            "id": "4dc3bfb77ea8fbf8",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "大纲"
+            }
+          },
+          {
+            "id": "d2aa8aa58c478da4",
+            "type": "leaf",
+            "state": {
+              "type": "copilot-chat-view",
+              "state": {},
+              "icon": "message-square",
+              "title": "Copilot"
+            }
+          }
+        ],
+        "currentTab": 3
+      }
+    ],
+    "direction": "horizontal",
+    "width": 396.5
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "templates:插入模板": false,
+      "command-palette:打开命令面板": false,
+      "bases:新建数据库": false,
+      "copilot:Open Copilot Chat": false,
+      "obsidian-git:Open Git source control": false
+    }
+  },
+  "active": "dd7bb0e76cbc8537",
+  "lastOpenFiles": [
+    "dist/sitemap-0.xml",
+    "dist/sitemap-index.xml",
+    "dist/~partytown/partytown.js",
+    "dist/~partytown/partytown-sw.js",
+    "dist/~partytown/partytown-media.js",
+    "dist/~partytown/partytown-atomics.js",
+    "dist/~partytown",
+    "dist/_astro/扫码_搜索联合传播样式-白色版.DhcIlVB9_ZM7b5H.webp",
+    "dist/_astro/适合的才最好，年底我选择新装一台“Mac mini”-1754592548286.fpfb7wwy_Z18mhlT.webp",
+    "dist/_astro/2024年，如何优雅使用WindowsPC-1754583037058.Z3tK2j8q_1EhtIL.webp",
+    "dist/_astro/2024年，如何优雅使用WindowsPC-1754583026082.BWjKaltf_20T1v2.webp",
+    "dist/_astro/2025年，我的生产力设备里留下了这些优秀工具-1767161542202.yLeywqFY_Zp19qX.webp",
+    "dist/_astro/适合的才最好，年底我选择新装一台“Mac mini”-1754592564637.BAFsNP93_Z1WGqgh.webp",
+    "dist/_astro/2024年，如何更优雅地使用 Mac-1754591513469.D1kso9wD_Z1i7vKX.webp",
+    "dist/_astro/适合的才最好，年底我选择新装一台“Mac mini”-1754592576870.Bfies96v_1CpP6X.webp",
+    "dist/_astro/2025年，我的生产力设备里留下了这些优秀工具-1768213942326.PxzhargJ_1kR3mF.webp",
+    "dist/_astro/2024年，如何优雅使用WindowsPC-1754583001340.BQioTmXn_Z1dO59g.webp",
+    "dist/en/index.html",
+    "dist/index.html",
+    "dist/en/works/index.html",
+    "dist/en/works",
+    "weekly/13 玄光周刊-你和AI聊过的天，可能并不属于你.md",
+    "weekly/14 玄光周刊-当 AI 开始记住你的一切.md",
+    "2024年，如何更优雅地使用 Mac-en.md",
+    "【SCP-华夏系列组画】上线爱发电.md",
+    "6月的设计师拔草记录和选荐.md",
+    "weekly/14 玄光周刊-你和AI聊过的天，可能并不属于你 1.md",
+    "weekly/13 玄光周刊-你和AI聊过的天，可能并不属于你-en.md"
+  ]
+}

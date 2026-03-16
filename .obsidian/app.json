@@ -1,0 +1,13 @@
+{
+  "strictLineBreaks": true,
+  "showLineNumber": true,
+  "spellcheck": true,
+  "newFileLocation": "folder",
+  "openBehavior": "file:src/content/posts/0-文章数据库.base",
+  "newLinkFormat": "absolute",
+  "alwaysUpdateLinks": true,
+  "useMarkdownLinks": true,
+  "attachmentFolderPath": "src/content/posts/_images",
+  "showUnsupportedFiles": true,
+  "newFileFolderPath": "src/content/posts"
+}
