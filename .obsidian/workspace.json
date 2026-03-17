@@ -4,21 +4,22 @@
     "type": "split",
     "children": [
       {
-        "id": "1a10cad678f2bc56",
+        "id": "b5fa208ba691b0e7",
         "type": "tabs",
         "children": [
           {
-            "id": "79a2f5bbc30310e8",
+            "id": "9f9062739c0a3eea",
             "type": "leaf",
             "state": {
-              "type": "split-diff-view",
+              "type": "markdown",
               "state": {
-                "aFile": ".gitignore",
-                "bFile": ".gitignore",
-                "aRef": ""
+                "file": "src/content/posts/weekly/14 玄光周刊-当 AI 开始记住你的一切.md",
+                "mode": "source",
+                "source": false,
+                "backlinks": false
               },
-              "icon": "diff",
-              "title": "Diff: .gitignore  (Working Tree)"
+              "icon": "lucide-file",
+              "title": "14 玄光周刊-当 AI 开始记住你的一切"
             }
           }
         ]
@@ -51,14 +52,16 @@
             "id": "dd7bb0e76cbc8537",
             "type": "leaf",
             "state": {
-              "type": "git-view",
-              "state": {},
-              "icon": "git-pull-request",
-              "title": "Source Control"
+              "type": "bases",
+              "state": {
+                "file": "src/content/posts/0-文章数据库.base",
+                "viewName": "草稿"
+              },
+              "icon": "lucide-table",
+              "title": "0-文章数据库"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "horizontal",
@@ -130,7 +133,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 396.5
+    "width": 429.5
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -141,8 +144,38 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "dd7bb0e76cbc8537",
+  "active": "6ab9d0fb0291f960",
   "lastOpenFiles": [
+    "src/content/posts/0-文章数据库.base",
+    "src/content/posts/weekly/14 玄光周刊-当 AI 开始记住你的一切.md",
+    "README.md",
+    "src/content/posts/_images/世界尽管让它去转，不用担心你学的东西会过时-1772956350488.webp",
+    "src/content/posts/_images/世界尽管让它去转，不用担心你学的东西会过时-1772944076005.webp",
+    "src/assets/icons/top-icon.svg",
+    "src/assets/icons/toc-icon.svg",
+    "src/assets/icons/theme-toggle.svg",
+    "src/assets/icons/search-icon.svg",
+    "src/assets/icons/pin-icon.svg",
+    "src/assets/icons/language-switcher.svg",
+    "src/assets/icons/heading-anchor.svg",
+    "src/assets/icons/go-back.svg",
+    "copilot/copilot-custom-prompts/Clip Web Page.md",
+    "copilot/copilot-custom-prompts/Clip YouTube Transcript.md",
+    "copilot/copilot-custom-prompts/Rewrite as tweet thread.md",
+    "copilot/copilot-custom-prompts/Rewrite as tweet.md",
+    "copilot/copilot-custom-prompts/Remove URLs.md",
+    "copilot/copilot-custom-prompts/Generate glossary.md",
+    "copilot/copilot-custom-prompts/Generate table of contents.md",
+    "copilot/copilot-custom-prompts/Make longer.md",
+    "copilot/copilot-custom-prompts/Make shorter.md",
+    "copilot/copilot-custom-prompts/Emojify.md",
+    "copilot/copilot-custom-prompts/Explain like I am 5.md",
+    "copilot/copilot-custom-prompts/Simplify.md",
+    "copilot/copilot-custom-prompts/Summarize.md",
+    "copilot/copilot-custom-prompts/Translate to Chinese.md",
+    "copilot/copilot-custom-prompts/Fix grammar and spelling.md",
+    "copilot/copilot-custom-prompts",
+    "copilot",
     "dist/sitemap-0.xml",
     "dist/sitemap-index.xml",
     "dist/~partytown/partytown.js",
@@ -150,20 +183,6 @@
     "dist/~partytown/partytown-media.js",
     "dist/~partytown/partytown-atomics.js",
     "dist/~partytown",
-    "dist/_astro/扫码_搜索联合传播样式-白色版.DhcIlVB9_ZM7b5H.webp",
-    "dist/_astro/适合的才最好，年底我选择新装一台“Mac mini”-1754592548286.fpfb7wwy_Z18mhlT.webp",
-    "dist/_astro/2024年，如何优雅使用WindowsPC-1754583037058.Z3tK2j8q_1EhtIL.webp",
-    "dist/_astro/2024年，如何优雅使用WindowsPC-1754583026082.BWjKaltf_20T1v2.webp",
-    "dist/_astro/2025年，我的生产力设备里留下了这些优秀工具-1767161542202.yLeywqFY_Zp19qX.webp",
-    "dist/_astro/适合的才最好，年底我选择新装一台“Mac mini”-1754592564637.BAFsNP93_Z1WGqgh.webp",
-    "dist/_astro/2024年，如何更优雅地使用 Mac-1754591513469.D1kso9wD_Z1i7vKX.webp",
-    "dist/_astro/适合的才最好，年底我选择新装一台“Mac mini”-1754592576870.Bfies96v_1CpP6X.webp",
-    "dist/_astro/2025年，我的生产力设备里留下了这些优秀工具-1768213942326.PxzhargJ_1kR3mF.webp",
-    "dist/_astro/2024年，如何优雅使用WindowsPC-1754583001340.BQioTmXn_Z1dO59g.webp",
-    "dist/en/index.html",
-    "dist/index.html",
-    "dist/en/works/index.html",
-    "dist/en/works",
     "weekly/13 玄光周刊-你和AI聊过的天，可能并不属于你.md",
     "weekly/14 玄光周刊-当 AI 开始记住你的一切.md",
     "2024年，如何更优雅地使用 Mac-en.md",
