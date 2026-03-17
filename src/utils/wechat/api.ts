@@ -1,4 +1,8 @@
 import { getWechatConfig } from './config'
+import FormData from 'form-data'
+import { Readable } from 'stream'
+import http from 'http'
+import https from 'https'
 
 const BASE_URL = 'https://api.weixin.qq.com'
 
@@ -109,15 +113,18 @@ export class WechatAPI {
     const endpoint = `${BASE_URL}/cgi-bin/material/add_material?type=image`
 
     const formData = new FormData()
-    const blob = new Blob([new Uint8Array(imageBuffer)], { type: 'image/jpeg' })
-    formData.append('media', blob, filename)
+    formData.append('media', Readable.from(imageBuffer), {
+      filename,
+      contentType: 'image/jpeg',
+    })
 
     const url = new URL(endpoint, BASE_URL)
     url.searchParams.set('access_token', token)
 
     const response = await fetch(url.toString(), {
       method: 'POST',
-      body: formData,
+      body: formData as any,
+      headers: formData.getHeaders(),
     })
 
     const data = await response.json() as WechatAPIResponse

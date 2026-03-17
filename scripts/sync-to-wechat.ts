@@ -3,7 +3,6 @@
 import * as fs from 'fs/promises'
 import * as path from 'path'
 import { fileURLToPath } from 'url'
-import MarkdownIt from 'markdown-it'
 import { parse as parseHTML } from 'node-html-parser'
 import { createWechatAPI, WechatAPIError } from '../src/utils/wechat/api.js'
 import { isWechatSyncEnabled } from '../src/utils/wechat/config.js'
@@ -13,24 +12,17 @@ import {
   getSyncStats,
   needsResync,
 } from '../src/utils/wechat/state.js'
+import { convertMarkdownToWechatHtml } from '../src/utils/wechat/markdown-to-wechat.js'
+
+// 使用 dotenv 加载环境变量
+try {
+  const dotenv = await import('dotenv')
+  dotenv.config()
+} catch {
+  // dotenv 不可用时使用默认方式
+}
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
-
-try {
-  const envPath = path.join(process.cwd(), '.env')
-  const envContent = await fs.readFile(envPath, 'utf-8')
-  const lines = envContent.split('\n')
-  for (const line of lines) {
-    const [key, ...valueParts] = line.split('=')
-    if (key && valueParts.length > 0 && !key.trim().startsWith('#')) {
-      const value = valueParts.join('=').trim()
-      process.env[key.trim()] = value
-    }
-  }
-}
-catch {
-  console.warn('未找到 .env 文件，将使用环境变量')
-}
 
 interface PostFrontmatter {
   title: string
@@ -55,12 +47,6 @@ interface SyncOptions {
   slugs?: string[]
   dryRun?: boolean
 }
-
-const md = MarkdownIt({
-  html: true,
-  linkify: true,
-  typographer: true,
-})
 
 function parseFrontmatter(content: string): { frontmatter: PostFrontmatter; body: string } {
   const frontmatterRegex = /^---\n([\s\S]*?)\n---\n([\s\S]*)$/
@@ -241,10 +227,6 @@ function getDefaultCoverImage(): { imageBuffer: Buffer; filename: string } {
   }
 }
 
-function convertMarkdownToHtml(markdown: string): string {
-  return md.render(markdown)
-}
-
 async function getPostFiles(postsDir: string): Promise<Array<{ slug: string; filePath: string }>> {
   const files: Array<{ slug: string; filePath: string }> = []
 
@@ -355,7 +337,14 @@ export async function syncPostToWechat(
       }
     }
 
-    const html = convertMarkdownToHtml(body)
+    // 使用微信友好的 HTML 转换器
+    const html = convertMarkdownToWechatHtml(body, {
+      primaryColor: '#07c160',
+      fontSize: '16px',
+      lineHeight: '1.75',
+      codeTheme: 'light',
+    })
+    
     const coverImage = await extractCoverImage(html, postFile.slug)
 
     const { imageBuffer, filename } = coverImage || getDefaultCoverImage()

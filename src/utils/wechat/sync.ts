@@ -1,8 +1,10 @@
-import { getCollection, type CollectionEntry } from 'astro:content'
+import type { CollectionEntry } from 'astro:content'
+import { getCollection } from 'astro:content'
 import { createWechatAPI, WechatAPIError } from './api'
 import { isWechatSyncEnabled } from './config'
-import MarkdownIt from 'markdown-it'
+import { convertMarkdownToWechatHtml } from './markdown-to-wechat'
 import { parse as parseHTML } from 'node-html-parser'
+import MarkdownIt from 'markdown-it'
 
 interface SyncResult {
   slug: string
