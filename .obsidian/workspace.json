@@ -60,8 +60,19 @@
               "icon": "lucide-table",
               "title": "0-文章数据库"
             }
+          },
+          {
+            "id": "44af323359bbddd8",
+            "type": "leaf",
+            "state": {
+              "type": "git-view",
+              "state": {},
+              "icon": "git-pull-request",
+              "title": "Source Control"
+            }
           }
-        ]
+        ],
+        "currentTab": 2
       }
     ],
     "direction": "horizontal",
@@ -144,7 +155,7 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "6ab9d0fb0291f960",
+  "active": "9f9062739c0a3eea",
   "lastOpenFiles": [
     "src/content/posts/0-文章数据库.base",
     "src/content/posts/weekly/14 玄光周刊-当 AI 开始记住你的一切.md",
