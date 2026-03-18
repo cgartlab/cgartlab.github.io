@@ -125,6 +125,7 @@ export class WechatAPI {
       method: 'POST',
       body: formData as any,
       headers: formData.getHeaders(),
+      duplex: 'half',
     })
 
     const data = await response.json() as WechatAPIResponse
