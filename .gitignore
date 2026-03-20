@@ -49,6 +49,12 @@ coverage/
 .stversions/
 .syncthing-*
 
+# Copilot
+.copilot-index/
+
+# Obsidian
+.obsidian/
+
 # Obsidian - 同步基本设置，但排除插件配置
 .obsidian/plugins/
 .obsidian/*/
