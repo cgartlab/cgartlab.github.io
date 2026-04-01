@@ -11,6 +11,15 @@ export function getWechatConfig(): WechatConfig {
     return cachedConfig
   }
 
+  // 使用 dotenv 加载环境变量（如果可用）
+  try {
+    // 动态导入 dotenv，避免硬依赖
+    const dotenv = require('dotenv')
+    dotenv.config()
+  } catch {
+    // dotenv 不可用时使用 process.env
+  }
+
   const appId = process.env.WECHAT_APP_ID || ''
   const appSecret = process.env.WECHAT_APP_SECRET || ''
   const enabled = process.env.WECHAT_SYNC_ENABLED === 'true'
