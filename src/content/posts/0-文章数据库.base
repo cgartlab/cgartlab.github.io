@@ -26,12 +26,10 @@ views:
       note.published: 117
       note.tags: 407
   - type: table
-    name: 表格
+    name: 周刊
     filters:
       and:
-        - '!file.inFolder("_files")'
-        - '!file.inFolder("_images")'
-        - '!file.inFolder("templates")'
+        - file.tags.contains("周刊")
     groupBy:
       property: file.folder
       direction: ASC
@@ -42,12 +40,10 @@ views:
       - abbrlink
       - tags
     sort:
-      - property: file.folder
-        direction: DESC
-      - property: file.mtime
+      - property: file.name
         direction: DESC
     columnSize:
       file.name: 442
-      note.abbrlink: 198
-      note.tags: 407
       note.published: 117
+      note.abbrlink: 153
+      note.tags: 407
