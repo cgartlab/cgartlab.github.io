@@ -1,4 +1,5 @@
 # Syncthing 忽略文件 - CGArtLab 知识库
+# 所有设备必须使用相同的忽略规则，避免删除冲突
 
 # Syncthing 元数据
 .stfolder/
@@ -7,7 +8,7 @@
 .syncthing-*
 *.sync-conflict-*
 
-# Git 元数据（通过 Git 管理）
+# Git 元数据
 .git/
 
 # 构建与缓存（每设备独立构建）
@@ -49,7 +50,7 @@ Desktop.ini
 *.bak
 *.backup
 
-# 锁文件
+# 锁文件（每设备独立生成）
 package-lock.json
 yarn.lock
 pnpm-lock.yaml
@@ -60,7 +61,7 @@ pnpm-lock.yaml
 .devcontainer/
 coverage/
 
-# Obsidian 设备特定配置
+# Obsidian 配置
 src/content/posts/.obsidian/workspace*.json
 src/content/posts/.obsidian/app.json
 src/content/posts/.obsidian/appearance.json
@@ -68,10 +69,7 @@ src/content/posts/.obsidian/hotkeys.json
 src/content/posts/.obsidian/graph.json
 src/content/posts/.obsidian/page-preview.json
 src/content/posts/.copilot-index/
-(?d)src/content/posts/.trash/
-
-# 项目特定
-src/assets/lqip-map.json
+src/content/posts/.trash/
 
 # 允许同步 Obsidian 共享配置
 !src/content/posts/.obsidian/plugins/
@@ -79,3 +77,6 @@ src/assets/lqip-map.json
 !src/content/posts/.obsidian/core-plugins.json
 !src/content/posts/.obsidian/community-plugins.json
 !src/content/posts/.obsidian/templates.json
+
+# 项目特定
+src/assets/lqip-map.json
