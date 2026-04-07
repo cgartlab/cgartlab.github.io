@@ -4,22 +4,21 @@
     "type": "split",
     "children": [
       {
-        "id": "b5fa208ba691b0e7",
+        "id": "ae6c26f7f6d829a1",
         "type": "tabs",
         "children": [
           {
-            "id": "9f9062739c0a3eea",
+            "id": "b4f6fa18afc3763a",
             "type": "leaf",
             "state": {
-              "type": "markdown",
+              "type": "split-diff-view",
               "state": {
-                "file": "src/content/posts/weekly/14 玄光周刊-当AI开始记住你的一切，这是我的使用策略.md",
-                "mode": "preview",
-                "source": true,
-                "backlinks": false
+                "aFile": "src/content/posts/闲聊「自学」这门手艺.md",
+                "bFile": "src/content/posts/闲聊「自学」这门手艺.md",
+                "aRef": ""
               },
-              "icon": "lucide-file",
-              "title": "14 玄光周刊-当AI开始记住你的一切，这是我的使用策略"
+              "icon": "diff",
+              "title": "Diff: 闲聊「自学」这门手艺  (Working Tree)"
             }
           }
         ]
@@ -41,7 +40,7 @@
             "state": {
               "type": "file-explorer",
               "state": {
-                "sortOrder": "alphabetical",
+                "sortOrder": "alphabeticalReverse",
                 "autoReveal": false
               },
               "icon": "lucide-folder-closed",
@@ -55,7 +54,7 @@
               "type": "bases",
               "state": {
                 "file": "src/content/posts/0-文章数据库.base",
-                "viewName": "草稿"
+                "viewName": "周刊"
               },
               "icon": "lucide-table",
               "title": "0-文章数据库"
@@ -86,7 +85,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300
+    "width": 306.5
   },
   "right": {
     "id": "19844fd2410b7196",
@@ -166,14 +165,30 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "44af323359bbddd8",
+  "active": "b4f6fa18afc3763a",
   "lastOpenFiles": [
+    "src/content/posts/weekly/15 玄光周刊-.md",
+    "src/assets/templates/周刊模板.md",
+    "src/assets/templates/文章模板.md",
+    "src/content/posts/跟着 Apple Watch 初识产品工业设计.md",
+    "src/content/posts/12月拔草记录的好物.md",
+    "src/content/posts/网站更新为 Astro 架构.md",
+    "src/content/posts/至今我不知道.md",
+    "src/content/posts/频繁记录6年，我还是跟不上这个时代.md",
+    "src/content/posts/适合的才最好，年底我选择新装一台“Mac mini”.md",
+    "src/content/posts/闲聊「自学」这门手艺.md",
+    "src/content/posts/weekly/14 玄光周刊-当AI开始记住你的一切，这是我的使用策略.md",
+    "src/content/posts/weekly/14 玄光周刊-当AI开始记住你的一切，这是我的使用策略-en.md",
+    "src/assets/icons/top-icon.svg",
+    "src/assets/templates",
+    "src/content/posts/未命名.md",
+    "src/content/posts/15.md",
+    "src/content/posts/15 玄光周刊-.md",
     "src/content/posts/0-文章数据库.base",
     "src/content/posts/weekly/14 玄光周刊-当 AI 开始记住你的一切.md",
     "README.md",
     "src/content/posts/_images/世界尽管让它去转，不用担心你学的东西会过时-1772956350488.webp",
     "src/content/posts/_images/世界尽管让它去转，不用担心你学的东西会过时-1772944076005.webp",
-    "src/assets/icons/top-icon.svg",
     "src/assets/icons/toc-icon.svg",
     "src/assets/icons/theme-toggle.svg",
     "src/assets/icons/search-icon.svg",
@@ -190,12 +205,6 @@
     "copilot/copilot-custom-prompts/Generate table of contents.md",
     "copilot/copilot-custom-prompts/Make longer.md",
     "copilot/copilot-custom-prompts/Make shorter.md",
-    "copilot/copilot-custom-prompts/Emojify.md",
-    "copilot/copilot-custom-prompts/Explain like I am 5.md",
-    "copilot/copilot-custom-prompts/Simplify.md",
-    "copilot/copilot-custom-prompts/Summarize.md",
-    "copilot/copilot-custom-prompts/Translate to Chinese.md",
-    "copilot/copilot-custom-prompts/Fix grammar and spelling.md",
     "copilot/copilot-custom-prompts",
     "copilot",
     "dist/sitemap-0.xml",
@@ -203,14 +212,6 @@
     "dist/~partytown/partytown.js",
     "dist/~partytown/partytown-sw.js",
     "dist/~partytown/partytown-media.js",
-    "dist/~partytown/partytown-atomics.js",
-    "dist/~partytown",
-    "weekly/13 玄光周刊-你和AI聊过的天，可能并不属于你.md",
-    "weekly/14 玄光周刊-当 AI 开始记住你的一切.md",
-    "2024年，如何更优雅地使用 Mac-en.md",
-    "【SCP-华夏系列组画】上线爱发电.md",
-    "6月的设计师拔草记录和选荐.md",
-    "weekly/14 玄光周刊-你和AI聊过的天，可能并不属于你 1.md",
-    "weekly/13 玄光周刊-你和AI聊过的天，可能并不属于你-en.md"
+    "dist/~partytown/partytown-atomics.js"
   ]
 }
