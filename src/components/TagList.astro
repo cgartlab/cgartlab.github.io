@@ -11,7 +11,7 @@ interface Props {
 const { tags, currentTag = '', lang } = Astro.props
 ---
 
-<div class="tag-list">
+<div class="no-heti mb-10.5 flex flex-wrap gap-x-3 gap-y-3.2">
   {tags.map(tag => (
     <a
       href={getTagPath(tag, lang)}
@@ -24,60 +24,3 @@ const { tags, currentTag = '', lang } = Astro.props
     </a>
   ))}
 </div>
-
-<style>
-.tag-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-}
-
-.tag-item {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border: 1px solid var(--border-color, #e5e7eb);
-  border-radius: 6px;
-  padding: 0.5rem 1.25rem;
-  background: transparent;
-  color: var(--text-secondary);
-  font-size: 0.875rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-  min-height: 2.25rem;
-  letter-spacing: 0.01em;
-  text-decoration: none;
-}
-
-.tag-item:hover {
-  border-color: var(--text-secondary);
-  color: var(--text-color);
-  transform: translateY(-1px);
-}
-
-.tag-item.active {
-  border-color: var(--text-color);
-  color: var(--text-color);
-  background: var(--bg-tertiary, rgba(0, 0, 0, 0.04));
-}
-
-.tag-text {
-  transform: translateY(1px);
-}
-
-@media (max-width: 768px) {
-  .tag-item {
-    padding: 0.45rem 1rem;
-    font-size: 0.85rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .tag-item {
-    padding: 0.4rem 0.875rem;
-    font-size: 0.8rem;
-  }
-}
-</style>
