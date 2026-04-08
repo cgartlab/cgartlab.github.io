@@ -15,8 +15,8 @@
   --color-canvas-overlay: var(--background-color);
   --color-canvas-inset: transparent;
   --color-canvas-subtle: transparent;
-  --color-accent-fg: oklch(70.7% 0.165 254.624);
-  --color-accent-emphasis: oklch(70.7% 0.165 254.624);
+  --color-accent-fg: oklch(0.75 0.12 138);
+  --color-accent-emphasis: oklch(0.75 0.12 138);
 
   /* Official Theme Colors */
   --color-prettylights-syntax-comment: #8b949e;
