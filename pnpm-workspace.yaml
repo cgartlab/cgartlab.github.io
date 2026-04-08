@@ -1,8 +1,1 @@
-shellEmulator: true
-
-trustPolicy: no-downgrade
-
-ignoredBuiltDependencies:
-  - esbuild
-  - sharp
-  - simple-git-hooks
+trustPolicy: permissive
