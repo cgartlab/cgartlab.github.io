@@ -1,1 +1,3 @@
-trustPolicy: permissive
+shellEmulator: true
+
+trustPolicy: no-downgrade
