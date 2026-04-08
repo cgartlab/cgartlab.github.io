@@ -14,7 +14,7 @@ import { getPostDescription } from '@/utils/description'
 
 const markdownParser = new MarkdownIt()
 const { title, description, i18nTitle, url, author } = themeConfig.site
-const { follow } = themeConfig.seo ?? {}
+const { folo } = themeConfig.seo ?? {}
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 // 动态导入 /src/content/posts/_images 下的所有图像
@@ -195,13 +195,13 @@ export async function generateFeed({ lang }: { lang?: Language } = {}) {
     })
   }
 
-  // 如果可用，添加关注验证
-  if (follow?.feedID && follow?.userID) {
+  // Add folo verification if available
+  if (folo?.feedID && folo?.userID) {
     feed.addExtension({
-      name: 'follow_challenge',
+      name: 'folo_challenge',
       objects: {
-        feedId: follow.feedID,
-        userId: follow.userID,
+        feedId: folo.feedID,
+        userId: folo.userID,
       },
     })
   }

@@ -109,10 +109,9 @@ export interface ThemeConfig {
     }
     // Google Analytics分析ID
     googleAnalyticsID?: string
-    // Umami Analytics分析ID
+    // Umami Analytics 分析 ID
     umamiAnalyticsID?: string
-    follow?: {
-      // Feed ID
+    folo?: {
       feedID?: string
       // User ID
       userID?: string
