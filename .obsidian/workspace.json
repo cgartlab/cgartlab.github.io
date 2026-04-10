@@ -4,22 +4,50 @@
     "type": "split",
     "children": [
       {
-        "id": "3fa79d1cebb383cd",
+        "id": "1c8f706730326ee3",
         "type": "tabs",
         "children": [
           {
-            "id": "9e5d6aca4f5d7de1",
+            "id": "48b7d8674ef30500",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "src/content/posts/weekly/15 玄光周刊-工具塑造的创作方式.md",
+                "file": "src/content/posts/weekly/工具塑造创作方式 - No.15 玄光周刊.md",
                 "mode": "source",
                 "source": false,
                 "backlinks": false
               },
               "icon": "lucide-file",
-              "title": "15 玄光周刊-工具塑造的创作方式"
+              "title": "工具塑造创作方式 - No.15 玄光周刊"
+            }
+          },
+          {
+            "id": "6d4d3aca87547fbb",
+            "type": "leaf",
+            "state": {
+              "type": "webviewer",
+              "state": {
+                "url": "https://www.tinyash.com/blog/agentic-ai-workflow-tutorial/",
+                "title": "从零开始构建 Agentic AI 工作流：多步骤任务自动化的完整实战指南 - 小灰灰的笔记",
+                "mode": "webview"
+              },
+              "icon": "globe-2",
+              "title": "从零开始构建 Agentic AI 工作流：多步骤任务自动化的完整实战指南 - 小灰灰的笔记"
+            }
+          },
+          {
+            "id": "c29762f7d5ca9594",
+            "type": "leaf",
+            "state": {
+              "type": "webviewer",
+              "state": {
+                "url": "https://cn.bing.com/images/search?q=Agentic%2520AI&form=HDRSC2&first=1",
+                "title": "Agentic%20AI - 搜索 图片",
+                "mode": "webview"
+              },
+              "icon": "globe-2",
+              "title": "Agentic%20AI - 搜索 图片"
             }
           }
         ]
@@ -55,7 +83,7 @@
               "type": "bases",
               "state": {
                 "file": "src/content/posts/0-文章数据库.base",
-                "viewName": "周刊"
+                "viewName": "草稿"
               },
               "icon": "lucide-table",
               "title": "0-文章数据库"
@@ -168,12 +196,19 @@
   },
   "active": "44af323359bbddd8",
   "lastOpenFiles": [
+    "src/content/posts/_images/15 玄光周刊-工具塑造的创作方式-1775832585145.webp",
+    "src/content/posts/weekly/工具塑造创作方式 - No.15 玄光周刊.md",
+    "src/content/posts/_images/15 玄光周刊-工具塑造的创作方式-1775832027508.webp",
+    "src/content/posts/_images/15 玄光周刊-工具塑造的创作方式-1775831664666.webp",
+    "src/content/posts/_images/15 玄光周刊-工具塑造的创作方式-1775831523848.webp",
+    "src/content/posts/_images/15 玄光周刊-工具塑造的创作方式-1775831314917.webp",
+    "src/content/posts/_images/15 玄光周刊-工具塑造的创作方式-1775831292259.webp",
+    "src/content/posts/_images/15 玄光周刊-工具塑造的创作方式-1775831152633.webp",
+    "src/content/posts/0-文章数据库.base",
     "src/content/posts/weekly/13 玄光周刊-你和AI聊过的天，可能并不属于你-en.md",
-    "src/content/posts/weekly/15 玄光周刊-工具塑造的创作方式.md",
     "~syncthing~CODE_WIKI.md.tmp",
     "CODE_WIKI.md",
     "src/content/posts/_images/15 玄光周刊--1775823220806.webp",
-    "src/content/posts/0-文章数据库.base",
     "src/assets/templates/周刊模板.md",
     "src/assets/templates/文章模板.md",
     "src/content/posts/跟着 Apple Watch 初识产品工业设计.md",
@@ -194,19 +229,12 @@
     "README.md",
     "src/content/posts/_images/世界尽管让它去转，不用担心你学的东西会过时-1772956350488.webp",
     "src/content/posts/_images/世界尽管让它去转，不用担心你学的东西会过时-1772944076005.webp",
-    "src/assets/icons/toc-icon.svg",
-    "src/assets/icons/theme-toggle.svg",
-    "src/assets/icons/search-icon.svg",
-    "src/assets/icons/pin-icon.svg",
-    "src/assets/icons/language-switcher.svg",
-    "src/assets/icons/heading-anchor.svg",
     "copilot/copilot-custom-prompts/Clip Web Page.md",
     "copilot/copilot-custom-prompts/Clip YouTube Transcript.md",
     "copilot/copilot-custom-prompts/Rewrite as tweet thread.md",
     "copilot/copilot-custom-prompts/Rewrite as tweet.md",
     "copilot/copilot-custom-prompts/Remove URLs.md",
     "copilot/copilot-custom-prompts/Generate glossary.md",
-    "copilot/copilot-custom-prompts/Generate table of contents.md",
     "copilot/copilot-custom-prompts",
     "copilot",
     "dist/sitemap-0.xml",
