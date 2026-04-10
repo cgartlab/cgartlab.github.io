@@ -4,21 +4,22 @@
     "type": "split",
     "children": [
       {
-        "id": "ae6c26f7f6d829a1",
+        "id": "3fa79d1cebb383cd",
         "type": "tabs",
         "children": [
           {
-            "id": "b4f6fa18afc3763a",
+            "id": "9e5d6aca4f5d7de1",
             "type": "leaf",
             "state": {
-              "type": "split-diff-view",
+              "type": "markdown",
               "state": {
-                "aFile": "src/content/posts/闲聊「自学」这门手艺.md",
-                "bFile": "src/content/posts/闲聊「自学」这门手艺.md",
-                "aRef": ""
+                "file": "src/content/posts/weekly/15 玄光周刊-工具塑造的创作方式.md",
+                "mode": "source",
+                "source": false,
+                "backlinks": false
               },
-              "icon": "diff",
-              "title": "Diff: 闲聊「自学」这门手艺  (Working Tree)"
+              "icon": "lucide-file",
+              "title": "15 玄光周刊-工具塑造的创作方式"
             }
           }
         ]
@@ -153,8 +154,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 429.5,
-    "collapsed": true
+    "width": 429.5
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -162,12 +162,18 @@
       "command-palette:打开命令面板": false,
       "bases:新建数据库": false,
       "copilot:Open Copilot Chat": false,
-      "obsidian-git:Open Git source control": false
+      "obsidian-git:Open Git source control": false,
+      "oz-clear-unused-images:Clear Unused Images": false
     }
   },
-  "active": "b4f6fa18afc3763a",
+  "active": "44af323359bbddd8",
   "lastOpenFiles": [
-    "src/content/posts/weekly/15 玄光周刊-.md",
+    "src/content/posts/weekly/13 玄光周刊-你和AI聊过的天，可能并不属于你-en.md",
+    "src/content/posts/weekly/15 玄光周刊-工具塑造的创作方式.md",
+    "~syncthing~CODE_WIKI.md.tmp",
+    "CODE_WIKI.md",
+    "src/content/posts/_images/15 玄光周刊--1775823220806.webp",
+    "src/content/posts/0-文章数据库.base",
     "src/assets/templates/周刊模板.md",
     "src/assets/templates/文章模板.md",
     "src/content/posts/跟着 Apple Watch 初识产品工业设计.md",
@@ -184,7 +190,6 @@
     "src/content/posts/未命名.md",
     "src/content/posts/15.md",
     "src/content/posts/15 玄光周刊-.md",
-    "src/content/posts/0-文章数据库.base",
     "src/content/posts/weekly/14 玄光周刊-当 AI 开始记住你的一切.md",
     "README.md",
     "src/content/posts/_images/世界尽管让它去转，不用担心你学的东西会过时-1772956350488.webp",
@@ -195,7 +200,6 @@
     "src/assets/icons/pin-icon.svg",
     "src/assets/icons/language-switcher.svg",
     "src/assets/icons/heading-anchor.svg",
-    "src/assets/icons/go-back.svg",
     "copilot/copilot-custom-prompts/Clip Web Page.md",
     "copilot/copilot-custom-prompts/Clip YouTube Transcript.md",
     "copilot/copilot-custom-prompts/Rewrite as tweet thread.md",
@@ -203,15 +207,12 @@
     "copilot/copilot-custom-prompts/Remove URLs.md",
     "copilot/copilot-custom-prompts/Generate glossary.md",
     "copilot/copilot-custom-prompts/Generate table of contents.md",
-    "copilot/copilot-custom-prompts/Make longer.md",
-    "copilot/copilot-custom-prompts/Make shorter.md",
     "copilot/copilot-custom-prompts",
     "copilot",
     "dist/sitemap-0.xml",
     "dist/sitemap-index.xml",
     "dist/~partytown/partytown.js",
     "dist/~partytown/partytown-sw.js",
-    "dist/~partytown/partytown-media.js",
-    "dist/~partytown/partytown-atomics.js"
+    "dist/~partytown/partytown-media.js"
   ]
 }
