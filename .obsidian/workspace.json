@@ -21,34 +21,6 @@
               "icon": "lucide-file",
               "title": "工具塑造创作方式 - No.15 玄光周刊"
             }
-          },
-          {
-            "id": "6d4d3aca87547fbb",
-            "type": "leaf",
-            "state": {
-              "type": "webviewer",
-              "state": {
-                "url": "https://www.tinyash.com/blog/agentic-ai-workflow-tutorial/",
-                "title": "从零开始构建 Agentic AI 工作流：多步骤任务自动化的完整实战指南 - 小灰灰的笔记",
-                "mode": "webview"
-              },
-              "icon": "globe-2",
-              "title": "从零开始构建 Agentic AI 工作流：多步骤任务自动化的完整实战指南 - 小灰灰的笔记"
-            }
-          },
-          {
-            "id": "c29762f7d5ca9594",
-            "type": "leaf",
-            "state": {
-              "type": "webviewer",
-              "state": {
-                "url": "https://cn.bing.com/images/search?q=Agentic%2520AI&form=HDRSC2&first=1",
-                "title": "Agentic%20AI - 搜索 图片",
-                "mode": "webview"
-              },
-              "icon": "globe-2",
-              "title": "Agentic%20AI - 搜索 图片"
-            }
           }
         ]
       }
@@ -194,17 +166,17 @@
       "oz-clear-unused-images:Clear Unused Images": false
     }
   },
-  "active": "44af323359bbddd8",
+  "active": "48b7d8674ef30500",
   "lastOpenFiles": [
-    "src/content/posts/_images/15 玄光周刊-工具塑造的创作方式-1775832585145.webp",
+    "src/content/posts/0-文章数据库.base",
     "src/content/posts/weekly/工具塑造创作方式 - No.15 玄光周刊.md",
+    "src/content/posts/_images/15 玄光周刊-工具塑造的创作方式-1775832585145.webp",
     "src/content/posts/_images/15 玄光周刊-工具塑造的创作方式-1775832027508.webp",
     "src/content/posts/_images/15 玄光周刊-工具塑造的创作方式-1775831664666.webp",
     "src/content/posts/_images/15 玄光周刊-工具塑造的创作方式-1775831523848.webp",
     "src/content/posts/_images/15 玄光周刊-工具塑造的创作方式-1775831314917.webp",
     "src/content/posts/_images/15 玄光周刊-工具塑造的创作方式-1775831292259.webp",
     "src/content/posts/_images/15 玄光周刊-工具塑造的创作方式-1775831152633.webp",
-    "src/content/posts/0-文章数据库.base",
     "src/content/posts/weekly/13 玄光周刊-你和AI聊过的天，可能并不属于你-en.md",
     "~syncthing~CODE_WIKI.md.tmp",
     "CODE_WIKI.md",
@@ -228,7 +200,6 @@
     "src/content/posts/weekly/14 玄光周刊-当 AI 开始记住你的一切.md",
     "README.md",
     "src/content/posts/_images/世界尽管让它去转，不用担心你学的东西会过时-1772956350488.webp",
-    "src/content/posts/_images/世界尽管让它去转，不用担心你学的东西会过时-1772944076005.webp",
     "copilot/copilot-custom-prompts/Clip Web Page.md",
     "copilot/copilot-custom-prompts/Clip YouTube Transcript.md",
     "copilot/copilot-custom-prompts/Rewrite as tweet thread.md",
