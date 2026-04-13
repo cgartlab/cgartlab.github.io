@@ -1,5 +1,5 @@
 ---
-title: 01 玄光周刊-发刊词
+title: 发刊词 - No.01 玄光周刊
 published: 2025-01-03
 description: 周刊从这里出发
 updated: 2025-01-03

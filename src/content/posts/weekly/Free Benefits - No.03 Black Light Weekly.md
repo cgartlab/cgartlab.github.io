@@ -1,5 +1,5 @@
 ---
-title: 03 Black Light Weekly - Free Benefits
+title: Free Benefits - No.03 Black Light Weekly
 published: 2025-07-10
 description: Sharing experiences as a freelancer adjusting sleep schedules, discussing efficiency gains from early rising and time management advantages, and exploring flexibility in switching between different sleep patterns.
 updated: 2025-08-06

@@ -1,5 +1,5 @@
 ---
-title: 08 Black Light Weekly - The Pine Trees of Golden Beach
+title: The Pine Trees of Golden Beach - No.08 Black Light Weekly
 published: 2025-07-31
 description: Sharing personal experience building RSS services, exploring invisible details in interaction design, and introducing practical tools for migrating music playlists to Apple Music.
 updated: 2025-08-08
