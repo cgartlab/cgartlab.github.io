@@ -1,5 +1,5 @@
 ---
-title: 12 Black Light Weekly - The "Left Foot Stepping on Right Foot" Creative Method
+title: The "Left Foot Stepping on Right Foot" Creative Method - No.12 Black Light Weekly
 published: 2026-02-03
 description: What does "left foot stepping on right foot" mean? Let me explain it to you slowly...
 updated: 2026-02-03

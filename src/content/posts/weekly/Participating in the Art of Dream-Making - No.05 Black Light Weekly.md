@@ -1,5 +1,5 @@
 ---
-title: 05 Black Light Weekly - Participating in the Art of Dream-Making
+title: Participating in the Art of Dream-Making - No.05 Black Light Weekly
 published: 2025-07-13
 description: Deep dive into movie production behind-the-scenes:from cyberpunk fog scenes at Qingdao Oriental Movie Metropolis to top-tier crew collaboration challenges, revealing how AI tools like NotebookLM, NoteGen, and Silicon Flow are revolutionizing creative workflows. Plus exclusive analysis of Mode's brand redesign double diamond framework, exploring how 'warm technology' reconstructs product value. Subscribe to Black Light Weekly for deep insights into digital art, knowledge management, and entrepreneurial thinking!
 updated: 2025-08-08

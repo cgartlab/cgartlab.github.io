@@ -1,5 +1,5 @@
 ---
-title: 08 玄光周刊-金沙滩的松树
+title: 金沙滩的松树 - No.08 玄光周刊
 published: 2025-07-31
 description: 分享个人搭建RSS服务的经验，探讨交互设计的隐形细节，并介绍迁移音乐歌单到Apple Music的实用工具。
 updated: 2025-08-08

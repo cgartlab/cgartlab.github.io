@@ -1,5 +1,5 @@
 ---
-title: 02 Black Light Weekly - The Magic Numbers on the Clock
+title: The Magic Numbers on the Clock - No.02 Black Light Weekly
 published: 2025-07-07
 description: Exploring the fascinating phenomenon of time perception, analyzing subjective differences in time experience across different periods, and sharing insights on time management inspired by a physics teacher.
 updated: 2025-08-06

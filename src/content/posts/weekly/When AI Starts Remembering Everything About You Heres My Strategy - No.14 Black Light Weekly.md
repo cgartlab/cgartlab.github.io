@@ -1,5 +1,5 @@
 ---
-title: 14 Blacklight Weekly - When AI Starts Remembering Everything About You, Here's My Strategy
+title: When AI Starts Remembering Everything About You, Here's My Strategy - No.14 Black Light Weekly
 published: 2026-03-20
 description: In 2026, large language model platforms almost simultaneously made a key choice:adding 'complex tasks' and 'long-term memory' features. Each platform may have different names for them, and some have limited free quotas. This is the inevitable evolution of AI.
 updated: 2026-03-20

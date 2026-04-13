@@ -1,5 +1,5 @@
 ---
-title: 04 玄光周刊-返修显卡和新渲染器
+title: 返修显卡和新渲染器 - No.04 玄光周刊
 published: 2025-07-11
 description: 分享显卡返修经历和使用体验，介绍新发现的GPU渲染器Centileo Render的性能特点，以及近期Obsidian和Windows商店的更新内容。
 updated: 2025-08-06

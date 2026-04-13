@@ -1,5 +1,5 @@
 ---
-title: 06 Black Light Weekly - The Real "Workhorses" and macOS Icon History
+title: The Real "Workhorses" and macOS Icon History - No.06 Black Light Weekly
 published: 2025-07-18
 description: From the self-deprecating "workhorse" label of modern workers to the carefree existence of real workhorses, this article explores the impermanent nature of technology and design from a Zen perspective. Tracing macOS icon style evolution over nearly 30 years (skeuomorphism → flat design → liquid glass), it reveals Apple's design language shift from function-driven to emotional expression. Combining WWDC 2025 liquid glass design and AR layout speculation, it proposes balancing technological innovation with Zen living:embracing the present like workhorses while maintaining openness to the future in the digital wave.
 updated: 2025-08-08

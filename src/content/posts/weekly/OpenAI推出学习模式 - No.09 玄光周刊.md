@@ -1,5 +1,5 @@
 ---
-title: 09 玄光周刊-OpenAI推出学习模式
+title: OpenAI推出学习模式 - No.09 玄光周刊
 published: 2025-08-02
 description: 本期周刊主要讨论了OpenAI新推出的学习模式、Newsletter传播形式的优势，以及推荐了IGLOO公司的创意网站设计。
 updated: 2025-08-02

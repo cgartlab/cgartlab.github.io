@@ -1,5 +1,5 @@
 ---
-title: 01 Black Light Weekly - Launch Statement
+title: Launch Statement - No.01 Black Light Weekly
 published: 2025-01-03
 description: The weekly starts from here
 updated: 2025-01-03

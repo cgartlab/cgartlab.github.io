@@ -1,5 +1,5 @@
 ---
-title: 13 Black Light Weekly - The Conversations You Had with AI Might Not Belong to You
+title: The Conversations You Had with AI Might Not Belong to You - No.13 Black Light Weekly
 published: 2026-02-05
 description: Since I started using the internet in college, I've never trusted any cloud storage or cloud services. This feeling faded a lot after the development of mobile internet because the internet was everywhere. But after AI emerged, I truly realized how valuable personal data is. At the same time, I also think this is something that most people using these AI platforms easily overlook.
 updated: 2026-02-05
