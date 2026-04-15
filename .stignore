@@ -9,15 +9,15 @@
 *.sync-conflict-*
 
 # Git 元数据
-.git/
+(?d).git/
 
 # 构建与缓存（每设备独立构建）
-.cache/
-.temp/
-.output/
-.astro/
-dist/
-node_modules/
+(?d).cache/
+(?d).temp/
+(?d).output/
+(?d).astro/
+(?d)dist/
+(?d)node_modules/
 
 # 日志
 *.log
