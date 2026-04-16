@@ -78,3 +78,4 @@ src/assets/lqip-map.json
 
 # 数据库
 /src/content/posts/0-文章数据库.base
+/.obsidian/workspace.json
