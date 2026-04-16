@@ -4,21 +4,22 @@
     "type": "split",
     "children": [
       {
-        "id": "9bae00d90ce0f110",
+        "id": "30f64caf36e3109c",
         "type": "tabs",
         "children": [
           {
-            "id": "bc2e3048a22e4b45",
+            "id": "d3a2115b8b4eea4f",
             "type": "leaf",
             "state": {
-              "type": "split-diff-view",
+              "type": "markdown",
               "state": {
-                "aFile": ".gitignore",
-                "bFile": ".gitignore",
-                "aRef": ""
+                "file": "src/content/posts/2026年，如何优雅地使用 Windows 11.md",
+                "mode": "source",
+                "source": false,
+                "backlinks": false
               },
-              "icon": "diff",
-              "title": "Diff: .gitignore  (Working Tree)"
+              "icon": "lucide-file",
+              "title": "2026年，如何优雅地使用 Windows 11"
             }
           }
         ]
@@ -85,7 +86,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 306.5
+    "width": 388.5
   },
   "right": {
     "id": "19844fd2410b7196",
@@ -165,7 +166,7 @@
       "oz-clear-unused-images:Clear Unused Images": false
     }
   },
-  "active": "bc2e3048a22e4b45",
+  "active": "44af323359bbddd8",
   "lastOpenFiles": [
     "src/content/posts/0-文章数据库.base",
     "src/content/posts/weekly/工具塑造创作方式 - No.15 玄光周刊.md",
