@@ -90,6 +90,9 @@ export default defineConfig({
     },
   },
   vite: {
+    build: {
+      chunkSizeWarningLimit: 1000,
+    },
     plugins: [
       {
         name: 'prefix-font-urls-with-base',

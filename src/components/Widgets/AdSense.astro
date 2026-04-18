@@ -1,5 +1,6 @@
 ---
 import { themeConfig } from '@/config'
+import { formatPublisherID } from '@/utils/adsense'
 
 interface Props {
   slot: string
@@ -19,18 +20,20 @@ const {
 
 const { googleAdSense } = themeConfig.seo ?? {}
 
-if (!googleAdSense?.enabled) {
+if (!googleAdSense?.enabled || !googleAdSense?.publisherID) {
   return null
 }
 
 const { publisherID } = googleAdSense
+
+const fullPublisherID = formatPublisherID(publisherID)
 ---
 
 <div class:list={['adsense-container', className]}>
   <ins
     class="adsbygoogle"
     style="display: block;"
-    data-ad-client={`ca-${publisherID}`}
+    data-ad-client={fullPublisherID}
     data-ad-slot={slot}
     data-ad-layout={layout}
     data-ad-format={format}
