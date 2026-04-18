@@ -154,6 +154,12 @@ export const themeConfig: ThemeConfig = {
     // automatically generate website screenshots for open graph images
     // get your access key at: https://apiflash.com/
     apiflashKey: '',
+    // google adsense
+    // https://www.google.com/adsense
+    googleAdSense: {
+      enabled: true,
+      publisherID: import.meta.env.GOOGLE_ADSENSE_PUBLISHER_ID || '',
+    },
   },
   // SEO SETTINGS >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> END
 

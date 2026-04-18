@@ -23,6 +23,7 @@ const { katex: katexEnabled, reduceMotion } = themeConfig.global
 const { verification = {}, twitterID = '', googleAnalyticsID = '', umamiAnalyticsID = '' } = themeConfig.seo ?? {}
 const { google = '', bing = '', yandex = '', baidu = '' } = verification
 const { customGoogleAnalyticsJS = '', customUmamiAnalyticsJS = '' } = themeConfig.preload ?? {}
+const { googleAdSense } = themeConfig.seo ?? {}
 
 // Site Metadata
 const metaTheme = defaultMode === 'dark' ? darkMode : lightMode
@@ -260,6 +261,17 @@ const pageImage = postSlug
     type="text/partytown"
     src={customUmamiAnalyticsJS || 'https://cloud.umami.is/script.js'}
     data-website-id={umamiAnalyticsID}
+  />
+)}
+
+<!-- Google AdSense -->
+{googleAdSense?.enabled && (
+  <script
+    is:inline
+    type="text/partytown"
+    async
+    src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${googleAdSense.publisherID}`}
+    crossorigin="anonymous"
   />
 )}
 </head>

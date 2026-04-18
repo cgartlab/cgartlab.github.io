@@ -5,6 +5,7 @@ import { getCollection, render } from 'astro:content'
 import Comment from '@/components/Comment/Index.astro'
 import PostDate from '@/components/PostDate.astro'
 import TagList from '@/components/TagList.astro'
+import AdSense from '@/components/Widgets/AdSense.astro'
 import BackButton from '@/components/Widgets/BackButton.astro'
 import TOC from '@/components/Widgets/TOC.astro'
 import { allLocales } from '@/config'
@@ -116,11 +117,15 @@ const { Content, headings, remarkPluginFrontmatter } = await render(post)
     </div>
     <!-- TOC -->
     {post.data.toc && <TOC headings={headings} />}
+    <!-- Ad Before Content -->
+    <AdSense slot="2768919160" layout="in-article" />
     <!-- Content -->
     <div id="post-content">
       <Content />
       <!-- Copyright -->
       <div id="post-copyright" />
+      <!-- Ad Above Comments -->
+      <AdSense slot="4078918877" layout="display" />
       <!-- Tag List -->
       {post.data.tags?.length > 0 && (
         <div class="mt-12.6 uno-decorative-line" />
