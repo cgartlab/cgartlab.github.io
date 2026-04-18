@@ -1,0 +1,53 @@
+---
+import { themeConfig } from '@/config'
+
+interface Props {
+  slot: string
+  layout?: 'in-article' | 'display' | 'multiplex' | 'in-feed'
+  format?: 'auto' | 'fluid' | 'rectangle'
+  responsive?: boolean
+  className?: string
+}
+
+const {
+  slot,
+  layout = 'in-article',
+  format = 'auto',
+  responsive = true,
+  className = '',
+} = Astro.props
+
+const { googleAdSense } = themeConfig.seo ?? {}
+
+if (!googleAdSense?.enabled) {
+  return null
+}
+
+const { publisherID } = googleAdSense
+---
+
+<div class:list={['adsense-container', className]}>
+  <ins
+    class="adsbygoogle"
+    style="display: block;"
+    data-ad-client={`ca-${publisherID}`}
+    data-ad-slot={slot}
+    data-ad-layout={layout}
+    data-ad-format={format}
+    data-full-width-responsive={responsive.toString()}
+  />
+  <script is:inline>
+    (adsbygoogle = window.adsbygoogle || []).push({})
+  </script>
+</div>
+
+<style>
+  .adsense-container {
+    margin: 2rem 0;
+    text-align: center;
+  }
+
+  .adsense-container:empty {
+    min-height: 100px;
+  }
+</style>

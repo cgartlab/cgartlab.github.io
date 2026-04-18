@@ -118,6 +118,13 @@ export interface ThemeConfig {
     }
     // ApiFlash访问密钥
     apiflashKey?: string
+    // Google AdSense 配置
+    googleAdSense?: {
+      // 启用 AdSense
+      enabled: boolean
+      // AdSense Publisher ID
+      publisherID: string
+    }
   }
   footer: {
     // 社交链接
