@@ -3,6 +3,7 @@ import { ClientRouter } from 'astro:transitions'
 import katexCSS from 'katex/dist/katex.min.css?url'
 import { allLocales, base, defaultLocale, themeConfig } from '@/config'
 import { ui } from '@/i18n/ui'
+import { formatPublisherID } from '@/utils/adsense'
 import { getPageInfo } from '@/utils/page'
 
 interface Props {
@@ -24,6 +25,10 @@ const { verification = {}, twitterID = '', googleAnalyticsID = '', umamiAnalytic
 const { google = '', bing = '', yandex = '', baidu = '' } = verification
 const { customGoogleAnalyticsJS = '', customUmamiAnalyticsJS = '' } = themeConfig.preload ?? {}
 const { googleAdSense } = themeConfig.seo ?? {}
+
+const googleAdSensePublisherID = googleAdSense?.publisherID
+  ? formatPublisherID(googleAdSense.publisherID)
+  : ''
 
 // Site Metadata
 const metaTheme = defaultMode === 'dark' ? darkMode : lightMode
@@ -270,7 +275,7 @@ const pageImage = postSlug
     is:inline
     type="text/partytown"
     async
-    src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${googleAdSense.publisherID}`}
+    src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${googleAdSensePublisherID}`}
     crossorigin="anonymous"
   />
 )}
