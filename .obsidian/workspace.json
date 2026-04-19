@@ -4,25 +4,53 @@
     "type": "split",
     "children": [
       {
-        "id": "c0efecbef9e91dd2",
+        "id": "a1b192186c6f664d",
         "type": "tabs",
         "children": [
           {
-            "id": "d62c008c4bbabc10",
+            "id": "ff9c52a3031b77a1",
             "type": "leaf",
             "state": {
-              "type": "markdown",
+              "type": "split-diff-view",
               "state": {
-                "file": "src/content/posts/weekly/当AI开始记住你的一切，这是我的使用策略 - No.14 玄光周刊-en.md",
-                "mode": "source",
-                "source": false,
-                "backlinks": false
+                "aFile": "src/content/posts/2025年，我的生产力设备里留下了这些优秀工具.md",
+                "bFile": "src/content/posts/2025年，我的生产力设备里留下了这些优秀工具.md",
+                "aRef": ""
               },
-              "icon": "lucide-file",
-              "title": "当AI开始记住你的一切，这是我的使用策略 - No.14 玄光周刊-en"
+              "icon": "diff",
+              "title": "Diff: 2025年，我的生产力设备里留下了这些优秀工具  (Working Tree)"
+            }
+          },
+          {
+            "id": "cc51e718463aade0",
+            "type": "leaf",
+            "state": {
+              "type": "split-diff-view",
+              "state": {
+                "aFile": "src/content/posts/2025年，我的生产力设备里留下了这些优秀工具-en.md",
+                "bFile": "src/content/posts/2025年，我的生产力设备里留下了这些优秀工具-en.md",
+                "aRef": ""
+              },
+              "icon": "diff",
+              "title": "Diff: 2025年，我的生产力设备里留下了这些优秀工具-en  (Working Tree)"
+            }
+          },
+          {
+            "id": "1dba06fdf47c28c9",
+            "type": "leaf",
+            "state": {
+              "type": "split-diff-view",
+              "state": {
+                "aFile": "src/assets/icons/top-icon.svg",
+                "bFile": "src/assets/icons/top-icon.svg",
+                "aRef": ""
+              },
+              "icon": "diff",
+              "title": "Diff: top-icon.svg  (Working Tree)"
             }
           }
-        ]
+        ],
+        "currentTab": 2
       }
     ],
     "direction": "vertical"
@@ -168,50 +196,51 @@
   },
   "active": "44af323359bbddd8",
   "lastOpenFiles": [
+    "src/content/posts/_images/AI时代的创意工具 - No.16 玄光周刊-1776614518361.webp",
+    "src/content/posts/weekly/AI时代的创意工具 - No.16 玄光周刊.md",
+    "dist/_astro/mermaid.core.CFYjPDOT.js",
+    "dist/_astro/wardley-RL74JXVD.C164j_W1.js",
+    "dist/_astro/vennDiagram-DHZGUBPP.SFbR7u2d.js",
+    "dist/_astro/_baseUniq.BSBLx-YN.js",
+    "dist/_astro/xychartDiagram-5P7HB3ND.DGb-1UL-.js",
+    "dist/_astro/sankeyDiagram-XADWPNL6.Bx6heFAr.js",
+    "dist/_astro/pieDiagram-DEJITSTG.BJqi_gjj.js",
+    "dist/_astro/min.dQcnc-py.js",
+    "dist/_astro/mindmap-definition-QFDTVHPH.D-6zClhd.js",
+    "dist/_astro/layout.BvCfcesD.js",
+    "dist/_astro/AI时代的创意工具 - No.16 玄光周刊-1776618234237.CPTxg-Vi_ZvYwKx.webp",
+    "dist/_astro/AI时代的创意工具 - No.16 玄光周刊-1776614919671.BU2QwGHX_Z1GfS1D.webp",
+    "dist/_astro/扫码_搜索联合传播样式-白色版.Dcrb48Pm_pWWPd.webp",
+    "dist/_astro/适合的才最好，年底我选择新装一台“Mac mini”-1754592548286.fpfb7wwy_Z18mhlT.webp",
+    "dist/_astro/适合的才最好，年底我选择新装一台“Mac mini”-1754592564637.BAFsNP93_Z1WGqgh.webp",
+    "dist/_astro/适合的才最好，年底我选择新装一台“Mac mini”-1754592593051.DSz0CwWV_Z2hDBL0.webp",
+    "dist/_astro/适合的才最好，年底我选择新装一台“Mac mini”-1754592576870.Bfies96v_1CpP6X.webp",
+    "dist/_astro/适合的才最好，年底我选择新装一台“Mac mini”-1754593268652.NF4BaMMN_14Jdh6.webp",
+    "dist/_astro/适合的才最好，年底我选择新装一台“Mac mini”-1754592263015.DY4WP0Ch_Z3ELAn.webp",
+    "dist/_astro/适合的才最好，年底我选择新装一台“Mac mini”-1754592228596.CWEo09YE_ZiOSrb.webp",
+    "src/content/posts/weekly/我的开源旅程 - No.17 玄光周刊.md",
+    "src/content/posts/().md",
+    "src/assets/templates/模板 - No.xx 玄光周刊.md",
+    "src/content/posts/未命名.md",
+    "src/content/posts/2025年，我的生产力设备里留下了这些优秀工具-en.md",
+    "src/content/posts/2025年，我的生产力设备里留下了这些优秀工具.md",
+    "src/content/posts/十五年浏览器折腾之旅.md",
+    "src/content/posts/碎片写作——建立一具思维标本.md",
+    "src/content/posts/NAS 买回来只会存照片？创作者的第一台“私有云”该怎么玩 - 下篇.md",
+    "src/content/posts/RSS 与现代阅读习惯（一）：如何在碎片化时代重塑深度阅读体验.md",
+    "src/content/posts/RSS 与现代阅读习惯（一）：如何在碎片化时代重塑深度阅读体验-en.md",
+    "src/content/posts/weekly/返修显卡和新渲染器 - No.04 玄光周刊.md",
+    "src/content/posts/weekly/工具塑造创作方式 - No.15 玄光周刊.md",
+    "src/content/posts/weekly/「左脚踩右脚」的创作方法 - No.12 玄光周刊.md",
+    "src/content/posts/weekly/OpenAI推出学习模式 - No.09 玄光周刊-en.md",
+    "src/content/posts/weekly/当AI开始记住你的一切，这是我的使用策略 - No.14 玄光周刊-en.md",
     "src/content/posts/weekly/当AI开始记住你的一切，这是我的使用策略 - No.14 玄光周刊.md",
-    "src/content/posts/0-文章数据库.base",
     "src/content/posts/2026年，如何优雅地使用 Windows 11.md",
     "src/content/posts/weekly/OpenAI推出学习模式 - No.09 玄光周刊.md",
     "src/content/posts/weekly/返修显卡和新渲染器 - No.04 玄光周刊-en.md",
     "src/content/posts/weekly/发刊词 - No.01 玄光周刊.md",
     "src/content/posts/weekly/发刊词 - No.01 玄光周刊-en.md",
-    "src/content/posts/weekly/当AI开始记住你的一切，这是我的使用策略 - No.14 玄光周刊-en.md",
     "src/content/posts/weekly/参与造梦的艺术 - No.05 玄光周刊.md",
-    "src/content/posts/weekly/参与造梦的艺术 - No.05 玄光周刊-en.md",
-    "src/content/posts/weekly/表上的数字很神奇 - No.02 玄光周刊.md",
-    "src/content/posts/weekly/表上的数字很神奇 - No.02 玄光周刊-en.md",
-    "src/content/posts/weekly/白给的福利 - No.03 玄光周刊.md",
-    "src/content/posts/weekly/白给的福利 - No.03 玄光周刊-en.md",
-    "src/content/posts/weekly/「左脚踩右脚」的创作方法 - No.12 玄光周刊.md",
-    "src/content/posts/weekly/「左脚踩右脚」的创作方法 - No.12 玄光周刊-en.md",
-    "src/content/posts/OpenAI推出学习模式 - No.09 玄光周刊-en.md",
-    "src/content/posts/真正的「牛马」和 macOS 图标简史 - No.06 玄光周刊-en.md",
-    "src/content/posts/双钻石设计模型：从用户需求到产品落地的黄金框架解析 - No.07 玄光周刊-en.md",
-    "src/content/posts/圣弥厄尔教堂 - No.10 玄光周刊-en.md",
-    "src/content/posts/你和AI聊过的天，可能并不属于你 - No.13 玄光周刊-en.md",
-    "src/content/posts/金沙滩的松树 - No.08 玄光周刊-en.md",
-    "src/content/posts/谷歌的UI设计理念 - No.11 玄光周刊-en.md",
-    "src/content/posts/工具塑造创作方式 - No.15 玄光周刊-en.md",
-    "src/content/posts/返修显卡和新渲染器 - No.04 玄光周刊-en.md",
-    "src/content/posts/发刊词 - No.01 玄光周刊-en.md",
-    "src/content/posts/_images/15 玄光周刊-工具塑造的创作方式-1775832585145.webp",
-    "src/content/posts/_images/15 玄光周刊-工具塑造的创作方式-1775832027508.webp",
-    "src/content/posts/_images/15 玄光周刊-工具塑造的创作方式-1775831664666.webp",
-    "src/content/posts/_images/15 玄光周刊-工具塑造的创作方式-1775831523848.webp",
-    "src/content/posts/_images/15 玄光周刊-工具塑造的创作方式-1775831314917.webp",
-    "src/content/posts/_images/15 玄光周刊-工具塑造的创作方式-1775831292259.webp",
-    "src/content/posts/_images/15 玄光周刊-工具塑造的创作方式-1775831152633.webp",
-    "~syncthing~CODE_WIKI.md.tmp",
-    "src/content/posts/_images/15 玄光周刊--1775823220806.webp",
-    "src/assets/icons/top-icon.svg",
-    "src/assets/templates",
-    "src/content/posts/_images/世界尽管让它去转，不用担心你学的东西会过时-1772956350488.webp",
-    "copilot/copilot-custom-prompts",
-    "copilot",
-    "dist/sitemap-0.xml",
-    "dist/sitemap-index.xml",
-    "dist/~partytown/partytown.js",
-    "dist/~partytown/partytown-sw.js",
-    "dist/~partytown/partytown-media.js"
+    "src/content/posts/weekly/参与造梦的艺术 - No.05 玄光周刊-en.md"
   ]
 }
