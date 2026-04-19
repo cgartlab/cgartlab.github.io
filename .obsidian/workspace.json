@@ -4,53 +4,20 @@
     "type": "split",
     "children": [
       {
-        "id": "a1b192186c6f664d",
+        "id": "3e5df498417b4889",
         "type": "tabs",
         "children": [
           {
-            "id": "ff9c52a3031b77a1",
+            "id": "5fca93ee3a2804b1",
             "type": "leaf",
             "state": {
-              "type": "split-diff-view",
-              "state": {
-                "aFile": "src/content/posts/2025年，我的生产力设备里留下了这些优秀工具.md",
-                "bFile": "src/content/posts/2025年，我的生产力设备里留下了这些优秀工具.md",
-                "aRef": ""
-              },
-              "icon": "diff",
-              "title": "Diff: 2025年，我的生产力设备里留下了这些优秀工具  (Working Tree)"
-            }
-          },
-          {
-            "id": "cc51e718463aade0",
-            "type": "leaf",
-            "state": {
-              "type": "split-diff-view",
-              "state": {
-                "aFile": "src/content/posts/2025年，我的生产力设备里留下了这些优秀工具-en.md",
-                "bFile": "src/content/posts/2025年，我的生产力设备里留下了这些优秀工具-en.md",
-                "aRef": ""
-              },
-              "icon": "diff",
-              "title": "Diff: 2025年，我的生产力设备里留下了这些优秀工具-en  (Working Tree)"
-            }
-          },
-          {
-            "id": "1dba06fdf47c28c9",
-            "type": "leaf",
-            "state": {
-              "type": "split-diff-view",
-              "state": {
-                "aFile": "src/assets/icons/top-icon.svg",
-                "bFile": "src/assets/icons/top-icon.svg",
-                "aRef": ""
-              },
-              "icon": "diff",
-              "title": "Diff: top-icon.svg  (Working Tree)"
+              "type": "empty",
+              "state": {},
+              "icon": "lucide-file",
+              "title": "新标签页"
             }
           }
-        ],
-        "currentTab": 2
+        ]
       }
     ],
     "direction": "vertical"
@@ -196,6 +163,7 @@
   },
   "active": "44af323359bbddd8",
   "lastOpenFiles": [
+    "src/content/posts/0-文章数据库.base",
     "src/content/posts/_images/AI时代的创意工具 - No.16 玄光周刊-1776614518361.webp",
     "src/content/posts/weekly/AI时代的创意工具 - No.16 玄光周刊.md",
     "dist/_astro/mermaid.core.CFYjPDOT.js",
@@ -217,7 +185,6 @@
     "dist/_astro/适合的才最好，年底我选择新装一台“Mac mini”-1754592576870.Bfies96v_1CpP6X.webp",
     "dist/_astro/适合的才最好，年底我选择新装一台“Mac mini”-1754593268652.NF4BaMMN_14Jdh6.webp",
     "dist/_astro/适合的才最好，年底我选择新装一台“Mac mini”-1754592263015.DY4WP0Ch_Z3ELAn.webp",
-    "dist/_astro/适合的才最好，年底我选择新装一台“Mac mini”-1754592228596.CWEo09YE_ZiOSrb.webp",
     "src/content/posts/weekly/我的开源旅程 - No.17 玄光周刊.md",
     "src/content/posts/().md",
     "src/assets/templates/模板 - No.xx 玄光周刊.md",
