@@ -11,10 +11,15 @@
             "id": "5fca93ee3a2804b1",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {},
+              "type": "markdown",
+              "state": {
+                "file": "src/content/posts/weekly/AI时代的创意工具 - No.16 玄光周刊-en.md",
+                "mode": "source",
+                "source": false,
+                "backlinks": false
+              },
               "icon": "lucide-file",
-              "title": "新标签页"
+              "title": "AI时代的创意工具 - No.16 玄光周刊-en"
             }
           }
         ]
@@ -161,8 +166,9 @@
       "oz-clear-unused-images:Clear Unused Images": false
     }
   },
-  "active": "44af323359bbddd8",
+  "active": "5fca93ee3a2804b1",
   "lastOpenFiles": [
+    "src/content/posts/weekly/AI时代的创意工具 - No.16 玄光周刊-en.md",
     "src/content/posts/0-文章数据库.base",
     "src/content/posts/_images/AI时代的创意工具 - No.16 玄光周刊-1776614518361.webp",
     "src/content/posts/weekly/AI时代的创意工具 - No.16 玄光周刊.md",
@@ -175,7 +181,6 @@
     "dist/_astro/pieDiagram-DEJITSTG.BJqi_gjj.js",
     "dist/_astro/min.dQcnc-py.js",
     "dist/_astro/mindmap-definition-QFDTVHPH.D-6zClhd.js",
-    "dist/_astro/layout.BvCfcesD.js",
     "dist/_astro/AI时代的创意工具 - No.16 玄光周刊-1776618234237.CPTxg-Vi_ZvYwKx.webp",
     "dist/_astro/AI时代的创意工具 - No.16 玄光周刊-1776614919671.BU2QwGHX_Z1GfS1D.webp",
     "dist/_astro/扫码_搜索联合传播样式-白色版.Dcrb48Pm_pWWPd.webp",
