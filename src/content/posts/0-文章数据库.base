@@ -30,7 +30,7 @@ views:
     filters:
       or:
         - file.inFolder("src/content/posts/weekly")
-        - file.hasTag("周刊")
+        - file.hasTag("周刊", "Weekly")
     groupBy:
       property: file.folder
       direction: ASC
