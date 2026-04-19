@@ -92,13 +92,13 @@ html.dark .code-copy-button.copied {
 
 /* Tag List >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> */
 .tag-item {
-  --at-apply: 'uno-round-border inline-flex items-center justify-center px-3 py-1.5 text-sm c-secondary transition-colors ease-out';
+  --at-apply: 'border border-secondary/20 rounded-lg inline-flex items-center justify-center px-3 py-1.5 text-sm c-secondary transition-colors ease-out';
 }
 .tag-item:hover {
-  --at-apply: 'border-primary/15 c-primary';
+  --at-apply: 'border-primary/30 c-primary';
 }
 .tag-item.active {
-  --at-apply: 'border-primary/15 bg-primary/5 c-primary';
+  --at-apply: 'border-primary/30 bg-primary/5 c-primary';
 }
 .tag-text {
   --at-apply: 'text-center';
