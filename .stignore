@@ -38,8 +38,8 @@ Desktop.ini
 *~
 
 # 编辑器（每设备独立配置）
-.idea/
-.vscode/
+(?d).idea/
+(?d).vscode/
 *.swp
 *.swo
 
@@ -68,8 +68,8 @@ src/content/posts/.obsidian/appearance.json
 src/content/posts/.obsidian/hotkeys.json
 src/content/posts/.obsidian/graph.json
 src/content/posts/.obsidian/page-preview.json
-src/content/posts/.copilot-index/
-src/content/posts/.trash/
+(?d)src/content/posts/.copilot-index/
+(?d)src/content/posts/.trash/
 
 # 允许同步 Obsidian 共享配置
 !src/content/posts/.obsidian/plugins/
