@@ -45,6 +45,23 @@ const pageImage = postSlug
 ---
 
 <head>
+<!-- Prevent FOUC: Apply theme class before any rendering -->
+<script is:inline>
+(function () {
+  const _mode = 'auto'
+  let _dark = _mode === 'dark' || (_mode === 'auto' && window.matchMedia('(prefers-color-scheme: dark)').matches)
+  if (_mode !== 'auto') {
+    _dark = _mode === 'dark'
+  }
+  else {
+    const _stored = localStorage.getItem('theme')
+    if (_stored)
+      _dark = _stored === 'dark'
+  }
+  if (_dark)
+    document.documentElement.classList.add('dark')
+})()
+</script>
 <!-- Basic Info -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
