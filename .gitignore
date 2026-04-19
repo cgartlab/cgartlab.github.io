@@ -82,3 +82,4 @@ src/assets/lqip-map.json
 # Obsidian 数据库文件
 src/content/posts/*.base
 /.obsidian/workspace.json
+/.obsidian/workspace.json
