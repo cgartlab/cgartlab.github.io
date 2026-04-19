@@ -18,6 +18,8 @@ views:
     sort:
       - property: published
         direction: DESC
+      - property: file.name
+        direction: DESC
       - property: file.ctime
         direction: DESC
     columnSize:
@@ -37,14 +39,9 @@ views:
     order:
       - file.name
       - published
-      - file.folder
-      - abbrlink
-      - tags
     sort:
-      - property: file.name
+      - property: published
         direction: DESC
     columnSize:
-      file.name: 442
+      file.name: 398
       note.published: 117
-      note.abbrlink: 153
-      note.tags: 407
