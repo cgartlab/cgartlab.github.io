@@ -77,5 +77,8 @@ coverage/
 src/assets/lqip-map.json
 
 # 数据库
-/src/content/posts/0-文章数据库.base
+src/assets/lqip-map.json
+
+# Obsidian 数据库文件
+src/content/posts/*.base
 /.obsidian/workspace.json
