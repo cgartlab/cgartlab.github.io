@@ -49,8 +49,12 @@ coverage/
 .stversions/
 .syncthing-*
 
-# Copilot
+# Copilot / AI 插件
 .copilot-index/
+.copilot/
+.github/copilot/
+.cursor/
+.windsurf/
 
 # Obsidian
 .obsidian/
@@ -73,13 +77,9 @@ coverage/
 !.obsidian/bookmarks.json
 !.obsidian/canvas.json
 
-# 项目特定
-src/assets/lqip-map.json
-
-# 数据库
+# 项目特定 / 数据库
 src/assets/lqip-map.json
 
 # Obsidian 数据库文件
 src/content/posts/*.base
-/.obsidian/workspace.json
 /.obsidian/workspace.json
