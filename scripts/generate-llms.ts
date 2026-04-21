@@ -141,55 +141,28 @@ async function main() {
   const chinesePosts = allPosts.filter(p => !p.isEnglish)
   const englishPosts = allPosts.filter(p => p.isEnglish)
 
-  const chineseArticles = chinesePosts.filter(p => !p.isWeekly)
-  const chineseWeekly = chinesePosts.filter(p => p.isWeekly)
-  const englishArticles = englishPosts.filter(p => !p.isWeekly)
-  const englishWeekly = englishPosts.filter(p => p.isWeekly)
-
   let output = `# CG艺术实验室
 
-> 专注于数字艺术、动态视觉设计、技术分享和知识管理的创意工作室。
+> 专注于数字艺术、动态视觉设计，技术分享和知识管理的创意工作室。
 
 `
 
-  if (chineseArticles.length > 0) {
+  if (chinesePosts.length > 0) {
     output += `## 近期文章
 
 `
-    for (const post of chineseArticles.slice(0, 20)) {
+    for (const post of chinesePosts.slice(0, 30)) {
       output += `- [${post.frontmatter.title}](${generateUrl(post)}): ${post.frontmatter.description}
 `
     }
   }
 
-  if (chineseWeekly.length > 0) {
-    output += `
-## 玄光周刊
-
-`
-    for (const post of chineseWeekly) {
-      output += `- [${post.frontmatter.title}](${generateUrl(post)}): ${post.frontmatter.description}
-`
-    }
-  }
-
-  if (englishArticles.length > 0) {
+  if (englishPosts.length > 0) {
     output += `
 ## English Articles
 
 `
-    for (const post of englishArticles.slice(0, 20)) {
-      output += `- [${post.frontmatter.title}](${generateUrl(post)}): ${post.frontmatter.description}
-`
-    }
-  }
-
-  if (englishWeekly.length > 0) {
-    output += `
-## Weekly Newsletter
-
-`
-    for (const post of englishWeekly) {
+    for (const post of englishPosts.slice(0, 30)) {
       output += `- [${post.frontmatter.title}](${generateUrl(post)}): ${post.frontmatter.description}
 `
     }
