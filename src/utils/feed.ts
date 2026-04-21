@@ -124,7 +124,7 @@ export async function generateFeed({ lang }: { lang?: Language } = {}) {
     language: lang ?? themeConfig.global.locale,
     copyright: `版权所有 © ${new Date().getFullYear()} ${author}`,
     updated: new Date(),
-    generator: 'Astro-Theme-Retypeset with Feed for Node.js',
+    generator: 'CGArtLab',
 
     feedLinks: {
       rss: new URL(lang ? `${base}/${lang}/rss.xml` : `${base}/rss.xml`, url).toString(),
