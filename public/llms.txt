@@ -1,96 +1,87 @@
-# CG艺术实验室 - 数字艺术与知识管理探索
+# CG艺术实验室
 
-> CG艺术实验室（cgartlab.com）是一个专注于数字艺术、动态视觉设计、技术分享和知识管理的工作室。致力于为数字艺术爱好者、专业设计师和初学者以及商业客户，分享创作经验和培训服务。
+> 专注于数字艺术、动态视觉设计、技术分享和知识管理的创意工作室。
 
-## 网站概述
+## 近期文章
 
-CG艺术实验室由设计师ChenYang创建，是一个记录和分享数字艺术创作、技术探索和知识管理经验的工作室。网站采用中英双语内容，涵盖设计工具使用、生产力提升、技术教程、个人作品展示等多个方面。目前已发布超过120篇原创文章，内容质量较高，注重实用性和深度思考。
+- [世界尽管让它去转，不用担心你学的东西会过时](https://cgartlab.com/zh/posts/dont-worry-what-your-learning-will-pass): 2026 刚开始两个月，AI 行业已经从“模型版本竞赛”到“Agent 代理”全面转向。如何让 AI 像员工一样自主工作、互相合作，已经开始重构我的常规工作流。在体验了一个月从 0 到 1 地和 OpenClaw 部署、设计、开发、协作之后，我认为应该写一篇文章好好沉淀一下近些年自己对 AI 技术的体验和思考。
+- [就算掌声无法抵达舞台，我依然劝你尽快动笔](https://cgartlab.com/zh/posts/pick-your-pencil-now): 封面图来自 Dan Koe 的个人网站，即使是 AI 画的，我也很喜欢这张图。这个画面让我想起去留学那天，一个人从机场走出来到陌生的国度，就是这种前面是无尽的未知，但是方向和动力又异常明确，两种看似明明相反排斥的力量，和谐统一地充斥在心里。
+- [NAS 买回来只会存照片？创作者的第一台“私有云”该怎么玩 - 下篇](https://cgartlab.com/zh/posts/nas-beyond-photos-your-first-private-cloud-2): NAS 不只是能联网的硬盘盒，而是你的私人数据中心。这个系列旨在跳过复杂的代码和命令，告诉你如何建立最基础的创作者存储逻辑。
+- [拔草记录和好物推荐-2601](https://cgartlab.com/zh/posts/good-things-2026-01): 利民AXP90纯铜散热器、飞傲BTR11蓝牙耳放、七彩虹RTX5070TI显卡、良工PDU机柜插座、WD40精密清洁剂。
+- [NAS 买回来只会存照片？创作者的第一台“私有云”该怎么玩 - 上篇](https://cgartlab.com/zh/posts/nas-beyond-photos-your-first-private-cloud-1): 它不只是硬盘盒，而是你的私人数据中心。跳过复杂的命令行，告诉你如何建立最基础的创作者存储逻辑。
+- [2025年，我的生产力设备里留下了这些优秀工具](https://cgartlab.com/zh/posts/good-tools-for-production-in-my-2025): 顶着这么多年设计师的头衔，我从未整体性地总结过自己用的软件应用。今年第一次冒出了想设计开发一个自己喜欢的产品，对于用户，软件是应用。对于开发者，软件是他们的产品。于是，在软件工具的选择和使用上，我逐渐开始以产品设计思维作为标准，甚至会去搜寻作者的幕后采访。随后在使用的时候会不由自主地揣摩开发者的思路。
+- [6月的设计师拔草记录和选荐](https://cgartlab.com/zh/posts/2025-06-good-things): 6月的设计师拔草记录和选荐，包含VGN蜻蜓A9 plus鼠标、3D打印腕托、日本UCC冻干咖啡、原道MX500平头塞等产品的使用体验和评价。
+- [WordPress插件商店打不开，搞定回环错误排查与修复步骤](https://cgartlab.com/zh/posts/fix-wordpress-plugin-store): WordPress插件商店打不开的回环错误排查与修复步骤，包含宝塔面板和终端命令两种解决方案。
+- [RSS 与现代阅读习惯（二）：重新获取信息收集的主动权](https://cgartlab.com/zh/posts/rss-2): 基于RSS构建个人碎片信息收集系统的实践经验分享，包含优质RSS源推荐和工具使用心得
+- [12月拔草记录的好物](https://cgartlab.com/zh/posts/2024-12-good-things): 12月拔草记录的好物分享，包含农科院无蔗糖燕麦、Pidan猫薄荷玩具、米家石墨烯电暖器、Keychron K3 Max键盘等好物推荐。
+- [再开公众号，并接入 AI](https://cgartlab.com/zh/posts/setup-wechat-channel-again): 重新开通微信公众号并接入AI助手的完整经验分享，包含智能体配置、知识库设置和多平台内容分发策略
+- [【SCP-华夏系列组画】上线爱发电](https://cgartlab.com/zh/posts/scp-digital-artwork): 目前更新至第三幅 《醉奴》
+- [2024年，如何更优雅地使用 Mac](https://cgartlab.com/zh/posts/2024-elegant-use-mac): 2024年Mac使用优化指南，从系统配置到软件选择，提升Mac使用体验和工作效率的实用技巧
+- [RSS 与现代阅读习惯（一）：如何在碎片化时代重塑深度阅读体验](https://cgartlab.com/zh/posts/rss-1): 探讨如何在碎片化时代通过RSS重塑深度阅读体验，从理念到实践的全面指南
+- [大型三维设计项目实战心得：小小的文件命名加速高效创作](https://cgartlab.com/zh/posts/good-name-for-better-work): 大型三维设计项目中文件命名和管理的实战心得，分享如何通过规范命名提升创作效率。
+- [11月的拔草记录和选荐](https://cgartlab.com/zh/posts/2024-11-good-things): 11月拔草记录分享，包含米家扫地机器人M30、射手座8盘位NAS机箱、皇家小虎手抓饼、Nutro美士猫粮、Wacom数位板石墨膜、Alkaline充电电池等好物推荐。
+- [适合的才最好，年底我选择新装一台“Mac mini”](https://cgartlab.com/zh/posts/build-a-macmini): 9 月底入手了一台零刻 SER5 Max 迷你主机，至今重度使用 3 个月左右，基本调教顺手。
+- [广场舞可以称之为艺术么？](https://cgartlab.com/zh/posts/square-dance-is-art): 探讨广场舞是否可以称之为艺术，从观众视角分析艺术的本质。
+- [LayerRenamer 1.0 脚本发布，PS 图层重命名从未如此简单](https://cgartlab.com/zh/posts/layerrenamer-1): Photoshop图层批量重命名脚本LayerRenamer 1.0发布，支持自定义命名规则和编号格式，提升设计工作效率
+- [博客内容将自动同步到 Telegram 频道](https://cgartlab.com/zh/posts/blog-to-telegram-channel): 博客内容将自动同步到 Telegram 频道的实现方案和配置步骤。
 
-## 主要内容分类
+## 玄光周刊
 
-### 技术分享与教程
-- 数字艺术工具使用指南（Photoshop、AE、C4D等）
-- 生产力工具评测与使用技巧
-- 服务器搭建与自托管服务
-- 前端开发与网站建设
+- [AI时代的创意工具 - No.16玄光周刊](https://cgartlab.com/zh/weekly/weekly-16): AI工具已从“赋能”卖点变为行业标配，但核心问题在于：它们是在扩展还是抹平创作边界？
+- [工具塑造创作方式 - No.15 玄光周刊](https://cgartlab.com/zh/weekly/weekly-15): 从专业软件到关注工作流的工具，再到主动参与的AI。这引发核心问题：当工具能“创作”，人的价值何在？答案在于判断力——在噪声中识别方向、定义意义的能力。随着执行成本下降，判断力成为创作者真正的稀缺资源。
+- [当AI开始记住你的一切，这是我的使用策略 - No.14 玄光周刊](https://cgartlab.com/zh/weekly/weekly-14): 2026 年，大模型平台几乎同时做出了一个关键选择：新增「复杂任务」和「长期记忆」功能。只是每家可能会有不同的叫法，有的也限制了免费额度。这是 AI 进化的必然。
+- [你和AI聊过的天，可能并不属于你 - No.13 玄光周刊](https://cgartlab.com/zh/weekly/weekly-13): 我从上大学真正接触网络开始，就信不过任何云盘和云服务。这种感觉从移动互联网发展起来后慢慢淡化了许多，因为网络随处都有。但当 AI 出现之后我才真正意识到，个人数据是多宝贵的财富。同时，我也认为这是目前大多数使用这些 AI 平台的人容易忽视的地方。
+- [「左脚踩右脚」的创作方法 - No.12 玄光周刊](https://cgartlab.com/zh/weekly/weekly-12): 左脚踩右脚是啥意思呢？且听我给你慢慢道来.....
+- [谷歌的UI设计理念 - No.11 玄光周刊](https://cgartlab.com/zh/weekly/weekly-11): 话说天冷了，这家伙越来越能吃（也能拉）。已经从去年刚抱回来的 4 斤半长到了 7 斤出头，拎起来已经明显感觉到压手了。从抱她回家到现在已经一年半，吃成煤气罐也没事，只要平平安安就成。
+- [圣弥厄尔教堂 - No.10 玄光周刊](https://cgartlab.com/zh/weekly/weekly-10): 本期封面拍摄自青岛圣弥厄尔大教堂。难得有闲暇时间可以约朋友组队出来玩一圈。国内的旅游方式，主打一个「来都来了」，几个地标还是要打个卡的。这个天主教堂其实没有想象中的大，但第一次见到了一比一的管风琴还是蛮震撼的。奇怪的是，没有见到任何修女或神父，貌似旅游旺季，他们或许放假了？
+- [OpenAI推出学习模式 - No.09 玄光周刊](https://cgartlab.com/zh/weekly/weekly-09): 本期周刊主要讨论了OpenAI新推出的学习模式、Newsletter传播形式的优势，以及推荐了IGLOO公司的创意网站设计。
+- [金沙滩的松树 - No.08 玄光周刊](https://cgartlab.com/zh/weekly/weekly-08): 分享个人搭建RSS服务的经验，探讨交互设计的隐形细节，并介绍迁移音乐歌单到Apple Music的实用工具。
+- [双钻石设计模型：从用户需求到产品落地的黄金框架解析 - No.07 玄光周刊](https://cgartlab.com/zh/weekly/weekly-07): 想了解双钻石设计模型如何串联“用户需求”与“产品落地”？本文深度解析其四大阶段（发现-定义-开发-交付）的核心任务与输出成果，揭示“黄金框架”如何通过迭代设计实现从概念到实物的完整链路。无论是产品经理、设计师还是品牌策划者，都能从中获取系统化设计方法论，提升项目落地效率。
+- [真正的「牛马」和 macOS 图标简史 - No.06 玄光周刊](https://cgartlab.com/zh/weekly/weekly-06): 从打工人的「牛马」自嘲到真实牛马的自在生存，本文以禅意视角探讨技术与设计的无常变迁。通过梳理macOS近30年图标风格的演变（拟物化→扁平化→液态玻璃），揭示苹果设计语言从功能驱动到情感表达的深层逻辑。结合WWDC 2025液态玻璃设计与AR布局猜想，提出技术革新与禅意生活的平衡之道：在数字化浪潮中，如牛马般活在当下，以开放心态拥抱未来。
+- [参与造梦的艺术 - No.05 玄光周刊](https://cgartlab.com/zh/weekly/weekly-05): 深入探索电影制作幕后：从青岛东方影都的赛博雾景到顶尖剧组协作挑战，揭秘AI工具NotebookLM、NoteGen与硅基流动如何革新创作流程。更独家解析Mode品牌重塑双菱形框架，探讨‘暖科技’如何重构产品价值。订阅玄光周刊，获取数字艺术、知识管理与创业思维的深度洞察！
+- [返修显卡和新渲染器 - No.04 玄光周刊](https://cgartlab.com/zh/weekly/weekly-04): 分享显卡返修经历和使用体验，介绍新发现的GPU渲染器Centileo Render的性能特点，以及近期Obsidian和Windows商店的更新内容。
+- [白给的福利 - No.03 玄光周刊](https://cgartlab.com/zh/weekly/weekly-03): 分享作为自由职业者调整作息的经验，探讨早睡早起带来的效率提升和时间管理优势，以及如何在多种作息模式间灵活切换。
+- [表上的数字很神奇 - No.02 玄光周刊](https://cgartlab.com/zh/weekly/weekly-02): 探讨时间知觉的奇妙现象，分析不同时间段的主观感受差异，并分享从物理老师处获得的关于时间管理的启发。
+- [发刊词 - No.01 玄光周刊](https://cgartlab.com/zh/weekly/weekly-01): 周刊从这里出发
 
-### 知识管理
-- 个人知识体系建设
-- 笔记软件使用经验（Obsidian、Notion等）
-- RSS阅读与信息管理
-- 数字资产管理
+## English Articles
 
-### 设计思考
-- 设计理念与方法论
-- 创意工作流程优化
-- 视觉设计作品展示
-- 艺术创作心得
+- [Let the World Keep Turning, Don't Worry About Your Learning Becoming Obsolete](https://cgartlab.com/en/posts/dont-worry-what-your-learning-will-pass): In the first two months of 2026, the AI industry has shifted from "model version competition" to "Agent agents." How to make AI work autonomously like employees and collaborate with each other has begun to reconstruct my regular workflow. After experiencing a month of deploying, designing, developing, and collaborating with OpenClaw from 0 to 1, I believe I should write an article to consolidate my experience and thinking on AI technology in recent years.
+- [Even If Applause Can't Reach the Stage, I Still Urge You to Pick Up Your Pencil Now](https://cgartlab.com/en/posts/pick-your-pencil-now): The cover image is from Dan Koe's personal website. Even though it's AI-generated, I really like this picture. It reminds me of the day I went abroad to study—stepping out of the airport alone into an unfamiliar country, facing endless unknowns ahead, yet with direction and motivation exceptionally clear. Two seemingly contradictory forces harmoniously coexisting within.
+- [NAS Beyond Photos - How to Build Your First Private Cloud for Creators - Part 2](https://cgartlab.com/en/posts/nas-beyond-photos-your-first-private-cloud-2): NAS is more than just a networked hard drive box—it's your personal data center. This series skips complex code and commands to show you how to establish the most basic creative storage logic.
+- [NAS Beyond Photos:Your First Private Cloud for Creators](https://cgartlab.com/en/posts/nas-beyond-photos-your-first-private-cloud-1): It's not just a hard drive box, but your personal data center. Skip the complex command lines and learn how to establish the most basic creator storage logic.
+- [2025 Productivity Tools That Stayed in My Workflow](https://cgartlab.com/en/posts/good-tools-for-production-in-my-2025): After years as a designer, I've never systematically shared the software tools I use. This year, inspired by the idea of designing my own product, I started evaluating software with a product design mindset - even researching developer interviews to understand their thinking process.
+- [WordPress Plugin Store Won't Open: Complete Loop Error Troubleshooting and Fix Steps](https://cgartlab.com/en/posts/fix-wordpress-plugin-store): Troubleshooting and fixing steps for WordPress plugin store loop errors, including two solutions using Baota Panel and terminal commands.
+- [RSS and Modern Reading Habits (Part 2) - Regaining Control Over Information Collection](https://cgartlab.com/en/posts/rss-2): Practical experience sharing on building a personal fragmented information collection system based on RSS, including recommendations for quality RSS sources and tool usage insights
+- [How to Use Mac More Elegantly in 2024](https://cgartlab.com/en/posts/2024-elegant-use-mac): A comprehensive guide to optimizing Mac usage in 2024, from system configuration to software selection, with practical tips to enhance Mac experience and work efficiency
+- [RSS and Modern Reading Habits (Part 1) - How to Reshape Deep Reading Experience in the Fragmented Era](https://cgartlab.com/en/posts/rss-1): Exploring how to reshape deep reading experience through RSS in the fragmented era - a comprehensive guide from concept to practice
+- [LayerRenamer 1.0 Script Released - Photoshop Layer Renaming Has Never Been Easier](https://cgartlab.com/en/posts/layerrenamer-1): Photoshop batch layer renaming script LayerRenamer 1.0 released, supporting custom naming rules and numbering formats to improve design workflow efficiency
+- [How to Use Windows PC Elegantly in 2024](https://cgartlab.com/en/posts/2024-elegant-use-windows): A comprehensive guide to using Windows PC in 2024, from system optimization to software configuration, creating an efficient and elegant Windows experience
+- [How I Built a Cloud Library](https://cgartlab.com/en/posts/how-to-build-library): How I Built a Cloud Library
+- [Digital Art Creation Basics (Part 1) The Courage of Mysterious Confidence](https://cgartlab.com/en/posts/digitalpainting1-confidence): Exploring confidence and courage in digital art creation, sharing experiences on taking the first step
+- [I Still Don't Know](https://cgartlab.com/en/posts/know-nothing): Reflections on knowledge background and pure sensation, exploring how to maintain authentic perception in the information age.
+- [Fragmented Writing - Building a Thinking Specimen](https://cgartlab.com/en/posts/fragmented-writing): View writing as the process of building thinking specimens, systematically organizing and expressing thoughts through fragmented writing methods.
+- [How to Use Winget Package Manager in Windows 11](https://cgartlab.com/en/posts/use-winget-on-win11): Complete guide to using Windows 11 winget package manager, including installation, search, update, uninstall software and automated script configuration
+- [Breaking the Binary Opposition of Emotions with Elementary School Math](https://cgartlab.com/en/posts/how-to-break-binary-opposition): Re-examining emotional issues through the lens of elementary school math thinking, discovering that emotions are not black-and-white binary oppositions but calculable, balanceable continuous spectrums. A journey of emotional exploration through mathematical thinking.
+- [Achieving Whole-House Scientific Internet Access with Router Configuration](https://cgartlab.com/en/posts/how-to-setup-full-home-science-internet): This article explains how to achieve whole-house scientific internet access using a router, including steps like unlocking SSH, calculating router root password, using Termius to enable SSH, and installing/configuring ShellClash. Using Redmi AX6S router as an example, but theoretically this process applies to various routers, provided you can find unlockable firmware and root password calculation methods for the specific model.
+- [Brush and Stroke](https://cgartlab.com/en/posts/brush-and-stroke): Recent work has been leaning more towards painting direction, and driven by my instinctive love for painting, I've had many thoughts on the subject.
+- [Writing Again, Farewell to Shanxi](https://cgartlab.com/en/posts/zaijianshanxi): Where it all began
 
-### 生活随笔
-- 技术生活感悟
-- 产品使用体验
-- 学习成长记录
+## Weekly Newsletter
 
-## 技术架构
-
-- **框架**: Astro静态站点生成器
-- **主题**: astro-theme-retypeset
-- **部署**: GitHub Pages
-- **语言支持**: 中文（简体/繁体）、英文
-- **评论系统**: Giscus（基于GitHub Discussions）
-
-## 特色功能
-
-- 响应式设计，支持多设备访问
-- 深色/浅色主题切换
-- 多语言内容支持
-- RSS订阅支持
-- 文章目录导航
-- 代码语法高亮
-- 数学公式渲染
-
-## 内容许可
-
-### 创意内容
-- 许可协议: CC BY-NC-SA 4.0
-- 允许非商业性使用、分享和改编
-- 要求署名并采用相同许可协议
-
-### 代码部分
-- 许可协议: MIT License
-- 开源可自由使用和修改
-
-## 作者信息
-
-- **姓名**: ChenYang
-- **职业**: 数字动态视觉设计师、前端开发者
-- **专长**: 数字动态视觉设计、前端产品研发、写作、个人纯艺术创作
-- **人格类型**: INFJ
-- **联系方式**: cgartlab@outlook.com
-
-## 社交媒体
-
-- GitHub: https://github.com/cgartlab
-- X (Twitter): https://x.com/cgartlab
-- Bilibili: https://space.bilibili.com/38043072
-- 少数派: https://sspai.com/u/cgartlab/updates
-
-## 更新频率
-
-网站内容定期更新，主要发布原创技术文章、设计作品和知识管理经验。文章质量较高，注重实用性和深度思考。
-
-## 目标受众
-
-- 数字艺术爱好者和从业者
-- 前端开发者和设计师
-- 知识管理爱好者
-- 技术写作和内容创作者
-- 对自托管和开源工具感兴趣的用户
-
----
-
-*本文件遵循llms.txt标准格式，旨在帮助AI模型更好地理解网站内容和结构。*
-
-**最后更新**: 2026年2月
-**网站地址**: https://cgartlab.com
-**RSS订阅**: https://cgartlab.com/rss.xml
+- [Creative Tools in the AI Era - No.16 Black Light Weekly](https://cgartlab.com/en/weekly/weekly-16): AI tools have evolved from a "powering" selling point to an industry standard, but the core question remains: Are they expanding or flattening the boundaries of creation?
+- [Tools Shaping How We Create - No.15 Black Light Weekly](https://cgartlab.com/en/weekly/weekly-15): From professional software to workflow-focused tools, to actively participating AI. This raises a core question - When tools can "create," where does human value lie? The answer lies in judgment, the ability to identify direction and define meaning amid noise. As execution costs decline, judgment becomes the truly scarce resource for creators.
+- [When AI Starts Remembering Everything About You, Here's My Strategy - No.14 Black Light Weekly](https://cgartlab.com/en/weekly/weekly-14): In 2026, large language model platforms almost simultaneously made a key choice:adding 'complex tasks' and 'long-term memory' features. Each platform may have different names for them, and some have limited free quotas. This is the inevitable evolution of AI.
+- [The Conversations You Had with AI Might Not Belong to You - No.13 Black Light Weekly](https://cgartlab.com/en/weekly/weekly-13): Since I started using the internet in college, I've never trusted any cloud storage or cloud services. This feeling faded a lot after the development of mobile internet because the internet was everywhere. But after AI emerged, I truly realized how valuable personal data is. At the same time, I also think this is something that most people using these AI platforms easily overlook.
+- [The "Left Foot Stepping on Right Foot" Creative Method - No.12 Black Light Weekly](https://cgartlab.com/en/weekly/weekly-12): What does "left foot stepping on right foot" mean? Let me explain it to you slowly...
+- [Google's UI Design Philosophy - No.11 Black Light Weekly](https://cgartlab.com/en/weekly/weekly-11): Speaking of which, as the weather gets colder, 👆 this one eats more (and poops more too). Has grown from 2.25kg when first brought home last year to over 3.5kg now—definitely feels heavier when picked up. It's been a year and a half since bringing her home. Even if she becomes a "gas tank," it's fine as long as she's safe and healthy.
+- [St. Michael's Cathedral - No.10 Black Light Weekly](https://cgartlab.com/en/weekly/weekly-10): This week's cover was shot at Qingdao St. Michael's Cathedral. Rarely having leisure time to gather friends for an outing. Domestic tourism style emphasizes "since we're here anyway"—must visit a few landmarks. This Catholic cathedral wasn't as large as imagined, but seeing a full-scale pipe organ for the first time was quite impressive. Strangely, no nuns or priests were seen—perhaps they're on vacation during peak tourist season?
+- [OpenAI Launches Learning Mode - No.09 Black Light Weekly](https://cgartlab.com/en/weekly/weekly-09): This week's weekly mainly discusses OpenAI's newly launched learning mode, the advantages of newsletter dissemination format, and recommends IGLOO company's creative website design.
+- [The Pine Trees of Golden Beach - No.08 Black Light Weekly](https://cgartlab.com/en/weekly/weekly-08): Sharing personal experience building RSS services, exploring invisible details in interaction design, and introducing practical tools for migrating music playlists to Apple Music.
+- [Double Diamond Design Model:Golden Framework Analysis from User Needs to Product Implementation - No.07 Black Light Weekly](https://cgartlab.com/en/weekly/weekly-07): Want to understand how the double diamond design model connects "user needs" with "product implementation"? This article deeply analyzes its four stages (discover-define-develop-deliver) core tasks and output results, revealing how the "golden framework" achieves complete workflow from concept to product through iterative design. Whether you're a product manager, designer, or brand strategist, you can gain systematic design methodology to improve project implementation efficiency.
+- [The Real "Workhorses" and macOS Icon History - No.06 Black Light Weekly](https://cgartlab.com/en/weekly/weekly-06): From the self-deprecating "workhorse" label of modern workers to the carefree existence of real workhorses, this article explores the impermanent nature of technology and design from a Zen perspective. Tracing macOS icon style evolution over nearly 30 years (skeuomorphism → flat design → liquid glass), it reveals Apple's design language shift from function-driven to emotional expression. Combining WWDC 2025 liquid glass design and AR layout speculation, it proposes balancing technological innovation with Zen living:embracing the present like workhorses while maintaining openness to the future in the digital wave.
+- [Participating in the Art of Dream-Making - No.05 Black Light Weekly](https://cgartlab.com/en/weekly/weekly-05): Deep dive into movie production behind-the-scenes:from cyberpunk fog scenes at Qingdao Oriental Movie Metropolis to top-tier crew collaboration challenges, revealing how AI tools like NotebookLM, NoteGen, and Silicon Flow are revolutionizing creative workflows. Plus exclusive analysis of Mode's brand redesign double diamond framework, exploring how 'warm technology' reconstructs product value. Subscribe to Black Light Weekly for deep insights into digital art, knowledge management, and entrepreneurial thinking!
+- [Refurbished Graphics Card and New Renderer - No.04 Black Light Weekly](https://cgartlab.com/en/weekly/weekly-04): Sharing experiences with graphics card repairs, exploring new rendering technologies, and discussing hardware maintenance insights for digital artists.
+- [Free Benefits - No.03 Black Light Weekly](https://cgartlab.com/en/weekly/weekly-03): Sharing experiences as a freelancer adjusting sleep schedules, discussing efficiency gains from early rising and time management advantages, and exploring flexibility in switching between different sleep patterns.
+- [The Magic Numbers on the Clock - No.02 Black Light Weekly](https://cgartlab.com/en/weekly/weekly-02): Exploring the fascinating phenomenon of time perception, analyzing subjective differences in time experience across different periods, and sharing insights on time management inspired by a physics teacher.
+- [Launch Statement - No.01 Black Light Weekly](https://cgartlab.com/en/weekly/weekly-01): The weekly starts from here
