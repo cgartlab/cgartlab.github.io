@@ -1,7 +1,7 @@
 # AGENTS.md
 
 ## Project Overview
-Astro-based static site for "CG艺术实验室" (cgartlab.com). Theme derived from `astro-theme-retypeset`.
+Astro-based static site for "CG艺术实验室" (cgartlab.com). Theme for CGArtLab.
 
 ## Dev Commands
 
