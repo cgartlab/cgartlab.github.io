@@ -1,9 +1,11 @@
 ---
-title: Breaking the Binary Opposition of Emotions with Elementary School Math
-description: Re-examining emotional issues through the lens of elementary school math thinking, discovering that emotions are not black-and-white binary oppositions but calculable, balanceable continuous spectrums. A journey of emotional exploration through mathematical thinking.
+title: "Breaking Emotional Binary Opposition with Math: Emotional Intelligence Guide"
+description: "Discover a unique mathematical approach to emotional intelligence. Learn how emotions exist on a continuous spectrum rather than binary oppositions, and develop practical emotional regulation skills through this framework."
 published: 2023-10-03
 tags:
   - Essay
+  - Emotional Intelligence
+  - Psychology
 toc: true
 pin: 0
 draft: false
@@ -11,7 +13,7 @@ lang: en
 abbrlink: how-to-break-binary-opposition
 ---
 
-![Cover](./_images/用小学数学破除情绪的二元对立-1754566959648.webp)
+![Digital artwork from the Meditation series exploring emotional depth and psychological balance](./_images/用小学数学破除情绪的二元对立-1754566959648.webp)
 
 When people talk about emotions online, they often jump straight to emotional management. I'm not in a hurry to discuss management - if we haven't even understood what emotions are, what is there to manage?
 

@@ -1,10 +1,12 @@
 ---
-title: Achieving Whole-House Scientific Internet Access with Router Configuration
+title: "Router Configuration Guide: Whole-House Network Setup with SSH & ShellClash"
 published: 2023-03-12
-description: This article explains how to achieve whole-house scientific internet access using a router, including steps like unlocking SSH, calculating router root password, using Termius to enable SSH, and installing/configuring ShellClash. Using Redmi AX6S router as an example, but theoretically this process applies to various routers, provided you can find unlockable firmware and root password calculation methods for the specific model.
+description: "Complete router configuration tutorial for whole-house network access. Learn SSH unlocking, root password calculation, Termius setup, and ShellClash installation using Redmi AX6S router example."
 updated: 2023-03-14
 tags:
   - tech-sharing
+  - Networking
+  - Tutorial
 draft: false
 pin: 0
 toc: true
@@ -12,7 +14,7 @@ lang: en
 abbrlink: how-to-setup-full-home-science-internet
 ---
 
-![Cover](./_images/用路由器实现全屋科学上网-1754477267589.webp)
+![Router network configuration diagram showing whole-house connectivity setup and SSH access points](./_images/用路由器实现全屋科学上网-1754477267589.webp)
 
 ## Introduction
 

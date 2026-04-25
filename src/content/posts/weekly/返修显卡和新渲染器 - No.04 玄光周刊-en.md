@@ -1,10 +1,12 @@
 ---
-title: Refurbished Graphics Card and New Renderer - No.04 Black Light Weekly
+title: "Refurbished Graphics Card and New Renderer - No.04 Black Light Weekly | CG Hardware Guide"
 published: 2025-07-11
-description: Sharing experiences with graphics card repairs, exploring new rendering technologies, and discussing hardware maintenance insights for digital artists.
+description: "Essential graphics card maintenance tips and 3D rendering technology reviews for digital artists. Learn hardware reliability strategies and discover new rendering tools for creative workflows."
 updated: 2025-08-06
 tags:
   - Weekly
+  - 3D Rendering
+  - Hardware
 draft: false
 pin: 0
 toc: true
@@ -12,7 +14,7 @@ lang: en
 abbrlink: weekly-04
 ---
 
-![Cover](../_images/04%20玄光周刊-返修显卡和新渲染器-1754596290223.webp)
+![Workstation setup with graphics card repair process for digital artists and 3D designers](../_images/04%20玄光周刊-返修显卡和新渲染器-1754596290223.webp)
 
 This week's cover shows my workstation setup—the very graphics card that went through the repair process I'll be discussing.
 

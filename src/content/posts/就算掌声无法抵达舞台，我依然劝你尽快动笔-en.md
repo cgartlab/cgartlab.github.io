@@ -1,10 +1,12 @@
 ---
-title: Even If Applause Can't Reach the Stage, I Still Urge You to Pick Up Your Pencil Now
+title: "Even If Applause Can't Reach the Stage: A Creator's Guide to Starting Your Journey"
 published: 2026-01-31
-description: The cover image is from Dan Koe's personal website. Even though it's AI-generated, I really like this picture. It reminds me of the day I went abroad to study—stepping out of the airport alone into an unfamiliar country, facing endless unknowns ahead, yet with direction and motivation exceptionally clear. Two seemingly contradictory forces harmoniously coexisting within.
+description: "Overcome creative fear and start your writing or artistic journey today. Learn from Dan Koe's content strategy, discover the 'Show Your Work' philosophy, and find practical motivation for creative beginners in the digital age."
 updated: 2026-01-31
 tags:
   - Essay
+  - Creativity
+  - Writing
 draft: false
 pin: 0
 toc: true
@@ -12,7 +14,7 @@ lang: en
 abbrlink: pick-your-pencil-now
 ---
 
-![Image from thedankoe.com](_images/12%20玄光周刊-Dan%20Koe-1769310982170.webp)
+![Inspirational landscape image representing the creative journey and stepping into the unknown as an artist](./_images/12%20玄光周刊-Dan%20Koe-1769310982170.webp)
 
 This image is from Dan Koe's personal website. Even though it's AI-generated, I really like this picture. It reminds me of the day I went abroad to study—stepping out of the airport alone into an unfamiliar country, facing endless unknowns ahead, yet with direction and motivation exceptionally clear. Two seemingly contradictory forces harmoniously coexisting within.
 

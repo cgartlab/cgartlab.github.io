@@ -1,10 +1,12 @@
 ---
-title: Free Benefits - No.03 Black Light Weekly
+title: "Free Benefits - No.03 Black Light Weekly | Freelancer Sleep Schedule & Productivity Tips"
 published: 2025-07-10
-description: Sharing experiences as a freelancer adjusting sleep schedules, discussing efficiency gains from early rising and time management advantages, and exploring flexibility in switching between different sleep patterns.
+description: "Discover freelancer productivity tips and early rising benefits. Learn how adjusting your sleep schedule can boost creative workflow efficiency and improve work-life balance for digital creators."
 updated: 2025-08-06
 tags:
   - Weekly
+  - Productivity
+  - Freelancing
 draft: false
 pin: 0
 toc: true
@@ -12,7 +14,7 @@ lang: en
 abbrlink: weekly-03
 ---
 
-![Cover](../_images/03%20玄光周刊-白给的福利-1754596081920.webp)
+![Morning routine scene from Thailand study abroad experience representing disciplined lifestyle](../_images/03%20玄光周刊-白给的福利-1754596081920.webp)
 
 This week's cover was taken during my study abroad in Thailand. What does it have to do with early rising? Perhaps for me, both represent ways to establish order in life.
 

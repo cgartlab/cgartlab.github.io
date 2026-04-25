@@ -1,10 +1,12 @@
 ---
-title: Brush and Stroke
-description: Recent work has been leaning more towards painting direction, and driven by my instinctive love for painting, I've had many thoughts on the subject.
+title: "Brush and Stroke: Essential Guide to Digital Painting Techniques"
+description: "Master digital painting fundamentals with our guide to brushes and strokes. Learn brush settings in Photoshop, understand shape and texture properties, and discover how strokes convey emotion in CG art."
 published: 2022-05-29
 updated: 2022-12-11
 tags:
   - digital-art
+  - Photoshop
+  - Tutorial
 toc: true
 pin: 0
 draft: false
@@ -12,7 +14,7 @@ lang: en
 abbrlink: brush-and-stroke
 ---
 
-![cover](./_images/打造第二大脑-1754474053916.webp)
+![Digital painting brushes collection showcasing various brush shapes and textures for CG artists](./_images/打造第二大脑-1754474053916.webp)
 
 ## Introduction
 

@@ -1,10 +1,12 @@
 ---
-title: Double Diamond Design Model:Golden Framework Analysis from User Needs to Product Implementation - No.07 Black Light Weekly
+title: "Double Diamond Design Model: Golden Framework from User Needs to Product - No.07 Weekly"
 published: 2025-07-25
-description: Want to understand how the double diamond design model connects "user needs" with "product implementation"? This article deeply analyzes its four stages (discover-define-develop-deliver) core tasks and output results, revealing how the "golden framework" achieves complete workflow from concept to product through iterative design. Whether you're a product manager, designer, or brand strategist, you can gain systematic design methodology to improve project implementation efficiency.
+description: "Master the double diamond design model with our comprehensive guide. Learn the four stages (discover, define, develop, deliver) of this UX design framework to improve product development workflow and user-centered design processes."
 updated: 2025-08-08
 tags:
   - Weekly
+  - UX Design
+  - Product Design
 draft: false
 pin: 0
 toc: true
@@ -12,7 +14,7 @@ lang: en
 abbrlink: weekly-07
 ---
 
-![Cafe Storefront on Badaguan University Road, Qingdao](../_images/07%20玄光周刊-双钻石设计模型：从用户需求到产品落地的黄金框架解析-1754596998369.webp)
+![Historic cafe storefront on Badaguan University Road in Qingdao showcasing German colonial architecture and design aesthetics](../_images/07%20玄光周刊-双钻石设计模型：从用户需求到产品落地的黄金框架解析-1754596998369.webp)
 
 This week's cover was shot in a small alley near Badaguan University Road in Qingdao—a very beautiful cafe storefront. Apparently, most buildings in this area were constructed by Germans during the Qing dynasty. Further down this alley is Lao She's former residence. If you have the chance, you should come experience sitting by the sea drinking coffee, listening to music, and enjoying the sea breeze.
 

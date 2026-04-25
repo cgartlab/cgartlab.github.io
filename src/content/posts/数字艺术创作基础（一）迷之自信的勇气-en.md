@@ -1,10 +1,12 @@
 ---
-title: Digital Art Creation Basics (Part 1) The Courage of Mysterious Confidence
+title: "Digital Art Creation Basics (Part 1): The Courage to Start Creating"
 published: 2024-05-05
-description: Exploring confidence and courage in digital art creation, sharing experiences on taking the first step
+description: "Begin your digital art journey with confidence. Learn fundamental concepts, overcome creative fear, and discover why starting before you're ready is the key to success in CG art and digital painting."
 updated: 2024-11-25
 tags:
   - digital-art
+  - Tutorial
+  - Creativity
 draft: false
 pin: 0
 toc: true
@@ -12,7 +14,7 @@ lang: en
 abbrlink: digitalpainting1-confidence
 ---
 
-![Digital art creation cover image, showcasing the theme of creativity and courage](./_images/数字艺术创作基础（一）迷之自信的勇气-1754579749806.webp)
+![Digital art creation cover showcasing creativity, courage, and the beginner's journey in CG painting](./_images/数字艺术创作基础（一）迷之自信的勇气-1754579749806.webp)
 
 ## Introduction
 

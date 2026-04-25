@@ -1,11 +1,12 @@
 ---
-title: RSS and Modern Reading Habits (Part 1) - How to Reshape Deep Reading Experience in the Fragmented Era
-description: Exploring how to reshape deep reading experience through RSS in the fragmented era - a comprehensive guide from concept to practice
+title: "RSS and Modern Reading Habits (Part 1): Reshape Deep Reading in the Fragmented Era"
+description: "Master RSS for deep reading in the digital age. Learn how to escape algorithm recommendations, build focused reading habits, and reclaim your attention span with practical RSS setup strategies."
 published: 2024-12-05
 updated: 2024-12-15
 tags:
   - knowledge-management
   - tech-sharing
+  - RSS
 draft: false
 pin: 0
 toc: true
@@ -13,7 +14,7 @@ lang: en
 abbrlink: rss-1
 ---
 
-![RSS reader interface display, symbolizing modern deep reading experience](./_images/RSS%20与现代阅读习惯（一）：如何在碎片化时代重塑深度阅读体验-1754593562740.webp)
+![RSS reader interface displaying organized article feeds for focused deep reading experience](./_images/RSS%20与现代阅读习惯（一）：如何在碎片化时代重塑深度阅读体验-1754593562740.webp)
 
 ## Preface: The Accelerating Era, Where Do We Go From Here?
 

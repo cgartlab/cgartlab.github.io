@@ -1,11 +1,12 @@
 ---
-title: RSS and Modern Reading Habits (Part 2) - Regaining Control Over Information Collection
+title: "RSS and Modern Reading Habits (Part 2): Regain Control Over Information Collection"
 published: 2025-06-30
-description: Practical experience sharing on building a personal fragmented information collection system based on RSS, including recommendations for quality RSS sources and tool usage insights
+description: "Build a personal information collection system with RSS. Discover quality RSS sources, tool recommendations, and practical workflows for managing fragmented information and curating your digital reading experience."
 updated: 2025-06-30
 tags:
   - knowledge-management
   - tech-sharing
+  - RSS
 draft: false
 pin: 0
 toc: true
@@ -13,7 +14,7 @@ lang: en
 abbrlink: rss-2
 ---
 
-![Cover](./_images/RSS%20与现代阅读习惯（二）：重新获取信息收集的主动权-1754680839895.webp)
+![RSS information collection system showing curated feeds and organized reading workflow for knowledge workers](./_images/RSS%20与现代阅读习惯（二）：重新获取信息收集的主动权-1754680839895.webp)
 
 ## Introduction
 

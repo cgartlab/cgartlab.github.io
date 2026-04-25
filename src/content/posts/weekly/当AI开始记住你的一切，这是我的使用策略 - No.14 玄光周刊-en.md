@@ -1,10 +1,12 @@
 ---
-title: When AI Starts Remembering Everything About You, Here's My Strategy - No.14 Black Light Weekly
+title: "AI Long-Term Memory Strategy: When AI Remembers Everything - No.14 Weekly"
 published: 2026-03-20
-description: In 2026, large language model platforms almost simultaneously made a key choice:adding 'complex tasks' and 'long-term memory' features. Each platform may have different names for them, and some have limited free quotas. This is the inevitable evolution of AI.
+description: "Master AI long-term memory features with proven strategies for ChatGPT, Claude, and other LLMs. Learn how to organize AI projects, manage conversation context, and maintain data privacy while maximizing AI productivity."
 updated: 2026-03-20
 tags:
   - Weekly
+  - AI Strategy
+  - Productivity
 draft: false
 pin: 0
 toc: true
@@ -12,7 +14,7 @@ lang: en
 abbrlink: weekly-14
 ---
 
-![Cover](../_images/14%20玄光周刊-当%20AI%20开始记住你的一切，这是我的使用策略-1774007950655.webp)
+![Custom-built mechanical keyboard for lightweight development tasks and creative writing workflows](../_images/14%20玄光周刊-当%20AI%20开始记住你的一切，这是我的使用策略-1774007950655.webp)
 
 This issue's cover was photographed from a newly assembled 'typewriter', just taken. This machine's positioning is: if the main workstation is doing heavy work, it can simultaneously allow me to handle some lightweight development tasks. (This weekly issue was written using it, very pleasant.)
 

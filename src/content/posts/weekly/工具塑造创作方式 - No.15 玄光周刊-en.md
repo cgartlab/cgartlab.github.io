@@ -1,10 +1,12 @@
 ---
-title: Tools Shaping How We Create - No.15 Black Light Weekly
+title: "Tools Shaping How We Create - No.15 Black Light Weekly | Creative Workflow Evolution"
 published: 2026-04-10
-description: From professional software to workflow-focused tools, to actively participating AI. This raises a core question - When tools can "create," where does human value lie? The answer lies in judgment, the ability to identify direction and define meaning amid noise. As execution costs decline, judgment becomes the truly scarce resource for creators.
+description: "Explore how creative tools evolve from Photoshop to AI-powered workflows. Discover Jan local AI, Figma MCP pipelines, and Appwrite backend services that are reshaping digital creation and design processes."
 updated: 2026-04-10
 tags:
   - Weekly
+  - Creative Tools
+  - AI Workflow
 draft: false
 pin: 0
 toc: true
@@ -12,7 +14,7 @@ lang: en
 abbrlink: weekly-15
 ---
 
-![cover](../_images/15%20玄光周刊--1775823220806.webp)
+![Universal Studios Singapore scene representing creative inspiration and global design trends](../_images/15%20玄光周刊--1775823220806.webp)
 
 This issue's cover was photographed at Universal Studios Singapore—it's quite hard to avoid catching extra tourists in the shot.
 

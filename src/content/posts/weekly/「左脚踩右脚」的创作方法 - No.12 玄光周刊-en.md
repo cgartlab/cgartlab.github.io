@@ -1,10 +1,12 @@
 ---
-title: The "Left Foot Stepping on Right Foot" Creative Method - No.12 Black Light Weekly
+title: "The Left Foot Stepping on Right Foot Creative Method - No.12 Weekly | Knowledge Management"
 published: 2026-02-03
-description: What does "left foot stepping on right foot" mean? Let me explain it to you slowly...
+description: "Discover the recursive creative method linking knowledge management and content creation. Learn how to build a self-propelling creative system using interconnected notes and writing workflows for digital creators."
 updated: 2026-02-03
 tags:
   - Weekly
+  - Knowledge Management
+  - Creativity
 draft: false
 pin: 0
 toc: true
@@ -12,7 +14,7 @@ lang: en
 abbrlink: weekly-12
 ---
 
-![cover](../_images/12%20玄光周刊-「左脚踩右脚」的创作方法-1769845597946.webp)
+![Supervisor cat watching creative work demonstrating the patience and curiosity essential for knowledge workers](../_images/12%20玄光周刊-「左脚踩右脚」的创作方法-1769845597946.webp)
 
 This week's cover comes from my supervisor—it doesn't love work but enjoys watching me work. Staring at the mouse cursor moving back and forth, it can persist here for 3 hours. It doesn't like hard wooden desktops, so I sacrificed my laptop sleeve. If replaced with a softer mat, it would probably persist even longer.
 

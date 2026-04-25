@@ -1,10 +1,12 @@
 ---
-title: Google's UI Design Philosophy - No.11 Black Light Weekly
+title: "Google's UI Design Philosophy - No.11 Black Light Weekly | Design Systems & Motion Awards"
 published: 2026-01-15
-description: Speaking of which, as the weather gets colder, 👆 this one eats more (and poops more too). Has grown from 2.25kg when first brought home last year to over 3.5kg now—definitely feels heavier when picked up. It's been a year and a half since bringing her home. Even if she becomes a "gas tank," it's fine as long as she's safe and healthy.
+description: "Explore Google's Material Design philosophy, The Motion Awards 2025 trends, and Vitsœ's timeless design principles. Discover how systematic design thinking shapes digital products and user experiences."
 updated: 2026-01-15
 tags:
   - Weekly
+  - UI Design
+  - Motion Design
 draft: false
 pin: 0
 toc: true
@@ -12,7 +14,7 @@ lang: en
 abbrlink: weekly-11
 ---
 
-![Cover](../_images/11%20玄光周刊-Obsidian史诗级更新-1768401629456.webp)
+![Google Design website showcasing modern UI design philosophy and digital product case studies](../_images/11%20玄光周刊-Obsidian史诗级更新-1768401629456.webp)
 
 This week's cover sponsored by the boss.
 

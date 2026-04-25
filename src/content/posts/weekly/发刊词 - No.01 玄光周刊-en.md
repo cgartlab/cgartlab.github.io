@@ -1,10 +1,12 @@
 ---
-title: Launch Statement - No.01 Black Light Weekly
+title: "Launch Statement - No.01 Black Light Weekly | CG Art Lab"
 published: 2025-01-03
-description: The weekly starts from here
+description: "Welcome to Black Light Weekly - a curated newsletter on digital art, visual design, and frontend development. Discover insights on creativity, knowledge management, and personal growth."
 updated: 2025-01-03
 tags:
   - Weekly
+  - Digital Art
+  - Design
 draft: false
 pin: 0
 toc: true
