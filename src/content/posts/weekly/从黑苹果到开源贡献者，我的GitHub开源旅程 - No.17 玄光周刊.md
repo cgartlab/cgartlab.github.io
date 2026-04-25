@@ -1,7 +1,7 @@
 ---
-published: 2026-04-25
 title: 我的开源旅程 - No.17 玄光周刊
-description: （这里写描述，140 字以内）
+description: 疫情初期，我因折腾黑苹果首次接触开源。从最开始套用别人分享的EFI文件。直到翻阅驱动源码时看到上百人为硬件ID反复调试，才意识到这套系统是志愿者用业余时间一砖一瓦搭建的。
+published: 2026-04-25
 updated: 2026-04-25
 tags:
   - 周刊
@@ -9,7 +9,7 @@ draft: true
 pin: 0
 toc: true
 lang: zh
-abbrlink: weekly-xx
+abbrlink: weekly-17
 ---
 
 本期封面拍摄自/来自
