@@ -27,7 +27,11 @@ abbrlink: weekly-xx
 
 ## 本期主题：我的开源旅程
 
-GitHub 主页：[https://github.com/cgartlab ](https://github.com/cgartlab)
+> 我的 GitHub 主页：[https://github.com/cgartlab ](https://github.com/cgartlab)
+
+我最早接触到的开源这个概念是在疫情初期，当时被关在家里百无聊赖，于是开始折腾起了黑苹果这个东西。所谓黑苹果就是在 Windows PC 上安装苹果系统。那个时候苹果还没有出 M 系列芯片，正版机器普遍都存在高价低配的问题，所以为了能同时用 Windows 和 Mac，开始了折腾。
+
+当时国内讨论黑苹果的论坛很少，网站就那么几个。折腾过程不表，和开源有关的就是想让苹果系统认为一台 Windows PC 是正常的苹果硬件，就需要对系统的引导文件进行一定的参数调整。包括不限于，各种驱动，硬件 ID 号，型号伪装等各种代码增减。
 
 ---
 
