@@ -1,10 +1,12 @@
 ---
-title: "WordPress Plugin Store Won't Open: Complete Loop Error Troubleshooting and Fix Steps"
+title: "WordPress Plugin Store Loop Error: Troubleshooting & Fix Guide"
 published: 2025-07-01
-description: Troubleshooting and fixing steps for WordPress plugin store loop errors, including two solutions using Baota Panel and terminal commands.
+description: "Fix WordPress plugin store loop errors with our step-by-step troubleshooting guide. Learn DNS resolution fixes using Baota Panel and terminal commands for WordPress site health restoration."
 updated: 2025-07-01
 tags:
   - tech-sharing
+  - WordPress
+  - Tutorial
 draft: false
 pin: 0
 toc: true
@@ -12,7 +14,7 @@ lang: en
 abbrlink: fix-wordpress-plugin-store
 ---
 
-![Cover](./_images/WordPress插件商店打不开，搞定回环错误排查与修复步骤-1754594730853.webp)
+![WordPress site health error showing loopback error and DNS resolution troubleshooting process](./_images/WordPress插件商店打不开，搞定回环错误排查与修复步骤-1754594730853.webp)
 
 ## Introduction
 

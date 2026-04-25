@@ -1,10 +1,12 @@
 ---
-title: The Pine Trees of Golden Beach - No.08 Black Light Weekly
+title: "The Pine Trees of Golden Beach - No.08 Black Light Weekly | RSS & Interaction Design"
 published: 2025-07-31
-description: Sharing personal experience building RSS services, exploring invisible details in interaction design, and introducing practical tools for migrating music playlists to Apple Music.
+description: "Learn how to build your own RSS service and discover invisible interaction design details in iOS and macOS. Plus practical tools for migrating music playlists to Apple Music for creative professionals."
 updated: 2025-08-08
 tags:
   - Weekly
+  - RSS
+  - Interaction Design
 draft: false
 pin: 0
 toc: true
@@ -12,7 +14,7 @@ lang: en
 abbrlink: weekly-08
 ---
 
-![Pine trees blown sideways by sea wind on a small island near Qingdao Golden Beach](../_images/08%20玄光周刊-金沙滩的松树-1754597325224.webp)
+![Pine trees shaped by sea wind on Qingdao Golden Beach island showcasing natural resilience and organic textures](../_images/08%20玄光周刊-金沙滩的松树-1754597325224.webp)
 
 This week's cover was shot on a small island near Qingdao Golden Beach. The inner side of the circular island path is lined with these pine trees blown sideways by sea winds, combined with dense pine needles creating unique textures resembling waves and rolling clouds.
 

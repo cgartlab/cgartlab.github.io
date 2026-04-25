@@ -1,10 +1,12 @@
 ---
-title: "I Still Don't Know"
-description: "Reflections on knowledge background and pure sensation, exploring how to maintain authentic perception in the information age."
+title: "I Still Don't Know: Authentic Perception in the Information Age"
+description: "Explore the tension between knowledge background and pure sensory experience in art appreciation. Discover how to maintain authentic perception while navigating information overload in digital culture."
 published: 2024-03-28
 updated: 2024-11-24
 tags:
-- Essay
+  - Essay
+  - Art Appreciation
+  - Mindfulness
 draft: false
 pin: 0
 toc: true
@@ -12,7 +14,7 @@ lang: en
 abbrlink: know-nothing
 ---
 
-![Cover](./_images/至今我不知道-1754570365993.webp)
+![Abstract digital artwork representing the mystery of pure sensory experience beyond knowledge](./_images/至今我不知道-1754570365993.webp)
 
 Every time I create something in a different style, I have to search for many references based on others' requirements or my own concepts.
 

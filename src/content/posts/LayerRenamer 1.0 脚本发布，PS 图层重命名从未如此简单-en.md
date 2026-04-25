@@ -1,10 +1,12 @@
 ---
-title: LayerRenamer 1.0 Script Released - Photoshop Layer Renaming Has Never Been Easier
+title: "LayerRenamer 1.0: Photoshop Batch Layer Renaming Script for Designers"
 published: 2024-09-10
-description: Photoshop batch layer renaming script LayerRenamer 1.0 released, supporting custom naming rules and numbering formats to improve design workflow efficiency
+description: "Download LayerRenamer 1.0 free Photoshop script for batch layer renaming. Supports custom naming rules, numbering formats, and grouping to streamline your design workflow and boost productivity."
 updated: 2024-12-11
 tags:
   - tech-sharing
+  - Photoshop
+  - Automation
 draft: false
 pin: 0
 toc: true
@@ -12,7 +14,7 @@ lang: en
 abbrlink: layerrenamer-1
 ---
 
-![LayerRenamer script cover image, showcasing Photoshop batch layer renaming functionality](_images/LayerRenamer%201.0%20脚本发布，PS%20图层重命名从未如此简单-1754591673573.webp)
+![LayerRenamer Photoshop script interface showing batch layer renaming functionality for designers](_images/LayerRenamer%201.0%20脚本发布，PS%20图层重命名从未如此简单-1754591673573.webp)
 
 ## Introduction
 

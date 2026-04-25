@@ -1,12 +1,13 @@
 ---
-title: Meditation Series
+title: "Meditation Series: Digital Art Exploring Consciousness and Inner Self"
 published: 2019-08-08
-description: Meditation is a form of consciousness transformation, a process of dissecting one's inner self, and a path to approaching reality infinitely. I first encountered this concept in 2013, and in the subsequent years of work and life, it gradually became a habit of communicating with myself.
+description: "Explore the Meditation Series digital artworks exploring consciousness transformation and inner self-discovery. View CG art pieces that visualize psychological depth, mindfulness, and the journey toward authentic reality."
 updated: 2019-08-08
 tags:
   - Digital Painting
-  - meditation
-  - mindfulness
+  - Meditation
+  - Mindfulness
+  - Portfolio
 draft: false
 pin: 0
 toc: true
@@ -14,7 +15,7 @@ lang: en
 abbrlink: meditation-series
 ---
 
-![Meditation Series](../_images/冥想系列-1754664741640.webp)
+![Meditation Series digital artwork exploring consciousness transformation and psychological depth through CG painting](../_images/冥想系列-1754664741640.webp)
 
 ## About the Work
 

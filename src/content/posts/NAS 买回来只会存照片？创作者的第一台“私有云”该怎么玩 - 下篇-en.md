@@ -1,19 +1,20 @@
 ---
 draft: false
-title: NAS Beyond Photos - How to Build Your First Private Cloud for Creators - Part 2
+title: "NAS for Creators Part 2: Build Your Private Cloud Storage System"
 abbrlink: nas-beyond-photos-your-first-private-cloud-2
 published: 2026-01-27
 tags:
   - Knowledge Management
   - Tech Sharing
-description: NAS is more than just a networked hard drive box—it's your personal data center. This series skips complex code and commands to show you how to establish the most basic creative storage logic.
+  - NAS
+description: "Build your creator NAS storage system with our practical guide. Learn hard drive selection, RAID configuration, four-layer storage logic, and workflow optimization for creative professionals."
 updated: 2026-01-24
 pin: 0
 toc: true
 lang: en
 ---
 
-![My current data center, all drive bays are now filled](_images/11月的拔草记录和选荐-1754916668923%201.webp)
+![Personal data center with all drive bays filled showing NAS storage setup for creative professionals](_images/11月的拔草记录和选荐-1754916668923%201.webp)
 
 ## Before We Begin
 

@@ -1,10 +1,12 @@
 ---
-title: How to Use Winget Package Manager in Windows 11
-description: Complete guide to using Windows 11 winget package manager, including installation, search, update, uninstall software and automated script configuration
+title: "How to Use Winget Package Manager in Windows 11: Complete Tutorial"
+description: "Master Windows 11 winget package manager with our complete guide. Learn installation, search, update, uninstall commands, and automated script configuration for efficient software management."
 published: 2024-03-01
 updated: 2024-03-09
 tags:
   - tech-sharing
+  - Windows 11
+  - Tutorial
 draft: false
 pin: 0
 toc: true
@@ -12,7 +14,7 @@ lang: en
 abbrlink: use-winget-on-win11
 ---
 
-![Cover](./_images/Windows%2011%20如何使用%20winget%20包管理器-1754567460839.webp)
+![Windows 11 terminal showing winget package manager commands for software installation and management](./_images/Windows%2011%20如何使用%20winget%20包管理器-1754567460839.webp)
 
 ## What is Winget
 

@@ -1,10 +1,12 @@
 ---
-title: Fragmented Writing - Building a Thinking Specimen
+title: "Fragmented Writing: Building a Thinking Specimen | Creative Knowledge Management"
 published: 2024-03-22
-description: View writing as the process of building thinking specimens, systematically organizing and expressing thoughts through fragmented writing methods.
+description: "Learn fragmented writing techniques for creative knowledge management. Discover how Git version control principles can transform your note-taking and writing workflow into a systematic thinking process."
 updated: 2024-11-25
 tags:
   - knowledge-management
+  - Writing
+  - Git
 draft: false
 pin: 0
 toc: true

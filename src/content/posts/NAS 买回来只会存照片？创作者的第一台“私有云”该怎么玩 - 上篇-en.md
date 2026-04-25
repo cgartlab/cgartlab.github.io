@@ -1,12 +1,13 @@
 ---
 draft: false
-title: NAS Beyond Photos:Your First Private Cloud for Creators
+title: "NAS for Creators Part 1: Your First Private Cloud Setup Guide"
 abbrlink: nas-beyond-photos-your-first-private-cloud-1
 published: 2026-01-24
 tags:
   - Essay
   - knowledge-management
-description: It's not just a hard drive box, but your personal data center. Skip the complex command lines and learn how to establish the most basic creator storage logic.
+  - NAS
+description: "NAS is more than a hard drive box—it's your personal data center. Learn the basics of NAS setup for creators, from understanding storage needs to building efficient creative workflows without complex commands."
 updated: 2026-01-24
 pin: 0
 toc: true
@@ -17,7 +18,7 @@ lang: en
 
 This series skips complex technologies and focuses on establishing the most basic storage and workflow logic for creators. For better reading experience, it's divided into two parts. This part is for beginners, if you already have a NAS, you can check out the next part.
 
-![Last year, I was debugging the NAS in my study room from the sofa](_images/解析设计师的第二大脑：从理念到实践-1754577343145%201.webp)
+![NAS setup in home study room showing personal data center configuration for creative professionals](_images/解析设计师的第二大脑：从理念到实践-1754577343145%201.webp)
 
 More and more people are using NAS these days. However, many people first hear about NAS through advertisements that emphasize storing large amounts of movies, files, photos, and videos - essentially a networked "hard drive box."
 

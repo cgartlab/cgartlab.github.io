@@ -1,10 +1,12 @@
 ---
-title: The Conversations You Had with AI Might Not Belong to You - No.13 Black Light Weekly
+title: "AI Data Privacy: Your Conversations Might Not Belong to You - No.13 Weekly"
 published: 2026-02-05
-description: Since I started using the internet in college, I've never trusted any cloud storage or cloud services. This feeling faded a lot after the development of mobile internet because the internet was everywhere. But after AI emerged, I truly realized how valuable personal data is. At the same time, I also think this is something that most people using these AI platforms easily overlook.
+description: "Protect your AI conversation data with our guide to data sovereignty and self-hosted solutions. Learn which AI platforms allow data export and how to build a private home data center for complete control."
 updated: 2026-02-05
 tags:
   - Weekly
+  - Data Privacy
+  - Self-Hosting
 draft: false
 pin: 0
 toc: true
@@ -12,7 +14,7 @@ lang: en
 abbrlink: weekly-13
 ---
 
-![Cover](../_images/13%20玄光周刊-你和AI聊过的天，可能并不属于你-1772119824577.webp)
+![Warner Bros logo evolution demonstrating brand identity design history and visual heritage](../_images/13%20玄光周刊-你和AI聊过的天，可能并不属于你-1772119824577.webp)
 
 This week's cover is the evolution of the Warner Bros logo, from [Logopedia | Fandom](https://logos.fandom.com/wiki/Logopedia). This is a website dedicated to documenting and collecting the visual design evolution of world-famous brand logos. It's very interesting, especially for century-old brands like Warner Bros and Disney, which have almost spanned most of design history.
 

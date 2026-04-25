@@ -1,10 +1,12 @@
 ---
-title: The Magic Numbers on the Clock - No.02 Black Light Weekly
+title: "The Magic Numbers on the Clock - No.02 Black Light Weekly | Time Perception & Productivity"
 published: 2025-07-07
-description: Exploring the fascinating phenomenon of time perception, analyzing subjective differences in time experience across different periods, and sharing insights on time management inspired by a physics teacher.
+description: "Explore time perception psychology and time management strategies. Discover why time feels faster as we age and how to leverage time awareness for better productivity and creative workflows."
 updated: 2025-08-06
 tags:
   - Weekly
+  - Productivity
+  - Psychology
 draft: false
 pin: 0
 toc: true
@@ -12,7 +14,7 @@ lang: en
 abbrlink: weekly-02
 ---
 
-![Cover](../_images/02%20玄光周刊-表上的数字很神奇-1754594890036.webp)
+![Pine trees on Qingdao Golden Beach illustrating the passage of time and seasonal change](../_images/02%20玄光周刊-表上的数字很神奇-1754594890036.webp)
 
 The first cover naturally comes from Luya—this was taken about a month after she arrived at my home, when she had just gotten familiar with the environment and dared to jump on the desk to supervise my work.
 

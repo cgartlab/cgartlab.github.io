@@ -1,11 +1,12 @@
 ---
-title: Let the World Keep Turning, Don't Worry About Your Learning Becoming Obsolete
+title: "Let the World Keep Turning: Why Your Skills Won't Become Obsolete in the AI Era"
 published: 2026-03-08
-description: In the first two months of 2026, the AI industry has shifted from "model version competition" to "Agent agents." How to make AI work autonomously like employees and collaborate with each other has begun to reconstruct my regular workflow. After experiencing a month of deploying, designing, developing, and collaborating with OpenClaw from 0 to 1, I believe I should write an article to consolidate my experience and thinking on AI technology in recent years.
+description: "Navigate the AI revolution with confidence. Discover why systematic thinking, aesthetic judgment, and creative workflows remain valuable despite AI advancement. Learn practical strategies for integrating AI tools into design and animation work."
 updated: 2026-03-08
 tags:
   - Essay
-  - Knowledge Management
+  - AI Strategy
+  - Career Development
 draft: false
 pin: 0
 toc: true

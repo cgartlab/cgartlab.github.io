@@ -1,10 +1,12 @@
 ---
-title: OpenAI Launches Learning Mode - No.09 Black Light Weekly
+title: "OpenAI Launches Learning Mode - No.09 Black Light Weekly | AI Education Trends"
 published: 2025-08-02
-description: This week's weekly mainly discusses OpenAI's newly launched learning mode, the advantages of newsletter dissemination format, and recommends IGLOO company's creative website design.
+description: "Explore OpenAI's new ChatGPT Learning Mode and AI education trends. Discover why newsletter format matters for content creators and see IGLOO's award-winning creative website design examples."
 updated: 2025-08-02
 tags:
   - Weekly
+  - AI Education
+  - Newsletter
 draft: false
 pin: 0
 toc: true
@@ -12,7 +14,7 @@ lang: en
 abbrlink: weekly-09
 ---
 
-![Cover](../_images/09%20玄光周刊-OpenAI推出学习模式-1754681868774.webp)
+![Monstera plant thriving in home office environment symbolizing growth and learning](../_images/09%20玄光周刊-OpenAI推出学习模式-1754681868774.webp)
 
 This week's cover features a monstera plant I keep at home. Initially placed in the living room, it wasn't thriving well. After moving it to the study, it regained vitality, growing from 7 leaves to 12. The color of newly emerged leaves is extremely vibrant, almost artificial-looking. It sits on a small refrigerator in the corner by the window—every two weeks or so, the leaves quietly stretch toward the light, requiring occasional pot rotation.
 

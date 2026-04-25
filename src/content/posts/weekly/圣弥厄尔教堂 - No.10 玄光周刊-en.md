@@ -1,10 +1,12 @@
 ---
-title: St. Michael's Cathedral - No.10 Black Light Weekly
+title: "St. Michael's Cathedral - No.10 Black Light Weekly | Astro Framework & Creative Tools"
 published: 2025-08-16
-description: This week's cover was shot at Qingdao St. Michael's Cathedral. Rarely having leisure time to gather friends for an outing. Domestic tourism style emphasizes "since we're here anyway"—must visit a few landmarks. This Catholic cathedral wasn't as large as imagined, but seeing a full-scale pipe organ for the first time was quite impressive. Strangely, no nuns or priests were seen—perhaps they're on vacation during peak tourist season?
+description: "Discover Astro framework for frontend development, OpenCut video editing software, and MAKING SOFTWARE design resources. Explore how historical architecture inspires timeless digital design principles for creators."
 updated: 2025-08-16
 tags:
   - Weekly
+  - Astro Framework
+  - Web Design
 draft: false
 pin: 0
 toc: true
@@ -12,7 +14,7 @@ lang: en
 abbrlink: weekly-10
 ---
 
-![Cover](../_images/10%20玄光周刊-圣弥厄尔教堂-1755279792823.webp)
+![St. Michael's Cathedral in Qingdao showcasing Gothic Revival architecture and historical design elements](../_images/10%20玄光周刊-圣弥厄尔教堂-1755279792823.webp)
 
 This week's cover was shot at Qingdao St. Michael's Cathedral. Rarely having leisure time to gather friends for an outing. Domestic tourism style emphasizes "since we're here anyway"—must visit a few landmarks. This Catholic cathedral wasn't as large as imagined, but seeing a full-scale pipe organ for the first time was quite impressive. Strangely, no nuns or priests were seen—perhaps they're on vacation during peak tourist season?
 

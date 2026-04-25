@@ -1,18 +1,20 @@
 ---
-title: Creative Tools in the AI Era - No.16 Black Light Weekly
+title: "Creative Tools in the AI Era - No.16 Black Light Weekly | Digital Art Innovation"
 published: 2026-04-20
-description: 'AI tools have evolved from a "powering" selling point to an industry standard, but the core question remains: Are they expanding or flattening the boundaries of creation?'
+description: "Analyze AI creative tools reshaping digital art in 2026. Explore Runway Gen-4, Leonardo AI, Stable Diffusion, and the debate between professionalization versus democratization of creative software."
 updated: 2026-04-20
 abbrlink: weekly-16
 tags:
   - Weekly
+  - AI Art
+  - Digital Creation
 draft: false
 pin: 0
 toc: true
 lang: en
 ---
 
-![cover](../_images/AI时代的创意工具%20-%20No.16%20玄光周刊-1776618234237.webp)
+![Hunan TV production studio in Changsha representing China's creative industry and broadcasting technology](../_images/AI时代的创意工具%20-%20No.16%20玄光周刊-1776618234237.webp)
 
 This issue's cover was taken on my commute to work in Changsha many years ago—the building at the end is Hunan TV's production studio. Even during rush hour, this road has few people, and even in the hot and humid Changsha summer, walking here feels especially comfortable.
 

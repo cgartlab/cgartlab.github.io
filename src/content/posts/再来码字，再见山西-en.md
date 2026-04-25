@@ -1,10 +1,12 @@
 ---
-title: Writing Again, Farewell to Shanxi
+title: "Writing Again, Farewell to Shanxi: A Creator's Return to Writing"
 published: 2022-05-08
-description: Where it all began
+description: "A personal essay on returning to writing after studying abroad. Discover how RSS feeds, information management, and intentional content consumption can fuel creative inspiration and rebuild writing habits."
 updated: 2024-12-11
 tags:
   - Essay
+  - Writing
+  - RSS
 draft: false
 pin: 0
 toc: true
@@ -12,7 +14,7 @@ lang: en
 abbrlink: zaijianshanxi
 ---
 
-![cover](./_images/再来码字，再见山西-1754470929070.webp)
+![Personal writing journey scene representing the return to creative expression and storytelling](./_images/再来码字，再见山西-1754470929070.webp)
 
 Long time no see, I've started writing again.
 

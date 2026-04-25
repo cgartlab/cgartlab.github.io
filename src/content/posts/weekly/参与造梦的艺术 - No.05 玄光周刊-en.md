@@ -1,10 +1,12 @@
 ---
-title: Participating in the Art of Dream-Making - No.05 Black Light Weekly
+title: "Participating in the Art of Dream-Making - No.05 Black Light Weekly | Film Production & AI Tools"
 published: 2025-07-13
-description: Deep dive into movie production behind-the-scenes:from cyberpunk fog scenes at Qingdao Oriental Movie Metropolis to top-tier crew collaboration challenges, revealing how AI tools like NotebookLM, NoteGen, and Silicon Flow are revolutionizing creative workflows. Plus exclusive analysis of Mode's brand redesign double diamond framework, exploring how 'warm technology' reconstructs product value. Subscribe to Black Light Weekly for deep insights into digital art, knowledge management, and entrepreneurial thinking!
+description: "Behind-the-scenes film production insights and AI creative workflow tools review. Explore NotebookLM, NoteGen, and brand design frameworks revolutionizing digital art and motion design industries."
 updated: 2025-08-08
 tags:
   - Weekly
+  - Film Production
+  - AI Tools
 draft: false
 pin: 0
 lang: en
@@ -12,7 +14,7 @@ toc: true
 abbrlink: weekly-05
 ---
 
-![Cyberpunk Fog Scene at Qingdao Oriental Movie Metropolis](../_images/05-参与造梦的艺术：电影制作幕后与AI工具革新%20%20玄光周刊-1754596444390.webp)
+![Cyberpunk fog scene at Qingdao Oriental Movie Metropolis showcasing atmospheric film production techniques](../_images/05-参与造梦的艺术：电影制作幕后与AI工具革新%20%20玄光周刊-1754596444390.webp)
 
 This week's cover was shot at Qingdao Oriental Movie Metropolis—one night in May when I was working overtime until late and encountered sudden heavy fog on my way back to the hotel, creating a very cyberpunk atmosphere.
 
