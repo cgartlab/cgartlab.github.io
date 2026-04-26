@@ -1,6 +1,6 @@
 ---
+
 title: 我的开源旅程 - No.17 玄光周刊
-description: 疫情初期，我因折腾黑苹果首次接触开源。从最开始套用别人分享的EFI文件。直到翻阅驱动源码时看到上百人为硬件ID反复调试，才意识到这套系统是志愿者用业余时间一砖一瓦搭建的。
 published: 2026-04-25
 updated: 2026-04-25
 tags:
@@ -10,6 +10,7 @@ pin: 0
 toc: true
 lang: zh
 abbrlink: weekly-17
+
 ---
 
 本期封面拍摄自/来自
@@ -43,7 +44,116 @@ abbrlink: weekly-17
 
 ---
 
-## 本期推荐
+
+### Three.js 程序化蛇游戏
+
+🔗 https://tympanus.net/codrops/2026/02/10/building-an-endless-procedural-snake-with-three-js-and-webgl/
+*分类: 技术*
+
+使用 Three.js 和 WebGL 构建无限程序化蛇游戏
+
+G1 连续性实现平滑曲线连接，程序化生成与实时渲染的结合
+
+---
+
+### WebGL Effects Studio
+
+🔗 [链接待补充]
+*分类: 技术*
+
+浏览器中的实时 WebGL 效果工作室
+
+创意编码将专业效果带入大众视野
+
+---
+
+### p5.js loop() 教程
+
+🔗 https://p5js.ai/tutorials/loop
+*分类: 技术*
+
+p5.js AI 辅助教程，学习控制动画循环
+
+loop() 与 noLoop() 的配合使用是创意编码的基础
+
+---
+
+### Pen Plotter 算法艺术
+
+🔗 https://penplotter.art/p/algorithmic-art-tutorial-emergent-complexity
+*分类: 技术*
+
+emergent complexity 算法艺术教程
+
+用算法生成涌现复杂性，物理绘图仪与生成艺术的交汇
+
+---
+
+### Krita - 开源数字绘画
+
+🔗 https://krita.org
+*分类: 工具*
+
+强大的开源绘画应用，专为数字艺术家设计
+
+开源软件的专业功能与社区驱动的创新
+
+---
+
+### Blender 2D-in-3D 工作流
+
+🔗 https://www.blender.org/
+*分类: 工具*
+
+Grease Pencil、洋葱皮、Dope Sheet 的 2D 动画工作流
+
+Blender 不仅是 3D 工具，其 2D 动画功能被低估
+
+---
+
+### Inkscape 矢量图形
+
+🔗 https://inkscape.org/
+*分类: 工具*
+
+开源矢量图形编辑器，Adobe Illustrator 的替代方案
+
+矢量图形的可扩展性对设计工作流至关重要
+
+---
+
+### GIMP 图像处理
+
+🔗 https://www.gimp.org/
+*分类: 工具*
+
+GNU 图像处理程序，Photoshop 的开源替代
+
+GEGL 架构下的高级图像处理能力
+
+---
+
+### 开源工具生态思考
+
+🔗 https://altback.com/blog/5-powerful-open-source-tools-every-digital-artist-should-try/
+*分类: 思想*
+
+五大开源工具：灵活、可定制、跨平台
+
+开源工具的社区驱动创新 vs 商业软件的封闭迭代
+
+---
+
+### 淘宝 PC 版上线 AI MCP 工具
+
+🔗 https://www.ithome.com/0/928/743.htm
+*分类: 工具*
+
+淘宝桌面客户端 2.5.0 支持 MCP 协议，可配置 AI 智能体完成搜索、比价、加购操作
+
+隐私换便利：启用后 AI 可访问收货地址、订单记录、购物车等敏感信息
+
+---## 本期推荐
 
 ### 素材 标题
 
