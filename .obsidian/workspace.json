@@ -13,13 +13,13 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "src/content/posts/weekly/从黑苹果到个人网站，我的GitHub开源旅程 - No.17 玄光周刊.md",
+                "file": "src/content/posts/weekly/从黑苹果到独立博客，这是我的开源旅程 - No.17玄光周刊.md",
                 "mode": "source",
                 "source": false,
                 "backlinks": false
               },
               "icon": "lucide-file",
-              "title": "从黑苹果到个人网站，我的GitHub开源旅程 - No.17 玄光周刊"
+              "title": "从黑苹果到独立博客，这是我的开源旅程 - No.17玄光周刊"
             }
           }
         ]
@@ -166,10 +166,12 @@
       "oz-clear-unused-images:Clear Unused Images": false
     }
   },
-  "active": "44af323359bbddd8",
+  "active": "d66d8d0040634727",
   "lastOpenFiles": [
-    "src/content/posts/0-文章数据库.base",
+    "src/content/posts/_images/从黑苹果到独立博客，这是我的开源旅程 - No.17玄光周刊-1777216858074.webp",
     "src/content/posts/weekly/从黑苹果到个人网站，我的GitHub开源旅程 - No.17 玄光周刊.md",
+    "src/content/posts/weekly/从黑苹果到独立博客，这是我的开源旅程 - No.17玄光周刊.md",
+    "src/content/posts/0-文章数据库.base",
     "dist/giscus/theme-light.css",
     "dist/giscus/theme-dark.css",
     "dist/giscus",
@@ -182,7 +184,6 @@
     "dist/~partytown/partytown.js",
     "dist/~partytown/partytown-sw.js",
     "dist/~partytown/partytown-media.js",
-    "dist/~partytown/partytown-atomics.js",
     "dist/_astro/适合的才最好，年底我选择新装一台“Mac mini”-1754909105968.D-IlcC3d_1q9KAn.webp",
     "dist/_astro/适合的才最好，年底我选择新装一台“Mac mini”-1754592720341.D9Hodl60_ZePn7r.webp",
     "dist/_astro/适合的才最好，年底我选择新装一台“Mac mini”-1754592737930.cF98aa-A_1dkVLk.webp",
@@ -212,7 +213,6 @@
     "src/content/posts/weekly/返修显卡和新渲染器 - No.04 玄光周刊-en.md",
     "src/content/posts/weekly/发刊词 - No.01 玄光周刊.md",
     "src/content/posts/weekly/发刊词 - No.01 玄光周刊-en.md",
-    "src/content/posts/weekly/参与造梦的艺术 - No.05 玄光周刊.md",
-    "src/content/posts/weekly/参与造梦的艺术 - No.05 玄光周刊-en.md"
+    "src/content/posts/weekly/参与造梦的艺术 - No.05 玄光周刊.md"
   ]
 }
