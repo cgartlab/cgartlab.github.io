@@ -11,15 +11,15 @@
             "id": "d66d8d0040634727",
             "type": "leaf",
             "state": {
-              "type": "markdown",
+              "type": "split-diff-view",
               "state": {
-                "file": "src/content/posts/weekly/从黑苹果到独立博客，这是我的开源旅程 - No.17玄光周刊.md",
-                "mode": "source",
-                "source": false,
-                "backlinks": false
+                "aFile": "src/content/posts/weekly/我的开源旅程 - No.17玄光周刊.md",
+                "bFile": "src/content/posts/weekly/从黑苹果到独立博客，这是我的开源旅程 - No.17玄光周刊.md",
+                "aRef": "HEAD",
+                "bRef": ""
               },
-              "icon": "lucide-file",
-              "title": "从黑苹果到独立博客，这是我的开源旅程 - No.17玄光周刊"
+              "icon": "diff",
+              "title": "Diff: 从黑苹果到独立博客，这是我的开源旅程 - No.17玄光周刊  (Index)"
             }
           }
         ]
@@ -166,12 +166,12 @@
       "oz-clear-unused-images:Clear Unused Images": false
     }
   },
-  "active": "d66d8d0040634727",
+  "active": "44af323359bbddd8",
   "lastOpenFiles": [
-    "src/content/posts/_images/从黑苹果到独立博客，这是我的开源旅程 - No.17玄光周刊-1777216858074.webp",
-    "src/content/posts/weekly/从黑苹果到个人网站，我的GitHub开源旅程 - No.17 玄光周刊.md",
-    "src/content/posts/weekly/从黑苹果到独立博客，这是我的开源旅程 - No.17玄光周刊.md",
     "src/content/posts/0-文章数据库.base",
+    "src/content/posts/_images/从黑苹果到独立博客，这是我的开源旅程 - No.17玄光周刊-1777216858074.webp",
+    "src/content/posts/weekly/从黑苹果到独立博客，这是我的开源旅程 - No.17玄光周刊.md",
+    "src/content/posts/weekly/从黑苹果到个人网站，我的GitHub开源旅程 - No.17 玄光周刊.md",
     "dist/giscus/theme-light.css",
     "dist/giscus/theme-dark.css",
     "dist/giscus",
@@ -190,7 +190,6 @@
     "dist/_astro/适合的才最好，年底我选择新装一台“Mac mini”-1754592707550.oEYPaA50_2kIozo.webp",
     "dist/_astro/适合的才最好，年底我选择新装一台“Mac mini”-1754592202748.I1zxawKQ_eo2K8.webp",
     "dist/_astro/2025年，我的生产力设备里留下了这些优秀工具-1768207001831.BoLTDSaI_D5WLF.webp",
-    "dist/_astro/2025年，我的生产力设备里留下了这些优秀工具-1754923771375.BerGF4_Q_KJMsg.webp",
     "src/assets/templates/模板 - No.xx 玄光周刊.md",
     "src/content/posts/weekly/AI时代的创意工具 - No.16 玄光周刊.md",
     "src/content/posts/().md",
