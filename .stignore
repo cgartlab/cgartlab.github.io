@@ -1,9 +1,8 @@
 # Syncthing 忽略文件 - CGArtLab 知识库
 # 所有设备必须使用相同的忽略规则，避免删除冲突
 
-# Syncthing 元数据
-.stfolder/
-.stignore
+# Syncthing 元数据（显式允许同步，确保跨设备一致性）
+!.stfolder/
 .stversions/
 .syncthing-*
 *.sync-conflict-*
@@ -62,21 +61,21 @@ pnpm-lock.yaml
 coverage/
 
 # Obsidian 配置
-src/content/posts/.obsidian/workspace*.json
-src/content/posts/.obsidian/app.json
-src/content/posts/.obsidian/appearance.json
-src/content/posts/.obsidian/hotkeys.json
-src/content/posts/.obsidian/graph.json
-src/content/posts/.obsidian/page-preview.json
-(?d)src/content/posts/.copilot-index/
-(?d)src/content/posts/.trash/
+.obsidian/workspace*.json
+.obsidian/app.json
+.obsidian/appearance.json
+.obsidian/hotkeys.json
+.obsidian/graph.json
+.obsidian/page-preview.json
+(?d).obsidian/.copilot-index/
+(?d).obsidian/.trash/
 
 # 允许同步 Obsidian 共享配置
-!src/content/posts/.obsidian/plugins/
-!src/content/posts/.obsidian/themes/
-!src/content/posts/.obsidian/core-plugins.json
-!src/content/posts/.obsidian/community-plugins.json
-!src/content/posts/.obsidian/templates.json
+!.obsidian/plugins/
+!.obsidian/themes/
+!.obsidian/core-plugins.json
+!.obsidian/community-plugins.json
+!.obsidian/templates.json
 
 # 项目特定
 src/assets/lqip-map.json

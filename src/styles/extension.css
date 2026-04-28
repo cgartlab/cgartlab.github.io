@@ -227,3 +227,14 @@ a:target-current {
 #toc-toggle:checked ~ #toc-accordion-wrapper {
   --at-apply: '2xl:rows-[0fr]';
 }
+
+/* AI Disclaimer >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> */
+.ai-disclaimer blockquote {
+  --at-apply: 'pl-4 border-l-3 border-secondary/70';
+}
+@supports (border-color: color-mix(in oklch, var(--color-secondary) 30%, transparent)) {
+  .ai-disclaimer blockquote {
+    --at-apply: 'border-l-3 opacity-100';
+    border-color: color-mix(in oklch, var(--color-secondary) 30%, transparent);
+  }
+}
