@@ -4,22 +4,22 @@
     "type": "split",
     "children": [
       {
-        "id": "83a653b05149b59a",
+        "id": "9b38b550c5c274da",
         "type": "tabs",
         "children": [
           {
-            "id": "d66d8d0040634727",
+            "id": "cdda9ccd31084ba9",
             "type": "leaf",
             "state": {
-              "type": "split-diff-view",
+              "type": "markdown",
               "state": {
-                "aFile": "src/content/posts/weekly/我的开源旅程 - No.17玄光周刊.md",
-                "bFile": "src/content/posts/weekly/从黑苹果到独立博客，这是我的开源旅程 - No.17玄光周刊.md",
-                "aRef": "HEAD",
-                "bRef": ""
+                "file": "README.md",
+                "mode": "source",
+                "source": false,
+                "backlinks": false
               },
-              "icon": "diff",
-              "title": "Diff: 从黑苹果到独立博客，这是我的开源旅程 - No.17玄光周刊  (Index)"
+              "icon": "lucide-file",
+              "title": "README"
             }
           }
         ]
@@ -49,19 +49,6 @@
             }
           },
           {
-            "id": "dd7bb0e76cbc8537",
-            "type": "leaf",
-            "state": {
-              "type": "bases",
-              "state": {
-                "file": "src/content/posts/0-文章数据库.base",
-                "viewName": "草稿"
-              },
-              "icon": "lucide-table",
-              "title": "0-文章数据库"
-            }
-          },
-          {
             "id": "44af323359bbddd8",
             "type": "leaf",
             "state": {
@@ -80,9 +67,22 @@
               "icon": "history",
               "title": "History"
             }
+          },
+          {
+            "id": "dd7bb0e76cbc8537",
+            "type": "leaf",
+            "state": {
+              "type": "bases",
+              "state": {
+                "file": "src/content/posts/0-文章数据库.base",
+                "viewName": "草稿"
+              },
+              "icon": "lucide-table",
+              "title": "0-文章数据库"
+            }
           }
         ],
-        "currentTab": 2
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
@@ -168,6 +168,9 @@
   },
   "active": "44af323359bbddd8",
   "lastOpenFiles": [
+    "AGENTS.md",
+    "AGENT.md",
+    "agent.md",
     "src/content/posts/0-文章数据库.base",
     "src/content/posts/_images/从黑苹果到独立博客，这是我的开源旅程 - No.17玄光周刊-1777216858074.webp",
     "src/content/posts/weekly/从黑苹果到独立博客，这是我的开源旅程 - No.17玄光周刊.md",
@@ -210,8 +213,6 @@
     "src/content/posts/2026年，如何优雅地使用 Windows 11.md",
     "src/content/posts/weekly/OpenAI推出学习模式 - No.09 玄光周刊.md",
     "src/content/posts/weekly/返修显卡和新渲染器 - No.04 玄光周刊-en.md",
-    "src/content/posts/weekly/发刊词 - No.01 玄光周刊.md",
-    "src/content/posts/weekly/发刊词 - No.01 玄光周刊-en.md",
-    "src/content/posts/weekly/参与造梦的艺术 - No.05 玄光周刊.md"
+    "src/content/posts/weekly/发刊词 - No.01 玄光周刊.md"
   ]
 }
