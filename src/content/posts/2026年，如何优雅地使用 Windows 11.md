@@ -1,8 +1,8 @@
 ---
 title: 2026年，如何优雅地使用 Windows 11
-published: 2026-04-16
+published: 2026-04-30
 description: 升级你的技能，以符合你的装备。
-updated: 2026-04-16
+updated: 2026-04-30
 tags:
   - 技术分享
   - 生产力工具
