@@ -4,22 +4,22 @@
     "type": "split",
     "children": [
       {
-        "id": "9b38b550c5c274da",
+        "id": "f0025c21c34614f5",
         "type": "tabs",
         "children": [
           {
-            "id": "cdda9ccd31084ba9",
+            "id": "1440429451c6085a",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "README.md",
+                "file": "src/content/posts/weekly/从黑苹果到独立博客，这是我的开源旅程 - No.17玄光周刊.md",
                 "mode": "source",
                 "source": false,
                 "backlinks": false
               },
               "icon": "lucide-file",
-              "title": "README"
+              "title": "从黑苹果到独立博客，这是我的开源旅程 - No.17玄光周刊"
             }
           }
         ]
@@ -86,7 +86,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 347.5
+    "width": 340.5
   },
   "right": {
     "id": "19844fd2410b7196",
@@ -168,51 +168,51 @@
   },
   "active": "44af323359bbddd8",
   "lastOpenFiles": [
+    "src/content/posts/_images/从黑苹果到独立博客，这是我的开源旅程 - No.17玄光周刊-1777530794891.webp",
+    "src/content/posts/weekly/从黑苹果到独立博客，这是我的开源旅程 - No.17玄光周刊.md",
+    "src/content/posts/_images/从黑苹果到独立博客，这是我的开源旅程 - No.17玄光周刊-1777530092204.webp",
+    "src/content/posts/2026年，如何优雅地使用 Windows 11.md",
+    "src/content/posts/你的创造力使用说明书.md",
+    "src/content/posts/闲聊「自学」这门手艺.md",
+    "src/content/posts/从0到1，设计师这样建立最小化的“秩序感”.md",
+    "src/content/posts/从“写作恐惧”到“码字疗愈”.md",
+    "src/content/posts/网站更新为 Astro 架构.md",
+    "src/content/posts/RSS 与现代阅读习惯（三）：我的信息收集工具链整合方案.md",
+    "src/content/posts/优雅的命令行.md",
+    "src/content/posts/macOS 如何使用 homebrew 包管理器.md",
+    "src/content/posts/探索中文输入法的自由边界：中州韵.md",
+    "src/content/posts/搭建一台自己的服务器-从0到1.md",
+    "src/content/posts/搭建私家服务器系列大纲.md",
+    "src/content/posts/PVE 安装体验飞牛私有云.md",
+    "src/content/posts/如何告别“收藏即学会”？.md",
+    "src/content/posts/频繁记录6年，我还是跟不上这个时代.md",
+    "src/content/posts/当AI开始“学习”：我们该如何向ChatGPT提问？.md",
+    "src/content/posts/如何利用闲置老电脑24小时给你打工？.md",
+    "src/content/posts/如何管理几十TB的电脑文件？职业选手真的想教会你.md",
+    "src/assets/icons/top-icon.svg",
+    "src/assets/icons/toc-icon.svg",
+    "src/assets/icons/theme-toggle.svg",
+    "src/assets/icons/search-icon.svg",
+    "src/assets/icons/pin-icon.svg",
+    "src/assets/icons/language-switcher.svg",
+    "src/assets/icons/heading-anchor.svg",
+    "src/assets/icons/go-back.svg",
+    "src/assets/icons/copy-icon.svg",
+    "src/content/posts/0-文章数据库.base",
+    "README.md",
     "AGENTS.md",
     "AGENT.md",
     "agent.md",
-    "src/content/posts/0-文章数据库.base",
-    "src/content/posts/_images/从黑苹果到独立博客，这是我的开源旅程 - No.17玄光周刊-1777216858074.webp",
-    "src/content/posts/weekly/从黑苹果到独立博客，这是我的开源旅程 - No.17玄光周刊.md",
     "src/content/posts/weekly/从黑苹果到个人网站，我的GitHub开源旅程 - No.17 玄光周刊.md",
     "dist/giscus/theme-light.css",
     "dist/giscus/theme-dark.css",
     "dist/giscus",
-    "dist/icons/og-logo.png",
-    "dist/icons/favicon.svg",
-    "dist/icons/favicon.png",
     "dist/icons",
     "dist/sitemap-0.xml",
     "dist/sitemap-index.xml",
     "dist/~partytown/partytown.js",
     "dist/~partytown/partytown-sw.js",
     "dist/~partytown/partytown-media.js",
-    "dist/_astro/适合的才最好，年底我选择新装一台“Mac mini”-1754909105968.D-IlcC3d_1q9KAn.webp",
-    "dist/_astro/适合的才最好，年底我选择新装一台“Mac mini”-1754592720341.D9Hodl60_ZePn7r.webp",
-    "dist/_astro/适合的才最好，年底我选择新装一台“Mac mini”-1754592737930.cF98aa-A_1dkVLk.webp",
-    "dist/_astro/适合的才最好，年底我选择新装一台“Mac mini”-1754592707550.oEYPaA50_2kIozo.webp",
-    "dist/_astro/适合的才最好，年底我选择新装一台“Mac mini”-1754592202748.I1zxawKQ_eo2K8.webp",
-    "dist/_astro/2025年，我的生产力设备里留下了这些优秀工具-1768207001831.BoLTDSaI_D5WLF.webp",
-    "src/assets/templates/模板 - No.xx 玄光周刊.md",
-    "src/content/posts/weekly/AI时代的创意工具 - No.16 玄光周刊.md",
-    "src/content/posts/().md",
-    "src/content/posts/未命名.md",
-    "src/content/posts/2025年，我的生产力设备里留下了这些优秀工具-en.md",
-    "src/content/posts/2025年，我的生产力设备里留下了这些优秀工具.md",
-    "src/content/posts/十五年浏览器折腾之旅.md",
-    "src/content/posts/碎片写作——建立一具思维标本.md",
-    "src/content/posts/NAS 买回来只会存照片？创作者的第一台“私有云”该怎么玩 - 下篇.md",
-    "src/content/posts/RSS 与现代阅读习惯（一）：如何在碎片化时代重塑深度阅读体验.md",
-    "src/content/posts/RSS 与现代阅读习惯（一）：如何在碎片化时代重塑深度阅读体验-en.md",
-    "src/content/posts/weekly/返修显卡和新渲染器 - No.04 玄光周刊.md",
-    "src/content/posts/weekly/工具塑造创作方式 - No.15 玄光周刊.md",
-    "src/content/posts/weekly/「左脚踩右脚」的创作方法 - No.12 玄光周刊.md",
-    "src/content/posts/weekly/OpenAI推出学习模式 - No.09 玄光周刊-en.md",
-    "src/content/posts/weekly/当AI开始记住你的一切，这是我的使用策略 - No.14 玄光周刊-en.md",
-    "src/content/posts/weekly/当AI开始记住你的一切，这是我的使用策略 - No.14 玄光周刊.md",
-    "src/content/posts/2026年，如何优雅地使用 Windows 11.md",
-    "src/content/posts/weekly/OpenAI推出学习模式 - No.09 玄光周刊.md",
-    "src/content/posts/weekly/返修显卡和新渲染器 - No.04 玄光周刊-en.md",
-    "src/content/posts/weekly/发刊词 - No.01 玄光周刊.md"
+    "src/assets/templates/模板 - No.xx 玄光周刊.md"
   ]
 }
