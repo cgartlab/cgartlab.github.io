@@ -1,8 +1,8 @@
 ---
-title: 主题 - No.17 玄光周刊
-published: 2026-04-20
+title: 主题 - No.xx 玄光周刊
+published: 2026-05-01
 description: （这里写描述，140 字以内）
-updated: 2026-04-20
+updated: 2026-05-01
 tags:
   - 周刊
 draft: true
@@ -53,6 +53,4 @@ abbrlink: weekly-xx
 
 ---
 
-周刊首发在 [玄光周刊](https://weekly.cgartlab.com)
-
-同时连载在 [CG 艺术实验室](https://cgartlab.com/weekly)
+周刊首发在 [CG艺术实验室](https://cgartlab.com/weekly)

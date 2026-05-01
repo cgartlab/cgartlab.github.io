@@ -45,3 +45,25 @@ views:
     columnSize:
       file.name: 398
       note.published: 117
+  - type: table
+    name: 已发布文章
+    filters:
+      and:
+        - file.folder.contains("src/content")
+        - lang == "zh"
+        - '!file.tags.contains("周刊")'
+        - draft == false
+    sort:
+      - property: published
+        direction: DESC
+  - type: table
+    name: 已发布周刊
+    filters:
+      and:
+        - file.folder.contains("src/content")
+        - lang == "zh"
+        - file.tags.contains("周刊")
+        - draft == false
+    sort:
+      - property: published
+        direction: DESC
