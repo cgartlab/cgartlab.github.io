@@ -69,7 +69,7 @@ Krita 是我一直比较关注的开源绘画工具。它不像 Photoshop 那样
 
 我曾经的 SCP 系列第三幅作品就是用 Krita 画的，很轻便，长边接近 8k 像素的画布在 16G 内存的 PC 上画起来也十分流畅。
 
-
+### 
 
 ---
 
@@ -87,4 +87,4 @@ Krita 是我一直比较关注的开源绘画工具。它不像 Photoshop 那样
 
 周刊首发在 [玄光周刊](https://weekly.cgartlab.com)
 
-同时连载在 [CG 艺术实验室](https://cgartlab.com/weekly）
+同时连载在 [CG艺术实验室](https://cgartlab.com/weekly）
