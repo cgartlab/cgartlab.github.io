@@ -75,7 +75,7 @@
               "type": "bases",
               "state": {
                 "file": "src/content/posts/0-文章数据库.base",
-                "viewName": "草稿"
+                "viewName": "已发布文章"
               },
               "icon": "lucide-table",
               "title": "0-文章数据库"
@@ -86,8 +86,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 336.5,
-    "collapsed": true
+    "width": 386.5
   },
   "right": {
     "id": "19844fd2410b7196",
@@ -155,7 +154,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 360.5
+    "width": 418.5,
+    "collapsed": true
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -169,6 +169,12 @@
   },
   "active": "6c7cf6a92587447a",
   "lastOpenFiles": [
+    "src/assets/templates/模板 - No.xx 玄光周刊.md",
+    "src/content/posts/weekly/从黑苹果到独立博客，这是我的开源旅程 - No.17玄光周刊.md",
+    "src/content/posts/_images/从黑苹果到独立博客，这是我的开源旅程 - No.17玄光周刊-1777653407966.webp",
+    "src/content/posts/适合的才最好，年底我选择新装一台“Mac mini”.md",
+    "src/content/posts/_images/从黑苹果到独立博客，这是我的开源旅程 - No.17玄光周刊-1777652961215.webp",
+    "src/content/privacy/privacy-zh.md",
     "dist/_astro/mermaid.core.CFYjPDOT.js",
     "dist/_astro/xychartDiagram-5P7HB3ND.DGb-1UL-.js",
     "dist/_astro/_baseUniq.BSBLx-YN.js",
@@ -179,7 +185,6 @@
     "dist/_astro/sankeyDiagram-XADWPNL6.Bx6heFAr.js",
     "dist/_astro/pieDiagram-DEJITSTG.BJqi_gjj.js",
     "dist/_astro/ordinal.BYWQX77i.js",
-    "dist/_astro/katex.DHMw6HUq.js",
     "dist/_astro/适合的才最好，年底我选择新装一台“Mac mini”-1754909105968.D-IlcC3d_1q9KAn.webp",
     "dist/_astro/2024年，如何优雅使用WindowsPC-1754583026082.BWjKaltf_20T1v2.webp",
     "dist/_astro/2024年，如何优雅使用WindowsPC-1754582710312.DHhei3qR_Z23pVDd.webp",
@@ -188,11 +193,7 @@
     "dist/_astro/适合的才最好，年底我选择新装一台“Mac mini”-1754592564637.BAFsNP93_Z1WGqgh.webp",
     "dist/_astro/适合的才最好，年底我选择新装一台“Mac mini”-1754592593051.DSz0CwWV_Z2hDBL0.webp",
     "dist/_astro/适合的才最好，年底我选择新装一台“Mac mini”-1754592576870.Bfies96v_1CpP6X.webp",
-    "dist/_astro/适合的才最好，年底我选择新装一台“Mac mini”-1754592608215.BISfYXg3_Z1GfWQW.webp",
-    "dist/_astro/2024年，如何优雅使用WindowsPC-1754583117080.Dmt9lBrQ_ZiK2H1.webp",
     "src/content/privacy/privacy-en.md",
-    "src/content/privacy/privacy-zh.md",
-    "src/content/posts/weekly/从黑苹果到独立博客，这是我的开源旅程 - No.17玄光周刊.md",
     "src/content/posts/2026年，如何优雅地使用 Windows 11.md",
     "src/content/posts/你的创造力使用说明书.md",
     "src/content/posts/闲聊「自学」这门手艺.md",
@@ -212,8 +213,6 @@
     "src/content/posts/如何利用闲置老电脑24小时给你打工？.md",
     "src/content/posts/如何管理几十TB的电脑文件？职业选手真的想教会你.md",
     "README.md",
-    "AGENTS.md",
-    "AGENT.md",
-    "agent.md"
+    "AGENTS.md"
   ]
 }
