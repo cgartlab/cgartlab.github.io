@@ -41,12 +41,22 @@ const wordCountText = {
 // 关于页面路径（带锚点）
 const aboutPath = currentLang === defaultLocale ? '/about/#关于本站' : `/${currentLang}/about/#关于本站`
 
+// 隐私政策页面路径
+const privacyPath = currentLang === defaultLocale ? '/privacy/' : `/${currentLang}/privacy/`
+
 // 公众号文本
 const wechatText = {
   'zh': '公众号',
   'en': 'WeChat',
   'zh-tw': '公眾號',
 }[currentLang] || '公众号'
+
+// 隐私政策文本
+const privacyText = {
+  'zh': '隐私政策',
+  'en': 'Privacy',
+  'zh-tw': '隱私政策',
+}[currentLang] || '隐私政策'
 ---
 
 <footer
@@ -64,6 +74,8 @@ const wechatText = {
 
   <p>
     © {year} {author}{showWordCount && <> · <i>{wordCountText}</i>{totalWords.toLocaleString()}</>}
+    {' · '}
+    <a class={footerLinkClass} href={privacyPath}>{privacyText}</a>
   </p>
 
   <p class="mt-2 text-2.5 opacity-80">
@@ -80,7 +92,7 @@ const wechatText = {
       rel="noopener noreferrer"
       class="highlight-hover py-0.8 transition-colors after:bottom-0.35em hover:c-primary"
     >
-      CC BY-NC-SA 4.0 许可协议
+      CC BY-NC-SA 4.0
     </a>
   </p>
 </footer>

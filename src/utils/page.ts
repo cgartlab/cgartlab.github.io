@@ -54,6 +54,10 @@ export function isLinksPage(path: string) {
   return matchPageType(path, 'links')
 }
 
+export function isPrivacyPage(path: string) {
+  return matchPageType(path, 'privacy')
+}
+
 // 返回包含语言、页面类型和本地化助手的页面上下文
 export function getPageInfo(path: string) {
   const currentLang = getLangFromPath(path)
@@ -64,6 +68,7 @@ export function getPageInfo(path: string) {
   const isWorks = isWorksPage(path)
   const isWeekly = isWeeklyPage(path)
   const isLinks = isLinksPage(path)
+  const isPrivacy = isPrivacyPage(path)
 
   return {
     currentLang,
@@ -74,6 +79,7 @@ export function getPageInfo(path: string) {
     isWorks,
     isWeekly,
     isLinks,
+    isPrivacy,
     getLocalizedPath: (targetPath: string) =>
       getLocalizedPath(targetPath, currentLang),
   }

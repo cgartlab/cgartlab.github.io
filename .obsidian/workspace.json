@@ -4,11 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "f0025c21c34614f5",
+        "id": "c3099d86dc292bbf",
         "type": "tabs",
         "children": [
           {
-            "id": "1440429451c6085a",
+            "id": "6c7cf6a92587447a",
             "type": "leaf",
             "state": {
               "type": "markdown",
@@ -86,7 +86,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 340.5
+    "width": 336.5,
+    "collapsed": true
   },
   "right": {
     "id": "19844fd2410b7196",
@@ -154,7 +155,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 402.5
+    "width": 360.5
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -166,11 +167,32 @@
       "oz-clear-unused-images:Clear Unused Images": false
     }
   },
-  "active": "44af323359bbddd8",
+  "active": "6c7cf6a92587447a",
   "lastOpenFiles": [
-    "src/content/posts/_images/从黑苹果到独立博客，这是我的开源旅程 - No.17玄光周刊-1777530794891.webp",
+    "dist/_astro/mermaid.core.CFYjPDOT.js",
+    "dist/_astro/xychartDiagram-5P7HB3ND.DGb-1UL-.js",
+    "dist/_astro/_baseUniq.BSBLx-YN.js",
+    "dist/_astro/wardley-RL74JXVD.C164j_W1.js",
+    "dist/_astro/vennDiagram-DHZGUBPP.SFbR7u2d.js",
+    "dist/_astro/wardleyDiagram-NUSXRM2D.D5_2Q9sF.js",
+    "dist/_astro/mindmap-definition-QFDTVHPH.D-6zClhd.js",
+    "dist/_astro/sankeyDiagram-XADWPNL6.Bx6heFAr.js",
+    "dist/_astro/pieDiagram-DEJITSTG.BJqi_gjj.js",
+    "dist/_astro/ordinal.BYWQX77i.js",
+    "dist/_astro/katex.DHMw6HUq.js",
+    "dist/_astro/适合的才最好，年底我选择新装一台“Mac mini”-1754909105968.D-IlcC3d_1q9KAn.webp",
+    "dist/_astro/2024年，如何优雅使用WindowsPC-1754583026082.BWjKaltf_20T1v2.webp",
+    "dist/_astro/2024年，如何优雅使用WindowsPC-1754582710312.DHhei3qR_Z23pVDd.webp",
+    "dist/_astro/扫码_搜索联合传播样式-白色版.Dcrb48Pm_pWWPd.webp",
+    "dist/_astro/适合的才最好，年底我选择新装一台“Mac mini”-1754592548286.fpfb7wwy_Z18mhlT.webp",
+    "dist/_astro/适合的才最好，年底我选择新装一台“Mac mini”-1754592564637.BAFsNP93_Z1WGqgh.webp",
+    "dist/_astro/适合的才最好，年底我选择新装一台“Mac mini”-1754592593051.DSz0CwWV_Z2hDBL0.webp",
+    "dist/_astro/适合的才最好，年底我选择新装一台“Mac mini”-1754592576870.Bfies96v_1CpP6X.webp",
+    "dist/_astro/适合的才最好，年底我选择新装一台“Mac mini”-1754592608215.BISfYXg3_Z1GfWQW.webp",
+    "dist/_astro/2024年，如何优雅使用WindowsPC-1754583117080.Dmt9lBrQ_ZiK2H1.webp",
+    "src/content/privacy/privacy-en.md",
+    "src/content/privacy/privacy-zh.md",
     "src/content/posts/weekly/从黑苹果到独立博客，这是我的开源旅程 - No.17玄光周刊.md",
-    "src/content/posts/_images/从黑苹果到独立博客，这是我的开源旅程 - No.17玄光周刊-1777530092204.webp",
     "src/content/posts/2026年，如何优雅地使用 Windows 11.md",
     "src/content/posts/你的创造力使用说明书.md",
     "src/content/posts/闲聊「自学」这门手艺.md",
@@ -189,30 +211,9 @@
     "src/content/posts/当AI开始“学习”：我们该如何向ChatGPT提问？.md",
     "src/content/posts/如何利用闲置老电脑24小时给你打工？.md",
     "src/content/posts/如何管理几十TB的电脑文件？职业选手真的想教会你.md",
-    "src/assets/icons/top-icon.svg",
-    "src/assets/icons/toc-icon.svg",
-    "src/assets/icons/theme-toggle.svg",
-    "src/assets/icons/search-icon.svg",
-    "src/assets/icons/pin-icon.svg",
-    "src/assets/icons/language-switcher.svg",
-    "src/assets/icons/heading-anchor.svg",
-    "src/assets/icons/go-back.svg",
-    "src/assets/icons/copy-icon.svg",
-    "src/content/posts/0-文章数据库.base",
     "README.md",
     "AGENTS.md",
     "AGENT.md",
-    "agent.md",
-    "src/content/posts/weekly/从黑苹果到个人网站，我的GitHub开源旅程 - No.17 玄光周刊.md",
-    "dist/giscus/theme-light.css",
-    "dist/giscus/theme-dark.css",
-    "dist/giscus",
-    "dist/icons",
-    "dist/sitemap-0.xml",
-    "dist/sitemap-index.xml",
-    "dist/~partytown/partytown.js",
-    "dist/~partytown/partytown-sw.js",
-    "dist/~partytown/partytown-media.js",
-    "src/assets/templates/模板 - No.xx 玄光周刊.md"
+    "agent.md"
   ]
 }
