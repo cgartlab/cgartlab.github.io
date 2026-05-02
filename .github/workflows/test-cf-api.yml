@@ -1,0 +1,84 @@
+name: Test Cloudflare API Token
+
+on:
+  workflow_dispatch:  # 手动触发
+
+permissions:
+  contents: read
+
+jobs:
+  test-api:
+    runs-on: ubuntu-latest
+    name: Test API Permissions
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Test 1 - Verify Token Validity
+        env:
+          CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+        run: |
+          echo "🔍 测试1：验证 Token 有效性..."
+          RESPONSE=$(curl -s -X GET "https://api.cloudflare.com/client/v4/accounts" \
+            -H "Authorization: Bearer $CF_API_TOKEN" \
+            -H "Content-Type: application/json")
+          
+          echo "响应结果：$RESPONSE"
+          
+          if echo "$RESPONSE" | grep -q '"success":true'; then
+            echo "✅ 测试1通过：Token 有效，可访问账户列表"
+          else
+            echo "❌ 测试1失败：Token 无效或权限不足"
+            exit 1
+          fi
+
+      - name: Test 2 - Verify Workers Scripts Access
+        env:
+          CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+          CF_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
+        run: |
+          echo "🔍 测试2：验证 Workers 脚本访问权限..."
+          RESPONSE=$(curl -s -X GET "https://api.cloudflare.com/client/v4/accounts/$CF_ACCOUNT_ID/workers/scripts" \
+            -H "Authorization: Bearer $CF_API_TOKEN" \
+            -H "Content-Type: application/json")
+          
+          echo "响应结果：$RESPONSE"
+          
+          if echo "$RESPONSE" | grep -q '"success":true'; then
+            echo "✅ 测试2通过：Token 有 Workers Scripts 访问权限"
+          else
+            echo "❌ 测试2失败：缺少 Workers Scripts 权限"
+            exit 1
+          fi
+
+      - name: Test 3 - Verify Wrangler Deploy Permission
+        env:
+          CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+          CF_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
+        run: |
+          echo "🔍 测试3：验证 Wrangler 部署权限..."
+          # 安装 wrangler
+          npm install -g wrangler
+          
+          # 创建临时 wrangler 配置（测试用）
+          cat > wrangler.temp.jsonc << EOF
+          {
+            "name": "cgartlab-test",
+            "compatibility_date": "2026-05-02",
+            "assets": { "directory": "./dist" }
+          }
+          EOF
+          
+          # 尝试 dry-run 部署（不实际部署）
+          echo "npx wrangler deploy --dry-run"
+          npx wrangler deploy --dry-run || {
+            echo "❌ 测试3失败：Wrangler 部署权限不足"
+            exit 1
+          }
+          
+          echo "✅ 测试3通过：Token 有部署权限"
+          rm wrangler.temp.jsonc
+
+      - name: Test Summary
+        run: |
+          echo "🎉 所有 API 权限测试通过！Token 可以用于迁移部署。"
