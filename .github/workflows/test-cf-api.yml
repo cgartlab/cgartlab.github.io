@@ -25,12 +25,12 @@ jobs:
           
           echo "响应结果：$RESPONSE"
           
-          if echo "$RESPONSE" | grep -q '"success":true'; then
-            echo "✅ 测试1通过：Token 有效，可访问账户列表"
-          else
-            echo "❌ 测试1失败：Token 无效或权限不足"
-            exit 1
-          fi
+if echo "$RESPONSE" | grep -q '"success"\s*:\s*true'; then
+  echo "✅ 测试1通过：Token 有效，可访问账户列表"
+else
+  echo "❌ 测试1失败：Token 无效或权限不足"
+  exit 1
+fi
 
       - name: Test 2 - Verify Workers Scripts Access
         env:
@@ -44,12 +44,12 @@ jobs:
           
           echo "响应结果：$RESPONSE"
           
-          if echo "$RESPONSE" | grep -q '"success":true'; then
-            echo "✅ 测试2通过：Token 有 Workers Scripts 访问权限"
-          else
-            echo "❌ 测试2失败：缺少 Workers Scripts 权限"
-            exit 1
-          fi
+if echo "$RESPONSE" | grep -q '"success"\s*:\s*true'; then
+  echo "✅ 测试2通过：Token 有 Workers Scripts 访问权限"
+else
+  echo "❌ 测试2失败：缺少 Workers Scripts 权限"
+  exit 1
+fi
 
       - name: Test 3 - Verify Wrangler Deploy Permission
         env:
