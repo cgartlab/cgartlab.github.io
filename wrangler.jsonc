@@ -4,5 +4,11 @@
   "compatibility_date": "2026-05-02",
   "assets": {
     "directory": "./dist"
-  }
+  },
+  "routes": [
+    {
+      "pattern": "cgartlab.com",
+      "custom_domain": true
+    }
+  ]
 }
