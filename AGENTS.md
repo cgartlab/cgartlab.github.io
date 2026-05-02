@@ -62,9 +62,11 @@
 
 ## CI/CD
 - 触发: 推送到 `main` 分支
-- Workers Builds（Cloudflare）：通过 Cloudflare 自动构建和部署，Node.js 24, pnpm 10.33.0
-- 构建: `pnpm build`，部署到 Cloudflare Worker（静态资源托管）
-- 自定义域名: cgartlab.com（通过 Cloudflare DNS）
+- Cloudflare Workers Git Integration：Cloudflare 直接连接 GitHub 仓库自动构建部署
+- 构建命令: `pnpm install --config.trustPolicy=off && pnpm build`
+- 部署命令: `npx wrangler deploy`
+- 自定义域名: cgartlab.com（Cloudflare Worker Custom Domain）
+- 环境变量: `GOOGLE_ADSENSE_PUBLISHER_ID` 在 Cloudflare Dashboard Worker 的 Variables 中配置
 
 ## Obsidian CLI 集成
 
