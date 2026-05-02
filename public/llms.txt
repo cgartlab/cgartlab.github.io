@@ -4,6 +4,7 @@
 
 ## 近期文章
 
+- [从黑苹果到独立博客，这是我的开源旅程 - No.17玄光周刊](https://cgartlab.com/zh/weekly/weekly-17): 疫情初期，因折腾黑苹果首次接触开源，从最开始套用别人分享的文件。直到翻阅驱动源码时看到上百人为硬件ID反复调试，才意识到这套系统是志愿者用业余时间一砖一瓦搭建起来的。
 - [AI时代的创意工具 - No.16玄光周刊](https://cgartlab.com/zh/weekly/weekly-16): AI工具已从“赋能”卖点变为行业标配，但核心问题在于：它们是在扩展还是抹平创作边界？
 - [工具塑造创作方式 - No.15 玄光周刊](https://cgartlab.com/zh/weekly/weekly-15): 从专业软件到关注工作流的工具，再到主动参与的AI。这引发核心问题：当工具能“创作”，人的价值何在？答案在于判断力——在噪声中识别方向、定义意义的能力。随着执行成本下降，判断力成为创作者真正的稀缺资源。
 - [当AI开始记住你的一切，这是我的使用策略 - No.14 玄光周刊](https://cgartlab.com/zh/weekly/weekly-14): 2026 年，大模型平台几乎同时做出了一个关键选择：新增「复杂任务」和「长期记忆」功能。只是每家可能会有不同的叫法，有的也限制了免费额度。这是 AI 进化的必然。
@@ -33,7 +34,6 @@
 - [再开公众号，并接入 AI](https://cgartlab.com/zh/posts/setup-wechat-channel-again): 重新开通微信公众号并接入AI助手的完整经验分享，包含智能体配置、知识库设置和多平台内容分发策略
 - [【SCP-华夏系列组画】上线爱发电](https://cgartlab.com/zh/posts/scp-digital-artwork): 目前更新至第三幅 《醉奴》
 - [2024年，如何更优雅地使用 Mac](https://cgartlab.com/zh/posts/2024-elegant-use-mac): 2024年Mac使用优化指南，从系统配置到软件选择，提升Mac使用体验和工作效率的实用技巧
-- [RSS 与现代阅读习惯（一）：如何在碎片化时代重塑深度阅读体验](https://cgartlab.com/zh/posts/rss-1): 探讨如何在碎片化时代通过RSS重塑深度阅读体验，从理念到实践的全面指南
 
 ## English Articles
 

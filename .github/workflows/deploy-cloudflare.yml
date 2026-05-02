@@ -1,0 +1,44 @@
+name: Deploy to Cloudflare Worker
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+          cache: 'pnpm'
+      
+      - name: Setup pnpm
+        run: |
+          corepack enable
+          corepack prepare pnpm@10.33.0 --activate
+      
+      - name: Install dependencies
+        run: pnpm install --config.trustPolicy=off --config.package-verification=false
+      
+      - name: Build site
+        run: pnpm build
+        env:
+          GOOGLE_ADSENSE_PUBLISHER_ID: ${{ secrets.GOOGLE_ADSENSE_PUBLISHER_ID }}
+      
+      - name: Deploy to Cloudflare Worker
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CF_API_TOKEN }}
+          accountId: ${{ secrets.CF_ACCOUNT_ID }}
