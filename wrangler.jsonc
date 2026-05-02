@@ -2,11 +2,7 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "cgartlab",
   "compatibility_date": "2026-05-02",
-  "compatibility_flags": ["nodejs_compat"],
   "assets": {
     "directory": "./dist"
-  },
-  "vars": {
-    "GOOGLE_ADSENSE_PUBLISHER_ID": ""
   }
 }

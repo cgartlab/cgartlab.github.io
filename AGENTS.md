@@ -1,5 +1,9 @@
 # AGENTS.md
 
+## 核心工作原则
+- **遇到问题先查官方文档**：在实施任何配置/迁移/新功能前，优先查阅相关项目的官方文档（Cloudflare, Astro, GitHub Actions 等），基于文档而非猜测制定计划
+- **一次只改一个东西**：每次修改后等待验证，确认通过后再进行下一步
+
 ## 构建与开发命令
 - **开发**: `pnpm dev` (执行 `astro check && astro dev`)
 - **构建**: `pnpm build` (完整流程: `astro check` → `astro build` → `tsx scripts/generate-llms.ts` → `pnpm apply-lqip`)
@@ -58,8 +62,9 @@
 
 ## CI/CD
 - 触发: 推送到 `main` 分支
-- GitHub Actions: Node.js 24, pnpm 10.33.0
-- 构建: `pnpm build`，部署到 GitHub Pages
+- Workers Builds（Cloudflare）：通过 Cloudflare 自动构建和部署，Node.js 24, pnpm 10.33.0
+- 构建: `pnpm build`，部署到 Cloudflare Worker（静态资源托管）
+- 自定义域名: cgartlab.com（通过 Cloudflare DNS）
 
 ## Obsidian CLI 集成
 
