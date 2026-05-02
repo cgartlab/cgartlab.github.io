@@ -17,13 +17,14 @@ jobs:
         env:
           CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
         run: |
-          echo "Testing Token validity..."
+          echo "Test 1: Verifying Token validity..."
           RESPONSE=$(curl -s -X GET "https://api.cloudflare.com/client/v4/accounts" \
             -H "Authorization: Bearer $CF_API_TOKEN" \
             -H "Content-Type: application/json")
           echo "Response: $RESPONSE"
-          if echo "$RESPONSE" | grep -q '"success"\s*:\s*true'; then
-            echo "TEST1 PASSED: Token is valid"
+          if echo "$RESPONSE" | jq -e '.success' > /dev/null 2>&1; then
+            echo "TEST1 PASSED: Token is valid, account: $(echo "$RESPONSE" | jq -r '.result[0].name')"
+            echo "ACCOUNT_ID=$(echo "$RESPONSE" | jq -r '.result[0].id')" >> "$GITHUB_ENV"
           else
             echo "TEST1 FAILED: Token invalid or insufficient permissions"
             exit 1
@@ -32,14 +33,18 @@ jobs:
       - name: Test 2 - Verify Workers Scripts Access
         env:
           CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
-          CF_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
         run: |
-          echo "Testing Workers Scripts access..."
-          RESPONSE=$(curl -s -X GET "https://api.cloudflare.com/client/v4/accounts/$CF_ACCOUNT_ID/workers/scripts" \
+          echo "Test 2: Checking Workers Scripts access..."
+          ACCOUNT_ID="${{ secrets.CF_ACCOUNT_ID }}"
+          if [ -z "$ACCOUNT_ID" ]; then
+            ACCOUNT_ID="$ACCOUNT_ID"
+          fi
+          echo "Using Account ID: ${ACCOUNT_ID:0:8}..."
+          RESPONSE=$(curl -s -X GET "https://api.cloudflare.com/client/v4/accounts/$ACCOUNT_ID/workers/scripts" \
             -H "Authorization: Bearer $CF_API_TOKEN" \
             -H "Content-Type: application/json")
           echo "Response: $RESPONSE"
-          if echo "$RESPONSE" | grep -q '"success"\s*:\s*true'; then
+          if echo "$RESPONSE" | jq -e '.success' > /dev/null 2>&1; then
             echo "TEST2 PASSED: Token has Workers Scripts access"
           else
             echo "TEST2 FAILED: Missing Workers Scripts permissions"
@@ -49,9 +54,12 @@ jobs:
       - name: Test 3 - Verify Wrangler Deploy Permission
         env:
           CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
-          CF_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
         run: |
-          echo "Testing Wrangler deploy permission..."
+          echo "Test 3: Checking Wrangler deploy permission..."
+          ACCOUNT_ID="${{ secrets.CF_ACCOUNT_ID }}"
+          if [ -z "$ACCOUNT_ID" ]; then
+            ACCOUNT_ID="$ACCOUNT_ID"
+          fi
           npm install -g wrangler
           cat > wrangler.temp.jsonc << EOF
           {
@@ -60,8 +68,7 @@ jobs:
             "assets": { "directory": "./dist" }
           }
           EOF
-          echo "npx wrangler deploy --dry-run"
-          npx wrangler deploy --dry-run || {
+          CLOUDFLARE_API_TOKEN="$CF_API_TOKEN" CLOUDFLARE_ACCOUNT_ID="$ACCOUNT_ID" npx wrangler deploy --dry-run || {
             echo "TEST3 FAILED: Wrangler deploy permission insufficient"
             exit 1
           }
@@ -70,4 +77,4 @@ jobs:
 
       - name: Test Summary
         run: |
-          echo "All API permission tests passed!"
+          echo "All API permission tests passed! Token is ready for migration."
