@@ -15,25 +15,29 @@ As an [INFJ](https://www.16personalities.com/personality-types/infj-personality)
 My professional focus spans several areas:
 
 1. Digital Motion Visual Design
-2. Front-end Product Development
-3. Writing
-4. Personal Fine Art
+2. UI/UX Design
+3. Front-end Product Development
+4. AI Tools & Workflows
+5. Writing
+6. Personal Fine Art
 
 When it comes to commercial work, I see it as simply earning a living. Most client projects don't make it into my portfolio—even though I created them, the collaborative nature with clients and colleagues means I rarely consider them purely "my" designs. They're products, not personal artworks. The few projects that do end up in my portfolio are those that genuinely resonate with me—either because they touch on areas I'm passionate about, align with a client's aesthetic vision, or challenge my skills in meaningful ways.
 
-To be honest, since around 2019 I've rarely worried about finding clients. This stability, while comfortable, led to some complacency and procrastination at times. I've come to realize that commercial design is fundamentally a negotiation—an art of compromise that I'm still learning to master.
+Looking back over the past six years, I've rarely worried about finding clients. My mindset has gone through phases—initial ease, some complacency and procrastination, and more recently, a renewed focus on independent creative work alongside commercial projects. I've always believed commercial design is fundamentally a negotiation—an art of compromise. That part hasn't changed.
 
-But those periods of relative slack weren't wasted. Working with computers daily, I've developed a genuine fascination with the technology itself. I feel fortunate to live in an era where such powerful tools are accessible.
+Lately, I've been deliberately making time for independent creative work and exploring AI tools and workflows alongside commercial projects. Working with computers daily, I've developed a genuine fascination not just with traditional design tools, but with AI agents and local LLMs. I feel fortunate to live in an era where such powerful tools are accessible.
 
-It's like skating across an endless dark ice lake without skates—thrilling and slightly precarious. From building private servers and DIY NAS systems to creating my first personal website, I've discovered the elegant simplicity of keyboard-driven computing. (As someone who primarily uses mouse and graphics tablet for design work, this keyboard-centric approach feels refreshingly different.) This journey has brought me immense satisfaction and led me to what truly excites me: creative expression.
+It's like skating across an endless dark ice lake without skates—thrilling and slightly precarious. From building private servers and DIY NAS to running local LLMs and integrating AI agents into daily creative workflows, I've discovered that the same elegant simplicity now extends to natural language. (As someone who primarily uses mouse and graphics tablet for design work, this feels like a natural evolution of the same principle.) This journey has brought me immense satisfaction and led me to what truly excites me: creative expression.
 
 ## About This Site
 
 This website represents a long-held dream of mine—to have a personal space online where I can share my creative journey.
 
-Think of it as a container for my public creative world.
+Think of it as a container for my public creative world. Most content is available in both Chinese and English—just switch languages using the navigation bar.
 
 The primary medium for this exploration is [CG Art](https://en.wikipedia.org/wiki/Computer_graphics), and since the entire process feels like a continuous experiment in creativity, "CG Art Lab" felt like the perfect name.
+
+I also publish a [weekly newsletter](/en/weekly/) covering design tools, creative inspiration, and practical AI workflows—think of it as my public notebook.
 
 ## License Agreement
 
@@ -70,7 +74,7 @@ This website adopts a dual-licensing strategy:
 - **Opinion Expression**: The views expressed herein represent my personal stance only and are not associated with any organization or company, nor do they constitute professional advice.
 - **Technical Content**: Code snippets, tutorials, and technical articles are provided for learning reference only. Please adjust usage according to actual circumstances, and I am not responsible for any losses incurred from using related content.
 - **External Links**: This site may provide links to third-party websites but is not responsible for the content of these sites. Visitors need to judge content reliability themselves.
-- **Privacy Protection**: This website respects user privacy and does not collect personal information. Comment functionality uses third-party services (like Giscus)—please refer to the respective service's privacy policy.
+- **Privacy Protection**: This website respects user privacy. See the full [Privacy Policy](/en/privacy/). Comment functionality uses third-party services (like Giscus)—please refer to the respective service's privacy policy.
 
 ## Tools as Extensions of Human Limbs
 
