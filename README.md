@@ -41,7 +41,7 @@ Astro 6 + TypeScript + UnoCSS + MDX + KaTeX + Mermaid
 
 - 网站：https://cgartlab.com
 - GitHub：https://github.com/cgartlab
-- 致谢：Astro、UnoCSS、Retypeset Theme
+- 基于 [Retypeset](https://github.com/radishzzz/astro-theme-retypeset) 主题构建，保留 CC BY-NC-SA 4.0 许可证
 
 ---
 
