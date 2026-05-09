@@ -73,6 +73,14 @@ const { title, description, url, icon } = Astro.props
   flex-shrink: 0;
 }
 
+.link-card-icon[src$=".svg"] {
+  filter: brightness(0) saturate(100%) invert(46%) sepia(0%) saturate(0%) hue-rotate(0deg);
+}
+
+.link-card-icon[src*="openclaw"] {
+  filter: none !important;
+}
+
 .link-card-text {
   flex: 1;
   min-width: 0;
