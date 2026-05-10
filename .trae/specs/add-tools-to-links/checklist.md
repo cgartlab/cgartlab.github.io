@@ -1,0 +1,8 @@
+- [ ] `links.ts` 中 zh "我常用的工具" 分类包含 13 个工具（原有 2 个 + 新增 11 个）
+- [ ] `links.ts` 中 en "Design & Creation" 分类包含对应英文工具条目
+- [ ] `links.ts` 中 zh-tw "設計創作" 分类包含对应繁体中文工具条目
+- [ ] 每个工具条目包含 title, description, url, icon 字段
+- [ ] 所有 icon URL 使用有效的 favicon 地址
+- [ ] 本地预览 `/links/` 页面正常渲染，无构建错误
+- [ ] 本地预览 `/en/links/` 页面正常渲染
+- [ ] 卡片悬停效果和布局与现有样式一致

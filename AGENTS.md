@@ -1,31 +1,87 @@
-# AGENTS.md
+# AGENTS.md — cgartlab.github.io
 
-## 命令
-- **开发**: `pnpm dev` (`astro check && astro dev`)
-- **构建**: `pnpm build` (`astro check` → build → `generate-llms.ts` → LQIP)
-- **检查**: `pnpm lint`, `pnpm lint:fix`
-- **内容**: `pnpm new-post "标题"`, `pnpm apply-lqip`, `pnpm format-posts`
+个人主站 (cgartlab.com)。Astro 6 + UnoCSS + pnpm 10.33.0，Cloudflare Workers 部署。
 
-## 约束
-- **包管理器**: pnpm 10.33.0（由 `package.json` `packageManager` 强制）
-- **`trailingSlash: 'always'`** (`astro.config.ts:31`) — 严禁修改
-- **LQIP 映射** (`src/assets/`) 自动生成 — 勿手动编辑
-- **ESLint** 忽略 `src/content/**` (`eslint.config.mjs:7`)
-- **提交前**: `lint-staged` 自动修复 `.js/.ts/.astro` 文件
-- **`.env`**: `GOOGLE_ADSENSE_PUBLISHER_ID`（不提交）
+## STRUCTURE
 
-## 内容
-- **文章**: `src/content/posts/`，图片同级 `_images/` 文件夹
-- **周刊**: `src/content/posts/weekly/`，需 `周刊` 标签，命名 `[主题] - No.XX 玄光周刊.md`
-- **双语**: 英文版加 `-en` 后缀（如 `文章.md` + `文章-en.md`）
-- **前置信息**: `title`, `published` (必需); `tags`, `draft`, `pin`, `lang` (zh/en/zh-tw), `abbrlink` (可选)
+```
+src/
+├── assets/         # LQIP 图片（自动生成，勿手动编辑）
+├── components/     # Astro 组件
+├── content/posts/  # 博客文章（含 weekly/ 周刊, _images/ 图片）
+├── data/           # 站点数据
+├── i18n/           # 国际化 (zh/en/zh-tw)
+├── layouts/        # 页面布局
+├── pages/          # 路由 ([...lang] 前缀)
+├── plugins/        # Markdown 插件 (rehype/remark)
+├── styles/         # UnoCSS 样式
+├── types/          # TypeScript 类型
+└── utils/          # 工具函数
+scripts/            # 构建/内容脚本
+```
 
-## 架构
-- **i18n**: `src/i18n/config.ts` — zh (默认), en, zh-tw；URL: `/`, `/en/`, `/zh-tw/`
-- **主题配置**: `src/config.ts`；Markdown 插件: `src/plugins/`
-- **构建**: UnoCSS + Astro Compress + Shiki 语法高亮（light/dark 主题）
+## WHERE TO LOOK
+
+| Task | Location | Notes |
+|------|----------|-------|
+| 博客文章 | `src/content/posts/` | MDX, 图片放 `_images/` |
+| 周刊 | `src/content/posts/weekly/` | 命名: `[主题] - No.XX 玄光周刊.md` |
+| i18n 配置 | `src/i18n/config.ts` | zh 默认, /en/, /zh-tw/ |
+| 站点配置 | `src/config.ts` | 全局主题配置 |
+| Astro 配置 | `astro.config.ts` | trailingSlash, UnoCSS, 集成 |
+| 构建脚本 | `scripts/` | generate-llms.ts, apply-lqip.ts, new-post.ts |
+| ESLint | `eslint.config.mjs` | antfu config, 忽略 src/content/ |
+
+## CODE MAP
+
+| Symbol | Type | Location | Role |
+|--------|------|----------|------|
+| `astro.config.ts` | Config | `/` | 主配置: trailingSlash, i18n, 集成 |
+| `src/config.ts` | Config | `src/` | 站点元数据、导航、社交链接 |
+| `src/i18n/config.ts` | Config | `src/i18n/` | 多语言路由和翻译 |
+| `src/content/config.ts` | Schema | `src/content/` | 内容集合 Zod schema |
+
+## CONVENTIONS
+
+- **`trailingSlash: 'always'`** — 所有 URL 以 `/` 结尾。**严禁修改**。
+- **pnpm 10.33.0** — `package.json` `packageManager` 强制，CI 需 `--config.trustPolicy=off`。
+- **LQIP 自动生成** — `src/assets/` 下图片由 `apply-lqip.ts` 自动处理，**不要手动编辑**。
+- **ESLint** — antfu config, `src/content/**` 被忽略。
+- **pre-commit** — `simple-git-hooks` + `lint-staged` 自动修复 `.js/.ts/.astro`。
+- **周刊标签** — 必须包含 `周刊` tag。
+- **双语文章** — 英文版文件名加 `-en` 后缀 (如 `文章.md` + `文章-en.md`)。
+- **Frontmatter**: `title`, `published` (必需); `tags`, `draft`, `pin`, `lang`, `abbrlink` (可选)。
+
+## ANTI-PATTERNS
+
+- **不要修改 `trailingSlash: 'always'`** — 所有现有 URL 依赖此设置。
+- **不要编辑 `src/assets/` 中的 LQIP 文件** — 由 `apply-lqip` 自动管理。
+- **不要用 npm/yarn** — pnpm only。
+- **不要在 `_images/` 外放文章图片** — 文章图片必须放在同名 `_images/` 目录。
+
+## COMMANDS
+
+```bash
+pnpm dev                  # astro check && astro dev
+pnpm build                # astro check → build → generate-llms → apply-lqip
+pnpm lint                 # eslint
+pnpm lint:fix             # eslint --fix
+pnpm new-post "标题"       # 创建文章（周刊自动放入 weekly/）
+pnpm format-posts         # CJK 文本格式化 (autocorrect)
+pnpm apply-lqip           # 生成 LQIP 图片
+```
 
 ## CI/CD
-- **触发**: 推送 `main` → Cloudflare Workers Git 集成自动部署
-- **构建**: `pnpm install --config.trustPolicy=off && pnpm build`
-- **域名**: cgartlab.com；环境变量在 Cloudflare Dashboard 配置
+
+- **触发**: push `main` → Cloudflare Workers Git 集成自动部署
+- **构建命令**: `pnpm install --config.trustPolicy=off && pnpm build`
+- **域名**: cgartlab.com
+- **环境变量**: Cloudflare Dashboard 配置 (`GOOGLE_ADSENSE_PUBLISHER_ID` 等)
+
+## NOTES
+
+- **UnoCSS** 而非 Tailwind — `unocss` 66.x, preset-attributify
+- **Markdown 插件**: rehype-katex (数学), rehype-mermaid (图表), remark-directive, remark-math
+- **评论系统**: Waline + Twikoo 双系统
+- **OG 图片**: `astro-og-canvas` + `canvaskit-wasm` 自动生成
+- **搜索**: 客户端搜索索引 (`api/search-index/[lang].json.ts`)
