@@ -63,6 +63,7 @@ const privacyText = {
   class="mt-6 text-3 leading-1.25em font-navbar lg:text-2.5"
   lg="uno-desktop-column bottom-16"
 >
+  <!-- 第1行：社交媒体 -->
   <p>
     {links.map((link, index) => (
       <>
@@ -72,12 +73,19 @@ const privacyText = {
     /&nbsp;<a class={footerLinkClass} href={aboutPath}><i>{wechatText}</i></a>
   </p>
 
+  <!-- 第2行：累计字数 + 隐私政策 -->
   <p>
-    © {year} {author}{showWordCount && <> · <i>{wordCountText}</i>{totalWords.toLocaleString()}</>}
-    {' · '}
+    {showWordCount && <><i>{wordCountText}</i>{totalWords.toLocaleString()}</>}
+    {showWordCount && ' · '}
     <a class={footerLinkClass} href={privacyPath}>{privacyText}</a>
   </p>
 
+  <!-- 第3行：版权信息（单独一行） -->
+  <p>
+    © {year} {author}
+  </p>
+
+  <!-- 第4行：内容采用 -->
   <p class="mt-2 text-2.5 opacity-80">
     {
       {
