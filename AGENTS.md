@@ -1,5 +1,7 @@
 # AGENTS.md — cgartlab.github.io
 
+**分层**: 个人品牌 (Personal Brand) — 品牌旗舰
+
 个人主站 (cgartlab.com)。Astro 6 + UnoCSS + pnpm 10.33.0，Cloudflare Workers 部署。
 
 ## STRUCTURE
@@ -25,6 +27,7 @@ scripts/            # 构建/内容脚本
 | Task | Location | Notes |
 |------|----------|-------|
 | 博客文章 | `src/content/posts/` | MDX, 图片放 `_images/` |
+| 产品介绍（LayerRenamer 等） | `src/content/posts/` | 个人产品的发布/介绍文章 |
 | 周刊 | `src/content/posts/weekly/` | 命名: `[主题] - No.XX 玄光周刊.md` |
 | i18n 配置 | `src/i18n/config.ts` | zh 默认, /en/, /zh-tw/ |
 | 站点配置 | `src/config.ts` | 全局主题配置 |
