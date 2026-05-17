@@ -55,12 +55,41 @@ scripts/            # 构建/内容脚本
 - **双语文章** — 英文版文件名加 `-en` 后缀 (如 `文章.md` + `文章-en.md`)。
 - **Frontmatter**: `title`, `published` (必需); `tags`, `draft`, `pin`, `lang`, `abbrlink` (可选)。
 
+## BRANCH STRATEGY
+
+### 分支命名规范
+```
+dev-{description}     # 网站功能开发
+write-{description}   # 文章/周刊写作
+```
+
+### 分支流程
+```
+main (受保护)
+├── dev-{description}  → 功能开发完成 → PR → main → 部署
+└── write-{description} → 文章写作完成 → PR → main → 部署
+```
+
+### 规则
+- **main 受保护** — 必须通过 PR 合并，禁止直接推送
+- **dev-*** — 网站代码、功能、样式、组件开发
+- **write-*** — 博客文章、周刊、内容创作
+- **合并后删除分支** — 已合并的功能分支应及时清理
+- **描述使用 kebab-case** — 如 `dev-header-fix`, `write-weekly-19`
+
+### 工作流程
+1. 从 main 创建 `dev-*` 或 `write-*` 分支
+2. 在分支上完成工作
+3. 提交 PR → 审查 → 合并到 main
+4. 合并后删除分支，拉取最新 main
+
 ## ANTI-PATTERNS
 
 - **不要修改 `trailingSlash: 'always'`** — 所有现有 URL 依赖此设置。
 - **不要编辑 `src/assets/` 中的 LQIP 文件** — 由 `apply-lqip` 自动管理。
 - **不要用 npm/yarn** — pnpm only。
 - **不要在 `_images/` 外放文章图片** — 文章图片必须放在同名 `_images/` 目录。
+- **不要直接推送 main** — 必须通过 PR 合并。
 
 ## COMMANDS
 
