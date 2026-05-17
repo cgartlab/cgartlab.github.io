@@ -37,6 +37,113 @@ Astro 6 + TypeScript + UnoCSS + MDX + KaTeX + Mermaid
 - **玄光周刊**：每周Newsletter
 - **作品集**：动态视觉设计作品
 
+## 分支策略
+
+本项目使用 `dev-*` 和 `write-*` 两种分支命名规范：
+
+| 分支类型 | 用途 | 示例 |
+|---------|------|------|
+| `dev-*` | 网站功能开发 | `dev-header-fix`, `dev-search-optimization` |
+| `write-*` | 文章/周刊写作 | `write-weekly-19`, `write-art-review` |
+
+### 工作流程
+
+```
+main (受保护)
+├── dev-{xxx}  → 功能开发 → PR → main → 部署
+└── write-{xxx} → 文章写作 → PR → main → 部署
+```
+
+**规则**：
+- `main` 受保护，必须通过 PR 合并
+- `dev-*` 用于代码、功能、样式开发
+- `write-*` 用于文章、周刊、内容创作
+- 合并后删除分支，拉取最新 main
+
+## 开发流程
+
+### 1. 网站功能开发
+
+```bash
+# 1. 从 main 创建开发分支
+git checkout main
+git pull origin main
+git checkout -b dev-your-feature
+
+# 2. 开发完成后提交
+git add .
+git commit -m "feat: add new feature"
+git push -u origin dev-your-feature
+
+# 3. GitHub 创建 PR → 审查 → 合并
+# 4. 合并后删除本地分支
+git checkout main
+git pull origin main
+git branch -d dev-your-feature
+```
+
+### 2. 文章/周刊写作
+
+```bash
+# 1. 从 main 创建写作分支
+git checkout main
+git pull origin main
+git checkout -b write-weekly-19
+
+# 2. 在 src/content/posts/weekly/ 创建文章
+# 命名格式: [主题] - No.XX 玄光周刊.md
+
+# 3. 提交文章
+git add .
+git commit -m "docs: add weekly #19"
+git push -u origin write-weekly-19
+
+# 4. GitHub 创建 PR → 审查 → 合并
+# 5. 合并后删除本地分支
+git checkout main
+git pull origin main
+git branch -d write-weekly-19
+```
+
+### 3. Obsidian 写作工作流
+
+Obsidian 用户可通过 obsidian-git 插件同步：
+
+```bash
+# 在终端先创建并推送分支
+git checkout -b write-your-topic
+git push -u origin write-your-topic
+
+# Obsidian 中刷新仓库即可看到新分支
+# 命令面板: Obsidian Git: Pull (拉取最新)
+# 命令面板: Obsidian Git: Commit (提交更改)
+# 命令面板: Obsidian Git: Push (推送)
+```
+
+**Obsidian 常用命令** (Ctrl/Cmd+P):
+- `Obsidian Git: Pull` — 拉取远程更改
+- `Obsidian Git: Commit` — 提交当前更改
+- `Obsidian Git: Push` — 推送到远程
+- `Obsidian Git: Checkout to` — 切换分支
+
+### 4. CI/CD 部署
+
+- push 到 `main` → Cloudflare Workers 自动部署
+- 构建命令: `pnpm install --config.trustPolicy=off && pnpm build`
+- 域名: https://cgartlab.com
+
+## 常用命令
+
+```bash
+pnpm dev                  # 启动开发服务器
+pnpm build                # 构建生产版本
+pnpm lint                 # ESLint 检查
+pnpm lint:fix             # ESLint 自动修复
+pnpm new-post "标题"       # 创建新文章
+pnpm format-posts         # 格式化 CJK 文本
+pnpm apply-lqip           # 生成 LQIP 图片
+```
+
 ## 相关链接
 
 - 网站：https://cgartlab.com
