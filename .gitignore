@@ -66,3 +66,5 @@ src/assets/lqip-map.json
 src/content/posts/*.base
 .obsidian/workspace.json
 .obsidian/workspace.json
+
+/.obsidian/workspace.json
