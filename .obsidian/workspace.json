@@ -4,11 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "6e87367928ad6d14",
+        "id": "74d68ce721a460ac",
         "type": "tabs",
         "children": [
           {
-            "id": "8e39e8d88867e3d0",
+            "id": "28ac1934ccc35e01",
             "type": "leaf",
             "state": {
               "type": "markdown",
@@ -169,10 +169,11 @@
   },
   "active": "44af323359bbddd8",
   "lastOpenFiles": [
+    "src/content/posts/weekly/我常用的 OpenClaw 工作流 Skill - No.18 玄光周刊.md",
+    "src/content/posts/0-文章数据库.base",
     "src/content/posts/_images/我常用的 OpenClaw 工作流 Skill - No.18 玄光周刊-1779522358029.webp",
     "src/content/posts/_images/我常用的 OpenClaw 工作流 Skill - No.18 玄光周刊-1779519862582.webp",
     "src/content/posts/_images/我常用的 OpenClaw 工作流 Skill - No.18 玄光周刊-1779036946164.webp",
-    "src/content/posts/weekly/我常用的 OpenClaw 工作流 Skill - No.18 玄光周刊.md",
     "src/content/posts/_images/我常用的 OpenClaw 工作流 Skill - No.18 玄光周刊-1779036673128.webp",
     "src/content/posts/_images/我常用的 OpenClaw 工作流 Skill - No.18 玄光周刊-1779036210576.webp",
     "src/content/posts/_images/我常用的 OpenClaw 工作流 Skill - No.18 玄光周刊-1779036148975.webp",
@@ -183,7 +184,6 @@
     "src/content/posts/_images/主题 - No.18 玄光周刊-1779030112419.webp",
     "src/content/posts/_images/我的 OpenClaw 常用自定义 Skill - No.18 玄光周刊-1779027009416.webp",
     "src/content/posts/weekly/从黑苹果到独立博客，这是我的开源旅程 - No.17玄光周刊.md",
-    "src/content/posts/0-文章数据库.base",
     "README.md",
     "AGENTS.md",
     "copilot/copilot-custom-prompts/Clip Web Page.md",
@@ -205,7 +205,6 @@
     "copilot",
     "src/content/posts/_images/从黑苹果到独立博客，这是我的开源旅程 - No.17玄光周刊-1777653407966.webp",
     "src/content/posts/适合的才最好，年底我选择新装一台“Mac mini”.md",
-    "src/content/posts/_images/从黑苹果到独立博客，这是我的开源旅程 - No.17玄光周刊-1777652961215.webp",
     "src/content/privacy/privacy-zh.md",
     "dist/_astro/mermaid.core.CFYjPDOT.js",
     "dist/_astro/xychartDiagram-5P7HB3ND.DGb-1UL-.js",
