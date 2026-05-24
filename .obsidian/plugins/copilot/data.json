@@ -306,7 +306,9 @@
       "name": "deepseek-v4-flash",
       "provider": "deepseek",
       "enabled": true,
-      "enableCors": true
+      "enableCors": true,
+      "topP": 0.9,
+      "frequencyPenalty": 0
     },
     {
       "name": "deepseek-v4-pro",
@@ -434,7 +436,7 @@
   "defaultConversationNoteName": "{$topic}@{$date}_{$time}",
   "inlineEditCommands": [],
   "projectList": [],
-  "lastDismissedVersion": "3.3.2",
+  "lastDismissedVersion": "3.3.3",
   "passMarkdownImages": true,
   "enableAutonomousAgent": true,
   "enableCustomPromptTemplating": true,

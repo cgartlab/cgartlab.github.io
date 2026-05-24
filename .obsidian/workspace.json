@@ -75,7 +75,7 @@
               "type": "bases",
               "state": {
                 "file": "src/content/posts/0-文章数据库.base",
-                "viewName": "草稿"
+                "viewName": "周刊"
               },
               "icon": "lucide-table",
               "title": "0-文章数据库"
@@ -151,11 +151,11 @@
             }
           }
         ],
-        "currentTab": 2
+        "currentTab": 3
       }
     ],
     "direction": "horizontal",
-    "width": 297.5
+    "width": 488.5
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -167,10 +167,13 @@
       "oz-clear-unused-images:Clear Unused Images": false
     }
   },
-  "active": "28ac1934ccc35e01",
+  "active": "44af323359bbddd8",
   "lastOpenFiles": [
-    "src/content/posts/_images/我常用的 OpenClaw 工作流 Skill - No.18 玄光周刊-1779603205424.webp",
+    "src/content/posts/weekly/AI时代的创意工具 - No.16 玄光周刊.md",
+    "src/content/posts/weekly/AI时代的创意工具 - No.16 玄光周刊-en.md",
+    "src/content/posts/weekly/从黑苹果到独立博客，这是我的开源旅程 - No.17玄光周刊.md",
     "src/content/posts/weekly/我常用的 OpenClaw 工作流 Skill - No.18 玄光周刊.md",
+    "src/content/posts/_images/我常用的 OpenClaw 工作流 Skill - No.18 玄光周刊-1779603205424.webp",
     "src/content/posts/0-文章数据库.base",
     "src/content/posts/_images/我常用的 OpenClaw 工作流 Skill - No.18 玄光周刊-1779522358029.webp",
     "src/content/posts/_images/我常用的 OpenClaw 工作流 Skill - No.18 玄光周刊-1779519862582.webp",
@@ -184,7 +187,6 @@
     "src/assets/templates/我的 OpenClaw 常用自定义 Skill - No.18 玄光周刊.md",
     "src/content/posts/_images/主题 - No.18 玄光周刊-1779030112419.webp",
     "src/content/posts/_images/我的 OpenClaw 常用自定义 Skill - No.18 玄光周刊-1779027009416.webp",
-    "src/content/posts/weekly/从黑苹果到独立博客，这是我的开源旅程 - No.17玄光周刊.md",
     "README.md",
     "AGENTS.md",
     "copilot/copilot-custom-prompts/Clip Web Page.md",
@@ -204,7 +206,6 @@
     "copilot/copilot-custom-prompts/Fix grammar and spelling.md",
     "copilot/copilot-custom-prompts",
     "copilot",
-    "src/content/posts/_images/从黑苹果到独立博客，这是我的开源旅程 - No.17玄光周刊-1777653407966.webp",
     "src/content/posts/适合的才最好，年底我选择新装一台“Mac mini”.md",
     "src/content/privacy/privacy-zh.md",
     "dist/_astro/mermaid.core.CFYjPDOT.js",
@@ -213,7 +214,6 @@
     "dist/_astro/wardley-RL74JXVD.C164j_W1.js",
     "dist/_astro/vennDiagram-DHZGUBPP.SFbR7u2d.js",
     "dist/_astro/wardleyDiagram-NUSXRM2D.D5_2Q9sF.js",
-    "dist/_astro/mindmap-definition-QFDTVHPH.D-6zClhd.js",
-    "src/content/privacy/privacy-en.md"
+    "dist/_astro/mindmap-definition-QFDTVHPH.D-6zClhd.js"
   ]
 }
