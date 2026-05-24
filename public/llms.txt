@@ -4,6 +4,7 @@
 
 ## 近期文章
 
+- [我常用的 OpenClaw 工作流 Skill - No.18 玄光周刊](https://cgartlab.com/zh/weekly/weekly-18): 用了 OpenClaw 三个月，给我最大的感受是根本不知道这个工具的上限在哪里。几乎每天都会认识到新的概念，每周都会发现已有工作流的不足之处。其中 Skill 这个概念不得不提，它太重要了。
 - [从黑苹果到独立博客，这是我的开源旅程 - No.17玄光周刊](https://cgartlab.com/zh/weekly/weekly-17): 疫情初期，因折腾黑苹果首次接触开源，从最开始套用别人分享的文件。直到翻阅驱动源码时看到上百人为硬件ID反复调试，才意识到这套系统是志愿者用业余时间一砖一瓦搭建起来的。
 - [AI时代的创意工具 - No.16玄光周刊](https://cgartlab.com/zh/weekly/weekly-16): AI工具已从“赋能”卖点变为行业标配，但核心问题在于：它们是在扩展还是抹平创作边界？
 - [工具塑造创作方式 - No.15 玄光周刊](https://cgartlab.com/zh/weekly/weekly-15): 从专业软件到关注工作流的工具，再到主动参与的AI。这引发核心问题：当工具能“创作”，人的价值何在？答案在于判断力——在噪声中识别方向、定义意义的能力。随着执行成本下降，判断力成为创作者真正的稀缺资源。
@@ -33,10 +34,11 @@
 - [12月拔草记录的好物](https://cgartlab.com/zh/posts/2024-12-good-things): 12月拔草记录的好物分享，包含农科院无蔗糖燕麦、Pidan猫薄荷玩具、米家石墨烯电暖器、Keychron K3 Max键盘等好物推荐。
 - [再开公众号，并接入 AI](https://cgartlab.com/zh/posts/setup-wechat-channel-again): 重新开通微信公众号并接入AI助手的完整经验分享，包含智能体配置、知识库设置和多平台内容分发策略
 - [【SCP-华夏系列组画】上线爱发电](https://cgartlab.com/zh/posts/scp-digital-artwork): 目前更新至第三幅 《醉奴》
-- [2024年，如何更优雅地使用 Mac](https://cgartlab.com/zh/posts/2024-elegant-use-mac): 2024年Mac使用优化指南，从系统配置到软件选择，提升Mac使用体验和工作效率的实用技巧
 
 ## English Articles
 
+- ["My OpenClaw Workflow Skills - No.18 Black Light Weekly](https://cgartlab.com/en/weekly/weekly-18): "After using OpenClaw for three months, my biggest feeling is that I have no idea what the upper limit of this tool is. Almost every day I learn new concepts, and every week I discover shortcomings in existing workflows. Among them, the concept of Skill is indispensable — it's too important.
+- ["From Hackintosh to Indie Blog: My Open Source Journey - No.17 Black Light Weekly](https://cgartlab.com/en/weekly/weekly-17): "During the early pandemic, I first encountered open source through tinkering with Hackintosh. Starting with using files shared by others, it wasn't until I read driver source code and saw hundreds of people debugging hardware IDs that I realized this system was built brick by brick by volunteers in their spare time.
 - ["Creative Tools in the AI Era - No.16 Black Light Weekly | Digital Art Innovation](https://cgartlab.com/en/weekly/weekly-16): "Analyze AI creative tools reshaping digital art in 2026. Explore Runway Gen-4, Leonardo AI, Stable Diffusion, and the debate between professionalization versus democratization of creative software.
 - ["Tools Shaping How We Create - No.15 Black Light Weekly | Creative Workflow Evolution](https://cgartlab.com/en/weekly/weekly-15): "Explore how creative tools evolve from Photoshop to AI-powered workflows. Discover Jan local AI, Figma MCP pipelines, and Appwrite backend services that are reshaping digital creation and design processes.
 - ["AI Long-Term Memory Strategy: When AI Remembers Everything - No.14 Weekly](https://cgartlab.com/en/weekly/weekly-14): "Master AI long-term memory features with proven strategies for ChatGPT, Claude, and other LLMs. Learn how to organize AI projects, manage conversation context, and maintain data privacy while maximizing AI productivity.
@@ -65,5 +67,3 @@
 - ["LayerRenamer 1.0: Photoshop Batch Layer Renaming Script for Designers](https://cgartlab.com/en/posts/layerrenamer-1): "Download LayerRenamer 1.0 free Photoshop script for batch layer renaming. Supports custom naming rules, numbering formats, and grouping to streamline your design workflow and boost productivity.
 - ["How to Use Windows PC Elegantly in 2024: Optimization & Setup Guide](https://cgartlab.com/en/posts/2024-elegant-use-windows): "Master Windows 11 in 2024 with our complete optimization guide. Learn system settings, keyboard shortcuts, built-in tools like winget, and productivity tips for an efficient Windows experience.
 - ["How I Built a Cloud Library: Self-Hosted E-Book Server Tutorial](https://cgartlab.com/en/posts/how-to-build-library): "Build your own cloud library with this step-by-step tutorial. Learn how to set up Calibre on Proxmox VE Debian 12 VM, configure X11 forwarding, and create a personal e-book management system.
-- ["Digital Art Creation Basics (Part 1): The Courage to Start Creating](https://cgartlab.com/en/posts/digitalpainting1-confidence): "Begin your digital art journey with confidence. Learn fundamental concepts, overcome creative fear, and discover why starting before you're ready is the key to success in CG art and digital painting.
-- ["I Still Don't Know: Authentic Perception in the Information Age](https://cgartlab.com/en/posts/know-nothing): "Explore the tension between knowledge background and pure sensory experience in art appreciation. Discover how to maintain authentic perception while navigating information overload in digital culture.
