@@ -80,8 +80,31 @@ main (受保护)
 ### 工作流程
 1. 从 main 创建 `dev-*` 或 `write-*` 分支
 2. 在分支上完成工作
-3. 提交 PR → 审查 → 合并到 main
+3. 提交 PR → Squash merge → 合并到 main
 4. 合并后删除分支，拉取最新 main
+
+## COMMIT MESSAGE
+
+所有提交遵循 Conventional Commits 格式，由 `commit-msg` hook 自动校验。
+
+### 标准格式
+```
+<type>(<可选 scope>): <描述>
+```
+
+### 允许类型
+`feat` | `fix` | `docs` | `style` | `refactor` | `perf` | `test` | `chore` | `ci`
+
+### 规则
+- **scope**：可选，支持 Unicode 字母（大写、中文）、数字、`_`、`.`、`-`
+- **scope 示例**：`feat(Auth)`、`docs(认证)`、`chore`
+
+### 豁免（跳过校验）
+| 前缀 | 用途 |
+|------|------|
+| `Merge ...` | Git 合入 |
+| `Revert ...` / `This reverts commit ...` | 回退提交 |
+| `vault backup: ...` | Obsidian 自动备份（仅 cgartlab-obsidian） |
 
 ## ANTI-PATTERNS
 
@@ -89,7 +112,7 @@ main (受保护)
 - **不要编辑 `src/assets/` 中的 LQIP 文件** — 由 `apply-lqip` 自动管理。
 - **不要用 npm/yarn** — pnpm only。
 - **不要在 `_images/` 外放文章图片** — 文章图片必须放在同名 `_images/` 目录。
-- **不要直接推送 main** — 必须通过 PR 合并。
+- **不要直接推送 main** — 必须通过 PR 合并（`dev-*` 或 `write-*` 分支 → PR → squash merge → main）。
 
 ## COMMANDS
 

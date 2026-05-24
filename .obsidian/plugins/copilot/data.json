@@ -16,7 +16,7 @@
   "openRouterAiApiKey": "",
   "xaiApiKey": "",
   "mistralApiKey": "",
-  "deepseekApiKey": "",
+  "deepseekApiKey": "sk-13d4d8c5e7cb4a2dbbf60dcf77c751eb",
   "amazonBedrockApiKey": "",
   "amazonBedrockRegion": "",
   "siliconflowApiKey": "",
@@ -24,8 +24,8 @@
   "githubCopilotToken": "",
   "githubCopilotTokenExpiresAt": 0,
   "defaultChainType": "llm_chain",
-  "defaultModelKey": "google/gemini-2.5-flash|openrouterai",
-  "embeddingModelKey": "openai/text-embedding-3-small|openrouterai",
+  "defaultModelKey": "deepseek-ai/DeepSeek-V4-Flash|siliconflow",
+  "embeddingModelKey": "Qwen/Qwen3-Embedding-0.6B|siliconflow",
   "temperature": 0.1,
   "maxTokens": 6000,
   "contextTurns": 15,
@@ -35,7 +35,7 @@
   "stream": true,
   "defaultSaveFolder": "copilot/copilot-conversations",
   "defaultConversationTag": "copilot-conversation",
-  "autosaveChat": true,
+  "autosaveChat": false,
   "generateAIChatTitleOnSave": true,
   "autoAddActiveContentToContext": true,
   "defaultOpenArea": "view",
@@ -48,7 +48,6 @@
   "chatNoteContextTags": [],
   "enableIndexSync": true,
   "debug": false,
-  "enableEncryption": false,
   "maxSourceChunks": 30,
   "enableInlineCitations": true,
   "groqApiKey": "",
@@ -77,9 +76,29 @@
       ]
     },
     {
-      "name": "gpt-5.4",
+      "name": "gpt-5.5",
       "provider": "openai",
       "enabled": true,
+      "isBuiltIn": true,
+      "core": true,
+      "capabilities": [
+        "vision"
+      ]
+    },
+    {
+      "name": "gpt-5.4-mini",
+      "provider": "openai",
+      "enabled": true,
+      "isBuiltIn": true,
+      "core": true,
+      "capabilities": [
+        "vision"
+      ]
+    },
+    {
+      "name": "gpt-5.4",
+      "provider": "openai",
+      "enabled": false,
       "isBuiltIn": true,
       "core": true,
       "capabilities": [
@@ -89,7 +108,7 @@
     {
       "name": "gpt-5-mini",
       "provider": "openai",
-      "enabled": true,
+      "enabled": false,
       "isBuiltIn": true,
       "core": true,
       "capabilities": [
@@ -99,17 +118,17 @@
     {
       "name": "claude-sonnet-4-6",
       "provider": "anthropic",
-      "enabled": true,
+      "enabled": false,
       "isBuiltIn": true,
       "capabilities": [
-        "vision",
-        "reasoning"
+        "reasoning",
+        "vision"
       ]
     },
     {
       "name": "gemini-3.1-flash-lite-preview",
       "provider": "google",
-      "enabled": true,
+      "enabled": false,
       "isBuiltIn": true,
       "projectEnabled": true,
       "capabilities": [
@@ -119,7 +138,7 @@
     {
       "name": "gemini-2.5-flash",
       "provider": "google",
-      "enabled": true,
+      "enabled": false,
       "isBuiltIn": true,
       "projectEnabled": true,
       "capabilities": [
@@ -132,8 +151,8 @@
       "enabled": false,
       "isBuiltIn": true,
       "capabilities": [
-        "vision",
-        "reasoning"
+        "reasoning",
+        "vision"
       ]
     },
     {
@@ -142,8 +161,8 @@
       "enabled": false,
       "isBuiltIn": true,
       "capabilities": [
-        "vision",
-        "reasoning"
+        "reasoning",
+        "vision"
       ]
     },
     {
@@ -229,8 +248,8 @@
       "enabled": false,
       "isBuiltIn": true,
       "capabilities": [
-        "vision",
-        "reasoning"
+        "reasoning",
+        "vision"
       ]
     },
     {
@@ -239,8 +258,8 @@
       "enabled": false,
       "isBuiltIn": true,
       "capabilities": [
-        "vision",
-        "reasoning"
+        "reasoning",
+        "vision"
       ]
     },
     {
@@ -249,8 +268,8 @@
       "enabled": false,
       "isBuiltIn": true,
       "capabilities": [
-        "vision",
-        "reasoning"
+        "reasoning",
+        "vision"
       ]
     },
     {
@@ -264,36 +283,38 @@
       ]
     },
     {
-      "name": "deepseek-chat",
-      "provider": "deepseek",
-      "enabled": false,
-      "isBuiltIn": true
-    },
-    {
-      "name": "deepseek-reasoner",
-      "provider": "deepseek",
-      "enabled": false,
-      "isBuiltIn": true,
-      "capabilities": [
-        "reasoning"
-      ]
-    },
-    {
-      "name": "deepseek-ai/DeepSeek-V3",
+      "name": "deepseek-ai/DeepSeek-V4-Flash",
       "provider": "siliconflow",
-      "enabled": false,
+      "enabled": true,
       "isBuiltIn": false,
-      "baseUrl": "https://api.siliconflow.com/v1"
+      "baseUrl": "https://api.siliconflow.cn/v1",
+      "displayName": "DeepSeek-V4-Flash",
+      "maxTokens": 128000,
+      "temperature": 0.3,
+      "topP": 0.9,
+      "frequencyPenalty": 0.15,
+      "apiKey": "sk-khkmvmpyafrotkqlvlmfbadenehotulkhyfrymjxfcounynp",
+      "capabilities": [
+        "reasoning",
+        "vision",
+        "websearch"
+      ],
+      "enableCors": true,
+      "reasoningEffort": "low"
     },
     {
-      "name": "deepseek-ai/DeepSeek-R1",
-      "provider": "siliconflow",
-      "enabled": false,
-      "isBuiltIn": false,
-      "baseUrl": "https://api.siliconflow.com/v1",
-      "capabilities": [
-        "reasoning"
-      ]
+      "name": "deepseek-v4-flash",
+      "provider": "deepseek",
+      "enabled": true,
+      "enableCors": true,
+      "topP": 0.9,
+      "frequencyPenalty": 0
+    },
+    {
+      "name": "deepseek-v4-pro",
+      "provider": "deepseek",
+      "enabled": true,
+      "enableCors": true
     }
   ],
   "activeEmbeddingModels": [
@@ -366,7 +387,10 @@
       "isBuiltIn": true,
       "isEmbeddingModel": true,
       "core": true,
-      "baseUrl": "https://api.siliconflow.com/v1"
+      "baseUrl": "https://api.siliconflow.cn/v1",
+      "apiKey": "sk-khkmvmpyafrotkqlvlmfbadenehotulkhyfrymjxfcounynp",
+      "enableCors": true,
+      "displayName": "Qwen3-Embedding-0.6B"
     },
     {
       "name": "text-embedding-3-large",
@@ -400,7 +424,7 @@
   "embeddingRequestsPerMin": 60,
   "embeddingBatchSize": 16,
   "disableIndexOnMobile": true,
-  "showSuggestedPrompts": true,
+  "showSuggestedPrompts": false,
   "showRelevantNotes": true,
   "numPartitions": 1,
   "lexicalSearchRamLimit": 100,
@@ -408,14 +432,15 @@
   "promptSortStrategy": "timestamp",
   "chatHistorySortStrategy": "recent",
   "projectListSortStrategy": "recent",
+  "projectsFolder": "copilot/projects",
   "defaultConversationNoteName": "{$topic}@{$date}_{$time}",
   "inlineEditCommands": [],
   "projectList": [],
-  "lastDismissedVersion": null,
+  "lastDismissedVersion": "3.3.3",
   "passMarkdownImages": true,
   "enableAutonomousAgent": true,
   "enableCustomPromptTemplating": true,
-  "enableSemanticSearchV3": false,
+  "enableSemanticSearchV3": true,
   "enableSelfHostMode": false,
   "enableMiyo": false,
   "miyoSearchAll": false,
@@ -455,5 +480,6 @@
   "userSystemPromptsFolder": "copilot/system-prompts",
   "defaultSystemPromptTitle": "",
   "autoCompactThreshold": 128000,
-  "convertedDocOutputFolder": ""
+  "convertedDocOutputFolder": "",
+  "_keychainVaultId": "8fcbeda4"
 }
