@@ -11,105 +11,115 @@ interface Props {
 
 const { posts, lang } = Astro.props
 
-// 动态导入 src/content/posts/_images 目录下的所有图片
+// Group posts by year
+const postsByYear = new Map<number, Post[]>()
+for (const post of posts) {
+  const year = post.data.published.getFullYear()
+  if (!postsByYear.has(year)) postsByYear.set(year, [])
+  postsByYear.get(year)!.push(post)
+}
+const sortedYears = [...postsByYear.keys()].sort((a, b) => b - a)
+
+// Extract issue number from abbrlink (e.g. "weekly-16" → "16")
+function getIssueNumber(post: Post): string {
+  const abbr = post.data.abbrlink || ''
+  const m = abbr.match(/weekly-(\d+)/)
+  return m ? m[1] : ''
+}
+
+// Dynamic import for thumbnails
 const imagesGlob = import.meta.glob<{ default: ImageMetadata }>(
   '/src/content/posts/_images/**/*.{jpeg,jpg,png,gif,webp}',
   { eager: true },
 )
 
-// 提取文章的第一张图片
+// Extract first image from post body
 async function getThumbnail(post: Post): Promise<{ type: 'image', src: string } | null> {
   const content = post.body || ''
-
-  // 检查是否有第一张图片
   const imageMatch = content.match(/!\[.*?\]\((.*?\.(?:webp|jpg|jpeg|png|gif))\)/)
   if (imageMatch) {
     const imagePath = imageMatch[1]
-
-    // 处理相对路径，转换为绝对路径
     if (imagePath.startsWith('./_images/') || imagePath.startsWith('../_images/')) {
-      // 解码 URL 编码的字符（如%20）
       const decodedPath = decodeURIComponent(imagePath)
-      // 正确处理各种相对路径情况，保留子目录结构
       const imageName = decodedPath.replace(/^(\.\.?\/)?_images\//, '')
       const absolutePath = `/src/content/posts/_images/${imageName}`
-
-      // 查找对应的图片模块
       const imageImporter = imagesGlob[absolutePath]
       if (imageImporter) {
         const imageMetadata = imageImporter.default
-        // 直接返回图片路径，Astro 会自动处理优化
         return { type: 'image', src: imageMetadata.src }
       }
     }
-
-    // 如果是外部链接，直接使用
     if (imagePath.startsWith('http')) {
       return { type: 'image', src: imagePath }
     }
-
-    // 其他情况返回原路径
     return { type: 'image', src: imagePath }
   }
-
   return null
 }
 
-// 获取文章描述
+// Get post description
 function getDescription(post: Post): string {
   return post.data.description || ''
 }
 ---
 
 <div class="weekly-gallery">
-  <!-- 周刊列表 -->
-  <div class="weekly-list">
-    {await Promise.all(posts.map(async (post) => {
-      const slug = post.data.abbrlink || post.id
-      const thumbnail = await getThumbnail(post)
-      const description = getDescription(post)
+  {sortedYears.map((year, yi) => (
+    <>
+      {yi > 0 && <div class="year-separator" />}
+      <div class="weekly-list">
+        {postsByYear.get(year)!.map(async (post) => {
+          const slug = post.data.abbrlink || post.id
+          const thumbnail = await getThumbnail(post)
+          const description = getDescription(post)
+          const issueNum = getIssueNumber(post)
 
-      return (
-        <div class="weekly-item">
-          <a
-            href={getPostPath(slug, lang)}
-            class="weekly-link"
-            transition:name={`post-${slug}${lang ? `-${lang}` : ''}`}
-            data-disable-theme-toggle-transition
-          >
-            <!-- 封面图区域 -->
-            <div class="weekly-thumbnail">
-              {thumbnail
-                ? (
-                  <img
-                    src={thumbnail.src}
-                    alt={post.data.title}
-                    loading="lazy"
-                    class="thumbnail-image"
-                  />
-                )
-                : (
-                  <div class="thumbnail-placeholder">
-                    <span class="placeholder-text">{lang === 'zh' ? '周刊' : 'Weekly'}</span>
+          return (
+            <div class="weekly-item">
+              <a
+                href={getPostPath(slug, lang)}
+                class="weekly-link"
+                transition:name={`post-${slug}${lang ? `-${lang}` : ''}`}
+                data-disable-theme-toggle-transition
+              >
+                {/* Cover image area */}
+                <div class="weekly-thumbnail">
+                  {thumbnail
+                    ? (
+                      <img
+                        src={thumbnail.src}
+                        alt={post.data.title}
+                        loading="lazy"
+                        class="thumbnail-image"
+                      />
+                    )
+                    : (
+                      <div class="thumbnail-placeholder">
+                        <span class="placeholder-text">{lang === 'zh' ? '周刊' : 'Weekly'}</span>
+                      </div>
+                    )}
+                </div>
+
+                {/* Content area */}
+                <div class="weekly-info">
+                  <h3 class="weekly-title">{post.data.title}</h3>
+                  {description && <p class="weekly-description">{description}</p>}
+                  <div class="weekly-meta">
+                    <div class="weekly-date-line">
+                      {issueNum && <span class="weekly-issue-num">#{issueNum}-</span>}
+                      <span class="weekly-date">
+                        {post.data.published.toLocaleDateString(lang === 'zh' ? 'zh-CN' : 'en-US', { year: 'numeric', month: 'numeric', day: 'numeric' })}
+                      </span>
+                    </div>
                   </div>
-                )}
+                </div>
+              </a>
             </div>
-
-            <!-- 内容区域 -->
-            <div class="weekly-info">
-              <h3 class="weekly-title">{post.data.title}</h3>
-              {description && <p class="weekly-description">{description}</p>}
-              <div class="weekly-meta">
-                <span class="weekly-date">
-                  {post.data.published.toLocaleDateString(lang === 'zh' ? 'zh-CN' : 'en-US')}
-                </span>
-              </div>
-            </div>
-          </a>
-        </div>
-      )
-    }))}
-  </div>
+          )
+        })}
+      </div>
+    </>
+  ))}
 </div>
 
 <style>
@@ -125,7 +135,7 @@ function getDescription(post: Post): string {
   }
 }
 
-/* 周刊列表样式 - 网格布局 */
+/* Grid layout */
 .weekly-list {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -152,7 +162,7 @@ function getDescription(post: Post): string {
   border-color: oklch(var(--un-preset-theme-colors-primary) / 0.3);
 }
 
-/* 封面图区域 */
+/* Cover image area */
 .weekly-thumbnail {
   width: 100%;
   aspect-ratio: 16 / 10;
@@ -192,7 +202,7 @@ function getDescription(post: Post): string {
   letter-spacing: 0.1em;
 }
 
-/* 内容区域 */
+/* Content area */
 .weekly-info {
   padding: 1.25rem 1.5rem;
   display: flex;
@@ -224,7 +234,7 @@ function getDescription(post: Post): string {
   overflow: hidden;
 }
 
-/* 元信息区域 */
+/* Meta area */
 .weekly-meta {
   display: flex;
   align-items: center;
@@ -236,19 +246,58 @@ function getDescription(post: Post): string {
   margin-top: 0.5rem;
 }
 
+.weekly-date-line {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.weekly-issue-num {
+  color: oklch(var(--un-preset-theme-colors-primary) / 0.8);
+  font-weight: 600;
+}
+
 .weekly-date {
   font-weight: 500;
   font-variant-numeric: tabular-nums;
 }
 
-/* 响应式设计 */
+/* Year group separator */
+.year-separator {
+  grid-column: 1 / -1;
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    oklch(var(--un-preset-theme-colors-primary) / 0.25) 20%,
+    oklch(var(--un-preset-theme-colors-primary) / 0.25) 80%,
+    transparent
+  );
+  margin: 1rem 0;
+}
+
+/* Responsive grid: 4 columns at wide screens */
+@media (min-width: 640px) {
+  .weekly-list {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .weekly-list {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (min-width: 1400px) {
+  .weekly-list {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
 @media (max-width: 768px) {
   .weekly-gallery {
     padding: 1.5rem 0;
-  }
-  .weekly-list {
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
   }
   .weekly-thumbnail {
     aspect-ratio: 16 / 9;
