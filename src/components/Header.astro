@@ -55,7 +55,8 @@ const SubtitleTag = isPost ? 'div' : 'h2'
       ]}
       aria-hidden={isPost}
     >
-      {headerSubtitle}
+      <span>{headerSubtitle}</span>
+      <span aria-hidden="true" class="typing-cursor ml-0.5" />
     </SubtitleTag>
   )}
 </header>

@@ -103,3 +103,13 @@ html.dark .code-copy-button.copied {
 .tag-text {
   --at-apply: 'text-center';
 }
+
+/* Typing Cursor >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> */
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+.typing-cursor {
+  --at-apply: 'inline-block w-0.5 self-stretch rounded-sm bg-current';
+  animation: blink 0.5s step-end infinite;
+}
