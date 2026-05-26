@@ -24,7 +24,7 @@ const isHome = isHomePage(Astro.url.pathname)
     return (
       <li
         class:list={[
-          'mb-5.5',
+          'mb-8',
           isHome ? 'lg:mb-10' : '',
         ]}
       >
@@ -54,7 +54,7 @@ const isHome = isHomePage(Astro.url.pathname)
         {/* post time: published date + reading time */}
         <div
           class:list={[
-            'text-3.5 font-time',
+            'mt-2 text-3.5 font-time',
             isHome ? 'lg:text-3.65' : '',
           ]}
           transition:name={`time-${slug}${lang ? `-${lang}` : ''}`}
@@ -69,10 +69,9 @@ const isHome = isHomePage(Astro.url.pathname)
         {/* post description */}
         <div
           class:list={[
-            'heti',
+            'heti mt-3',
             isHome ? 'block' : 'hidden lg:block',
           ]}
-          lg:mt-2.25
         >
           <p class="text-3.5 c-secondary/60 leading-relaxed">
             {getPostDescription(post, 'list')}
