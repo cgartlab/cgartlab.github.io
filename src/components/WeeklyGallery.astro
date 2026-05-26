@@ -106,7 +106,7 @@ function getDescription(post: Post): string {
                   {description && <p class="weekly-description">{description}</p>}
                   <div class="weekly-meta">
                     <div class="weekly-date-line">
-                      {issueNum && <span class="weekly-issue-num">#{issueNum}-</span>}
+                      {issueNum && <span class="weekly-issue-num">#{issueNum}</span>}
                       <span class="weekly-date">
                         {post.data.published.toLocaleDateString(lang === 'zh' ? 'zh-CN' : 'en-US', { year: 'numeric', month: 'numeric', day: 'numeric' })}
                       </span>
@@ -252,14 +252,14 @@ function getDescription(post: Post): string {
   gap: 0.4rem;
 }
 
-.weekly-issue-num {
-  color: oklch(var(--un-preset-theme-colors-primary) / 0.8);
-  font-weight: 600;
-}
-
+.weekly-issue-num,
 .weekly-date {
   font-weight: 500;
   font-variant-numeric: tabular-nums;
+}
+
+.weekly-date-line {
+  color: oklch(var(--un-preset-theme-colors-secondary) / 0.6);
 }
 
 /* Year group separator */
@@ -273,25 +273,14 @@ function getDescription(post: Post): string {
     oklch(var(--un-preset-theme-colors-primary) / 0.25) 80%,
     transparent
   );
-  margin: 1rem 0;
+  margin: 2rem 0;
 }
 
-/* Responsive grid: 4 columns at wide screens */
-@media (min-width: 640px) {
+/* Responsive grid: 2 columns on tablet and desktop, 1 column on mobile */
+@media (min-width: 768px) {
   .weekly-list {
     grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (min-width: 1024px) {
-  .weekly-list {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-
-@media (min-width: 1400px) {
-  .weekly-list {
-    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
   }
 }
 
