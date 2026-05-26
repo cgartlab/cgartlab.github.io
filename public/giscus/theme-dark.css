@@ -2,22 +2,19 @@
  * Copyright (c) 2018 GitHub Inc.
  * https://github.com/primer/primitives/blob/main/LICENSE
  */
-
  main {
   /* Custom Theme Colors */
   --secondary-color: oklch(77% 0.005 298);
   --secondary-color-25: oklch(77% 0.005 298 / 25%);
   --secondary-color-5: oklch(77% 0.005 298 / 5%);
   --background-color: oklch(22% 0.005 298);
-
   --color-fg-default: var(--secondary-color);
   --color-canvas-default: transparent;
   --color-canvas-overlay: var(--background-color);
   --color-canvas-inset: transparent;
   --color-canvas-subtle: transparent;
-  --color-accent-fg: oklch(0.75 0.12 138);
-  --color-accent-emphasis: oklch(0.75 0.12 138);
-
+  --color-accent-fg: oklch(70.7% 0.165 254.624);
+  --color-accent-emphasis: oklch(70.7% 0.165 254.624);
   /* Official Theme Colors */
   --color-prettylights-syntax-comment: #8b949e;
   --color-prettylights-syntax-constant: #79c0ff;
@@ -92,44 +89,36 @@
   --color-primer-shadow-inset: 0 0 transparent;
   --color-scale-gray-7: #21262d;
   --color-scale-blue-8: #0c2d6b;
-
   /*! Extensions from @primer/css/alerts/flash.scss */
   --color-social-reaction-bg-hover: var(--color-scale-gray-7);
   --color-social-reaction-bg-reacted-hover: var(--color-scale-blue-8);
 }
-
 main .pagination-loader-container {
   background-image: url("https://github.com/images/modules/pulls/progressive-disclosure-line-dark.svg");
 }
-
 main .gsc-loading-image {
   background-image: url("https://github.githubassets.com/images/mona-loading-dark.gif");
 }
-
 /* Smooth Font */
 body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-
 /* All Border Color */
 *:not(.BtnGroup-item) {
   border-color: var(--secondary-color-25)!important;
 }
-
 /* Hide Giscus Copyright and Avatar Line */
 .gsc-tl-line,
 .gsc-left-header em {
   display: none;
 }
-
 /* Font Size and Color on Comments Count */
 h4.gsc-comments-count-separator,
 h4.gsc-replies-count {
   color: var(--secondary-color);
   font-size: 0.875rem;
 }
-
 /* "Oldest" and "Newest" Buttons Style */
 .BtnGroup-item,
 .BtnGroup-item.BtnGroup-item--selected {
@@ -150,29 +139,24 @@ h4.gsc-replies-count {
 .BtnGroup-item .btn {
   background-color: transparent;
 }
-
 /* Larger Padding Top on Author Comment Header */
 .gsc-comment-header {
   padding-top: 1rem;
 }
-
 /* Add Padding Bottom on Replies Box */
 .gsc-replies {
   padding-bottom: 0.5rem;
 }
-
 /* Hide Underline on Reply Time */
 .gsc-comment-author a:has(time),
 .gsc-reply-author a:has(time) {
   text-decoration: none;
   font-size: 0.75rem;
 }
-
 /* Hide Underline on Comments Count */
 .gsc-comments-count a {
   text-decoration: none!important;
 }
-
 /* Social Reactions Icons */
 .gsc-social-reaction-summary-item.has-reacted {
   background-color: var(--background-color);
@@ -184,22 +168,18 @@ h4.gsc-replies-count {
 .color-bg-info {
   background-color: var(--background-color);
 }
-
 /* Medium Font Weight on Comment Box Tabs Selected Button  */
 .gsc-comment-box-tabs .color-text-primary {
   font-weight: 500;
 }
-
 /* Thinner Bottom Line on Comment Box Preview Border */
 .gsc-comment-box-preview {
   border-bottom-width: 1px;
 }
-
 /* Hide Underline on sign out button */
 .link-secondary {
   text-decoration: none;
 }
-
 /* Scrollbar Style on Code Blocks */
 pre {
   background-color: var(--secondary-color-5)!important;

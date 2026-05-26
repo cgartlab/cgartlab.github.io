@@ -262,15 +262,15 @@ function getDescription(post: Post): string {
   color: oklch(var(--un-preset-theme-colors-secondary) / 0.6);
 }
 
-/* Year group separator */
+/* Year group separator — matches the top decorative line style */
 .year-separator {
   grid-column: 1 / -1;
   height: 1px;
   background: linear-gradient(
     to right,
     transparent,
-    oklch(var(--un-preset-theme-colors-primary) / 0.25) 20%,
-    oklch(var(--un-preset-theme-colors-primary) / 0.25) 80%,
+    oklch(var(--un-preset-theme-colors-secondary) / 0.25) 20%,
+    oklch(var(--un-preset-theme-colors-secondary) / 0.25) 80%,
     transparent
   );
   margin: 2rem 0;
