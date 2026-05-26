@@ -50,10 +50,9 @@ let giscusContainer: HTMLElement | null = null
 
 function getThemeUrl() {
   const isDark = document.documentElement.classList.contains('dark')
-  const origin = window.location.origin
   return isDark
-    ? `${origin}/giscus/theme-dark.css`
-    : `${origin}/giscus/theme-light.css`
+    ? `https://cdn.jsdelivr.net/gh/radishzzz/astro-theme-retypeset@master/public/giscus/theme-dark.css`
+    : `https://cdn.jsdelivr.net/gh/radishzzz/astro-theme-retypeset@master/public/giscus/theme-light.css`
 }
 
 function updateGiscusTheme() {
@@ -72,9 +71,8 @@ function updateGiscusTheme() {
       'https://giscus.app',
     )
   }
-  catch (error: unknown) {
-    const message = error instanceof Error ? error.message : String(error)
-    console.error('[Giscus] Failed to update theme:', message)
+  catch (error) {
+    console.error('[Giscus] Failed to update theme:', error)
   }
 }
 
@@ -103,9 +101,8 @@ function setupGiscus() {
     script.src = 'https://giscus.app/client.js'
     giscusContainer.appendChild(script)
   }
-  catch (error: unknown) {
-    const message = error instanceof Error ? error.message : String(error)
-    console.error('[Giscus] Failed to initialize:', message)
+  catch (error) {
+    console.error('[Giscus] Failed to initialize:', error)
   }
 }
 
