@@ -3,6 +3,7 @@
 .temp/
 .output/
 .astro/
+.wrangler/
 dist/
 node_modules/
 

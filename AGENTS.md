@@ -2,7 +2,7 @@
 
 **分层**: 个人品牌 (Personal Brand) — 品牌旗舰
 
-个人主站 (cgartlab.com)。Astro 6 + UnoCSS + pnpm 10.33.0，Cloudflare Workers 部署。
+个人主站 (cgartlab.com)。Astro 6 + UnoCSS + pnpm 10.33.0，Cloudflare Pages 部署。
 
 ## STRUCTURE
 
@@ -128,10 +128,20 @@ pnpm apply-lqip           # 生成 LQIP 图片
 
 ## CI/CD
 
-- **触发**: push `main` → Cloudflare Workers Git 集成自动部署
+- **触发**: push `main` → GitHub Actions (`deploy.yml`) → Cloudflare Pages 自动部署
 - **构建命令**: `pnpm install --config.trustPolicy=off && pnpm build`
-- **域名**: cgartlab.com
-- **环境变量**: Cloudflare Dashboard 配置 (`GOOGLE_ADSENSE_PUBLISHER_ID` 等)
+- **域名**: cgartlab.com (Cloudflare Pages 自定义域名)
+- **环境变量**: GitHub Secrets 配置 (`CLOUDFLARE_ACCOUNT_ID`, `CLOUDFLARE_API_TOKEN`)
+- **环境变量 (站点)**: Cloudflare Pages Dashboard 配置 (`GOOGLE_ADSENSE_PUBLISHER_ID` 等)
+
+### 首次设置 GitHub Secrets
+
+在 https://github.com/cgartlab/cgartlab.github.io/settings/secrets/actions 添加：
+
+| Secret | 说明 | 获取位置 |
+|--------|------|----------|
+| `CLOUDFLARE_ACCOUNT_ID` | 账号 ID | `ad5d3be21fb5de9c8e196e1d2a0eb1be` |
+| `CLOUDFLARE_API_TOKEN` | API Token | 已有 Pages+Workers 权限的 token |
 
 ## NOTES
 
