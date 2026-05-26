@@ -228,6 +228,29 @@ a:target-current {
   --at-apply: '2xl:rows-[0fr]';
 }
 
+/* Typing Cursor for Header Subtitle >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> */
+.subtitle-typing-wrapper {
+  display: inline-flex;
+  align-items: center;
+}
+
+.typing-cursor {
+  display: inline-block;
+  width: 2px;
+  height: 1em;
+  border-radius: 2px;
+  background-color: currentColor;
+  margin-left: 2px;
+  animation: cursor-blink 0.5s step-end infinite;
+  vertical-align: text-bottom;
+  flex-shrink: 0;
+}
+
+@keyframes cursor-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
 /* AI Disclaimer >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> */
 .ai-disclaimer blockquote {
   --at-apply: 'pl-4 border-l-3 border-secondary/70';
