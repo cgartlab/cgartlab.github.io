@@ -1,6 +1,18 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "cgartlab",
+  "main": "src/worker.mjs",
+  "assets": {
+    "binding": "ASSETS",
+    "directory": "./dist"
+  },
   "compatibility_date": "2026-05-02",
-  "pages_build_output_dir": "./dist"
+  "compatibility_flags": ["nodejs_compat"],
+  "observability": {
+    "enabled": true
+  },
+  "routes": [
+    { "pattern": "cgartlab.com", "custom_domain": true },
+    { "pattern": "www.cgartlab.com", "custom_domain": true }
+  ]
 }
