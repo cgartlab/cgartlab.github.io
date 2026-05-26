@@ -2,13 +2,5 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "cgartlab",
   "compatibility_date": "2026-05-02",
-  "assets": {
-    "directory": "./dist"
-  },
-  "routes": [
-    {
-      "pattern": "cgartlab.com",
-      "custom_domain": true
-    }
-  ]
+  "pages_build_output_dir": "./dist"
 }
