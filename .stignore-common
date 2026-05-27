@@ -1,0 +1,72 @@
+// =====================================================
+// cgartlab.github.io — Syncthing 共享忽略规则
+// 此文件会通过 Syncthing 自动同步到所有设备。
+// 所有设备共享同一套规则。
+// =====================================================
+// --- 版本控制（各设备独立 git 操作，不通过 Syncthing 同步）---
+(?d).git/
+
+// --- 依赖（各设备独立安装）---
+(?d)node_modules/
+.pnpm-store/
+
+// --- 构建产物和缓存（各设备独立生成）---
+(?d)dist/
+(?d).astro/
+.wrangler/
+.output/
+.vercel/
+.netlify/
+.cache/
+.temp/
+.tmp/
+
+// --- 环境配置（设备独有）---
+.env
+.env.*
+
+// --- Syncthing 内部文件 ---
+.stversions/
+.syncthing-*
+
+// --- Obsidian 配置（同步插件数据，不同步易冲突的二进制）---
+.obsidian/workspace.json
+.obsidian/workspace-*.json
+.obsidian/graph.json
+.obsidian/cache/
+.obsidian/logs/
+.obsidian/types/
+.obsidian/plugins/*/main.js
+**/.obsidian/plugins/*/main.js
+.obsidian/plugins/*/styles.css
+**/.obsidian/plugins/*/styles.css
+.obsidian/*.sync-conflict-*.json
+**/.obsidian/*.sync-conflict-*.json
+
+// --- AI/编辑器索引（各设备独立生成）---
+.copilot-index/
+**/copilot-index-*.json
+.sisyphus/
+
+// --- 编辑器/IDE 状态 ---
+.idea/
+.vscode/
+.trae/
+.cursor/
+.windsurf/
+*.swp
+*.swo
+
+// --- 系统文件 ---
+.DS_Store
+.DS_Store?
+._*
+Thumbs.db
+Desktop.ini
+*~
+
+// --- 临时文件 ---
+*.bak
+*.backup
+
+// Sync-ts: 1779901743
