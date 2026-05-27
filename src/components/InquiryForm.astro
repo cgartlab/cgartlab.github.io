@@ -1,0 +1,490 @@
+---
+import { getLangFromPath } from '@/i18n/lang'
+
+const lang = Astro.props.lang || getLangFromPath(Astro.url.pathname)
+
+const t = {
+  zh: {
+    title: '项目询价',
+    titleNote: '填写下面表单，我会尽快回复你。',
+    projectType: '项目类型',
+    projectTypeOptions: [
+      { value: '', label: '请选择项目类型' },
+      { value: 'motion', label: '动态视觉设计（Motion Graphics）' },
+      { value: 'uiux', label: 'UI/UX 设计' },
+      { value: 'frontend', label: '前端开发' },
+      { value: 'illustration', label: '数字插画' },
+      { value: 'other', label: '其他' },
+    ],
+    budget: '预算范围',
+    budgetOptions: [
+      { value: '', label: '请选择预算范围' },
+      { value: 'under5k', label: '5,000 元以下' },
+      { value: '5k-15k', label: '5,000 - 15,000 元' },
+      { value: '15k-50k', label: '15,000 - 50,000 元' },
+      { value: 'above50k', label: '50,000 元以上' },
+      { value: 'discuss', label: '暂不明确，想先聊聊' },
+    ],
+    timeline: '预计时间线',
+    timelineOptions: [
+      { value: '', label: '请选择时间线' },
+      { value: 'urgent', label: '紧急（1 周内）' },
+      { value: '1month', label: '1 - 4 周' },
+      { value: '1-3months', label: '1 - 3 个月' },
+      { value: 'flexible', label: '时间灵活' },
+    ],
+    name: '你的名字',
+    namePlaceholder: '如何称呼你',
+    email: '电子邮箱',
+    emailPlaceholder: '方便我回复你的邮箱',
+    description: '项目描述',
+    descriptionPlaceholder: '简单描述一下你的项目：需求背景、核心目标、大致方向……越具体越好。',
+    submit: '发送询价',
+    submitting: '发送中...',
+    success: '✅ 收到！我会尽快查看并回复你。',
+    error: '发送失败，请直接发邮件至 hello@cgartlab.com',
+    required: '必填',
+    accessKey: 'a1b2c3d4e5f6g7h8i9j0', // Web3Forms public key, replaced via env
+  },
+  en: {
+    title: 'Project Inquiry',
+    titleNote: 'Fill out the form below and I will get back to you soon.',
+    projectType: 'Project Type',
+    projectTypeOptions: [
+      { value: '', label: 'Select project type' },
+      { value: 'motion', label: 'Motion Graphics' },
+      { value: 'uiux', label: 'UI/UX Design' },
+      { value: 'frontend', label: 'Frontend Development' },
+      { value: 'illustration', label: 'Digital Illustration' },
+      { value: 'other', label: 'Other' },
+    ],
+    budget: 'Budget Range',
+    budgetOptions: [
+      { value: '', label: 'Select budget range' },
+      { value: 'under5k', label: 'Under $700' },
+      { value: '5k-15k', label: '$700 - $2,000' },
+      { value: '15k-50k', label: '$2,000 - $7,000' },
+      { value: 'above50k', label: 'Above $7,000' },
+      { value: 'discuss', label: 'Not sure yet, want to discuss first' },
+    ],
+    timeline: 'Expected Timeline',
+    timelineOptions: [
+      { value: '', label: 'Select timeline' },
+      { value: 'urgent', label: 'Urgent (within 1 week)' },
+      { value: '1month', label: '1 - 4 weeks' },
+      { value: '1-3months', label: '1 - 3 months' },
+      { value: 'flexible', label: 'Flexible' },
+    ],
+    name: 'Your Name',
+    namePlaceholder: 'How should I address you?',
+    email: 'Email',
+    emailPlaceholder: 'Email for me to reply',
+    description: 'Project Description',
+    descriptionPlaceholder: 'Briefly describe your project: background, goals, direction... The more detail, the better.',
+    submit: 'Send Inquiry',
+    submitting: 'Sending...',
+    success: "✅ Received! I'll check and get back to you soon.",
+    error: 'Failed to send. Please email hello@cgartlab.com directly.',
+    required: 'Required',
+    accessKey: 'a1b2c3d4e5f6g7h8i9j0',
+  },
+  'zh-tw': {
+    title: '專案詢價',
+    titleNote: '填寫下面表單，我會盡快回覆你。',
+    projectType: '專案類型',
+    projectTypeOptions: [
+      { value: '', label: '請選擇專案類型' },
+      { value: 'motion', label: '動態視覺設計（Motion Graphics）' },
+      { value: 'uiux', label: 'UI/UX 設計' },
+      { value: 'frontend', label: '前端開發' },
+      { value: 'illustration', label: '數位插畫' },
+      { value: 'other', label: '其他' },
+    ],
+    budget: '預算範圍',
+    budgetOptions: [
+      { value: '', label: '請選擇預算範圍' },
+      { value: 'under5k', label: '5,000 元以下' },
+      { value: '5k-15k', label: '5,000 - 15,000 元' },
+      { value: '15k-50k', label: '15,000 - 50,000 元' },
+      { value: 'above50k', label: '50,000 元以上' },
+      { value: 'discuss', label: '暫不明確，想先聊聊' },
+    ],
+    timeline: '預計時間線',
+    timelineOptions: [
+      { value: '', label: '請選擇時間線' },
+      { value: 'urgent', label: '緊急（1 週內）' },
+      { value: '1month', label: '1 - 4 週' },
+      { value: '1-3months', label: '1 - 3 個月' },
+      { value: 'flexible', label: '時間靈活' },
+    ],
+    name: '你的名字',
+    namePlaceholder: '如何稱呼你',
+    email: '電子郵箱',
+    emailPlaceholder: '方便我回覆你的郵箱',
+    description: '專案描述',
+    descriptionPlaceholder: '簡單描述一下你的專案：需求背景、核目標、大致方向……越具體越好。',
+    submit: '發送詢價',
+    submitting: '發送中...',
+    success: '✅ 收到！我會盡快查看並回覆你。',
+    error: '發送失敗，請直接發郵件至 hello@cgartlab.com',
+    required: '必填',
+    accessKey: 'a1b2c3d4e5f6g7h8i9j0',
+  },
+}
+
+const d = t[lang as keyof typeof t] || t.zh
+---
+
+<div class="inquiry-section" id="inquiry-form">
+  <div class="inquiry-header">
+    <h2 class="inquiry-title">{d.title}</h2>
+    <p class="inquiry-note">{d.titleNote}</p>
+  </div>
+
+  <form
+    id="inquiry-form-el"
+    class="inquiry-form"
+    action="https://api.web3forms.com/submit"
+    method="POST"
+    novalidate
+  >
+    <!-- Web3Forms config -->
+    <input type="hidden" name="access_key" value={d.accessKey} />
+    <input type="hidden" name="subject" value="[CGArtLab] New Project Inquiry" />
+    <input type="hidden" name="from_name" value="CGArtLab Inquiry Form" />
+    <input type="checkbox" name="botcheck" class="hidden" style="display: none" />
+
+    <!-- Project Type -->
+    <div class="form-group">
+      <label for="project-type" class="form-label">
+        {d.projectType}
+        <span class="form-required">*</span>
+      </label>
+      <select id="project-type" name="project_type" required class="form-select">
+        {d.projectTypeOptions.map(opt => (
+          <option value={opt.value} disabled={opt.value === ''} selected={opt.value === ''}>
+            {opt.label}
+          </option>
+        ))}
+      </select>
+    </div>
+
+    <!-- Budget + Timeline row -->
+    <div class="form-row">
+      <div class="form-group">
+        <label for="budget" class="form-label">
+          {d.budget}
+          <span class="form-required">*</span>
+        </label>
+        <select id="budget" name="budget" required class="form-select">
+          {d.budgetOptions.map(opt => (
+            <option value={opt.value} disabled={opt.value === ''} selected={opt.value === ''}>
+              {opt.label}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="timeline" class="form-label">
+          {d.timeline}
+          <span class="form-required">*</span>
+        </label>
+        <select id="timeline" name="timeline" required class="form-select">
+          {d.timelineOptions.map(opt => (
+            <option value={opt.value} disabled={opt.value === ''} selected={opt.value === ''}>
+              {opt.label}
+            </option>
+          ))}
+        </select>
+      </div>
+    </div>
+
+    <!-- Name + Email row -->
+    <div class="form-row">
+      <div class="form-group">
+        <label for="name" class="form-label">
+          {d.name}
+          <span class="form-required">*</span>
+        </label>
+        <input
+          type="text"
+          id="name"
+          name="name"
+          placeholder={d.namePlaceholder}
+          required
+          class="form-input"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="email" class="form-label">
+          {d.email}
+          <span class="form-required">*</span>
+        </label>
+        <input
+          type="email"
+          id="email"
+          name="email"
+          placeholder={d.emailPlaceholder}
+          required
+          class="form-input"
+        />
+      </div>
+    </div>
+
+    <!-- Description -->
+    <div class="form-group">
+      <label for="description" class="form-label">
+        {d.description}
+        <span class="form-required">*</span>
+      </label>
+      <textarea
+        id="description"
+        name="description"
+        placeholder={d.descriptionPlaceholder}
+        required
+        rows="5"
+        class="form-textarea"
+      ></textarea>
+    </div>
+
+    <!-- Submit -->
+    <div class="form-footer">
+      <button type="submit" class="form-submit" id="submit-btn">
+        <span class="submit-text">{d.submit}</span>
+        <span class="submit-loading" hidden>{d.submitting}</span>
+      </button>
+    </div>
+
+    <!-- Status messages -->
+    <div id="form-success" class="form-message form-message-success" hidden>
+      {d.success}
+    </div>
+    <div id="form-error" class="form-message form-message-error" hidden>
+      {d.error}
+    </div>
+  </form>
+</div>
+
+<style>
+.inquiry-section {
+  margin-top: 2.5rem;
+  padding: 2rem;
+  background: oklch(var(--un-preset-theme-colors-secondary) / 0.04);
+  border-radius: 1rem;
+  border: 1px solid oklch(var(--un-preset-theme-colors-highlight) / 0.15);
+}
+
+.inquiry-header {
+  margin-bottom: 1.75rem;
+}
+
+.inquiry-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: oklch(var(--un-preset-theme-colors-primary));
+  margin: 0 0 0.35rem 0;
+}
+
+.inquiry-note {
+  font-size: 0.9rem;
+  color: oklch(var(--un-preset-theme-colors-secondary) / 0.6);
+  margin: 0;
+}
+
+.inquiry-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+@media (max-width: 640px) {
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.form-label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: oklch(var(--un-preset-theme-colors-primary));
+}
+
+.form-required {
+  color: oklch(55% 0.2 25);
+  margin-left: 0.2rem;
+}
+
+.form-input,
+.form-select,
+.form-textarea {
+  width: 100%;
+  padding: 0.625rem 0.875rem;
+  font-size: 0.95rem;
+  color: oklch(var(--un-preset-theme-colors-primary));
+  background: oklch(var(--un-preset-theme-colors-secondary) / 0.06);
+  border: 1px solid oklch(var(--un-preset-theme-colors-highlight) / 0.25);
+  border-radius: 0.625rem;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  font-family: inherit;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.form-select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23555' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  padding-right: 2.25rem;
+  cursor: pointer;
+}
+
+.form-input:focus,
+.form-select:focus,
+.form-textarea:focus {
+  border-color: oklch(var(--un-preset-theme-colors-primary) / 0.4);
+  box-shadow: 0 0 0 3px oklch(var(--un-preset-theme-colors-primary) / 0.07);
+}
+
+.form-input::placeholder,
+.form-textarea::placeholder {
+  color: oklch(var(--un-preset-theme-colors-secondary) / 0.4);
+}
+
+.form-textarea {
+  resize: vertical;
+  min-height: 120px;
+  line-height: 1.6;
+}
+
+.form-footer {
+  margin-top: 0.5rem;
+}
+
+.form-submit {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 2rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: oklch(98% 0.01 300);
+  background: oklch(var(--un-preset-theme-colors-primary));
+  border: none;
+  border-radius: 0.625rem;
+  cursor: pointer;
+  transition: opacity 0.2s ease, transform 0.15s ease;
+  min-width: 140px;
+}
+
+.form-submit:hover {
+  opacity: 0.88;
+}
+
+.form-submit:active {
+  transform: scale(0.98);
+}
+
+.form-submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.form-message {
+  font-size: 0.9rem;
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.form-message-success {
+  background: oklch(60% 0.15 145 / 0.1);
+  color: oklch(55% 0.15 145);
+  border: 1px solid oklch(60% 0.15 145 / 0.2);
+}
+
+.form-message-error {
+  background: oklch(60% 0.15 25 / 0.1);
+  color: oklch(55% 0.15 25);
+  border: 1px solid oklch(60% 0.15 25 / 0.2);
+}
+</style>
+
+<script>
+const form = document.getElementById('inquiry-form-el') as HTMLFormElement | null
+const submitBtn = document.getElementById('submit-btn') as HTMLButtonElement | null
+const successMsg = document.getElementById('form-success')
+const errorMsg = document.getElementById('form-error')
+
+if (form && submitBtn) {
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault()
+
+    // Basic client-side validation
+    const required = form.querySelectorAll('[required]')
+    let valid = true
+    required.forEach((field) => {
+      const el = field as HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+      if (!el.value.trim()) {
+        el.style.borderColor = 'oklch(55% 0.2 25)'
+        valid = false
+      } else {
+        el.style.borderColor = ''
+      }
+    })
+
+    if (!valid) return
+
+    // Loading state
+    submitBtn.disabled = true
+    const submitText = submitBtn.querySelector('.submit-text') as HTMLElement
+    const submitLoading = submitBtn.querySelector('.submit-loading') as HTMLElement
+    if (submitText) submitText.hidden = true
+    if (submitLoading) submitLoading.hidden = false
+
+    try {
+      const res = await fetch(form.action, {
+        method: 'POST',
+        body: new FormData(form),
+      })
+
+      const data = await res.json()
+
+      if (data.success) {
+        if (successMsg) successMsg.hidden = false
+        if (errorMsg) errorMsg.hidden = true
+        form.reset()
+        // Reset selects to first option
+        form.querySelectorAll('select').forEach(sel => {
+          const s = sel as HTMLSelectElement
+          s.selectedIndex = 0
+        })
+      } else {
+        throw new Error(data.message || 'Submission failed')
+      }
+    } catch {
+      if (errorMsg) errorMsg.hidden = false
+      if (successMsg) successMsg.hidden = true
+    } finally {
+      submitBtn.disabled = false
+      if (submitText) submitText.hidden = false
+      if (submitLoading) submitLoading.hidden = true
+    }
+  })
+}
+</script>
