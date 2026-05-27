@@ -1,0 +1,102 @@
+---
+// E-E-A-T Author credibility box for Google signals
+const lang = Astro.props.lang || 'zh'
+
+const texts = {
+  'zh': {
+    heading: '关于作者',
+    bio: '数字艺术创作者、UI/UX 设计师，专注于动态视觉设计、AI 工具与工作流、前端产品研发。长期分享数字艺术创作经验与技术实践。',
+    more: '了解更多',
+    links: '关注作者',
+  },
+  'en': {
+    heading: 'About the Author',
+    bio: 'Digital artist and UI/UX designer focused on motion design, AI tools & workflows, and front-end product development. Sharing creative insights and technical practices.',
+    more: 'Learn more',
+    links: 'Follow',
+  },
+  'zh-tw': {
+    heading: '關於作者',
+    bio: '數位藝術創作者、UI/UX 設計師，專注於動態視覺設計、AI 工具與工作流程、前端產品研發。長期分享數位藝術創作經驗與技術實踐。',
+    more: '了解更多',
+    links: '關注作者',
+  },
+}
+
+const t = texts[lang as keyof typeof texts] || texts.zh
+const aboutPath = lang === 'en' ? '/en/about/' : lang === 'zh-tw' ? '/zh-tw/about/' : '/about/'
+---
+
+<div class="author-box">
+  <div class="author-content">
+    <p class="author-bio">{t.bio}</p>
+    <div class="author-links">
+      <a href={aboutPath} class="author-more">{t.more} →</a>
+      <span class="author-separator">|</span>
+      <span class="author-social-label">{t.links}:</span>
+      <a href="https://github.com/cgartlab" target="_blank" rel="noopener noreferrer me" class="author-social-link">GitHub</a>
+      <a href="https://x.com/cgartlab" target="_blank" rel="noopener noreferrer me" class="author-social-link">X</a>
+      <a href="https://sspai.com/u/cgartlab/updates" target="_blank" rel="noopener noreferrer me" class="author-social-link">sspai</a>
+    </div>
+  </div>
+</div>
+
+<style>
+.author-box {
+  margin-top: 2.5rem;
+  padding: 1.5rem;
+  border: 1px solid oklch(var(--un-preset-theme-colors-highlight));
+  border-radius: 0.5rem;
+  background: oklch(var(--un-preset-theme-colors-highlight) / 0.08);
+}
+
+.author-content {
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: oklch(var(--un-preset-theme-colors-secondary));
+}
+
+.author-bio {
+  margin: 0 0 0.75rem 0;
+}
+
+.author-links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+}
+
+.author-more {
+  color: oklch(var(--un-preset-theme-colors-primary));
+  font-weight: 600;
+  text-decoration: none;
+  border-bottom: 1px dashed oklch(var(--un-preset-theme-colors-primary));
+}
+
+.author-more:hover {
+  opacity: 0.8;
+}
+
+.author-separator {
+  color: oklch(var(--un-preset-theme-colors-secondary) / 0.4);
+}
+
+.author-social-label {
+  color: oklch(var(--un-preset-theme-colors-secondary) / 0.6);
+}
+
+.author-social-link {
+  color: oklch(var(--un-preset-theme-colors-primary));
+  text-decoration: none;
+  font-weight: 500;
+  transition: opacity 0.2s;
+  border-bottom: 1px solid transparent;
+}
+
+.author-social-link:hover {
+  opacity: 0.7;
+  border-bottom-color: oklch(var(--un-preset-theme-colors-primary));
+}
+</style>

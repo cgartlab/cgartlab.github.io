@@ -229,20 +229,24 @@ a:target-current {
 }
 
 /* Typing Cursor for Header Subtitle >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> */
-.subtitle-typing-wrapper {
+.subtitle-cursor {
   display: inline-flex;
   align-items: center;
+  width: 207px;
+  letter-spacing: 0.1875em;
 }
 
-.typing-cursor {
-  display: inline-block;
-  width: 2px;
+.subtitle-text {
+  letter-spacing: 0.2em;
+}
+
+.subtitle-cursor-block {
+  width: 1em;
   height: 1em;
-  border-radius: 2px;
-  background-color: currentColor;
-  margin-left: 2px;
-  animation: cursor-blink 0.5s step-end infinite;
-  vertical-align: text-bottom;
+  margin: 0 6px;
+  background-color: #c04d30;
+  animation: cursor-blink 1s step-end infinite;
+  transform: translateY(-2px);
   flex-shrink: 0;
 }
 

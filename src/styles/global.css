@@ -103,13 +103,3 @@ html.dark .code-copy-button.copied {
 .tag-text {
   --at-apply: 'text-center';
 }
-
-/* Typing cursor after subtitle */
-@keyframes blink {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0; }
-}
-.typing-cursor {
-  --at-apply: 'inline-block w-0.5 h-[1em] rounded-sm bg-current align-middle';
-  animation: blink 0.5s step-end infinite;
-}

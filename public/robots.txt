@@ -2,7 +2,6 @@
 # https://cgartlab.com
 
 Sitemap: https://cgartlab.com/sitemap-index.xml
-Sitemap: https://cgartlab.com/sitemap-pages.xml
 
 # AI Crawlers - Block all for content protection
 User-agent: GPTBot
@@ -159,4 +158,4 @@ Crawl-delay: 1
 
 # Content Protection
 # This file protects CGArtLab content from unauthorized AI training
-# For content removal requests, contact: cgartlab@outlook.com
+# For content removal requests, contact: hello@cgartlab.com

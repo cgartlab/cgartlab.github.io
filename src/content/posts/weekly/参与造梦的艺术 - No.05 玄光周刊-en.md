@@ -22,7 +22,7 @@ This week's cover was shot at Qingdao Oriental Movie Metropolis—one night in M
 >
 > This is an electronic weekly focusing on knowledge management, covering digital art, visual design, and frontend development. Currently published weekly, each issue selects a specific topic for in-depth reflection. It shares my notes about entrepreneurship and products, including my thoughts, excerpts and annotations, reading notes, and quality content recommendations.
 >
-> If you find the content here worthwhile, welcome to use [RSS](https://weekly.cgartlab.com/feed/atom) or [Email Subscription](https://weekly.cgartlab.com/) , we summarize these notes into an email sent to you weekly. Of course, your [letters](mailto:info@cgartlab.com) are also welcome.
+> If you find the content here worthwhile, welcome to use [RSS](https://weekly.cgartlab.com/feed/atom) or [Email Subscription](https://weekly.cgartlab.com/) , we summarize these notes into an email sent to you weekly. Of course, your [letters](mailto:hello@cgartlab.com) are also welcome.
 
 ## Unexpected Turn of Events
 

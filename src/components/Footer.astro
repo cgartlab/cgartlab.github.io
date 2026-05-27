@@ -47,8 +47,8 @@ const privacyPath = currentLang === defaultLocale ? '/privacy/' : `/${currentLan
 // 服务条款页面路径
 const termsPath = currentLang === defaultLocale ? '/terms/' : `/${currentLang}/terms/`
 
-// 联系页面路径
-const contactPath = currentLang === defaultLocale ? '/links/' : `/${currentLang}/links/`
+// 联系页面路径（新独立页面）
+const contactPath = currentLang === defaultLocale ? '/contact/' : `/${currentLang}/contact/`
 
 // 公众号文本
 const wechatText = {
@@ -80,40 +80,40 @@ const contactText = {
 ---
 
 <footer
-  class="mt-6 text-3 leading-1.25em font-navbar lg:text-2.5"
+  class="mt-2 mb-2 text-3 leading-3 font-navbar lg:text-2.5 flex flex-col gap-0.625em box-content h-110px tracking-0"
   lg="uno-desktop-column bottom-16"
 >
   <!-- 第1行：社交媒体 -->
-  <p>
+  <p class="m-0 text-3 leading-3 font-navbar lg:text-2.5 tracking-0">
     {links.map((link, index) => (
       <>
         <a class={footerLinkClass} href={link.url} target="_blank" rel="noopener noreferrer">{link.name}</a>&nbsp;{index < links.length - 1 && '/'}
       </>
     ))}
-    /&nbsp;<a class={footerLinkClass} href={aboutPath}><i>{wechatText}</i></a>
+    /&nbsp;<a class={footerLinkClass} href={aboutPath}>{wechatText}</a>
   </p>
 
   <!-- 第2行：累计字数 -->
   {showWordCount && (
-    <p>
-      <i>{wordCountText}</i>{totalWords.toLocaleString()}
+    <p class="m-0 text-3 leading-3 font-navbar lg:text-2.5 tracking-0">
+      {wordCountText}{totalWords.toLocaleString()}
     </p>
   )}
 
   <!-- 第3行：法律与联系信息 -->
-  <p>
+  <p class="m-0 text-3 leading-3 font-navbar lg:text-2.5 tracking-0">
     <a class={footerLinkClass} href={privacyPath}>{privacyText}</a>
     &nbsp;/&nbsp;<a class={footerLinkClass} href={termsPath}>{termsText}</a>
     &nbsp;/&nbsp;<a class={footerLinkClass} href={contactPath}>{contactText}</a>
   </p>
 
-  <!-- 第4行：版权信息（单独一行） -->
-  <p>
-    © {year} {author}
+  <!-- 第4行：版权 -->
+  <p class="m-0 text-3 leading-3 font-navbar lg:text-2.5 tracking-0">
+    © {year} <a class={footerLinkClass} href="https://cy92.org" target="_blank" rel="noopener noreferrer">{author}</a>
   </p>
 
-  <!-- 第5行：内容采用 -->
-  <p class="mt-2 text-2.5 opacity-80">
+  <!-- 第5行：许可 -->
+  <p class="m-0 text-3 leading-3 font-navbar lg:text-2.5 tracking-0">
     {
       {
         'zh': '内容采用',
@@ -122,10 +122,10 @@ const contactText = {
       }[currentLang] || '内容采用'
     }
     <a
+      class={footerLinkClass}
       href="https://creativecommons.org/licenses/by-nc-sa/4.0/"
       target="_blank"
       rel="noopener noreferrer"
-      class="highlight-hover py-0.8 transition-colors after:bottom-0.35em hover:c-primary"
     >
       CC BY-NC-SA 4.0
     </a>

@@ -169,7 +169,7 @@ export const themeConfig: ThemeConfig = {
     links: [
       {
         name: 'Email',
-        url: 'mailto:cgartlab@outlook.com',
+        url: 'mailto:hello@cgartlab.com',
       },
       {
         name: 'RSS',
