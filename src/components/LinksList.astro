@@ -11,10 +11,11 @@ const lang = Astro.props.lang || getLangFromPath(Astro.url.pathname)
 const categories = linksData[lang as keyof typeof linksData] || linksData.zh
 ---
 
+
 <div class="links-container">
   {Object.entries(categories).map(([category, links]) => (
-    <section class="links-section">
-      <h2 class="links-category-title">{category}</h2>
+    <details class="links-section">
+      <summary class="links-category-title">{category}</summary>
       <div class="links-grid">
         {links.map(link => (
           <LinkCard
@@ -25,7 +26,7 @@ const categories = linksData[lang as keyof typeof linksData] || linksData.zh
           />
         ))}
       </div>
-    </section>
+    </details>
   ))}
 </div>
 
@@ -36,6 +37,8 @@ const categories = linksData[lang as keyof typeof linksData] || linksData.zh
 
 .links-section {
   margin-bottom: 1.5rem;
+  border-radius: 0.75rem;
+  overflow: hidden;
 }
 
 .links-section:last-child {
@@ -45,10 +48,48 @@ const categories = linksData[lang as keyof typeof linksData] || linksData.zh
 .links-category-title {
   font-size: 1.5rem;
   font-weight: 700;
-  margin: 0 0 1.5rem 0;
+  margin: 0;
   color: oklch(var(--un-preset-theme-colors-primary));
   position: relative;
-  padding-bottom: 0.75rem;
+  padding: 1rem 1.5rem;
+  background: oklch(var(--un-preset-theme-colors-secondary) / 0.05);
+  cursor: pointer;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  transition: background 0.2s ease;
+}
+
+.links-category-title::-webkit-details-marker {
+  display: none;
+}
+
+.links-category-title::after {
+  content: '';
+  width: 0.5rem;
+  height: 0.5rem;
+  border-right: 2px solid oklch(var(--un-preset-theme-colors-primary));
+  border-bottom: 2px solid oklch(var(--un-preset-theme-colors-primary));
+  transform: rotate(45deg);
+  transition: transform 0.25s ease;
+  flex-shrink: 0;
+}
+
+.links-section[open] .links-category-title::after {
+  transform: rotate(-135deg);
+}
+
+.links-section[open] .links-category-title {
+  border-bottom: 2px solid oklch(var(--un-preset-theme-colors-highlight));
+}
+
+.links-section:not([open]) .links-category-title {
+  border-bottom: none;
+}
+
+.links-section[open] .links-category-title {
   border-bottom: 2px solid oklch(var(--un-preset-theme-colors-highlight));
 }
 
@@ -56,16 +97,30 @@ const categories = linksData[lang as keyof typeof linksData] || linksData.zh
   display: grid;
   gap: 1rem;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  padding: 1.5rem;
+  animation: collapse 0.25s ease-out;
+}
+
+@keyframes collapse {
+  from {
+    opacity: 0;
+    transform: translateY(-0.5rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @media (max-width: 640px) {
   .links-grid {
     grid-template-columns: 1fr;
+    padding: 1rem;
   }
 
   .links-category-title {
     font-size: 1.25rem;
-    margin-bottom: 1rem;
+    padding: 0.875rem 1rem;
   }
 }
 </style>
