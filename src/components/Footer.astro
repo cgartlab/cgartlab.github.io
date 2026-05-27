@@ -44,6 +44,12 @@ const aboutPath = currentLang === defaultLocale ? '/about/#关于本站' : `/${c
 // 隐私政策页面路径
 const privacyPath = currentLang === defaultLocale ? '/privacy/' : `/${currentLang}/privacy/`
 
+// 服务条款页面路径
+const termsPath = currentLang === defaultLocale ? '/terms/' : `/${currentLang}/terms/`
+
+// 联系页面路径
+const contactPath = currentLang === defaultLocale ? '/links/' : `/${currentLang}/links/`
+
 // 公众号文本
 const wechatText = {
   'zh': '公众号',
@@ -57,6 +63,20 @@ const privacyText = {
   'en': 'Privacy',
   'zh-tw': '隱私政策',
 }[currentLang] || '隐私政策'
+
+// 服务条款文本
+const termsText = {
+  'zh': '服务条款',
+  'en': 'Terms',
+  'zh-tw': '服務條款',
+}[currentLang] || '服务条款'
+
+// 联系文本
+const contactText = {
+  'zh': '联系',
+  'en': 'Contact',
+  'zh-tw': '聯繫',
+}[currentLang] || '联系'
 ---
 
 <footer
@@ -73,19 +93,26 @@ const privacyText = {
     /&nbsp;<a class={footerLinkClass} href={aboutPath}><i>{wechatText}</i></a>
   </p>
 
-  <!-- 第2行：累计字数 + 隐私政策 -->
+  <!-- 第2行：累计字数 -->
+  {showWordCount && (
+    <p>
+      <i>{wordCountText}</i>{totalWords.toLocaleString()}
+    </p>
+  )}
+
+  <!-- 第3行：法律与联系信息 -->
   <p>
-    {showWordCount && <><i>{wordCountText}</i>{totalWords.toLocaleString()}</>}
-    {showWordCount && ' · '}
     <a class={footerLinkClass} href={privacyPath}>{privacyText}</a>
+    &nbsp;/&nbsp;<a class={footerLinkClass} href={termsPath}>{termsText}</a>
+    &nbsp;/&nbsp;<a class={footerLinkClass} href={contactPath}>{contactText}</a>
   </p>
 
-  <!-- 第3行：版权信息（单独一行） -->
+  <!-- 第4行：版权信息（单独一行） -->
   <p>
     © {year} {author}
   </p>
 
-  <!-- 第4行：内容采用 -->
+  <!-- 第5行：内容采用 -->
   <p class="mt-2 text-2.5 opacity-80">
     {
       {
