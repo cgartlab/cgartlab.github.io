@@ -1,4 +1,4 @@
-name: Deploy to Cloudflare Pages
+name: Deploy to Cloudflare Workers
 
 on:
   push:
@@ -44,10 +44,10 @@ jobs:
         run: pnpm build
         working-directory: ${{ env.BUILD_PATH }}
 
-      - name: Deploy to Cloudflare Pages
+      - name: Deploy to Cloudflare Workers
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy dist/ --project-name cgartlab --branch main
+          command: deploy
           workingDirectory: ${{ env.BUILD_PATH }}
