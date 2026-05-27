@@ -52,7 +52,18 @@ export default defineConfig({
         forward: ['dataLayer.push', 'gtag'],
       },
     }),
-    sitemap(),
+    sitemap({
+      // Include lastmod and priority for better SEO signals
+      lastmod: new Date(),
+      // Custom serialize to exclude low-value pages
+      serialize(item) {
+        // Exclude tag archive pages from sitemap (thin content risk)
+        if (/\/tags\/[^/]+\/$/.test(item.url)) {
+          return undefined
+        }
+        return item
+      },
+    }),
     Compress({
       CSS: true,
       HTML: true,

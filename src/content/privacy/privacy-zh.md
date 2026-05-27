@@ -108,10 +108,25 @@ CG艺术实验室（以下简称"本站"）高度重视用户的隐私保护。�
 |---------|--------|------|---------|
 | GitHub Pages | GitHub, Inc. | 网站托管服务 | [GitHub 隐私政策](https://docs.github.com/zh/site-policy/privacy-policies/github-general-privacy-statement) |
 
-### 3.5 数据共享原则
+### 3.5 广告服务（Google AdSense）
 
-- 本站**不会出售、出租或交易**您的个人信息给任何第三方
-- 仅在法律要求、保护本站合法权益或防止欺诈等必要情况下，我们可能披露相关信息
+| 第三方服务 | 提供商 | 用途 | 隐私政策 |
+|---------|--------|------|---------|
+| Google AdSense | Google LLC | 展示广告以支持网站运营 | [Google 隐私政策](https://policies.google.com/privacy) |
+
+**说明**：
+- Google AdSense 是本站使用的广告服务，用于展示广告以维持网站运营。
+- 第三方供应商（包括 Google）使用 Cookie 根据您之前访问本站或其他网站的情况来展示广告。
+- Google 使用广告 Cookie 使其及其合作伙伴能够根据您访问本站和/或互联网上其他网站的情况向您展示广告。
+- 您可以通过访问 [Google 广告设置](https://www.google.com/settings/ads) 选择停用个性化广告。
+- 您也可以访问 [www.aboutads.info](https://www.aboutads.info/) 选择停用第三方供应商使用 Cookie 进行个性化广告投放。
+- Google AdSense 可能会收集您的 IP 地址、浏览器类型、访问页面等信息用于广告投放和效果衡量。
+- 本站不会将 Google AdSense 收集的数据用于除广告展示之外的任何目的。
+
+### 3.6 数据共享原则
+
+- 本站**不会出售、出租或交易**您的个人信息给任何第三方。
+- 仅在法律要求、保护本站合法权利或防止欺诈等必要情况下，我们才可能披露相关信息。
 
 ---
 
@@ -210,7 +225,7 @@ Cookie 是网站存储在您浏览器中的小型文本文件，用于记录您�
 
 如需行使上述权利，请通过以下方式联系本站：
 
-- **电子邮箱**：cgartlab@outlook.com
+- **电子邮箱**：hello@cgartlab.com
 - **GitHub Issues**：[cgartlab/cgartlab.github.io](https://github.com/cgartlab/cgartlab.github.io/issues)
 
 我们将在收到请求后的 15 个工作日内予以响应。
@@ -248,7 +263,7 @@ Cookie 是网站存储在您浏览器中的小型文本文件，用于记录您�
 
 | 渠道 | 联系方式 |
 |------|---------|
-| 电子邮箱 | cgartlab@outlook.com |
+| 电子邮箱 | hello@cgartlab.com |
 | GitHub | [cgartlab/cgartlab.github.io](https://github.com/cgartlab/cgartlab.github.io) |
 | 微信公众号 | 尘光造梦 |
 

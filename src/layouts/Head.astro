@@ -10,10 +10,11 @@ interface Props {
   postTitle?: string
   postDescription?: string
   postSlug?: string
+  postDate?: Date
 }
 
 // Props and Language
-const { postTitle, postDescription, postSlug } = Astro.props
+const { postTitle, postDescription, postSlug, postDate } = Astro.props
 const { currentLang } = getPageInfo(Astro.url.pathname)
 const currentUI = ui[currentLang as keyof typeof ui] ?? {}
 
@@ -54,9 +55,14 @@ const pageImage = postSlug
     _dark = _mode === 'dark'
   }
   else {
-    const _stored = localStorage.getItem('theme')
-    if (_stored)
-      _dark = _stored === 'dark'
+    // In auto mode, only use localStorage if user manually set theme
+    const _manual = localStorage.getItem('theme-manual')
+    if (_manual === 'true') {
+      const _stored = localStorage.getItem('theme')
+      if (_stored)
+        _dark = _stored === 'dark'
+    }
+    // Otherwise, follow system preference (already set above)
   }
   if (_dark)
     document.documentElement.classList.add('dark')
@@ -120,7 +126,7 @@ const pageImage = postSlug
     type="application/ld+json"
     set:html={JSON.stringify({
     '@context': 'https://schema.org',
-    '@type': 'Article',
+    '@type': 'BlogPosting',
     'headline': postTitle,
     'description': pageDescription,
     'image': pageImage.toString(),
@@ -137,8 +143,8 @@ const pageImage = postSlug
         'url': new URL(`${base}/icons/favicon.svg`, Astro.url.origin).toString(),
       },
     },
-    'datePublished': new Date().toISOString(),
-    'dateModified': new Date().toISOString(),
+    'datePublished': (postDate || new Date()).toISOString(),
+    'dateModified': (postDate || new Date()).toISOString(),
     'mainEntityOfPage': {
       '@type': 'WebPage',
       '@id': Astro.url.toString(),
@@ -177,6 +183,55 @@ const pageImage = postSlug
   />
 )}
 
+<!-- BreadcrumbList Structured Data -->
+{(() => {
+  const origin = Astro.url.origin
+  const url = Astro.url.toString()
+  const pathname = Astro.url.pathname
+  const segments = pathname.split('/').filter(Boolean)
+
+  // Build breadcrumb items from URL path
+  const items: { '@type': 'ListItem'; position: number; name: string; item: string }[] = [
+    {
+      '@type': 'ListItem',
+      'position': 1,
+      'name': siteTitle,
+      'item': `${origin}${base}/`,
+    },
+  ]
+
+  let accumPath = `${origin}${base}/`
+  let pos = 2
+  for (const seg of segments) {
+    // Skip language prefix segments (en, zh-tw)
+    if (seg === 'en' || seg === 'zh-tw') {
+      accumPath = `${accumPath}${seg}/`
+      continue
+    }
+    accumPath = `${accumPath}${seg}/`
+    // Only add meaningful segments (exclude UUIDs, IDs)
+    if (seg.length > 1 && !/^\d+$/.test(seg) && seg !== 'posts') {
+    // Skip raw post slugs and internal paths
+      items.push({
+        '@type': 'ListItem',
+        'position': pos++,
+        'name': seg.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase()),
+        'item': accumPath,
+      })
+    }
+  }
+
+  if (items.length <= 1) return null
+
+  return (
+    <script is:inline type="application/ld+json" set:html={JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': 'BreadcrumbList',
+      'itemListElement': items.slice(0, 5), // Max 5 items
+    })} />
+  )
+})()}
+
 <!-- Global View Transition -->
 <ClientRouter fallback="none" />
 
@@ -192,18 +247,22 @@ const pageImage = postSlug
 >
 (function () {
   // Check if current theme is dark
-  // Priority: localStorage theme > default theme > system preference
+  // Priority: manual theme > default mode > system preference
   function isCurrentDark() {
-    const currentTheme = localStorage.getItem('theme')
-    if (currentTheme) {
-      return currentTheme === 'dark'
+    // Check if user manually set theme
+    const manualTheme = localStorage.getItem('theme-manual')
+    if (manualTheme === 'true') {
+      const currentTheme = localStorage.getItem('theme')
+      if (currentTheme) {
+        return currentTheme === 'dark'
+      }
     }
 
     if (defaultMode !== 'auto') {
       return defaultMode === 'dark'
     }
 
-    // If defaultMode is auto, follow system preference
+    // If defaultMode is auto and no manual override, follow system preference
     return window.matchMedia('(prefers-color-scheme: dark)').matches
   }
 
@@ -292,7 +351,6 @@ const pageImage = postSlug
 {googleAdSense?.enabled && (
   <script
     is:inline
-    type="text/partytown"
     async
     src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${googleAdSensePublisherID}`}
     crossorigin="anonymous"
