@@ -32,7 +32,7 @@ export const ui = {
     searchPlaceholder: '搜索文章、标签、内容...',
     searchEmpty: '未找到相关结果',
     terms: '服务条款',
-    contact: '联系',
+    contact: '联系方式',
   },
   'zh-tw': {
     title: 'CGArtLab',
@@ -49,6 +49,6 @@ export const ui = {
     searchPlaceholder: '搜尋文章、標籤、內容...',
     searchEmpty: '未找到相關結果',
     terms: '服務條款',
-    contact: '聯繫',
+    contact: '聯繫方式',
   },
 }

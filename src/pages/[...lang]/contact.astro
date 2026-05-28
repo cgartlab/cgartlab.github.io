@@ -14,121 +14,46 @@ const currentLang = getLangFromLocale(Astro.currentLocale)
 
 const t = {
   zh: {
-    title: '联系',
-    intro: '我一般不太看消息，但看到了都会回。',
-    email: {
-      label: '邮件',
-      value: 'hello@cgartlab.com',
-      desc: '最靠谱的方式。合作咨询、设计需求、或者单纯想说点什么，都行。我尽量三天内回复。',
-    },
-    github: {
-      label: 'GitHub',
-      value: 'github.com/cgartlab',
-      desc: '开源项目、代码问题、bug 反馈，走这里最快。issue 比私信靠谱。',
-    },
-    wechat: {
-      label: '微信公众号',
-      value: 'CG艺术实验室',
-      desc: '文章更新通知，偶尔写点不太适合发在网站上的碎碎念。',
-    },
-    x: {
-      label: 'X (Twitter)',
-      value: '@cgartlab',
-      desc: '潜水为主，偶尔冒泡。DM 会看，但不保证秒回。',
-    },
-    sspai: {
-      label: '少数派',
-      value: 'sspai.com/u/cgartlab',
-      desc: '一些工具向的深度文章会发在这里。',
-    },
-    bilibili: {
-      label: 'Bilibili',
-      value: 'space.bilibili.com/38043072',
-      desc: '偶尔发点动态视觉作品，频率随缘。',
-    },
-    note: '说明一下：我不接急单，不接比稿，不做廉价设计。如果你有一个有趣的项目，或者觉得我们审美上能聊得来，欢迎来信聊聊。',
+    title: '联系方式',
+    email: 'hello@cgartlab.com',
+    github: 'github.com/cgartlab',
+    wechat: 'CG艺术实验室',
+    x: '@cgartlab',
+    sspai: 'sspai.com/u/cgartlab',
+    bilibili: 'space.bilibili.com/38043072',
+    note: "请认真衡量项目的成本和收益，避免急单或比稿，再填写下方表单。",
   },
   en: {
     title: 'Contact',
-    intro: "I don't check messages often, but I do reply when I see them.",
-    email: {
-      label: 'Email',
-      value: 'hello@cgartlab.com',
-      desc: 'The most reliable option. Collaboration inquiries, design needs, or just want to say hi — all fine. I aim to reply within three days.',
-    },
-    github: {
-      label: 'GitHub',
-      value: 'github.com/cgartlab',
-      desc: 'Open source projects, code issues, bug reports — this is the fastest route. Issues beat DMs.',
-    },
-    wechat: {
-      label: 'WeChat',
-      value: 'CGArtLab',
-      desc: 'Article updates and occasional thoughts that feel too casual for the main site.',
-    },
-    x: {
-      label: 'X (Twitter)',
-      value: '@cgartlab',
-      desc: 'Mostly lurking. I read DMs but make no promises about response time.',
-    },
-    sspai: {
-      label: 'sspai',
-      value: 'sspai.com/u/cgartlab',
-      desc: 'In-depth tool-focused articles sometimes end up here.',
-    },
-    bilibili: {
-      label: 'Bilibili',
-      value: 'space.bilibili.com/38043072',
-      desc: 'Motion design work drops here, on no particular schedule.',
-    },
-    note: "A heads-up: I don't take rush jobs, spec work, or bargain-bin design requests. If you have an interesting project, or think we'd connect on an aesthetic level, feel free to reach out.",
+    email: 'hello@cgartlab.com',
+    github: 'github.com/cgartlab',
+    wechat: 'CGArtLab',
+    x: '@cgartlab',
+    sspai: 'sspai.com/u/cgartlab',
+    bilibili: 'space.bilibili.com/38043072',
+    note: "Please carefully evaluate the cost and benefit of the project, and avoid rush jobs or spec work.",
   },
   'zh-tw': {
-    title: '聯繫',
-    intro: '我一般不太看訊息，但看到了都會回。',
-    email: {
-      label: '郵件',
-      value: 'hello@cgartlab.com',
-      desc: '最靠譜的方式。合作諮詢、設計需求、或者單純想說點什麼，都行。我盡量三天內回覆。',
-    },
-    github: {
-      label: 'GitHub',
-      value: 'github.com/cgartlab',
-      desc: '開源專案、程式碼問題、bug 回饋，走這裡最快。issue 比私訊靠譜。',
-    },
-    wechat: {
-      label: '微信公眾號',
-      value: 'CG藝術實驗室',
-      desc: '文章更新通知，偶爾寫點不太適合發在網站上的碎碎唸。',
-    },
-    x: {
-      label: 'X (Twitter)',
-      value: '@cgartlab',
-      desc: '潛水為主，偶爾冒泡。DM 會看，但不保證秒回。',
-    },
-    sspai: {
-      label: '少數派',
-      value: 'sspai.com/u/cgartlab',
-      desc: '一些工具向的深度文章會發在這裡。',
-    },
-    bilibili: {
-      label: 'Bilibili',
-      value: 'space.bilibili.com/38043072',
-      desc: '偶爾發點動態視覺作品，頻率隨緣。',
-    },
-    note: '說明一下：我不接急單，不接比稿，不做廉價設計。如果你有一個有趣的專案，或者覺得我們審美上能聊得來，歡迎來信聊聊。',
+    title: '聯繫方式',
+    email: 'hello@cgartlab.com',
+    github: 'github.com/cgartlab',
+    wechat: 'CG藝術實驗室',
+    x: '@cgartlab',
+    sspai: 'sspai.com/u/cgartlab',
+    bilibili: 'space.bilibili.com/38043072',
+    note: "请认真衡量项目的成本和收益，避免急单或比稿，再填写下方表單。",
   },
 }
 
 const d = t[currentLang as keyof typeof t] || t.zh
 
-const items: { icon: string; label: string; value: string; desc: string; url?: string }[] = [
-  { ...d.email, url: `mailto:${d.email.value}`, icon: '📧' },
-  { ...d.github, url: `https://${d.github.value}`, icon: '🐙' },
-  { ...d.wechat, icon: '💬' },
-  { ...d.x, url: `https://x.com/cgartlab`, icon: '🐦' },
-  { ...d.sspai, url: `https://${d.sspai.value}`, icon: '📝' },
-  { ...d.bilibili, url: `https://${d.bilibili.value}`, icon: '▶️' },
+const items: { label: string; value: string; url?: string }[] = [
+  { label: 'Email', value: d.email, url: `mailto:${d.email}` },
+  { label: 'GitHub', value: d.github, url: `https://${d.github}` },
+  { label: 'WeChat', value: d.wechat },
+  { label: 'X (Twitter)', value: d.x, url: `https://x.com/cgartlab` },
+  { label: '少数派', value: d.sspai, url: `https://${d.sspai}` },
+  { label: 'Bilibili', value: d.bilibili, url: `https://${d.bilibili}` },
 ]
 ---
 
@@ -138,97 +63,62 @@ const items: { icon: string; label: string; value: string; desc: string; url?: s
   <article class="heti mt-6 lg:mt-10.5">
     <h1 class="post-title">{d.title}</h1>
 
-    <p class="text-3.5 c-secondary/70 mb-8 lg:mb-12 leading-relaxed">
-      {d.intro}
-    </p>
-
-    <!-- Contact Items -->
-    <div class="contact-list">
+    <div class="contact-grid">
       {
         items.map(item => (
           <div class="contact-item">
-            <div class="contact-header">
-              <span class="contact-icon">{item.icon}</span>
-              <span class="contact-label">{item.label}</span>
-            </div>
-            <div class="contact-body">
-              {item.url
-                ? (
-                  <a
-                    href={item.url}
-                    class="contact-value"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    {item.value}
-                  </a>
-                )
-                : (
-                  <span class="contact-value contact-value-static">{item.value}</span>
-                )}
-              <p class="contact-desc">{item.desc}</p>
-            </div>
+            <span class="contact-label">{item.label}</span>
+            {item.url ? (
+              <a
+                href={item.url}
+                class="contact-value"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {item.value}
+              </a>
+            ) : (
+              <span class="contact-value">{item.value}</span>
+            )}
           </div>
         ))
       }
     </div>
 
-    <!-- Inquiry Form -->
-    <InquiryForm lang={currentLang} />
-
-    <!-- Note -->
-    <blockquote class="mt-10 lg:mt-14 mb-0 text-3.2 c-secondary/60 italic leading-relaxed">
+    <blockquote class="contact-note mt-6 lg:mt-8 mb-0">
       <p>{d.note}</p>
     </blockquote>
+
+    <InquiryForm lang={currentLang} />
   </article>
 </Layout>
 
 <style>
-.contact-list {
+.contact-grid {
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
+  gap: 0.5rem;
+  margin-top: 0;
 }
 
 .contact-item {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-  padding: 1rem 0;
-  border-bottom: 1px solid oklch(var(--un-preset-theme-colors-highlight) / 0.3);
-}
-
-.contact-item:last-child {
-  border-bottom: none;
-}
-
-.contact-header {
   display: flex;
   align-items: center;
   gap: 0.5rem;
 }
 
-.contact-icon {
-  font-size: 1.1rem;
-  line-height: 1;
-}
-
 .contact-label {
   font-size: 1rem;
   font-weight: 600;
-  color: oklch(var(--un-preset-theme-colors-primary));
-}
-
-.contact-body {
-  margin-top: 0.15rem;
+  color: oklch(var(--un-preset-theme-colors-secondary) / 0.6);
+  text-align: left;
+  min-width: 4rem;
 }
 
 .contact-value {
-  font-size: 1.05rem;
-  font-weight: 500;
+  font-size: 1rem;
   color: oklch(var(--un-preset-theme-colors-primary));
   text-decoration: none;
-  border-bottom: 1px dashed oklch(var(--un-preset-theme-colors-primary) / 0.5);
   transition: opacity 0.2s;
 }
 
@@ -236,15 +126,9 @@ const items: { icon: string; label: string; value: string; desc: string; url?: s
   opacity: 0.7;
 }
 
-.contact-value-static {
-  border-bottom: none;
-  font-weight: 500;
-}
-
-.contact-desc {
-  margin: 0.35rem 0 0 0;
-  font-size: 0.9rem;
+.contact-note {
+  font-size: 0.85rem;
   color: oklch(var(--un-preset-theme-colors-secondary) / 0.65);
-  line-height: 1.6;
+  margin-top: 1.25rem;
 }
 </style>
