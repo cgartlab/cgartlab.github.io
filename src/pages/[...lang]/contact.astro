@@ -1,4 +1,5 @@
 ---
+import InquiryForm from '@/components/InquiryForm.astro'
 import { allLocales } from '@/config'
 import { getLangFromLocale, getLangRouteParam } from '@/i18n/lang'
 import Layout from '@/layouts/Layout.astro'
@@ -80,7 +81,7 @@ const t = {
       value: 'space.bilibili.com/38043072',
       desc: 'Motion design work drops here, on no particular schedule.',
     },
-    note: 'A heads-up: I don\'t take rush jobs, spec work, or bargain-bin design requests. If you have an interesting project, or think we\'d connect on an aesthetic level, feel free to reach out.',
+    note: "A heads-up: I don't take rush jobs, spec work, or bargain-bin design requests. If you have an interesting project, or think we'd connect on an aesthetic level, feel free to reach out.",
   },
   'zh-tw': {
     title: '聯繫',
@@ -121,7 +122,6 @@ const t = {
 
 const d = t[currentLang as keyof typeof t] || t.zh
 
-// Build contact items array for iteration
 const items: { icon: string; label: string; value: string; desc: string; url?: string }[] = [
   { ...d.email, url: `mailto:${d.email.value}`, icon: '📧' },
   { ...d.github, url: `https://${d.github.value}`, icon: '🐙' },
@@ -172,6 +172,9 @@ const items: { icon: string; label: string; value: string; desc: string; url?: s
         ))
       }
     </div>
+
+    <!-- Inquiry Form -->
+    <InquiryForm lang={currentLang} />
 
     <!-- Note -->
     <blockquote class="mt-10 lg:mt-14 mb-0 text-3.2 c-secondary/60 italic leading-relaxed">
