@@ -27,6 +27,11 @@ html[data-theme-changing] [data-disable-theme-toggle-transition] {
   view-transition-name: none !important;
 }
 
+/* Disable view-transition-name during resize to prevent compositor layer desync >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> */
+html[data-resizing] [style*="view-transition-name"] {
+  view-transition-name: none !important;
+}
+
 /* Content Progressive Animation >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> */
 @keyframes fadeInUp {
   from {
