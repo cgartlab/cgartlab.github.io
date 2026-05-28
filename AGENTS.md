@@ -2,15 +2,15 @@
 
 **分层**: 个人品牌 (Personal Brand) — 品牌旗舰
 
-个人主站 (cgartlab.com)。Astro 6 + UnoCSS + pnpm 10.33.0，Cloudflare Pages 部署。
+个人主站 (cgartlab.com)。Astro 6 + UnoCSS + Node 24 + pnpm 10.33.0，Cloudflare Pages 部署。
 
 ## STRUCTURE
 
 ```
 src/
 ├── assets/         # LQIP 图片（自动生成，勿手动编辑）
-├── components/     # Astro 组件
-├── content/posts/  # 博客文章（含 weekly/ 周刊, _images/ 图片）
+├── components/     # Astro 组件（含 InquiryForm.astro Web3Forms 表单）
+├── content/posts/  # 博客文章（含 weekly/ 周刊, works/, _images/ 图片）
 ├── data/           # 站点数据
 ├── i18n/           # 国际化 (zh/en/zh-tw)
 ├── layouts/        # 页面布局
@@ -19,7 +19,7 @@ src/
 ├── styles/         # UnoCSS 样式
 ├── types/          # TypeScript 类型
 └── utils/          # 工具函数
-scripts/            # 构建/内容脚本
+scripts/            # 构建/内容脚本 (generate-llms.ts, apply-lqip.ts, new-post.ts, format-posts.ts, fix-internal-links.ts)
 ```
 
 ## WHERE TO LOOK
@@ -29,10 +29,12 @@ scripts/            # 构建/内容脚本
 | 博客文章 | `src/content/posts/` | MDX, 图片放 `_images/` |
 | 产品介绍（LayerRenamer 等） | `src/content/posts/` | 个人产品的发布/介绍文章 |
 | 周刊 | `src/content/posts/weekly/` | 命名: `[主题] - No.XX 玄光周刊.md` |
+| 作品集 | `src/content/posts/works/` | 动态视觉设计作品 |
+| 联系表单 | `src/components/InquiryForm.astro` | Web3Forms 表单组件 |
 | i18n 配置 | `src/i18n/config.ts` | zh 默认, /en/, /zh-tw/ |
 | 站点配置 | `src/config.ts` | 全局主题配置 |
 | Astro 配置 | `astro.config.ts` | trailingSlash, UnoCSS, 集成 |
-| 构建脚本 | `scripts/` | generate-llms.ts, apply-lqip.ts, new-post.ts |
+| 构建脚本 | `scripts/` | generate-llms.ts, apply-lqip.ts, new-post.ts, fix-internal-links.ts |
 | ESLint | `eslint.config.mjs` | antfu config, 忽略 src/content/ |
 
 ## CODE MAP
@@ -113,43 +115,37 @@ main (受保护)
 - **不要用 npm/yarn** — pnpm only。
 - **不要在 `_images/` 外放文章图片** — 文章图片必须放在同名 `_images/` 目录。
 - **不要直接推送 main** — 必须通过 PR 合并（`dev-*` 或 `write-*` 分支 → PR → squash merge → main）。
+- **不要提交 .obsidian/** — 设备级配置，通过 Syncthing 同步。
 
 ## COMMANDS
 
 ```bash
 pnpm dev                  # astro check && astro dev
 pnpm build                # astro check → build → generate-llms → apply-lqip
+pnpm preview              # astro preview
 pnpm lint                 # eslint
 pnpm lint:fix             # eslint --fix
 pnpm new-post "标题"       # 创建文章（周刊自动放入 weekly/）
 pnpm format-posts         # CJK 文本格式化 (autocorrect)
 pnpm apply-lqip           # 生成 LQIP 图片
+pnpm fix-internal-links    # 修复内部链接
 ```
 
 ## CI/CD
 
-- **触发**: push `main` → GitHub Actions (`deploy.yml`) → Cloudflare Pages 自动部署
+- **触发**: push `main` → Cloudflare Pages 直接部署（无需 GitHub Actions）
 - **构建命令**: `pnpm install --config.trustPolicy=off && pnpm build`
 - **域名**: cgartlab.com (Cloudflare Pages 自定义域名)
-- **环境变量**: GitHub Secrets 配置 (`CLOUDFLARE_ACCOUNT_ID`, `CLOUDFLARE_API_TOKEN`)
-- **环境变量 (站点)**: Cloudflare Pages Dashboard 配置 (`GOOGLE_ADSENSE_PUBLISHER_ID` 等)
-
-### 首次设置 GitHub Secrets
-
-在 https://github.com/cgartlab/cgartlab.github.io/settings/secrets/actions 添加：
-
-| Secret | 说明 | 获取位置 |
-|--------|------|----------|
-| `CLOUDFLARE_ACCOUNT_ID` | 账号 ID | `ad5d3be21fb5de9c8e196e1d2a0eb1be` |
-| `CLOUDFLARE_API_TOKEN` | API Token | 已有 Pages+Workers 权限的 token |
+- **Wrangler**: `wrangler.jsonc`（Workers + Static Assets 配置）
 
 ## NOTES
 
 - **UnoCSS** 而非 Tailwind — `unocss` 66.x, preset-attributify
 - **Markdown 插件**: rehype-katex (数学), rehype-mermaid (图表), remark-directive, remark-math
 - **评论系统**: Waline + Twikoo 双系统
+- **联系表单**: Web3Forms（InquiryForm.astro）
 - **OG 图片**: `astro-og-canvas` + `canvaskit-wasm` 自动生成
 - **搜索**: 客户端搜索索引 (`api/search-index/[lang].json.ts`)
+- **测试**: playwright 1.58.2 已安装（`pnpm exec playwright test`）
 - **Type suppressions**: 仅 2 处 (`@ts-expect-error` in MediaEmbed.astro, `eslint-disable` in Head.astro)
-- **无测试文件**: 静态站点，无单元/E2E 测试
-- **CI 工作流**: `.github/workflows/qwen-triage.yml` (部署由 Cloudflare Pages 自动处理)
+- **.obsidian/**: 设备级配置，通过 Syncthing 同步，不纳入 git 追踪
