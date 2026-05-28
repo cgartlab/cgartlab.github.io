@@ -49,7 +49,6 @@ coverage/
 .stfolder/
 .stversions/
 .syncthing-*
-.sync-con*
 
 # Copilot / AI 插件
 .copilot-index/
@@ -70,4 +69,3 @@ src/content/posts/*.base
 .obsidian/workspace.json
 
 /.obsidian/workspace.json
-.sisyphus/*
