@@ -150,3 +150,6 @@ pnpm apply-lqip           # 生成 LQIP 图片
 - **评论系统**: Waline + Twikoo 双系统
 - **OG 图片**: `astro-og-canvas` + `canvaskit-wasm` 自动生成
 - **搜索**: 客户端搜索索引 (`api/search-index/[lang].json.ts`)
+- **Type suppressions**: 仅 2 处 (`@ts-expect-error` in MediaEmbed.astro, `eslint-disable` in Head.astro)
+- **无测试文件**: 静态站点，无单元/E2E 测试
+- **CI 工作流**: `.github/workflows/qwen-triage.yml` (部署由 Cloudflare Pages 自动处理)
