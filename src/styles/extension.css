@@ -244,11 +244,12 @@ a:target-current {
   width: 1em;
   height: 1em;
   margin: 0 6px;
-  background-color: #c04d30;
-  animation: cursor-blink 1s step-end infinite;
+  background-color: #b91c1c; /* 日本传统印章朱红色 */
+  animation: cursor-blink 1s ease-in-out infinite;
   transform: translateY(-2px);
   flex-shrink: 0;
 }
+
 
 @keyframes cursor-blink {
   0%, 40% { opacity: 1; }
