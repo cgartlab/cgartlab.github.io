@@ -41,8 +41,8 @@ const t = {
     descriptionPlaceholder: '简单描述一下你的项目：需求背景、核心目标、大致方向……越具体越好。',
     submit: '发送询价',
     submitting: '发送中...',
-    success: '✅ 收到！我会尽快查看并回复你。',
-    error: '发送失败，请直接发邮件至 hello@cgartlab.com',
+    success: '已收到，我会尽快回复。',
+    error: '发送失败，请直接邮件 hello@cgartlab.com',
     required: '必填',
     accessKey: 'a1b2c3d4e5f6g7h8i9j0', // Web3Forms public key, replaced via env
   },
@@ -83,8 +83,8 @@ const t = {
     descriptionPlaceholder: 'Briefly describe your project: background, goals, direction... The more detail, the better.',
     submit: 'Send Inquiry',
     submitting: 'Sending...',
-    success: "✅ Received! I'll check and get back to you soon.",
-    error: 'Failed to send. Please email hello@cgartlab.com directly.',
+    success: '已收到，我会尽快回复。',
+    error: '发送失败，请直接邮件 hello@cgartlab.com',
     required: 'Required',
     accessKey: 'a1b2c3d4e5f6g7h8i9j0',
   },
@@ -125,8 +125,8 @@ const t = {
     descriptionPlaceholder: '簡單描述一下你的專案：需求背景、核目標、大致方向……越具體越好。',
     submit: '發送詢價',
     submitting: '發送中...',
-    success: '✅ 收到！我會盡快查看並回覆你。',
-    error: '發送失敗，請直接發郵件至 hello@cgartlab.com',
+    success: '已收到，我會盡快回覆。',
+    error: '發送失敗，請直接郵件 hello@cgartlab.com',
     required: '必填',
     accessKey: 'a1b2c3d4e5f6g7h8i9j0',
   },
@@ -269,40 +269,40 @@ const d = t[lang as keyof typeof t] || t.zh
 
 <style>
 .inquiry-section {
-  margin-top: 2.5rem;
-  padding: 2rem;
+  margin-top: 2rem;
+  padding: 1.25rem 1.5rem;
   background: oklch(var(--un-preset-theme-colors-secondary) / 0.04);
-  border-radius: 1rem;
-  border: 1px solid oklch(var(--un-preset-theme-colors-highlight) / 0.15);
+  border-radius: 0.75rem;
+  border: 1px solid oklch(var(--un-preset-theme-colors-highlight) / 0.12);
 }
 
 .inquiry-header {
-  margin-bottom: 1.75rem;
+  margin-bottom: 1rem;
 }
 
 .inquiry-title {
-  font-size: 1.5rem;
-  font-weight: 700;
+  font-size: 1.1rem;
+  font-weight: 600;
   color: oklch(var(--un-preset-theme-colors-primary));
-  margin: 0 0 0.35rem 0;
+  margin: 0;
 }
 
 .inquiry-note {
-  font-size: 0.9rem;
+  font-size: 0.8rem;
   color: oklch(var(--un-preset-theme-colors-secondary) / 0.6);
-  margin: 0;
+  margin: 0.25rem 0 0 0;
 }
 
 .inquiry-form {
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
+  gap: 0.875rem;
 }
 
 .form-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 1rem;
+  gap: 0.75rem;
 }
 
 @media (max-width: 640px) {
@@ -314,11 +314,11 @@ const d = t[lang as keyof typeof t] || t.zh
 .form-group {
   display: flex;
   flex-direction: column;
-  gap: 0.4rem;
+  gap: 0.25rem;
 }
 
 .form-label {
-  font-size: 0.875rem;
+  font-size: 0.8rem;
   font-weight: 600;
   color: oklch(var(--un-preset-theme-colors-primary));
 }
@@ -332,14 +332,14 @@ const d = t[lang as keyof typeof t] || t.zh
 .form-select,
 .form-textarea {
   width: 100%;
-  padding: 0.625rem 0.875rem;
-  font-size: 0.95rem;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
   color: oklch(var(--un-preset-theme-colors-primary));
   background: oklch(var(--un-preset-theme-colors-secondary) / 0.06);
-  border: 1px solid oklch(var(--un-preset-theme-colors-highlight) / 0.25);
-  border-radius: 0.625rem;
+  border: 1px solid oklch(var(--un-preset-theme-colors-highlight) / 0.2);
+  border-radius: 0.5rem;
   outline: none;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  transition: border-color 0.2s ease;
   font-family: inherit;
   appearance: none;
   -webkit-appearance: none;
@@ -349,7 +349,7 @@ const d = t[lang as keyof typeof t] || t.zh
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23555' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 0.75rem center;
-  padding-right: 2.25rem;
+  padding-right: 2rem;
   cursor: pointer;
 }
 
@@ -357,7 +357,6 @@ const d = t[lang as keyof typeof t] || t.zh
 .form-select:focus,
 .form-textarea:focus {
   border-color: oklch(var(--un-preset-theme-colors-primary) / 0.4);
-  box-shadow: 0 0 0 3px oklch(var(--un-preset-theme-colors-primary) / 0.07);
 }
 
 .form-input::placeholder,
@@ -367,33 +366,31 @@ const d = t[lang as keyof typeof t] || t.zh
 
 .form-textarea {
   resize: vertical;
-  min-height: 120px;
+  min-height: 100px;
   line-height: 1.6;
 }
 
 .form-footer {
-  margin-top: 0.5rem;
+  margin-top: 0.25rem;
 }
 
 .form-submit {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
-  padding: 0.75rem 2rem;
-  font-size: 1rem;
+  padding: 0.5rem 1.25rem;
+  font-size: 0.875rem;
   font-weight: 600;
   color: oklch(98% 0.01 300);
   background: oklch(var(--un-preset-theme-colors-primary));
   border: none;
-  border-radius: 0.625rem;
+  border-radius: 0.5rem;
   cursor: pointer;
-  transition: opacity 0.2s ease, transform 0.15s ease;
-  min-width: 140px;
+  transition: opacity 0.2s ease;
 }
 
 .form-submit:hover {
-  opacity: 0.88;
+  opacity: 0.85;
 }
 
 .form-submit:active {
@@ -406,9 +403,9 @@ const d = t[lang as keyof typeof t] || t.zh
 }
 
 .form-message {
-  font-size: 0.9rem;
-  padding: 0.75rem 1rem;
-  border-radius: 0.5rem;
+  font-size: 0.8rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.375rem;
   margin-top: 0.5rem;
 }
 
@@ -443,7 +440,8 @@ if (form && submitBtn) {
       if (!el.value.trim()) {
         el.style.borderColor = 'oklch(55% 0.2 25)'
         valid = false
-      } else {
+      }
+      else {
         el.style.borderColor = ''
       }
     })
@@ -470,17 +468,20 @@ if (form && submitBtn) {
         if (errorMsg) errorMsg.hidden = true
         form.reset()
         // Reset selects to first option
-        form.querySelectorAll('select').forEach(sel => {
+        form.querySelectorAll('select').forEach((sel) => {
           const s = sel as HTMLSelectElement
           s.selectedIndex = 0
         })
-      } else {
+      }
+      else {
         throw new Error(data.message || 'Submission failed')
       }
-    } catch {
+    }
+    catch {
       if (errorMsg) errorMsg.hidden = false
       if (successMsg) successMsg.hidden = true
-    } finally {
+    }
+    finally {
       submitBtn.disabled = false
       if (submitText) submitText.hidden = false
       if (submitLoading) submitLoading.hidden = true
