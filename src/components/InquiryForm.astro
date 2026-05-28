@@ -10,9 +10,10 @@ const t = {
     projectType: '项目类型',
     projectTypeOptions: [
       { value: '', label: '请选择项目类型' },
-      { value: 'motion', label: '动态视觉设计（Motion Graphics）' },
+      { value: 'motion', label: '动态视觉设计' },
       { value: 'uiux', label: 'UI/UX 设计' },
       { value: 'frontend', label: '前端开发' },
+      { value: 'ai', label: 'AI 工作流' },
       { value: 'illustration', label: '数字插画' },
       { value: 'other', label: '其他' },
     ],
@@ -44,7 +45,7 @@ const t = {
     success: '已收到，我会尽快回复。',
     error: '发送失败，请直接邮件 hello@cgartlab.com',
     required: '必填',
-    accessKey: 'a1b2c3d4e5f6g7h8i9j0', // Web3Forms public key, replaced via env
+    accessKey: 'a1b2c3d4e5f6g7h8i9j0',
   },
   en: {
     title: 'Project Inquiry',
@@ -55,6 +56,7 @@ const t = {
       { value: 'motion', label: 'Motion Graphics' },
       { value: 'uiux', label: 'UI/UX Design' },
       { value: 'frontend', label: 'Frontend Development' },
+      { value: 'ai', label: 'AI Workflow' },
       { value: 'illustration', label: 'Digital Illustration' },
       { value: 'other', label: 'Other' },
     ],
@@ -94,9 +96,10 @@ const t = {
     projectType: '專案類型',
     projectTypeOptions: [
       { value: '', label: '請選擇專案類型' },
-      { value: 'motion', label: '動態視覺設計（Motion Graphics）' },
+      { value: 'motion', label: '動態視覺設計' },
       { value: 'uiux', label: 'UI/UX 設計' },
       { value: 'frontend', label: '前端開發' },
+      { value: 'ai', label: 'AI 工作流' },
       { value: 'illustration', label: '數位插畫' },
       { value: 'other', label: '其他' },
     ],
@@ -148,13 +151,11 @@ const d = t[lang as keyof typeof t] || t.zh
     method="POST"
     novalidate
   >
-    <!-- Web3Forms config -->
     <input type="hidden" name="access_key" value={d.accessKey} />
     <input type="hidden" name="subject" value="[CGArtLab] New Project Inquiry" />
     <input type="hidden" name="from_name" value="CGArtLab Inquiry Form" />
     <input type="checkbox" name="botcheck" class="hidden" style="display: none" />
 
-    <!-- Project Type -->
     <div class="form-group">
       <label for="project-type" class="form-label">
         {d.projectType}
@@ -169,7 +170,6 @@ const d = t[lang as keyof typeof t] || t.zh
       </select>
     </div>
 
-    <!-- Budget + Timeline row -->
     <div class="form-row">
       <div class="form-group">
         <label for="budget" class="form-label">
@@ -200,7 +200,6 @@ const d = t[lang as keyof typeof t] || t.zh
       </div>
     </div>
 
-    <!-- Name + Email row -->
     <div class="form-row">
       <div class="form-group">
         <label for="name" class="form-label">
@@ -233,7 +232,6 @@ const d = t[lang as keyof typeof t] || t.zh
       </div>
     </div>
 
-    <!-- Description -->
     <div class="form-group">
       <label for="description" class="form-label">
         {d.description}
@@ -249,7 +247,6 @@ const d = t[lang as keyof typeof t] || t.zh
       ></textarea>
     </div>
 
-    <!-- Submit -->
     <div class="form-footer">
       <button type="submit" class="form-submit" id="submit-btn">
         <span class="submit-text">{d.submit}</span>
@@ -257,7 +254,6 @@ const d = t[lang as keyof typeof t] || t.zh
       </button>
     </div>
 
-    <!-- Status messages -->
     <div id="form-success" class="form-message form-message-success" hidden>
       {d.success}
     </div>
@@ -271,9 +267,9 @@ const d = t[lang as keyof typeof t] || t.zh
 .inquiry-section {
   margin-top: 2rem;
   padding: 1.25rem 1.5rem;
-  background: oklch(var(--un-preset-theme-colors-secondary) / 0.04);
+  background-color: oklch(var(--un-preset-theme-colors-background));
+  border: 1px solid oklch(var(--un-preset-theme-colors-highlight) / 0.3);
   border-radius: 0.75rem;
-  border: 1px solid oklch(var(--un-preset-theme-colors-highlight) / 0.12);
 }
 
 .inquiry-header {
@@ -335,18 +331,18 @@ const d = t[lang as keyof typeof t] || t.zh
   padding: 0.5rem 0.75rem;
   font-size: 0.875rem;
   color: oklch(var(--un-preset-theme-colors-primary));
-  background: oklch(var(--un-preset-theme-colors-secondary) / 0.06);
-  border: 1px solid oklch(var(--un-preset-theme-colors-highlight) / 0.2);
+  background-color: oklch(var(--un-preset-theme-colors-background));
+  border: 1px solid oklch(var(--un-preset-theme-colors-highlight) / 0.5);
   border-radius: 0.5rem;
   outline: none;
-  transition: border-color 0.2s ease;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
   font-family: inherit;
   appearance: none;
   -webkit-appearance: none;
 }
 
 .form-select {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23555' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='oklch(var(--un-preset-theme-colors-primary) / 0.6)' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 0.75rem center;
   padding-right: 2rem;
@@ -356,12 +352,13 @@ const d = t[lang as keyof typeof t] || t.zh
 .form-input:focus,
 .form-select:focus,
 .form-textarea:focus {
-  border-color: oklch(var(--un-preset-theme-colors-primary) / 0.4);
+  border-color: oklch(var(--un-preset-theme-colors-highlight));
+  box-shadow: 0 0 0 3px oklch(var(--un-preset-theme-colors-highlight) / 0.2);
 }
 
 .form-input::placeholder,
 .form-textarea::placeholder {
-  color: oklch(var(--un-preset-theme-colors-secondary) / 0.4);
+  color: oklch(var(--un-preset-theme-colors-secondary) / 0.5);
 }
 
 .form-textarea {
@@ -381,16 +378,17 @@ const d = t[lang as keyof typeof t] || t.zh
   padding: 0.5rem 1.25rem;
   font-size: 0.875rem;
   font-weight: 600;
-  color: oklch(98% 0.01 300);
-  background: oklch(var(--un-preset-theme-colors-primary));
-  border: none;
+  color: oklch(var(--un-preset-theme-colors-primary));
+  background-color: transparent;
+  border: 1px solid oklch(var(--un-preset-theme-colors-highlight) / 0.5);
   border-radius: 0.5rem;
   cursor: pointer;
-  transition: opacity 0.2s ease;
+  transition: opacity 0.2s ease, background-color 0.2s ease;
 }
 
 .form-submit:hover {
-  opacity: 0.85;
+  background-color: oklch(var(--un-preset-theme-colors-highlight) / 0.15);
+  opacity: 1;
 }
 
 .form-submit:active {
@@ -410,15 +408,15 @@ const d = t[lang as keyof typeof t] || t.zh
 }
 
 .form-message-success {
-  background: oklch(60% 0.15 145 / 0.1);
+  background-color: oklch(var(--un-preset-theme-colors-background));
   color: oklch(55% 0.15 145);
-  border: 1px solid oklch(60% 0.15 145 / 0.2);
+  border: 1px solid oklch(55% 0.15 145 / 0.4);
 }
 
 .form-message-error {
-  background: oklch(60% 0.15 25 / 0.1);
+  background-color: oklch(var(--un-preset-theme-colors-background));
   color: oklch(55% 0.15 25);
-  border: 1px solid oklch(60% 0.15 25 / 0.2);
+  border: 1px solid oklch(55% 0.15 25 / 0.4);
 }
 </style>
 
@@ -432,13 +430,12 @@ if (form && submitBtn) {
   form.addEventListener('submit', async (e) => {
     e.preventDefault()
 
-    // Basic client-side validation
     const required = form.querySelectorAll('[required]')
     let valid = true
     required.forEach((field) => {
       const el = field as HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
       if (!el.value.trim()) {
-        el.style.borderColor = 'oklch(55% 0.2 25)'
+        el.style.borderColor = 'oklch(var(--un-preset-theme-colors-highlight))'
         valid = false
       }
       else {
@@ -448,7 +445,6 @@ if (form && submitBtn) {
 
     if (!valid) return
 
-    // Loading state
     submitBtn.disabled = true
     const submitText = submitBtn.querySelector('.submit-text') as HTMLElement
     const submitLoading = submitBtn.querySelector('.submit-loading') as HTMLElement
@@ -467,7 +463,6 @@ if (form && submitBtn) {
         if (successMsg) successMsg.hidden = false
         if (errorMsg) errorMsg.hidden = true
         form.reset()
-        // Reset selects to first option
         form.querySelectorAll('select').forEach((sel) => {
           const s = sel as HTMLSelectElement
           s.selectedIndex = 0

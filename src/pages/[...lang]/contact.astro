@@ -105,6 +105,12 @@ const items: { label: string; value: string; url?: string }[] = [
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  padding: 0.25rem 0;
+  border-bottom: 1px solid oklch(var(--un-preset-theme-colors-highlight) / 0.15);
+}
+
+.contact-item:last-child {
+  border-bottom: none;
 }
 
 .contact-label {
@@ -112,7 +118,7 @@ const items: { label: string; value: string; url?: string }[] = [
   font-weight: 600;
   color: oklch(var(--un-preset-theme-colors-secondary) / 0.6);
   text-align: left;
-  min-width: 4rem;
+  min-width: 5rem;
 }
 
 .contact-value {
@@ -130,5 +136,7 @@ const items: { label: string; value: string; url?: string }[] = [
   font-size: 0.85rem;
   color: oklch(var(--un-preset-theme-colors-secondary) / 0.65);
   margin-top: 1.25rem;
+  padding-left: 1rem;
+  border-left: 2px solid oklch(var(--un-preset-theme-colors-highlight) / 0.4);
 }
 </style>
