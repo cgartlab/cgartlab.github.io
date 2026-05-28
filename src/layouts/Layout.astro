@@ -53,12 +53,12 @@ const MarginBottom = isPost && themeConfig.comment.enabled
     >
       <Header />
       <Navbar />
+      <Button supportedLangs={supportedLangs} />
       <main class={`${MarginBottom} mt-5`}>
         <slot />
       </main>
       <Footer />
     </div>
-    <Button supportedLangs={supportedLangs} />
     <SoundEffect />
     <CodeCopyButton />
     <GithubCard />
