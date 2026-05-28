@@ -3,6 +3,7 @@ import type { CollectionEntry } from 'astro:content'
 import type { Language } from '@/i18n/config'
 import { getCollection, render } from 'astro:content'
 import AIDisclaimer from '@/components/AIDisclaimer.astro'
+import AuthorBox from '@/components/AuthorBox.astro'
 import Comment from '@/components/Comment/Index.astro'
 import PostDate from '@/components/PostDate.astro'
 import TagList from '@/components/TagList.astro'
@@ -86,6 +87,7 @@ const { Content, headings, remarkPluginFrontmatter } = await render(post)
   postTitle={post.data.title}
   postDescription={description}
   postSlug={post.id}
+  postDate={post.data.published}
   supportedLangs={supportedLangs}
 >
   <article class="heti">
@@ -125,6 +127,8 @@ const { Content, headings, remarkPluginFrontmatter } = await render(post)
       <Content />
       <!-- AI Disclaimer -->
       <AIDisclaimer lang={currentLang} />
+      <!-- Author Box (E-E-A-T) -->
+      <AuthorBox lang={currentLang} />
       <!-- Copyright -->
       <div id="post-copyright" />
       <!-- Ad Above Comments -->

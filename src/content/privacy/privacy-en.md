@@ -108,7 +108,22 @@ This Site uses the following third-party services, which may collect and process
 |---------|----------|---------|----------------|
 | GitHub Pages | GitHub, Inc. | Website hosting service | [GitHub Privacy Policy](https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement) |
 
-### 3.5 Data Sharing Principles
+### 3.5 Advertising (Google AdSense)
+
+| Service | Provider | Purpose | Privacy Policy |
+|---------|----------|---------|----------------|
+| Google AdSense | Google LLC | Display advertisements to support site operations | [Google Privacy Policy](https://policies.google.com/privacy) |
+
+**Notes**:
+- Google AdSense is an advertising service used by this Site to display advertisements in support of site operations.
+- Third-party vendors, including Google, use cookies to serve ads based on your prior visits to this Site or other websites.
+- Google's use of advertising cookies enables it and its partners to serve ads to you based on your visit to this Site and/or other sites on the Internet.
+- You may opt out of personalized advertising by visiting [Google Ads Settings](https://www.google.com/settings/ads).
+- You may also opt out of third-party vendors' use of cookies for personalized advertising by visiting [www.aboutads.info](https://www.aboutads.info/).
+- Google AdSense may collect information such as your IP address, browser type, and pages visited for ad serving and performance measurement.
+- This Site does not use data collected by Google AdSense for any purposes other than advertisement display.
+
+### 3.6 Data Sharing Principles
 
 - We **do not sell, rent, or trade** your personal information to any third party.
 - We may disclose relevant information only when required by law, to protect our legitimate rights, or to prevent fraud.
@@ -210,7 +225,7 @@ You have the right to withdraw previously granted consent at any time, without a
 
 To exercise the above rights, please contact us through:
 
-- **Email**: cgartlab@outlook.com
+- **Email**: hello@cgartlab.com
 - **GitHub Issues**: [cgartlab/cgartlab.github.io](https://github.com/cgartlab/cgartlab.github.io/issues)
 
 We will respond within 15 business days of receiving your request.
@@ -248,7 +263,7 @@ If you have any questions, comments, or complaints about this Privacy Policy, pl
 
 | Channel | Contact |
 |---------|---------|
-| Email | cgartlab@outlook.com |
+| Email | hello@cgartlab.com |
 | GitHub | [cgartlab/cgartlab.github.io](https://github.com/cgartlab/cgartlab.github.io) |
 | WeChat Official Account | 尘光造梦 |
 

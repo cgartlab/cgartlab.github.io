@@ -229,22 +229,27 @@ a:target-current {
 }
 
 /* Typing Cursor for Header Subtitle >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> */
-.subtitle-typing-wrapper {
+.subtitle-cursor {
   display: inline-flex;
   align-items: center;
-  gap: 2px;
+  width: 207px;
+  letter-spacing: 0.1875em;
 }
 
-.typing-cursor {
-  display: inline-block;
-  width: 2px;
-  height: 0.9em;
-  border-radius: 2px;
-  background-color: #C41E3A;
+.subtitle-text {
+  letter-spacing: 0.2em;
+}
+
+.subtitle-cursor-block {
+  width: 1em;
+  height: 1em;
+  margin: 0 6px;
+  background-color: #b91c1c; /* 日本传统印章朱红色 */
   animation: cursor-blink 1s ease-in-out infinite;
-  vertical-align: middle;
+  transform: translateY(-2px);
   flex-shrink: 0;
 }
+
 
 @keyframes cursor-blink {
   0%, 40% { opacity: 1; }
