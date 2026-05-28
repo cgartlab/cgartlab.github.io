@@ -4,7 +4,7 @@ lang: en
 
 # Privacy Policy
 
-**Last Updated: May 1, 2026**
+**Last Updated: May 28, 2026**
 
 ## Introduction
 
@@ -21,7 +21,7 @@ Please read this policy carefully before using our services. By accessing this S
 When you use the following features of this Site, you may need to provide relevant information voluntarily:
 
 - **Comments**: When posting comments via Giscus (based on GitHub Discussions), you need to provide your GitHub account information. Data processing follows GitHub's Privacy Policy.
-- **Email Subscription**: Your email address when subscribing to the XuanGuang Weekly newsletter.
+- **Email Subscription**: Your email address when subscribing to the newsletter.
 - **Contact**: Your name, email, and message content when contacting us via email.
 
 ### 1.2 Automatically Collected Information
@@ -33,7 +33,16 @@ When you browse this Site, the following information may be automatically record
 - **Browsing Behavior**: Pages visited, duration of stay, click paths, referral pages
 - **Language Preference**: Language and region settings from your browser
 
-### 1.3 Information We Do NOT Collect
+### 1.3 Browser Local Storage
+
+This Site uses browser LocalStorage to store the following information:
+
+| Storage Type | Purpose | Lifecycle |
+|--------------|---------|-----------|
+| Theme Preference | Record your chosen light/dark theme mode | Persistent (until manually cleared) |
+| Search History | Record your search keywords (optional feature) | Session-level |
+
+### 1.4 Information We Do NOT Collect
 
 - We **do not collect** sensitive personal information such as real names, ID numbers, addresses, or phone numbers.
 - We **do not store** user passwords or payment information.
@@ -53,7 +62,7 @@ We use the collected information for the following purposes:
 
 ### 2.2 Content Services
 
-- Send XuanGuang Weekly newsletter content (only after you actively subscribe)
+- Send newsletter email content (only after you actively subscribe)
 - Respond to inquiries or feedback sent via email
 - Interact with you in the comment section
 
@@ -71,7 +80,7 @@ This Site uses the following third-party services, which may collect and process
 ### 3.1 Analytics
 
 | Service | Provider | Purpose | Privacy Policy |
-|---------|----------|---------|----------------|
+|---------|----------|---------|---------------|
 | Google Analytics | Google LLC | Website traffic analysis and user behavior statistics | [Google Privacy Policy](https://policies.google.com/privacy) |
 | Umami Analytics | Umami Software, Inc. | Privacy-friendly open-source analytics | [Umami Privacy](https://umami.is/privacy) |
 
@@ -83,7 +92,7 @@ This Site uses the following third-party services, which may collect and process
 ### 3.2 Comment System
 
 | Service | Provider | Purpose | Privacy Policy |
-|---------|----------|---------|----------------|
+|---------|----------|---------|---------------|
 | Giscus | Open Source Project | Comment system based on GitHub Discussions | [GitHub Privacy Policy](https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement) |
 
 **Notes**:
@@ -94,7 +103,7 @@ This Site uses the following third-party services, which may collect and process
 ### 3.3 Content Embedding
 
 | Service | Provider | Purpose | Privacy Policy |
-|---------|----------|---------|----------------|
+|---------|----------|---------|---------------|
 | YouTube Embed | Google LLC | Video content display | [YouTube Terms](https://www.youtube.com/t/terms) |
 | Bilibili Embed | Shanghai Kuanyu Digital Technology Co., Ltd. | Video content display | [Bilibili Privacy Policy](https://www.bilibili.com/blackboard/privacy-pc.html) |
 
@@ -105,13 +114,18 @@ This Site uses the following third-party services, which may collect and process
 ### 3.4 Hosting and CDN
 
 | Service | Provider | Purpose | Privacy Policy |
-|---------|----------|---------|----------------|
-| GitHub Pages | GitHub, Inc. | Website hosting service | [GitHub Privacy Policy](https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement) |
+|---------|----------|---------|---------------|
+| Cloudflare Pages | Cloudflare, Inc. | Website hosting and global acceleration | [Cloudflare Privacy Policy](https://www.cloudflare.com/privacy/) |
+
+**Notes**:
+- Cloudflare deploys CDN nodes globally to improve access speed
+- Cloudflare may record access logs for security protection and performance optimization
+- Compliant with GDPR, CCPA and other data protection regulations
 
 ### 3.5 Advertising (Google AdSense)
 
 | Service | Provider | Purpose | Privacy Policy |
-|---------|----------|---------|----------------|
+|---------|----------|---------|---------------|
 | Google AdSense | Google LLC | Display advertisements to support site operations | [Google Privacy Policy](https://policies.google.com/privacy) |
 
 **Notes**:
@@ -139,20 +153,30 @@ Cookies are small text files that websites store in your browser to record your 
 ### 4.2 Cookies Used on This Site
 
 | Cookie Type | Purpose | Duration |
-|-------------|---------|----------|
+|------------|---------|----------|
 | Theme Preference | Record your chosen light/dark theme mode | Persistent (until manually cleared) |
 | Analytics Cookie | Google Analytics for distinguishing unique visitors | 2 years |
 
-### 4.3 Your Cookie Controls
+### 4.3 Browser Local Storage
 
-You can manage cookies through the following methods:
+In addition to cookies, this Site uses browser LocalStorage:
+
+| Storage Key | Purpose | Notes |
+|------------|---------|-------|
+| `theme` | Theme mode | Value is `light` or `dark` |
+| `theme-manual` | Whether theme was manually set | Value `true` ignores system preference |
+
+### 4.4 Your Privacy Controls
+
+You can manage cookies and local storage through the following methods:
 
 - **Browser Settings**: Clear, block, or manage cookies in your browser preferences
-- **Site Settings**: Cookie consent banner on first visit (if applicable)
 - **Analytics Opt-out**:
   - [Google Analytics Opt-out](https://tools.google.com/dlpage/gaoptout)
+- **Reduced Motion**: If your system preference is set to `prefers-reduced-motion: reduce`, this Site will automatically disable page animations
+- **Private Browsing Mode**: Use your browser's privacy/incognito mode when visiting this Site
 
-**Note**: Disabling essential cookies may affect normal site functionality (such as theme switching memory).
+**Note**: Disabling essential cookies or clearing local storage may affect normal Site functionality (such as theme switching memory).
 
 ---
 
@@ -163,7 +187,7 @@ You can manage cookies through the following methods:
 This Site takes the following measures to protect your information:
 
 - Full-site HTTPS encrypted transmission (SSL/TLS)
-- Website hosted on GitHub Pages, inheriting enterprise-level security protection
+- Website hosted on Cloudflare Pages, inheriting enterprise-level security protection (including DDoS protection, WAF, etc.)
 - Regular system and dependency updates to patch security vulnerabilities
 - Restricted access to personal information
 
@@ -172,6 +196,7 @@ This Site takes the following measures to protect your information:
 - Analytics data: Google Analytics default retention is 26 months (set to auto-delete)
 - Comment data: Stored in GitHub Discussions, following GitHub's data retention policy
 - Email subscriptions: Retained until you actively unsubscribe
+- Local storage data: Managed by you, can be cleared through browser settings
 
 ### 5.3 Security Incident Response
 
@@ -208,6 +233,7 @@ You have the right to request deletion of your personal information in the follo
 **Specific Actions**:
 - Comment deletion: Please contact the site administrator or delete your Discussion comment via GitHub
 - Email subscription cancellation: Click the "Unsubscribe" link at the bottom of the newsletter email
+- Local storage clearing: Clear this Site's data through browser settings
 
 ### 6.5 Right to Restrict Processing
 
@@ -242,9 +268,9 @@ We will respond within 15 business days of receiving your request.
 
 ## 8. Cross-Border Data Transfer
 
-- This Site is hosted on GitHub Pages (United States), and some access data may be transmitted to overseas servers.
-- Google Analytics data processing may involve cross-border transfers.
-- We ensure that all cross-border transfers comply with applicable laws and take adequate security protection measures.
+- This Site is hosted on Cloudflare (global distributed nodes), and access data may be processed worldwide
+- Google Analytics and Google AdSense data processing may involve cross-border transfers
+- We ensure that all cross-border transfers comply with applicable laws and take adequate security protection measures
 
 ---
 
@@ -265,10 +291,18 @@ If you have any questions, comments, or complaints about this Privacy Policy, pl
 |---------|---------|
 | Email | hello@cgartlab.com |
 | GitHub | [cgartlab/cgartlab.github.io](https://github.com/cgartlab/cgartlab.github.io) |
-| WeChat Official Account | 尘光造梦 |
+| X (Twitter) | [@cgartlab](https://x.com/cgartlab) |
+| Bilibili | [cgartlab](https://space.bilibili.com/38043072) |
+| SSPai | [cgartlab](https://sspai.com/u/cgartlab/updates) |
 
 For disputes that cannot be resolved, you have the right to file a complaint or report to the relevant regulatory authorities.
 
 ---
 
-*This Privacy Policy is effective as of May 1, 2026.*
+## 11. Applicable Law
+
+This Privacy Policy is governed by, executed, and interpreted in accordance with applicable laws. If any provision of this policy conflicts with applicable law, such provision shall be reinterpreted in accordance with applicable law, and the remaining provisions shall remain in full force and effect.
+
+---
+
+*This Privacy Policy is effective as of May 28, 2026.*
