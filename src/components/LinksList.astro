@@ -52,13 +52,10 @@ const categories = linksData[lang as keyof typeof linksData] || linksData.zh
   color: oklch(var(--un-preset-theme-colors-primary));
   position: relative;
   padding: 1rem 1.5rem;
-  background: oklch(var(--un-preset-theme-colors-secondary) / 0.05);
+  background: transparent;
   cursor: pointer;
   list-style: none;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
+  display: block;
   transition: background 0.2s ease;
 }
 
@@ -66,23 +63,8 @@ const categories = linksData[lang as keyof typeof linksData] || linksData.zh
   display: none;
 }
 
-.links-category-title::after {
-  content: '';
-  width: 0.5rem;
-  height: 0.5rem;
-  border-right: 2px solid oklch(var(--un-preset-theme-colors-primary));
-  border-bottom: 2px solid oklch(var(--un-preset-theme-colors-primary));
-  transform: rotate(45deg);
-  transition: transform 0.25s ease;
-  flex-shrink: 0;
-}
-
-.links-section[open] .links-category-title::after {
-  transform: rotate(-135deg);
-}
-
 .links-section[open] .links-category-title {
-  border-bottom: 2px solid oklch(var(--un-preset-theme-colors-highlight));
+  border-bottom: 2px solid oklch(var(--un-preset-theme-colors-primary));
 }
 
 .links-section:not([open]) .links-category-title {
