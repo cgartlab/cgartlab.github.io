@@ -14,7 +14,7 @@ const categories = linksData[lang as keyof typeof linksData] || linksData.zh
 
 <div class="links-container">
   {Object.entries(categories).map(([category, links]) => (
-    <details class="links-section">
+    <details class="links-section" open>
       <summary class="links-category-title">{category}</summary>
       <div class="links-grid">
         {links.map(link => (
