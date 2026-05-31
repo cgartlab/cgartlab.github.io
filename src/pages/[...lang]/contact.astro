@@ -13,7 +13,7 @@ export async function getStaticPaths() {
 const currentLang = getLangFromLocale(Astro.currentLocale)
 
 const t = {
-  zh: {
+  'zh': {
     title: '联系方式',
     email: 'hello@cgartlab.com',
     github: 'github.com/cgartlab',
@@ -21,9 +21,9 @@ const t = {
     x: '@cgartlab',
     sspai: 'sspai.com/u/cgartlab',
     bilibili: 'space.bilibili.com/38043072',
-    note: "请认真衡量项目的成本和收益，避免急单或比稿，再填写下方表单。",
+    note: '请认真衡量项目的成本和收益，避免急单或比稿，再填写下方表单。',
   },
-  en: {
+  'en': {
     title: 'Contact',
     email: 'hello@cgartlab.com',
     github: 'github.com/cgartlab',
@@ -31,7 +31,7 @@ const t = {
     x: '@cgartlab',
     sspai: 'sspai.com/u/cgartlab',
     bilibili: 'space.bilibili.com/38043072',
-    note: "Please carefully evaluate the cost and benefit of the project, and avoid rush jobs or spec work.",
+    note: 'Please carefully evaluate the cost and benefit of the project, and avoid rush jobs or spec work.',
   },
   'zh-tw': {
     title: '聯繫方式',
@@ -41,13 +41,13 @@ const t = {
     x: '@cgartlab',
     sspai: 'sspai.com/u/cgartlab',
     bilibili: 'space.bilibili.com/38043072',
-    note: "请认真衡量项目的成本和收益，避免急单或比稿，再填写下方表單。",
+    note: '请认真衡量项目的成本和收益，避免急单或比稿，再填写下方表單。',
   },
 }
 
 const d = t[currentLang as keyof typeof t] || t.zh
 
-const items: { label: string; value: string; url?: string }[] = [
+const items: { label: string, value: string, url?: string }[] = [
   { label: 'Email', value: d.email, url: `mailto:${d.email}` },
   { label: 'GitHub', value: d.github, url: `https://${d.github}` },
   { label: 'WeChat', value: d.wechat },
@@ -68,7 +68,8 @@ const items: { label: string; value: string; url?: string }[] = [
         items.map(item => (
           <div class="contact-item">
             <span class="contact-label">{item.label}</span>
-            {item.url ? (
+            {item.url
+? (
               <a
                 href={item.url}
                 class="contact-value"
@@ -77,7 +78,8 @@ const items: { label: string; value: string; url?: string }[] = [
               >
                 {item.value}
               </a>
-            ) : (
+            )
+: (
               <span class="contact-value">{item.value}</span>
             )}
           </div>
@@ -85,7 +87,7 @@ const items: { label: string; value: string; url?: string }[] = [
       }
     </div>
 
-    <blockquote class="contact-note mt-6 lg:mt-8 mb-0">
+    <blockquote class="contact-note mb-0 mt-6 lg:mt-8">
       <p>{d.note}</p>
     </blockquote>
 

@@ -10,13 +10,13 @@ export default {
 
     // Try serving the asset from the assets namespace
     const asset = await env.ASSETS.fetch(
-      new Request(new URL(assetPath, request.url), request)
+      new Request(new URL(assetPath, request.url), request),
     )
 
     // If asset not found, serve 404.html
     if (asset.status === 404) {
       const notFound = await env.ASSETS.fetch(
-        new Request(new URL('/404.html', request.url), request)
+        new Request(new URL('/404.html', request.url), request),
       )
       return new Response(notFound.body, {
         status: 404,

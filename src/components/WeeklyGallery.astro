@@ -15,7 +15,8 @@ const { posts, lang } = Astro.props
 const postsByYear = new Map<number, Post[]>()
 for (const post of posts) {
   const year = post.data.published.getFullYear()
-  if (!postsByYear.has(year)) postsByYear.set(year, [])
+  if (!postsByYear.has(year))
+postsByYear.set(year, [])
   postsByYear.get(year)!.push(post)
 }
 const sortedYears = [...postsByYear.keys()].sort((a, b) => b - a)

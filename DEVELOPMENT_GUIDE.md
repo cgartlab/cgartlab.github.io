@@ -1,8 +1,8 @@
 # CGArtLab 网站开发指南
 
-> **版本**: 1.0  
-> **最后更新**: 2025-05-28  
-> **适用对象**: 人类开发者 & AI 大模型  
+> **版本**: 1.0
+> **最后更新**: 2025-05-28
+> **适用对象**: 人类开发者 & AI 大模型
 > **项目地址**: https://github.com/cgartlab/cgartlab.github.io
 
 ---
@@ -410,7 +410,8 @@ lg:       → ≥ 1024px（桌面端）
 // uno.config.ts
 variants: [
   (matcher) => {
-    if (!matcher.startsWith('cjk:')) return matcher
+    if (!matcher.startsWith('cjk:'))
+      return matcher
     return {
       matcher: matcher.slice(4),
       selector: s => `${s}:is(:lang(zh), :lang(ja), :lang(ko))`,
@@ -463,11 +464,11 @@ localStorage 'theme-manual' ≠ 'true'  → defaultMode !== 'auto' → 用配置
 
 ```ts
 // 亮色模式 (uno.config.ts theme.colors)
-note: 'oklch(48.8% 0.243 264.376 / 0.8)'      // 蓝色
-tip: 'oklch(50.8% 0.118 165.612 / 0.8)'       // 翡翠绿
+note: 'oklch(48.8% 0.243 264.376 / 0.8)' // 蓝色
+tip: 'oklch(50.8% 0.118 165.612 / 0.8)' // 翡翠绿
 important: 'oklch(49.6% 0.265 301.924 / 0.8)' // 紫色
-warning: 'oklch(55.5% 0.163 48.998 / 0.8)'    // 琥珀色
-caution: 'oklch(50.5% 0.213 27.518 / 0.8)'    // 红色
+warning: 'oklch(55.5% 0.163 48.998 / 0.8)' // 琥珀色
+caution: 'oklch(50.5% 0.213 27.518 / 0.8)' // 红色
 ```
 
 ### 7.4 ⚠️ 修改颜色时的注意事项
@@ -669,20 +670,20 @@ lang: ""        # 通用内容，所有语言可见
 ```ts
 schema: z.object({
   // 必需
-  title: z.string(),           // 文章标题
-  published: z.date(),         // 发布日期 (YYYY-MM-DD)
+  title: z.string(), // 文章标题
+  published: z.date(), // 发布日期 (YYYY-MM-DD)
 
   // 可选
-  description: z.string().default(''),     // SEO 描述
-  updated: z.date().optional(),            // 更新日期
-  tags: z.array(z.string()).default([]),    // 标签数组
+  description: z.string().default(''), // SEO 描述
+  updated: z.date().optional(), // 更新日期
+  tags: z.array(z.string()).default([]), // 标签数组
 
   // 高级
-  draft: z.boolean().default(false),       // 草稿状态
+  draft: z.boolean().default(false), // 草稿状态
   pin: z.number().min(0).max(99).default(0), // 置顶优先级(0=不置顶)
-  toc: z.boolean().default(true),          // 显示目录
+  toc: z.boolean().default(true), // 显示目录
   lang: z.enum(['', ...allLocales]).default(''), // 语言(空=通用)
-  abbrlink: z.string().default(''),        // 自定义 URL slug
+  abbrlink: z.string().default(''), // 自定义 URL slug
 })
 ```
 
@@ -1185,7 +1186,7 @@ color: {
 ---
 // src/pages/[...lang]/newpage.astro
 import { allLocales } from '@/config'
-import { getLangFromLocale, getLangRouteParam } from '@/i18n/lang'
+import { getLangRouteParam } from '@/i18n/lang'
 import Layout from '@/layouts/Layout.astro'
 
 export async function getStaticPaths() {
@@ -1375,16 +1376,16 @@ html.dark .heti pre span {
 ---
 title: 文章标题
 published: 2025-01-15
-updated: 2025-01-20      # 可选
-description: 文章简述     # 可选，用于 SEO
+updated: 2025-01-20 # 可选
+description: 文章简述 # 可选，用于 SEO
 tags:
   - 标签1
   - 标签2
-pin: 0                   # 0=不置顶，1-99=置顶优先级
-toc: true                # 是否显示目录
-lang: zh                 # zh | en | zh-tw | ''(通用)
-abbrlink: custom-slug    # 自定义URL（可选）
-draft: false             # 草稿状态
+pin: 0 # 0=不置顶，1-99=置顶优先级
+toc: true # 是否显示目录
+lang: zh # zh | en | zh-tw | ''(通用)
+abbrlink: custom-slug # 自定义URL（可选）
+draft: false # 草稿状态
 ---
 ```
 

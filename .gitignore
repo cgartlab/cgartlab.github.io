@@ -50,6 +50,9 @@ coverage/
 .stversions/
 .syncthing-*
 
+# OpenCode
+.opencode/
+
 # Copilot / AI 插件
 .copilot-index/
 .copilot/

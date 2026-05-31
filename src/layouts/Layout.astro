@@ -67,14 +67,15 @@ const MarginBottom = isPost && themeConfig.comment.enabled
     <Search />
     <!-- Resize jitter fix: suppress view-transition-name during active resize -->
     <script is:inline>
-    (function(){
-      var t;
-      window.addEventListener('resize', function(){
-        if(!t) document.documentElement.setAttribute('data-resizing','');
-        clearTimeout(t);
-        t = setTimeout(function(){ document.documentElement.removeAttribute('data-resizing'); t = 0; }, 200);
-      });
-    })()
-    </script>
+(function () {
+  let t
+  window.addEventListener('resize', () => {
+    if (!t)
+      document.documentElement.setAttribute('data-resizing', '')
+    clearTimeout(t)
+    t = setTimeout(() => { document.documentElement.removeAttribute('data-resizing'); t = 0 }, 200)
+  })
+})()
+</script>
   </body>
 </html>
