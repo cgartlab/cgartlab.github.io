@@ -50,6 +50,14 @@ const termsPath = currentLang === defaultLocale ? '/terms/' : `/${currentLang}/t
 // 联系页面路径（新独立页面）
 const contactPath = currentLang === defaultLocale ? '/contact/' : `/${currentLang}/contact/`
 
+// 网站累计访问次数（根据 GA4 数据硬编码，定期手动更新）
+const siteVisitCount = 87558
+const siteVisitText = {
+  'zh': '网站累计访问 ',
+  'en': 'Site visits: ',
+  'zh-tw': '網站累計訪問 ',
+}[currentLang] || '网站累计访问 '
+
 // 公众号文本
 const wechatText = {
   'zh': '公众号',
@@ -100,19 +108,24 @@ const contactText = {
     </p>
   )}
 
-  <!-- 第3行：法律与联系信息 -->
+  <!-- 第3行：网站累计访问 -->
+  <p class="m-0 text-3 leading-3 font-navbar lg:text-2.5 tracking-0">
+    {siteVisitText}{siteVisitCount.toLocaleString()}
+  </p>
+
+  <!-- 第4行：法律与联系信息 -->
   <p class="m-0 text-3 leading-3 font-navbar lg:text-2.5 tracking-0">
     <a class={footerLinkClass} href={privacyPath}>{privacyText}</a>
     &nbsp;/&nbsp;<a class={footerLinkClass} href={termsPath}>{termsText}</a>
     &nbsp;/&nbsp;<a class={footerLinkClass} href={contactPath}>{contactText}</a>
   </p>
 
-  <!-- 第4行：版权 -->
+  <!-- 第5行：版权 -->
   <p class="m-0 text-3 leading-3 font-navbar lg:text-2.5 tracking-0">
     © {year} <a class={footerLinkClass} href="https://cy92.org" target="_blank" rel="noopener noreferrer">{author}</a>
   </p>
 
-  <!-- 第5行：许可 -->
+  <!-- 第6行：许可 -->
   <p class="m-0 text-3 leading-3 font-navbar lg:text-2.5 tracking-0">
     {
       {
