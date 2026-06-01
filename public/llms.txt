@@ -4,6 +4,7 @@
 
 ## 近期文章
 
+- [那些真正扛起工作的 Skill - No.19 玄光周刊](https://cgartlab.com/zh/weekly/weekly-19): 承接上期内容，本期继续介绍 OpenClaw 第二类 Skill——那些真正扛起工作的专用 Skill。它们与自部署服务深度集成，是日常生产力的核心支柱。
 - [我常用的 OpenClaw 工作流 Skill - No.18 玄光周刊](https://cgartlab.com/zh/weekly/weekly-18): 用了 OpenClaw 三个月，给我最大的感受是根本不知道这个工具的上限在哪里。几乎每天都会认识到新的概念，每周都会发现已有工作流的不足之处。其中 Skill 这个概念不得不提，它太重要了。
 - [从黑苹果到独立博客，这是我的开源旅程 - No.17玄光周刊](https://cgartlab.com/zh/weekly/weekly-17): 疫情初期，因折腾黑苹果首次接触开源，从最开始套用别人分享的文件。直到翻阅驱动源码时看到上百人为硬件ID反复调试，才意识到这套系统是志愿者用业余时间一砖一瓦搭建起来的。
 - [AI时代的创意工具 - No.16玄光周刊](https://cgartlab.com/zh/weekly/weekly-16): AI工具已从“赋能”卖点变为行业标配，但核心问题在于：它们是在扩展还是抹平创作边界？
@@ -33,7 +34,6 @@
 - [发刊词 - No.01 玄光周刊](https://cgartlab.com/zh/weekly/weekly-01): 周刊从这里出发
 - [12月拔草记录的好物](https://cgartlab.com/zh/posts/2024-12-good-things): 12月拔草记录的好物分享，包含农科院无蔗糖燕麦、Pidan猫薄荷玩具、米家石墨烯电暖器、Keychron K3 Max键盘等好物推荐。
 - [再开公众号，并接入 AI](https://cgartlab.com/zh/posts/setup-wechat-channel-again): 重新开通微信公众号并接入AI助手的完整经验分享，包含智能体配置、知识库设置和多平台内容分发策略
-- [【SCP-华夏系列组画】上线爱发电](https://cgartlab.com/zh/posts/scp-digital-artwork): 目前更新至第三幅 《醉奴》
 
 ## English Articles
 

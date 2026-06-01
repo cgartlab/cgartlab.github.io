@@ -193,7 +193,7 @@ Of course, there are many ready-made NAS options on the market, just with relati
 
 ## Recommended Common Apps
 
-With Apple's software ecosystem, built-in applications can handle over 80% of my light tasks. Here are some third-party apps I use. Due to space limitations, I won't详细介绍具体使用方法.
+With Apple's software ecosystem, built-in applications can handle over 80% of my light tasks. Here are some third-party apps I use. Due to space limitations, I won't 详细介绍具体使用方法.
 
 **[Hidden Bar](https://apps.apple.com/cn/app/hidden-bar/id1452453066?mt=12)**: Selectively hide top menu bar icons, open source and free.
 

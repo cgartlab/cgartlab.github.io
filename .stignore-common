@@ -29,19 +29,20 @@
 .stversions/
 .syncthing-*
 
-// --- Obsidian 配置（同步插件数据，不同步易冲突的二进制）---
+// --- Obsidian 配置（同步插件及配置，不同步 workspace/cache/构建文件） ---
 .obsidian/workspace.json
 .obsidian/workspace-*.json
 .obsidian/graph.json
 .obsidian/cache/
 .obsidian/logs/
 .obsidian/types/
-.obsidian/plugins/*/main.js
-**/.obsidian/plugins/*/main.js
-.obsidian/plugins/*/styles.css
-**/.obsidian/plugins/*/styles.css
+.obsidian/plugins/*/*.sync-conflict-*
+**/.obsidian/plugins/*/*.sync-conflict-*
 .obsidian/*.sync-conflict-*.json
 **/.obsidian/*.sync-conflict-*.json
+// 注意：main.js/styles.css/data.json 均不同步 → 插件和配置在所有桌面设备间共享
+// 移动端如需独立配置，请在移动端本地 .stignore 中添加：
+//   (?d).obsidian/plugins/*/data.json
 
 // --- AI/编辑器索引（各设备独立生成）---
 .copilot-index/
@@ -69,4 +70,4 @@ Desktop.ini
 *.bak
 *.backup
 
-// Sync-ts: 1779901743
+// Sync-ts: 1779901745
