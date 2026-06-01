@@ -83,7 +83,7 @@ Oh My OpenAgent (omo) is an open source AI Agent toolchain, formerly known as oh
 
 Its core philosophy is "not binding to any single model provider," completing tasks through multi-Agent collaboration, real-time coordination, and Side-by-side tmux visualization. The maintainer completely publicly builds the process on Discord, and claims that Anthropic once blocked OpenCode because of this project.
 
-Community feedback is quite enthusiastic, with some saying "it made me cancel my Cursor subscription." For those interested in深入了解, you can check its AGENTS.md file to understand the 11 Agent role definitions and lifecycle hook systems.
+Community feedback is quite enthusiastic, with some saying "it made me cancel my Cursor subscription." For those interested in 深入了解，you can check its AGENTS.md file to understand the 11 Agent role definitions and lifecycle hook systems.
 
 ### GEO — Generative Engine Optimization, the Next Battlefield of SEO
 
@@ -113,7 +113,7 @@ In terms of coping strategies, the article suggests increasing one's own diversi
 
 In Behance's 2026 design trends report, a notable change is that minimalism is beginning to coexist with bold typography — clean layouts paired with bold fonts and strong contrasting colors. This means "minimal" no longer equals "boring," but rather seeks breakthroughs in visual impact through restraint.
 
-The report also mentions that 2026 design focuses more on personal expression and emotional resonance. In the context of rapid AI tool普及, handmade textures, texture details, and conscious design decisions反而 become differentiated competitive advantages.
+The report also mentions that 2026 design focuses more on personal expression and emotional resonance. In the context of rapid AI tool 普及，handmade textures, texture details, and conscious design decisions 反而 become differentiated competitive advantages.
 
 ### Buzz — Offline Audio Transcription and Translation Tool
 
@@ -123,7 +123,7 @@ The report also mentions that 2026 design focuses more on personal expression an
 
 Buzz is a completely offline audio transcription and translation tool powered by OpenAI's Whisper. It supports processing audio files locally on your computer without uploading to the cloud, protecting privacy while being suitable for network-restricted environments.
 
-Compared to many online transcription services, Buzz's advantages lie in local operation, customizable model selection, and multi-language translation support. For podcast enthusiasts, meeting recorders, or users who need to process sensitive audio content, it is a noteworthy open source option. My own usage is to download many podcasts of人物访谈 that I don't have time to listen to but am interested in, throw them in locally. Usually, a super long podcast of about three hours can be processed into text in 5 minutes using 5070Ti acceleration, and then directly let an Agent梳理 out interesting viewpoints and cases and other valuable information — quite good.
+Compared to many online transcription services, Buzz's advantages lie in local operation, customizable model selection, and multi-language translation support. For podcast enthusiasts, meeting recorders, or users who need to process sensitive audio content, it is a noteworthy open source option. My own usage is to download many podcasts of 人物访谈 that I don't have time to listen to but am interested in, throw them in locally. Usually, a super long podcast of about three hours can be processed into text in 5 minutes using 5070Ti acceleration, and then directly let an Agent 梳理 out interesting viewpoints and cases and other valuable information — quite good.
 
 ---
 
@@ -139,7 +139,7 @@ A very thought-provoking and interesting question 👆.
 
 There is so much to write about AI Agents this year. After thinking for a long time, I believe I need to find a suitable entry point, otherwise the topic is too big to start with.
 
-Starting from this issue, I'll first try to切入 from the Skills I use most frequently every day and are relatively practical, slowly梳理 out the AI-accelerated productivity path that creators can most easily get started with. But unfortunately, this is not a so-called "shortcut," just sharing the joy of my own creations.
+Starting from this issue, I'll first try to 切入 from the Skills I use most frequently every day and are relatively practical, slowly 梳理 out the AI-accelerated productivity path that creators can most easily get started with. But unfortunately, this is not a so-called "shortcut," just sharing the joy of my own creations.
 
 Next issue: introducing the second category, those Skills that truly carry the workload.
 

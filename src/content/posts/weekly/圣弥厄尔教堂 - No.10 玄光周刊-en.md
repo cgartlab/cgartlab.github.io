@@ -34,7 +34,7 @@ Source: <https://astro.build>
 
 ![OpenCut](../_images/10%20玄光周刊-圣弥厄尔教堂-1755281016933.webp)
 
-An open-source video editing software competing with CapCut. Since the international version of CapCut also started membership systems, I had a预感 an open-source alternative would appear—finally here, and sponsored by the famous Vercel! Early alpha public testing has begun, interested friends can try it.
+An open-source video editing software competing with CapCut. Since the international version of CapCut also started membership systems, I had a 预感 an open-source alternative would appear—finally here, and sponsored by the famous Vercel! Early alpha public testing has begun, interested friends can try it.
 
 Source: <https://opencut.app>
 
