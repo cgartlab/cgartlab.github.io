@@ -15,7 +15,7 @@ abbrlink: elegant-use-windows11-in-2026
 
 ## 写在前面
 
-参考 [[2024年，如何优雅使用WindowsPC]] 重写大纲和内容。
+参考 [[2024 年，如何优雅使用 WindowsPC]] 重写大纲和内容。
 
 主要变化：
 

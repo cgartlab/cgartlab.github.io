@@ -12,7 +12,7 @@ lang: zh
 abbrlink: use-homebrew-in-macos
 ---
 
-上一篇写了 [Windows 11 如何使用 winget 包管理器](https://cgartlab.com/posts/use-winget-on-win11/) 结尾讲到了 macOS 端我也制作了一个小脚本，使用的正是 Homebrew 。
+上一篇写了 [Windows 11 如何使用 winget 包管理器](https://cgartlab.com/posts/use-winget-on-win11/) 结尾讲到了 macOS 端我也制作了一个小脚本，使用的正是 Homebrew。
 
 ## 介绍 Homebrew
 

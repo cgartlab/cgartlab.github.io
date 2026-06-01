@@ -48,7 +48,7 @@ Email isn't popular domestically, and I learned about newsletter as a creative f
 
 Ironically, public account content doesn't always reach the public. Email only requires an email address—no real-name verification, no IP exposure, not even a real email address needed—authors can establish one-on-one relationships with readers. Each subscription to an author gives readers additional "eyes" to better capture other interesting things in the world.
 
-As the original article mentioned, newsletter is a "de-platformed" dissemination method. Both authors and readers are "users" in platforms' eyes—soil for platform revenue generation. This注定 information dissemination under platforms always pursues quantity, speed, quality, and efficiency—more traffic, faster trend-chasing, better mass emotion targeting, easier content production.
+As the original article mentioned, newsletter is a "de-platformed" dissemination method. Both authors and readers are "users" in platforms' eyes—soil for platform revenue generation. This 注定 information dissemination under platforms always pursues quantity, speed, quality, and efficiency—more traffic, faster trend-chasing, better mass emotion targeting, easier content production.
 
 ## IGLOO Creative Website Design
 

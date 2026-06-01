@@ -103,7 +103,7 @@ macOS 安装之前首先需要对磁盘进行分区，我把 1T 的 nvme 固态�
 
 ### 制作系统安装盘
 
-写入镜像实际上也有很多工具，推荐[balenaEthcher](https://www.balena.io/etcher) ，开源免费。
+写入镜像实际上也有很多工具，推荐 [balenaEthcher](https://www.balena.io/etcher) ，开源免费。
 
 ![制作安装U盘](./_images/适合的才最好，年底我选择新装一台“Mac%20mini”-1754592284478.webp)
 

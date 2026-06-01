@@ -51,7 +51,7 @@ His success isn't accidental; it's the result of combining a set of validated cr
 
 ![图片来自 thedankoe.com](./_images/就算掌声无法抵达舞台，我依然劝你尽快动笔-1769861516030.webp)
 
-He recently wrote a long post on 𝕏 (Twitter) titled [《How to fix your entire life in 1 day》](https://x.com/thedankoe/status/2010751592346030461). As of this article's publication, less than half a month after he posted it, it had already garnered 170 million views on 𝕏 alone. I only started paying attention to him because my social media feeds and RSS subscriptions were flooded with mentions of this.
+He recently wrote a long post on 𝕏 (Twitter) titled [“How to fix your entire life in 1 day”](https://x.com/thedankoe/status/2010751592346030461). As of this article's publication, less than half a month after he posted it, it had already garnered 170 million views on 𝕏 alone. I only started paying attention to him because my social media feeds and RSS subscriptions were flooded with mentions of this.
 
 To be honest, before this long post appeared, I was quite resistant to articles promoting "one-person companies" and "independent development." The reason is simple: they're useless, the paths aren't replicable. From these articles, I couldn't see the authors actually practicing what they preached—these contents felt more like "promotion" than anything else.
 

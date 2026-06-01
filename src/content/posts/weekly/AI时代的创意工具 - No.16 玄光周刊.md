@@ -224,7 +224,7 @@ Cloudflare 发布 Mesh 私有网络服务，面向 AI 代理、开发者和远�
 
 ## 配饭视频
 
-【解读《齐马蓝》美术风格与视听语言】 https://www.bilibili.com/video/BV1n3411s7Ze/?share_source=copy_web&vd_source=700cd77b5ffc2570c23ad5d112c9a3d8
+【解读《齐马蓝》美术风格与视听语言】https://www.bilibili.com/video/BV1n3411s7Ze/?share_source=copy_web&vd_source=700cd77b5ffc2570c23ad5d112c9a3d8
 
 ---
 

@@ -43,7 +43,7 @@ This isn't a complaint. What I want to say is: beneath all the hype, there's a q
 
 Over the past decade, creator communities have repeatedly discussed "democratization of tools." Democratization refers to **lowering the economic and technical barriers of professional creative tools, enabling more people to access and use these tools, thereby gaining the ability to express and create.**
 
-Photoshop is too expensive—we have GIMP. After Effects is too complex—we have DaVinci Resolve. Tool普及 = barrier lowering = more opportunities to create. I've always认同 this logic.
+Photoshop is too expensive—we have GIMP. After Effects is too complex—we have DaVinci Resolve. Tool 普及 = barrier lowering = more opportunities to create. I've always 认同 this logic.
 
 **Until AI image generation tools appeared.**
 
@@ -84,7 +84,7 @@ Commercial platform marketing noise is so loud that open-source model voices are
 
 But if we seriously look at the impact of Stable Diffusion and its derivative models, open-source communities' shaping of the AI creative ecosystem may be more far-reaching than any single commercial product.
 
-**The core value of open-source models lies not in being free, but in being auditable, modifiable, and customizable.** When a creator can run a model locally, a team can fine-tune their own dedicated model, a community can jointly maintain a model free from commercial company意志, the initiative of creation truly returns to creators.
+**The core value of open-source models lies not in being free, but in being auditable, modifiable, and customizable.** When a creator can run a model locally, a team can fine-tune their own dedicated model, a community can jointly maintain a model free from commercial company 意志，the initiative of creation truly returns to creators.
 
 Of course, the cost of open-source is higher technical barriers and more distributed user experience. But this precisely echoes the paradox mentioned at the beginning: the tension between tool democratization and technical understanding barriers is most fully expressed in the open-source domain.
 
@@ -102,7 +102,7 @@ When AI can execute most of the work, what exactly does "authenticity" of creati
 
 - Is it the freshness of technique?
 - Is it the originality of ideas?
-- Or is it the irreplaceable human judgment in the创作 process?
+- Or is it the irreplaceable human judgment in the 创作 process?
 
 These questions have no standard answers. But practitioners who take creation seriously are answering it in their own ways.
 
@@ -138,7 +138,7 @@ C4D 2026.2's most important new feature this time is **Fabric Brush**—a modeli
 
 The Redshift renderer also updated to 2026.5.0, adding a night sky mode—sunset to night scene lighting can now be completed directly within the Sun and Sky system, no need to piece together lighting tricks anymore.
 
-Additionally, Maxon announced at NAB 2026 that C4D iPad beta is coming soon—this is the first time professional 3D software has come to mobile. For someone like me who has done desktop work for over a decade, this change is a bit微妙: barriers are indeed lowering, but the definition of "professional" is also being rewritten.
+Additionally, Maxon announced at NAB 2026 that C4D iPad beta is coming soon—this is the first time professional 3D software has come to mobile. For someone like me who has done desktop work for over a decade, this change is a bit 微妙：barriers are indeed lowering, but the definition of "professional" is also being rewritten.
 
 ---
 
@@ -180,7 +180,7 @@ Link: <https://orshot.com/blog/automated-content-creation-tools>
 
 Every creator faces the same bottleneck: content demand is too big, time is not enough. Product banners, social media graphics, ad creatives—each is needed, but manually doing each takes too much time. This article systematically compiles 10 truly usable content automation tools for 2026: n8n (open-source workflow automation), Canva Bulk Create (batch design from CSV), Orshot (batch image and PDF from templates), etc.
 
-What inspires me most is a design principle: **automation works most effectively not in creative decision-making, but in the most repetitive execution环节.** Rather than having AI write your copy, have AI automatically publish your written copy to 10 platforms. The latter saves real time.
+What inspires me most is a design principle: **automation works most effectively not in creative decision-making, but in the most repetitive execution 环节.** Rather than having AI write your copy, have AI automatically publish your written copy to 10 platforms. The latter saves real time.
 
 ---
 
@@ -226,7 +226,7 @@ For creator teams with private deployment needs, this service is worth following
 
 ## Videos for Your Meal
 
-【Deconstructing "Zima Blue" Art Style and Audiovisual Language】 https://www.bilibili.com/video/BV1n3411s7Ze/?share_source=copy_web&vd_source=700cd77b5ffc2570c23ad5d112c9a3d8
+【Deconstructing "Zima Blue" Art Style and Audiovisual Language】https://www.bilibili.com/video/BV1n3411s7Ze/?share_source=copy_web&vd_source=700cd77b5ffc2570c23ad5d112c9a3d8
 
 ---
 
