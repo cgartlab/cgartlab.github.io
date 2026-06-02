@@ -348,11 +348,27 @@ const pageImage = postSlug
 
 <!-- Google AdSense -->
 {googleAdSense?.enabled && googleAdSensePublisherID && (
-  <script
-    is:inline
-    async
-    src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${googleAdSensePublisherID}`}
-    crossorigin="anonymous"
-  />
+  <>
+    <script
+      is:inline
+      async
+      src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${googleAdSensePublisherID}`}
+      crossorigin="anonymous"
+    />
+    {/* Re-push all ad slots after every Astro View Transition page swap.
+        Without this, ads rendered in SPA-navigated pages are never activated
+        because adsbygoogle.js only processes .push() calls on initial load. */}
+    <script is:inline>
+      document.addEventListener('astro:page-load', function () {
+        var ads = document.querySelectorAll('.adsbygoogle:not([data-adsbygoogle-status])')
+        ads.forEach(function () {
+          try {
+            ;(window.adsbygoogle = window.adsbygoogle || []).push({})
+          }
+          catch (_) {}
+        })
+      })
+    </script>
+  </>
 )}
 </head>
