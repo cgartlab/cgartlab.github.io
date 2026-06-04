@@ -102,6 +102,11 @@ const pageImage = postSlug
     hreflang={lang === 'zh-tw' ? 'zh-TW' : lang}
   />
 ))}
+<link
+  rel="alternate"
+  href={`${Astro.url.origin}${base}${Astro.url.pathname}`}
+  hreflang="x-default"
+/>
 
 <!-- Open Graph -->
 <meta property="og:type" content={postTitle ? 'article' : 'website'} />
