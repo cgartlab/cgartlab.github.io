@@ -1,0 +1,16 @@
+# Cloudflare Pages Headers
+# https://developers.cloudflare.com/pages/platform/headers/
+
+# Noindex for weekly pages (thin content risk)
+/weekly/*
+  X-Robots-Tag: noindex, follow
+
+/en/weekly/*
+  X-Robots-Tag: noindex, follow
+
+# Noindex for tag archive pages (thin content)
+/tags/*
+  X-Robots-Tag: noindex, follow
+
+/en/tags/*
+  X-Robots-Tag: noindex, follow

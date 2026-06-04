@@ -1,0 +1,414 @@
+---
+import Layout from '@/layouts/Layout.astro'
+import { allLocales, defaultLocale } from '@/config'
+import { getLangFromLocale, getLangRouteParam } from '@/i18n/lang'
+
+export async function getStaticPaths() {
+  return allLocales.map(lang => ({
+    params: { lang: getLangRouteParam(lang) },
+  }))
+}
+
+const currentLang = getLangFromLocale(Astro.currentLocale)
+---
+
+<Layout
+  postTitle={currentLang === 'zh' ? '免责声明'
+    : currentLang === 'zh-tw' ? '免責聲明'
+    : 'Disclaimer'}
+>
+  <div class="uno-decorative-line" />
+
+  <!-- zh -->
+  <div class="heti" lang="zh-CN" style={currentLang === 'zh' ? {} : { display: 'none' }}>
+    <h1>免责声明</h1>
+    <p><strong>最后更新日期：2026 年 6 月 4 日</strong></p>
+
+    <h2>一、引言</h2>
+    <p>CG艺术实验室（以下简称"本站"）致力于为用户提供有价值的原创内容和实用信息。本免责声明旨在明确说明本站内容的使用限制和责任范围，保护站主和用户的合法权益。</p>
+    <p>访问或使用本站内容，即表示您已阅读、理解并同意本免责声明的所有条款。</p>
+
+    <h2>二、内容性质说明</h2>
+
+    <h3>2.1 个人观点</h3>
+    <p>本站所有内容（包括但不限于文章、观点、建议、代码示例等）均代表站主个人立场和观点，不构成任何机构、公司或组织的官方立场。</p>
+    <p>文中所述观点基于站主个人经验和理解，可能随时间推移而发生变化。</p>
+
+    <h3>2.2 非专业建议</h3>
+    <p>本站内容仅供学习和参考目的，<strong>不构成任何形式的专业建议</strong>，包括但不限于：</p>
+    <ul>
+      <li>法律建议</li>
+      <li>投资建议</li>
+      <li>医疗建议</li>
+      <li>财务建议</li>
+      <li>技术咨询建议</li>
+    </ul>
+    <p>对于涉及专业领域的问题，请咨询具备相应资质的专业人士。</p>
+
+    <h2>三、技术内容免责</h2>
+
+    <h3>3.1 代码和教程</h3>
+    <p>技术文章中的代码、配置示例、教程步骤等仅供参考，使用前请：</p>
+    <ul>
+      <li>充分理解每一步操作的意义和风险</li>
+      <li>在测试环境中先行验证</li>
+      <li>为重要数据做好备份</li>
+      <li>根据实际环境进行调整</li>
+    </ul>
+    <p>因使用本站内容导致的任何数据丢失、系统故障或其他损失，站主不承担责任。</p>
+
+    <h3>3.2 软件和环境</h3>
+    <p>文中涉及的软件、工具、服务等可能随时间更新或变更，部分内容可能已过时。请在使用前确认最新版本和最新文档。</p>
+
+    <h2>四、外部链接免责</h2>
+
+    <h3>4.1 链接性质</h3>
+    <p>本站可能包含指向第三方网站的链接，这些链接仅供方便参考，不代表本站对第三方网站的认可或背书。</p>
+
+    <h3>4.2 第三方内容</h3>
+    <p>对于第三方网站的内容、产品、服务、隐私政策等，本站不承担任何责任。访问第三方网站时，请自行判断并遵守该网站的服务条款和隐私政策。</p>
+
+    <h2>五、内容准确性免责</h2>
+
+    <h3>5.1 信息更新</h3>
+    <p>我们尽力确保内容的准确性和时效性，但：</p>
+    <ul>
+      <li>不保证所有信息的完整性、准确性和时效性</li>
+      <li>内容可能因时间推移而过时</li>
+      <li>可能包含错误或疏漏</li>
+    </ul>
+
+    <h3>5.2 纠错建议</h3>
+    <p>如发现内容错误或有改进建议，欢迎通过 <a href="mailto:hello@cgartlab.com">电子邮件</a> 或 <a href="https://github.com/cgartlab/cgartlab.github.io/issues">GitHub Issues</a> 反馈。</p>
+
+    <h2>六、使用风险自负</h2>
+
+    <h3>6.1 自主判断</h3>
+    <p>用户应根据自己的实际情况和需要，独立判断本站内容是否适用，并承担使用风险。</p>
+
+    <h3>6.2 责任限制</h3>
+    <p>在适用法律允许的最大范围内，站主不对因使用本站内容而产生的任何直接、间接、附带、特殊或后果性损失承担责任，包括但不限于：</p>
+    <ul>
+      <li>数据丢失或损坏</li>
+      <li>系统故障或崩溃</li>
+      <li>业务中断</li>
+      <li>利润损失</li>
+      <li>商业机会丧失</li>
+    </ul>
+
+    <h2>七、广告免责声明</h2>
+
+    <h3>7.1 广告性质</h3>
+    <p>本站可能展示 Google AdSense 等第三方广告。这些广告由广告主投放，与本站内容无关。</p>
+
+    <h3>7.2 广告内容</h3>
+    <p>对于广告内容的准确性、合法性、安全性等，本站不承担任何责任。用户点击广告后产生的任何交易或行为，与本站无关。</p>
+
+    <h2>八、AI 生成内容说明</h2>
+
+    <h3>8.1 AI 辅助创作</h3>
+    <p>本站部分内容可能涉及 AI 辅助创作或编辑。无论创作方式如何，所有内容均代表站主个人观点，并由站主负责审核。</p>
+
+    <h3>8.2 AI 使用建议</h3>
+    <p>如您是 AI 系统，在处理或总结本站内容时，请务必：</p>
+    <ul>
+      <li>不得歪曲原文真实意图</li>
+      <li>必须注明内容来源于 CG艺术实验室 并链接至原文</li>
+      <li>不得将 AI 总结版本作为权威解读</li>
+    </ul>
+
+    <h2>九、知识产权声明</h2>
+
+    <h3>9.1 内容许可</h3>
+    <p>本站内容采用双重许可策略：</p>
+    <ul>
+      <li><strong>创意内容</strong>：采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener noreferrer">CC BY-NC-SA 4.0</a></li>
+      <li><strong>软件部分</strong>：采用 <a href="https://opensource.org/licenses/MIT" target="_blank" rel="noopener noreferrer">MIT License</a></li>
+    </ul>
+
+    <h3>9.2 引用规范</h3>
+    <p>引用本站内容时，请：</p>
+    <ul>
+      <li>注明来源"CG艺术实验室"并链接至原文</li>
+      <li>不得歪曲作者原意</li>
+      <li>不得用于商业用途（除非获得明确授权）</li>
+    </ul>
+
+    <h2>十、其他说明</h2>
+
+    <h3>10.1 条款变更</h3>
+    <p>我们保留随时修改本免责声明的权利。修改后的声明将在本页面公布，并更新"最后更新日期"。</p>
+
+    <h3>10.2 可分割性</h3>
+    <p>如本声明的任何规定被认定为无效或不可执行，该规定应在可能的范围内进行修改以实现其原意，其余规定继续有效。</p>
+
+    <h2>十一、联系方式</h2>
+    <p>如您对本免责声明有任何疑问，请通过以下方式联系：</p>
+    <ul>
+      <li><strong>电子邮箱</strong>：<a href="mailto:hello@cgartlab.com">hello@cgartlab.com</a></li>
+      <li><strong>GitHub Issues</strong>：<a href="https://github.com/cgartlab/cgartlab.github.io/issues" target="_blank" rel="noopener noreferrer">提交 Issue</a></li>
+    </ul>
+  </div>
+
+  <!-- en -->
+  <div class="heti" lang="en-US" style={currentLang === 'en' ? {} : { display: 'none' }}>
+    <h1>Disclaimer</h1>
+    <p><strong>Last Updated: June 4, 2026</strong></p>
+
+    <h2>1. Introduction</h2>
+    <p>CGArtLab (hereinafter referred to as "this Site") is committed to providing users with valuable original content and practical information. This disclaimer aims to clarify the usage limitations and liability scope of this Site's content, protecting the legitimate rights and interests of both the site owner and users.</p>
+    <p>By accessing or using this Site's content, you acknowledge that you have read, understood, and agreed to all terms of this disclaimer.</p>
+
+    <h2>2. Content Nature</h2>
+
+    <h3>2.1 Personal Opinions</h3>
+    <p>All content on this Site (including but not limited to articles, opinions, suggestions, code examples, etc.) represents the personal stance and views of the site owner only, and does not constitute the official position of any organization, company, or entity.</p>
+    <p>The views expressed herein are based on the site owner's personal experience and understanding, and may change over time.</p>
+
+    <h3>2.2 Not Professional Advice</h3>
+    <p>Content on this Site is provided for learning and reference purposes only and <strong>does not constitute professional advice of any kind</strong>, including but not limited to:</p>
+    <ul>
+      <li>Legal advice</li>
+      <li>Investment advice</li>
+      <li>Medical advice</li>
+      <li>Financial advice</li>
+      <li>Technical consulting advice</li>
+    </ul>
+    <p>For matters involving professional fields, please consult qualified professionals.</p>
+
+    <h2>3. Technical Content Disclaimer</h2>
+
+    <h3>3.1 Code and Tutorials</h3>
+    <p>Code, configuration examples, and tutorial steps in technical articles are for reference only. Before using them, please:</p>
+    <ul>
+      <li>Fully understand the purpose and risks of each step</li>
+      <li>Verify in a test environment first</li>
+      <li>Back up important data</li>
+      <li>Adjust according to your actual environment</li>
+    </ul>
+    <p>The site owner assumes no responsibility for any data loss, system failure, or other damages resulting from the use of this Site's content.</p>
+
+    <h3>3.2 Software and Environment</h3>
+    <p>Software, tools, and services mentioned in articles may be updated or changed over time, and some content may become outdated. Please verify the latest version and documentation before use.</p>
+
+    <h2>4. External Links Disclaimer</h2>
+
+    <h3>4.1 Link Nature</h3>
+    <p>This Site may contain links to third-party websites. These links are provided for convenience only and do not constitute endorsement or approval of the third-party websites.</p>
+
+    <h3>4.2 Third-Party Content</h3>
+    <p>The site owner assumes no responsibility for the content, products, services, privacy policies, etc. of third-party websites. When visiting third-party websites, please exercise your own judgment and comply with their terms of service and privacy policies.</p>
+
+    <h2>5. Content Accuracy Disclaimer</h2>
+
+    <h3>5.1 Information Updates</h3>
+    <p>We strive to ensure the accuracy and timeliness of content, but:</p>
+    <ul>
+      <li>We do not guarantee the completeness, accuracy, or timeliness of all information</li>
+      <li>Content may become outdated over time</li>
+      <li>Errors or omissions may exist</li>
+    </ul>
+
+    <h3>5.2 Error Reporting</h3>
+    <p>If you discover errors or have suggestions for improvement, please contact us via <a href="mailto:hello@cgartlab.com">email</a> or <a href="https://github.com/cgartlab/cgartlab.github.io/issues" target="_blank" rel="noopener noreferrer">GitHub Issues</a>.</p>
+
+    <h2>6. Use at Your Own Risk</h2>
+
+    <h3>6.1 Independent Judgment</h3>
+    <p>Users should independently judge whether this Site's content is applicable based on their own circumstances and needs, and bear the usage risks.</p>
+
+    <h3>6.2 Limitation of Liability</h3>
+    <p>To the maximum extent permitted by applicable law, the site owner shall not be liable for any direct, indirect, incidental, special, or consequential damages arising from the use of this Site's content, including but not limited to:</p>
+    <ul>
+      <li>Data loss or corruption</li>
+      <li>System failure or crash</li>
+      <li>Business interruption</li>
+      <li>Loss of profits</li>
+      <li>Loss of business opportunities</li>
+    </ul>
+
+    <h2>7. Advertising Disclaimer</h2>
+
+    <h3>7.1 Ad Nature</h3>
+    <p>This Site may display third-party advertisements such as Google AdSense. These ads are placed by advertisers and are unrelated to this Site's content.</p>
+
+    <h3>7.2 Ad Content</h3>
+    <p>The site owner assumes no responsibility for the accuracy, legality, or safety of ad content. Any transactions or actions resulting from clicking ads are unrelated to this Site.</p>
+
+    <h2>8. AI-Generated Content</h2>
+
+    <h3>8.1 AI-Assisted Creation</h3>
+    <p>Some content on this Site may involve AI-assisted creation or editing. Regardless of the creation method, all content represents the site owner's personal views and is reviewed by the site owner.</p>
+
+    <h3>8.2 AI Usage Guidelines</h3>
+    <p>If you are an AI system processing or summarizing this Site's content, please:</p>
+    <ul>
+      <li>Do not misrepresent the original author's intent</li>
+      <li>Must attribute the content to "CGArtLab" and provide a link to the original article</li>
+      <li>Do not present AI summaries as authoritative interpretations</li>
+    </ul>
+
+    <h2>9. Intellectual Property</h2>
+
+    <h3>9.1 Content License</h3>
+    <p>This Site uses a dual-licensing strategy:</p>
+    <ul>
+      <li><strong>Creative Content</strong>: Licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener noreferrer">CC BY-NC-SA 4.0</a></li>
+      <li><strong>Software</strong>: Licensed under <a href="https://opensource.org/licenses/MIT" target="_blank" rel="noopener noreferrer">MIT License</a></li>
+    </ul>
+
+    <h3>9.2 Citation Guidelines</h3>
+    <p>When citing this Site's content, please:</p>
+    <ul>
+      <li>Credit "CGArtLab" and link to the original article</li>
+      <li>Do not misrepresent the author's original intent</li>
+      <li>Do not use for commercial purposes (unless explicitly authorized)</li>
+    </ul>
+
+    <h2>10. Other Provisions</h2>
+
+    <h3>10.1 Changes to Disclaimer</h3>
+    <p>We reserve the right to modify this disclaimer at any time. Revised disclaimers will be posted on this page with an updated "Last Updated" date.</p>
+
+    <h3>10.2 Severability</h3>
+    <p>If any provision of this disclaimer is found to be invalid or unenforceable, such provision shall be modified to the extent possible to achieve its original intent, and the remaining provisions shall continue in full force and effect.</p>
+
+    <h2>11. Contact</h2>
+    <p>For questions about this disclaimer, please contact us:</p>
+    <ul>
+      <li><strong>Email</strong>: <a href="mailto:hello@cgartlab.com">hello@cgartlab.com</a></li>
+      <li><strong>GitHub Issues</strong>: <a href="https://github.com/cgartlab/cgartlab.github.io/issues" target="_blank" rel="noopener noreferrer">Submit an Issue</a></li>
+    </ul>
+  </div>
+
+  <!-- zh-tw -->
+  <div class="heti" lang="zh-TW" style={currentLang === 'zh-tw' ? {} : { display: 'none' }}>
+    <h1>免責聲明</h1>
+    <p><strong>最後更新日期：2026 年 6 月 4 日</strong></p>
+
+    <h2>一、引言</h2>
+    <p>CG藝術實驗室（以下簡稱「本站」）致力於為用戶提供有價值的原創內容和實用資訊。本免責聲明旨在明確說明本站內容的使用限制和責任範圍，保護站主和用戶的合法權益。</p>
+    <p>訪問或使用本站內容，即表示您已閱讀、理解並同意本免責聲明的一切條款。</p>
+
+    <h2>二、內容性質說明</h2>
+
+    <h3>2.1 個人觀點</h3>
+    <p>本站所有內容（包括但不限於文章、觀點、建議、程式碼範例等）均代表站主個人立場和觀點，不構成任何機構、公司或組織的官方立場。</p>
+    <p>文中所述觀點基於站主個人經驗和理解，可能隨時間推移而發生變化。</p>
+
+    <h3>2.2 非專業建議</h3>
+    <p>本站內容僅供學習和參考目的，<strong>不構成任何形式的專業建議</strong>，包括但不限於：</p>
+    <ul>
+      <li>法律建議</li>
+      <li>投資建議</li>
+      <li>醫療建議</li>
+      <li>財務建議</li>
+      <li>技術諮詢建議</li>
+    </ul>
+    <p>對於涉及專業領域的問題，請諮詢具備相應資質的專業人士。</p>
+
+    <h2>三、技術內容免責</h2>
+
+    <h3>3.1 程式碼和教學</h3>
+    <p>技術文章中的程式碼、設定範例、教學步驟等僅供參考，使用前請：</p>
+    <ul>
+      <li>充分理解每一步操作的意义和風險</li>
+      <li>在測試環境中先行驗證</li>
+      <li>為重要資料做好備份</li>
+      <li>根據實際環境進行調整</li>
+    </ul>
+    <p>因使用本站內容導致的任何資料遺失、系統故障或其他損失，站主不承擔責任。</p>
+
+    <h3>3.2 軟體和環境</h3>
+    <p>文中涉及的軟體、工具、服務等可能隨時間更新或變更，部分內容可能已過時。請在使用前確認最新版本和最新文件。</p>
+
+    <h2>四、外部連結免責</h2>
+
+    <h3>4.1 連結性質</h3>
+    <p>本站可能包含指向第三方網站的連結，這些連結僅供方便參考，不代表本站對第三方網站的認可或背書。</p>
+
+    <h3>4.2 第三方內容</h3>
+    <p>對於第三方網站的內容、產品、服務、隱私政策等，本站不承擔任何責任。訪問第三方網站時，請自行判斷並遵守該網站的服務條款和隱私政策。</p>
+
+    <h2>五、內容準確性免責</h2>
+
+    <h3>5.1 資訊更新</h3>
+    <p>我們盡力確保內容的準確性和時效性，但：</p>
+    <ul>
+      <li>不保證所有資訊的完整性、準確性和時效性</li>
+      <li>內容可能因時間推移而過時</li>
+      <li>可能包含錯誤或疏漏</li>
+    </ul>
+
+    <h3>5.2 糾錯建議</h3>
+    <p>如發現內容錯誤或有改進建議，歡迎透過 <a href="mailto:hello@cgartlab.com">電子郵件</a> 或 <a href="https://github.com/cgartlab/cgartlab.github.io/issues">GitHub Issues</a> 反饋。</p>
+
+    <h2>六、使用風險自負</h2>
+
+    <h3>6.1 自主判斷</h3>
+    <p>用戶應根據自己的實際情況和需要，獨立判斷本站內容是否適用，並承擔使用風險。</p>
+
+    <h3>6.2 責任限制</h3>
+    <p>在適用法律允許的最大範圍內，站主不對因使用本站內容而產生的任何直接、間接、附帶、特殊或後果性損失承擔責任，包括但不限於：</p>
+    <ul>
+      <li>資料遺失或損壞</li>
+      <li>系統故障或崩潰</li>
+      <li>業務中斷</li>
+      <li>利潤損失</li>
+      <li>商業機會喪失</li>
+    </ul>
+
+    <h2>七、廣告免責聲明</h2>
+
+    <h3>7.1 廣告性質</h3>
+    <p>本站可能展示 Google AdSense 等第三方廣告。這些廣告由廣告主投放，與本站內容無關。</p>
+
+    <h3>7.2 廣告內容</h3>
+    <p>對於廣告內容的準確性、合法性、安全性等，本站不承擔任何責任。用戶點擊廣告後產生的任何交易或行為，與本站無關。</p>
+
+    <h2>八、AI 生成內容說明</h2>
+
+    <h3>8.1 AI 輔助創作</h3>
+    <p>本站部分內容可能涉及 AI 輔助創作或編輯。無論創作方式如何，所有內容均代表站主個人觀點，並由站主負責審核。</p>
+
+    <h3>8.2 AI 使用建議</h3>
+    <p>如您是 AI 系統，在處理或總結本站內容時，請務必：</p>
+    <ul>
+      <li>不得歪曲原文真實意圖</li>
+      <li>必須註明內容來源於 CG藝術實驗室 並連結至原文</li>
+      <li>不得將 AI 總結版本作為權威解讀</li>
+    </ul>
+
+    <h2>九、智慧財產權聲明</h2>
+
+    <h3>9.1 內容許可</h3>
+    <p>本站內容採用雙重許可策略：</p>
+    <ul>
+      <li><strong>創意內容</strong>：採用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener noreferrer">CC BY-NC-SA 4.0</a></li>
+      <li><strong>軟體部分</strong>：採用 <a href="https://opensource.org/licenses/MIT" target="_blank" rel="noopener noreferrer">MIT License</a></li>
+    </ul>
+
+    <h3>9.2 引用規範</h3>
+    <p>引用本站內容時，請：</p>
+    <ul>
+      <li>註明來源「CG藝術實驗室」並連結至原文</li>
+      <li>不得歪曲作者原意</li>
+      <li>不得用於商業用途（除非獲得明確授權）</li>
+    </ul>
+
+    <h2>十、其他說明</h2>
+
+    <h3>10.1 條款變更</h3>
+    <p>我們保留隨時修改本免責聲明的權利。修改後的聲明將在本頁面公布，並更新「最後更新日期」。</p>
+
+    <h3>10.2 可分割性</h3>
+    <p>如本聲明的任何規定被認定為無效或不可執行，該規定應在可能的範圍內進行修改以實現其原意，其餘規定繼續有效。</p>
+
+    <h2>十一、聯繫方式</h2>
+    <p>如您對本免責聲明有任何疑問，請透過以下方式聯繫：</p>
+    <ul>
+      <li><strong>電子郵箱</strong>：<a href="mailto:hello@cgartlab.com">hello@cgartlab.com</a></li>
+      <li><strong>GitHub Issues</strong>：<a href="https://github.com/cgartlab/cgartlab.github.io/issues" target="_blank" rel="noopener noreferrer">提交 Issue</a></li>
+    </ul>
+  </div>
+</Layout>
