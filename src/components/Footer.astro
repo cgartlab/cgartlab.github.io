@@ -50,6 +50,9 @@ const termsPath = currentLang === defaultLocale ? '/terms/' : `/${currentLang}/t
 // 联系页面路径（新独立页面）
 const contactPath = currentLang === defaultLocale ? '/contact/' : `/${currentLang}/contact/`
 
+// 免责声明页面路径
+const disclaimerPath = currentLang === defaultLocale ? '/disclaimer/' : `/${currentLang}/disclaimer/`
+
 // 公众号文本
 const wechatText = {
   'zh': '公众号',
@@ -77,6 +80,13 @@ const contactText = {
   'en': 'Contact',
   'zh-tw': '聯繫方式',
 }[currentLang] || '联系方式'
+
+// 免责声明文本
+const disclaimerText = {
+  'zh': '免责声明',
+  'en': 'Disclaimer',
+  'zh-tw': '免責聲明',
+}[currentLang] || '免责声明'
 ---
 
 <footer
@@ -104,6 +114,7 @@ const contactText = {
   <p class="m-0 text-3 leading-3 font-navbar lg:text-2.5 tracking-0">
     <a class={footerLinkClass} href={privacyPath}>{privacyText}</a>
     &nbsp;/&nbsp;<a class={footerLinkClass} href={termsPath}>{termsText}</a>
+    &nbsp;/&nbsp;<a class={footerLinkClass} href={disclaimerPath}>{disclaimerText}</a>
     &nbsp;/&nbsp;<a class={footerLinkClass} href={contactPath}>{contactText}</a>
   </p>
 
