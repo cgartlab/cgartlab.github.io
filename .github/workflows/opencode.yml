@@ -16,7 +16,6 @@ jobs:
       contents: write
       pull-requests: write
       issues: write
-      id-token: write
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
@@ -26,8 +25,7 @@ jobs:
       - name: Run OpenCode
         uses: anomalyco/opencode/github@latest
         env:
-          MINIMAX_API_KEY: ${{ secrets.MINIMAX_API_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          model: minimax/MiniMax-M2.7
+          model: opencode/deepseek-v4-flash-free
           use_github_token: true
