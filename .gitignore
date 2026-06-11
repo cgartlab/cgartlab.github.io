@@ -69,3 +69,6 @@ src/content/posts/*.base
 .obsidian/workspace.json
 
 /.obsidian/workspace.json
+# Debug scripts with API tokens
+.omo/
+
