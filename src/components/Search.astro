@@ -200,6 +200,11 @@ const currentUI = ui[currentLang as keyof typeof ui] ?? {}
     transform: translateX(0.25rem);
   }
 
+  .search-result-item:focus-visible {
+    outline: 2px solid var(--un-preset-theme-colors-primary);
+    outline-offset: -2px;
+  }
+
   .search-result-title {
     font-size: 1.125rem;
     font-weight: 600;
@@ -342,6 +347,7 @@ const currentUI = ui[currentLang as keyof typeof ui] ?? {}
   let debounceTimer = null
   let keydownHandler = null
   let inputHandler = null
+  let previousFocus = null
   const base = document.querySelector('base')?.getAttribute('href') || '/'
 
   function getElements() {
@@ -360,6 +366,7 @@ const currentUI = ui[currentLang as keyof typeof ui] ?? {}
     const els = getElements()
     if (!els.overlay)
       return
+    previousFocus = document.activeElement
     els.overlay.classList.add('active')
     els.overlay.setAttribute('aria-hidden', 'false')
     document.body.style.overflow = 'hidden'
@@ -383,6 +390,10 @@ const currentUI = ui[currentLang as keyof typeof ui] ?? {}
       els.results.innerHTML = ''
     if (els.empty)
       els.empty.classList.remove('visible')
+    if (previousFocus && typeof previousFocus.focus === 'function') {
+      previousFocus.focus()
+    }
+    previousFocus = null
   }
 
   function normalizeLang(lang) {
