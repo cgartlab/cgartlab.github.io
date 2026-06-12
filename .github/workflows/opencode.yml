@@ -16,7 +16,7 @@ jobs:
   opencode:
     if: |
       (github.event_name == 'pull_request') ||
-      (github.event_name != 'pull_request' && github.event.comment.user.login != 'argus-cgartlab[bot]' && (contains(github.event.comment.body, '/oc') || contains(github.event.comment.body, '/opencode')))
+      (github.event_name != 'pull_request' && github.event.comment.user.login != 'argus-flash[bot]' && (contains(github.event.comment.body, '/oc') || contains(github.event.comment.body, '/opencode')))
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -41,8 +41,8 @@ jobs:
 
       - name: Configure git with app token
         run: |
-          git config user.name "argus-cgartlab[bot]"
-          git config user.email "291769438+argus-cgartlab[bot]@users.noreply.github.com"
+          git config user.name "argus-flash[bot]"
+          git config user.email "291769438+argus-flash[bot]@users.noreply.github.com"
           git remote set-url origin https://x-access-token:${{ steps.app-token.outputs.token }}@github.com/${{ github.repository }}.git
 
       - name: Run OpenCode
