@@ -41,7 +41,7 @@ public/
 - 评论系统：Giscus + Twikoo + Waline **三套并行**
 - 搜索：客户端搜索索引 (`api/search-index/[lang].json.ts`)
 - OG 图片：`astro-og-canvas` + `canvaskit-wasm` 构建时自动生成
-- SEO 优化、Google Analytics + Umami 双向统计、Google AdSense
+- SEO 优化、Google Analytics + Umami 双向统计
 - 数学公式 (KaTeX)、Mermaid 图表
 - LQIP 低质量图片占位符（构建时自动生成）
 - llms.txt 自动生成

@@ -77,7 +77,7 @@ cgartlab.github.io/
 │   │   └── templates/          # Post article templates
 │   ├── components/
 │   │   ├── Comment/            # Giscus + Twikoo + Waline (all live, one active)
-│   │   ├── Widgets/            # TOC, ImageZoom, CodeCopyButton, MediaEmbed, AdSense...
+│   │   ├── Widgets/            # TOC, ImageZoom, CodeCopyButton, MediaEmbed...
 │   │   └── *.astro             # Header, Navbar, Footer, PostList, Search...
 │   ├── config.ts               # Site-wide configuration (colors, SEO, comments, analytics)
 │   ├── content.config.ts       # Content collection schemas (Zod)
@@ -111,8 +111,7 @@ cgartlab.github.io/
 │   │   ├── feed.ts            # RSS/Atom feed generation
 │   │   ├── search.ts         # Search index normalization
 │   │   ├── description.ts    # Post description/excerpt generation
-│   │   ├── page.ts           # Page type detection
-│   │   └── adsense.ts        # AdSense formatting
+│   │   └── page.ts           # Page type detection
 │   └── worker.mjs            # Cloudflare Worker (www→non-www, index.html append, 404 fallback)
 ├── public/
 │   ├── fonts/                 # EarlySummer, STIX, Snell (subset + split chunks)
@@ -162,7 +161,7 @@ All three systems (Giscus/Twikoo/Waline) are bundled; `src/config.ts` determines
 ### 5. Cloudflare Worker Scope
 
 The Worker handles only three things:
-- **www→non-www redirect** (301, AdSense compliance)
+- **www→non-www redirect** (301, SEO canonical unity)
 - **index.html appending** for trailing slash enforcement
 - **ads.txt Content-Type enforcement** (text/plain)
 
