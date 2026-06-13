@@ -25,7 +25,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ```bash
 pnpm dev                  # astro check + astro dev（类型检查 + 开发服务器）
-pnpm build                # astro check → astro build → tsx generate-llms → pnpm apply-lqip（顺序敏感）
+pnpm build                # astro check → astro build → tsx scripts/generate-llms.ts → pnpm apply-lqip（顺序敏感）
 pnpm preview              # astro preview
 pnpm lint                 # eslint（antfu config，忽略 src/content/**）
 pnpm lint:fix             # eslint --fix
@@ -46,23 +46,9 @@ pnpm exec playwright test # Playwright E2E 测试
 - **Shiki**: `github-light` / `github-dark`, 排除 `mermaid`
 - **Vite 插件**: `prefix-font-urls-with-base` — 自动给 font.css 中的 `/fonts/` URL 加 base path
 
-**Markdown 插件管线（7 个自定义 remark/rehype 插件）:**
+**Markdown 插件管线（7 个自定义 remark/rehype 插件）:** 容器指令(`:::note`/`:::tip`/`:::fold`/`:::gallery`)、叶指令(`{youtube}`/`{bilibili}`/`{github}`)、阅读时间、标题锚点、图片 figure 包裹、外链 Umami 追踪、代码复制按钮。含三方 remarkDirective/remarkMath/rehypeKatex/rehypeMermaid/rehypeSlug。
 
-> **详细插件文档**: 见 `docs/PLUGINS.md` — 包含每个插件的完整行为说明、输出结构、属性表。
-
-| 阶段 | 插件 | 作用 |
-|------|------|------|
-| remark | `remarkDirective` + `remarkMath` | 指令语法 + 数学公式 |
-| remark | `remarkContainerDirectives` (自定义) | `:::note` / `:::tip` / `:::fold` / `:::gallery` |
-| remark | `remarkLeafDirectives` (自定义) | `{youtube}` / `{bilibili}` / `{github}` 等 |
-| remark | `remarkReadingTime` (自定义) | 阅读时间 → frontmatter.minutes |
-| rehype | `rehypeKatex` + `rehypeMermaid` + `rehypeSlug` | KaTeX + Mermaid + 标题 ID |
-| rehype | `rehypeHeadingAnchor` (自定义) | 标题锚点链接 |
-| rehype | `rehypeImageProcessor` (自定义) | 图片 figure/figcaption 包裹 |
-| rehype | `rehypeExternalLinks` (自定义) | 外链 + Umami 追踪 |
-| rehype | `rehypeCodeCopyButton` (自定义) | 代码复制按钮 |
-
-> **详细插件文档**: 见 `docs/PLUGINS.md` — 包含每个插件的完整行为说明、输出结构、属性表。
+> 完整文档与语法参考: `docs/PLUGINS.md`
 
 ### UnoCSS 配置 (uno.config.ts)
 
