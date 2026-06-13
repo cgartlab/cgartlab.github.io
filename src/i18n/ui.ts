@@ -16,6 +16,7 @@ export const ui = {
     searchEmpty: 'No results found',
     terms: 'Terms',
     contact: 'Contact',
+    skipToContent: 'Skip to content',
   },
   'zh': {
     title: 'CGArtLab',
@@ -33,6 +34,7 @@ export const ui = {
     searchEmpty: '未找到相关结果',
     terms: '服务条款',
     contact: '联系方式',
+    skipToContent: '跳到主要内容',
   },
   'zh-tw': {
     title: 'CGArtLab',
@@ -50,5 +52,6 @@ export const ui = {
     searchEmpty: '未找到相關結果',
     terms: '服務條款',
     contact: '聯繫方式',
+    skipToContent: '跳到主要內容',
   },
 }
