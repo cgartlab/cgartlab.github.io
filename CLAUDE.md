@@ -2,9 +2,26 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## Documentation Map
+
+| File | Purpose |
+|------|---------|
+| **AGENTS.md** | Primary agent instructions (OpenCode, this workspace) |
+| **CLAUDE.md** | Claude Code AI assistant guidance (this file) |
+| **DEVELOPMENT_GUIDE.md** | Comprehensive 1422-line development manual |
+| **docs/ARCHITECTURE.md** | System architecture overview, tech decisions |
+| **docs/PLUGINS.md** | All 7 custom remark/rehype plugin reference |
+| **docs/COMMANDS.md** | All npm scripts and build tool commands |
+| **CONTRIBUTING.md** | PR workflow, commit conventions, contribution guide |
+| **CHANGELOG.md** | Version history and changelog |
+
+---
+
 ## 一、技术开发
 
 ### 开发命令
+
+> **完整命令参考**: 见 `docs/COMMANDS.md`
 
 ```bash
 pnpm dev                  # astro check + astro dev（类型检查 + 开发服务器）
@@ -45,6 +62,8 @@ pnpm exec playwright test # Playwright E2E 测试
 | rehype | `rehypeImageProcessor` (自定义) | 图片自动 `figure/figcaption` 包裹 |
 | rehype | `rehypeExternalLinks` (自定义) | 外部链接加 `target="_blank" rel="noopener noreferrer"` |
 | rehype | `rehypeCodeCopyButton` (自定义) | `<pre>` 块添加复制按钮 |
+
+> **详细插件文档**: 见 `docs/PLUGINS.md` — 包含每个插件的完整行为说明、输出结构、属性表。
 
 ### UnoCSS 配置 (uno.config.ts)
 
@@ -148,6 +167,9 @@ src/
 ---
 
 ## 二、文章写作规范
+
+> **贡献指南**: 见 `CONTRIBUTING.md` — PR 工作流、提交格式、分支策略
+> **更新日志**: 见 `CHANGELOG.md` — 版本历史和变更记录
 
 ### 内容集合 (content.config.ts)
 
