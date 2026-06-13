@@ -132,7 +132,7 @@ const currentUI = ui[currentLang as keyof typeof ui] ?? {}
     try {
       localStorage.setItem(STORAGE_KEY, pref)
     }
-    catch (_e) {}
+    catch { /* ignore storage error */ }
     hideBanner()
     if (pref === 'accepted') {
       window.__CONSENT_STATUS = 'accepted'
@@ -150,7 +150,7 @@ const currentUI = ui[currentLang as keyof typeof ui] ?? {}
     try {
       pref = localStorage.getItem(STORAGE_KEY)
     }
-    catch (_e) {
+    catch {
       pref = null
     }
 
