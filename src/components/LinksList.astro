@@ -49,7 +49,7 @@ const categories = linksData[lang as keyof typeof linksData] || linksData.zh
   font-size: 1.5rem;
   font-weight: 700;
   margin: 0;
-  color: oklch(var(--un-preset-theme-colors-primary));
+  color: var(--un-preset-theme-colors-primary);
   position: relative;
   padding: 1rem 1.5rem;
   background: transparent;
@@ -64,7 +64,7 @@ const categories = linksData[lang as keyof typeof linksData] || linksData.zh
 }
 
 .links-section[open] .links-category-title {
-  border-bottom: 2px solid oklch(var(--un-preset-theme-colors-primary));
+  border-bottom: 2px solid var(--un-preset-theme-colors-primary);
 }
 
 .links-section:not([open]) .links-category-title {

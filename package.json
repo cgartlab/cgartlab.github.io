@@ -14,7 +14,8 @@
     "new-post": "tsx scripts/new-post.ts",
     "apply-lqip": "tsx scripts/apply-lqip.ts",
     "format-posts": "tsx scripts/format-posts.ts",
-    "fix-internal-links": "tsx scripts/fix-internal-links.ts"
+    "fix-internal-links": "tsx scripts/fix-internal-links.ts",
+    "verify-feed": "tsx scripts/verify-feed.ts"
   },
   "dependencies": {
     "@astrojs/mdx": "^5.0.3",
@@ -41,7 +42,9 @@
     "sanitize-html": "^2.17.3",
     "sharp": "^0.34.5",
     "twikoo": "^1.7.4",
-    "unist-util-visit": "^5.1.0"
+    "unist-util-visit": "^5.1.0",
+    "vite-plugin-pwa": "^1.3.0",
+    "workbox-precaching": "^7.4.1"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^7.7.3",

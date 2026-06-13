@@ -106,7 +106,7 @@ const items: { label: string; value: string; url?: string }[] = [
   align-items: center;
   gap: 0.5rem;
   padding: 0.25rem 0;
-  border-bottom: 1px solid oklch(var(--un-preset-theme-colors-highlight) / 0.15);
+  border-bottom: 1px solid color-mix(in srgb, var(--un-preset-theme-colors-highlight) 15%, transparent);
 }
 
 .contact-item:last-child {
@@ -116,14 +116,14 @@ const items: { label: string; value: string; url?: string }[] = [
 .contact-label {
   font-size: 1rem;
   font-weight: 600;
-  color: oklch(var(--un-preset-theme-colors-secondary) / 0.6);
+  color: color-mix(in srgb, var(--un-preset-theme-colors-secondary) 60%, transparent);
   text-align: left;
   min-width: 5rem;
 }
 
 .contact-value {
   font-size: 1rem;
-  color: oklch(var(--un-preset-theme-colors-primary));
+  color: var(--un-preset-theme-colors-primary);
   text-decoration: none;
   transition: opacity 0.2s;
 }
@@ -134,9 +134,9 @@ const items: { label: string; value: string; url?: string }[] = [
 
 .contact-note {
   font-size: 0.85rem;
-  color: oklch(var(--un-preset-theme-colors-secondary) / 0.65);
+  color: color-mix(in srgb, var(--un-preset-theme-colors-secondary) 65%, transparent);
   margin-top: 1.25rem;
   padding-left: 1rem;
-  border-left: 2px solid oklch(var(--un-preset-theme-colors-highlight) / 0.4);
+  border-left: 2px solid color-mix(in srgb, var(--un-preset-theme-colors-highlight) 40%, transparent);
 }
 </style>
