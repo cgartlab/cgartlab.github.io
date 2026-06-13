@@ -329,14 +329,13 @@ const pageImage = postSlug
      dataLayer.push(arguments)
    }
    window.gtag('js', new Date())
-   if (customGoogleAnalyticsJS) {
-     window.gtag('config', googleAnalyticsID, {
-       transport_url: new URL(customGoogleAnalyticsJS).origin,
-     })
-   }
- else {
-     window.gtag('config', googleAnalyticsID)
-   }
+    if (customGoogleAnalyticsJS) {
+      window.gtag('config', googleAnalyticsID, {
+        transport_url: new URL(customGoogleAnalyticsJS).origin,
+      })
+    } else {
+      window.gtag('config', googleAnalyticsID)
+    }
    const gaScript = document.createElement('script')
    gaScript.src = customGoogleAnalyticsJS || `https://www.googletagmanager.com/gtag/js?id=${googleAnalyticsID}`
    gaScript.type = 'text/partytown'
