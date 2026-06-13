@@ -154,16 +154,6 @@ export const themeConfig: ThemeConfig = {
     // automatically generate website screenshots for open graph images
     // get your access key at: https://apiflash.com/
     apiflashKey: '',
-    // google adsense
-    // https://www.google.com/adsense
-    // Publisher ID 是公开信息（同样出现在 public/ads.txt 中），
-    // 因此直接写入配置作为单一可信源，避免因 Cloudflare 等构建环境
-    // 未设置环境变量而导致 AdSense 脚本以空 client ID 加载、站点无法被验证。
-    // 如需在不同环境覆盖，可设置 GOOGLE_ADSENSE_PUBLISHER_ID 环境变量。
-    googleAdSense: {
-      enabled: true,
-      publisherID: import.meta.env.GOOGLE_ADSENSE_PUBLISHER_ID || '6319932112761670',
-    },
   },
   // SEO SETTINGS >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> END
 
