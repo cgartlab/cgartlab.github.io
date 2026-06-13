@@ -254,7 +254,7 @@ We will respond within 15 business days of receiving your request.
 ## 8. Cross-Border Data Transfer
 
 - This Site is hosted on Cloudflare (global distributed nodes), and access data may be processed worldwide
-- Google Analytics and Google AdSense data processing may involve cross-border transfers
+- Google Analytics data processing may involve cross-border transfers
 - We ensure that all cross-border transfers comply with applicable laws and take adequate security protection measures
 
 ---

@@ -160,10 +160,9 @@ All three systems (Giscus/Twikoo/Waline) are bundled; `src/config.ts` determines
 
 ### 5. Cloudflare Worker Scope
 
-The Worker handles only three things:
+The Worker handles only two things:
 - **www→non-www redirect** (301, SEO canonical unity)
 - **index.html appending** for trailing slash enforcement
-- **ads.txt Content-Type enforcement** (text/plain)
 
 Static file serving is handled entirely by Cloudflare Pages.
 
