@@ -174,7 +174,7 @@ Static file serving is handled entirely by Cloudflare Pages.
 pnpm build
   ├─→ astro check          TypeScript type checking
   ├─→ astro build         SSG → dist/
-  ├─→ tsx generate-llms   public/llms.txt (top 30 zh + 30 en)
+  ├─→ tsx scripts/generate-llms.ts   public/llms.txt (top 30 zh + 30 en)
   └─→ pnpm apply-lqip     LQIP CSS variable injection
 ```
 

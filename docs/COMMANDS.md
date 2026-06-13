@@ -29,7 +29,7 @@ Full production build pipeline. **Order-sensitive steps**:
 ```
 1. astro check          TypeScript type checking (fails on type errors)
 2. astro build          SSG → dist/ (all HTML/CSS/JS generated)
-3. tsx generate-llms    Writes public/llms.txt (top 30 zh + 30 en posts)
+3. tsx scripts/generate-llms.ts    Writes public/llms.txt (top 30 zh + 30 en posts)
 4. pnpm apply-lqip      Scans dist/_astro/*.webp → injects --lqip CSS vars
 ```
 

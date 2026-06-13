@@ -25,16 +25,16 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ```bash
 pnpm dev                  # astro check + astro dev（类型检查 + 开发服务器）
-pnpm build                # astro check → astro build → generate-llms → apply-lqip（顺序敏感）
+pnpm build                # astro check → astro build → tsx generate-llms → pnpm apply-lqip（顺序敏感）
 pnpm preview              # astro preview
 pnpm lint                 # eslint（antfu config，忽略 src/content/**）
 pnpm lint:fix             # eslint --fix
 pnpm new-post "标题"       # 在 src/content/posts/ 下创建 MD 文件
 pnpm apply-lqip           # 重新生成 LQIP 占位图（写入 dist/ 中 <img> 标签的 style）
-pnpm generate-llms        # 生成 public/llms.txt（top 30 zh + 30 en）
 pnpm format-posts         # CJK 文本规范化
 pnpm fix-internal-links   # 修复内部链接
 pnpm exec playwright test # Playwright E2E 测试
+# tsx scripts/generate-llms.ts  # 生成 public/llms.txt（构建时自动调用）
 ```
 
 ### Astro Config (astro.config.ts)
@@ -46,22 +46,21 @@ pnpm exec playwright test # Playwright E2E 测试
 - **Shiki**: `github-light` / `github-dark`, 排除 `mermaid`
 - **Vite 插件**: `prefix-font-urls-with-base` — 自动给 font.css 中的 `/fonts/` URL 加 base path
 
-**Markdown 插件管线（7 个自定义 + 5 个三方）:**
+**Markdown 插件管线（7 个自定义 remark/rehype 插件）:**
+
+> **详细插件文档**: 见 `docs/PLUGINS.md` — 包含每个插件的完整行为说明、输出结构、属性表。
 
 | 阶段 | 插件 | 作用 |
 |------|------|------|
-| remark | `remarkDirective` | 启用 `:::` 容器和 `:` 叶指令语法 |
-| remark | `remarkMath` | 数学公式解析 |
-| remark | `remarkContainerDirectives` (自定义) | 处理 `:::note` / `:::tip` / `:::fold` / `:::gallery` |
-| remark | `remarkLeafDirectives` (自定义) | 处理 `{youtube}` / `{bilibili}` / `{github}` 等 |
-| remark | `remarkReadingTime` (自定义) | 计算阅读时间，存于 `remarkPluginFrontmatter.minutes` |
-| rehype | `rehypeKatex` | KaTeX 渲染 |
-| rehype | `rehypeMermaid` | Mermaid 图表渲染 |
-| rehype | `rehypeSlug` | 生成标题锚点 ID |
-| rehype | `rehypeHeadingAnchor` (自定义) | 添加标题链接图标 |
-| rehype | `rehypeImageProcessor` (自定义) | 图片自动 `figure/figcaption` 包裹 |
-| rehype | `rehypeExternalLinks` (自定义) | 外部链接加 `target="_blank" rel="noopener noreferrer"` |
-| rehype | `rehypeCodeCopyButton` (自定义) | `<pre>` 块添加复制按钮 |
+| remark | `remarkDirective` + `remarkMath` | 指令语法 + 数学公式 |
+| remark | `remarkContainerDirectives` (自定义) | `:::note` / `:::tip` / `:::fold` / `:::gallery` |
+| remark | `remarkLeafDirectives` (自定义) | `{youtube}` / `{bilibili}` / `{github}` 等 |
+| remark | `remarkReadingTime` (自定义) | 阅读时间 → frontmatter.minutes |
+| rehype | `rehypeKatex` + `rehypeMermaid` + `rehypeSlug` | KaTeX + Mermaid + 标题 ID |
+| rehype | `rehypeHeadingAnchor` (自定义) | 标题锚点链接 |
+| rehype | `rehypeImageProcessor` (自定义) | 图片 figure/figcaption 包裹 |
+| rehype | `rehypeExternalLinks` (自定义) | 外链 + Umami 追踪 |
+| rehype | `rehypeCodeCopyButton` (自定义) | 代码复制按钮 |
 
 > **详细插件文档**: 见 `docs/PLUGINS.md` — 包含每个插件的完整行为说明、输出结构、属性表。
 
