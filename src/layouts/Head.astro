@@ -355,15 +355,15 @@ const pageImage = postSlug
       customUmamiAnalyticsJS,
     }}
    >
- const _hasConsent = (typeof localStorage !== 'undefined' && localStorage.getItem('consent-preference') === 'accepted')
- if (_hasConsent) {
-   const umamiScript = document.createElement('script')
-   umamiScript.src = customUmamiAnalyticsJS || 'https://cloud.umami.is/script.js'
-   umamiScript.setAttribute('data-website-id', umamiAnalyticsID)
-   umamiScript.type = 'text/partytown'
-   document.head.appendChild(umamiScript)
- }
- </script>
+  var _hasConsentUmami = (typeof localStorage !== 'undefined' && localStorage.getItem('consent-preference') === 'accepted')
+  if (_hasConsentUmami) {
+    var umamiScript = document.createElement('script')
+    umamiScript.src = customUmamiAnalyticsJS || 'https://cloud.umami.is/script.js'
+    umamiScript.setAttribute('data-website-id', umamiAnalyticsID)
+    umamiScript.type = 'text/partytown'
+    document.head.appendChild(umamiScript)
+  }
+  </script>
 )}}
 
 
