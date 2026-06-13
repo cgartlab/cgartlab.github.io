@@ -312,52 +312,57 @@ const pageImage = postSlug
 })()
 </script>
 
-<!-- Google Analytics -->
-<!-- Define gtag on window object for proper Partytown forwarding -->
-<!-- See https://github.com/QwikDev/partytown/issues/382 -->
+<!-- Google Analytics (loaded only with consent) -->
 {googleAnalyticsID && (
-  <>
-    <script
-      is:inline
-      type="text/partytown"
-      src={customGoogleAnalyticsJS || `https://www.googletagmanager.com/gtag/js?id=${googleAnalyticsID}`}
-    />
-    <script
-      is:inline
-      type="text/partytown"
-      define:vars={{
-        googleAnalyticsID,
-        customGoogleAnalyticsJS,
-      }}
-    >
-      window.dataLayer = window.dataLayer || []
-      window.gtag = function () {
-        // eslint-disable-next-line prefer-rest-params
-        dataLayer.push(arguments)
-      }
-      window.gtag('js', new Date())
-
-      if (customGoogleAnalyticsJS) {
-        window.gtag('config', googleAnalyticsID, {
-          transport_url: new URL(customGoogleAnalyticsJS).origin,
-        })
-      }
-      else {
-        window.gtag('config', googleAnalyticsID)
-      }
-    </script>
-  </>
+  <script
+    is:inline
+    type="text/partytown"
+    define:vars={{
+      googleAnalyticsID,
+      customGoogleAnalyticsJS,
+    }}
+  >
+ if (window.__CONSENT_STATUS === 'accepted') {
+   window.dataLayer = window.dataLayer || []
+   window.gtag = function () {
+     dataLayer.push(arguments)
+   }
+   window.gtag('js', new Date())
+   if (customGoogleAnalyticsJS) {
+     window.gtag('config', googleAnalyticsID, {
+       transport_url: new URL(customGoogleAnalyticsJS).origin,
+     })
+   }
+ else {
+     window.gtag('config', googleAnalyticsID)
+   }
+   const gaScript = document.createElement('script')
+   gaScript.src = customGoogleAnalyticsJS || `https://www.googletagmanager.com/gtag/js?id=${googleAnalyticsID}`
+   gaScript.type = 'text/partytown'
+   document.head.appendChild(gaScript)
+ }
+ </script>
 )}
 
-<!-- Umami Analytics -->
+<!-- Umami Analytics (loaded only with consent) -->
 {umamiAnalyticsID && (
   <script
     is:inline
     type="text/partytown"
-    src={customUmamiAnalyticsJS || 'https://cloud.umami.is/script.js'}
-    data-website-id={umamiAnalyticsID}
-  />
-)}
+    define:vars={{
+      umamiAnalyticsID,
+      customUmamiAnalyticsJS,
+    }}
+  >
+    if (window.__CONSENT_STATUS === 'accepted') {
+      const umamiScript = document.createElement('script')
+      umamiScript.src = customUmamiAnalyticsJS || 'https://cloud.umami.is/script.js'
+      umamiScript.setAttribute('data-website-id', umamiAnalyticsID)
+      umamiScript.type = 'text/partytown'
+      document.head.appendChild(umamiScript)
+    }
+  </script>
+)}}
 
 
 </head>

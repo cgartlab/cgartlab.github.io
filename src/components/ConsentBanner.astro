@@ -1,0 +1,184 @@
+---
+import { ui } from '@/i18n/ui'
+import { getPageInfo } from '@/utils/page'
+
+const { currentLang } = getPageInfo(Astro.url.pathname)
+const currentUI = ui[currentLang as keyof typeof ui] ?? {}
+---
+
+<div id="consent-banner" class="consent-banner" role="dialog" aria-label={currentUI.consentTitle || 'Cookie Consent'} aria-hidden="true">
+  <div class="consent-content">
+    <h2 class="consent-title">{currentUI.consentTitle || 'Cookie Consent'}</h2>
+    <p class="consent-description">{currentUI.consentDescription || 'We use cookies to analyze site traffic and improve your experience.'}</p>
+    <div class="consent-buttons">
+      <button id="consent-reject" class="consent-btn consent-btn-reject">
+        {currentUI.consentReject || 'Reject All'}
+      </button>
+      <button id="consent-functional" class="consent-btn consent-btn-functional">
+        {currentUI.consentFunctional || 'Functional Only'}
+      </button>
+      <button id="consent-accept" class="consent-btn consent-btn-accept">
+        {currentUI.consentAccept || 'Accept All'}
+      </button>
+    </div>
+  </div>
+</div>
+
+<style>
+  .consent-banner {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 9000;
+    background: var(--un-preset-theme-colors-background);
+    border-top: 1px solid var(--un-preset-theme-colors-secondary);
+    padding: 1rem 1.5rem;
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.1);
+    transform: translateY(100%);
+    transition: transform 0.3s ease;
+  }
+
+  .consent-banner.visible {
+    transform: translateY(0);
+  }
+
+  .consent-content {
+    max-width: 42rem;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .consent-title {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: var(--un-preset-theme-colors-primary);
+  }
+
+  .consent-description {
+    font-size: 0.875rem;
+    color: var(--un-preset-theme-colors-secondary);
+    margin-bottom: 1rem;
+    line-height: 1.5;
+  }
+
+  .consent-buttons {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .consent-btn {
+    padding: 0.5rem 1rem;
+    border-radius: 0.375rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.1s;
+    border: 1px solid var(--un-preset-theme-colors-secondary);
+  }
+
+  .consent-btn:hover {
+    opacity: 0.9;
+  }
+
+  .consent-btn:active {
+    transform: scale(0.98);
+  }
+
+  .consent-btn-reject {
+    background: transparent;
+    color: var(--un-preset-theme-colors-secondary);
+  }
+
+  .consent-btn-functional {
+    background: var(--un-preset-theme-colors-secondary);
+    color: var(--un-preset-theme-colors-background);
+  }
+
+  .consent-btn-accept {
+    background: var(--un-preset-theme-colors-primary);
+    color: var(--un-preset-theme-colors-background);
+  }
+
+  .consent-banner:focus-within {
+    outline: 2px solid var(--un-preset-theme-colors-highlight);
+    outline-offset: 2px;
+  }
+</style>
+
+<script is:inline>
+(function () {
+  const STORAGE_KEY = 'consent-preference'
+  const banner = document.getElementById('consent-banner')
+
+  function showBanner() {
+    if (banner) {
+      banner.classList.add('visible')
+      banner.setAttribute('aria-hidden', 'false')
+    }
+  }
+
+  function hideBanner() {
+    if (banner) {
+      banner.classList.remove('visible')
+      banner.setAttribute('aria-hidden', 'true')
+    }
+  }
+
+  function setPreference(pref) {
+    try {
+      localStorage.setItem(STORAGE_KEY, pref)
+    }
+    catch (_e) {}
+    hideBanner()
+    if (pref === 'accepted') {
+      window.__CONSENT_STATUS = 'accepted'
+    }
+    else if (pref === 'functional') {
+      window.__CONSENT_STATUS = 'functional'
+    }
+    else {
+      window.__CONSENT_STATUS = 'rejected'
+    }
+  }
+
+  function init() {
+    let pref
+    try {
+      pref = localStorage.getItem(STORAGE_KEY)
+    }
+    catch (_e) {
+      pref = null
+    }
+
+    if (!pref) {
+      showBanner()
+    }
+    else if (pref === 'accepted') {
+      window.__CONSENT_STATUS = 'accepted'
+    }
+    else if (pref === 'functional') {
+      window.__CONSENT_STATUS = 'functional'
+    }
+    else {
+      window.__CONSENT_STATUS = 'rejected'
+    }
+
+    const rejectBtn = document.getElementById('consent-reject')
+    const functionalBtn = document.getElementById('consent-functional')
+    const acceptBtn = document.getElementById('consent-accept')
+
+    if (rejectBtn)
+      rejectBtn.addEventListener('click', () => { setPreference('rejected') })
+    if (functionalBtn)
+      functionalBtn.addEventListener('click', () => { setPreference('functional') })
+    if (acceptBtn)
+      acceptBtn.addEventListener('click', () => { setPreference('accepted') })
+  }
+
+  init()
+})()
+</script>
