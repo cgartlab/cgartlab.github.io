@@ -45,15 +45,15 @@ const aboutPath = lang === 'en' ? '/en/about/' : lang === 'zh-tw' ? '/zh-tw/abou
 .author-box {
   margin-top: 2.5rem;
   padding: 1.5rem;
-  border: 1px solid oklch(var(--un-preset-theme-colors-highlight));
+  border: 1px solid var(--un-preset-theme-colors-highlight);
   border-radius: 0.5rem;
-  background: oklch(var(--un-preset-theme-colors-highlight) / 0.08);
+  background: color-mix(in srgb, var(--un-preset-theme-colors-highlight) 8%, transparent);
 }
 
 .author-content {
   font-size: 0.9rem;
   line-height: 1.6;
-  color: oklch(var(--un-preset-theme-colors-secondary));
+  color: var(--un-preset-theme-colors-secondary);
 }
 
 .author-bio {
@@ -69,10 +69,10 @@ const aboutPath = lang === 'en' ? '/en/about/' : lang === 'zh-tw' ? '/zh-tw/abou
 }
 
 .author-more {
-  color: oklch(var(--un-preset-theme-colors-primary));
+  color: var(--un-preset-theme-colors-primary);
   font-weight: 600;
   text-decoration: none;
-  border-bottom: 1px dashed oklch(var(--un-preset-theme-colors-primary));
+  border-bottom: 1px dashed var(--un-preset-theme-colors-primary);
 }
 
 .author-more:hover {
@@ -80,15 +80,15 @@ const aboutPath = lang === 'en' ? '/en/about/' : lang === 'zh-tw' ? '/zh-tw/abou
 }
 
 .author-separator {
-  color: oklch(var(--un-preset-theme-colors-secondary) / 0.4);
+  color: color-mix(in srgb, var(--un-preset-theme-colors-secondary) 40%, transparent);
 }
 
 .author-social-label {
-  color: oklch(var(--un-preset-theme-colors-secondary) / 0.6);
+  color: color-mix(in srgb, var(--un-preset-theme-colors-secondary) 60%, transparent);
 }
 
 .author-social-link {
-  color: oklch(var(--un-preset-theme-colors-primary));
+  color: var(--un-preset-theme-colors-primary);
   text-decoration: none;
   font-weight: 500;
   transition: opacity 0.2s;
@@ -97,6 +97,6 @@ const aboutPath = lang === 'en' ? '/en/about/' : lang === 'zh-tw' ? '/zh-tw/abou
 
 .author-social-link:hover {
   opacity: 0.7;
-  border-bottom-color: oklch(var(--un-preset-theme-colors-primary));
+  border-bottom-color: var(--un-preset-theme-colors-primary);
 }
 </style>

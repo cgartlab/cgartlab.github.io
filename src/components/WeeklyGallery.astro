@@ -151,15 +151,15 @@ function getDescription(post: Post): string {
   color: inherit;
   display: block;
   transition: transform 0.3s ease;
-  border: 1px solid oklch(var(--un-preset-theme-colors-secondary) / 0.15);
+  border: 1px solid color-mix(in srgb, var(--un-preset-theme-colors-secondary) 15%, transparent);
   border-radius: 8px;
   overflow: hidden;
-  background: oklch(var(--un-preset-theme-colors-background) / 0.5);
+  background: color-mix(in srgb, var(--un-preset-theme-colors-background) 50%, transparent);
 }
 
 .weekly-link:hover {
   transform: translateY(-4px);
-  border-color: oklch(var(--un-preset-theme-colors-primary) / 0.3);
+  border-color: color-mix(in srgb, var(--un-preset-theme-colors-primary) 30%, transparent);
 }
 
 /* Cover image area */
@@ -168,8 +168,8 @@ function getDescription(post: Post): string {
   aspect-ratio: 16 / 10;
   overflow: hidden;
   position: relative;
-  background: oklch(var(--un-preset-theme-colors-background) / 0.3);
-  border-bottom: 1px solid oklch(var(--un-preset-theme-colors-secondary) / 0.15);
+  background: color-mix(in srgb, var(--un-preset-theme-colors-background) 30%, transparent);
+  border-bottom: 1px solid color-mix(in srgb, var(--un-preset-theme-colors-secondary) 15%, transparent);
 }
 
 .thumbnail-image {
@@ -188,11 +188,11 @@ function getDescription(post: Post): string {
 .thumbnail-placeholder {
   width: 100%;
   height: 100%;
-  background: oklch(var(--un-preset-theme-colors-background) / 0.3);
+  background: color-mix(in srgb, var(--un-preset-theme-colors-background) 30%, transparent);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: oklch(var(--un-preset-theme-colors-secondary) / 0.6);
+  color: color-mix(in srgb, var(--un-preset-theme-colors-secondary) 60%, transparent);
 }
 
 .placeholder-text {
@@ -240,9 +240,9 @@ function getDescription(post: Post): string {
   align-items: center;
   gap: 1rem;
   font-size: 0.8rem;
-  color: oklch(var(--un-preset-theme-colors-secondary) / 0.5);
+  color: color-mix(in srgb, var(--un-preset-theme-colors-secondary) 50%, transparent);
   padding-top: 0.75rem;
-  border-top: 1px solid oklch(var(--un-preset-theme-colors-secondary) / 0.15);
+  border-top: 1px solid color-mix(in srgb, var(--un-preset-theme-colors-secondary) 15%, transparent);
   margin-top: 0.5rem;
 }
 
@@ -259,7 +259,7 @@ function getDescription(post: Post): string {
 }
 
 .weekly-date-line {
-  color: oklch(var(--un-preset-theme-colors-secondary) / 0.6);
+  color: color-mix(in srgb, var(--un-preset-theme-colors-secondary) 60%, transparent);
 }
 
 /* Year group separator — matches the top decorative line style */
@@ -269,8 +269,8 @@ function getDescription(post: Post): string {
   background: linear-gradient(
     to right,
     transparent,
-    oklch(var(--un-preset-theme-colors-secondary) / 0.25) 20%,
-    oklch(var(--un-preset-theme-colors-secondary) / 0.25) 80%,
+    color-mix(in srgb, var(--un-preset-theme-colors-secondary) 25%, transparent) 20%,
+    color-mix(in srgb, var(--un-preset-theme-colors-secondary) 25%, transparent) 80%,
     transparent
   );
   margin: 2rem 0;
