@@ -322,7 +322,8 @@ const pageImage = postSlug
       customGoogleAnalyticsJS,
     }}
   >
- if (window.__CONSENT_STATUS === 'accepted') {
+ var _hasConsent = (window.__CONSENT_STATUS === 'accepted') || (typeof localStorage !== 'undefined' && localStorage.getItem('consent-preference') === 'accepted')
+ if (_hasConsent) {
    window.dataLayer = window.dataLayer || []
    window.gtag = function () {
      dataLayer.push(arguments)
@@ -332,8 +333,7 @@ const pageImage = postSlug
      window.gtag('config', googleAnalyticsID, {
        transport_url: new URL(customGoogleAnalyticsJS).origin,
      })
-   }
- else {
+   } else {
      window.gtag('config', googleAnalyticsID)
    }
    const gaScript = document.createElement('script')
@@ -353,15 +353,16 @@ const pageImage = postSlug
       umamiAnalyticsID,
       customUmamiAnalyticsJS,
     }}
-  >
-    if (window.__CONSENT_STATUS === 'accepted') {
-      const umamiScript = document.createElement('script')
-      umamiScript.src = customUmamiAnalyticsJS || 'https://cloud.umami.is/script.js'
-      umamiScript.setAttribute('data-website-id', umamiAnalyticsID)
-      umamiScript.type = 'text/partytown'
-      document.head.appendChild(umamiScript)
-    }
-  </script>
+   >
+   var _hasConsent = (window.__CONSENT_STATUS === 'accepted') || (typeof localStorage !== 'undefined' && localStorage.getItem('consent-preference') === 'accepted')
+   if (_hasConsent) {
+     const umamiScript = document.createElement('script')
+     umamiScript.src = customUmamiAnalyticsJS || 'https://cloud.umami.is/script.js'
+     umamiScript.setAttribute('data-website-id', umamiAnalyticsID)
+     umamiScript.type = 'text/partytown'
+     document.head.appendChild(umamiScript)
+   }
+ </script>
 )}}
 
 
