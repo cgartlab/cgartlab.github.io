@@ -122,21 +122,6 @@ This Site uses the following third-party services, which may collect and process
 - Cloudflare may record access logs for security protection and performance optimization
 - Compliant with GDPR, CCPA and other data protection regulations
 
-### 3.5 Advertising (Google AdSense)
-
-| Service | Provider | Purpose | Privacy Policy |
-|---------|----------|---------|---------------|
-| Google AdSense | Google LLC | Display advertisements to support site operations | [Google Privacy Policy](https://policies.google.com/privacy) |
-
-**Notes**:
-- Google AdSense is an advertising service used by this Site to display advertisements in support of site operations.
-- Third-party vendors, including Google, use cookies to serve ads based on your prior visits to this Site or other websites.
-- Google's use of advertising cookies enables it and its partners to serve ads to you based on your visit to this Site and/or other sites on the Internet.
-- You may opt out of personalized advertising by visiting [Google Ads Settings](https://www.google.com/settings/ads).
-- You may also opt out of third-party vendors' use of cookies for personalized advertising by visiting [www.aboutads.info](https://www.aboutads.info/).
-- Google AdSense may collect information such as your IP address, browser type, and pages visited for ad serving and performance measurement.
-- This Site does not use data collected by Google AdSense for any purposes other than advertisement display.
-
 ### 3.6 Data Sharing Principles
 
 - We **do not sell, rent, or trade** your personal information to any third party.
@@ -269,7 +254,7 @@ We will respond within 15 business days of receiving your request.
 ## 8. Cross-Border Data Transfer
 
 - This Site is hosted on Cloudflare (global distributed nodes), and access data may be processed worldwide
-- Google Analytics and Google AdSense data processing may involve cross-border transfers
+- Google Analytics data processing may involve cross-border transfers
 - We ensure that all cross-border transfers comply with applicable laws and take adequate security protection measures
 
 ---

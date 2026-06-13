@@ -184,7 +184,6 @@ cgartlab.github.io/
 │   │   ├── search.ts        # 搜索索引
 │   │   ├── feed.ts          # RSS/Atom 生成
 │   │   ├── cache.ts         # 缓存工具
-│   │   └── adsense.ts       # 广告工具
 │   ├── plugins/             # 🔌 自定义 remark/rehype 插件
 │   ├── types/               # 📐 TypeScript 类型定义
 │   ├── data/                # 📊 静态数据

@@ -40,7 +40,7 @@ pnpm exec playwright test # Playwright E2E 测试
 ### Astro Config (astro.config.ts)
 
 - **Output**: `static` (SSG), 部署到 Cloudflare Pages (Workers + Static Assets)
-- **Integrations** (按顺序): UnoCSS (injectReset: true) → MDX → Partytown (GA/Umami/AdSense offload) → Sitemap (排除 `/tags/*/`) → astro-compress (CSS/HTML/JS, 不包括图片和 SVG)
+- **Integrations** (按顺序): UnoCSS (injectReset: true) → MDX → Partytown (GA/Umami offload) → Sitemap (排除 `/tags/*/`) → astro-compress (CSS/HTML/JS, 不包括图片和 SVG)
 - **i18n**: locales `zh`(default), `en`(zh-TW), `zh-TW`(zh-TW) | `trailingSlash: 'always'` **禁止修改**
 - **Prefetch**: `prefetchAll: true, defaultStrategy: 'viewport'`
 - **Shiki**: `github-light` / `github-dark`, 排除 `mermaid`
@@ -107,7 +107,7 @@ src/
 │   └── _files/            # 附件
 ├── components/
 │   ├── Comment/           # Giscus + Twikoo + Waline 三套评论
-│   └── Widgets/           # TOC, ImageZoom, CodeCopyButton, MediaEmbed, SoundEffect, AdSense
+│   └── Widgets/           # TOC, ImageZoom, CodeCopyButton, MediaEmbed, SoundEffect
 ├── layouts/
 │   ├── Head.astro         # <head> SEO + OG + 字体 + 分析脚本
 │   └── Layout.astro       # 主布局包裹器
@@ -119,7 +119,7 @@ src/
 ├── styles/                # global.css, markdown.css(heti), font.css, transition.css, extension.css, lqip.css, comment.css
 ├── i18n/                  # config.ts, ui.ts, lang.ts, path.ts
 ├── types/                 # TypeScript 类型定义
-├── utils/                 # content.ts, cache.ts(memoize), feed.ts, search.ts, description.ts, page.ts, adsense.ts
+├── utils/                 # content.ts, cache.ts(memoize), feed.ts, search.ts, description.ts, page.ts
 └── worker.mjs             # Cloudflare Worker 入口
 ```
 
@@ -343,7 +343,7 @@ pnpm new-post "标题"
 | **MediaEmbed** | `Widgets/MediaEmbed.astro` | 视频/B站嵌入，响应式容器 |
 | **SoundEffect** | `Widgets/SoundEffect.astro` | Web Audio API 打字音效，桌面端(>1023px)生效，5 种变体 |
 | **BackButton** | `Widgets/BackButton.astro` | 桌面端(≥1024px)可见 |
-| **AdSense** | `Widgets/AdSense.astro` | Google AdSense 广告位 |
+
 
 ### SEO 结构化数据
 
