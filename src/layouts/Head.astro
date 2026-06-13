@@ -3,7 +3,6 @@ import { ClientRouter } from 'astro:transitions'
 import katexCSS from 'katex/dist/katex.min.css?url'
 import { allLocales, base, defaultLocale, themeConfig } from '@/config'
 import { ui } from '@/i18n/ui'
-import { formatPublisherID } from '@/utils/adsense'
 import { getPageInfo } from '@/utils/page'
 
 interface Props {
@@ -25,11 +24,7 @@ const { katex: katexEnabled, reduceMotion } = themeConfig.global
 const { verification = {}, twitterID = '', googleAnalyticsID = '', umamiAnalyticsID = '' } = themeConfig.seo ?? {}
 const { google = '', bing = '', yandex = '', baidu = '' } = verification
 const { customGoogleAnalyticsJS = '', customUmamiAnalyticsJS = '' } = themeConfig.preload ?? {}
-const { googleAdSense } = themeConfig.seo ?? {}
 
-const googleAdSensePublisherID = googleAdSense?.publisherID
-  ? formatPublisherID(googleAdSense.publisherID)
-  : ''
 
 // Site Metadata
 const metaTheme = defaultMode === 'dark' ? darkMode : lightMode
@@ -351,29 +346,5 @@ const pageImage = postSlug
   />
 )}
 
-<!-- Google AdSense -->
-{googleAdSense?.enabled && googleAdSensePublisherID && (
-  <>
-    <script
-      is:inline
-      async
-      src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${googleAdSensePublisherID}`}
-      crossorigin="anonymous"
-    />
-    {/* Re-push all ad slots after every Astro View Transition page swap.
-        Without this, ads rendered in SPA-navigated pages are never activated
-        because adsbygoogle.js only processes .push() calls on initial load. */}
-    <script is:inline>
-      document.addEventListener('astro:page-load', function () {
-        var ads = document.querySelectorAll('.adsbygoogle:not([data-adsbygoogle-status])')
-        ads.forEach(function () {
-          try {
-            ;(window.adsbygoogle = window.adsbygoogle || []).push({})
-          }
-          catch (_) {}
-        })
-      })
-    </script>
-  </>
-)}
+
 </head>

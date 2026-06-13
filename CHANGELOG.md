@@ -39,7 +39,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - View Transitions for theme switching and page navigation
 - OG image generation via `astro-og-canvas` + `canvaskit-wasm`
 - Partytown integration for offloading analytics to Web Workers
-- AdSense integration with pre-submit checklist
+
 - Client-side search with language-specific JSON indexes
 - RSS + Atom feed generation with XSLT styling
 - llms.txt auto-generation for LLM consumption
@@ -51,7 +51,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
-- www → non-www redirect (301) via Cloudflare Worker (AdSense compliance)
+- www → non-www redirect (301) via Cloudflare Worker (SEO canonical unity)
 - robots.txt blocks AI training crawlers (CC0 waiver)
 - Umami Analytics external link tracking
 - CSP-ready header structure
