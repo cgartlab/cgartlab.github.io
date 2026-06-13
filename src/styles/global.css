@@ -6,6 +6,32 @@ html {
   overflow-x: hidden;
 }
 
+/* Image CLS Protection (for future cover images) >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> */
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Skip to Content Link (WCAG 2.4.1 Bypass Blocks) >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> */
+.skip-to-content {
+  position: absolute;
+  inset-inline: 0;
+  z-index: 9999;
+  padding: 0.75rem 1.5rem;
+  text-align: center;
+  background: var(--un-preset-theme-colors-primary);
+  color: var(--un-preset-theme-colors-background);
+  font-weight: 600;
+  text-decoration: none;
+  translate: 0 -100%;
+  transition: translate 0.2s;
+}
+.skip-to-content:focus {
+  translate: 0 0;
+  outline: 2px solid var(--un-preset-theme-colors-highlight);
+  outline-offset: 2px;
+}
+
 /* Fix Flash Issue On iOS */
 body {
   backface-visibility: hidden;
