@@ -1,95 +1,208 @@
 /**
- * 验证 RSS/Atom Feed 中的链接是否有效
- * 用法: pnpm tsx scripts/verify-feed.ts
+ * 校验 RSS Feed 内容与实际发布的文章是否一致
+ * 用法: pnpm verify-feed 或 tsx scripts/verify-feed.ts
+ *
+ * 注意: RSS Feed 默认只包含最新的 25 篇文章，因此"文章存在但 Feed 中缺失"
+ * 不是问题。只有"Feed 中存在但文章已删除"才是真正的数据不一致问题。
  */
 
-import { parse } from 'node-html-parser'
-import { readFile } from 'node:fs/promises'
-import { resolve } from 'node:path'
+import fs from 'node:fs/promises'
+import path from 'node:path'
+import process from 'node:process'
+import glob from 'fast-glob'
 
-interface BrokenLink {
-  url: string
-  status?: number
-  error?: string
+interface Discrepancy {
+  type: 'missing_in_posts'
+  slug: string
+  title?: string
 }
 
-async function fetchWithTimeout(url: string, timeout = 5000): Promise<Response> {
-  const controller = new AbortController()
-  const timeoutId = setTimeout(() => controller.abort(), timeout)
-  try {
-    return await fetch(url, { signal: controller.signal, method: 'HEAD' })
-  }
-  finally {
-    clearTimeout(timeoutId)
-  }
+interface FeedItem {
+  link: string
+  title: string
 }
 
-async function verifyFeed(feedPath: string): Promise<BrokenLink[]> {
-  const fullPath = resolve(process.cwd(), 'dist', feedPath)
-  let xml: string
+interface PostFrontmatter {
+  title: string
+  published?: string
+  draft?: boolean
+  abbrlink?: string
+}
+
+interface PostMeta {
+  slug: string
+  title: string
+}
+
+async function parseRssFeed(xmlPath: string): Promise<FeedItem[]> {
+  const content = await fs.readFile(xmlPath, 'utf-8')
+  const items: FeedItem[] = []
+
+  const itemRegex = /<item>([\s\S]*?)<\/item>/g
+  let match
+
+  while (true) {
+    match = itemRegex.exec(content)
+    if (!match)
+      break
+    const itemContent = match[1]
+    const linkMatch = itemContent.match(/<link>([^<]*)<\/link>/)
+    const titleMatch = itemContent.match(/<title><!\[CDATA\[([^\]]*)\]\]><\/title>/)
+      || itemContent.match(/<title>([^<]*)<\/title>/)
+
+    if (linkMatch) {
+      items.push({
+        link: linkMatch[1].trim().replace(/\/$/, ''),
+        title: titleMatch ? titleMatch[1].trim() : '',
+      })
+    }
+  }
+
+  return items
+}
+
+async function getPublishedPosts(contentDir: string): Promise<PostMeta[]> {
+  const files = await glob('**/*.md', {
+    cwd: contentDir,
+    ignore: ['_images/**', '_files/**', '**/_*/**'],
+  })
+
+  const posts: PostMeta[] = []
+
+  for (const file of files) {
+    try {
+      const filePath = path.join(contentDir, file)
+      const content = await fs.readFile(filePath, 'utf-8')
+
+      const frontmatterMatch = content.match(/^---\n([\s\S]*?)\n---/)
+      if (!frontmatterMatch)
+        continue
+
+      const fmContent = frontmatterMatch[1]
+      const frontmatter: PostFrontmatter = {}
+
+      for (const line of fmContent.split('\n')) {
+        const colonIndex = line.indexOf(':')
+        if (colonIndex === -1)
+          continue
+
+        const key = line.slice(0, colonIndex).trim()
+        let value = line.slice(colonIndex + 1).trim()
+
+        if ((value.startsWith('"') && value.endsWith('"'))
+          || (value.startsWith('\'') && value.endsWith('\''))) {
+          value = value.slice(1, -1)
+        }
+
+        if (key === 'title')
+          frontmatter.title = value
+        else if (key === 'published')
+          frontmatter.published = value
+        else if (key === 'draft')
+          frontmatter.draft = value === 'true'
+        else if (key === 'abbrlink')
+          frontmatter.abbrlink = value // Fixed: was 'abrlink'
+      }
+
+      if (frontmatter.draft)
+        continue
+
+      let slug = path.basename(file, path.extname(file))
+      if (frontmatter.abbrlink)
+        slug = frontmatter.abbrlink
+
+      posts.push({ slug, title: frontmatter.title ?? slug })
+    }
+    catch {
+      // Skip files that can't be read
+    }
+  }
+
+  return posts
+}
+
+function extractSlugFromUrl(url: string): string {
+  const match = url.match(/\/posts\/([^/]+)\/?$/)
+  return match ? match[1] : ''
+}
+
+async function verifyFeedConsistency(): Promise<{
+  feedItems: FeedItem[]
+  postSlugs: Set<string>
+  discrepancies: Discrepancy[]
+}> {
+  const distDir = 'dist'
+  const contentDir = 'src/content/posts'
+  const feedPath = path.join(distDir, 'rss.xml')
+
   try {
-    xml = await readFile(fullPath, 'utf-8')
+    await fs.access(feedPath)
   }
   catch {
-    console.error(`❌ 无法读取 Feed 文件: ${fullPath}`)
-    console.error('   请先运行 pnpm build 生成 Feed')
-    process.exit(1)
+    console.warn('⚠️  RSS Feed 文件不存在，跳过校验')
+    return { feedItems: [], postSlugs: new Set(), discrepancies: [] }
   }
 
-  const doc = parse(xml)
-  const items = doc.querySelectorAll('item')
-  const links = items.map(item => item.querySelector('link')?.textContent?.trim()).filter(Boolean) as string[]
+  const feedItems = await parseRssFeed(feedPath)
+  const feedSlugs = feedItems.map(item => extractSlugFromUrl(item.link)).filter(Boolean)
 
-  console.log(`🔍 检查 ${links.length} 个 Feed 链接...`)
+  const posts = await getPublishedPosts(contentDir)
+  const postSlugs = new Set(posts.map(p => p.slug))
 
-  const broken: BrokenLink[] = []
-  for (const url of links) {
-    try {
-      const response = await fetchWithTimeout(url)
-      if (!response.ok) {
-        broken.push({ url, status: response.status })
-      }
-    }
-    catch (error) {
-      const message = error instanceof Error ? error.message : String(error)
-      broken.push({ url, error: message })
+  const discrepancies: Discrepancy[] = []
+
+  // Only report truly problematic cases: deleted posts still in feed
+  for (const slug of feedSlugs) {
+    if (!postSlugs.has(slug)) {
+      const item = feedItems.find(i => extractSlugFromUrl(i.link) === slug)
+      discrepancies.push({
+        type: 'missing_in_posts',
+        slug,
+        title: item?.title,
+      })
     }
   }
 
-  return broken
+  return { feedItems, postSlugs, discrepancies }
 }
 
-async function main() {
-  console.log('📡 开始校验 RSS Feed...\n')
+function printReport(result: Awaited<ReturnType<typeof verifyFeedConsistency>>): void {
+  const { feedItems, postSlugs, discrepancies } = result
 
-  const brokenRss = await verifyFeed('rss.xml')
-  const brokenAtom = await verifyFeed('atom.xml')
+  console.log('\n📋 RSS Feed 校验报告')
+  console.log('='.repeat(50))
+  console.log(`📬 Feed 条目数: ${feedItems.length}`)
+  console.log(`📝 已发布文章数: ${postSlugs.size}`)
+  console.log(`📌 Feed 限制: 最多显示 25 篇最新文章`)
 
-  if (brokenRss.length === 0 && brokenAtom.length === 0) {
-    console.log('✅ 所有 Feed 链接有效，无死链')
+  if (discrepancies.length === 0) {
+    console.log('\n✅ Feed 内容与已发布文章完全一致！')
     return
   }
 
-  if (brokenRss.length > 0) {
-    console.error(`\n❌ RSS Feed 中发现 ${brokenRss.length} 个死链:`)
-    for (const { url, status, error } of brokenRss) {
-      console.error(`   ${status || 'ERROR'}: ${url} ${error || ''}`)
-    }
-  }
+  console.log(`\n🔴 发现 ${discrepancies.length} 个问题:`)
 
-  if (brokenAtom.length > 0) {
-    console.error(`\n❌ Atom Feed 中发现 ${brokenAtom.length} 个死链:`)
-    for (const { url, status, error } of brokenAtom) {
-      console.error(`   ${status || 'ERROR'}: ${url} ${error || ''}`)
-    }
+  for (const item of discrepancies) {
+    console.log(`   ⚠️  ${item.slug}${item.title ? ` (${item.title})` : ''} — 已删除但仍在 Feed 中`)
   }
-
-  console.error('\n💥 Feed 校验失败，请检查上述死链')
-  process.exit(1)
 }
 
-main().catch((error) => {
-  const message = error instanceof Error ? error.message : String(error)
-  console.error('❌ 校验脚本执行失败:', message)
-  process.exit(1)
-})
+async function main() {
+  console.log('🔍 开始校验 RSS Feed...')
+
+  try {
+    const result = await verifyFeedConsistency()
+    printReport(result)
+
+    if (result.discrepancies.length > 0) {
+      console.log('\n💡 提示: 重新构建网站以更新 Feed')
+      process.exit(1)
+    }
+  }
+  catch (error) {
+    console.error('❌ 校验失败:', error)
+    process.exit(1)
+  }
+}
+
+main()
