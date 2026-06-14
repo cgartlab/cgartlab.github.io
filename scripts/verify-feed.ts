@@ -22,8 +22,8 @@ interface FeedItem {
   title: string
 }
 
-interface PostFrontmatter {
-  title: string
+interface PostFrontmatterPartial {
+  title?: string
   published?: string
   draft?: boolean
   abbrlink?: string
@@ -79,7 +79,7 @@ async function getPublishedPosts(contentDir: string): Promise<PostMeta[]> {
         continue
 
       const fmContent = frontmatterMatch[1]
-      const frontmatter: PostFrontmatter = {}
+      const frontmatter: PostFrontmatterPartial = {}
 
       for (const line of fmContent.split('\n')) {
         const colonIndex = line.indexOf(':')
