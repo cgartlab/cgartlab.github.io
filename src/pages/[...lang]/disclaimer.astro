@@ -1,7 +1,7 @@
 ---
-import Layout from '@/layouts/Layout.astro'
 import { allLocales } from '@/config'
 import { getLangFromLocale, getLangRouteParam } from '@/i18n/lang'
+import Layout from '@/layouts/Layout.astro'
 
 export async function getStaticPaths() {
   return allLocales.map(lang => ({
@@ -13,8 +13,10 @@ const currentLang = getLangFromLocale(Astro.currentLocale)
 ---
 
 <Layout
-  postTitle={currentLang === 'zh' ? '免责声明'
-    : currentLang === 'zh-tw' ? '免責聲明'
+  postTitle={currentLang === 'zh'
+? '免责声明'
+    : currentLang === 'zh-tw'
+? '免責聲明'
     : 'Disclaimer'}
 >
   <div class="uno-decorative-line" />
