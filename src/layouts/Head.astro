@@ -312,7 +312,7 @@ const pageImage = postSlug
 })()
 </script>
 
-<!-- Google Analytics (loaded only with consent) -->
+<!-- Google Analytics -->
 {googleAnalyticsID && (
   <script
     is:inline
@@ -322,29 +322,26 @@ const pageImage = postSlug
       customGoogleAnalyticsJS,
     }}
   >
- const _hasConsent = (typeof localStorage !== 'undefined' && localStorage.getItem('consent-preference') === 'accepted')
- if (_hasConsent) {
-   window.dataLayer = window.dataLayer || []
-   window.gtag = function () {
-     dataLayer.push(arguments)
-   }
-   window.gtag('js', new Date())
-    if (customGoogleAnalyticsJS) {
-      window.gtag('config', googleAnalyticsID, {
-        transport_url: new URL(customGoogleAnalyticsJS).origin,
-      })
-    } else {
-      window.gtag('config', googleAnalyticsID)
-    }
-   const gaScript = document.createElement('script')
-   gaScript.src = customGoogleAnalyticsJS || `https://www.googletagmanager.com/gtag/js?id=${googleAnalyticsID}`
-   gaScript.type = 'text/partytown'
-   document.head.appendChild(gaScript)
- }
- </script>
+  window.dataLayer = window.dataLayer || []
+  window.gtag = function () {
+    dataLayer.push(arguments)
+  }
+  window.gtag('js', new Date())
+  if (customGoogleAnalyticsJS) {
+    window.gtag('config', googleAnalyticsID, {
+      transport_url: new URL(customGoogleAnalyticsJS).origin,
+    })
+  } else {
+    window.gtag('config', googleAnalyticsID)
+  }
+  const gaScript = document.createElement('script')
+  gaScript.src = customGoogleAnalyticsJS || `https://www.googletagmanager.com/gtag/js?id=${googleAnalyticsID}`
+  gaScript.type = 'text/partytown'
+  document.head.appendChild(gaScript)
+  </script>
 )}
 
-<!-- Umami Analytics (loaded only with consent) -->
+<!-- Umami Analytics -->
 {umamiAnalyticsID && (
   <script
     is:inline
@@ -354,16 +351,12 @@ const pageImage = postSlug
       customUmamiAnalyticsJS,
     }}
    >
-  var _hasConsentUmami = (typeof localStorage !== 'undefined' && localStorage.getItem('consent-preference') === 'accepted')
-  if (_hasConsentUmami) {
-    var umamiScript = document.createElement('script')
-    umamiScript.src = customUmamiAnalyticsJS || 'https://cloud.umami.is/script.js'
-    umamiScript.setAttribute('data-website-id', umamiAnalyticsID)
-    umamiScript.type = 'text/partytown'
-    document.head.appendChild(umamiScript)
-  }
+  var umamiScript = document.createElement('script')
+  umamiScript.src = customUmamiAnalyticsJS || 'https://cloud.umami.is/script.js'
+  umamiScript.setAttribute('data-website-id', umamiAnalyticsID)
+  umamiScript.type = 'text/partytown'
+  document.head.appendChild(umamiScript)
   </script>
-)}}
-
+)}
 
 </head>
