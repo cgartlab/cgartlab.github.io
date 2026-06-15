@@ -1,7 +1,6 @@
 ---
 import type { Language } from '@/i18n/config'
 import Button from '@/components/Button.astro'
-import ConsentBanner from '@/components/ConsentBanner.astro'
 import Footer from '@/components/Footer.astro'
 import Header from '@/components/Header.astro'
 import Navbar from '@/components/Navbar.astro'
@@ -9,11 +8,10 @@ import Search from '@/components/Search.astro'
 import CodeCopyButton from '@/components/Widgets/CodeCopyButton.astro'
 import GithubCard from '@/components/Widgets/GithubCard.astro'
 import ImageZoom from '@/components/Widgets/ImageZoom.astro'
-import MermaidLazy from '@/components/Widgets/MermaidLazy.astro'
 import MediaEmbed from '@/components/Widgets/MediaEmbed.astro'
+import MermaidLazy from '@/components/Widgets/MermaidLazy.astro'
 import SoundEffect from '@/components/Widgets/SoundEffect.astro'
 import { themeConfig } from '@/config'
-import { ui } from '@/i18n/ui'
 import Head from '@/layouts/Head.astro'
 import { getPageInfo } from '@/utils/page'
 import '@/styles/comment.css'
@@ -33,12 +31,11 @@ interface Props {
 }
 
 const { postTitle, postDescription, postSlug, postDate, supportedLangs = [] } = Astro.props
-const { isPost, currentLang } = getPageInfo(Astro.url.pathname)
+const { isPost } = getPageInfo(Astro.url.pathname)
 const fontStyle = themeConfig.global.fontStyle === 'serif' ? 'font-serif' : 'font-sans'
 const MarginBottom = isPost && themeConfig.comment.enabled
   ? 'mb-10' // Post page with comment
   : 'mb-12' // Other pages without comment
-const currentUI = ui[currentLang as keyof typeof ui] ?? {}
 ---
 
 <html
@@ -55,7 +52,6 @@ const currentUI = ui[currentLang as keyof typeof ui] ?? {}
       p="x-[min(7.25vw,3.731rem)] y-10"
       lg="mx-[max(5.75rem,calc(50vw-34.25rem))] my-20 max-w-[min(calc(75vw-16rem),44rem)] min-h-full p-0"
     >
-      <a href="#main-content" class="skip-to-content">{currentUI.skipToContent || '跳到主要内容'}</a>
       <Header />
       <Navbar />
       <Button supportedLangs={supportedLangs} />
@@ -65,7 +61,6 @@ const currentUI = ui[currentLang as keyof typeof ui] ?? {}
       <Footer />
     </div>
     <SoundEffect />
-    <ConsentBanner />
     <CodeCopyButton />
     <GithubCard />
     <MermaidLazy />
@@ -80,7 +75,10 @@ const currentUI = ui[currentLang as keyof typeof ui] ?? {}
     if (!t)
       document.documentElement.setAttribute('data-resizing', '')
     clearTimeout(t)
-    t = setTimeout(() => { document.documentElement.removeAttribute('data-resizing'); t = 0 }, 200)
+    t = setTimeout(() => {
+      document.documentElement.removeAttribute('data-resizing')
+      t = 0
+    }, 200)
   })
 })()
 </script>
