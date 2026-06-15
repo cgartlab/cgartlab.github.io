@@ -7,7 +7,7 @@
 ```bash
 pnpm dev                  # astro check → astro dev
 pnpm build                # astro check → build → generate-llms → apply-lqip (顺序重要)
-pnpm preview              # astro preview
+pnpm preview              # astro preview --host (局域网可访问)
 pnpm lint / lint:fix      # eslint (antfu config, 忽略 src/content/**)
 pnpm new-post "标题"       # 创建 MD 文章 (src/content/posts/)，周刊自动放入 weekly/
 pnpm format-posts         # CJK 文本规范化 (autocorrect)

@@ -1,0 +1,537 @@
+---
+// GitHub Contribution Heatmap Component
+// Fetches data at build time from github-contributions-api
+// Displays a contribution grid similar to GitHub's profile heatmap
+
+interface ContributionCell {
+  color: string
+  contributionCount: number
+  contributionLevel: 'NONE' | 'FIRST_QUARTILE' | 'SECOND_QUARTILE' | 'THIRD_QUARTILE' | 'FOURTH_QUARTILE'
+  date: string
+}
+
+interface ContributionData {
+  contributions: ContributionCell[][]
+  total: number
+}
+
+const API_URL = 'https://github-contributions-api.deno.dev/cgartlab.json'
+
+let data: ContributionData = { contributions: [], total: 0 }
+let fetchError = false
+
+try {
+  const response = await fetch(API_URL)
+  if (response.ok) {
+    const json = await response.json()
+    data = {
+      contributions: json.contributions as ContributionCell[][],
+      total: json.totalContributions as number,
+    }
+  }
+  else {
+    fetchError = true
+  }
+}
+catch (e) {
+  console.error('[GithubHeatmap] Failed to fetch data:', e)
+  fetchError = true
+}
+
+// Determine month labels based on actual dates in contributions
+function getMonthLabels(contributions: ContributionCell[][]): { month: string, weekIndex: number }[] {
+  const labels: { month: string, weekIndex: number }[] = []
+  let lastMonth = -1
+
+  contributions.forEach((week, weekIndex) => {
+    const dayWithDate = week.find(day => day.date)
+    if (!dayWithDate)
+return
+
+    const date = new Date(`${dayWithDate.date}T00:00:00`)
+    const month = date.getMonth()
+
+    if (month !== lastMonth) {
+      const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+      labels.push({ month: monthNames[month], weekIndex })
+      lastMonth = month
+    }
+  })
+
+  return labels
+}
+
+const contributions = data.contributions
+const monthLabels = contributions.length > 0 ? getMonthLabels(contributions) : []
+const totalFormatted = data.total.toLocaleString()
+
+// SSR-friendly date format function
+function formatDateStr(dateStr: string): string {
+  const date = new Date(`${dateStr}T00:00:00`)
+  return date.toLocaleDateString('en-US', {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+  })
+}
+
+const levelClassMap: Record<string, string> = {
+  NONE: 'gh-cell--none',
+  FIRST_QUARTILE: 'gh-cell--first_quartile',
+  SECOND_QUARTILE: 'gh-cell--second_quartile',
+  THIRD_QUARTILE: 'gh-cell--third_quartile',
+  FOURTH_QUARTILE: 'gh-cell--fourth_quartile',
+}
+
+const dayIndices = [0, 1, 2, 3, 4, 5, 6]
+const dayLabelMap: Record<number, string> = { 0: 'Sun', 6: 'Sat' }
+---
+
+{
+  fetchError || contributions.length === 0
+? (
+    <div class="gh-heatmap gh-heatmap--error">
+      <div class="gh-header">
+        <h2 class="gh-title font-serif">GitHub Contributions</h2>
+      </div>
+      <p class="gh-error-msg">Contribution data unavailable</p>
+    </div>
+  )
+: (
+    <div class="gh-heatmap">
+      <div class="gh-header">
+        <h2 class="gh-title font-serif">GitHub Contributions</h2>
+        <div class="gh-legend">
+          <span class="gh-legend-label">Less</span>
+          <span class="gh-cell gh-cell--none" aria-hidden="true"></span>
+          <span class="gh-cell gh-cell--first_quartile" aria-hidden="true"></span>
+          <span class="gh-cell gh-cell--second_quartile" aria-hidden="true"></span>
+          <span class="gh-cell gh-cell--third_quartile" aria-hidden="true"></span>
+          <span class="gh-cell gh-cell--fourth_quartile" aria-hidden="true"></span>
+          <span class="gh-legend-label">More</span>
+        </div>
+      </div>
+
+      <div class="gh-grid-wrapper">
+        <div class="gh-grid" role="grid" aria-label="GitHub contribution activity">
+          <!-- Month labels row -->
+          <div class="gh-months" aria-hidden="true">
+            <div class="gh-day-labels-placeholder"></div>
+            {monthLabels.map(({ month, weekIndex }) => {
+              const offset = weekIndex * 12
+              return <div class="gh-month-label" style={`left: ${offset}px`}>{month}</div>
+            })}
+          </div>
+
+          <!-- Grid rows with day labels -->
+          <div class="gh-rows">
+            {dayIndices.map((dayIndex) => {
+              const dayLabel = dayLabelMap[dayIndex] ?? ''
+              return (
+                <div class="gh-row" role="row">
+                  <div class="gh-day-label" aria-hidden="true">{dayLabel}</div>
+                  <div class="gh-cells">
+                    {contributions.map((week) => {
+                      const cell = week[dayIndex]
+                      if (!cell) {
+                        return <span class="gh-cell gh-cell--none" aria-hidden="true"></span>
+                      }
+                      const levelClass = levelClassMap[cell.contributionLevel] ?? 'gh-cell--none'
+                      const tooltipId = `gh-tooltip-${cell.date}`
+                      return (
+                        <span
+                          class={`gh-cell ${levelClass}`}
+                          data-date={cell.date}
+                          data-count={cell.contributionCount}
+                          tabindex="0"
+                          role="gridcell"
+                          aria-describedby={tooltipId}
+                        >
+                          <span class="gh-tooltip" role="tooltip" id={tooltipId}>
+                            {formatDateStr(cell.date)} — {cell.contributionCount} contribution{cell.contributionCount !== 1 ? 's' : ''}
+                          </span>
+                        </span>
+                      )
+                    })}
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+        </div>
+      </div>
+
+      <div class="gh-footer">
+        <span class="gh-total">
+          {totalFormatted} contributions in the last year
+        </span>
+      </div>
+    </div>
+  )
+}
+
+<script>
+function setupHeatmapInteractions() {
+  const cells = document.querySelectorAll<HTMLElement>('.gh-cell[data-date]')
+  if (cells.length === 0)
+    return
+
+  const cellArray = Array.from(cells)
+  let columns = 0
+
+  // Determine grid dimensions
+  cellArray.forEach((cell) => {
+    const row = cell.closest('.gh-row')
+    if (row) {
+      const cellsInRow = row.querySelectorAll<HTMLElement>('.gh-cell[data-date]')
+      columns = cellsInRow.length
+    }
+  })
+
+  // Re-determine rows/cols properly
+  const rows = document.querySelectorAll<HTMLElement>('.gh-row')
+  const rowCount = rows.length
+  const colCount = columns
+
+  rows.forEach((row, rowIdx) => {
+    const rowCells = row.querySelectorAll<HTMLElement>('.gh-cell[data-date]')
+    rowCells.forEach((cell, colIdx) => {
+      cell.dataset.row = String(rowIdx)
+      cell.dataset.col = String(colIdx)
+    })
+  })
+
+  // Tooltip show/hide
+  cells.forEach((cell) => {
+    const tooltip = cell.querySelector<HTMLElement>('.gh-tooltip')
+    if (!tooltip)
+      return
+
+    const showTooltip = () => tooltip.classList.add('gh-tooltip--visible')
+    const hideTooltip = () => tooltip.classList.remove('gh-tooltip--visible')
+
+    cell.addEventListener('mouseenter', showTooltip)
+    cell.addEventListener('mouseleave', hideTooltip)
+    cell.addEventListener('focus', showTooltip)
+    cell.addEventListener('blur', hideTooltip)
+  })
+
+  // Keyboard navigation
+  const getCell = (row: number, col: number): HTMLElement | null => {
+    return document.querySelector<HTMLElement>(
+      `.gh-cell[data-row="${row}"][data-col="${col}"]`,
+    )
+  }
+
+  const focusCell = (row: number, col: number) => {
+    const cell = getCell(row, col)
+    if (cell) {
+      cell.focus()
+    }
+  }
+
+  document.addEventListener('keydown', (e: KeyboardEvent) => {
+    const active = document.activeElement
+    if (!active || !active.classList.contains('gh-cell'))
+      return
+
+    const row = Number.parseInt((active as HTMLElement).dataset.row ?? '0', 10)
+    const col = Number.parseInt((active as HTMLElement).dataset.col ?? '0', 10)
+
+    switch (e.key) {
+      case 'ArrowUp':
+        e.preventDefault()
+        focusCell(Math.max(0, row - 1), col)
+        break
+      case 'ArrowDown':
+        e.preventDefault()
+        focusCell(Math.min(rowCount - 1, row + 1), col)
+        break
+      case 'ArrowLeft':
+        e.preventDefault()
+        focusCell(row, Math.max(0, col - 1))
+        break
+      case 'ArrowRight':
+        e.preventDefault()
+        focusCell(row, Math.min(colCount - 1, col + 1))
+        break
+      case 'Home':
+        e.preventDefault()
+        if (e.ctrlKey || e.metaKey) {
+          // First cell overall
+          const firstCell = getCell(0, 0)
+          if (firstCell)
+            firstCell.focus()
+        }
+        else {
+          // First cell in row
+          focusCell(row, 0)
+        }
+        break
+      case 'End':
+        e.preventDefault()
+        if (e.ctrlKey || e.metaKey) {
+          // Last cell overall
+          const lastCell = getCell(rowCount - 1, colCount - 1)
+          if (lastCell)
+            lastCell.focus()
+        }
+        else {
+          // Last cell in row
+          focusCell(row, colCount - 1)
+        }
+        break
+    }
+  })
+}
+
+document.addEventListener('astro:page-load', setupHeatmapInteractions)
+</script>
+
+<style is:global>
+/* ==============================
+   GitHub Heatmap Styles
+   ============================== */
+
+.gh-heatmap {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  user-select: none;
+}
+
+.gh-heatmap--error {
+  padding: 1rem 0;
+}
+
+.gh-error-msg {
+  font-size: 0.8125rem;
+  color: var(--un-preset-theme-colors-secondary);
+  opacity: 0.65;
+  margin-top: 0.5rem;
+}
+
+/* ---- Header ---- */
+.gh-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.gh-title {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--un-preset-theme-colors-primary);
+  margin: 0;
+  line-height: 1.3;
+}
+
+.gh-legend {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.gh-legend-label {
+  font-size: 0.6875rem;
+  color: var(--un-preset-theme-colors-secondary);
+  opacity: 0.7;
+  padding-inline: 2px;
+}
+
+/* ---- Grid ---- */
+.gh-grid-wrapper {
+  overflow-x: auto;
+  overflow-y: visible;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  padding-bottom: 4px;
+}
+
+.gh-grid {
+  display: flex;
+  flex-direction: column;
+  width: max-content;
+}
+
+/* Month labels */
+.gh-months {
+  display: flex;
+  position: relative;
+  height: 16px;
+  margin-bottom: 4px;
+  margin-left: 28px;
+}
+
+@media (max-width: 479px) {
+  .gh-months {
+    margin-left: 0;
+  }
+}
+
+.gh-day-labels-placeholder {
+  width: 0;
+  height: 0;
+}
+
+.gh-month-label {
+  position: absolute;
+  font-size: 0.6875rem;
+  color: var(--un-preset-theme-colors-secondary);
+  opacity: 0.65;
+  white-space: nowrap;
+  line-height: 1;
+}
+
+/* Rows */
+.gh-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.gh-row {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  height: 10px;
+}
+
+.gh-day-label {
+  width: 28px;
+  font-size: 0.625rem;
+  color: var(--un-preset-theme-colors-secondary);
+  opacity: 0.55;
+  text-align: left;
+  line-height: 1;
+  flex-shrink: 0;
+  padding-right: 4px;
+}
+
+@media (max-width: 767px) {
+  .gh-row:last-child .gh-day-label { display: none; }
+}
+@media (max-width: 479px) {
+  .gh-day-label { display: none; }
+  .gh-months { margin-left: 0; }
+  .gh-header { flex-direction: column; align-items: flex-start; }
+}
+
+.gh-cells {
+  display: flex;
+  gap: 2px;
+}
+
+/* ---- Cell ---- */
+.gh-cell {
+  display: block;
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  position: relative;
+  cursor: pointer;
+  transition: transform 0.12s ease-out;
+  outline: none;
+  flex-shrink: 0;
+}
+
+.gh-cell:hover,
+.gh-cell:focus-visible {
+  transform: scale(1.15);
+  z-index: 2;
+}
+
+.gh-cell:focus-visible {
+  box-shadow: 0 0 0 2px var(--un-preset-theme-colors-primary);
+}
+
+/* Light theme cell colors — spec values */
+.gh-cell--none {
+  background-color: oklch(91% 0.012 85);
+}
+
+.gh-cell--first_quartile {
+  background-color: oklch(0.75 0.12 138 / 0.30);
+}
+
+.gh-cell--second_quartile {
+  background-color: oklch(0.75 0.12 138 / 0.50);
+}
+
+.gh-cell--third_quartile {
+  background-color: oklch(0.75 0.12 138 / 0.70);
+}
+
+.gh-cell--fourth_quartile {
+  background-color: oklch(0.75 0.12 138 / 0.95);
+}
+
+/* Dark theme cell colors — spec values */
+html.dark .gh-cell--none {
+  background-color: oklch(28% 0.003 298);
+}
+
+html.dark .gh-cell--first_quartile {
+  background-color: oklch(0.75 0.12 138 / 0.20);
+}
+
+html.dark .gh-cell--second_quartile {
+  background-color: oklch(0.75 0.12 138 / 0.40);
+}
+
+html.dark .gh-cell--third_quartile {
+  background-color: oklch(0.75 0.12 138 / 0.60);
+}
+
+html.dark .gh-cell--fourth_quartile {
+  background-color: oklch(0.75 0.12 138 / 0.85);
+}
+
+/* ---- Tooltip ---- */
+.gh-tooltip {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.15s ease-out, visibility 0.15s ease-out;
+  z-index: 100;
+  line-height: 1.4;
+
+  /* Light theme tooltip */
+  background-color: oklch(25% 0.005 298);
+  color: oklch(98% 0.012 85);
+}
+
+.gh-tooltip--visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Dark theme tooltip */
+html.dark .gh-tooltip {
+  background-color: oklch(92% 0.005 298);
+  color: oklch(22% 0.005 298);
+}
+
+/* ---- Footer ---- */
+.gh-footer {
+  margin-top: 1rem;
+  display: flex;
+  align-items: center;
+}
+
+.gh-total {
+  font-size: 0.8125rem;
+  color: var(--un-preset-theme-colors-secondary);
+  opacity: 0.75;
+}
+</style>
