@@ -25,6 +25,7 @@ Desktop.ini
 # 编辑器
 .idea/
 .vscode/
+.trae/
 *.swp
 *.swo
 
@@ -37,7 +38,6 @@ Desktop.ini
 # 锁文件
 package-lock.json
 yarn.lock
-pnpm-lock.yaml
 
 # 部署与测试
 .vercel/
@@ -47,6 +47,7 @@ coverage/
 
 # Syncthing
 .stfolder/
+.stfolder*
 .stversions/
 .syncthing-*
 
@@ -60,15 +61,14 @@ coverage/
 # Obsidian
 .obsidian/
 
+# Sisyphus 运行时状态
+.sisyphus/
+
 # 项目特定 / 数据库
 src/assets/lqip-map.json
 
 # Obsidian 数据库文件
 src/content/posts/*.base
-.obsidian/workspace.json
-.obsidian/workspace.json
 
-/.obsidian/workspace.json
 # Debug scripts with API tokens
 .omo/
-
