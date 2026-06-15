@@ -31,7 +31,8 @@ async function fetchRepoData(repo: string): Promise<GithubRepoData | null> {
     }
   }
   catch {
-    try { localStorage.removeItem(cacheKey) } catch {}
+    try { localStorage.removeItem(cacheKey) }
+    catch {}
   }
 
   // Fetch from API if not cached or expired

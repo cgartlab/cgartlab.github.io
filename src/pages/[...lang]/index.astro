@@ -19,7 +19,7 @@ const postsByYear = await getPostsByYear(currentLang)
 <Layout>
   <!-- Pinned Posts -->
   {pinnedPosts.length > 0 && (
-    <section class="mb-6 lg:mb-7.5 w-full">
+    <section class="mb-6 w-full lg:mb-7.5">
       <div class="uno-decorative-line" />
       <PostList posts={pinnedPosts} lang={currentLang} pinned={true} />
     </section>

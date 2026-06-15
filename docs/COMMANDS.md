@@ -89,7 +89,7 @@ tags:
   - Tag
 draft: false
 pin: 0
-toc: true  # from themeConfig.global.toc
+toc: true # from themeConfig.global.toc
 lang: ''
 abbrlink: ''
 ---
