@@ -1,24 +1,19 @@
 ---
-import { ui } from '@/i18n/ui'
-import { getPageInfo } from '@/utils/page'
-
-const { currentLang } = getPageInfo(Astro.url.pathname)
-const currentUI = ui[currentLang as keyof typeof ui] ?? {}
 ---
 
-<div id="consent-banner" class="consent-banner" role="dialog" aria-label={currentUI.consentTitle || 'Cookie Consent'} aria-hidden="true">
+<div id="consent-banner" class="consent-banner" role="dialog" aria-label="Cookie Consent" aria-hidden="true">
   <div class="consent-content">
-    <h2 class="consent-title">{currentUI.consentTitle || 'Cookie Consent'}</h2>
-    <p class="consent-description">{currentUI.consentDescription || 'We use cookies to analyze site traffic and improve your experience.'}</p>
+    <h2 class="consent-title">Cookie Consent</h2>
+    <p class="consent-description">We use cookies to analyze site traffic and improve your experience.</p>
     <div class="consent-buttons">
       <button id="consent-reject" class="consent-btn consent-btn-reject">
-        {currentUI.consentReject || 'Reject All'}
+        Reject All
       </button>
       <button id="consent-functional" class="consent-btn consent-btn-functional">
-        {currentUI.consentFunctional || 'Functional Only'}
+        Functional Only
       </button>
       <button id="consent-accept" class="consent-btn consent-btn-accept">
-        {currentUI.consentAccept || 'Accept All'}
+        Accept All
       </button>
     </div>
   </div>
@@ -31,9 +26,8 @@ const currentUI = ui[currentLang as keyof typeof ui] ?? {}
     left: 0;
     right: 0;
     z-index: 9000;
-    /* Light mode: cream white, dark mode: dark blue */
-    background: color-mix(in srgb, var(--un-preset-theme-colors-background) 100%, transparent);
-    border-top: 1px solid color-mix(in srgb, var(--un-preset-theme-colors-secondary) 100%, transparent);
+    background: #ffffff;
+    border-top: 1px solid #e5e5e5;
     padding: 1rem 1.5rem;
     box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.1);
     transform: translateY(100%);
@@ -54,12 +48,12 @@ const currentUI = ui[currentLang as keyof typeof ui] ?? {}
     font-size: 1rem;
     font-weight: 600;
     margin-bottom: 0.5rem;
-    color: var(--un-preset-theme-colors-primary);
+    color: #333333;
   }
 
   .consent-description {
     font-size: 0.875rem;
-    color: var(--un-preset-theme-colors-secondary);
+    color: #666666;
     margin-bottom: 1rem;
     line-height: 1.5;
   }
@@ -78,7 +72,7 @@ const currentUI = ui[currentLang as keyof typeof ui] ?? {}
     font-weight: 500;
     cursor: pointer;
     transition: opacity 0.2s, transform 0.1s;
-    border: 1px solid var(--un-preset-theme-colors-secondary);
+    border: 1px solid #e5e5e5;
   }
 
   .consent-btn:hover {
@@ -91,21 +85,21 @@ const currentUI = ui[currentLang as keyof typeof ui] ?? {}
 
   .consent-btn-reject {
     background: transparent;
-    color: var(--un-preset-theme-colors-secondary);
+    color: #666666;
   }
 
   .consent-btn-functional {
-    background: var(--un-preset-theme-colors-secondary);
-    color: var(--un-preset-theme-colors-background);
+    background: #e5e5e5;
+    color: #333333;
   }
 
   .consent-btn-accept {
-    background: var(--un-preset-theme-colors-primary);
-    color: var(--un-preset-theme-colors-background);
+    background: #007bff;
+    color: #ffffff;
   }
 
   .consent-banner:focus-within {
-    outline: 2px solid var(--un-preset-theme-colors-highlight);
+    outline: 2px solid #007bff;
     outline-offset: 2px;
   }
 </style>
