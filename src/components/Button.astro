@@ -106,8 +106,9 @@ function handleThemeToggle(e: MouseEvent) {
     return
   }
 
-  // If reduceMotion is enabled, update theme directly
-  if (document.documentElement.classList.contains('reduce-motion')) {
+  // If reduceMotion is enabled or View Transitions API unavailable, update theme directly
+  if (document.documentElement.classList.contains('reduce-motion')
+    || !document.startViewTransition) {
     toggleTheme()
     return
   }
