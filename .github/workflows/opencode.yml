@@ -18,11 +18,10 @@ jobs:
       (github.event_name != 'pull_request' && github.event.comment.user.login != 'argus-cgartlab[bot]' && (contains(github.event.comment.body, '/oc') || contains(github.event.comment.body, '/opencode')))
     runs-on: ubuntu-latest
     permissions:
-      contents: write
+      contents: read
+      id-token: write
       issues: write
       pull-requests: write
-      metadata: read
-      checks: write
     env:
       FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
     steps:
