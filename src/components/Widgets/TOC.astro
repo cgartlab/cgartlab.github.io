@@ -88,29 +88,67 @@ const is2xl = window.matchMedia('(min-width: 1536px)')
 let ticking = false
 let lastLink: Element | null = null
 
-// Find and scroll to the active link
-function scrollToActiveLink() {
+// Fallback for browsers without :target-current (e.g. Firefox)
+let fallbackObserver: IntersectionObserver | null = null
+const visibleHeadings = new Set<string>()
+
+function scrollToActiveLinkFallback() {
   const tocList = document.getElementById('toc-links-list')
   if (!tocList) {
     ticking = false
     return
   }
 
-  const activeLink = tocList.querySelector('a:target-current')
-  if (activeLink && activeLink !== lastLink) {
-    activeLink.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
-    lastLink = activeLink
+  if (visibleHeadings.size === 0) {
+    ticking = false
+    return
+  }
+
+  // Pick the topmost visible heading
+  const firstVisible = [...visibleHeadings].sort()[0]
+  const link = tocList.querySelector(`a[href="#${firstVisible}"]`) as HTMLAnchorElement | null
+
+  if (link && link.parentElement !== lastLink) {
+    link.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
+    lastLink = link.parentElement
   }
 
   ticking = false
 }
 
-// Throttle scroll events
 function handleScroll() {
   if (!ticking && is2xl.matches) {
     window.requestAnimationFrame(scrollToActiveLink)
     ticking = true
   }
+}
+
+function setupFallbackObserver() {
+  const headings = document.querySelectorAll('h2[id], h3[id], h4[id]')
+  if (headings.length === 0) {
+    return
+  }
+
+  fallbackObserver = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        visibleHeadings.add(entry.target.id)
+      }
+      else {
+        visibleHeadings.delete(entry.target.id)
+      }
+    })
+
+    if (!ticking && is2xl.matches) {
+      window.requestAnimationFrame(scrollToActiveLinkFallback)
+      ticking = true
+    }
+  }, {
+    rootMargin: '-80px 0px -60% 0px',
+    threshold: 0,
+  })
+
+  headings.forEach((h) => fallbackObserver?.observe(h))
 }
 
 // Initialize scroll listener
@@ -119,16 +157,24 @@ function setupAutoScroll() {
   lastLink = null
 
   const tocList = document.getElementById('toc-links-list')
-  if (!tocList || !CSS.supports('selector(:target-current)')) {
+  if (!tocList) {
     return
   }
 
-  document.addEventListener('scroll', handleScroll, { passive: true })
+  if (CSS.supports('selector(:target-current)')) {
+    document.addEventListener('scroll', handleScroll, { passive: true })
+  }
+  else {
+    setupFallbackObserver()
+  }
 }
 
 // Cleanup listener and reset state
 function cleanupAutoScroll() {
   document.removeEventListener('scroll', handleScroll)
+  fallbackObserver?.disconnect()
+  fallbackObserver = null
+  visibleHeadings.clear()
   lastLink = null
 }
 

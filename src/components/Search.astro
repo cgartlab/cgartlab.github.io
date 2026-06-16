@@ -632,12 +632,6 @@ const currentUI = ui[currentLang as keyof typeof ui] ?? {}
   }
 
   document.addEventListener('astro:page-load', init)
-
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init)
-  }
-  else {
-    init()
-  }
 })()
+
 </script>

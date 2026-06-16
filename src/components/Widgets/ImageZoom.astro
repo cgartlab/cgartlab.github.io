@@ -2,6 +2,7 @@
 let overlay: HTMLDivElement | null = null
 let zoomedImg: HTMLImageElement | null = null
 let originalImg: HTMLImageElement | null = null
+let transitionFallbackTimer: number | null = null
 
 // Setup overlay element
 function setupOverlay() {
@@ -17,6 +18,10 @@ function setupOverlay() {
 
 // Clean up zoom state
 function cleanupZoom() {
+  if (transitionFallbackTimer !== null) {
+    clearTimeout(transitionFallbackTimer)
+    transitionFallbackTimer = null
+  }
   overlay = null
   zoomedImg = null
   originalImg = null
@@ -103,8 +108,18 @@ function zoomOut() {
     originalImg = null
   }
 
-  // Listen for transition end to cleanup
-  zoomedImg.addEventListener('transitionend', cleanup, { once: true })
+  // Fallback: clear any pending fallback timeout from a previous zoomOut
+  if (transitionFallbackTimer !== null) {
+    clearTimeout(transitionFallbackTimer)
+  }
+
+  // Listen for transition end to cleanup (with 350ms fallback in case transitionend never fires)
+  const onEnd = () => cleanup()
+  zoomedImg.addEventListener('transitionend', onEnd, { once: true })
+  transitionFallbackTimer = window.setTimeout(() => {
+    transitionFallbackTimer = null
+    cleanup()
+  }, 350)
 }
 
 // Handle click events

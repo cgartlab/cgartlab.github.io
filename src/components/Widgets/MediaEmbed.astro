@@ -121,7 +121,16 @@ function handleGalleryWheel(e: WheelEvent) {
   e.preventDefault()
 }
 
-document.addEventListener('astro:page-load', setupMediaEmbeds)
+function setupMediaEmbedsAndListeners() {
+  setupMediaEmbeds()
+  document.addEventListener('wheel', handleGalleryWheel, { passive: false })
+}
+
+function cleanupMediaEmbedsAndListeners() {
+  document.removeEventListener('wheel', handleGalleryWheel)
+}
+
+document.addEventListener('astro:page-load', setupMediaEmbedsAndListeners)
+document.addEventListener('astro:before-swap', cleanupMediaEmbedsAndListeners)
 document.addEventListener('theme-changed', updateMermaidTheme)
-document.addEventListener('wheel', handleGalleryWheel, { passive: false })
 </script>
