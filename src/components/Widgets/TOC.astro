@@ -118,7 +118,7 @@ function scrollToActiveLinkFallback() {
 
 function handleScroll() {
   if (!ticking && is2xl.matches) {
-    window.requestAnimationFrame(scrollToActiveLink)
+    window.requestAnimationFrame(scrollToActiveLinkFallback)
     ticking = true
   }
 }
