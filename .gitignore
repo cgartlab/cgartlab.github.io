@@ -72,3 +72,5 @@ src/content/posts/*.base
 
 # Debug scripts with API tokens
 .omo/
+# Syncthing运行时文件
+.stignore-common
