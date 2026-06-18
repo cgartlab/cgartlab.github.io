@@ -1,5 +1,8 @@
 # CG艺术实验室
 
+[![CI](https://github.com/cgartlab/cgartlab.github.io/actions/workflows/ci.yml/badge.svg)](https://github.com/cgartlab/cgartlab.github.io/actions/workflows/ci.yml)
+[![Argus-Flash Review](https://github.com/cgartlab/cgartlab.github.io/actions/workflows/argus-review.yml/badge.svg)](https://github.com/cgartlab/cgartlab.github.io/actions/workflows/argus-review.yml)
+
 基于 Astro 6 + UnoCSS 66 构建的个人品牌网站，专注于数字艺术、动态视觉设计、技术分享与知识管理。部署于 Cloudflare Pages (Workers + Static Assets)。
 
 ## 技术栈
