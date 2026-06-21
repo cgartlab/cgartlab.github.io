@@ -214,6 +214,16 @@ function setupHeatmapInteractions() {
     cell.addEventListener('mouseleave', hideTooltip)
     cell.addEventListener('focus', showTooltip)
     cell.addEventListener('blur', hideTooltip)
+    // Touch: toggle tooltip on tap
+    cell.addEventListener('click', (e) => {
+      e.stopPropagation()
+      // Close any other open tooltip
+      document.querySelectorAll('.gh-tooltip--visible').forEach((t) => {
+        if (t !== tooltip)
+          t.classList.remove('gh-tooltip--visible')
+      })
+      tooltip.classList.toggle('gh-tooltip--visible')
+    })
   })
 
   // Keyboard navigation
@@ -283,6 +293,15 @@ function setupHeatmapInteractions() {
         break
     }
   })
+
+  // Dismiss when tapping outside
+  document.addEventListener('click', (e) => {
+    const target = e.target as HTMLElement
+    if (!target.closest('.gh-cell[data-date]')) {
+      document.querySelectorAll('.gh-tooltip--visible')
+        .forEach(t => t.classList.remove('gh-tooltip--visible'))
+    }
+  })
 }
 
 document.addEventListener('astro:page-load', setupHeatmapInteractions)
@@ -347,12 +366,17 @@ document.addEventListener('astro:page-load', setupHeatmapInteractions)
   -webkit-overflow-scrolling: touch;
   scrollbar-width: thin;
   padding-bottom: 4px;
+  /* Fix gotcha: overflow-x: auto causes other axis visible→auto, clipping row-0 tooltip */
+  /* Give tooltip vertical breathing room */
+  padding-top: 28px;
+  margin-top: -28px;
 }
 
 .gh-grid {
   display: flex;
   flex-direction: column;
   width: max-content;
+  padding-right: 16px;  /* Scroll end spacing hint */
 }
 
 /* Month labels */
@@ -488,6 +512,15 @@ html.dark .gh-cell--fourth_quartile {
   background-color: oklch(0.75 0.12 138 / 0.85);
 }
 
+/* Invisible touch-target expansion — only on touch devices */
+@media (hover: none) and (pointer: coarse) {
+  .gh-cell::after {
+    content: '';
+    position: absolute;
+    inset: -7px;  /* 10px visual → 24px hit area, centered */
+  }
+}
+
 /* ---- Tooltip ---- */
 .gh-tooltip {
   position: absolute;
@@ -514,6 +547,14 @@ html.dark .gh-cell--fourth_quartile {
 .gh-tooltip--visible {
   opacity: 1;
   visibility: visible;
+}
+
+/* Touch: tooltip above cell to avoid finger obstruction */
+@media (pointer: coarse) {
+  .gh-tooltip {
+    top: auto;
+    bottom: calc(100% + 6px);
+  }
 }
 
 /* Dark theme tooltip */
