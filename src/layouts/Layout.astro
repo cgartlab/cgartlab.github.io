@@ -1,6 +1,7 @@
 ---
 import type { Language } from '@/i18n/config'
 import Button from '@/components/Button.astro'
+import ConsentBanner from '@/components/ConsentBanner.astro'
 import Footer from '@/components/Footer.astro'
 import Header from '@/components/Header.astro'
 import Navbar from '@/components/Navbar.astro'
@@ -8,8 +9,8 @@ import Search from '@/components/Search.astro'
 import CodeCopyButton from '@/components/Widgets/CodeCopyButton.astro'
 import GithubCard from '@/components/Widgets/GithubCard.astro'
 import ImageZoom from '@/components/Widgets/ImageZoom.astro'
-import MediaEmbed from '@/components/Widgets/MediaEmbed.astro'
 import MermaidLazy from '@/components/Widgets/MermaidLazy.astro'
+import MediaEmbed from '@/components/Widgets/MediaEmbed.astro'
 import SoundEffect from '@/components/Widgets/SoundEffect.astro'
 import { themeConfig } from '@/config'
 import Head from '@/layouts/Head.astro'
@@ -61,6 +62,7 @@ const MarginBottom = isPost && themeConfig.comment.enabled
       <Footer />
     </div>
     <SoundEffect />
+    <ConsentBanner />
     <CodeCopyButton />
     <GithubCard />
     <MermaidLazy />

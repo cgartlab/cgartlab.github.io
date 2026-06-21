@@ -1,106 +1,224 @@
 ---
+import { ui } from '@/i18n/ui'
+import { getPageInfo } from '@/utils/page'
+
+const { currentLang } = getPageInfo(Astro.url.pathname)
+const currentUI = ui[currentLang as keyof typeof ui] ?? {}
 ---
 
-<div id="consent-banner" class="consent-banner" role="dialog" aria-label="Cookie Consent" aria-hidden="true">
-  <div class="consent-content">
-    <h2 class="consent-title">Cookie Consent</h2>
-    <p class="consent-description">We use cookies to analyze site traffic and improve your experience.</p>
-    <div class="consent-buttons">
-      <button id="consent-reject" class="consent-btn consent-btn-reject">
-        Reject All
-      </button>
-      <button id="consent-functional" class="consent-btn consent-btn-functional">
-        Functional Only
-      </button>
-      <button id="consent-accept" class="consent-btn consent-btn-accept">
-        Accept All
-      </button>
+<!--
+  consent-banner-overlay: fixed full-screen wrapper, handles backdrop + centering
+  consent-backdrop:      click-to-dismiss semi-transparent backdrop with blur
+  consent-container:     flex centering container
+  consent-card:          the actual modal card with frosted glass, animation
+-->
+<div id="consent-banner" class="consent-banner" role="dialog" aria-modal="true" aria-label={currentUI.consentTitle || 'Cookie Consent'} aria-describedby="consent-description" aria-hidden="true">
+  <div class="consent-backdrop" id="consent-backdrop"></div>
+  <div class="consent-container">
+    <div class="consent-card">
+<h2 class="consent-title">{currentUI.consentTitle || 'Cookie Consent'}</h2>
+       <p id="consent-description" class="consent-description">{currentUI.consentDescription || 'We use cookies to analyze site traffic and improve your experience. Your data is only collected with your explicit consent.'}</p>
+       <div class="consent-buttons">
+         <button id="consent-reject" class="consent-btn consent-btn-reject">
+           {currentUI.consentReject || 'Reject All'}
+         </button>
+         <button id="consent-functional" class="consent-btn consent-btn-functional">
+           {currentUI.consentFunctional || 'Functional Only'}
+         </button>
+         <button id="consent-accept" class="consent-btn consent-btn-accept">
+           {currentUI.consentAccept || 'Accept All'}
+         </button>
+       </div>
     </div>
   </div>
 </div>
 
 <style>
+  /* ── overlay wrapper ─────────────────────────────── */
   .consent-banner {
     position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
+    inset: 0;
     z-index: 9000;
-    background: #ffffff;
-    border-top: 1px solid #e5e5e5;
-    padding: 1rem 1.5rem;
-    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.1);
-    transform: translateY(100%);
-    transition: transform 0.3s ease;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.35s ease-out, visibility 0.35s ease-out;
   }
 
   .consent-banner.visible {
-    transform: translateY(0);
+    visibility: visible;
+    opacity: 1;
   }
 
-  .consent-content {
-    max-width: 42rem;
-    margin: 0 auto;
+  /* ── backdrop ─────────────────────────────────────── */
+  .consent-backdrop {
+    position: absolute;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.35);
+    backdrop-filter: blur(6px) saturate(120%);
+    -webkit-backdrop-filter: blur(6px) saturate(120%);
+  }
+
+  /* ── flex centering container ─────────────────────── */
+  .consent-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    padding: 1.5rem;
+  }
+
+  /* ── modal card ───────────────────────────────────── */
+  .consent-card {
+    width: 100%;
+    max-width: 28rem;
+    padding: 2rem 2rem 1.75rem;
+    border-radius: 1.25rem;
     text-align: center;
+
+    /* frosted glass – light */
+    background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.82) 0%,
+      rgba(255, 255, 250, 0.68) 60%,
+      rgba(255, 255, 245, 0.58) 100%
+    );
+    backdrop-filter: blur(32px) saturate(180%);
+    -webkit-backdrop-filter: blur(32px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+
+    box-shadow:
+      0 24px 64px rgba(0, 0, 0, 0.12),
+      0 8px 24px rgba(0, 0, 0, 0.06),
+      inset 0 1px 0 rgba(255, 255, 255, 0.7);
+
+    transform: scale(0.92);
+    opacity: 0;
+    transition:
+      transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1),
+      opacity 0.35s ease-out;
   }
 
+  .consent-banner.visible .consent-card {
+    transform: scale(1);
+    opacity: 1;
+  }
+
+  /* ── typography ───────────────────────────────────── */
   .consent-title {
-    font-size: 1rem;
-    font-weight: 600;
-    margin-bottom: 0.5rem;
-    color: #333333;
+    font-size: 1.125rem;
+    font-weight: 700;
+    margin-bottom: 0.625rem;
+    letter-spacing: 0.01em;
+    color: var(--un-preset-theme-colors-primary);
   }
 
   .consent-description {
     font-size: 0.875rem;
-    color: #666666;
-    margin-bottom: 1rem;
-    line-height: 1.5;
+    color: oklch(var(--un-preset-theme-colors-secondary) / 0.75);
+    margin-bottom: 1.25rem;
+    line-height: 1.6;
+    max-width: 24rem;
+    margin-inline: auto;
   }
 
+  /* ── buttons ──────────────────────────────────────── */
   .consent-buttons {
     display: flex;
+    flex-direction: column;
     gap: 0.5rem;
-    justify-content: center;
-    flex-wrap: wrap;
   }
 
   .consent-btn {
-    padding: 0.5rem 1rem;
-    border-radius: 0.375rem;
+    width: 100%;
+    padding: 0.625rem 1rem;
+    border-radius: 0.625rem;
     font-size: 0.875rem;
-    font-weight: 500;
+    font-weight: 600;
     cursor: pointer;
-    transition: opacity 0.2s, transform 0.1s;
-    border: 1px solid #e5e5e5;
-  }
-
-  .consent-btn:hover {
-    opacity: 0.9;
+    transition:
+      background-color 0.2s ease,
+      color 0.2s ease,
+      transform 0.12s ease,
+      box-shadow 0.2s ease;
+    border: 1px solid transparent;
+    letter-spacing: 0.01em;
   }
 
   .consent-btn:active {
-    transform: scale(0.98);
+    transform: scale(0.97);
   }
 
+  /* Reject – ghost */
   .consent-btn-reject {
     background: transparent;
-    color: #666666;
+    color: oklch(var(--un-preset-theme-colors-secondary) / 0.55);
+    border-color: oklch(var(--un-preset-theme-colors-secondary) / 0.15);
   }
 
+  .consent-btn-reject:hover {
+    background: color-mix(in srgb, var(--un-preset-theme-colors-secondary) 6%, transparent);
+    color: oklch(var(--un-preset-theme-colors-secondary) / 0.85);
+  }
+
+  /* Functional – outlined */
   .consent-btn-functional {
-    background: #e5e5e5;
-    color: #333333;
+    background: color-mix(in srgb, var(--un-preset-theme-colors-secondary) 8%, transparent);
+    color: var(--un-preset-theme-colors-secondary);
+    border-color: oklch(var(--un-preset-theme-colors-secondary) / 0.2);
   }
 
+  .consent-btn-functional:hover {
+    background: oklch(var(--un-preset-theme-colors-secondary) / 0.15);
+  }
+
+  /* Accept – filled primary */
   .consent-btn-accept {
-    background: #007bff;
-    color: #ffffff;
+    background: var(--un-preset-theme-colors-primary);
+    color: var(--un-preset-theme-colors-background);
+    border-color: var(--un-preset-theme-colors-primary);
+    box-shadow: 0 2px 8px color-mix(in srgb, var(--un-preset-theme-colors-primary) 20%, transparent);
   }
 
-  .consent-banner:focus-within {
-    outline: 2px solid #007bff;
+  .consent-btn-accept:hover {
+    background: color-mix(in srgb, var(--un-preset-theme-colors-primary) 70%, var(--un-preset-theme-colors-background));
+    box-shadow: 0 4px 14px color-mix(in srgb, var(--un-preset-theme-colors-primary) 30%, transparent);
+  }
+
+  /* ── focus indicator ──────────────────────────────── */
+  .consent-btn:focus-visible {
+    outline: 2px solid oklch(var(--un-preset-theme-colors-highlight) / 0.6);
     outline-offset: 2px;
+  }
+
+  /* ── reduced motion ────────────────────────────────── */
+  @media (prefers-reduced-motion: reduce) {
+    .consent-banner,
+    .consent-banner *,
+    .consent-banner.visible .consent-card {
+      transition-duration: 0.01ms !important;
+      animation-duration: 0.01ms !important;
+    }
+  }
+
+  /* ── mobile tweaks ────────────────────────────────── */
+  @media (max-width: 640px) {
+    .consent-container {
+      padding: 1rem;
+    }
+
+    .consent-card {
+      padding: 1.5rem 1.25rem 1.5rem;
+      border-radius: 1rem;
+    }
+
+    .consent-title {
+      font-size: 1rem;
+    }
+
+    .consent-description {
+      font-size: 0.8125rem;
+    }
   }
 </style>
 
@@ -109,10 +227,17 @@
   var STORAGE_KEY = 'consent-preference'
   var banner = document.getElementById('consent-banner')
 
+  /** Manage body scroll lock while modal is open */
+  function lockBodyScroll(lock) {
+    document.body.classList.toggle('scroll-lock', lock)
+  }
+
   function showBanner() {
     if (banner) {
       banner.classList.add('visible')
       banner.setAttribute('aria-hidden', 'false')
+      lockBodyScroll(true)
+      trapFocus(banner)
     }
   }
 
@@ -120,6 +245,8 @@
     if (banner) {
       banner.classList.remove('visible')
       banner.setAttribute('aria-hidden', 'true')
+      lockBodyScroll(false)
+      releaseFocus()
     }
   }
 
@@ -127,7 +254,9 @@
     try {
       localStorage.setItem(STORAGE_KEY, pref)
     }
-    catch {}
+    catch (e) {
+      /* localStorage may throw in private browsing / storage-quota contexts */
+    }
     hideBanner()
     if (pref === 'accepted') {
       window.__CONSENT_STATUS = 'accepted'
@@ -140,6 +269,73 @@
     }
   }
 
+  /* ── Focus trap ───────────────────────────────────── */
+  var previousActiveElement = null
+
+  function trapFocus(container) {
+    if (!container) return
+    previousActiveElement = document.activeElement
+
+    var focusable = container.querySelectorAll(
+      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+    )
+    var first = focusable[0]
+    var last  = focusable[focusable.length - 1]
+
+    if (first) first.focus()
+
+    function handler(e) {
+      if (e.key !== 'Tab') return
+      var current = document.activeElement
+      if (e.shiftKey) {
+        if (current === first) {
+          e.preventDefault()
+          if (last) last.focus()
+        }
+      }
+      else {
+        if (current === last) {
+          e.preventDefault()
+          if (first) first.focus()
+        }
+      }
+    }
+
+    container._focusTrapHandler = handler
+    document.addEventListener('keydown', handler)
+  }
+
+  function releaseFocus() {
+    if (banner && banner._focusTrapHandler) {
+      document.removeEventListener('keydown', banner._focusTrapHandler)
+      delete banner._focusTrapHandler
+    }
+    if (previousActiveElement && previousActiveElement.focus) {
+      previousActiveElement.focus()
+      previousActiveElement = null
+    }
+  }
+
+  /* ── backdrop click dismiss (reject is the safe fallback) ── */
+  function setupBackdropDismiss() {
+    var backdrop = document.getElementById('consent-backdrop')
+    if (backdrop) {
+      backdrop.addEventListener('click', function () {
+        setPreference('rejected')
+      })
+    }
+  }
+
+  /* ── keyboard: Escape → reject ────────────────────── */
+  function setupKeyboardDismiss() {
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && banner && banner.classList.contains('visible')) {
+        setPreference('rejected')
+      }
+    })
+  }
+
+  /* ── init ──────────────────────────────────────────── */
   function init() {
     var pref
     try {
@@ -162,16 +358,19 @@
       window.__CONSENT_STATUS = 'rejected'
     }
 
-    var rejectBtn = document.getElementById('consent-reject')
+    var rejectBtn     = document.getElementById('consent-reject')
     var functionalBtn = document.getElementById('consent-functional')
-    var acceptBtn = document.getElementById('consent-accept')
+    var acceptBtn     = document.getElementById('consent-accept')
 
     if (rejectBtn)
-      rejectBtn.addEventListener('click', function() { setPreference('rejected') })
+      rejectBtn.addEventListener('click', function () { setPreference('rejected') })
     if (functionalBtn)
-      functionalBtn.addEventListener('click', function() { setPreference('functional') })
+      functionalBtn.addEventListener('click', function () { setPreference('functional') })
     if (acceptBtn)
-      acceptBtn.addEventListener('click', function() { setPreference('accepted') })
+      acceptBtn.addEventListener('click', function () { setPreference('accepted') })
+
+    setupBackdropDismiss()
+    setupKeyboardDismiss()
   }
 
   init()
