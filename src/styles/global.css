@@ -36,6 +36,11 @@ img {
   height: auto;
 }
 
+/* Body scroll lock for modals */
+.scroll-lock {
+  overflow: hidden;
+}
+
 /* Fix Flash Issue On iOS */
 body {
   backface-visibility: hidden;
