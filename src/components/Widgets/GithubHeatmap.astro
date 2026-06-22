@@ -63,8 +63,7 @@ return
     const month = date.getMonth()
 
     if (month !== lastMonth) {
-      const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-      labels.push({ month: monthNames[month], weekIndex })
+      labels.push({ month: monthFormatter.format(new Date(2024, month, 1)), weekIndex })
       lastMonth = month
     }
   })
@@ -76,15 +75,26 @@ const contributions = data.contributions
 const monthLabels = contributions.length > 0 ? getMonthLabels(contributions) : []
 const totalFormatted = data.total.toLocaleString()
 
+// Tooltip count label helper
+function formatTooltipCount(count: number): string {
+  const label = currentUI.contributionCount || 'contribution'
+  if (currentLang === 'en')
+    return count === 1 ? `1 ${label}` : `${count} ${label}s`
+  return `${count} ${label}`
+}
+
 // SSR-friendly date format function
 function formatDateStr(dateStr: string): string {
   const date = new Date(`${dateStr}T00:00:00`)
-  return date.toLocaleDateString('en-US', {
+  return date.toLocaleDateString(currentLang, {
     month: 'short',
     day: 'numeric',
     year: 'numeric',
   })
 }
+
+const monthFormatter = new Intl.DateTimeFormat(currentLang, { month: 'short' })
+const dayFormatter = new Intl.DateTimeFormat(currentLang, { weekday: 'short' })
 
 const levelClassMap: Record<string, string> = {
   NONE: 'gh-cell--none',
@@ -95,7 +105,10 @@ const levelClassMap: Record<string, string> = {
 }
 
 const dayIndices = [0, 1, 2, 3, 4, 5, 6]
-const dayLabelMap: Record<number, string> = { 0: 'Sun', 6: 'Sat' }
+const dayLabelMap: Record<number, string> = {
+  0: dayFormatter.format(new Date(2024, 0, 7)),
+  6: dayFormatter.format(new Date(2024, 0, 6)),
+}
 
 // Cell pitch: 10px cell + 2px gap = 12px per column
 const CELL_PITCH = 12
@@ -108,7 +121,7 @@ const CELL_PITCH = 12
       <div class="gh-header">
         <h2 class="gh-title font-serif">{currentUI.contributionTitle || 'GitHub Contributions'}</h2>
       </div>
-      <p class="gh-error-msg">Contribution data unavailable</p>
+      <p class="gh-error-msg">{currentUI.contributionUnavailable || 'Contribution data unavailable'}</p>
     </div>
   )
 : (
@@ -162,7 +175,7 @@ const CELL_PITCH = 12
                           aria-describedby={tooltipId}
                         >
                           <span class="gh-tooltip" role="tooltip" id={tooltipId}>
-                            {formatDateStr(cell.date)} — {cell.contributionCount} contribution{cell.contributionCount !== 1 ? 's' : ''}
+                            {formatDateStr(cell.date)} — {formatTooltipCount(cell.contributionCount)}
                           </span>
                         </span>
                       )
@@ -177,7 +190,7 @@ const CELL_PITCH = 12
 
       <div class="gh-footer">
         <span class="gh-total">
-          {totalFormatted} contributions in the last year
+          {totalFormatted} {currentUI.contributionYear || 'contributions in the last year'}
         </span>
       </div>
     </div>
@@ -388,7 +401,6 @@ document.addEventListener('astro:page-load', () => {
 /* Base */
 .gh-heatmap {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-  user-select: none;
   width: 100%;
 }
 
@@ -444,6 +456,7 @@ document.addEventListener('astro:page-load', () => {
   display: flex;
   flex-direction: column;
   width: max-content;
+  user-select: none;
 }
 
 /* Month labels */
@@ -452,7 +465,7 @@ document.addEventListener('astro:page-load', () => {
   position: relative;
   height: 16px;
   margin-bottom: 4px;
-  margin-left: 28px;
+  margin-left: var(--gh-day-label-width);
 }
 
 .gh-month-label {
@@ -483,7 +496,7 @@ document.addEventListener('astro:page-load', () => {
 }
 
 .gh-day-label {
-  width: 28px;
+  width: var(--gh-day-label-width);
   font-size: 0.625rem;
   color: var(--un-preset-theme-colors-secondary);
   opacity: 0.55;
@@ -528,6 +541,7 @@ document.addEventListener('astro:page-load', () => {
   --gh-cell-2: oklch(0.75 0.12 138 / 0.50);
   --gh-cell-3: oklch(0.75 0.12 138 / 0.70);
   --gh-cell-4: oklch(0.75 0.12 138 / 0.95);
+  --gh-day-label-width: 28px;
 }
 
 html.dark {
