@@ -208,9 +208,17 @@ function scrollHeatmapToLatest() {
   const wrapper = document.querySelector<HTMLElement>('.gh-grid-wrapper')
   if (!wrapper)
     return
-  // 无条件滚动到最右侧；如果内容未溢出视口，scrollLeft=max 不会产生副作用
+  // 滚动到 grid 右边缘对齐内容区右边界
   requestAnimationFrame(() => {
-    wrapper.scrollLeft = wrapper.scrollWidth - wrapper.clientWidth
+    const wrapperRect = wrapper.getBoundingClientRect()
+    const leftOffset = wrapperRect.left
+    const contentRight = window.innerWidth
+    const visibleWidth = wrapper.clientWidth
+    // 目标：grid 右边缘 = 内容区右边界
+    // scrollLeft + visibleWidth = contentRight - leftOffset
+    // scrollLeft = contentRight - leftOffset - visibleWidth
+    const targetScrollLeft = Math.max(0, contentRight - leftOffset - visibleWidth)
+    wrapper.scrollLeft = targetScrollLeft
   })
 }
 
