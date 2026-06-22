@@ -3,8 +3,8 @@
 // Fetches data at build time from github-contributions-api
 // Displays a contribution grid similar to GitHub's profile heatmap
 
-import { getPageInfo } from '@/utils/page'
 import { ui } from '@/i18n/ui'
+import { getPageInfo } from '@/utils/page'
 
 interface Props {
   class?: string
@@ -12,7 +12,7 @@ interface Props {
 
 const { class: className = '' } = Astro.props
 const { currentLang } = getPageInfo(Astro.url.pathname)
-const currentUI = ui[currentLang as keyof typeof ui] ?? ui['zh']
+const currentUI = ui[currentLang as keyof typeof ui] ?? ui.zh
 
 interface ContributionCell {
   color: string
@@ -334,33 +334,49 @@ function setupHeatmapInteractions() {
     }
   })
 
-  // On flexible layouts (≥768px), recalculate month label positions
-  // to align with actual cell positions
+  // Recalculate month label positions to align with actual cell positions.
+  // Runs for all widths ≥480px (below that, month labels are hidden via CSS).
+  // Uses getBoundingClientRect() for pixel-accurate alignment regardless of
+  // margin-left values, scroll position, or offsetParent chain differences.
   function alignMonthLabels() {
-    if (window.innerWidth < 768) return
+    // Below 480px month labels are hidden via CSS — nothing to align
+    if (window.innerWidth < 480)
+      return
 
     const labels = document.querySelectorAll<HTMLElement>('.gh-month-label')
-    if (!labels.length) return
+    if (!labels.length)
+      return
+
+    const monthsContainer = document.querySelector<HTMLElement>('.gh-months')
+    if (!monthsContainer)
+      return
 
     const firstRow = document.querySelector<HTMLElement>('.gh-row')
-    if (!firstRow) return
+    if (!firstRow)
+      return
 
     const cellsContainer = firstRow.querySelector<HTMLElement>('.gh-cells')
-    if (!cellsContainer) return
+    if (!cellsContainer)
+      return
 
     const cells = [...cellsContainer.querySelectorAll<HTMLElement>('.gh-cell')]
-    if (!cells.length) return
+    if (!cells.length)
+      return
+
+    // monthsLeft: left edge of the .gh-months container in viewport coords.
+    // cellLeft: left edge of the target cell in viewport coords.
+    // Their difference is the correct `left` value for position:absolute labels
+    // inside .gh-months, scroll-independent because both elements move together
+    // inside the same scroll container.
+    const monthsLeft = monthsContainer.getBoundingClientRect().left
 
     labels.forEach((label) => {
-      const oldLeft = Number.parseInt(label.style.left, 10) || 0
-      const weekIndex = Math.round(oldLeft / CELL_PITCH)
+      const ssrLeft = Number.parseInt(label.style.left, 10) || 0
+      const weekIndex = Math.round(ssrLeft / CELL_PITCH)
       const cell = cells[weekIndex]
       if (cell) {
-        // cell.offsetLeft is relative to .gh-row
-        // cellsContainer.offsetLeft gives the start of cells within .gh-row
-        // The difference gives the cell's position within the cells area,
-        // matching .gh-months coordinate space
-        label.style.left = `${cell.offsetLeft - cellsContainer.offsetLeft}px`
+        const cellLeft = cell.getBoundingClientRect().left
+        label.style.left = `${cellLeft - monthsLeft}px`
       }
     })
   }
@@ -381,7 +397,8 @@ function scrollHeatmapToLatest() {
   if (window.innerWidth >= 1025)
     return
   const wrapper = document.querySelector<HTMLElement>('.gh-grid-wrapper')
-  if (!wrapper) return
+  if (!wrapper)
+    return
 
   requestAnimationFrame(() => {
     wrapper.scrollLeft = wrapper.scrollWidth - wrapper.clientWidth
@@ -391,44 +408,6 @@ function scrollHeatmapToLatest() {
 document.addEventListener('astro:page-load', () => {
   scrollHeatmapToLatest()
   setupHeatmapInteractions()
-
-  // Diagnostic: log heatmap dimensions to console
-  requestAnimationFrame(() => {
-    const wrapper = document.querySelector<HTMLElement>('.gh-grid-wrapper')
-    const grid = document.querySelector<HTMLElement>('.gh-grid')
-    const months = grid?.querySelector<HTMLElement>('.gh-months')
-    const rows = grid?.querySelector<HTMLElement>('.gh-rows')
-    const firstRow = rows?.querySelector<HTMLElement>('.gh-row')
-    const cells = firstRow?.querySelector<HTMLElement>('.gh-cells')
-
-    if (wrapper && grid) {
-      const lastCellEl = cells?.querySelector<HTMLElement>('.gh-cell:last-child')
-      const cellCount = cells?.querySelectorAll('.gh-cell').length || 0
-      const gridRect = grid.getBoundingClientRect()
-      const wrapRect = wrapper.getBoundingClientRect()
-      const lastCellRect = lastCellEl?.getBoundingClientRect()
-
-      console.log('=== Heatmap DIAGNOSTIC ===')
-      console.log('Viewport:', window.innerWidth, 'x', window.innerHeight)
-      console.log('Grid columns:', cellCount)
-      console.log('Grid width:', grid.offsetWidth, 'scrollWidth:', grid.scrollWidth)
-      console.log('Grid rect:', gridRect.left, '→', gridRect.right)
-      console.log('Wrapper: offsetW=', wrapper.offsetWidth, 'clientW=', wrapper.clientWidth, 'scrollW=', wrapper.scrollWidth, 'scrollL=', wrapper.scrollLeft)
-      console.log('Wrapper rect:', wrapRect.left, '→', wrapRect.right)
-      if (lastCellEl) {
-        if (lastCellRect) {
-        console.log('Last cell rect:', lastCellRect.left, '→', lastCellRect.right)
-        console.log('Gap (wrapper.right - lastCell.right):', (wrapRect.right - lastCellRect.right).toFixed(2))
-      }
-      }
-      console.log('Scrollbar estimate:', wrapper.offsetWidth - wrapper.clientWidth)
-      if (months) console.log('Months offsetWidth:', months.offsetWidth, 'marginLeft:', getComputedStyle(months).marginLeft)
-      if (rows) console.log('Rows offsetWidth:', rows.offsetWidth)
-      console.log('Grid marginLeft:', getComputedStyle(grid).marginLeft)
-      console.log('Grid overflowX:', getComputedStyle(wrapper).overflowX)
-      console.log('========================')
-    }
-  })
 })
 </script>
 
@@ -491,6 +470,13 @@ document.addEventListener('astro:page-load', () => {
   overflow-y: hidden;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: thin;
+  /* thumb / track — matches the site's warm-neutral palette in light mode */
+  scrollbar-color: oklch(65% 0.004 85 / 0.30) transparent;
+}
+
+html.dark .gh-grid-wrapper {
+  /* slightly more opaque thumb so it stays legible on dark backgrounds */
+  scrollbar-color: oklch(55% 0.003 298 / 0.40) transparent;
 }
 
 .gh-grid {
@@ -662,7 +648,9 @@ html.dark {
 /* Tablet Portrait: 480px–767px */
 @media (max-width: 767px) {
   .gh-row:last-child .gh-day-label { display: none; }
-  .gh-months { margin-left: 0; }
+  /* .gh-months keeps margin-left: var(--gh-day-label-width) so SSR offsets stay
+     in the same coordinate space as cells; alignMonthLabels() will fine-tune via
+     getBoundingClientRect() for pixel-perfect alignment. */
   .gh-header { flex-wrap: nowrap; }
 }
 
