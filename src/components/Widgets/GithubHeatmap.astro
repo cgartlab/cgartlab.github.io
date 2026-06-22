@@ -49,6 +49,10 @@ catch (e) {
   fetchError = true
 }
 
+// Date formatters (must be before getMonthLabels which uses them)
+const monthFormatter = new Intl.DateTimeFormat(currentLang, { month: 'short' })
+const dayFormatter = new Intl.DateTimeFormat(currentLang, { weekday: 'short' })
+
 // Determine month labels based on actual dates in contributions
 function getMonthLabels(contributions: ContributionCell[][]): { month: string, weekIndex: number }[] {
   const labels: { month: string, weekIndex: number }[] = []
@@ -92,9 +96,6 @@ function formatDateStr(dateStr: string): string {
     year: 'numeric',
   })
 }
-
-const monthFormatter = new Intl.DateTimeFormat(currentLang, { month: 'short' })
-const dayFormatter = new Intl.DateTimeFormat(currentLang, { weekday: 'short' })
 
 const levelClassMap: Record<string, string> = {
   NONE: 'gh-cell--none',
