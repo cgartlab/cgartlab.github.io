@@ -88,10 +88,10 @@ function formatDateStr(dateStr: string): string {
 
 const levelClassMap: Record<string, string> = {
   NONE: 'gh-cell--none',
-  FIRST_QUARTILE: 'gh-cell--first_quartile',
-  SECOND_QUARTILE: 'gh-cell--second_quartile',
-  THIRD_QUARTILE: 'gh-cell--third_quartile',
-  FOURTH_QUARTILE: 'gh-cell--fourth_quartile',
+  FIRST_QUARTILE: 'gh-cell--first-quartile',
+  SECOND_QUARTILE: 'gh-cell--second-quartile',
+  THIRD_QUARTILE: 'gh-cell--third-quartile',
+  FOURTH_QUARTILE: 'gh-cell--fourth-quartile',
 }
 
 const dayIndices = [0, 1, 2, 3, 4, 5, 6]
@@ -118,10 +118,10 @@ const CELL_PITCH = 12
         <div class="gh-legend">
           <span class="gh-legend-label">{currentUI.contributionLess || 'Less'}</span>
           <span class="gh-cell gh-cell--none" aria-hidden="true"></span>
-          <span class="gh-cell gh-cell--first_quartile" aria-hidden="true"></span>
-          <span class="gh-cell gh-cell--second_quartile" aria-hidden="true"></span>
-          <span class="gh-cell gh-cell--third_quartile" aria-hidden="true"></span>
-          <span class="gh-cell gh-cell--fourth_quartile" aria-hidden="true"></span>
+          <span class="gh-cell gh-cell--first-quartile" aria-hidden="true"></span>
+          <span class="gh-cell gh-cell--second-quartile" aria-hidden="true"></span>
+          <span class="gh-cell gh-cell--third-quartile" aria-hidden="true"></span>
+          <span class="gh-cell gh-cell--fourth-quartile" aria-hidden="true"></span>
           <span class="gh-legend-label">{currentUI.contributionMore || 'More'}</span>
         </div>
       </div>
@@ -521,19 +521,29 @@ document.addEventListener('astro:page-load', () => {
   box-shadow: 0 0 0 2px var(--un-preset-theme-colors-primary);
 }
 
-/* Cell colors — light */
-.gh-cell--none { background-color: oklch(91% 0.012 85); }
-.gh-cell--first_quartile { background-color: oklch(0.75 0.12 138 / 0.30); }
-.gh-cell--second_quartile { background-color: oklch(0.75 0.12 138 / 0.50); }
-.gh-cell--third_quartile { background-color: oklch(0.75 0.12 138 / 0.70); }
-.gh-cell--fourth_quartile { background-color: oklch(0.75 0.12 138 / 0.95); }
+/* Cell color tokens */
+:root {
+  --gh-cell-0: oklch(91% 0.012 85);
+  --gh-cell-1: oklch(0.75 0.12 138 / 0.30);
+  --gh-cell-2: oklch(0.75 0.12 138 / 0.50);
+  --gh-cell-3: oklch(0.75 0.12 138 / 0.70);
+  --gh-cell-4: oklch(0.75 0.12 138 / 0.95);
+}
 
-/* Cell colors — dark */
-html.dark .gh-cell--none { background-color: oklch(28% 0.003 298); }
-html.dark .gh-cell--first_quartile { background-color: oklch(0.75 0.12 138 / 0.20); }
-html.dark .gh-cell--second_quartile { background-color: oklch(0.75 0.12 138 / 0.40); }
-html.dark .gh-cell--third_quartile { background-color: oklch(0.75 0.12 138 / 0.60); }
-html.dark .gh-cell--fourth_quartile { background-color: oklch(0.75 0.12 138 / 0.85); }
+html.dark {
+  --gh-cell-0: oklch(28% 0.003 298);
+  --gh-cell-1: oklch(0.75 0.12 138 / 0.20);
+  --gh-cell-2: oklch(0.75 0.12 138 / 0.40);
+  --gh-cell-3: oklch(0.75 0.12 138 / 0.60);
+  --gh-cell-4: oklch(0.75 0.12 138 / 0.85);
+}
+
+/* Cell color application */
+.gh-cell--none { background-color: var(--gh-cell-0); }
+.gh-cell--first-quartile { background-color: var(--gh-cell-1); }
+.gh-cell--second-quartile { background-color: var(--gh-cell-2); }
+.gh-cell--third-quartile { background-color: var(--gh-cell-3); }
+.gh-cell--fourth-quartile { background-color: var(--gh-cell-4); }
 
 /* Touch targets */
 @media (hover: none) and (pointer: coarse) {
