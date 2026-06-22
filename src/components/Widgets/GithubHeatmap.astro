@@ -96,6 +96,9 @@ const levelClassMap: Record<string, string> = {
 
 const dayIndices = [0, 1, 2, 3, 4, 5, 6]
 const dayLabelMap: Record<number, string> = { 0: 'Sun', 6: 'Sat' }
+
+// Cell pitch: 10px cell + 2px gap = 12px per column
+const CELL_PITCH = 12
 ---
 
 {
@@ -129,7 +132,7 @@ const dayLabelMap: Record<number, string> = { 0: 'Sun', 6: 'Sat' }
           <div class="gh-months" aria-hidden="true">
             <div class="gh-day-labels-placeholder"></div>
             {monthLabels.map(({ month, weekIndex }) => {
-              const offset = weekIndex * 12
+              const offset = weekIndex * CELL_PITCH
               return <div class="gh-month-label" style={`left: ${offset}px`}>{month}</div>
             })}
           </div>
@@ -182,6 +185,9 @@ const dayLabelMap: Record<number, string> = { 0: 'Sun', 6: 'Sat' }
 }
 
 <script>
+// Cell pitch: 10px cell + 2px gap = 12px per column (must match SSR constant)
+const CELL_PITCH = 12
+
 // 默认显示最新日期（右侧）
 function scrollHeatmapToLatest() {
   const wrapper = document.querySelector<HTMLElement>('.gh-grid-wrapper')
@@ -192,8 +198,6 @@ function scrollHeatmapToLatest() {
     wrapper.scrollLeft = wrapper.scrollWidth - wrapper.clientWidth
   })
 }
-
-document.addEventListener('astro:page-load', scrollHeatmapToLatest)
 
 function setupHeatmapInteractions() {
   const cells = document.querySelectorAll<HTMLElement>('.gh-cell[data-date]')
@@ -346,7 +350,7 @@ function setupHeatmapInteractions() {
 
     labels.forEach((label) => {
       const oldLeft = Number.parseInt(label.style.left, 10) || 0
-      const weekIndex = Math.round(oldLeft / 12)
+      const weekIndex = Math.round(oldLeft / CELL_PITCH)
       const cell = cells[weekIndex]
       if (cell) {
         // cell.offsetLeft is relative to .gh-row
@@ -368,7 +372,10 @@ function setupHeatmapInteractions() {
   })
 }
 
-document.addEventListener('astro:page-load', setupHeatmapInteractions)
+document.addEventListener('astro:page-load', () => {
+  scrollHeatmapToLatest()
+  setupHeatmapInteractions()
+})
 </script>
 
 <style is:global>
@@ -494,6 +501,7 @@ document.addEventListener('astro:page-load', setupHeatmapInteractions)
 
 .gh-cell {
   display: block;
+  position: relative;
   width: 10px;
   height: 10px;
   border-radius: 2px;
@@ -553,8 +561,8 @@ html.dark .gh-cell--fourth_quartile { background-color: oklch(0.75 0.12 138 / 0.
   transition: opacity 0.15s ease-out, visibility 0.15s ease-out;
   z-index: 100;
   line-height: 1.4;
-  background-color: oklch(25% 0.005 298);
-  color: oklch(98% 0.012 85);
+  background-color: var(--un-preset-theme-colors-primary);
+  color: var(--un-preset-theme-colors-background);
 }
 
 .gh-tooltip--visible {
@@ -567,11 +575,6 @@ html.dark .gh-cell--fourth_quartile { background-color: oklch(0.75 0.12 138 / 0.
     top: auto;
     bottom: calc(100% + 6px);
   }
-}
-
-html.dark .gh-tooltip {
-  background-color: oklch(92% 0.005 298);
-  color: oklch(22% 0.005 298);
 }
 
 /* Footer */
