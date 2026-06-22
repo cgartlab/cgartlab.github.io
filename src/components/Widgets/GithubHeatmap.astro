@@ -190,6 +190,8 @@ const CELL_PITCH = 12
 
 // 默认显示最新日期（右侧）
 function scrollHeatmapToLatest() {
+  if (window.innerWidth >= 480)
+    return
   const wrapper = document.querySelector<HTMLElement>('.gh-grid-wrapper')
   if (!wrapper)
     return
@@ -434,10 +436,8 @@ document.addEventListener('astro:page-load', () => {
 
 /* Grid — overflow handles scrolling */
 .gh-grid-wrapper {
-  overflow-x: auto;
+  overflow-x: hidden;
   overflow-y: visible;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: thin;
 }
 
 .gh-grid {
@@ -614,6 +614,11 @@ html.dark {
 
 /* Phone: <480px */
 @media (max-width: 479px) {
+  .gh-grid-wrapper {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+  }
   .gh-day-label { display: none; }
   .gh-months { margin-left: 0; display: none; }
   .gh-header { flex-direction: column; align-items: flex-start; }
