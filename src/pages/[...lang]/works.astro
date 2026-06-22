@@ -1,4 +1,5 @@
 ---
+import GithubHeatmap from '@/components/Widgets/GithubHeatmap.astro'
 import WorksGallery from '@/components/WorksGallery.astro'
 import { allLocales } from '@/config'
 import { getLangFromLocale, getLangRouteParam } from '@/i18n/lang'
@@ -23,6 +24,9 @@ const supportedLangs = await getTagSupportedLangs(tags[0])
 <Layout supportedLangs={supportedLangs}>
   <!-- Decorative Line -->
   <div class="uno-decorative-line" />
+
+  <!-- GitHub Contribution Heatmap - 直接对齐WorksGallery -->
+  <GithubHeatmap class="mt-6 lg:mt-10.5" />
 
   <!-- Works Gallery -->
   <div class="mt-6 lg:mt-10.5">
