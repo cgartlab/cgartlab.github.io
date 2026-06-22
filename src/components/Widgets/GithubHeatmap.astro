@@ -202,27 +202,6 @@ const CELL_PITCH = 12
 // Cell pitch: 10px cell + 2px gap = 12px per column (must match SSR constant)
 const CELL_PITCH = 12
 
-// 默认显示最新日期（右侧）
-function scrollHeatmapToLatest() {
-  if (window.innerWidth >= 1025)
-    return
-  const wrapper = document.querySelector<HTMLElement>('.gh-grid-wrapper')
-  if (!wrapper)
-    return
-  // 滚动到 grid 右边缘对齐内容区右边界
-  requestAnimationFrame(() => {
-    const wrapperRect = wrapper.getBoundingClientRect()
-    const leftOffset = wrapperRect.left
-    const contentRight = window.innerWidth
-    const visibleWidth = wrapper.clientWidth
-    // 目标：grid 右边缘 = 内容区右边界
-    // scrollLeft + visibleWidth = contentRight - leftOffset
-    // scrollLeft = contentRight - leftOffset - visibleWidth
-    const targetScrollLeft = Math.max(0, contentRight - leftOffset - visibleWidth)
-    wrapper.scrollLeft = targetScrollLeft
-  })
-}
-
 function setupHeatmapInteractions() {
   const cells = document.querySelectorAll<HTMLElement>('.gh-cell[data-date]')
   if (cells.length === 0)
@@ -396,9 +375,60 @@ function setupHeatmapInteractions() {
   })
 }
 
+// 默认滚动到最右侧，显示最新日期
+function scrollHeatmapToLatest() {
+  // ≥1025px 桌面端由 CSS margin-left: auto 处理，无需 JS 滚动
+  if (window.innerWidth >= 1025)
+    return
+  const wrapper = document.querySelector<HTMLElement>('.gh-grid-wrapper')
+  if (!wrapper) return
+
+  requestAnimationFrame(() => {
+    wrapper.scrollLeft = wrapper.scrollWidth - wrapper.clientWidth
+  })
+}
+
 document.addEventListener('astro:page-load', () => {
   scrollHeatmapToLatest()
   setupHeatmapInteractions()
+
+  // Diagnostic: log heatmap dimensions to console
+  requestAnimationFrame(() => {
+    const wrapper = document.querySelector<HTMLElement>('.gh-grid-wrapper')
+    const grid = document.querySelector<HTMLElement>('.gh-grid')
+    const months = grid?.querySelector<HTMLElement>('.gh-months')
+    const rows = grid?.querySelector<HTMLElement>('.gh-rows')
+    const firstRow = rows?.querySelector<HTMLElement>('.gh-row')
+    const cells = firstRow?.querySelector<HTMLElement>('.gh-cells')
+
+    if (wrapper && grid) {
+      const lastCellEl = cells?.querySelector<HTMLElement>('.gh-cell:last-child')
+      const cellCount = cells?.querySelectorAll('.gh-cell').length || 0
+      const gridRect = grid.getBoundingClientRect()
+      const wrapRect = wrapper.getBoundingClientRect()
+      const lastCellRect = lastCellEl?.getBoundingClientRect()
+
+      console.log('=== Heatmap DIAGNOSTIC ===')
+      console.log('Viewport:', window.innerWidth, 'x', window.innerHeight)
+      console.log('Grid columns:', cellCount)
+      console.log('Grid width:', grid.offsetWidth, 'scrollWidth:', grid.scrollWidth)
+      console.log('Grid rect:', gridRect.left, '→', gridRect.right)
+      console.log('Wrapper: offsetW=', wrapper.offsetWidth, 'clientW=', wrapper.clientWidth, 'scrollW=', wrapper.scrollWidth, 'scrollL=', wrapper.scrollLeft)
+      console.log('Wrapper rect:', wrapRect.left, '→', wrapRect.right)
+      if (lastCellEl) {
+        if (lastCellRect) {
+        console.log('Last cell rect:', lastCellRect.left, '→', lastCellRect.right)
+        console.log('Gap (wrapper.right - lastCell.right):', (wrapRect.right - lastCellRect.right).toFixed(2))
+      }
+      }
+      console.log('Scrollbar estimate:', wrapper.offsetWidth - wrapper.clientWidth)
+      if (months) console.log('Months offsetWidth:', months.offsetWidth, 'marginLeft:', getComputedStyle(months).marginLeft)
+      if (rows) console.log('Rows offsetWidth:', rows.offsetWidth)
+      console.log('Grid marginLeft:', getComputedStyle(grid).marginLeft)
+      console.log('Grid overflowX:', getComputedStyle(wrapper).overflowX)
+      console.log('========================')
+    }
+  })
 })
 </script>
 
@@ -457,8 +487,10 @@ document.addEventListener('astro:page-load', () => {
 
 /* Grid — overflow handles scrolling */
 .gh-grid-wrapper {
-  overflow-x: hidden;
+  overflow-x: auto;
   overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
 }
 
 .gh-grid {
@@ -632,25 +664,10 @@ html.dark {
   .gh-row:last-child .gh-day-label { display: none; }
   .gh-months { margin-left: 0; }
   .gh-header { flex-wrap: nowrap; }
-  .gh-grid { width: 100%; }
-}
-
-/* iPad Portrait / Large Phone Landscape: 768px–1023px */
-@media (min-width: 768px) and (max-width: 1023px) {
-  .gh-grid-wrapper {
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: thin;
-  }
 }
 
 /* Phone: <480px */
 @media (max-width: 479px) {
-  .gh-grid-wrapper {
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: thin;
-  }
   .gh-day-label { display: none; }
   .gh-months { margin-left: 0; display: none; }
   .gh-header { flex-direction: column; align-items: flex-start; }
@@ -659,5 +676,12 @@ html.dark {
   .gh-cells { gap: 1px; }
   .gh-legend { gap: 2px; }
   .gh-legend-label { font-size: 0.5625rem; padding-inline: 1px; }
+}
+
+/* Desktop (≥1025px): right-align via CSS margin-left: auto */
+@media (min-width: 1025px) {
+  .gh-grid {
+    margin-left: auto;
+  }
 }
 </style>
