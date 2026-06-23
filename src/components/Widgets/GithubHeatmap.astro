@@ -569,14 +569,28 @@ document.addEventListener('astro:page-load', () => {
   outline: none;
 }
 
-.gh-cell:hover,
 .gh-cell:focus-visible {
   transform: scale(1.15);
   z-index: 2;
 }
 
+/* Focus ring — three-layer fallback for cross-browser compatibility */
+/* 1. Base fallback (for Safari <15 and legacy mobile browsers) */
+.gh-cell:focus {
+  box-shadow: 0 0 0 2px var(--un-preset-theme-colors-primary);
+  z-index: 10;
+}
+
+/* 2. Suppress focus ring on mouse click (pointer devices) */
+.gh-cell:focus:not(:focus-visible) {
+  box-shadow: none;
+  z-index: auto;
+}
+
+/* 3. Precision focus ring for keyboard navigation only */
 .gh-cell:focus-visible {
   box-shadow: 0 0 0 2px var(--un-preset-theme-colors-primary);
+  z-index: 10;
 }
 
 /* Cell color tokens */
