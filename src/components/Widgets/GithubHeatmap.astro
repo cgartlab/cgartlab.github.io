@@ -140,8 +140,9 @@ const CELL_PITCH = 12
         </div>
       </div>
 
-      <div class="gh-grid-wrapper">
-        <div class="gh-grid" role="grid" aria-label="GitHub contribution activity">
+      <div class="gh-grid-scale-container" id="heatmap-scale-container">
+        <div class="gh-grid-wrapper" id="heatmap-wrapper">
+          <div class="gh-grid" role="grid" aria-label="GitHub contribution activity">
           <!-- Month labels row -->
           <div class="gh-months" aria-hidden="true">
             <div class="gh-day-labels-placeholder"></div>
@@ -188,6 +189,7 @@ const CELL_PITCH = 12
           </div>
         </div>
       </div>
+      </div>
 
       <div class="gh-footer">
         <span class="gh-total">
@@ -198,10 +200,87 @@ const CELL_PITCH = 12
   )
 }
 
-<script>
-// Cell pitch: 10px cell + 2px gap = 12px per column (must match SSR constant)
-const CELL_PITCH = 12
+<script is:inline>
+/**
+ * Heatmap Proportional Scaling (Scale-to-Fit)
+ *
+ * Replaces horizontal scroll with CSS transform: scale(), so the entire
+ * heatmap is always visible at any viewport width without scrolling.
+ *
+ * - Scale factor = min(containerWidth / naturalWidth, 1)  (never enlarges)
+ * - transform-origin: top left — grid scales from the top-left corner
+ * - Container height is synced to preserve document flow (no CLS)
+ * - Uses ResizeObserver for accurate, debounced recalculation
+ * - Compatible with Astro View Transitions (astro:page-load cleanup)
+ */
+(function () {
+  var SCALE_CONTAINER_ID = 'heatmap-scale-container'
+  var WRAPPER_ID = 'heatmap-wrapper'
 
+  function initHeatmapScale() {
+    var container = document.getElementById(SCALE_CONTAINER_ID)
+    var wrapper = document.getElementById(WRAPPER_ID)
+    if (!container || !wrapper) return
+
+    function updateScale() {
+      // Temporarily reset transform to measure natural (unscaled) dimensions
+      wrapper.style.transform = 'scale(1)'
+      var naturalWidth = wrapper.scrollWidth
+      var naturalHeight = wrapper.scrollHeight
+
+      var containerWidth = container.clientWidth
+      if (containerWidth === 0) return
+
+      var scale = Math.min(containerWidth / naturalWidth, 1)
+
+      wrapper.style.transform = 'scale(' + scale + ')'
+      // Sync container height so subsequent content is not displaced
+      container.style.height = (naturalHeight * scale) + 'px'
+
+      // One-shot diagnostic: compare scrollWidth vs offsetWidth vs visual width
+      if (!container.dataset.scaleDiagnosed) {
+        var visualWidth = wrapper.getBoundingClientRect().width / scale
+        console.log('[Heatmap Scale] scrollWidth:', naturalWidth,
+          '| offsetWidth:', wrapper.offsetWidth,
+          '| visual:', Math.round(visualWidth),
+          '| scale:', scale.toFixed(4))
+        container.dataset.scaleDiagnosed = 'true'
+      }
+    }
+
+    updateScale()
+
+    // Use ResizeObserver for accurate, throttled recalculation
+    if (typeof ResizeObserver !== 'undefined') {
+      var ro = new ResizeObserver(function () {
+        requestAnimationFrame(updateScale)
+      })
+      ro.observe(container)
+    } else {
+      // Fallback for older browsers
+      var timer
+      window.addEventListener('resize', function () {
+        clearTimeout(timer)
+        timer = setTimeout(updateScale, 100)
+      })
+    }
+
+    // ResizeObserver does NOT fire on device orientation change (iPad rotate,
+    // phone rotate) — supplement with orientationchange for full coverage.
+    window.addEventListener('orientationchange', function () {
+      updateScale()
+    })
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initHeatmapScale)
+  } else {
+    initHeatmapScale()
+  }
+})()
+</script>
+
+<script>
 function setupHeatmapInteractions() {
   const cells = document.querySelectorAll<HTMLElement>('.gh-cell[data-date]')
   if (cells.length === 0)
@@ -334,79 +413,9 @@ function setupHeatmapInteractions() {
     }
   })
 
-  // Recalculate month label positions to align with actual cell positions.
-  // Runs for all widths ≥480px (below that, month labels are hidden via CSS).
-  // Uses getBoundingClientRect() for pixel-accurate alignment regardless of
-  // margin-left values, scroll position, or offsetParent chain differences.
-  function alignMonthLabels() {
-    // Below 480px month labels are hidden via CSS — nothing to align
-    if (window.innerWidth < 480)
-      return
-
-    const labels = document.querySelectorAll<HTMLElement>('.gh-month-label')
-    if (!labels.length)
-      return
-
-    const monthsContainer = document.querySelector<HTMLElement>('.gh-months')
-    if (!monthsContainer)
-      return
-
-    const firstRow = document.querySelector<HTMLElement>('.gh-row')
-    if (!firstRow)
-      return
-
-    const cellsContainer = firstRow.querySelector<HTMLElement>('.gh-cells')
-    if (!cellsContainer)
-      return
-
-    const cells = [...cellsContainer.querySelectorAll<HTMLElement>('.gh-cell')]
-    if (!cells.length)
-      return
-
-    // monthsLeft: left edge of the .gh-months container in viewport coords.
-    // cellLeft: left edge of the target cell in viewport coords.
-    // Their difference is the correct `left` value for position:absolute labels
-    // inside .gh-months, scroll-independent because both elements move together
-    // inside the same scroll container.
-    const monthsLeft = monthsContainer.getBoundingClientRect().left
-
-    labels.forEach((label) => {
-      const ssrLeft = Number.parseInt(label.style.left, 10) || 0
-      const weekIndex = Math.round(ssrLeft / CELL_PITCH)
-      const cell = cells[weekIndex]
-      if (cell) {
-        const cellLeft = cell.getBoundingClientRect().left
-        label.style.left = `${cellLeft - monthsLeft}px`
-      }
-    })
   }
 
-  alignMonthLabels()
-
-  // Recalculate on resize (orientation change, window resize)
-  let resizeTimer: ReturnType<typeof setTimeout>
-  window.addEventListener('resize', () => {
-    clearTimeout(resizeTimer)
-    resizeTimer = setTimeout(alignMonthLabels, 150)
-  })
-}
-
-// 默认滚动到最右侧，显示最新日期
-function scrollHeatmapToLatest() {
-  // ≥1025px 桌面端由 CSS margin-left: auto 处理，无需 JS 滚动
-  if (window.innerWidth >= 1025)
-    return
-  const wrapper = document.querySelector<HTMLElement>('.gh-grid-wrapper')
-  if (!wrapper)
-    return
-
-  requestAnimationFrame(() => {
-    wrapper.scrollLeft = wrapper.scrollWidth - wrapper.clientWidth
-  })
-}
-
 document.addEventListener('astro:page-load', () => {
-  scrollHeatmapToLatest()
   setupHeatmapInteractions()
 })
 </script>
@@ -464,19 +473,22 @@ document.addEventListener('astro:page-load', () => {
   padding-inline: 2px;
 }
 
-/* Grid — overflow handles scrolling */
-.gh-grid-wrapper {
-  overflow-x: auto;
-  overflow-y: hidden;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: thin;
-  /* thumb / track — matches the site's warm-neutral palette in light mode */
-  scrollbar-color: oklch(65% 0.004 85 / 0.30) transparent;
+/* Scale container — provides layout space and prevents FOUC */
+.gh-grid-scale-container {
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+  /* Fixed 102px matches the natural grid height (652px wide × 102px tall).
+     JS overrides this to the precise scaled height on every resize. */
+  height: 102px;
 }
 
-html.dark .gh-grid-wrapper {
-  /* slightly more opaque thumb so it stays legible on dark backgrounds */
-  scrollbar-color: oklch(55% 0.003 298 / 0.40) transparent;
+/* Grid — transform-origin ensures scaling starts from top-left */
+.gh-grid-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform-origin: top left;
 }
 
 .gh-grid {
@@ -493,6 +505,12 @@ html.dark .gh-grid-wrapper {
   height: 16px;
   margin-bottom: 4px;
   margin-left: var(--gh-day-label-width);
+  /* Hardware-accelerate transform to improve small-text rendering at tiny scales */
+  will-change: transform;
+  /* Subpixel antialiasing + minimum readable size at 320px viewport */
+  font-size: 0.8rem;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 .gh-month-label {
@@ -645,31 +663,8 @@ html.dark {
    Responsive Breakpoints
    ============================== */
 
-/* Tablet Portrait: 480px–767px */
+/* Tablet Portrait: 480px–767px — header compact layout */
 @media (max-width: 767px) {
-  .gh-row:last-child .gh-day-label { display: none; }
-  /* .gh-months keeps margin-left: var(--gh-day-label-width) so SSR offsets stay
-     in the same coordinate space as cells; alignMonthLabels() will fine-tune via
-     getBoundingClientRect() for pixel-perfect alignment. */
   .gh-header { flex-wrap: nowrap; }
-}
-
-/* Phone: <480px */
-@media (max-width: 479px) {
-  .gh-day-label { display: none; }
-  .gh-months { margin-left: 0; display: none; }
-  .gh-header { flex-direction: column; align-items: flex-start; }
-  .gh-cell { width: 8px; height: 8px; }
-  .gh-row { gap: 1px; }
-  .gh-cells { gap: 1px; }
-  .gh-legend { gap: 2px; }
-  .gh-legend-label { font-size: 0.5625rem; padding-inline: 1px; }
-}
-
-/* Desktop (≥1025px): right-align via CSS margin-left: auto */
-@media (min-width: 1025px) {
-  .gh-grid {
-    margin-left: auto;
-  }
 }
 </style>
