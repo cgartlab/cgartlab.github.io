@@ -20,9 +20,9 @@ abbrlink: weekly-19
 
 > [!note] 关于周刊
 > 这是一份专注知识管理，涵盖数字艺术、视觉设计、前端开发领域的电子周刊，发布频率目前为每周 1 期，每期精选一个细分话题展开思考。
->
+> 
 > 如果你觉得这里的内容还不错，想获得更完善的阅读体验，更推荐使用浏览器来到官网阅读。
->
+> 
 > 也欢迎使用 **RSS** (https://weekly.cgartlab.com/feed/atom) 或**邮件订阅**（[https://weekly.cgartlab.com](https://weekly.cgartlab.com)）进行订阅。
 
 ---

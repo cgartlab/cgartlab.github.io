@@ -160,19 +160,20 @@ const CELL_PITCH = 12
                 <div class="gh-row" role="row">
                   <div class="gh-day-label" aria-hidden="true">{dayLabel}</div>
                   <div class="gh-cells">
-                    {contributions.map((week) => {
+                    {contributions.map((week, weekIndex) => {
                       const cell = week[dayIndex]
                       if (!cell) {
                         return <span class="gh-cell gh-cell--none" aria-hidden="true"></span>
                       }
                       const levelClass = levelClassMap[cell.contributionLevel] ?? 'gh-cell--none'
                       const tooltipId = `gh-tooltip-${cell.date}`
+                      const isFirstCell = weekIndex === 0 && dayIndex === 0
                       return (
                         <span
                           class={`gh-cell ${levelClass}`}
                           data-date={cell.date}
                           data-count={cell.contributionCount}
-                          tabindex="0"
+                          tabindex={isFirstCell ? '0' : '-1'}
                           role="gridcell"
                           aria-describedby={tooltipId}
                         >
@@ -207,7 +208,8 @@ const CELL_PITCH = 12
  * Replaces horizontal scroll with CSS transform: scale(), so the entire
  * heatmap is always visible at any viewport width without scrolling.
  *
- * - Scale factor = min(containerWidth / naturalWidth, 1)  (never enlarges)
+ * - Scale factor = containerWidth / naturalWidth (no cap — grid always fills
+ *   container; on desktop this enlarges ~1.06×, on mobile it shrinks to fit)
  * - transform-origin: top left — grid scales from the top-left corner
  * - Container height is synced to preserve document flow (no CLS)
  * - Uses ResizeObserver for accurate, debounced recalculation
@@ -225,25 +227,34 @@ const CELL_PITCH = 12
     function updateScale() {
       // Temporarily reset transform to measure natural (unscaled) dimensions
       wrapper.style.transform = 'scale(1)'
-      var naturalWidth = wrapper.scrollWidth
+      // Use offsetWidth (CSS layout box) — NOT scrollWidth, which can be
+      // inflated by absolutely-positioned month labels that overflow beyond
+      // the grid's actual max-content width (~678px vs true 664px).
+      // IMPORTANT: Do NOT add padding or border to .gh-grid-wrapper —
+      // offsetWidth includes both, which would overcount and underscale.
+      var naturalWidth = wrapper.offsetWidth
       var naturalHeight = wrapper.scrollHeight
 
       var containerWidth = container.clientWidth
       if (containerWidth === 0) return
 
-      var scale = Math.min(containerWidth / naturalWidth, 1)
+      var scale = containerWidth / naturalWidth
 
       wrapper.style.transform = 'scale(' + scale + ')'
       // Sync container height so subsequent content is not displaced
       container.style.height = (naturalHeight * scale) + 'px'
 
-      // One-shot diagnostic: compare scrollWidth vs offsetWidth vs visual width
+      // One-shot diagnostic: verify offsetWidth matches the true layout width.
+      // scale < 1 means grid shrinks to fit (mobile). scale > 1 means grid
+      // expands to fill container (desktop, up to ~1.06×). scrollWidth vs
+      // offsetWidth shows the month-label-inflation gap if any.
       if (!container.dataset.scaleDiagnosed) {
-        var visualWidth = wrapper.getBoundingClientRect().width / scale
-        console.log('[Heatmap Scale] scrollWidth:', naturalWidth,
-          '| offsetWidth:', wrapper.offsetWidth,
-          '| visual:', Math.round(visualWidth),
-          '| scale:', scale.toFixed(4))
+        console.log('[Heatmap Scale] offsetWidth:', naturalWidth,
+          '| scrollWidth:', wrapper.scrollWidth,
+          '| container:', containerWidth,
+          '| scale:', scale.toFixed(4),
+          '| cell size:', (10 * scale).toFixed(1) + 'px',
+          '| gap:', scale > 0 ? (2 * scale).toFixed(1) + 'px' : '0px')
         container.dataset.scaleDiagnosed = 'true'
       }
     }
@@ -346,6 +357,10 @@ function setupHeatmapInteractions() {
   const focusCell = (row: number, col: number) => {
     const cell = getCell(row, col)
     if (cell) {
+      const prev = document.querySelector<HTMLElement>('.gh-cell[tabindex="0"]')
+      if (prev && prev !== cell)
+        prev.tabIndex = -1
+      cell.tabIndex = 0
       cell.focus()
     }
   }
@@ -379,9 +394,7 @@ function setupHeatmapInteractions() {
         e.preventDefault()
         if (e.ctrlKey || e.metaKey) {
           // First cell overall
-          const firstCell = getCell(0, 0)
-          if (firstCell)
-            firstCell.focus()
+          focusCell(0, 0)
         }
         else {
           // First cell in row
@@ -392,9 +405,7 @@ function setupHeatmapInteractions() {
         e.preventDefault()
         if (e.ctrlKey || e.metaKey) {
           // Last cell overall
-          const lastCell = getCell(rowCount - 1, colCount - 1)
-          if (lastCell)
-            lastCell.focus()
+          focusCell(rowCount - 1, colCount - 1)
         }
         else {
           // Last cell in row
@@ -478,9 +489,11 @@ document.addEventListener('astro:page-load', () => {
   width: 100%;
   overflow: hidden;
   position: relative;
-  /* Fixed 102px matches the natural grid height (652px wide × 102px tall).
-     JS overrides this to the precise scaled height on every resize. */
-  height: 102px;
+  /* Fixed 108px = natural grid height (102px) × max possible scale (1.06×).
+     At max container width (704px), scale = 704/664 ≈ 1.06.
+     JS overrides this to the precise scaled height on every resize.
+     Using max expected height instead of 102px reduces CLS on initial render. */
+  height: 108px;
 }
 
 /* Grid — transform-origin ensures scaling starts from top-left */
