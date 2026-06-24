@@ -454,11 +454,11 @@ a:target-current {
   border-left-style: solid;
   border-color: color-mix(in srgb, var(--un-preset-theme-colors-secondary) 70%, transparent);
 }
-@supports (border-color: color-mix(in oklch, var(--color-secondary) 30%, transparent)) {
+@supports (border-color: color-mix(in oklch, var(--un-preset-theme-colors-secondary) 30%, transparent)) {
   .ai-disclaimer blockquote {
     border-left-width: 3px;
     border-left-style: solid;
     opacity: 1;
-    border-color: color-mix(in oklch, var(--color-secondary) 30%, transparent);
+    border-color: color-mix(in oklch, var(--un-preset-theme-colors-secondary) 30%, transparent);
   }
 }

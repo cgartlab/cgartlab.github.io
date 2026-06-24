@@ -146,7 +146,6 @@ h4:hover .heading-anchor-link svg:hover {
   cursor: pointer;
   place-items: center;
   border: 1px solid;
-  border-color: color-mix(in srgb, var(--un-preset-theme-colors-secondary) 5%, transparent);
   border-radius: 0.25rem;
   border-color: color-mix(in srgb, var(--un-preset-theme-colors-secondary) 15%, transparent);
   background-color: var(--un-preset-theme-colors-background);

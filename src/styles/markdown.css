@@ -339,12 +339,12 @@ html.dark .heti pre span {
 /* Wavy Underline */
 .heti :where(u) {
   text-decoration-line: underline;
-  text-decoration-color: #f87171;
+  text-decoration-color: var(--un-preset-theme-colors-caution);
   text-underline-offset: 0.25em;
   text-decoration-style: wavy;
 }
 html.dark .heti :where(u) {
-  text-decoration-color: rgba(248, 113, 113, 0.6);
+  text-decoration-color: color-mix(in srgb, var(--un-preset-theme-colors-caution) 80%, transparent);
 }
 
 /* Keyboard Input */
