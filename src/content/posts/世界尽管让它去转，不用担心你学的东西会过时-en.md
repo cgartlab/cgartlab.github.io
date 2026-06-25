@@ -252,6 +252,6 @@ So, back to that initial anxious moment—when you feel like something you just 
 - [Digital Media Art](https://en.wikipedia.org/wiki/Digital_media_art) — Understanding the development of digital media art
 - [Impressionism](https://en.wikipedia.org/wiki/Impressionism) — Understanding the visual principle of "brain completion" mentioned in the article
 - [Stable Diffusion](https://github.com/CompVis/stable-diffusion) — 2023 open-source AI image generation model, a landmark technical breakthrough
-- [Building a Second Brain - Tiago Forte](https://www.boltdesignsystem.com/en/books/second-brain) — The source of PARA methodology, the knowledge management system mentioned in the article
+- [Building a Second Brain - Tiago Forte](https://www.buildingasecondbrain.com/) — The source of PARA methodology, the knowledge management system mentioned in the article
 - [Unity Official Documentation](https://unity.com) — VR experience development engine mentioned in the article
 - [Seedance](https://seedance.com) — AI video generation tool, version 2.0 release mentioned in the article
