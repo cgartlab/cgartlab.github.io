@@ -160,11 +160,11 @@ html[data-resizing] [style*="view-transition-name"] {
 
 /* Fallback Transition >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> */
 html.reduce-motion {
-  --at-apply: 'transition-colors duration-300 ease-out';
+  transition: color 0.3s ease-out, background-color 0.3s ease-out, border-color 0.3s ease-out;
 
   .highlight-hover,
   .highlight-static {
-    --at-apply: 'transition-inherit';
+    transition: inherit;
   }
 
   #toc-container,
