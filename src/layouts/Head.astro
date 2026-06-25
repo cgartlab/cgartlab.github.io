@@ -247,6 +247,15 @@ const pageImage = postSlug
 <!-- Global View Transition -->
 <ClientRouter fallback="none" />
 
+<!-- Re-apply CSS after soft navigation to fix --at-apply unavailability -->
+<script is:inline>
+document.addEventListener('astro:after-swap', () => {
+  requestAnimationFrame(() => {
+    document.body.offsetHeight
+  })
+})
+</script>
+
 <!-- Theme Toggle -->
 <script
   is:inline
