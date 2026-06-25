@@ -37,4 +37,4 @@ EDIC（Editorial Design Interface for Content）是我为自己打造的设计�
 ## 相关链接
 
 - 官网：[edic.cgartlab.com](https://edic.cgartlab.com)
-- GitHub：[github.com/cgartlab/cgartlab-design-system](https://github.com/cgartlab/cgartlab-design-system)
+- GitHub：[github.com/cgartlab/edic-design-system](https://github.com/cgartlab/edic-design-system)

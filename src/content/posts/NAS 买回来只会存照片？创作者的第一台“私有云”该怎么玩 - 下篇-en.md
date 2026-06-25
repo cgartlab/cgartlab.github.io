@@ -231,7 +231,8 @@ Have you thought about what you'll create with it?
 - [Feiniu OS Official Website](https://www.fireneve.com/)
 - [Syncthing Official Website](https://syncthing.net/)
 - [Tailscale Official Website](https://tailscale.com/)
-- [DDNS-GO Official Website](https://ddns-go.com/)
+- [DDNS-GO Official Website](https://github.com/jeessy2/ddns-go)
 - [Calibre-web Official Website](https://calibre-web.readthedocs.io/en/latest/)
 
 ---
+
