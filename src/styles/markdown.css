@@ -356,7 +356,6 @@ html.dark .heti :where(u) {
   line-height: 1;
   letter-spacing: 0em;
   border: 1px solid;
-  border-color: color-mix(in srgb, var(--un-preset-theme-colors-secondary) 5%, transparent);
   border-radius: 0.25rem;
   border-color: color-mix(in srgb, var(--un-preset-theme-colors-secondary) 40%, transparent);
   color: var(--un-preset-theme-colors-secondary);
