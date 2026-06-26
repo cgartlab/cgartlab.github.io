@@ -232,7 +232,11 @@ Have you thought about what you'll create with it?
 - [Syncthing Official Website](https://syncthing.net/)
 - [Tailscale Official Website](https://tailscale.com/)
 - [DDNS-GO Official Website](https://github.com/jeessy2/ddns-go)
+<<<<<<< HEAD
 - [Calibre-web Official Website](https://calibre-web.readthedocs.io/en/latest/) (Dead 2026-06-26)
+=======
+- [Calibre-web Official Website](https://calibre-web.readthedocs.io/en/latest/)
+>>>>>>> origin/main
 
 ---
 

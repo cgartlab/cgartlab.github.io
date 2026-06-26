@@ -234,7 +234,11 @@ NAS 还能为我做更多定制化的事情吗？当然，这就引出了第三�
 - [Syncthing 官方网站](https://syncthing.net/)
 - [Tailscale 官方网站](https://tailscale.com/)
 - [DDNS-GO 官方网站](https://github.com/jeessy2/ddns-go)
+<<<<<<< HEAD
 - [Calibre-web 官方网站](https://calibre-web.readthedocs.io/en/latest/) (已失效 2026-06-26)
+=======
+- [Calibre-web 官方网站](https://calibre-web.readthedocs.io/en/latest/)
+>>>>>>> origin/main
 
 ---
 
