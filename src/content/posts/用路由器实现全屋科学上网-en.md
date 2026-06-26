@@ -121,7 +121,7 @@ ShellClash is a variant version of Clash that supports running on various router
 In the SSH Host, directly paste the following command to install ShellClash.
 
 ```bash
-export url='https://raw.fastgit.org/juewuy/ShellClash/master' && sh -c "$(curl -kfsSl $url/install.sh)" && source /etc/profile &> /dev/null
+export url='https://raw.githubusercontent.com/juewuy/ShellClash/master' && sh -c "$(curl -kfsSl $url/install.sh)" && source /etc/profile &> /dev/null
 ```
 
 - Select "2" stable version

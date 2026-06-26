@@ -176,7 +176,7 @@ If considering future configuration upgrades, I recommend getting sufficient mem
 
 ## Directory Structure and File Management
 
-As mentioned in my previous article "[Flowing Programs, Solid Data](https://cgartlab.com/posts/流水的程序铁打的数据/)", I established core principles for directory structure and file management:
+As mentioned in my previous article "[Flowing Programs, Solid Data](https://cgartlab.com/posts/flow-program-iron-data/)", I established core principles for directory structure and file management:
 
 > **Don't add classifications unless necessary:** The premise is that this classification can be exhaustive. For example, there are only a few types of files, but countless formats.
 > **Complete archiving within 1 minute:** I've seen many people know archiving is important, but few can persist for a year. Often, they're already frustrated and tired after work—who has the energy to bother? Actually, with proper classification, 1-minute archiving becomes natural.
