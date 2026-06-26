@@ -7,7 +7,7 @@ tags:
   - 知识管理
   - 技术分享
 description: NAS 不只是能联网的硬盘盒，而是你的私人数据中心。这个系列旨在跳过复杂的代码和命令，告诉你如何建立最基础的创作者存储逻辑。
-updated: 2026-01-24
+updated: 2026-06-26
 pin: 0
 toc: true
 lang: zh
@@ -230,11 +230,11 @@ NAS 还能为我做更多定制化的事情吗？当然，这就引出了第三�
 
 ### 参考链接
 
-- [飞牛 OS 官方网站](https://www.fireneve.com/)
+- [飞牛 OS 官方网站](https://www.fireneve.com/) (已失效 2026-06-26)
 - [Syncthing 官方网站](https://syncthing.net/)
 - [Tailscale 官方网站](https://tailscale.com/)
 - [DDNS-GO 官方网站](https://github.com/jeessy2/ddns-go)
-- [Calibre-web 官方网站](https://calibre-web.readthedocs.io/en/latest/)
+- [Calibre-web 官方网站](https://calibre-web.readthedocs.io/en/latest/) (已失效 2026-06-26)
 
 ---
 

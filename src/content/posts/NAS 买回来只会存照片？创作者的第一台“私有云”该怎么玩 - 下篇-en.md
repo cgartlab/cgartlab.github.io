@@ -8,7 +8,7 @@ tags:
   - Tech Sharing
   - NAS
 description: "Build your creator NAS storage system with our practical guide. Learn hard drive selection, RAID configuration, four-layer storage logic, and workflow optimization for creative professionals."
-updated: 2026-01-24
+updated: 2026-06-26
 pin: 0
 toc: true
 lang: en
@@ -228,11 +228,11 @@ Have you thought about what you'll create with it?
 
 ### Reference Links
 
-- [Feiniu OS Official Website](https://www.fireneve.com/)
+- [Feiniu OS Official Website](https://www.fireneve.com/) (Dead 2026-06-26)
 - [Syncthing Official Website](https://syncthing.net/)
 - [Tailscale Official Website](https://tailscale.com/)
 - [DDNS-GO Official Website](https://github.com/jeessy2/ddns-go)
-- [Calibre-web Official Website](https://calibre-web.readthedocs.io/en/latest/)
+- [Calibre-web Official Website](https://calibre-web.readthedocs.io/en/latest/) (Dead 2026-06-26)
 
 ---
 
