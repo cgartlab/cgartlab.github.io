@@ -109,8 +109,8 @@ function splitIntoFragments(text: string, matches: Match[]): Fragment[] {
       properties: {
         className: ['wiki-link'],
         href: m.href,
-        'data-umami-event': 'wiki-term-click',
-        'data-umami-event-term': m.termId,
+        dataUmamiEvent: 'wiki-term-click',
+        dataUmamiEventTerm: m.termId,
       },
       children: [{ type: 'text', value: m.display }],
     })
