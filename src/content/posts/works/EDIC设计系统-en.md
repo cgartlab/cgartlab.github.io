@@ -37,4 +37,4 @@ Something that works well for me turned out to help others too. The system is pu
 ## Links
 
 - Website: [edic.cgartlab.com](https://edic.cgartlab.com)
-- GitHub: [github.com/cgartlab/cgartlab-design-system](https://github.com/cgartlab/cgartlab-design-system)
+- GitHub: [github.com/cgartlab/edic-design-system](https://github.com/cgartlab/edic-design-system)
