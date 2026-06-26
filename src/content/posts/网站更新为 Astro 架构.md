@@ -1,8 +1,8 @@
 ---
 title: 网站更新为 Astro 架构
 published: 2025-08-16
-description: 终于受不了 WordPress 的臃肿，换了全新架构。
-updated: 2025-08-17
+description: "终于受不了 WordPress 的臃肿，换了全新架构。这是一篇踩坑笔记，写给所有想从 WordPress 迁出但又怕 SEO 受损的人。"
+updated: 2026-06-27
 tags:
   - 技术分享
 draft: true
@@ -32,10 +32,43 @@ Astro 是近几年新兴的一款前端架构，也叫作框架。对不了解�
 
 ## 安装 Astro
 
-安装 Astro 比较简单，首先
+真正开始动手之前，先做好环境准备，安装过程其实比想象中顺利。
+
+- **Node.js 是基础**：确保本地安装了 Node.js 18+（推荐 LTS 版本），可以用 `node -v` 检查版本
+- **用 pnpm create astro 初始化项目**：一行命令选择模板，5 分钟跑起一个本地博客骨架，比 WordPress 安装插件还快
+- **选定项目目录和语言**：TypeScript 是必选，目录结构建议参考官方推荐的 `src/pages/` + `src/components/` 布局
+- **本地预览用 astro dev**：修改代码后浏览器热更新，几乎零等待，比 WordPress 的预览刷新体验好很多
+- **部署到 Cloudflare Pages**：免费额度够用，git push 触发自动构建，CI/CD 全自动，省去了维护 WordPress 主机的精力（与 [建立秩序的第一步是拥抱混乱](/posts/first-step-to-order-is-embracing-chaos/) 中的设备管理思路一致，都是追求"一次性配置，长期自动运行"）
 
 ## 搬运数据
 
+从 WordPress 迁移数据是最花时间的环节，我花了整整两天处理导出和导入。
+
+- **用 WordPress 自带工具导出 XML**：后台 → 工具 → 导出所有内容，下载一个包含所有文章/页面/评论的 XML 文件
+- **用 convertToAstro 工具做初步转换**：网上有几个开源脚本可以把 WordPress XML 转为 Markdown，但图片和内部链接需要手动处理
+- **处理图片路径**：WordPress 的图片上传到媒体库后路径格式变了，需要批量替换旧 URL 为新路径或 CDN 地址
+- **重定向旧 URL**：WordPress 默认使用 `?p=123` 格式的 URL，Astro 生成的静态路径格式不同，需要在 `public/_redirects` 文件里设置 301 重定向规则
+- **检查文章内容的 HTML 残留**：WordPress 的富文本编辑器会留下很多无语义化的标签（如 `<font>`、内联样式），迁移后用正则批量清理
+- **SEO 方面最重要的动作**：确保所有旧链接都有对应的重定向记录，Google Search Console 里的索引可以在迁移后逐步更新，不会因为 URL 变更导致排名暴跌
+
 ## 自定义主题
 
+Astro 本身只提供页面骨架，视觉风格需要自己搭。UnoCSS 是我最终选择的方案。
+
+- **UnoCSS 替代 Tailwind**：配置更灵活，Attributify 模式让 HTML 标签里直接写 `class="text-xl font-bold"`，写法更简洁
+- **astro-og-canvas 生成 OG 图片**：每篇文章自动生成社交分享封面图，尺寸和格式都符合主流平台要求，无需手动制作
+- **自建组件替代 WordPress 插件**：搜索、评论区、导航栏全部用 Astro 组件重写，代码可控性高，加载速度比 WordPress 插件快 5-10 倍
+- **响应式布局用 CSS Grid + Flexbox**：不再依赖页面构建器，手写布局代码更简洁，也更方便版本管理
+- **深色/浅色主题切换**：用 CSS 变量管理颜色主题，配合 `@astrojs/tailwind` 的 darkMode 选项，5 行代码搞定主题切换
+
 ## 新开发了几个地方
+
+迁移不只是换个框架，也是重新思考"这个网站到底需要什么功能"的机会。
+
+- **自建搜索索引 API**：放弃了 WordPress 的实时搜索，改用构建时生成的静态 JSON 索引文件，配合轻量 JS 实现毫秒级客户端搜索
+- **Giscus + Twikoo + Waline 三套评论系统并行**：满足不同读者的评论习惯，同时降低单一服务不可用的风险
+- **Syncthing 同步 Obsidian 笔记库**：参考 [打造第二大脑](/posts/build-the-second-brain/) 的方案，设备间自动同步，避免单点故障
+- **自动化 LQIP 占位图**：图片资源自动生成低质量占位符（LQIP），配合 blur-up 技术，文章列表页加载体验丝滑
+- **Pre-commit hook 强制代码规范**：eslint + lint-staged 在每次提交前自动检查 TypeScript 代码，保证代码库长期健康
+
+这次迁移让我意识到：**一个博客的形态，本质上反映了博主对"内容"这件事的理解深度**。Astro 给我的最大收获，是把控制权还给了我——不再被主题商城的更新牵着鼻子走，也不再为某个插件的兼容性问题熬夜。

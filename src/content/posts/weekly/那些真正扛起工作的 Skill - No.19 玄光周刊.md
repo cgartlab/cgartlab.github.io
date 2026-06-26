@@ -1,8 +1,8 @@
 ---
 title: 那些真正扛起工作的 Skill - No.19 玄光周刊
 published: 2026-06-02
-updated: 2026-06-02
-description: 承接上期内容，本期继续介绍 OpenClaw 第二类 Skill——那些真正扛起工作的专用 Skill。它们与自部署服务深度集成，是日常生产力的核心支柱。
+updated: 2026-06-27
+description: 承接上期内容，本期继续介绍我的 OpenClaw 第二类 Skill——那些真正扛起工作的专用 Skill。它们与自部署服务深度集成，已经融入正式的工作流。
 tags:
   - 周刊
 draft: true
