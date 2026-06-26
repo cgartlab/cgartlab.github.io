@@ -2,7 +2,7 @@
 title: 你和AI聊过的天，可能并不属于你 - No.13 玄光周刊
 published: 2026-02-05
 description: 我从上大学真正接触网络开始，就信不过任何云盘和云服务。这种感觉从移动互联网发展起来后慢慢淡化了许多，因为网络随处都有。但当 AI 出现之后我才真正意识到，个人数据是多宝贵的财富。同时，我也认为这是目前大多数使用这些 AI 平台的人容易忽视的地方。
-updated: 2026-02-05
+updated: 2026-06-26
 tags:
   - 周刊
 draft: false
@@ -90,7 +90,7 @@ Times New Roman 字体被广泛误认为是“传统”和“权威”的象征�
 
 ### Black Hole V5 - 技术的浪漫
 
-🔗[https://black-hole-v5.vercel.app/](https://black-hole-v5.vercel.app/ "https://black-hole-v5.vercel.app/")
+🔗[https://black-hole-v5.vercel.app/](https://black-hole-v5.vercel.app/ "https://black-hole-v5.vercel.app/") (已失效 2026-06-26)
 
 Three.js 实现的黑洞效果。iPad 都可以流畅运行，在 50 寸超宽屏上动起来还是非常震撼的，用鼠标转视角甚至会有眩晕感。有笔记本的小伙伴可以投到大屏上感受一下，实时 3D 的好处就是分辨率才决定性能，尺寸不会。
 
@@ -102,4 +102,4 @@ Three.js 实现的黑洞效果。iPad 都可以流畅运行，在 50 寸超宽�
 >
 > 这是一份专注知识管理，涵盖数字艺术、视觉设计、前端开发领域的电子周刊，发布频率目前为每周 1 期，每期精选一个细分话题展开思考。其中会分享我写的关于创业、产品的笔记，包括我的所思所想、摘抄与批注、读书笔记、优质内容推荐。
 >
-> 如果你觉得这里的内容还不错，想获得更完善的阅读体验，更推荐使用浏览器来到官网阅读，也欢迎使用 **RSS** (<https://weekly.cgartlab.com/feed/atom>) 或**邮件订阅**（<https://weekly.cgartlab.com）> ，我们每周把这些笔记汇总为一封邮件发送给你。当然也欢迎你的 [来信](mailto:hello@cgartlab.com) 。
+> 如果你觉得这里的内容还不错，想获得更完善的阅读体验，更推荐使用浏览器来到官网阅读，也欢迎使用 **RSS** (<https://weekly.cgartlab.com/feed/atom>) 或**邮件订阅**（<https://weekly.cgartlab.com/>）> ，我们每周把这些笔记汇总为一封邮件发送给你。当然也欢迎你的 [来信](mailto:hello@cgartlab.com) 。
