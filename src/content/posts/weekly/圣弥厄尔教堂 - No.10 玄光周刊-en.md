@@ -2,7 +2,7 @@
 title: "St. Michael's Cathedral - No.10 Black Light Weekly | Astro Framework & Creative Tools"
 published: 2025-08-16
 description: "Discover Astro framework for frontend development, OpenCut video editing software, and MAKING SOFTWARE design resources. Explore how historical architecture inspires timeless digital design principles for creators."
-updated: 2025-08-16
+updated: 2026-06-26
 tags:
   - Weekly
   - Astro Framework
@@ -52,7 +52,7 @@ Source: <https://www.makingsoftware.com>
 
 A white noise website I've been loving recently, with open-source code. Can freely combine over 80 different ambient sounds, adjust volumes, save as presets. Easily create your preferred atmosphere, and share preset sound combinations via links. Also, relatively simple site structure makes it great as a practice open-source project.
 
-Source: <https://www.ambientsounds.org>
+Source: <https://www.ambientsounds.org> (已失效 2026-06-26)
 
 ## Architectural Reflections
 

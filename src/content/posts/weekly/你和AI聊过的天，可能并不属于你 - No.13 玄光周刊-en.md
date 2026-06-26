@@ -2,7 +2,7 @@
 title: "AI Data Privacy: Your Conversations Might Not Belong to You - No.13 Weekly"
 published: 2026-02-05
 description: "Protect your AI conversation data with our guide to data sovereignty and self-hosted solutions. Learn which AI platforms allow data export and how to build a private home data center for complete control."
-updated: 2026-02-05
+updated: 2026-06-26
 tags:
   - Weekly
   - Data Privacy
@@ -92,7 +92,7 @@ Writers care about fonts, designers care about systems. Politicians seek presenc
 
 ### Black Hole V5 - The Romance of Technology
 
-🔗[https://black-hole-v5.vercel.app/](https://black-hole-v5.vercel.app/ "https://black-hole-v5.vercel.app/")
+🔗[https://black-hole-v5.vercel.app/](https://black-hole-v5.vercel.app/ "https://black-hole-v5.vercel.app/") (已失效 2026-06-26)
 
 A black hole effect implemented with Three.js. It can run smoothly even on an iPad, and it's still very impressive when displayed on a 50-inch ultra-wide screen. Rotating the view with the mouse can even cause a sense of vertigo. If you have a laptop, you can project it onto a large screen to experience it. The advantage of real-time 3D is that performance depends on resolution, not size.
 
