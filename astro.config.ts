@@ -15,7 +15,9 @@ import { base, defaultLocale, themeConfig } from './src/config'
 import { langMap } from './src/i18n/config'
 import { rehypeCodeCopyButton } from './src/plugins/rehype-code-copy-button.mjs'
 import { rehypeExternalLinks } from './src/plugins/rehype-external-links.mjs'
+import { rehypeGlossary } from './src/plugins/rehype-glossary.ts'
 import { rehypeHeadingAnchor } from './src/plugins/rehype-heading-anchor.mjs'
+import { remarkGlossary } from './src/plugins/remark-glossary.ts'
 import { rehypeImageProcessor } from './src/plugins/rehype-image-processor.mjs'
 import { remarkContainerDirectives } from './src/plugins/remark-container-directives.mjs'
 import { remarkLeafDirectives } from './src/plugins/remark-leaf-directives.mjs'
@@ -79,6 +81,7 @@ export default defineConfig({
       remarkContainerDirectives,
       remarkLeafDirectives,
       remarkReadingTime,
+      remarkGlossary,
     ],
     rehypePlugins: [
       rehypeKatex,
@@ -86,6 +89,7 @@ export default defineConfig({
       rehypeSlug,
       rehypeHeadingAnchor,
       rehypeImageProcessor,
+      rehypeGlossary,
       rehypeExternalLinks,
       rehypeCodeCopyButton,
     ],
