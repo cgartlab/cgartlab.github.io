@@ -44,23 +44,26 @@ const pageImage = postSlug
 <!-- Prevent FOUC: Apply theme class before any rendering -->
 <script is:inline define:vars={{ defaultMode }}>
 (function () {
-  const _mode = defaultMode
-  let _dark = _mode === 'dark' || (_mode === 'auto' && window.matchMedia('(prefers-color-scheme: dark)').matches)
-  if (_mode !== 'auto') {
-    _dark = _mode === 'dark'
+  // Priority: forced mode > auto+manual > auto+system
+  var _dark
+  if (defaultMode === 'dark') {
+    _dark = true
+  }
+  else if (defaultMode === 'light') {
+    _dark = false
   }
   else {
-    // In auto mode, only use localStorage if user manually set theme
-    const _manual = localStorage.getItem('theme-manual')
+    // auto mode
+    var _manual = localStorage.getItem('theme-manual')
     if (_manual === 'true') {
-      const _stored = localStorage.getItem('theme')
-      if (_stored)
-        _dark = _stored === 'dark'
+      var _stored = localStorage.getItem('theme')
+      _dark = _stored === 'dark'
     }
-    // Otherwise, follow system preference (already set above)
+    else {
+      _dark = window.matchMedia('(prefers-color-scheme: dark)').matches
+    }
   }
-  if (_dark)
-    document.documentElement.classList.add('dark')
+  if (_dark) document.documentElement.classList.add('dark')
 })()
 </script>
 <!-- Basic Info -->
@@ -247,15 +250,6 @@ const pageImage = postSlug
 <!-- Global View Transition -->
 <ClientRouter fallback="none" />
 
-<!-- Re-apply CSS after soft navigation to fix --at-apply unavailability -->
-<script is:inline>
-document.addEventListener('astro:after-swap', () => {
-  requestAnimationFrame(() => {
-    document.body.offsetHeight
-  })
-})
-</script>
-
 <!-- Theme Toggle -->
 <script
   is:inline
@@ -267,52 +261,52 @@ document.addEventListener('astro:after-swap', () => {
  }}
 >
 (function () {
-  // Check if current theme is dark
-  // Priority: manual theme > default mode > system preference
+  // Determine if dark mode should be active.
+  // Priority (highest → lowest):
+  //   1. Forced mode in config (light / dark) — always wins
+  //   2. auto mode + user has manually toggled — respect stored choice
+  //   3. auto mode + no manual override — follow system preference
   function isCurrentDark() {
-    // Check if user manually set theme
+    if (defaultMode === 'dark') return true
+    if (defaultMode === 'light') return false
+
+    // auto mode
     const manualTheme = localStorage.getItem('theme-manual')
     if (manualTheme === 'true') {
-      const currentTheme = localStorage.getItem('theme')
-      if (currentTheme) {
-        return currentTheme === 'dark'
-      }
+      const storedTheme = localStorage.getItem('theme')
+      if (storedTheme) return storedTheme === 'dark'
     }
 
-    if (defaultMode !== 'auto') {
-      return defaultMode === 'dark'
-    }
-
-    // If defaultMode is auto and no manual override, follow system preference
+    // No manual override — always follow system preference
     return window.matchMedia('(prefers-color-scheme: dark)').matches
   }
 
-  // Initialize theme
-  function initTheme(doc = document) {
+  // Apply theme class + meta theme-color to the given document
+  function initTheme(doc) {
+    doc = doc || document
     const isDark = isCurrentDark()
     doc.documentElement.classList.toggle('dark', isDark)
 
-    // Update meta theme-color tag
     const metaThemeColor = doc.head.querySelector('meta[name="theme-color"]')
     if (metaThemeColor) {
       metaThemeColor.setAttribute('content', isDark ? darkMode : lightMode)
     }
   }
 
-  // Check and init motion preference
-  // Condition: theme config || system preference || browser capability
-  function initMotionPref(doc = document) {
+  // Apply reduce-motion class to the given document
+  function initMotionPref(doc) {
+    doc = doc || document
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
     const supportsViewTransitions = 'startViewTransition' in doc
     const shouldReduceMotion = reduceMotion || prefersReducedMotion || !supportsViewTransitions
-
     doc.documentElement.classList.toggle('reduce-motion', shouldReduceMotion)
   }
 
-  // Update theme after page transition to apply theme to new document
-  document.addEventListener('astro:after-swap', () => {
-    initTheme()
-    initMotionPref()
+  // Apply theme to the INCOMING document BEFORE the swap so there is
+  // zero flash between the outgoing and incoming pages.
+  document.addEventListener('astro:before-swap', function (e) {
+    initTheme(e.newDocument)
+    initMotionPref(e.newDocument)
   })
 
   // Initialize theme on first load
