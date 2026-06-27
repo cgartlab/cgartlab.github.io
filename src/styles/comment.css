@@ -10,10 +10,6 @@
 #twikoo .tk-comments-container .tk-avatar {
   margin-top: 0.2rem;
 }
-#twikoo .tk-avatar,
-#twikoo .tk-avatar-img {
-  /* lg:(h-12 w-12) */
-}
 @media (min-width: 1024px) {
   #twikoo .tk-avatar,
   #twikoo .tk-avatar-img {
@@ -146,9 +142,6 @@
     margin-left: 4rem;
   }
 }
-#twikoo .tk-comments-container .tk-row.actions {
-  /* lg:ml-14 */
-}
 @media (min-width: 1024px) {
   #twikoo .tk-comments-container .tk-row.actions {
     margin-left: 3.5rem;
@@ -216,7 +209,6 @@
 #waline .wl-header-item {
   border-bottom: 1px solid;
   border-bottom-color: color-mix(in srgb, var(--un-preset-theme-colors-primary) 25%, transparent);
-  border-bottom-style: solid;
 }
 #waline .wl-header label {
   font-size: 0.75rem;
@@ -270,11 +262,8 @@
   scrollbar-width: none;
   -ms-overflow-style: none;
 }
-#waline .wl-gallery::-webkit-scrollbar {
-  display: none;
-}
 #waline .wl-btn {
-  transition-duration: 150ms;
+  transition-duration: 0.15s;
 }
 #waline .wl-btn:hover {
   border-color: color-mix(in srgb, var(--un-preset-theme-colors-secondary) 80%, transparent);
