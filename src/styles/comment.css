@@ -1,7 +1,7 @@
 /* Twikoo */
 #twikoo svg,
 #twikoo .tk-action-count {
-color: color-mix(in srgb, oklch(var(--un-preset-theme-colors-secondary)) 80%, transparent);
+  color: color-mix(in srgb, oklch(var(--un-preset-theme-colors-secondary)) 80%, transparent);
 }
 #twikoo .tk-comments-container {
   font-size: 0.875rem;
@@ -227,7 +227,7 @@ color: color-mix(in srgb, oklch(var(--un-preset-theme-colors-secondary)) 80%, tr
   min-height: 5rem;
 }
 #waline .wl-editor::placeholder {
-  color: color-mix(in srgb, oklch(var(--un-preset-theme-colors-primary)) 25%, transparent);
+  color: oklch(var(--un-preset-theme-colors-primary) / 0.25);
 }
 #waline .wl-footer {
   margin: 0.5rem;
