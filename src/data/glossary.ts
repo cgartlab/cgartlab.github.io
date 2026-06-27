@@ -16,6 +16,8 @@ export interface TermLangOverride {
   aliases?: string[]
   /** 该语言下指向的 wikiPath；不填则回退到顶层 wikiPath */
   wikiPath?: string
+  /** 自定义链接（优先级高于 wikiPath） */
+  url?: string
 }
 
 export interface TermEntry {
@@ -27,6 +29,8 @@ export interface TermEntry {
   aliases?: string[]
   /** 顶层 wikiPath（默认指向中文维基） */
   wikiPath: string
+  /** 自定义链接（优先级高于 wikiPath，如产品文档或官网） */
+  url?: string
   /** 各语言覆盖 */
   langs?: Partial<Record<Language, TermLangOverride>>
   /** 简短描述（用于审计报告，可选） */
