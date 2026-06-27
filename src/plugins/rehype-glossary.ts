@@ -16,7 +16,7 @@
 
 import { visit, SKIP } from 'unist-util-visit'
 import { glossary } from '../data/glossary.ts'
-import { buildWikiUrl, getMatchCandidates } from '../utils/glossary.ts'
+import { getMatchCandidates, resolveLinkUrl } from '../utils/glossary.ts'
 import type { TermEntry } from '../data/glossary.ts'
 import type { Language } from '../i18n/config.ts'
 
@@ -72,7 +72,7 @@ function findTermMatches(text: string, activeTerms: TermEntry[], lang: Language,
         end: index + candidate.length,
         termId: entry.id,
         display: candidate,
-        href: buildWikiUrl(entry, lang),
+        href: resolveLinkUrl(entry, lang),
       })
       // 找到第一个匹配后跳出（同一术语在单节点里只链接一次）
       break
