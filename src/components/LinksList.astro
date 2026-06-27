@@ -69,7 +69,7 @@ const { glossaryTitle, glossaryDesc, glossaryUrl, glossaryLinkText } = Astro.pro
   font-size: 1.5rem;
   font-weight: 700;
   margin: 0;
-  color: var(--un-preset-theme-colors-primary);
+  color: oklch(var(--un-preset-theme-colors-primary));
   position: relative;
   padding: 1rem 1.5rem;
   background: transparent;
@@ -84,7 +84,7 @@ const { glossaryTitle, glossaryDesc, glossaryUrl, glossaryLinkText } = Astro.pro
 }
 
 .links-section[open] .links-category-title {
-  border-bottom: 2px solid var(--un-preset-theme-colors-primary);
+  border-bottom: 2px solid oklch(var(--un-preset-theme-colors-primary));
 }
 
 .links-section:not([open]) .links-category-title {
@@ -106,7 +106,7 @@ const { glossaryTitle, glossaryDesc, glossaryUrl, glossaryLinkText } = Astro.pro
 
 .glossary-desc {
   font-size: 0.9rem;
-  color: var(--un-preset-theme-colors-secondary);
+  color: oklch(var(--un-preset-theme-colors-secondary));
   opacity: 0.75;
   margin: 0 0 1rem;
   line-height: 1.5;
@@ -116,16 +116,16 @@ const { glossaryTitle, glossaryDesc, glossaryUrl, glossaryLinkText } = Astro.pro
   display: inline-block;
   font-size: 0.9rem;
   font-weight: 600;
-  color: var(--un-preset-theme-colors-primary);
+  color: oklch(var(--un-preset-theme-colors-primary));
   text-decoration: none;
   padding: 0.5rem 1rem;
   border-radius: 0.375rem;
-  background: color-mix(in srgb, var(--un-preset-theme-colors-primary) 10%, transparent);
+  background: color-mix(in srgb, oklch(var(--un-preset-theme-colors-primary)) 10%, transparent);
   transition: all 0.2s;
 }
 
 .glossary-link:hover {
-  background: color-mix(in srgb, var(--un-preset-theme-colors-primary) 20%, transparent);
+  background: color-mix(in srgb, oklch(var(--un-preset-theme-colors-primary)) 20%, transparent);
   transform: translateY(-1px);
 }
 
