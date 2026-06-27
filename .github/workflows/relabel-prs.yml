@@ -62,21 +62,10 @@ jobs:
               100: ["✨ type:enhancement", "🎨 area:theme"],
             };
 
-            const oldLabels = ["bug", "documentation", "duplicate", "enhancement", "invalid", "question", "wontfix", "dependencies", "javascript", "codex", "P0", "P1", "P2", "合规", "a11y", "i18n", "SEO", "performance", "good first issue", "help wanted"];
-
             for (const [prNum, labels] of Object.entries(prLabels)) {
               try {
-                // Remove old labels first
-                if (oldLabels.length > 0) {
-                  await github.rest.issues.removeLabel({
-                    owner: context.repo.owner,
-                    repo: context.repo.repo,
-                    issue_number: parseInt(prNum),
-                    name: oldLabels[0],
-                  }).catch(() => {});
-                }
-                // Add new labels
-                await github.rest.issues.addLabels({
+                // setLabels 原子替换：移除旧标签 + 添加新标签，一次 API 调用完成
+                await github.rest.issues.setLabels({
                   owner: context.repo.owner,
                   repo: context.repo.repo,
                   issue_number: parseInt(prNum),
@@ -84,7 +73,6 @@ jobs:
                 });
                 console.log(`✅ PR #${prNum}: ${labels.join(", ")}`);
               } catch (e) {
-                console.log(`❌ PR #${prNum}: ${e.message}`);
+                console.log(`❌ PR #${prNum}: ${e.message} — 跳过`);
               }
-              await new Promise(r => setTimeout(r, 100));
             }
