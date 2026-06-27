@@ -1,0 +1,62 @@
+📦 area:content:
+  - changed-files:
+      - any-glob-to-any-file:
+          - 'src/content/**/*'
+          - 'src/content.config.ts'
+
+🎨 area:theme:
+  - changed-files:
+      - any-glob-to-any-file:
+          - 'src/components/**/*'
+          - 'src/layouts/**/*'
+          - 'src/styles/**/*'
+          - 'src/pages/**/*'
+          - 'uno.config.ts'
+          - 'src/config.ts'
+
+⚙️ area:infra:
+  - changed-files:
+      - any-glob-to-any-file:
+          - '.github/**/*'
+          - 'wrangler.jsonc'
+          - 'astro.config.ts'
+          - 'package.json'
+          - 'pnpm-lock.yaml'
+          - 'pnpm-workspace.yaml'
+          - 'scripts/**/*'
+
+🔍 area:seo:
+  - changed-files:
+      - any-glob-to-any-file:
+          - 'src/layouts/Head.astro'
+          - 'src/pages/og/**/*'
+          - 'public/robots.txt'
+          - 'public/_headers'
+          - 'public/llms.txt'
+
+📝 type:docs:
+  - changed-files:
+      - any-glob-to-any-file:
+          - 'README.md'
+          - 'AGENTS.md'
+          - 'docs/**/*'
+          - '.github/ISSUE_TEMPLATE/**/*'
+
+✨ type:enhancement:
+  - changed-files:
+      - any-glob-to-any-file:
+          - 'src/components/**/*'
+          - 'src/pages/**/*'
+          - 'src/plugins/**/*'
+          - 'src/utils/**/*'
+
+🔧 type:chore:
+  - changed-files:
+      - any-glob-to-any-file:
+          - 'tsconfig.json'
+          - 'eslint.config.mjs'
+          - '.editorconfig'
+          - '.gitignore'
+          - '.npmrc'
+          - 'patches/**/*'
+          - 'pnpm-lock.yaml'
