@@ -1,5 +1,16 @@
 name-template: 'v$RESOLVED_VERSION'
 tag-template: 'v$RESOLVED_VERSION'
+exclude-labels:
+  - '🏁 good first issue'
+  - '🤝 help wanted'
+  - '🚧 status:blocked'
+  - '💤 status:stale'
+  - '🔥 priority:high'
+  - '🌿 priority:low'
+  - '📦 area:content'
+  - '🎨 area:theme'
+  - '⚙️ area:infra'
+  - '🔍 area:seo'
 categories:
   - title: '🚀 Features'
     labels:
@@ -17,14 +28,6 @@ categories:
   - title: '💥 Breaking Changes'
     labels:
       - '💥 breaking'
-  - title: '📦 Area Changes'
-    labels:
-      - '📦 area:content'
-      - '🎨 area:theme'
-      - '⚙️ area:infra'
-      - '🔍 area:seo'
-  - title: 'Other Changes'
-    labels: []
 change-template: '- $TITLE (#$NUMBER)'
 change-title-escapes: '\<*_&'
 version-resolver:
