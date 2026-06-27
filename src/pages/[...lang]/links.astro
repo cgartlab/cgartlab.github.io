@@ -1,7 +1,8 @@
 ---
 import LinksList from '@/components/LinksList.astro'
-import { allLocales } from '@/config'
+import { allLocales, base } from '@/config'
 import { getLangFromLocale, getLangRouteParam } from '@/i18n/lang'
+import { glossary } from '@/data/glossary'
 import Layout from '@/layouts/Layout.astro'
 
 export async function getStaticPaths() {
@@ -11,6 +12,8 @@ export async function getStaticPaths() {
 }
 
 const currentLang = getLangFromLocale(Astro.currentLocale)
+const termCount = glossary.length
+const glossaryUrl = `${base || ''}/glossary/`
 ---
 
 <Layout>
@@ -20,4 +23,57 @@ const currentLang = getLangFromLocale(Astro.currentLocale)
   <div class="mt-6 lg:mt-10.5">
     <LinksList lang={currentLang} />
   </div>
+
+  <!-- Glossary Section -->
+  <div class="glossary-callout">
+    <h2 class="glossary-callout-title">术语表</h2>
+    <p class="glossary-callout-desc">
+      博客文章中出现的专业术语首次会自动链接到维基百科，方便快速查阅。目前已收录 <strong>{termCount}</strong> 条术语。
+    </p>
+    <a href={glossaryUrl} class="glossary-callout-link" data-umami-event="glossary-links-cta">
+      查看完整术语表 →
+    </a>
+  </div>
 </Layout>
+
+<style>
+.glossary-callout {
+  margin-top: 3rem;
+  padding: 1.5rem;
+  border-radius: 0.75rem;
+  border: 1px solid color-mix(in srgb, var(--un-preset-theme-colors-secondary) 15%, transparent);
+  background: color-mix(in srgb, var(--un-preset-theme-colors-background) 50%, transparent);
+}
+
+.glossary-callout-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--un-preset-theme-colors-primary);
+  margin: 0 0 0.5rem;
+}
+
+.glossary-callout-desc {
+  font-size: 0.9rem;
+  color: var(--un-preset-theme-colors-secondary);
+  opacity: 0.75;
+  margin: 0 0 1rem;
+  line-height: 1.5;
+}
+
+.glossary-callout-link {
+  display: inline-block;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--un-preset-theme-colors-primary);
+  text-decoration: none;
+  padding: 0.5rem 1rem;
+  border-radius: 0.375rem;
+  background: color-mix(in srgb, var(--un-preset-theme-colors-primary) 10%, transparent);
+  transition: all 0.2s;
+}
+
+.glossary-callout-link:hover {
+  background: color-mix(in srgb, var(--un-preset-theme-colors-primary) 20%, transparent);
+  transform: translateY(-1px);
+}
+</style>

@@ -113,16 +113,17 @@ function handleThemeToggle(e: MouseEvent) {
     return
   }
 
-  // Add temporary markers before view transition
-  document.documentElement.style.setProperty('view-transition-name', 'theme-toggle-transition')
   document.documentElement.setAttribute('data-theme-changing', '')
 
   // Use View Transitions API for theme toggle
-  const transition = document.startViewTransition(toggleTheme)
+  // Force synchronous reflow to ensure CSS variables are recalculated before snapshot capture
+  const transition = document.startViewTransition(() => {
+    void document.documentElement.offsetHeight
+    toggleTheme()
+  })
 
-  // Remove temporary markers after view transition
+  // Remove temporary marker after view transition
   transition.finished.then(() => {
-    document.documentElement.style.removeProperty('view-transition-name')
     document.documentElement.removeAttribute('data-theme-changing')
   })
 }

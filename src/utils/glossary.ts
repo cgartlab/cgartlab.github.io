@@ -26,6 +26,25 @@ export function resolveWikiPath(entry: TermEntry, lang: Language): string {
 }
 
 /**
+ * 解析当前文章语言下术语的自定义 URL（如有）
+ */
+function resolveUrl(entry: TermEntry, lang: Language): string | undefined {
+  const override = entry.langs?.[lang]
+  return override?.url ?? entry.url
+}
+
+/**
+ * 生成链接 URL
+ * 优先级：自定义 url > 维基百科 URL
+ */
+export function resolveLinkUrl(entry: TermEntry, lang: Language): string {
+  const custom = resolveUrl(entry, lang)
+  if (custom) return custom
+  const path = resolveWikiPath(entry, lang)
+  return `https://${WIKI_LANG_HOST[lang]}/wiki/${encodeURIComponent(path)}`
+}
+
+/**
  * 解析当前文章语言下术语的有效 aliases
  * 返回空数组表示无额外匹配形式
  */

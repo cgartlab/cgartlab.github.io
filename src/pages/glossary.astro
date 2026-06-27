@@ -1,0 +1,199 @@
+---
+import Layout from '@/layouts/Layout.astro'
+import { glossary } from '@/data/glossary'
+import { resolveLinkUrl } from '@/utils/glossary'
+
+const sorted = [...glossary].sort((a, b) => a.term.localeCompare(b.term))
+
+interface LetterGroup {
+  letter: string
+  entries: typeof glossary
+}
+
+const groups: LetterGroup[] = []
+let currentLetter = ''
+let currentGroup: LetterGroup | null = null
+for (const entry of sorted) {
+  const first = entry.term.charAt(0).toUpperCase()
+  const letter = /[A-Za-z]/.test(first) ? first : '#'
+  if (!currentGroup) {
+    currentGroup = { letter, entries: [] }
+    currentLetter = letter
+    groups.push(currentGroup)
+  } else if (letter !== currentLetter) {
+    currentGroup = { letter, entries: [] }
+    groups.push(currentGroup)
+    currentLetter = letter
+  }
+  currentGroup.entries.push(entry)
+}
+---
+
+<Layout>
+  <div class="uno-decorative-line" />
+
+  <div class="glossary-page">
+    <h1 class="glossary-title">术语表</h1>
+    <p class="glossary-subtitle">术语首次出现在非周刊文章中时，自动链接到维基百科。共 {glossary.length} 条。</p>
+
+    <!-- Letter Jump Nav -->
+    <nav class="letter-nav" aria-label="字母索引">
+      {groups.map(g => (
+        <a href={`#letter-${g.letter}`} class="letter-jump">{g.letter}</a>
+      ))}
+    </nav>
+
+    <!-- Glossary Entries -->
+    {groups.map(group => (
+      <section class="letter-section">
+        <h2 id={`letter-${group.letter}`} class="letter-header">{group.letter}</h2>
+        <dl class="term-list">
+          {group.entries.map(entry => {
+            const url = resolveLinkUrl(entry, 'zh')
+            return (
+              <div class="term-item">
+                <dt class="term-name">
+                  <a
+                    href={url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    data-umami-event="glossary-term-click"
+                    data-umami-event-term={entry.id}
+                  >
+                    {entry.term}
+                  </a>
+                </dt>
+                <dd class="term-desc">{entry.description}</dd>
+              </div>
+            )
+          })}
+        </dl>
+      </section>
+    ))}
+  </div>
+</Layout>
+
+<style>
+.glossary-page {
+  max-width: 48rem;
+  margin: 0 auto;
+  padding: 1rem 0;
+}
+
+.glossary-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--un-preset-theme-colors-primary);
+  margin: 0 0 0.25rem;
+}
+
+.glossary-subtitle {
+  font-size: 0.9rem;
+  color: var(--un-preset-theme-colors-secondary);
+  opacity: 0.7;
+  margin: 0 0 2rem;
+}
+
+.letter-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid color-mix(in srgb, var(--un-preset-theme-colors-secondary) 15%, transparent);
+}
+
+.letter-jump {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--un-preset-theme-colors-secondary);
+  text-decoration: none;
+  border-radius: 0.25rem;
+  transition: all 0.2s;
+}
+
+.letter-jump:hover {
+  color: var(--un-preset-theme-colors-primary);
+  background: color-mix(in srgb, var(--un-preset-theme-colors-primary) 10%, transparent);
+}
+
+.letter-section {
+  margin-bottom: 1.5rem;
+}
+
+.letter-header {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--un-preset-theme-colors-primary);
+  margin: 0 0 0.75rem;
+  padding-bottom: 0.25rem;
+  border-bottom: 2px solid color-mix(in srgb, var(--un-preset-theme-colors-primary) 20%, transparent);
+  scroll-margin-top: 2rem;
+}
+
+.term-list {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.term-item {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  padding: 0.375rem 0.5rem;
+  border-radius: 0.375rem;
+  transition: background 0.2s;
+}
+
+.term-item:hover {
+  background: color-mix(in srgb, var(--un-preset-theme-colors-background) 90%, transparent);
+}
+
+.term-name {
+  font-size: 1rem;
+  font-weight: 600;
+  min-width: 8rem;
+  flex-shrink: 0;
+}
+
+.term-name a {
+  color: var(--un-preset-theme-colors-primary);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.term-name a:hover {
+  text-decoration: underline;
+  opacity: 0.8;
+}
+
+.term-desc {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--un-preset-theme-colors-secondary);
+  opacity: 0.75;
+  line-height: 1.4;
+}
+
+@media (max-width: 640px) {
+  .glossary-title {
+    font-size: 1.5rem;
+  }
+
+  .term-item {
+    flex-direction: column;
+    gap: 0.15rem;
+  }
+
+  .term-name {
+    min-width: auto;
+  }
+}
+</style>
