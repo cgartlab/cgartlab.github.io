@@ -70,6 +70,28 @@ export default defineConfig({
     'c-warning': 'text-warning',
     'c-caution': 'text-caution',
   },
+  // safelist forces unocss-preset-theme to emit CSS variable definitions for
+  // ALL theme colors, even those not referenced by any utility in source files.
+  // Without this, colors only used in raw CSS (global.css, extension.css, etc.)
+  // like 'background' and 'highlight' never get their --un-preset-theme-colors-*
+  // variables generated, so oklch(var(--un-preset-theme-colors-background)) in
+  // global.css resolves to an invalid color and the browser discards it entirely.
+  safelist: [
+    'bg-background',
+    'bg-highlight',
+    'bg-note',
+    'bg-tip',
+    'bg-important',
+    'bg-warning',
+    'bg-caution',
+    'text-background',
+    'text-highlight',
+    'text-note',
+    'text-tip',
+    'text-important',
+    'text-warning',
+    'text-caution',
+  ],
   variants: [
     (matcher) => {
       if (!matcher.startsWith('cjk:')) {
