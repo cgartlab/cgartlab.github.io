@@ -267,8 +267,8 @@ const d = t[lang as keyof typeof t] || t.zh
 .inquiry-section {
   margin-top: 2rem;
   padding: 1.25rem 1.5rem;
-  background-color: var(--un-preset-theme-colors-background);
-  border: 1px solid color-mix(in srgb, var(--un-preset-theme-colors-highlight) 30%, transparent);
+  background-color: oklch(var(--un-preset-theme-colors-background));
+  border: 1px solid oklch(var(--un-preset-theme-colors-highlight) / 0.3);
   border-radius: 0.75rem;
 }
 
@@ -279,13 +279,13 @@ const d = t[lang as keyof typeof t] || t.zh
 .inquiry-title {
   font-size: 1.1rem;
   font-weight: 600;
-  color: var(--un-preset-theme-colors-primary);
+  color: oklch(var(--un-preset-theme-colors-primary));
   margin: 0;
 }
 
 .inquiry-note {
   font-size: 0.8rem;
-  color: color-mix(in srgb, var(--un-preset-theme-colors-secondary) 60%, transparent);
+  color: oklch(var(--un-preset-theme-colors-secondary) / 0.6);
   margin: 0.25rem 0 0 0;
 }
 
@@ -316,7 +316,7 @@ const d = t[lang as keyof typeof t] || t.zh
 .form-label {
   font-size: 0.8rem;
   font-weight: 600;
-  color: var(--un-preset-theme-colors-primary);
+  color: oklch(var(--un-preset-theme-colors-primary));
 }
 
 .form-required {
@@ -330,9 +330,9 @@ const d = t[lang as keyof typeof t] || t.zh
   width: 100%;
   padding: 0.5rem 0.75rem;
   font-size: 0.875rem;
-  color: var(--un-preset-theme-colors-primary);
-  background-color: var(--un-preset-theme-colors-background);
-  border: 1px solid color-mix(in srgb, var(--un-preset-theme-colors-highlight) 50%, transparent);
+  color: oklch(var(--un-preset-theme-colors-primary));
+  background-color: oklch(var(--un-preset-theme-colors-background));
+  border: 1px solid oklch(var(--un-preset-theme-colors-highlight) / 0.5);
   border-radius: 0.5rem;
   outline: none;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
@@ -342,7 +342,7 @@ const d = t[lang as keyof typeof t] || t.zh
 }
 
 .form-select {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='color-mix(in srgb, var(--un-preset-theme-colors-primary) 60%, transparent)' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='oklch(var(--un-preset-theme-colors-primary) / 0.6)' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 0.75rem center;
   padding-right: 2rem;
@@ -352,13 +352,13 @@ const d = t[lang as keyof typeof t] || t.zh
 .form-input:focus,
 .form-select:focus,
 .form-textarea:focus {
-  border-color: var(--un-preset-theme-colors-highlight);
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--un-preset-theme-colors-highlight) 20%, transparent);
+  border-color: oklch(var(--un-preset-theme-colors-highlight));
+  box-shadow: 0 0 0 3px oklch(var(--un-preset-theme-colors-highlight) / 0.2);
 }
 
 .form-input::placeholder,
 .form-textarea::placeholder {
-  color: color-mix(in srgb, var(--un-preset-theme-colors-secondary) 50%, transparent);
+  color: oklch(var(--un-preset-theme-colors-secondary) / 0.5);
 }
 
 .form-textarea {
@@ -378,16 +378,16 @@ const d = t[lang as keyof typeof t] || t.zh
   padding: 0.5rem 1.25rem;
   font-size: 0.875rem;
   font-weight: 600;
-  color: var(--un-preset-theme-colors-primary);
+  color: oklch(var(--un-preset-theme-colors-primary));
   background-color: transparent;
-  border: 1px solid color-mix(in srgb, var(--un-preset-theme-colors-highlight) 50%, transparent);
+  border: 1px solid oklch(var(--un-preset-theme-colors-highlight) / 0.5);
   border-radius: 0.5rem;
   cursor: pointer;
   transition: opacity 0.2s ease, background-color 0.2s ease;
 }
 
 .form-submit:hover {
-  background-color: color-mix(in srgb, var(--un-preset-theme-colors-highlight) 15%, transparent);
+  background-color: oklch(var(--un-preset-theme-colors-highlight) / 0.15);
   opacity: 1;
 }
 
@@ -408,13 +408,13 @@ const d = t[lang as keyof typeof t] || t.zh
 }
 
 .form-message-success {
-  background-color: var(--un-preset-theme-colors-background);
+  background-color: oklch(var(--un-preset-theme-colors-background));
   color: oklch(55% 0.15 145);
   border: 1px solid oklch(55% 0.15 145 / 0.4);
 }
 
 .form-message-error {
-  background-color: var(--un-preset-theme-colors-background);
+  background-color: oklch(var(--un-preset-theme-colors-background));
   color: oklch(55% 0.15 25);
   border: 1px solid oklch(55% 0.15 25 / 0.4);
 }
@@ -435,7 +435,7 @@ if (form && submitBtn) {
     required.forEach((field) => {
       const el = field as HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
       if (!el.value.trim()) {
-        el.style.borderColor = 'var(--un-preset-theme-colors-highlight)'
+        el.style.borderColor = 'oklch(var(--un-preset-theme-colors-highlight))'
         valid = false
       }
       else {

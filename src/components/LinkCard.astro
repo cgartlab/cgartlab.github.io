@@ -42,8 +42,8 @@ const { title, description, url, icon } = Astro.props
   justify-content: space-between;
   padding: 1.25rem;
   border-radius: 0.5rem;
-  border: 1px solid color-mix(in srgb, var(--un-preset-theme-colors-secondary) 15%, transparent);
-  background: color-mix(in srgb, var(--un-preset-theme-colors-background) 50%, transparent);
+  border: 1px solid color-mix(in srgb, oklch(var(--un-preset-theme-colors-secondary)) 15%, transparent);
+  background: color-mix(in srgb, oklch(var(--un-preset-theme-colors-background)) 50%, transparent);
   text-decoration: none;
   color: inherit;
   transition: all 0.3s ease-out;
@@ -51,9 +51,9 @@ const { title, description, url, icon } = Astro.props
 }
 
 .link-card:hover {
-  border-color: color-mix(in srgb, var(--un-preset-theme-colors-primary) 30%, transparent);
-  background: color-mix(in srgb, var(--un-preset-theme-colors-background) 80%, transparent);
-  box-shadow: 0 6px 16px color-mix(in srgb, var(--un-preset-theme-colors-primary) 15%, transparent);
+  border-color: color-mix(in srgb, oklch(var(--un-preset-theme-colors-primary)) 30%, transparent);
+  background: color-mix(in srgb, oklch(var(--un-preset-theme-colors-background)) 80%, transparent);
+  box-shadow: 0 6px 16px color-mix(in srgb, oklch(var(--un-preset-theme-colors-primary)) 15%, transparent);
   transform: translateY(-3px);
 }
 
@@ -90,18 +90,18 @@ const { title, description, url, icon } = Astro.props
   margin: 0;
   font-size: 1rem;
   font-weight: 600;
-  color: var(--un-preset-theme-colors-primary);
+  color: oklch(var(--un-preset-theme-colors-primary));
   transition: color 0.3s ease-out;
 }
 
 .link-card:hover .link-card-title {
-  color: var(--un-preset-theme-colors-primary);
+  color: oklch(var(--un-preset-theme-colors-primary));
 }
 
 .link-card-description {
   margin: 0.25rem 0 0;
   font-size: 0.875rem;
-  color: var(--un-preset-theme-colors-secondary);
+  color: oklch(var(--un-preset-theme-colors-secondary));
   opacity: 0.7;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -115,8 +115,8 @@ const { title, description, url, icon } = Astro.props
   width: 2rem;
   height: 2rem;
   border-radius: 0.5rem;
-  background: color-mix(in srgb, var(--un-preset-theme-colors-primary) 10%, transparent);
-  color: var(--un-preset-theme-colors-primary);
+  background: color-mix(in srgb, oklch(var(--un-preset-theme-colors-primary)) 10%, transparent);
+  color: oklch(var(--un-preset-theme-colors-primary));
   flex-shrink: 0;
   opacity: 0.6;
   transition: all 0.3s ease-out;
@@ -124,7 +124,7 @@ const { title, description, url, icon } = Astro.props
 
 .link-card:hover .link-card-arrow {
   opacity: 1;
-  background: color-mix(in srgb, var(--un-preset-theme-colors-primary) 20%, transparent);
+  background: color-mix(in srgb, oklch(var(--un-preset-theme-colors-primary)) 20%, transparent);
   transform: translateX(2px);
 }
 </style>
