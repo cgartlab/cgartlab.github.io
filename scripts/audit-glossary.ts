@@ -61,12 +61,42 @@ function getExistingTerms(): Set<string> {
     { term: 'Markdown' },
     { term: 'NAS', aliases: ['网络附加存储', 'Network-attached storage', 'network-attached storage'] },
     { term: 'DNS' }, { term: 'SSH' }, { term: 'HTTP' },
+    { term: 'IPv6' },
+    { term: '内网穿透', aliases: ['NAT穿透', 'NAT穿透', 'NAT穿越', 'NAT traversal', 'NAT Traversal'] },
+    { term: 'PowerShell', aliases: ['pwsh'] },
+    { term: 'WSL', aliases: ['WSL2', 'Windows Subsystem for Linux'] },
     { term: 'AI', aliases: ['人工智能', 'Artificial intelligence', 'artificial intelligence', '人工智慧'] },
+    { term: 'Gemini', aliases: ['Google Gemini'] },
+    { term: 'ChatGPT' },
+    { term: 'Claude' },
+    { term: 'Ollama' }, { term: 'Cursor' }, { term: 'Kimi' }, { term: 'MiniMax' },
+    { term: 'OpenClaw', aliases: ['龙虾'] },
+    { term: 'OpenCode' },
     { term: 'WordPress' }, { term: 'Telegram' }, { term: 'Photoshop' }, { term: 'Cloudflare' },
+    { term: 'After Effects', aliases: ['AE'] },
+    { term: 'Procreate' },
+    { term: 'OneDrive' },
+    { term: 'RIME', aliases: ['中州韵', '小狼毫', '鼠须管'] },
+    { term: 'Calibre' },
+    { term: 'Homebrew' },
+    { term: 'n8n' },
+    { term: 'Memos' },
+    { term: 'Miniflux' },
+    { term: 'Reeder' },
+    { term: 'Folo', aliases: ['Follow'] },
+    { term: 'RSSHub' },
+    { term: 'Affine' },
+    { term: 'Flomo' },
+    { term: 'Syncthing' },
+    { term: 'Unity' },
+    { term: 'Proxmox' },
+    { term: 'PVE', aliases: ['Proxmox VE'] },
+    { term: 'Hackintosh', aliases: ['黑苹果'] },
     { term: 'Notion' }, { term: 'Obsidian' },
     { term: '印象笔记', aliases: ['Evernote'] },
+    { term: 'AppleScript' },
     { term: '印象派', aliases: ['Impressionism'] },
-    { term: 'AppleScript' }, { term: 'Procreate' },
+    { term: 'C4D', aliases: ['Cinema 4D'] },
   ]
   const terms = new Set<string>()
   for (const entry of entries) {
@@ -195,7 +225,11 @@ async function main() {
     console.log(`  ${term} (${articles.length}次) → ${uniqueSlugs.slice(0, 5).join(', ')}${uniqueSlugs.length > 5 ? '...' : ''}`)
   }
 
-  console.log(`\n总文章数: ${[...allTermArticles.values()].flat().length / [...allTermArticles.keys()].length || 0}`)
+  const totalArticles = new Set<string>()
+  for (const articles of allTermArticles.values()) {
+    for (const a of articles) totalArticles.add(a.slug)
+  }
+  console.log(`\n总扫描文章数: ${totalArticles.size}`)
 }
 
 main().catch(console.error)
