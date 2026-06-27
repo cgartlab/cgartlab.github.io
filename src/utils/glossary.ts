@@ -20,7 +20,7 @@ export const WIKI_LANG_HOST: Record<Language, string> = {
 /**
  * 解析当前文章语言下术语的有效 wikiPath
  */
-export function resolveWikiPath(entry: TermEntry, lang: Language): string {
+export function resolveWikiPath(entry: TermEntry, lang: Language): string | undefined {
   const override = entry.langs?.[lang]
   return override?.wikiPath ?? entry.wikiPath
 }
@@ -41,6 +41,7 @@ export function resolveLinkUrl(entry: TermEntry, lang: Language): string {
   const custom = resolveUrl(entry, lang)
   if (custom) return custom
   const path = resolveWikiPath(entry, lang)
+  if (!path) return ''
   return `https://${WIKI_LANG_HOST[lang]}/wiki/${encodeURIComponent(path)}`
 }
 
@@ -60,6 +61,7 @@ export function resolveAliases(entry: TermEntry, lang: Language): string[] {
  */
 export function buildWikiUrl(entry: TermEntry, lang: Language): string {
   const path = resolveWikiPath(entry, lang)
+  if (!path) return ''
   return `https://${WIKI_LANG_HOST[lang]}/wiki/${encodeURIComponent(path)}`
 }
 

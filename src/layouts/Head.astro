@@ -44,28 +44,20 @@ const pageImage = postSlug
 <!-- Prevent FOUC: Apply theme class before any rendering -->
 <script is:inline define:vars={{ defaultMode }}>
 (function () {
-  // Determine if dark mode should be active:
-  // 1. If mode is forced (light/dark), use that directly.
-  // 2. If mode is 'auto' AND user has manually overridden, use their stored choice.
-  // 3. Otherwise (auto + no manual override), follow system preference.
-  var _dark
-  if (defaultMode === 'dark') {
-    _dark = true
-  }
-  else if (defaultMode === 'light') {
-    _dark = false
+  const _mode = defaultMode
+  let _dark = _mode === 'dark' || (_mode === 'auto' && window.matchMedia('(prefers-color-scheme: dark)').matches)
+  if (_mode !== 'auto') {
+    _dark = _mode === 'dark'
   }
   else {
-    // auto mode: check if user has manually chosen a theme
-    var _manual = localStorage.getItem('theme-manual')
+    // In auto mode, only use localStorage if user manually set theme
+    const _manual = localStorage.getItem('theme-manual')
     if (_manual === 'true') {
-      var _stored = localStorage.getItem('theme')
-      _dark = _stored === 'dark'
+      const _stored = localStorage.getItem('theme')
+      if (_stored)
+        _dark = _stored === 'dark'
     }
-    else {
-      // No manual override — always follow system preference
-      _dark = window.matchMedia('(prefers-color-scheme: dark)').matches
-    }
+    // Otherwise, follow system preference (already set above)
   }
   if (_dark)
     document.documentElement.classList.add('dark')
@@ -275,23 +267,23 @@ document.addEventListener('astro:after-swap', () => {
  }}
 >
 (function () {
-  // Check if current theme should be dark.
-  // Priority:
-  //   1. Forced mode (config light/dark) — always wins
-  //   2. Auto mode + user manual override — respect stored choice
-  //   3. Auto mode + no manual override — follow system preference
+  // Check if current theme is dark
+  // Priority: manual theme > default mode > system preference
   function isCurrentDark() {
-    if (defaultMode === 'dark') return true
-    if (defaultMode === 'light') return false
-
-    // auto mode
+    // Check if user manually set theme
     const manualTheme = localStorage.getItem('theme-manual')
     if (manualTheme === 'true') {
-      const storedTheme = localStorage.getItem('theme')
-      if (storedTheme) return storedTheme === 'dark'
+      const currentTheme = localStorage.getItem('theme')
+      if (currentTheme) {
+        return currentTheme === 'dark'
+      }
     }
 
-    // No manual override — always follow system preference
+    if (defaultMode !== 'auto') {
+      return defaultMode === 'dark'
+    }
+
+    // If defaultMode is auto and no manual override, follow system preference
     return window.matchMedia('(prefers-color-scheme: dark)').matches
   }
 
@@ -317,10 +309,10 @@ document.addEventListener('astro:after-swap', () => {
     doc.documentElement.classList.toggle('reduce-motion', shouldReduceMotion)
   }
 
-  // Update theme before page transition to prevent flashing
-  document.addEventListener('astro:before-swap', ({ newDocument }) => {
-    initTheme(newDocument)
-    initMotionPref(newDocument)
+  // Update theme after page transition to apply theme to new document
+  document.addEventListener('astro:after-swap', () => {
+    initTheme()
+    initMotionPref()
   })
 
   // Initialize theme on first load
