@@ -1,0 +1,34 @@
+name: Close Stale Issues
+
+on:
+  schedule:
+    - cron: '30 1 * * *'
+  workflow_dispatch:
+
+jobs:
+  stale:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      pull-requests: write
+    steps:
+      - uses: actions/stale@v10
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          days-before-issue-stale: 60
+          days-before-issue-close: 14
+          stale-issue-label: '💤 status:stale'
+          stale-issue-message: |
+            This issue has been marked as stale due to 60 days of inactivity.
+            此 issue 因 60 天无活动已被标记为 stale。
+            
+            If no further activity occurs in 14 days, it will be automatically closed.
+            若 14 天内无新活动，将自动关闭。
+          close-issue-message: |
+            This issue was closed automatically after 14 days of no response.
+            此 issue 因 14 天无响应已自动关闭。
+          days-before-pr-stale: -1
+          days-before-pr-close: -1
+          remove-stale-when-updated: true
+          exempt-issue-labels: '🔥 priority:high,🚧 status:blocked'
+          operations-per-run: 30

@@ -1,0 +1,81 @@
+name: "Bug Report｜问题反馈"
+description: "Report a bug or unexpected behavior / 报告功能异常"
+assignees: [cgartlab]
+labels: ["🐛 type:bug"]
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Bug Report｜问题反馈
+
+        Thanks for taking the time to report a bug! / 感谢您抽出时间报告问题！
+
+        > Please fill out all required fields. / 请填写所有必填项。
+        > Before reporting, try to reproduce the issue in a clean environment. / 报告前，尝试在干净环境中复现问题。
+
+  - type: input
+    id: url
+    attributes:
+      label: "Page URL｜页面 URL"
+      description: "The URL where the bug occurred / 出现问题的页面 URL"
+      placeholder: "https://cgartlab.com/..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: "Bug Description｜问题描述"
+      description: "Describe what happened / 描述发生了什么"
+      placeholder: "Describe the bug clearly..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: "Steps to Reproduce｜复现步骤"
+      description: "List the steps to reproduce the bug / 列出复现步骤"
+      placeholder: |
+        1. Go to '...'
+        2. Click on '...'
+        3. See error
+    validations:
+      required: true
+
+  - type: dropdown
+    id: browser
+    attributes:
+      label: "Browser｜浏览器"
+      description: "Which browser did you use? / 使用了什么浏览器？"
+      options:
+        - Chrome
+        - Firefox
+        - Safari
+        - Edge
+        - Other
+    validations:
+      required: true
+
+  - type: dropdown
+    id: device
+    attributes:
+      label: "Device｜设备"
+      description: "What device type are you using? / 使用什么设备？"
+      options:
+        - Desktop
+        - Mobile
+        - Tablet
+
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: "Screenshots｜截图"
+      description: "Attach screenshots if available / 可附上截图"
+
+  - type: textarea
+    id: context
+    attributes:
+      label: "Additional Context｜补充信息"
+      description: "Any other context about the problem / 其他相关信息"
