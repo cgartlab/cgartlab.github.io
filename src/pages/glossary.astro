@@ -18,6 +18,7 @@ for (const entry of sorted) {
   const letter = /[A-Za-z]/.test(first) ? first : '#'
   if (!currentGroup) {
     currentGroup = { letter, entries: [] }
+    currentLetter = letter
     groups.push(currentGroup)
   } else if (letter !== currentLetter) {
     currentGroup = { letter, entries: [] }
