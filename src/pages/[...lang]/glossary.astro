@@ -1,7 +1,19 @@
 ---
 import Layout from '@/layouts/Layout.astro'
+import { allLocales, base, defaultLocale } from '@/config'
 import { glossary } from '@/data/glossary'
 import { resolveLinkUrl } from '@/utils/glossary'
+import { getLangFromLocale, getLangRouteParam } from '@/i18n/lang'
+import { ui } from '@/i18n/ui'
+
+export async function getStaticPaths() {
+  return allLocales.map(lang => ({
+    params: { lang: getLangRouteParam(lang) },
+  }))
+}
+
+const currentLang = getLangFromLocale(Astro.currentLocale)
+const t = ui[currentLang]
 
 const sorted = [...glossary].sort((a, b) => a.term.localeCompare(b.term))
 
@@ -33,11 +45,11 @@ for (const entry of sorted) {
   <div class="uno-decorative-line" />
 
   <div class="glossary-page">
-    <h1 class="glossary-title">术语表</h1>
-    <p class="glossary-subtitle">术语首次出现在非周刊文章中时，自动链接到维基百科。共 {glossary.length} 条。</p>
+    <h1 class="glossary-title">{t.glossaryTitle}</h1>
+    <p class="glossary-subtitle">{t.glossaryDesc.replace('{n}', String(glossary.length))}</p>
 
     <!-- Letter Jump Nav -->
-    <nav class="letter-nav" aria-label="字母索引">
+    <nav class="letter-nav" aria-label={t.glossaryLetterNav}>
       {groups.map(g => (
         <a href={`#letter-${g.letter}`} class="letter-jump">{g.letter}</a>
       ))}
@@ -49,7 +61,7 @@ for (const entry of sorted) {
         <h2 id={`letter-${group.letter}`} class="letter-header">{group.letter}</h2>
         <dl class="term-list">
           {group.entries.map(entry => {
-            const url = resolveLinkUrl(entry, 'zh')
+            const url = resolveLinkUrl(entry, currentLang)
             return (
               <div class="term-item">
                 <dt class="term-name">
