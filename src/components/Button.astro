@@ -71,11 +71,11 @@ const nextUrl = supportedLangs.length > 0
 
 <!-- Theme Toggle Script >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> -->
 <script>
-// Apply theme changes
-function applyTheme(isDark: boolean) {
+// Update DOM and meta tag for given dark state
+// Does NOT touch localStorage — callers decide whether to persist
+function applyThemeToDom(isDark: boolean) {
   document.documentElement.classList.toggle('dark', isDark)
 
-  // Update meta theme-color tag
   const metaThemeColor = document.head.querySelector('meta[name="theme-color"]')
   const themeButton = document.getElementById('theme-toggle-button')
   const lightMode = themeButton?.dataset.lightMode
@@ -85,15 +85,30 @@ function applyTheme(isDark: boolean) {
     metaThemeColor.setAttribute('content', isDark ? darkMode : lightMode)
   }
 
-  localStorage.setItem('theme', isDark ? 'dark' : 'light')
-  localStorage.setItem('theme-manual', 'true') // Mark as manually set
   document.dispatchEvent(new Event('theme-changed'))
 }
 
-// Toggle theme mode
+// Apply theme triggered by the USER clicking the toggle button
+// Persists choice to localStorage and marks as manually set
+function applyThemeManual(isDark: boolean) {
+  applyThemeToDom(isDark)
+  localStorage.setItem('theme', isDark ? 'dark' : 'light')
+  localStorage.setItem('theme-manual', 'true')
+}
+
+// Apply theme triggered by SYSTEM preference change
+// Updates DOM only — never sets theme-manual flag, never writes to localStorage
+function applyThemeSystem(isDark: boolean) {
+  applyThemeToDom(isDark)
+  // Keep localStorage in sync so page reloads are consistent,
+  // but do NOT set theme-manual so auto-follow remains active
+  localStorage.setItem('theme', isDark ? 'dark' : 'light')
+}
+
+// Toggle theme on user click
 function toggleTheme() {
   const isDark = !document.documentElement.classList.contains('dark')
-  applyTheme(isDark)
+  applyThemeManual(isDark)
 }
 
 // Handle theme toggle click events
@@ -129,16 +144,14 @@ function handleThemeToggle(e: MouseEvent) {
 }
 
 // Listen to system theme changes in real time
-// Only apply system theme changes if user hasn't manually toggled theme
+// Only follow system if the user has NOT manually overridden the theme
 function handleSystemChange(event: MediaQueryListEvent) {
-  // Check if theme was manually set by user (not following system)
-  const manualTheme = localStorage.getItem('theme-manual')
-  if (manualTheme === 'true') {
-    return // User has manually set theme, ignore system changes
+  const isManual = localStorage.getItem('theme-manual') === 'true'
+  if (isManual) {
+    return // User has explicitly chosen a theme — respect it
   }
 
-  const isDark = event.matches
-  applyTheme(isDark)
+  applyThemeSystem(event.matches)
 }
 
 document.addEventListener('click', handleThemeToggle)
