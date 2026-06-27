@@ -5,16 +5,36 @@ import { getLangFromPath } from '@/i18n/lang'
 
 interface Props {
   lang?: string
+  glossaryTitle?: string
+  glossaryDesc?: string
+  glossaryUrl?: string
+  glossaryLinkText?: string
 }
 
 const lang = Astro.props.lang || getLangFromPath(Astro.url.pathname)
 const categories = linksData[lang as keyof typeof linksData] || linksData.zh
+const { glossaryTitle, glossaryDesc, glossaryUrl, glossaryLinkText } = Astro.props
 ---
 
 
 <div class="links-container">
+  {
+    glossaryTitle && (
+      <details class="links-section" open>
+        <summary class="links-category-title">{glossaryTitle}</summary>
+        <div class="glossary-content">
+          {glossaryDesc && <p class="glossary-desc">{glossaryDesc}</p>}
+          {glossaryUrl && glossaryLinkText && (
+            <a href={glossaryUrl} class="glossary-link" data-umami-event="glossary-links-cta">
+              {glossaryLinkText}
+            </a>
+          )}
+        </div>
+      </details>
+    )
+  }
   {Object.entries(categories).map(([category, links]) => (
-    <details class="links-section" open>
+    <details class="links-section">
       <summary class="links-category-title">{category}</summary>
       <div class="links-grid">
         {links.map(link => (
@@ -79,6 +99,36 @@ const categories = linksData[lang as keyof typeof linksData] || linksData.zh
   animation: collapse 0.25s ease-out;
 }
 
+.glossary-content {
+  padding: 1.5rem;
+  animation: collapse 0.25s ease-out;
+}
+
+.glossary-desc {
+  font-size: 0.9rem;
+  color: var(--un-preset-theme-colors-secondary);
+  opacity: 0.75;
+  margin: 0 0 1rem;
+  line-height: 1.5;
+}
+
+.glossary-link {
+  display: inline-block;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--un-preset-theme-colors-primary);
+  text-decoration: none;
+  padding: 0.5rem 1rem;
+  border-radius: 0.375rem;
+  background: color-mix(in srgb, var(--un-preset-theme-colors-primary) 10%, transparent);
+  transition: all 0.2s;
+}
+
+.glossary-link:hover {
+  background: color-mix(in srgb, var(--un-preset-theme-colors-primary) 20%, transparent);
+  transform: translateY(-1px);
+}
+
 @keyframes collapse {
   from {
     opacity: 0;
@@ -99,6 +149,10 @@ const categories = linksData[lang as keyof typeof linksData] || linksData.zh
   .links-category-title {
     font-size: 1.25rem;
     padding: 0.875rem 1rem;
+  }
+
+  .glossary-content {
+    padding: 1rem;
   }
 }
 </style>
