@@ -25,6 +25,7 @@ pnpm exec playwright test # 端到端测试 (Playwright)
 - **ESLint 跳过** — `src/content/**` 完全忽略
 - **pre-commit hook** — `simple-git-hooks` + `lint-staged` 自动 eslint --fix `.js/.ts/.astro`
 - **Type suppressions** — 仅 2 处 (`@ts-expect-error` in MediaEmbed.astro, `eslint-disable` in Head.astro)
+- **`--at-apply` 已废弃** — `injectReset: true` 移除后，纯 CSS 文件中的 `--at-apply` 不再被 UnoCSS 处理，需转为显式 CSS 变量
 
 ## ARCHITECTURE
 
@@ -73,6 +74,38 @@ pnpm exec playwright test # 端到端测试 (Playwright)
 - push main → Cloudflare Pages 自动部署
 - 构建命令: `pnpm install --config.trustPolicy=off && pnpm build`
 - 域名: cgartlab.com (Cloudflare Pages 自定义域名)
+
+## DEBUGGING
+
+### 暗色模式失效排查清单
+
+当暗色模式出现异常（切换后背景/文字颜色不变化）时，按顺序执行：
+
+1. **查 git 历史** — `git log --oneline -20`
+   - 找最近合并的 PR，尤其是涉及 CSS/UnoCSS 的变更
+   - 破坏点通常是最近一次"以为无害"的重构
+2. **枚举所有 CSS 文件** — `git ls-files 'src/**/*.css'`
+   - 确认每个文件都使用了 CSS 变量，没有残留 `--at-apply`
+   - `--at-apply` 在移除 `injectReset: true` 后不再被 UnoCSS 处理，会变成死代码
+3. **验证 UnoCSS 构建产物** — 搜索 `.astro/`
+   ```bash
+   Select-String -Path '.astro' -Pattern "\.dark.*--un-preset-theme-colors-background"
+   ```
+   - 确认存在 `.dark { --un-preset-theme-colors-background: ... }` 变量覆盖
+4. **浏览器 DevTools** — 在暗色模式下检查
+   ```js
+   getComputedStyle(document.documentElement)
+     .getPropertyValue('--un-preset-theme-colors-background')
+   ```
+   - 亮色应返回含 `98%`，暗色应返回含 `22%`
+5. **PWA 缓存** — 暗色模式下硬刷新 `Ctrl+Shift+R`，排除 Service Worker 缓存
+
+### 关键规则
+
+- **修改配置层（UnoCSS/Vite）后必须验证构建产物** — 配置对不等于 CSS 对
+- **用户提到"之前是好的"立即查 git 历史** — 不要在当前代码里反复重建
+- **PR 改了部分文件时立即审计同类文件** — 很可能遗漏了同类文件
+- **CSS 变量同时查 `:root` 和 `.dark` 两个选择器** — 单边有值不等于两边都生效
 
 ## NOTE
 
