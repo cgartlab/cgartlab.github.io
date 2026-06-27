@@ -1,8 +1,9 @@
 ---
 import LinksList from '@/components/LinksList.astro'
-import { allLocales, base } from '@/config'
+import { allLocales, defaultLocale } from '@/config'
 import { getLangFromLocale, getLangRouteParam } from '@/i18n/lang'
 import { glossary } from '@/data/glossary'
+import { ui } from '@/i18n/ui'
 import Layout from '@/layouts/Layout.astro'
 
 export async function getStaticPaths() {
@@ -12,8 +13,9 @@ export async function getStaticPaths() {
 }
 
 const currentLang = getLangFromLocale(Astro.currentLocale)
+const t = ui[currentLang]
 const termCount = glossary.length
-const glossaryUrl = `${base || ''}/glossary/`
+const glossaryUrl = `/${currentLang === defaultLocale ? '' : currentLang + '/'}glossary/`
 ---
 
 <Layout>
@@ -26,12 +28,12 @@ const glossaryUrl = `${base || ''}/glossary/`
 
   <!-- Glossary Section -->
   <div class="glossary-callout">
-    <h2 class="glossary-callout-title">术语表</h2>
+    <h2 class="glossary-callout-title">{t.glossaryTitle}</h2>
     <p class="glossary-callout-desc">
-      博客文章中出现的专业术语首次会自动链接到维基百科，方便快速查阅。目前已收录 <strong>{termCount}</strong> 条术语。
+      {t.glossaryDesc.replace('{n}', String(termCount))}
     </p>
     <a href={glossaryUrl} class="glossary-callout-link" data-umami-event="glossary-links-cta">
-      查看完整术语表 →
+      {t.glossaryViewAll}
     </a>
   </div>
 </Layout>
