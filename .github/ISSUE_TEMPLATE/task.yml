@@ -1,0 +1,40 @@
+name: "Task｜任务"
+description: "Track a maintenance task or chore / 记录维护任务"
+assignees: [cgartlab]
+labels: ["🔧 type:chore"]
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Task｜任务
+
+        Track a maintenance task, dependency update, configuration change, or other chore.
+
+        > Please fill out all required fields. / 请填写所有必填项。
+
+  - type: textarea
+    id: description
+    attributes:
+      label: "Task Description｜任务描述"
+      description: "Describe the task / 描述任务内容"
+      placeholder: "This task involves..."
+    validations:
+      required: true
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: "Area｜领域"
+      description: "Which area does this task belong to? / 该任务属于哪个领域？"
+      options:
+        - area:content
+        - area:theme
+        - area:infra
+        - area:seo
+
+  - type: textarea
+    id: notes
+    attributes:
+      label: "Notes｜备注"
+      description: "Additional notes or links / 补充说明或相关链接"

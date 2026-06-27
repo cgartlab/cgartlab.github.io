@@ -1,0 +1,59 @@
+name: "Feature Request｜功能请求"
+description: "Suggest an idea for this project / 提出改进建议"
+assignees: [cgartlab]
+labels: ["✨ type:enhancement"]
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Feature Request｜功能请求
+
+        Have an idea to improve this project? We'd love to hear it! / 有改进项目的想法？我们很乐意倾听！
+
+        > Please fill out all required fields. / 请填写所有必填项。
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: "Problem Statement｜问题陈述"
+      description: "Describe the problem this feature would solve / 描述该功能要解决的问题"
+      placeholder: "I encounter a situation where..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: "Proposed Solution｜解决方案"
+      description: "Describe your proposed solution / 描述你建议的解决方案"
+      placeholder: "A solution to this problem would be..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: "Alternative Solutions｜替代方案"
+      description: "List any alternative solutions you've considered / 列出你考虑过的替代方案"
+      placeholder: "Another approach could be..."
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: "Area｜领域"
+      description: "Which area does this feature belong to? / 该功能属于哪个领域？"
+      options:
+        - area:content
+        - area:theme
+        - area:infra
+        - area:seo
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: context
+    attributes:
+      label: "Additional Context｜补充信息"
+      description: "Any other context about the feature request / 其他相关信息"
