@@ -110,7 +110,7 @@ const currentUI = ui[currentLang as keyof typeof ui] ?? {}
     font-weight: 700;
     margin-bottom: 0.625rem;
     letter-spacing: 0.01em;
-    color: var(--un-preset-theme-colors-primary);
+    color: oklch(var(--un-preset-theme-colors-primary));
   }
 
   .consent-description {
@@ -157,14 +157,14 @@ const currentUI = ui[currentLang as keyof typeof ui] ?? {}
   }
 
   .consent-btn-reject:hover {
-    background: color-mix(in srgb, var(--un-preset-theme-colors-secondary) 6%, transparent);
+    background: color-mix(in srgb, oklch(var(--un-preset-theme-colors-secondary)) 6%, transparent);
     color: oklch(var(--un-preset-theme-colors-secondary) / 0.85);
   }
 
   /* Functional – outlined */
   .consent-btn-functional {
-    background: color-mix(in srgb, var(--un-preset-theme-colors-secondary) 8%, transparent);
-    color: var(--un-preset-theme-colors-secondary);
+    background: color-mix(in srgb, oklch(var(--un-preset-theme-colors-secondary)) 8%, transparent);
+    color: oklch(var(--un-preset-theme-colors-secondary));
     border-color: oklch(var(--un-preset-theme-colors-secondary) / 0.2);
   }
 
@@ -174,15 +174,15 @@ const currentUI = ui[currentLang as keyof typeof ui] ?? {}
 
   /* Accept – filled primary */
   .consent-btn-accept {
-    background: var(--un-preset-theme-colors-primary);
-    color: var(--un-preset-theme-colors-background);
-    border-color: var(--un-preset-theme-colors-primary);
-    box-shadow: 0 2px 8px color-mix(in srgb, var(--un-preset-theme-colors-primary) 20%, transparent);
+    background: oklch(var(--un-preset-theme-colors-primary));
+    color: oklch(var(--un-preset-theme-colors-background));
+    border-color: oklch(var(--un-preset-theme-colors-primary));
+    box-shadow: 0 2px 8px oklch(var(--un-preset-theme-colors-primary) / 0.2);
   }
 
   .consent-btn-accept:hover {
-    background: color-mix(in srgb, var(--un-preset-theme-colors-primary) 70%, var(--un-preset-theme-colors-background));
-    box-shadow: 0 4px 14px color-mix(in srgb, var(--un-preset-theme-colors-primary) 30%, transparent);
+    background: color-mix(in srgb, oklch(var(--un-preset-theme-colors-primary)) 70%, oklch(var(--un-preset-theme-colors-background)));
+    box-shadow: 0 4px 14px oklch(var(--un-preset-theme-colors-primary) / 0.3);
   }
 
   /* ── focus indicator ──────────────────────────────── */

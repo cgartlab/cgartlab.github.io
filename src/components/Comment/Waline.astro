@@ -120,29 +120,29 @@ document.addEventListener('astro:before-swap', cleanupWaline)
 <style>
 #waline {
   /* Regular Colors */
-  --waline-white: var(--un-preset-theme-colors-background);
-  --waline-light-grey: color-mix(in srgb, var(--un-preset-theme-colors-primary) 25%, transparent);
-  --waline-dark-grey: var(--un-preset-theme-colors-secondary);
+  --waline-white: oklch(var(--un-preset-theme-colors-background));
+  --waline-light-grey: oklch(var(--un-preset-theme-colors-primary) / 0.25);
+  --waline-dark-grey: oklch(var(--un-preset-theme-colors-secondary));
 
   /* Theme Colors */
-  --waline-theme-color: var(--un-preset-theme-colors-primary);
-  --waline-active-color: var(--un-preset-theme-colors-primary);
+  --waline-theme-color: oklch(var(--un-preset-theme-colors-primary));
+  --waline-active-color: oklch(var(--un-preset-theme-colors-primary));
 
   /* Layout Colors */
-  --waline-color: var(--un-preset-theme-colors-secondary);
-  --waline-bg-color: var(--un-preset-theme-colors-background);
-  --waline-bg-color-light: var(--un-preset-theme-colors-background);
-  --waline-bg-color-hover: var(--un-preset-theme-colors-background);
-  --waline-border-color: color-mix(in srgb, var(--un-preset-theme-colors-primary) 25%, transparent);
-  --waline-disable-bg-color: color-mix(in srgb, var(--un-preset-theme-colors-secondary) 5%, transparent);
-  --waline-disable-color: var(--un-preset-theme-colors-primary);
+  --waline-color: oklch(var(--un-preset-theme-colors-secondary));
+  --waline-bg-color: oklch(var(--un-preset-theme-colors-background));
+  --waline-bg-color-light: oklch(var(--un-preset-theme-colors-background));
+  --waline-bg-color-hover: oklch(var(--un-preset-theme-colors-background));
+  --waline-border-color: oklch(var(--un-preset-theme-colors-primary) / 0.25);
+  --waline-disable-bg-color: oklch(var(--un-preset-theme-colors-secondary) / 0.05);
+  --waline-disable-color: oklch(var(--un-preset-theme-colors-primary));
 
   /* Special Colors */
-  --waline-bq-color: color-mix(in srgb, var(--un-preset-theme-colors-primary) 25%, transparent);
+  --waline-bq-color: oklch(var(--un-preset-theme-colors-primary) / 0.25);
 
   /* Information */
-  --waline-info-bg-color: var(--un-preset-theme-colors-background);
-  --waline-info-color: color-mix(in srgb, var(--un-preset-theme-colors-primary) 25%, transparent);
+  --waline-info-bg-color: oklch(var(--un-preset-theme-colors-background));
+  --waline-info-color: oklch(var(--un-preset-theme-colors-primary) / 0.25);
 
   /* Rendering Options */
   --waline-avatar-radius: 0.5rem;

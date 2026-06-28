@@ -56,20 +56,42 @@ export default defineConfig({
     'uno-desktop-column': 'absolute left-[min(calc(100vw-19rem),calc(50vw+21rem))] w-14rem',
     'uno-decorative-line': 'mb-4.5 h-0.25 w-10 bg-secondary/25 lg:(mb-6 w-11)',
     'uno-round-border': 'border border-secondary/5 rounded border-solid',
-    // Force unocss-preset-theme to generate --un-preset-theme-colors-* CSS variables
-    // via postprocess scan. These shortcuts reference all theme colors so the preset
-    // emits both light and dark variants into the final CSS.
-    'c-primary': ['color:oklch(var(--un-preset-theme-colors-primary))'],
-    'c-secondary': ['color:oklch(var(--un-preset-theme-colors-secondary))'],
-    'c-highlight': ['color:oklch(var(--un-preset-theme-colors-highlight))'],
-    'c-note': ['color:oklch(var(--un-preset-theme-colors-note))'],
-    'c-tip': ['color:oklch(var(--un-preset-theme-colors-tip))'],
-    'c-important': ['color:oklch(var(--un-preset-theme-colors-important))'],
-    'c-warning': ['color:oklch(var(--un-preset-theme-colors-warning))'],
-    'c-caution': ['color:oklch(var(--un-preset-theme-colors-caution))'],
-    'bg-background': ['background-color:oklch(var(--un-preset-theme-colors-background))'],
-    'bg-highlight': ['background-color:oklch(var(--un-preset-theme-colors-highlight))'],
+    // Semantic color shortcuts — thin aliases over presetWind3 color utilities
+    // so that opacity modifiers work correctly (e.g. c-secondary/60).
+    // unocss-preset-theme replaces theme.colors.* with var(--un-preset-theme-colors-*)
+    // so text-primary / text-secondary etc. already resolve to the correct
+    // dark-mode CSS variable at build time.
+    'c-primary': 'text-primary',
+    'c-secondary': 'text-secondary',
+    'c-highlight': 'text-highlight',
+    'c-note': 'text-note',
+    'c-tip': 'text-tip',
+    'c-important': 'text-important',
+    'c-warning': 'text-warning',
+    'c-caution': 'text-caution',
   },
+  // safelist forces unocss-preset-theme to emit CSS variable definitions for
+  // ALL theme colors, even those not referenced by any utility in source files.
+  // Without this, colors only used in raw CSS (global.css, extension.css, etc.)
+  // like 'background' and 'highlight' never get their --un-preset-theme-colors-*
+  // variables generated, so oklch(var(--un-preset-theme-colors-background)) in
+  // global.css resolves to an invalid color and the browser discards it entirely.
+  safelist: [
+    'bg-background',
+    'bg-highlight',
+    'bg-note',
+    'bg-tip',
+    'bg-important',
+    'bg-warning',
+    'bg-caution',
+    'text-background',
+    'text-highlight',
+    'text-note',
+    'text-tip',
+    'text-important',
+    'text-warning',
+    'text-caution',
+  ],
   variants: [
     (matcher) => {
       if (!matcher.startsWith('cjk:')) {
@@ -84,16 +106,5 @@ export default defineConfig({
   transformers: [
     transformerDirectives(),
     transformerVariantGroup(),
-  ],
-  preflights: [
-    {
-      layer: 'theme',
-      getCSS: () => `
-        html {
-          background-color: oklch(var(--un-preset-theme-colors-background));
-          color: oklch(var(--un-preset-theme-colors-secondary));
-        }
-      `,
-    },
   ],
 })
