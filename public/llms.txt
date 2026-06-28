@@ -4,7 +4,7 @@
 
 ## 近期文章
 
-- [博客功能更新：一分钟给所有文章内的术语生成百科链接](https://cgartlab.com/zh/posts/auto-glossary-term-linking): 朋友反馈"很多名词看不懂，需要挨个去查"。虽然划词搜索已经很强，依然希望点一下就能跳转。我不想挨个挂链接，于是写了两个插件，让构建过程替我做这件事。本文用小学生都能听懂的语言讲原理，也记录了完整的实现过程。
+- [自动给文章术语加百科链接，这个方案一分钟搞定](https://cgartlab.com/zh/posts/auto-glossary-term-linking): 自动为技术文章内的术语生成百科链接，提升阅读体验。本文用小学生都能听懂的语言讲原理，记录基于 Astro 的 remark/rehype 插件实现过程。适合博客开发者和技术写作者。
 - [我常用的 OpenClaw 工作流 Skill - No.18 玄光周刊](https://cgartlab.com/zh/weekly/weekly-18): 用了 OpenClaw 三个月，给我最大的感受是根本不知道这个工具的上限在哪里。几乎每天都会认识到新的概念，每周都会发现已有工作流的不足之处。其中 Skill 这个概念不得不提，它太重要了。
 - [从黑苹果到独立博客，这是我的开源旅程 - No.17玄光周刊](https://cgartlab.com/zh/weekly/weekly-17): 疫情初期，因折腾黑苹果首次接触开源，从最开始套用别人分享的文件。直到翻阅驱动源码时看到上百人为硬件ID反复调试，才意识到这套系统是志愿者用业余时间一砖一瓦搭建起来的。
 - [AI时代的创意工具 - No.16玄光周刊](https://cgartlab.com/zh/weekly/weekly-16): AI工具已从“赋能”卖点变为行业标配，但核心问题在于：它们是在扩展还是抹平创作边界？
@@ -37,6 +37,7 @@
 
 ## English Articles
 
+- [Auto-generate Encyclopedia Links for Terms in Articles, Done in One Minute](https://cgartlab.com/en/posts/auto-glossary-term-linking): Automatically generate encyclopedia links for technical terms in articles to improve reading flow. Explains the logic in plain language and documents the full implementation based on Astro remark/rehype plugins. Suitable for blog developers and technical writers.
 - ["My OpenClaw Workflow Skills - No.18 Black Light Weekly](https://cgartlab.com/en/weekly/weekly-18): "After using OpenClaw for three months, my biggest feeling is that I have no idea what the upper limit of this tool is. Almost every day I learn new concepts, and every week I discover shortcomings in existing workflows. Among them, the concept of Skill is indispensable — it's too important.
 - ["From Hackintosh to Indie Blog: My Open Source Journey - No.17 Black Light Weekly](https://cgartlab.com/en/weekly/weekly-17): "During the early pandemic, I first encountered open source through tinkering with Hackintosh. Starting with using files shared by others, it wasn't until I read driver source code and saw hundreds of people debugging hardware IDs that I realized this system was built brick by brick by volunteers in their spare time.
 - ["Creative Tools in the AI Era - No.16 Black Light Weekly | Digital Art Innovation](https://cgartlab.com/en/weekly/weekly-16): "Analyze AI creative tools reshaping digital art in 2026. Explore Runway Gen-4, Leonardo AI, Stable Diffusion, and the debate between professionalization versus democratization of creative software.
@@ -66,4 +67,3 @@
 - ["RSS and Modern Reading Habits (Part 1): Reshape Deep Reading in the Fragmented Era](https://cgartlab.com/en/posts/rss-1): "Master RSS for deep reading in the digital age. Learn how to escape algorithm recommendations, build focused reading habits, and reclaim your attention span with practical RSS setup strategies.
 - ["LayerRenamer 1.0: Photoshop Batch Layer Renaming Script for Designers](https://cgartlab.com/en/posts/layerrenamer-1): "Download LayerRenamer 1.0 free Photoshop script for batch layer renaming. Supports custom naming rules, numbering formats, and grouping to streamline your design workflow and boost productivity.
 - ["How to Use Windows PC Elegantly in 2024: Optimization & Setup Guide](https://cgartlab.com/en/posts/2024-elegant-use-windows): "Master Windows 11 in 2024 with our complete optimization guide. Learn system settings, keyboard shortcuts, built-in tools like winget, and productivity tips for an efficient Windows experience.
-- ["How I Built a Cloud Library: Self-Hosted E-Book Server Tutorial](https://cgartlab.com/en/posts/how-to-build-library): "Build your own cloud library with this step-by-step tutorial. Learn how to set up Calibre on Proxmox VE Debian 12 VM, configure X11 forwarding, and create a personal e-book management system.
