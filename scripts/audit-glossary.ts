@@ -97,6 +97,19 @@ function getExistingTerms(): Set<string> {
     { term: 'AppleScript' },
     { term: '印象派', aliases: ['Impressionism'] },
     { term: 'C4D', aliases: ['Cinema 4D'] },
+    { term: 'SMTP', aliases: ['Simple Mail Transfer Protocol'] },
+    { term: 'WPS' },
+    { term: 'VSCode', aliases: ['Visual Studio Code'] },
+    { term: 'GitHub Desktop' },
+    { term: 'GitHub Pages' },
+    { term: 'WebDAV', aliases: ['Web Distributed Authoring and Versioning'] },
+    { term: 'DDNS', aliases: ['动态域名系统', '动态DNS', 'Dynamic DNS', 'dynamic DNS'] },
+    { term: 'Safari' },
+    { term: 'Chrome' },
+    { term: 'Astro' },
+    { term: 'Service Worker', aliases: ['ServiceWorker'] },
+    { term: 'DALL-E', aliases: ['DALL·E', 'DALLE'] },
+    { term: 'Tailwind CSS' },
   ]
   const terms = new Set<string>()
   for (const entry of entries) {
