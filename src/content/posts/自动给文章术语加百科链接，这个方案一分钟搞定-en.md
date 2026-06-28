@@ -25,11 +25,11 @@ So-called "reading experience" isn't always about typography or spacing. **At it
 
 Here's the final result👇.
 
-![Click link to jump to Wikipedia](src/content/posts/_images/video_2026-06-28_20-40-23.mp4)
+<video src="/posts/_images/video_2026-06-28_20-40-23.mp4" controls playsinline></video>
 
 Modern mobile browsers also support long-press link preview, so you don't necessarily need to navigate away. You can quickly understand a concept and continue reading — I think that's an even better experience.
 
-![Using link preview feature](src/content/posts/_images/video_2026-06-28_20-40-17.mp4)
+<video src="/posts/_images/video_2026-06-28_20-40-17.mp4" controls playsinline></video>
 
 > [!NOTE]
 > If you're reading this on the live site, you may have already noticed that many unfamiliar terms are now clickable.
