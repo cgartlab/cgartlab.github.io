@@ -510,4 +510,109 @@ export const glossary: TermEntry[] = [
       en: { aliases: ['Cinema 4D'], wikiPath: 'CINEMA_4D' },
     },
   },
+
+  // ────────── 开发 / 协作工具 ──────────
+  {
+    id: 'smtp',
+    term: 'SMTP',
+    wikiPath: 'SMTP',
+    description: '简单邮件传输协议',
+    langs: {
+      en: { aliases: ['Simple Mail Transfer Protocol'], wikiPath: 'Simple_Mail_Transfer_Protocol' },
+    },
+  },
+  {
+    id: 'wps',
+    term: 'WPS',
+    wikiPath: 'WPS_Office',
+    description: '金山办公旗下办公软件套件',
+    langs: { en: { wikiPath: 'WPS_Office' } },
+  },
+  {
+    id: 'vscode',
+    term: 'VSCode',
+    aliases: ['Visual Studio Code'],
+    wikiPath: 'Visual_Studio_Code',
+    description: 'Microsoft 推出的跨平台代码编辑器',
+    langs: {
+      en: { aliases: ['Visual Studio Code'], wikiPath: 'Visual_Studio_Code' },
+    },
+  },
+  {
+    id: 'github-desktop',
+    term: 'GitHub Desktop',
+    url: 'https://desktop.github.com/',
+    description: 'GitHub 官方 GUI 客户端',
+  },
+  {
+    id: 'github-pages',
+    term: 'GitHub Pages',
+    url: 'https://pages.github.com/',
+    description: 'GitHub 提供的静态站点托管服务',
+  },
+  {
+    id: 'webdav',
+    term: 'WebDAV',
+    wikiPath: 'WebDAV',
+    description: '基于 HTTP 的分布式文件协作协议',
+    langs: {
+      en: { aliases: ['Web Distributed Authoring and Versioning'], wikiPath: 'WebDAV' },
+    },
+  },
+  {
+    id: 'ddns',
+    term: 'DDNS',
+    aliases: ['动态域名系统', '动态DNS'],
+    wikiPath: '动态域名系统',
+    description: '动态 DNS，将动态 IP 映射到固定域名的服务',
+    langs: {
+      en: { aliases: ['Dynamic DNS', 'dynamic DNS'], wikiPath: 'Dynamic_DNS' },
+    },
+  },
+  {
+    id: 'safari',
+    term: 'Safari',
+    wikiPath: 'Safari',
+    description: 'Apple 推出的网页浏览器',
+    langs: { en: { wikiPath: 'Safari_(web_browser)' } },
+  },
+  {
+    id: 'chrome',
+    term: 'Chrome',
+    wikiPath: 'Google_Chrome',
+    description: 'Google 推出的网页浏览器',
+    langs: { en: { wikiPath: 'Google_Chrome' } },
+  },
+  {
+    id: 'astro',
+    term: 'Astro',
+    wikiPath: 'Astro_(software)',
+    description: '面向内容驱动型网站的前端框架',
+    langs: {
+      en: { wikiPath: 'Astro_(software)' },
+    },
+  },
+  {
+    id: 'service-worker',
+    term: 'Service Worker',
+    aliases: ['ServiceWorker'],
+    wikiPath: '服务工作线程',
+    description: '浏览器后台脚本，可拦截网络请求实现离线缓存等能力',
+    langs: {
+      en: { aliases: ['ServiceWorker'], wikiPath: 'Service_worker' },
+    },
+  },
+  {
+    id: 'dall-e',
+    term: 'DALL-E',
+    aliases: ['DALL·E', 'DALLE'],
+    url: 'https://openai.com/dall-e-3',
+    description: 'OpenAI 发布的文本生成图像模型',
+  },
+  {
+    id: 'tailwind-css',
+    term: 'Tailwind CSS',
+    url: 'https://tailwindcss.com/',
+    description: 'Utility-first CSS 框架',
+  },
 ]
