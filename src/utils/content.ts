@@ -94,7 +94,11 @@ async function _getPosts(lang?: Language) {
   )
 }
 
-export const getPosts = memoize(_getPosts)
+export const getPosts = memoize(
+  // 在 memoize 包装层归一化 undefined → defaultLocale，
+  // 确保 getPosts() 与 getPosts(defaultLocale) 共享同一缓存键
+  (lang: Language = defaultLocale) => _getPosts(lang),
+)
 
 /**
  * 获取所有非置顶文章
@@ -154,13 +158,11 @@ async function _getPostsByYear(lang?: Language): Promise<Map<number, Post[]>> {
     yearPosts.push(post)
   })
 
-  // 在每一年内按日期排序文章
+  // 在每一年内按完整日期降序排列
   yearMap.forEach((yearPosts) => {
-    yearPosts.sort((a, b) => {
-      const aDate = a.data.published
-      const bDate = b.data.published
-      return bDate.getMonth() - aDate.getMonth() || bDate.getDate() - aDate.getDate()
-    })
+    yearPosts.sort((a, b) =>
+      b.data.published.valueOf() - a.data.published.valueOf(),
+    )
   })
 
   return new Map([...yearMap.entries()].sort((a, b) => b[0] - a[0]))
@@ -247,7 +249,20 @@ async function _getPostsByTags(tags: string[], lang?: Language) {
   )
 }
 
-export const getPostsByTags = memoize(_getPostsByTags)
+// 内部 memoized 版本先声明，避免 getPostsByTags 包装函数引用时出现 TDZ 错误
+const _memoizedPostsByTags = memoize(_getPostsByTags)
+
+/**
+ * 获取包含多个标签中任意一个的所有文章（去重）
+ * 调用前对 tags 排序，确保 ["A","B"] 与 ["B","A"] 共享同一 memoize 缓存键
+ *
+ * @param tags 需要筛选文章的标签名称数组
+ * @param lang 需要筛选的语言代码，默认为站点默认语言
+ * @returns 包含指定标签的文章数组（去重并按日期排序）
+ */
+export function getPostsByTags(tags: string[], lang?: Language) {
+  return _memoizedPostsByTags([...tags].sort(), lang)
+}
 
 /**
  * 检查哪些语言支持特定标签

@@ -132,7 +132,7 @@ document.addEventListener('astro:before-swap', cleanupWaline)
   --waline-color: oklch(var(--un-preset-theme-colors-secondary));
   --waline-bg-color: oklch(var(--un-preset-theme-colors-background));
   --waline-bg-color-light: oklch(var(--un-preset-theme-colors-background));
-  --waline-bg-color-hover: oklch(var(--un-preset-theme-colors-background));
+  /* --waline-bg-color-hover 不覆盖，让 Waline 使用自带的 hover 高亮色 */
   --waline-border-color: oklch(var(--un-preset-theme-colors-primary) / 0.25);
   --waline-disable-bg-color: oklch(var(--un-preset-theme-colors-secondary) / 0.05);
   --waline-disable-color: oklch(var(--un-preset-theme-colors-primary));

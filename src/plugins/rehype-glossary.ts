@@ -67,6 +67,14 @@ function findTermMatches(text: string, activeTerms: TermEntry[], lang: Language,
         if (before && /[\w]/.test(before)) continue
         if (after && /[\w]/.test(after)) continue
       }
+      else {
+        // CJK 术语边界检查：要求前后字符为非 CJK 字母/汉字（允许标点、空格、行首行尾）
+        const before = index > 0 ? text[index - 1] : ''
+        const after = index + candidate.length < text.length ? text[index + candidate.length] : ''
+        // 若前后紧跟 CJK 字符（汉字/假名/谚文），则为复合词内部子串，跳过
+        if (before && /[\u4E00-\u9FFF\u3040-\u30FF\uAC00-\uD7AF\u3400-\u4DBF]/.test(before)) continue
+        if (after && /[\u4E00-\u9FFF\u3040-\u30FF\uAC00-\uD7AF\u3400-\u4DBF]/.test(after)) continue
+      }
       matches.push({
         start: index,
         end: index + candidate.length,

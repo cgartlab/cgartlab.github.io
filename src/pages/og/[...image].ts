@@ -12,7 +12,7 @@ async function initOGRouter() {
   if (ogRouteResult)
     return ogRouteResult
 
-  const posts = await getCollection('posts')
+  const posts = await getCollection('posts', ({ data }) => import.meta.env.DEV || !data.draft)
 
   const pages = Object.fromEntries(
     posts.map((post: CollectionEntry<'posts'>) => [

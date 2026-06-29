@@ -201,6 +201,14 @@ const currentUI = ui[currentLang as keyof typeof ui] ?? {}
     }
   }
 
+  /* 站点通过 JS 在 <html> 上设置 .reduce-motion 类时同样抑制动画 */
+  :global(html.reduce-motion) .consent-banner,
+  :global(html.reduce-motion) .consent-banner *,
+  :global(html.reduce-motion) .consent-banner.visible .consent-card {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+
   /* ── mobile tweaks ────────────────────────────────── */
   @media (max-width: 640px) {
     .consent-container {

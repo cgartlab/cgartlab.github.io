@@ -74,15 +74,19 @@ const MarginBottom = isPost && themeConfig.comment.enabled
     <script is:inline>
 (function () {
   let t
-  window.addEventListener('resize', () => {
-    if (!t)
-      document.documentElement.setAttribute('data-resizing', '')
-    clearTimeout(t)
-    t = setTimeout(() => {
-      document.documentElement.removeAttribute('data-resizing')
-      t = 0
-    }, 200)
-  })
+  // 仅注册一次，避免 View Transition 导航后重复累加
+  if (!window.__resizeJitterSetup) {
+    window.__resizeJitterSetup = true
+    window.addEventListener('resize', () => {
+      if (!t)
+        document.documentElement.setAttribute('data-resizing', '')
+      clearTimeout(t)
+      t = setTimeout(() => {
+        document.documentElement.removeAttribute('data-resizing')
+        t = 0
+      }, 200)
+    })
+  }
 })()
 </script>
   </body>

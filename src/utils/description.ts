@@ -26,28 +26,39 @@ const excerptLengths: Record<ExcerptScene, { cjk: number, other: number }> = {
 }
 
 const htmlEntityMap: Record<string, string> = {
+  // &amp; 必须最后解码，避免其他实体中的 & 被提前替换
   '&lt;': '<',
   '&gt;': '>',
-  '&amp;': '&',
   '&quot;': '"',
   '&apos;': '\'',
   '&nbsp;': ' ',
+  '&amp;': '&',
+}
+
+// 预编译正则，避免每次调用都重新构造
+// & 和 ; 不是正则特殊字符，直接传入 entity 字符串即可
+const htmlEntityRegexes: Array<[RegExp, string]> = Object.entries(htmlEntityMap).map(
+  ([entity, char]) => [new RegExp(entity, 'g'), char],
+)
+
+// 模块级语言判断，避免在每次 getExcerpt 调用时重新创建
+function isCJKLang(lang: Language): boolean {
+  return ['zh', 'zh-tw', 'ja', 'ko'].includes(lang)
 }
 
 // 根据语言和场景创建指定长度的纯净文本摘要
 function getExcerpt(text: string, lang: Language, scene: ExcerptScene): string {
-  const isCJK = (lang: Language) => ['zh', 'zh-tw', 'ja', 'ko'].includes(lang)
-  const length = isCJK(lang)
+  const length = isCJKLang(lang)
     ? excerptLengths[scene].cjk
     : excerptLengths[scene].other
 
   // 移除HTML标签
   let cleanText = text.replace(/<[^>]*>/g, '')
 
-  // 解码HTML实体
-  Object.entries(htmlEntityMap).forEach(([entity, char]) => {
-    cleanText = cleanText.replace(new RegExp(entity, 'g'), char)
-  })
+  // 解码HTML实体（使用预编译正则）
+  for (const [re, char] of htmlEntityRegexes) {
+    cleanText = cleanText.replace(re, char)
+  }
 
   // 规范化空白字符
   cleanText = cleanText.replace(/\s+/g, ' ')
@@ -73,10 +84,9 @@ export function getPostDescription(
   const lang = (post.data.lang || defaultLocale) as Language
 
   if (post.data.description) {
-    // 仅为og场景截断，其他场景返回完整描述
-    return scene === 'og'
-      ? getExcerpt(post.data.description, lang, scene)
-      : post.data.description
+    // frontmatter description 可能含有 Markdown 语法，先渲染再截断
+    const rendered = markdownParser.render(post.data.description)
+    return getExcerpt(rendered, lang, scene)
   }
 
   const rawContent = post.body || ''

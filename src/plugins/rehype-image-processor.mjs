@@ -1,17 +1,19 @@
-import { visit } from 'unist-util-visit'
+import { visit, SKIP } from 'unist-util-visit'
 
 function createFigure(imgNode, isInGallery = false) {
   // 获取替代文本
   const altText = imgNode.properties?.alt
   // 如果没有替代文本或者以_开头则跳过说明
   const shouldSkipCaption = !altText || altText.startsWith('_')
+
+  // 非画廊的单图无 alt：直接返回裸 imgNode（不包裹 figure）
   if (shouldSkipCaption && !isInGallery) {
     return imgNode
   }
 
   const children = [imgNode]
 
-  // 添加说明文字
+  // 添加说明文字（有 alt 且不以 _ 开头）
   if (!shouldSkipCaption) {
     children.push({
       type: 'element',
@@ -24,6 +26,7 @@ function createFigure(imgNode, isInGallery = false) {
   return {
     type: 'element',
     tagName: 'figure',
+    // 画廊图片无论是否有 alt 都必须有 gallery-item class
     properties: isInGallery ? { className: ['gallery-item'] } : {},
     children,
   }
@@ -58,7 +61,8 @@ export function rehypeImageProcessor() {
       if (isInGallery) {
         const figures = imgNodes.map(imgNode => createFigure(imgNode, true))
         parent.children.splice(index, 1, ...figures)
-        return
+        // splice 后更新游标，避免索引偏移导致跳过或重复遍历兄弟节点
+        return [SKIP, index + figures.length]
       }
 
       // 单张图片：在非画廊容器中转换为带说明的图像
@@ -73,8 +77,11 @@ export function rehypeImageProcessor() {
         return
       }
 
-      // 多张图片：在非画廊容器中展开
-      parent.children.splice(index, 1, ...imgNodes)
+      // 多张图片：在非画廊容器中，每张图片均通过 createFigure 处理以保留 alt/figcaption
+      const figures = imgNodes.map(imgNode => createFigure(imgNode, false))
+      parent.children.splice(index, 1, ...figures)
+      // splice 后更新游标
+      return [SKIP, index + figures.length]
     })
   }
 }

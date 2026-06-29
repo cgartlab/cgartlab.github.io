@@ -129,6 +129,20 @@ export function remarkContainerDirectives() {
 
       firstTextNode.value = firstTextNode.value.substring(match[0].length)
 
+      // 若移除前缀后文本为空，则从父节点移除该文本节点，避免产生空 <p>
+      if (!firstTextNode.value.trim()) {
+        const firstParagraph = node.children?.[0]
+        if (firstParagraph && firstParagraph.children) {
+          firstParagraph.children = firstParagraph.children.filter(
+            child => child !== firstTextNode,
+          )
+          // 若段落本身变为空，移除整个段落
+          if (firstParagraph.children.length === 0) {
+            node.children = node.children.slice(1)
+          }
+        }
+      }
+
       createAdmonition(node, type, title)
     })
   }
