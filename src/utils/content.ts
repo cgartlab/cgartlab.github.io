@@ -158,13 +158,11 @@ async function _getPostsByYear(lang?: Language): Promise<Map<number, Post[]>> {
     yearPosts.push(post)
   })
 
-  // 在每一年内按日期排序文章
+  // 在每一年内按完整日期降序排列
   yearMap.forEach((yearPosts) => {
-    yearPosts.sort((a, b) => {
-      const aDate = a.data.published
-      const bDate = b.data.published
-      return bDate.getMonth() - aDate.getMonth() || bDate.getDate() - aDate.getDate()
-    })
+    yearPosts.sort((a, b) =>
+      b.data.published.valueOf() - a.data.published.valueOf(),
+    )
   })
 
   return new Map([...yearMap.entries()].sort((a, b) => b[0] - a[0]))
@@ -251,7 +249,11 @@ async function _getPostsByTags(tags: string[], lang?: Language) {
   )
 }
 
-export const getPostsByTags = memoize(_getPostsByTags)
+// 对 tags 排序后再 memoize，确保 ["A","B"] 与 ["B","A"] 共享同一缓存键
+export function getPostsByTags(tags: string[], lang?: Language) {
+  return _memoizedPostsByTags([...tags].sort(), lang)
+}
+const _memoizedPostsByTags = memoize(_getPostsByTags)
 
 /**
  * 检查哪些语言支持特定标签

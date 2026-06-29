@@ -132,11 +132,23 @@ function zoomOut() {
     clearTimeout(transitionFallbackTimer)
   }
 
-  // Listen for transition end to cleanup (with 350ms fallback in case transitionend never fires)
-  const onEnd = () => cleanup()
-  zoomedImg.addEventListener('transitionend', onEnd, { once: true })
+  // Capture current ref so both paths operate on the same element
+  const imgToClean = zoomedImg
+
+  // Listen for transition end to cleanup (with 350ms fallback)
+  const onEnd = () => {
+    if (transitionFallbackTimer !== null) {
+      clearTimeout(transitionFallbackTimer)
+      transitionFallbackTimer = null
+    }
+    cleanup()
+  }
+  imgToClean.addEventListener('transitionend', onEnd, { once: true })
+
   transitionFallbackTimer = window.setTimeout(() => {
     transitionFallbackTimer = null
+    // Remove the transitionend listener so it can't fire after cleanup
+    imgToClean.removeEventListener('transitionend', onEnd)
     cleanup()
   }, 350)
 }
