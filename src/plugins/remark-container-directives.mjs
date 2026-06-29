@@ -134,7 +134,7 @@ export function remarkContainerDirectives() {
         const firstParagraph = node.children?.[0]
         if (firstParagraph && firstParagraph.children) {
           firstParagraph.children = firstParagraph.children.filter(
-            (child: any) => child !== firstTextNode,
+            child => child !== firstTextNode,
           )
           // 若段落本身变为空，移除整个段落
           if (firstParagraph.children.length === 0) {
