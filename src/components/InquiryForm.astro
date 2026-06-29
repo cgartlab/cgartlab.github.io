@@ -484,11 +484,15 @@ async function handleFormSubmit(e: SubmitEvent) {
       throw new Error(data.message || 'Submission failed')
     }
   }
-  catch {
+  catch (err) {
     if (errorMsg)
       errorMsg.hidden = false
     if (successMsg)
       successMsg.hidden = true
+    // 开发环境打印错误，方便调试；生产环境静默（避免暴露内部信息）
+    if (import.meta.env.DEV) {
+      console.error('[InquiryForm] submit error:', err)
+    }
   }
   finally {
     if (submitBtn) {
