@@ -36,8 +36,9 @@ const htmlEntityMap: Record<string, string> = {
 }
 
 // 预编译正则，避免每次调用都重新构造
+// & 和 ; 不是正则特殊字符，直接传入 entity 字符串即可
 const htmlEntityRegexes: Array<[RegExp, string]> = Object.entries(htmlEntityMap).map(
-  ([entity, char]) => [new RegExp(entity.replace(/[&;]/g, s => `\\${s}`), 'g'), char],
+  ([entity, char]) => [new RegExp(entity, 'g'), char],
 )
 
 // 模块级语言判断，避免在每次 getExcerpt 调用时重新创建
