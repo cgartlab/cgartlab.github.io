@@ -42,14 +42,17 @@ public/
 - 明暗主题、响应式布局、多语言（zh/en/zh-tw）
 - 玄光周刊画廊（WeeklyGallery）：响应式行列布局
 - 评论系统：Giscus + Twikoo + Waline **三套并行**
-- 搜索：客户端搜索索引 (`api/search-index/[lang].json.ts`)
-- OG 图片：`astro-og-canvas` + `canvaskit-wasm` 构建时自动生成
+- 搜索：客户端搜索索引 (`api/search-index/[lang].json.ts`)，含 try-catch 错误处理
+- OG 图片：`astro-og-canvas` + `canvaskit-wasm` 构建时自动生成（过滤草稿）
 - SEO 优化、Google Analytics + Umami 双向统计
 - 数学公式 (KaTeX)、Mermaid 图表
 - LQIP 低质量图片占位符（构建时自动生成）
 - llms.txt 自动生成
-- 打字音效（可选）、图片点击缩放、代码复制按钮
-- 联系表单 (Web3Forms)
+- 打字音效（可选）、图片点击缩放（iOS Safari 滚动锁定兼容）、代码复制按钮
+- 联系表单 (Web3Forms)，View Transition 导航后表单功能正常
+- TOC 目录：IntersectionObserver 高亮 + 桌面端可滚动
+- 无障碍：Skip-to-content 链接、完整 `:focus-visible` 键盘焦点指示
+- Cloudflare Worker：无尾斜杠 301 重定向 + 错误兜底
 
 ## 常用命令
 

@@ -79,6 +79,11 @@ PR title should mirror the commit message format (it becomes the squash commit m
 ### 6. PR Review
 
 - PRs trigger the **Argus** GitHub App for automatic code review
+- Argus reports issues with priority labels P0/P1/P2/P3; assess each finding:
+  - **Verify first** — confirm the issue actually exists in the code before fixing
+  - `rgba()`/`hsl()` values in frosted-glass gradients and shadows are **intentional** and should not be converted to theme tokens
+  - Fixed semantic function colors (e.g., validation error red) are **intentional**
+  - Bare hex values that duplicate existing theme tokens **should** be fixed
 - At least one human review approval is required before merge
 - CI checks must pass (lint, type check, build)
 
