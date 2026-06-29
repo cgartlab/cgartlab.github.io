@@ -16,6 +16,21 @@ function setupOverlay() {
   document.body.appendChild(overlay)
 }
 
+// Lock body scroll (iOS-compatible)
+let savedScrollY = 0
+function lockBodyScroll() {
+  savedScrollY = window.scrollY
+  document.body.style.top = `-${savedScrollY}px`
+  document.body.classList.add('scroll-lock')
+}
+
+// Unlock body scroll and restore position
+function unlockBodyScroll() {
+  document.body.classList.remove('scroll-lock')
+  document.body.style.top = ''
+  window.scrollTo(0, savedScrollY)
+}
+
 // Clean up zoom state
 function cleanupZoom() {
   if (transitionFallbackTimer !== null) {
@@ -34,7 +49,7 @@ function zoomIn(img: HTMLImageElement) {
   }
 
   // Disable scrolling and get position
-  document.body.style.overflow = 'hidden'
+  lockBodyScroll()
   const rect = img.getBoundingClientRect()
   originalImg = img
 
@@ -86,7 +101,7 @@ function zoomOut() {
   // Start closing animation
   zoomedImg.style.transform = ''
   overlay.style.opacity = '0'
-  document.body.style.overflow = ''
+  unlockBodyScroll()
 
   // Define cleanup logic
   const cleanup = () => {
@@ -144,7 +159,13 @@ function handleClick(event: MouseEvent) {
 }
 
 document.addEventListener('astro:page-load', setupOverlay)
-document.addEventListener('astro:before-swap', cleanupZoom)
-document.addEventListener('click', handleClick)
-window.addEventListener('resize', zoomOut)
+document.addEventListener('astro:before-swap', () => {
+  cleanupZoom()
+  document.removeEventListener('click', handleClick)
+  window.removeEventListener('resize', zoomOut)
+})
+document.addEventListener('astro:page-load', () => {
+  document.addEventListener('click', handleClick)
+  window.addEventListener('resize', zoomOut)
+})
 </script>

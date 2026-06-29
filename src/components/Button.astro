@@ -154,6 +154,16 @@ function handleSystemChange(event: MediaQueryListEvent) {
   applyThemeSystem(event.matches)
 }
 
-document.addEventListener('click', handleThemeToggle)
-window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', handleSystemChange)
+function setupThemeListeners() {
+  document.addEventListener('click', handleThemeToggle)
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', handleSystemChange)
+}
+
+function cleanupThemeListeners() {
+  document.removeEventListener('click', handleThemeToggle)
+  window.matchMedia('(prefers-color-scheme: dark)').removeEventListener('change', handleSystemChange)
+}
+
+document.addEventListener('astro:page-load', setupThemeListeners)
+document.addEventListener('astro:before-swap', cleanupThemeListeners)
 </script>

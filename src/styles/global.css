@@ -40,8 +40,12 @@ img {
 }
 
 /* Body scroll lock for modals */
+/* iOS Safari 不支持仅用 overflow: hidden 锁定背景滚动，
+   需配合 position: fixed + width: 100% 才能可靠阻止 */
 .scroll-lock {
   overflow: hidden;
+  position: fixed;
+  width: 100%;
 }
 
 /* Fix Flash Issue On iOS */
@@ -53,7 +57,7 @@ body::selection {
   background-color: oklch(var(--un-preset-theme-colors-highlight));
 }
 
-/* Highlight Hover Animation */
+/* Highlight Hover Animation — 橄榄绿下划线（非块状背景） */
 .highlight-static,
 .highlight-hover {
   position: relative;
@@ -63,8 +67,8 @@ body::selection {
 .highlight-hover::after {
   position: absolute;
   left: 0;
-  z-index: -1;
-  height: 0.5em;
+  bottom: -0.1em;
+  height: 2px;
   width: 100%;
   background-color: oklch(var(--un-preset-theme-colors-highlight));
   content: '';
@@ -153,9 +157,16 @@ h4:hover .heading-anchor-link svg:hover {
   opacity: 0;
   transition: opacity 0.15s ease-out, background-color 0.15s ease-out;
 }
-.code-copy-button:hover {
+.code-copy-button:hover,
+.code-copy-button:focus-visible {
   border-color: color-mix(in srgb, oklch(var(--un-preset-theme-colors-primary)) 15%, transparent);
   color: color-mix(in srgb, oklch(var(--un-preset-theme-colors-primary)) 80%, transparent);
+}
+/* 键盘聚焦时按钮始终可见（不依赖父元素 hover） */
+.code-copy-button:focus-visible {
+  opacity: 1;
+  outline: 2px solid oklch(var(--un-preset-theme-colors-highlight) / 0.6);
+  outline-offset: 2px;
 }
 .code-block-wrapper:hover .code-copy-button {
   opacity: 1;
@@ -198,7 +209,8 @@ html.dark .code-copy-button.copied {
   color: oklch(var(--un-preset-theme-colors-secondary));
   transition: color 0.15s ease-out, border-color 0.15s ease-out, background-color 0.15s ease-out;
 }
-.tag-item:hover {
+.tag-item:hover,
+.tag-item:focus-visible {
   border-color: color-mix(in srgb, oklch(var(--un-preset-theme-colors-primary)) 30%, transparent);
   color: oklch(var(--un-preset-theme-colors-primary));
 }

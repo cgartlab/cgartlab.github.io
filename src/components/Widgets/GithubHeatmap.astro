@@ -292,6 +292,9 @@ const CELL_PITCH = 12
 </script>
 
 <script>
+let heatmapKeydownHandler: ((e: KeyboardEvent) => void) | null = null
+let heatmapClickHandler: ((e: MouseEvent) => void) | null = null
+
 function setupHeatmapInteractions() {
   const cells = document.querySelectorAll<HTMLElement>('.gh-cell[data-date]')
   if (cells.length === 0)
@@ -365,7 +368,7 @@ function setupHeatmapInteractions() {
     }
   }
 
-  document.addEventListener('keydown', (e: KeyboardEvent) => {
+  heatmapKeydownHandler = (e: KeyboardEvent) => {
     const active = document.activeElement
     if (!active || !active.classList.contains('gh-cell'))
       return
@@ -393,42 +396,50 @@ function setupHeatmapInteractions() {
       case 'Home':
         e.preventDefault()
         if (e.ctrlKey || e.metaKey) {
-          // First cell overall
           focusCell(0, 0)
         }
         else {
-          // First cell in row
           focusCell(row, 0)
         }
         break
       case 'End':
         e.preventDefault()
         if (e.ctrlKey || e.metaKey) {
-          // Last cell overall
           focusCell(rowCount - 1, colCount - 1)
         }
         else {
-          // Last cell in row
           focusCell(row, colCount - 1)
         }
         break
     }
-  })
+  }
 
   // Dismiss when tapping outside
-  document.addEventListener('click', (e) => {
+  heatmapClickHandler = (e: MouseEvent) => {
     const target = e.target as HTMLElement
     if (!target.closest('.gh-cell[data-date]')) {
       document.querySelectorAll('.gh-tooltip--visible')
         .forEach(t => t.classList.remove('gh-tooltip--visible'))
     }
-  })
-
   }
 
-document.addEventListener('astro:page-load', () => {
-  setupHeatmapInteractions()
-})
+  document.addEventListener('keydown', heatmapKeydownHandler)
+  document.addEventListener('click', heatmapClickHandler)
+}
+
+function cleanupHeatmapInteractions() {
+  if (heatmapKeydownHandler) {
+    document.removeEventListener('keydown', heatmapKeydownHandler)
+    heatmapKeydownHandler = null
+  }
+  if (heatmapClickHandler) {
+    document.removeEventListener('click', heatmapClickHandler)
+    heatmapClickHandler = null
+  }
+}
+
+document.addEventListener('astro:page-load', setupHeatmapInteractions)
+document.addEventListener('astro:before-swap', cleanupHeatmapInteractions)
 </script>
 
 <style is:global>

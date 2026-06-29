@@ -386,9 +386,15 @@ const d = t[lang as keyof typeof t] || t.zh
   transition: opacity 0.2s ease, background-color 0.2s ease;
 }
 
-.form-submit:hover {
+.form-submit:hover,
+.form-submit:focus-visible {
   background-color: oklch(var(--un-preset-theme-colors-highlight) / 0.15);
   opacity: 1;
+}
+
+.form-submit:focus-visible {
+  outline: 2px solid oklch(var(--un-preset-theme-colors-highlight) / 0.6);
+  outline-offset: 2px;
 }
 
 .form-submit:active {
@@ -421,31 +427,32 @@ const d = t[lang as keyof typeof t] || t.zh
 </style>
 
 <script>
-const form = document.getElementById('inquiry-form-el') as HTMLFormElement | null
-const submitBtn = document.getElementById('submit-btn') as HTMLButtonElement | null
-const successMsg = document.getElementById('form-success')
-const errorMsg = document.getElementById('form-error')
+async function handleFormSubmit(e: SubmitEvent) {
+  e.preventDefault()
 
-if (form && submitBtn) {
-  form.addEventListener('submit', async (e) => {
-    e.preventDefault()
+  const form = e.currentTarget as HTMLFormElement
+  const submitBtn = document.getElementById('submit-btn') as HTMLButtonElement | null
+  const successMsg = document.getElementById('form-success')
+  const errorMsg = document.getElementById('form-error')
 
-    const required = form.querySelectorAll('[required]')
-    let valid = true
-    required.forEach((field) => {
-      const el = field as HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
-      if (!el.value.trim()) {
-        el.style.borderColor = 'oklch(var(--un-preset-theme-colors-highlight))'
-        valid = false
-      }
-      else {
-        el.style.borderColor = ''
-      }
-    })
+  // 验证必填字段；错误边框改为红色（非 highlight 色）
+  const required = form.querySelectorAll('[required]')
+  let valid = true
+  required.forEach((field) => {
+    const el = field as HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+    if (!el.value.trim()) {
+      el.style.borderColor = 'oklch(55% 0.2 25)' // 红色表示验证错误
+      valid = false
+    }
+    else {
+      el.style.borderColor = ''
+    }
+  })
 
-    if (!valid)
-      return
+  if (!valid)
+    return
 
+  if (submitBtn) {
     submitBtn.disabled = true
     const submitText = submitBtn.querySelector('.submit-text') as HTMLElement
     const submitLoading = submitBtn.querySelector('.submit-loading') as HTMLElement
@@ -453,43 +460,58 @@ if (form && submitBtn) {
       submitText.hidden = true
     if (submitLoading)
       submitLoading.hidden = false
+  }
 
-    try {
-      const res = await fetch(form.action, {
-        method: 'POST',
-        body: new FormData(form),
-      })
+  try {
+    const res = await fetch(form.action, {
+      method: 'POST',
+      body: new FormData(form),
+    })
 
-      const data = await res.json()
+    const data = await res.json()
 
-      if (data.success) {
-        if (successMsg)
-          successMsg.hidden = false
-        if (errorMsg)
-          errorMsg.hidden = true
-        form.reset()
-        form.querySelectorAll('select').forEach((sel) => {
-          const s = sel as HTMLSelectElement
-          s.selectedIndex = 0
-        })
-      }
-      else {
-        throw new Error(data.message || 'Submission failed')
-      }
-    }
-    catch {
-      if (errorMsg)
-        errorMsg.hidden = false
+    if (data.success) {
       if (successMsg)
-        successMsg.hidden = true
+        successMsg.hidden = false
+      if (errorMsg)
+        errorMsg.hidden = true
+      form.reset()
+      form.querySelectorAll('select').forEach((sel) => {
+        (sel as HTMLSelectElement).selectedIndex = 0
+      })
     }
-    finally {
+    else {
+      throw new Error(data.message || 'Submission failed')
+    }
+  }
+  catch {
+    if (errorMsg)
+      errorMsg.hidden = false
+    if (successMsg)
+      successMsg.hidden = true
+  }
+  finally {
+    if (submitBtn) {
       submitBtn.disabled = false
+      const submitText = submitBtn.querySelector('.submit-text') as HTMLElement
+      const submitLoading = submitBtn.querySelector('.submit-loading') as HTMLElement
       if (submitText)
         submitText.hidden = false
       if (submitLoading)
         submitLoading.hidden = true
     }
-  })
+  }
 }
+
+function setupInquiryForm() {
+  const form = document.getElementById('inquiry-form-el') as HTMLFormElement | null
+  if (form) {
+    // 移除可能残留的旧监听器后重新绑定，防止重复触发
+    form.removeEventListener('submit', handleFormSubmit)
+    form.addEventListener('submit', handleFormSubmit)
+  }
+}
+
+// astro:page-load 在硬刷新和每次 View Transition 导航后均触发
+document.addEventListener('astro:page-load', setupInquiryForm)
 </script>

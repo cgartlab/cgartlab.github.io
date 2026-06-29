@@ -57,8 +57,6 @@ const { glossaryTitle, glossaryDesc, glossaryUrl, glossaryLinkText } = Astro.pro
 
 .links-section {
   margin-bottom: 1.5rem;
-  border-radius: 0.75rem;
-  overflow: hidden;
 }
 
 .links-section:last-child {
@@ -81,14 +79,6 @@ const { glossaryTitle, glossaryDesc, glossaryUrl, glossaryLinkText } = Astro.pro
 
 .links-category-title::-webkit-details-marker {
   display: none;
-}
-
-.links-section[open] .links-category-title {
-  border-bottom: 2px solid oklch(var(--un-preset-theme-colors-primary));
-}
-
-.links-section:not([open]) .links-category-title {
-  border-bottom: none;
 }
 
 .links-grid {
