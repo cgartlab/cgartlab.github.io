@@ -26,6 +26,9 @@ pnpm exec playwright test # 端到端测试 (Playwright)
 - **pre-commit hook** — `simple-git-hooks` + `lint-staged` 自动 eslint --fix `.js/.ts/.astro`
 - **Type suppressions** — 仅 2 处 (`@ts-expect-error` in MediaEmbed.astro, `eslint-disable` in Head.astro)
 - **`--at-apply` 已废弃** — `injectReset: true` 移除后，纯 CSS 文件中的 `--at-apply` 不再被 UnoCSS 处理，需转为显式 CSS 变量
+- **颜色 token** — 所有颜色必须用 `oklch(var(--un-preset-theme-colors-*))` token，禁止裸色值 `#xxx`/`rgb()`。唯一例外：毛玻璃/阴影中的物理透明度 `rgba(0,0,0,α)` 和固定功能语义色（如错误红）
+- **View Transitions 监听器** — 全局 `addEventListener` 必须配套 `astro:page-load`/`astro:before-swap`，`matchMedia` 需提取为模块级常量引用
+- **iOS 滚动锁定** — 使用 `.scroll-lock` class（`overflow:hidden + position:fixed + width:100%`），开启前保存 `scrollY`，关闭后恢复
 
 ## ARCHITECTURE
 
@@ -37,10 +40,12 @@ pnpm exec playwright test # 端到端测试 (Playwright)
 | UnoCSS | `uno.config.ts` | Wind3 + Attributify + theme preset, 非 Tailwind |
 | 路由 | `src/pages/[...lang]/` | 多语言前缀动态路由 |
 | 评论 | Giscus + Twikoo + Waline 三套并行 |
-| 表单 | `src/components/InquiryForm.astro` | Web3Forms |
-| 搜索 | 客户端搜索索引 (`api/search-index/[lang].json.ts`) |
-| OG 图片 | `astro-og-canvas` + `canvaskit-wasm` 构建时生成 |
-| Wrangler | `wrangler.jsonc` | Workers + Static Assets (dist 目录) |
+| 表单 | `src/components/InquiryForm.astro` | Web3Forms，submit 监听器在 `astro:page-load` 内绑定 |
+| 搜索 | 客户端搜索索引 (`api/search-index/[lang].json.ts` + `api/search-index.json.ts`) |
+| OG 图片 | `astro-og-canvas` + `canvaskit-wasm` 构建时生成，过滤草稿 |
+| Wrangler | `wrangler.jsonc` | Workers + Static Assets (dist 目录)，含无尾斜杠 301 重定向 |
+| TOC 高亮 | `Widgets/TOC.astro` | IntersectionObserver 驱动 `.toc-active` class，按 DOM 顺序排序 |
+| 滚动锁定 | `global.css .scroll-lock` | iOS Safari 兼容：`overflow:hidden + position:fixed + width:100%` |
 
 ## BRANCH STRATEGY
 
