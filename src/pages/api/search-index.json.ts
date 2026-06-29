@@ -29,11 +29,30 @@ export const GET: APIRoute = async ({ request }) => {
     const searchIndex: SearchIndex[] = posts.map((post) => {
       const slug = post.data.abbrlink || post.id.replace(/\.mdx?$/, '').replace(/\/index$/, '')
 
+      // 安全截断：避免在多字节字符（CJK、emoji）边界处截断
+      const body = post.body || ''
+      let content: string
+      if (body.length <= 5000) {
+        content = body
+      }
+      else if (typeof Intl !== 'undefined' && Intl.Segmenter) {
+        const segmenter = new Intl.Segmenter()
+        let idx = 0
+        for (const { segment } of segmenter.segment(body)) {
+          if (idx + segment.length > 5000) break
+          idx += segment.length
+        }
+        content = body.slice(0, idx)
+      }
+      else {
+        content = Array.from(body).slice(0, 5000).join('')
+      }
+
       return {
         title: post.data.title,
         description: post.data.description || '',
         tags: post.data.tags || [],
-        content: (post.body || '').slice(0, 5000),
+        content,
         slug,
         lang: normalizePostLang(post.data.lang),
         published: post.data.published.toISOString(),
