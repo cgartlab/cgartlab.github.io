@@ -375,13 +375,16 @@ shortcuts: {
 
 ### 6.3 颜色引用语法
 
+> **注意**：`--un-preset-theme-colors-*` CSS 变量存储的是裸 OKLCH 参数（如 `0.5 0.2 138`），
+> 使用时**必须**包裹 `oklch()` 函数。带透明度的写法用 `oklch(var(...) / alpha)`。
+
 ```
-c-primary         → color: var(--un-preset-theme-colors-primary)
-c-secondary       → color: var(--un-preset-theme-colors-secondary)
-c-secondary/60    → color: oklch(var(--un-preset-theme-colors-secondary) / 0.6)
-bg-background     → background-color: var(--un-preset-theme-colors-background)
-bg-highlight      → background-color: var(--un-preset-theme-colors-highlight)
-bg-secondary/5    → background-color: oklch(var(--un-preset-theme-colors-secondary) / 0.05)
+c-primary           → color: oklch(var(--un-preset-theme-colors-primary))
+c-secondary         → color: oklch(var(--un-preset-theme-colors-secondary))
+c-secondary/60      → color: oklch(var(--un-preset-theme-colors-secondary) / 0.6)
+bg-background       → background-color: oklch(var(--un-preset-theme-colors-background))
+bg-highlight        → background-color: oklch(var(--un-preset-theme-colors-highlight))
+bg-secondary/5      → background-color: oklch(var(--un-preset-theme-colors-secondary) / 0.05)
 border-secondary/20 → border-color: oklch(var(--un-preset-theme-colors-secondary) / 0.2)
 ```
 
