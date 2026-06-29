@@ -26,12 +26,13 @@ const excerptLengths: Record<ExcerptScene, { cjk: number, other: number }> = {
 }
 
 const htmlEntityMap: Record<string, string> = {
+  // &amp; 必须最后解码，避免其他实体中的 & 被提前替换
   '&lt;': '<',
   '&gt;': '>',
-  '&amp;': '&',
   '&quot;': '"',
   '&apos;': '\'',
   '&nbsp;': ' ',
+  '&amp;': '&',
 }
 
 // 根据语言和场景创建指定长度的纯净文本摘要
@@ -73,8 +74,9 @@ export function getPostDescription(
   const lang = (post.data.lang || defaultLocale) as Language
 
   if (post.data.description) {
-    // 所有场景均截断以防止 meta 标签超长
-    return getExcerpt(post.data.description, lang, scene)
+    // frontmatter description 可能含有 Markdown 语法，先渲染再截断
+    const rendered = markdownParser.render(post.data.description)
+    return getExcerpt(rendered, lang, scene)
   }
 
   const rawContent = post.body || ''

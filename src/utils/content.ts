@@ -95,7 +95,9 @@ async function _getPosts(lang?: Language) {
 }
 
 export const getPosts = memoize(
-  (lang?: Language) => _getPosts(lang || defaultLocale),
+  // 在 memoize 包装层归一化 undefined → defaultLocale，
+  // 确保 getPosts() 与 getPosts(defaultLocale) 共享同一缓存键
+  (lang: Language = defaultLocale) => _getPosts(lang),
 )
 
 /**

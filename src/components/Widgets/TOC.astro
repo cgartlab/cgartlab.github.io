@@ -106,7 +106,10 @@ function setActiveLink(id: string | null) {
   if (link && link !== lastActiveLink) {
     link.classList.add('toc-active')
     if (is2xl.matches) {
-      link.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
+      // reduce-motion 模式下使用 instant，避免不必要的滚动动画
+      const reducedMotion = document.documentElement.classList.contains('reduce-motion')
+        || window.matchMedia('(prefers-reduced-motion: reduce)').matches
+      link.scrollIntoView({ behavior: reducedMotion ? 'instant' : 'smooth', block: 'nearest' })
     }
     lastActiveLink = link
   }
@@ -117,9 +120,16 @@ function scrollToActiveLinkFallback() {
     ticking = false
     return
   }
-  // 取最靠前（字典序最小即页面顺序最前）的可见标题
-  const firstVisible = [...visibleHeadings].sort()[0]
-  setActiveLink(firstVisible)
+  // 按 DOM 顺序找最靠前的可见标题（比字典序更可靠）
+  const allHeadings = Array.from(document.querySelectorAll('h2[id], h3[id], h4[id]'))
+  let firstVisible: string | undefined
+  for (const h of allHeadings) {
+    if (visibleHeadings.has(h.id)) {
+      firstVisible = h.id
+      break
+    }
+  }
+  setActiveLink(firstVisible ?? null)
   ticking = false
 }
 

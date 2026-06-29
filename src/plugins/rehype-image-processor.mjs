@@ -5,13 +5,15 @@ function createFigure(imgNode, isInGallery = false) {
   const altText = imgNode.properties?.alt
   // 如果没有替代文本或者以_开头则跳过说明
   const shouldSkipCaption = !altText || altText.startsWith('_')
+
+  // 非画廊的单图无 alt：直接返回裸 imgNode（不包裹 figure）
   if (shouldSkipCaption && !isInGallery) {
     return imgNode
   }
 
   const children = [imgNode]
 
-  // 添加说明文字
+  // 添加说明文字（有 alt 且不以 _ 开头）
   if (!shouldSkipCaption) {
     children.push({
       type: 'element',
@@ -24,6 +26,7 @@ function createFigure(imgNode, isInGallery = false) {
   return {
     type: 'element',
     tagName: 'figure',
+    // 画廊图片无论是否有 alt 都必须有 gallery-item class
     properties: isInGallery ? { className: ['gallery-item'] } : {},
     children,
   }
