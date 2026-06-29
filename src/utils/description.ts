@@ -73,10 +73,8 @@ export function getPostDescription(
   const lang = (post.data.lang || defaultLocale) as Language
 
   if (post.data.description) {
-    // 仅为og场景截断，其他场景返回完整描述
-    return scene === 'og'
-      ? getExcerpt(post.data.description, lang, scene)
-      : post.data.description
+    // 所有场景均截断以防止 meta 标签超长
+    return getExcerpt(post.data.description, lang, scene)
   }
 
   const rawContent = post.body || ''

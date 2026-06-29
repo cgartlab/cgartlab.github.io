@@ -146,41 +146,40 @@ function getCategories(posts: Post[]): string[] {
 
   <!-- 分类筛选脚本 -->
   <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const categoryTags = document.querySelectorAll('.category-tag')
-      const albumItems = document.querySelectorAll('.album-item')
+    function setupWorksFilter() {
+      const categoryTags = document.querySelectorAll<HTMLButtonElement>('.category-tag')
+      const albumItems = document.querySelectorAll<HTMLElement>('.album-item')
 
       categoryTags.forEach((tag) => {
         tag.addEventListener('click', (event) => {
-          const target = event.target as HTMLElement
+          // 使用 currentTarget 确保始终指向绑定事件的 <button> 元素，
+          // 而非点击到内层 <span> 时返回的子元素
+          const btn = event.currentTarget as HTMLButtonElement
 
           // 移除所有标签的激活状态
           categoryTags.forEach(t => t.classList.remove('active'))
 
-          // 添加当前标签的激活状态
-          target.classList.add('active')
+          // 添加当前按钮的激活状态
+          btn.classList.add('active')
 
-          const selectedCategory = target.dataset.category || 'all'
+          const selectedCategory = btn.dataset.category || 'all'
 
           // 筛选作品
           albumItems.forEach((item) => {
-            const itemElement = item as HTMLElement
             if (selectedCategory === 'all') {
-              itemElement.style.display = 'block'
+              item.style.display = 'block'
             }
             else {
-              const categories = itemElement.dataset.categories?.split(',') || []
-              if (categories.includes(selectedCategory)) {
-                itemElement.style.display = 'block'
-              }
-              else {
-                itemElement.style.display = 'none'
-              }
+              const categories = item.dataset.categories?.split(',') || []
+              item.style.display = categories.includes(selectedCategory) ? 'block' : 'none'
             }
           })
         })
       })
-    })
+    }
+
+    // astro:page-load 在首次加载和每次 View Transition 导航后均会触发
+    document.addEventListener('astro:page-load', setupWorksFilter)
   </script>
 </div>
 
@@ -230,10 +229,16 @@ function getCategories(posts: Post[]): string[] {
   transform: translateY(1px);
 }
 
-.category-tag:hover {
+.category-tag:hover,
+.category-tag:focus-visible {
   border-color: color-mix(in srgb, oklch(var(--un-preset-theme-colors-primary)) 30%, transparent);
   color: oklch(var(--un-preset-theme-colors-primary));
   transform: translateY(-1px);
+}
+
+.category-tag:focus-visible {
+  outline: 2px solid oklch(var(--un-preset-theme-colors-highlight) / 0.6);
+  outline-offset: 2px;
 }
 
 .category-tag.active {

@@ -44,5 +44,14 @@ async function handleCodeCopyClick(e: MouseEvent) {
   timeoutMap.set(button, timeoutId)
 }
 
-document.addEventListener('click', handleCodeCopyClick)
+function setupCodeCopy() {
+  document.addEventListener('click', handleCodeCopyClick)
+}
+
+function cleanupCodeCopy() {
+  document.removeEventListener('click', handleCodeCopyClick)
+}
+
+document.addEventListener('astro:page-load', setupCodeCopy)
+document.addEventListener('astro:before-swap', cleanupCodeCopy)
 </script>

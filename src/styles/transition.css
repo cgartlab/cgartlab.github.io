@@ -182,4 +182,20 @@ html.reduce-motion {
     transform: translate(0);
     animation: none;
   }
+
+  /* 热图单元格 hover 动画 */
+  .gh-cell {
+    transition: none;
+  }
+
+  /* 链接卡片 hover 变换 */
+  .gc-container {
+    transition: color 0.3s ease-out, background-color 0.3s ease-out, border-color 0.3s ease-out;
+  }
+
+  /* 画廊图片 hover 效果 */
+  .thumbnail-image,
+  .album-link {
+    transition: none;
+  }
 }

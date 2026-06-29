@@ -1,4 +1,4 @@
-import { visit } from 'unist-util-visit'
+import { visit, SKIP } from 'unist-util-visit'
 
 function createFigure(imgNode, isInGallery = false) {
   // 获取替代文本
@@ -58,7 +58,8 @@ export function rehypeImageProcessor() {
       if (isInGallery) {
         const figures = imgNodes.map(imgNode => createFigure(imgNode, true))
         parent.children.splice(index, 1, ...figures)
-        return
+        // splice 后更新游标，避免索引偏移导致跳过或重复遍历兄弟节点
+        return [SKIP, index + figures.length]
       }
 
       // 单张图片：在非画廊容器中转换为带说明的图像
@@ -73,8 +74,11 @@ export function rehypeImageProcessor() {
         return
       }
 
-      // 多张图片：在非画廊容器中展开
-      parent.children.splice(index, 1, ...imgNodes)
+      // 多张图片：在非画廊容器中，每张图片均通过 createFigure 处理以保留 alt/figcaption
+      const figures = imgNodes.map(imgNode => createFigure(imgNode, false))
+      parent.children.splice(index, 1, ...figures)
+      // splice 后更新游标
+      return [SKIP, index + figures.length]
     })
   }
 }

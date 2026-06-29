@@ -320,7 +320,6 @@ pre.mermaid svg {
   margin-top: 0.25rem;
   list-style-type: none;
   padding-left: 0;
-  scroll-target-group: auto;
 }
 @media (min-width: 1536px) {
   #toc-links-list {
@@ -331,12 +330,13 @@ pre.mermaid svg {
 #toc-links-list > * + * {
   margin-top: 0.275rem;
 }
-a:target-current {
+/* TOC 当前高亮由 JS IntersectionObserver 动态添加 .toc-active 类 */
+a.toc-active {
   color: oklch(var(--un-preset-theme-colors-primary));
   font-weight: 500;
 }
 @media (min-width: 1536px) {
-  a:target-current {
+  a.toc-active {
     color: oklch(var(--un-preset-theme-colors-primary));
     font-weight: 500;
   }
@@ -407,11 +407,11 @@ a:target-current {
   grid-template-rows: 1fr;
 }
 
-/* Desktop Initial State */
-#toc-accordion-wrapper {
-  grid-template-rows: 1fr;
-}
+/* Desktop Initial State — 桌面端默认展开，checkbox checked 时折叠 */
 @media (min-width: 1536px) {
+  #toc-accordion-wrapper {
+    grid-template-rows: 1fr;
+  }
   #toc-toggle:checked ~ #toc-accordion-wrapper {
     grid-template-rows: 0fr;
   }

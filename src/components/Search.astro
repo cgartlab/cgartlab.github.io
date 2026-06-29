@@ -165,9 +165,15 @@ const currentUI = ui[currentLang as keyof typeof ui] ?? {}
     transition: opacity 0.15s ease-out, background-color 0.15s ease-out;
   }
 
-  .search-close:hover {
+  .search-close:hover,
+  .search-close:focus-visible {
     opacity: 1;
     background-color: rgba(128, 128, 128, 0.1);
+  }
+
+  .search-close:focus-visible {
+    outline: 2px solid oklch(var(--un-preset-theme-colors-highlight) / 0.6);
+    outline-offset: 2px;
   }
 
   .search-close svg {
@@ -195,9 +201,15 @@ const currentUI = ui[currentLang as keyof typeof ui] ?? {}
     transition: background-color 0.15s ease-out, transform 0.15s ease-out;
   }
 
-  .search-result-item:hover {
+  .search-result-item:hover,
+  .search-result-item:focus-visible {
     background-color: rgba(128, 128, 128, 0.08);
     transform: translateX(0.25rem);
+  }
+
+  .search-result-item:focus-visible {
+    outline: 2px solid oklch(var(--un-preset-theme-colors-highlight) / 0.6);
+    outline-offset: -2px;
   }
 
   .search-result-title {

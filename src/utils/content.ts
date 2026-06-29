@@ -94,7 +94,9 @@ async function _getPosts(lang?: Language) {
   )
 }
 
-export const getPosts = memoize(_getPosts)
+export const getPosts = memoize(
+  (lang?: Language) => _getPosts(lang || defaultLocale),
+)
 
 /**
  * 获取所有非置顶文章
