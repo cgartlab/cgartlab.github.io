@@ -37,6 +37,10 @@ function cleanupZoom() {
     clearTimeout(transitionFallbackTimer)
     transitionFallbackTimer = null
   }
+  // 确保导航时 scroll-lock 被移除，防止下一页无法滚动
+  if (document.body.classList.contains('scroll-lock')) {
+    unlockBodyScroll()
+  }
   overlay = null
   zoomedImg = null
   originalImg = null

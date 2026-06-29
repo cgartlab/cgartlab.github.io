@@ -433,7 +433,8 @@ a.toc-active {
   width: 1em;
   height: 1em;
   margin: 0 6px;
-  background-color: #b91c1c;
+  /* 日本传统印章朱红色光标，使用项目 caution token 对齐 */
+  background-color: oklch(var(--un-preset-theme-colors-caution));
   animation: cursor-blink 1s ease-in-out infinite;
   transform: translateY(-2px);
   flex-shrink: 0;

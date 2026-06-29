@@ -17,8 +17,8 @@ html {
   z-index: 9999;
   padding: 0.75rem 1.5rem;
   text-align: center;
-  background: #007bff;
-  color: #ffffff;
+  background: oklch(var(--un-preset-theme-colors-primary));
+  color: oklch(var(--un-preset-theme-colors-background));
   font-weight: 600;
   text-decoration: none;
   pointer-events: none;
@@ -29,7 +29,7 @@ html {
   transform: translateX(-50%);
   opacity: 1;
   pointer-events: auto;
-  outline: 2px solid #007bff;
+  outline: 2px solid oklch(var(--un-preset-theme-colors-primary));
   outline-offset: 2px;
 }
 
@@ -182,11 +182,9 @@ h4:hover .heading-anchor-link svg:hover {
 }
 .code-copy-button.copied {
   border: none;
-  background-color: #059669;
+  /* 使用项目 tip (emerald) token 表示"已复制"成功状态 */
+  background-color: oklch(var(--un-preset-theme-colors-tip));
   color: oklch(var(--un-preset-theme-colors-background));
-}
-html.dark .code-copy-button.copied {
-  background-color: #10b981;
 }
 .code-copy-button.copied .icon-copy {
   opacity: 0;
