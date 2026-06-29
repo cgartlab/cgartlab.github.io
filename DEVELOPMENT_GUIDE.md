@@ -1,7 +1,7 @@
 # CGArtLab 网站开发指南
 
-> **版本**: 1.0
-> **最后更新**: 2026-06-14
+> **版本**: 1.1
+> **最后更新**: 2026-06-29
 > **适用对象**: 人类开发者 & AI 大模型
 > **项目地址**: https://github.com/cgartlab/cgartlab.github.io
 
@@ -375,13 +375,16 @@ shortcuts: {
 
 ### 6.3 颜色引用语法
 
+> **注意**：`--un-preset-theme-colors-*` CSS 变量存储的是裸 OKLCH 参数（如 `0.5 0.2 138`），
+> 使用时**必须**包裹 `oklch()` 函数。带透明度的写法用 `oklch(var(...) / alpha)`。
+
 ```
-c-primary         → color: var(--un-preset-theme-colors-primary)
-c-secondary       → color: var(--un-preset-theme-colors-secondary)
-c-secondary/60    → color: oklch(var(--un-preset-theme-colors-secondary) / 0.6)
-bg-background     → background-color: var(--un-preset-theme-colors-background)
-bg-highlight      → background-color: var(--un-preset-theme-colors-highlight)
-bg-secondary/5    → background-color: oklch(var(--un-preset-theme-colors-secondary) / 0.05)
+c-primary           → color: oklch(var(--un-preset-theme-colors-primary))
+c-secondary         → color: oklch(var(--un-preset-theme-colors-secondary))
+c-secondary/60      → color: oklch(var(--un-preset-theme-colors-secondary) / 0.6)
+bg-background       → background-color: oklch(var(--un-preset-theme-colors-background))
+bg-highlight        → background-color: oklch(var(--un-preset-theme-colors-highlight))
+bg-secondary/5      → background-color: oklch(var(--un-preset-theme-colors-secondary) / 0.05)
 border-secondary/20 → border-color: oklch(var(--un-preset-theme-colors-secondary) / 0.2)
 ```
 
@@ -779,14 +782,14 @@ const SubtitleTag = isPost ? 'div' : 'h2'
 ```ts
 function getNavItemClass(isActive: boolean) {
   return isActive
-    ? 'highlight-static c-primary font-bold after:bottom-0.7em'
-    : 'highlight-hover transition-[colors,font-weight] after:bottom-0.7em hover:(c-primary font-bold)'
+    ? 'highlight-static c-primary font-bold'
+    : 'highlight-hover transition-[colors,font-weight] hover:(c-primary font-bold)'
 }
 ```
 
 **视觉效果**：
-- `highlight-static` → 永久显示底部高亮条（伪元素 `::after`）
-- `highlight-hover` → 悬停时从右向左展开高亮条动画
+- `highlight-static` → 永久显示底部橄榄绿细线下划线（`height: 2px`，`bottom: -0.1em`）
+- `highlight-hover` → 悬停时下划线从左向右展开，移出时从右向左收缩
 
 ### 12.4 PostList 组件
 
@@ -809,7 +812,7 @@ function getNavItemClass(isActive: boolean) {
 ### 12.6 TOC（目录）组件
 
 - **移动端**：手风琴折叠，点击展开/收起
-- **桌面端(2xl+)**：固定在右侧，自动高亮当前阅读位置（`a:target-current`）
+- **桌面端(2xl+)**：固定在右侧，IntersectionObserver 监听标题可见性，自动添加 `.toc-active` class 高亮当前阅读位置；`reduce-motion` 模式下 `scrollIntoView` 降级为 `instant`
 - **CSS-only 切换**：通过隐藏的 checkbox + 兄弟选择器实现，无 JavaScript
 
 ---
@@ -934,15 +937,21 @@ Markdown 源文件
 ### 14.3 高亮条动画
 
 ```css
+/* 高亮条：橄榄绿 2px 下划线，不遮挡文字 */
 .highlight-hover::after {
-  --at-apply: 'origin-bottom-right scale-x-0 transition-transform ease-out lg:duration-300';
+  height: 2px;
+  bottom: -0.1em;
+  transform-origin: bottom right;
+  transform: scaleX(0);
+  transition: transform 0.3s ease-out;
 }
 .highlight-hover:hover::after {
-  --at-apply: 'origin-bottom-left scale-x-100';
+  transform-origin: bottom left;
+  transform: scaleX(1);
 }
 ```
 
-**视觉效果**：悬停时，底部高亮条从左向右展开；移出时从右向左收缩。
+**⚠️ 视觉效果**：悬停时，底部**橄榄绿细线下划线**从左向右展开（`height: 2px`）；移出时从右向左收缩。不遮挡文字（无 `z-index: -1`）。
 
 ### 14.4 减少动画模式
 
@@ -951,14 +960,21 @@ Markdown 源文件
 - 系统偏好 `prefers-reduced-motion: reduce`
 - 浏览器不支持 View Transitions
 
-启用后所有动画被禁用，元素直接显示最终状态。
+启用后（通过 `html.reduce-motion` class 控制）：
+- 所有页面过渡动画被禁用
+- TOC `scrollIntoView` 使用 `instant` 而非 `smooth`
+- 热图单元格、链接卡片、画廊图片的 hover 动画被禁用
+- ConsentBanner 横幅动画被抑制
+
+两个控制路径并行生效：JS 设置 `html.reduce-motion` class + 系统媒体查询 `@media (prefers-reduced-motion: reduce)`，两者均在 `transition.css` 和 `ConsentBanner.astro` 中处理。
 
 ### 14.5 副标题光标闪烁动画
 
 ```css
 .subtitle-cursor-block {
   width: 1em; height: 1em;
-  background-color: #b91c1c; /* 日本传统印章朱红色 */
+  /* 使用 caution token 对应日本传统印章朱红色 */
+  background-color: oklch(var(--un-preset-theme-colors-caution));
   animation: cursor-blink 1s ease-in-out infinite;
 }
 @keyframes cursor-blink {
