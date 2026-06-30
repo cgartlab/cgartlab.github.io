@@ -282,6 +282,17 @@ pnpm new-post "标题"
 
 动画在 `reduce-motion` class 下全部禁用。移动端(≤767px) 仅前 8 个 `post-content` 子元素有动画。
 
+**View Transitions 事件监听器规范**：所有在 View Transitions 场景下使用的全局事件监听器，**必须**采用 `astro:page-load` / `astro:before-swap` 配对注册/清理模式，禁止在模块顶层直接 `addEventListener`：
+
+```js
+function setup() { document.addEventListener('click', handler) }
+function cleanup() { document.removeEventListener('click', handler) }
+document.addEventListener('astro:page-load', setup)
+document.addEventListener('astro:before-swap', cleanup)
+```
+
+`matchMedia` 引用必须提取为模块级常量，确保 `addEventListener` 与 `removeEventListener` 操作同一对象。
+
 ### 主题切换 (暗色/亮色)
 
 1. **检测优先级**: localStorage `theme` → config `defaultMode` → 系统 `prefers-color-scheme`
@@ -339,7 +350,7 @@ pnpm new-post "标题"
 |------|------|------|
 | **ImageZoom** | `Widgets/ImageZoom.astro` | 点击图片全屏查看，计算缩放比例(桌面 0.8, 移动 1.0)，点击外部/缩放关闭 |
 | **CodeCopyButton** | `Widgets/CodeCopyButton.astro` | 代码块右上角复制按钮 |
-| **TOC** | `Widgets/TOC.astro` | 目录，桌面端 2xl 固定侧栏，当前标题 `:target-current` 高亮 |
+| **TOC** | `Widgets/TOC.astro` | 目录，桌面端 2xl 固定侧栏，IntersectionObserver 驱动 `.toc-active` 高亮 |
 | **MediaEmbed** | `Widgets/MediaEmbed.astro` | 视频/B站嵌入，响应式容器 |
 | **SoundEffect** | `Widgets/SoundEffect.astro` | Web Audio API 打字音效，桌面端(>1023px)生效，5 种变体 |
 | **BackButton** | `Widgets/BackButton.astro` | 桌面端(≥1024px)可见 |
@@ -391,3 +402,6 @@ pnpm new-post "标题"
 - ESLint 跳过 `src/content/**`
 - 文中 2 处特例豁免不可新增
 - pre-commit hook 自动 eslint --fix `.js/.ts/.astro`
+- **颜色系统**：所有组件/样式中的颜色必须使用 `oklch(var(--un-preset-theme-colors-*))` token，禁止裸色值（`#xxx`、`rgb()`）。毛玻璃/阴影效果中的物理透明度 `rgba(0,0,0,α)` 和固定功能语义色（如错误红）除外
+- **View Transitions 监听器**：全局事件监听器必须用 `astro:page-load`/`astro:before-swap` 配对，`matchMedia` 必须提取为模块级常量
+- **iOS 滚动锁定**：使用 `.scroll-lock` class（含 `position:fixed+width:100%`），配合 `savedScrollY` 防止跳顶
