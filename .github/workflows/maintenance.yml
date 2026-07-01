@@ -1,12 +1,19 @@
-name: Close Stale Issues
+name: Repository Maintenance
 
 on:
   schedule:
     - cron: '30 1 * * *'
+  push:
+    paths:
+      - 'labels.yml'
+    branches: [main]
   workflow_dispatch:
+
+permissions: {}
 
 jobs:
   stale:
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     permissions:
       issues: write
@@ -21,7 +28,7 @@ jobs:
           stale-issue-message: |
             This issue has been marked as stale due to 60 days of inactivity.
             此 issue 因 60 天无活动已被标记为 stale。
-            
+
             If no further activity occurs in 14 days, it will be automatically closed.
             若 14 天内无新活动，将自动关闭。
           close-issue-message: |
@@ -32,3 +39,23 @@ jobs:
           remove-stale-when-updated: true
           exempt-issue-labels: '🔥 priority:high,🚧 status:blocked'
           operations-per-run: 30
+
+  sync-labels:
+    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v6
+      - name: Install github-label-sync
+        run: npm install -g @endbug/github-label-sync
+      - name: Sync labels
+        env:
+          GITHUB_ACCESS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          github-label-sync \
+            --labels labels.yml \
+            --allow-added-labels \
+            ${{ github.repository }}

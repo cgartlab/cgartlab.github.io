@@ -1,0 +1,17 @@
+# Global owner
+* @cgartlab
+
+# Content directories
+/src/content/ @cgartlab
+/src/assets/ @cgartlab
+
+# CI/CD and configuration
+/.github/ @cgartlab
+/astro.config.ts @cgartlab
+/uno.config.ts @cgartlab
+/wrangler.jsonc @cgartlab
+
+# Root config files
+/package.json @cgartlab
+/pnpm-workspace.yaml @cgartlab
+/.npmrc @cgartlab
