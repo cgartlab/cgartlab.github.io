@@ -11,7 +11,6 @@ permissions:
 
 jobs:
   review:
-    if: github.actor != 'dependabot[bot]'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
@@ -20,11 +19,17 @@ jobs:
 
       - name: Generate argus-flash token
         id: app-token
+        continue-on-error: true
         uses: actions/create-github-app-token@v1
         with:
           app-id: ${{ secrets.ARGUS_FLASH_APP_ID }}
           private-key: ${{ secrets.ARGUS_FLASH_PRIVATE_KEY }}
 
+      - name: Skip Dependabot PRs without secrets access
+        if: steps.app-token.outcome == 'failure' || steps.app-token.outputs.token == ''
+        run: echo "Skipping Argus review for PR without secrets access" && exit 0
+
       - uses: cgartlab/argus/.github/actions/argus-review@3de07b013b58a4e021dc9353fa96cc1a2d11d969
+        if: steps.app-token.outcome == 'success' && steps.app-token.outputs.token != ''
         with:
           github-token: ${{ steps.app-token.outputs.token }}
