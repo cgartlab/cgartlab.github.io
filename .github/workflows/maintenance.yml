@@ -48,7 +48,7 @@ jobs:
       issues: write
       pull-requests: write
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - name: Install github-label-sync
         run: npm install -g @endbug/github-label-sync
       - name: Sync labels
