@@ -10,7 +10,7 @@ const isTagActive = isTag
 const isAboutActive = isAbout
 const isWorksActive = isWorks
 const isWeeklyActive = isWeekly
-const isLinksActive = isResource
+const isResourceActive = isResource
 
 function getNavItemClass(isActive: boolean) {
   return isActive
@@ -37,7 +37,7 @@ const navItems = [
   {
     href: '/resource/',
     label: currentUI.links,
-    className: getNavItemClass(isLinksActive),
+    className: getNavItemClass(isResourceActive),
   },
   {
     href: '/tags/',
