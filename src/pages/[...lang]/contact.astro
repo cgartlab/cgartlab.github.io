@@ -46,15 +46,6 @@ const t = {
 }
 
 const d = t[currentLang as keyof typeof t] || t.zh
-
-const items: { label: string, value: string, url?: string }[] = [
-  { label: 'Email', value: d.email, url: `mailto:${d.email}` },
-  { label: 'GitHub', value: d.github, url: `https://${d.github}` },
-  { label: 'WeChat', value: d.wechat },
-  { label: 'X (Twitter)', value: d.x, url: `https://x.com/cgartlab` },
-  { label: '少数派', value: d.sspai, url: `https://${d.sspai}` },
-  { label: 'Bilibili', value: d.bilibili, url: `https://${d.bilibili}` },
-]
 ---
 
 <Layout postTitle={d.title}>
@@ -63,28 +54,39 @@ const items: { label: string, value: string, url?: string }[] = [
   <article class="heti mt-6 lg:mt-10.5">
     <h1 class="post-title">{d.title}</h1>
 
-    <div class="contact-grid">
-      {
-        items.map(item => (
-          <div class="contact-item">
-            <span class="contact-label">{item.label}</span>
-            {item.url
-? (
-              <a
-                href={item.url}
-                class="contact-value"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                {item.value}
-              </a>
-            )
-: (
-              <span class="contact-value">{item.value}</span>
-            )}
-          </div>
-        ))
-      }
+    <div class="contact-sections">
+      <div class="contact-group">
+        <div class="contact-item">
+          <span class="contact-label">Email</span>
+          <a href={`mailto:${d.email}`} class="contact-value" target="_blank" rel="noopener noreferrer">{d.email}</a>
+        </div>
+      </div>
+
+      <div class="contact-group">
+        <div class="contact-item">
+          <span class="contact-label">X (Twitter)</span>
+          <a href="https://x.com/cgartlab" class="contact-value" target="_blank" rel="noopener noreferrer">{d.x}</a>
+        </div>
+        <div class="contact-item">
+          <span class="contact-label">GitHub</span>
+          <a href={`https://${d.github}`} class="contact-value" target="_blank" rel="noopener noreferrer">{d.github}</a>
+        </div>
+      </div>
+
+      <div class="contact-group">
+        <div class="contact-item">
+          <span class="contact-label">WeChat</span>
+          <span class="contact-value">{d.wechat}</span>
+        </div>
+        <div class="contact-item">
+          <span class="contact-label">Bilibili</span>
+          <a href={`https://${d.bilibili}`} class="contact-value" target="_blank" rel="noopener noreferrer">{d.bilibili}</a>
+        </div>
+        <div class="contact-item">
+          <span class="contact-label">少数派</span>
+          <a href={`https://${d.sspai}`} class="contact-value" target="_blank" rel="noopener noreferrer">{d.sspai}</a>
+        </div>
+      </div>
     </div>
 
     <blockquote class="contact-note mb-0 mt-6 lg:mt-8">
@@ -96,23 +98,31 @@ const items: { label: string, value: string, url?: string }[] = [
 </Layout>
 
 <style>
-.contact-grid {
+.contact-sections {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-top: 0;
+}
+
+.contact-group {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-  margin-top: 0;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid color-mix(in srgb, var(--un-preset-theme-colors-highlight) 10%, transparent);
+}
+
+.contact-group:last-child {
+  padding-bottom: 0;
+  border-bottom: none;
 }
 
 .contact-item {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 0.25rem 0;
-  border-bottom: 1px solid color-mix(in srgb, var(--un-preset-theme-colors-highlight) 15%, transparent);
-}
-
-.contact-item:last-child {
-  border-bottom: none;
+  padding: 0.375rem 0;
 }
 
 .contact-label {
@@ -120,7 +130,7 @@ const items: { label: string, value: string, url?: string }[] = [
   font-weight: 600;
   color: color-mix(in srgb, var(--un-preset-theme-colors-secondary) 60%, transparent);
   text-align: left;
-  min-width: 5rem;
+  min-width: 6rem;
 }
 
 .contact-value {
@@ -128,6 +138,7 @@ const items: { label: string, value: string, url?: string }[] = [
   color: oklch(var(--un-preset-theme-colors-primary));
   text-decoration: none;
   transition: opacity 0.2s;
+  word-break: break-all;
 }
 
 .contact-value:hover {
@@ -137,7 +148,7 @@ const items: { label: string, value: string, url?: string }[] = [
 .contact-note {
   font-size: 0.85rem;
   color: color-mix(in srgb, var(--un-preset-theme-colors-secondary) 65%, transparent);
-  margin-top: 1.25rem;
+  margin-top: 1.5rem;
   padding-left: 1rem;
   border-left: 2px solid color-mix(in srgb, var(--un-preset-theme-colors-highlight) 40%, transparent);
 }

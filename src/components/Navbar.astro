@@ -1,8 +1,8 @@
----
+﻿---
 import { ui } from '@/i18n/ui'
 import { getPageInfo } from '@/utils/page'
 
-const { currentLang, isHome, isPost, isTag, isAbout, isWorks, isWeekly, isLinks, getLocalizedPath } = getPageInfo(Astro.url.pathname)
+const { currentLang, isHome, isPost, isTag, isAbout, isWorks, isWeekly, isResource, getLocalizedPath } = getPageInfo(Astro.url.pathname)
 const currentUI = ui[currentLang as keyof typeof ui] ?? {}
 
 const isPostActive = isHome || isPost
@@ -10,7 +10,7 @@ const isTagActive = isTag
 const isAboutActive = isAbout
 const isWorksActive = isWorks
 const isWeeklyActive = isWeekly
-const isLinksActive = isLinks
+const isResourceActive = isResource
 
 function getNavItemClass(isActive: boolean) {
   return isActive
@@ -35,9 +35,9 @@ const navItems = [
     className: getNavItemClass(isWeeklyActive),
   },
   {
-    href: '/links/',
+    href: '/resource/',
     label: currentUI.links,
-    className: getNavItemClass(isLinksActive),
+    className: getNavItemClass(isResourceActive),
   },
   {
     href: '/tags/',
@@ -65,7 +65,7 @@ const navItems = [
     <li class="lg:leading-2.45em">
       <button
         id="search-trigger"
-        class="highlight-hover transition-[colors,font-weight] hover:(c-primary font-bold)"
+        class="nav-highlight highlight-hover transition-[colors,font-weight] hover:(c-primary font-bold)"
         aria-label={currentUI.search}
       >
         {currentUI.search}
@@ -75,7 +75,7 @@ const navItems = [
       <li class="lg:leading-2.45em">
         <a
           href={getLocalizedPath(item.href)}
-          class={item.className}
+          class={`nav-highlight ${item.className}`}
         >
           {item.label}
         </a>
