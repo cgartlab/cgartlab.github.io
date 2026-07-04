@@ -7,7 +7,7 @@
 
 ## 技术栈
 
-Astro 6 · TypeScript 6 · pnpm 10 · Node 24 · UnoCSS 66 (Wind3 + Attributify) · MDX · KaTeX · Mermaid · Playwright · Wrangler
+ Astro 6 · TypeScript 6 · pnpm 10 · Node 24 · UnoCSS 66 (Wind3 + Attributify) · MDX · KaTeX · Mermaid · Playwright · Wrangler · Cloudflare Workers
 
 ## 项目结构
 
@@ -19,10 +19,10 @@ src/
 │   └── Widgets/        # TOC, ImageZoom, MediaEmbed, CodeCopyButton 等
 ├── content/
 │   ├── about/           # 关于页集合
-│   ├── posts/           # 博客文章（含 works/, weekly/, _images/）
+│   ├── posts/           # 博客文章（含 works/, weekly/, _images/, _files/）
 │   └── privacy/         # 隐私政策集合
 ├── data/                # 站点数据（链接等）
-├── i18n/                # 国际化 (zh/en/zh-tw)
+├── i18n/                # 国际化 (zh/en，zh-tw 仅在 langMap 中定义但未启用)
 ├── layouts/             # 页面布局
 ├── pages/               # 路由（多语言 [...lang] 前缀）
 ├── plugins/             # Markdown 插件 (remark/rehype)
@@ -31,10 +31,14 @@ src/
 └── utils/               # 工具函数（内容、搜索、缓存、Feed 等）
 scripts/                 # 构建与内容工具脚本
 public/
-├── icons/               # 网站图标
-├── fonts/               # 自定义字体（EarlySummer, STIX, Snell）
+├── icons/               # 网站图标（含 SVG favicon）
+├── fonts/               # 自定义字体（EarlySummer, STIX, Snell）+ NotoSansSC 简体
 ├── giscus/              # Giscus 评论主题
-└── feeds/               # RSS/Atom Feed 样式表
+├── feeds/               # RSS/Atom Feed 样式表
+├── sounds/              # 打字音效 WAV 文件
+├── images/              # OG 默认图、微信分享图等静态图片
+├── llms.txt             # llms.txt 自动生成
+└── robots.txt
 ```
 
 ## 主要功能
@@ -59,7 +63,7 @@ public/
 ```bash
 pnpm dev                  # astro check → astro dev
 pnpm build                # astro check → build → generate-llms → apply-lqip（顺序敏感）
-pnpm preview              # astro preview
+pnpm preview              # astro preview --host（局域网可访问）
 pnpm lint / lint:fix      # eslint（antfu config，忽略 src/content/**）
 pnpm new-post "标题"       # 创建 MD 文章（周刊自动放入 weekly/）
 pnpm format-posts         # CJK 文本规范化 (autocorrect)
@@ -78,7 +82,9 @@ pnpm exec playwright test # Playwright 端到端测试
 
 ## CI/CD
 
-- push `main` → **Cloudflare Pages** 自动部署（无 GitHub Actions）
+ - `main` push → **Cloudflare Pages** 直接部署（构建在 Cloudflare 完成）
+ - GitHub Actions（`ci.yml`）在每次 push `main`/`dev-*` 和 PR 时运行构建验证
+ - 其他 workflow：PR 审查（`pr-review.yml`）、PR 分类（`pr-triage.yml`）、定时维护（`maintenance.yml`）、Release 草稿（`release.yml`）
 - 构建命令: `pnpm install --config.trustPolicy=off && pnpm build`
 - 域名: [cgartlab.com](https://cgartlab.com)
 - 部署配置: `wrangler.jsonc`
