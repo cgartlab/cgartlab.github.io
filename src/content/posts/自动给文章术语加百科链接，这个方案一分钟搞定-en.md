@@ -11,6 +11,8 @@ toc: true
 abbrlink: auto-glossary-term-linking
 ---
 
+> **AI Disclosure:** The frontend visual design and written content in this article are original by the author. For the code, the author provided requirements, creative direction, and domain definitions for the terminology glossary, while [OpenCode](https://sspai.com/post/opencode.ai) handled the specific implementation. The author reviewed, manually adjusted, and then deployed the final version.
+
 ![Automated processing outputs web pages with encyclopedia links](./_images/博客功能更新：一分钟给所有文章内的术语生成百科链接-1782638526361.webp)
 
 # Why Add Links to Terms
@@ -179,11 +181,11 @@ Why custom URLs? Some terms don't have a corresponding Wikipedia page (e.g., nic
 
 The Wikipedia URL generation rules are straightforward:
 
-| Language | Generated URL |
-|----------|---------------|
-| `zh` | `https://zh.wikipedia.org/wiki/{wikiPath}` |
-| `zh-tw` | `https://zh.wikipedia.org/wiki/{wikiPath}` |
-| `en` | `https://en.wikipedia.org/wiki/{wikiPath}` |
+| Language | Generated URL                              |
+| -------- | ------------------------------------------ |
+| `zh`     | `https://zh.wikipedia.org/wiki/{wikiPath}` |
+| `zh-tw`  | `https://zh.wikipedia.org/wiki/{wikiPath}` |
+| `en`     | `https://en.wikipedia.org/wiki/{wikiPath}` |
 
 Simplified and Traditional Chinese share Chinese Wikipedia, though the URL-encoded path may differ depending on the term's character variant.
 
