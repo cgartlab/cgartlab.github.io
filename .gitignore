@@ -74,3 +74,15 @@ src/content/posts/*.base
 .omo/
 # Syncthing运行时文件
 .stignore-common
+
+# Codex 工作目录
+/.claude/
+
+# 运维日志
+logs/
+
+# pnpm patch 产物
+patches/
+
+# LQIP 构建产物
+src/assets/lqip/
