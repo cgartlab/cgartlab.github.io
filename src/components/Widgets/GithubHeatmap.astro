@@ -79,13 +79,6 @@ const contributions = data.contributions
 const monthLabels = contributions.length > 0 ? getMonthLabels(contributions) : []
 const totalFormatted = data.total.toLocaleString()
 
-// Tooltip count label helper
-function formatTooltipCount(count: number): string {
-  const label = currentUI.contributionCount || 'contribution'
-  if (currentLang === 'en')
-    return count === 1 ? `1 ${label}` : `${count} ${label}s`
-  return `${count} ${label}`
-}
 
 // SSR-friendly date format function
 function formatDateStr(dateStr: string): string {
