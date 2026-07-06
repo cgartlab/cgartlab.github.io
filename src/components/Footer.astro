@@ -90,11 +90,11 @@ const disclaimerText = {
 ---
 
 <footer
-  class="mb-2 mt-2 box-content h-110px flex flex-col gap-0.625em text-3 leading-3 tracking-0 font-navbar lg:text-2.5"
-  lg="uno-desktop-column fixed bottom-16"
+  class="mb-2 mt-2 box-content h-120px flex flex-col gap-0 text-footer font-navbar"
+  lg="uno-desktop-column fixed bottom-28"
 >
   <!-- 第1行：社交媒体 -->
-  <p class="m-0 text-3 leading-3 tracking-0 font-navbar lg:text-2.5">
+  <p class="m-0 text-footer font-navbar">
     {links.map((link, index) => (
       <>
         <a class={footerLinkClass} href={link.url} target="_blank" rel="noopener noreferrer">{link.name}</a>&nbsp;{index < links.length - 1 && '/'}
@@ -105,26 +105,26 @@ const disclaimerText = {
 
   <!-- 第2行：累计字数 -->
   {showWordCount && (
-    <p class="m-0 text-3 leading-3 tracking-0 font-navbar lg:text-2.5">
+    <p class="m-0 text-footer font-navbar">
       {wordCountText}{totalWords.toLocaleString()}
     </p>
   )}
 
   <!-- 第3行：法律与联系信息 -->
-  <p class="m-0 text-3 leading-3 tracking-0 font-navbar lg:text-2.5">
+  <p class="m-0 text-footer font-navbar">
     <a class={footerLinkClass} href={privacyPath}>{privacyText}</a>
-    &nbsp;/&nbsp;<a class={footerLinkClass} href={termsPath}>{termsText}</a>
-    &nbsp;/&nbsp;<a class={footerLinkClass} href={disclaimerPath}>{disclaimerText}</a>
-    &nbsp;/&nbsp;<a class={footerLinkClass} href={contactPath}>{contactText}</a>
+    &nbsp; / &nbsp;<a class={footerLinkClass} href={termsPath}>{termsText}</a>
+    &nbsp; / &nbsp;<a class={footerLinkClass} href={disclaimerPath}>{disclaimerText}</a>
+    &nbsp; / &nbsp;<a class={footerLinkClass} href={contactPath}>{contactText}</a>
   </p>
 
   <!-- 第4行：版权 -->
-  <p class="m-0 text-3 leading-3 tracking-0 font-navbar lg:text-2.5">
+  <p class="m-0 text-footer font-navbar">
     © {year} <a class={footerLinkClass} href="https://cy92.org" target="_blank" rel="noopener noreferrer">{author}</a>
   </p>
 
   <!-- 第5行：许可 -->
-  <p class="m-0 text-3 leading-3 tracking-0 font-navbar lg:text-2.5">
+  <p class="m-0 text-footer font-navbar">
     {
       {
         'zh': '内容采用',
