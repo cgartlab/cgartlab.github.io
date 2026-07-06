@@ -8,7 +8,7 @@ export const themeConfig: ThemeConfig = {
     // site subtitle
     subtitle: '探索数字创作的边界',
     // site description
-    description: 'CG艺术实验室（cgartlab.com）是一个专注于数字艺术、动态视觉设计、技术分享和知识管理的工作室。致力于为数字艺术爱好者、专业设计师和初学者以及商业客户，分享创作经验和培训服务。',
+    description: 'CG艺术实验室（cgartlab.com）是一个专注于动态视觉设计、数字艺术、技术分享和知识管理的工作室。致力于为数字艺术爱好者、专业设计师和初学者以及商业客户，分享创作经验和提供服务。',
     // use i18n title/subtitle/description from src/i18n/ui.ts instead of static ones above
     i18nTitle: true, // true | false
     // author name
@@ -153,7 +153,7 @@ export const themeConfig: ThemeConfig = {
     // apiflash access key
     // automatically generate website screenshots for open graph images
     // get your access key at: https://apiflash.com/
-    apiflashKey: '',
+    apiflashKey: '88d1af52b0eb40d08f7279b43add327d',
   },
   // SEO SETTINGS >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> END
 
