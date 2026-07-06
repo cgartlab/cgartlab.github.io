@@ -67,7 +67,7 @@ body::selection {
 .highlight-hover::after {
   position: absolute;
   left: 0;
-  bottom: 0.4em;
+  bottom: 0.35em;
   height: 2px;
   width: 100%;
   background-color: oklch(var(--un-preset-theme-colors-highlight));
