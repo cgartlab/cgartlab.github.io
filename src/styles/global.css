@@ -53,11 +53,21 @@ body {
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
 }
+
+/* ═══ Selection Highlight ═══
+   Sets both background and text color to ensure sufficient contrast.
+   Text uses the page background color so selected text is always
+   readable against the olive green highlight background.
+   Light: oklch(41% 0.12 138) — 3.10:1 contrast
+   Dark:  oklch(72% 0.14 138) — 4.52:1 contrast */
 body::selection {
   background-color: oklch(var(--un-preset-theme-colors-highlight));
+  color: oklch(var(--un-preset-theme-colors-background));
 }
 
-/* Highlight Hover Animation — 橄榄绿下划线（非块状背景） */
+/* ═══ Navbar Highlight Underline ═══
+   Pure underline (no block background) using olive green.
+   Animated scale-in on hover for non-active items. */
 .highlight-static,
 .highlight-hover {
   position: relative;
