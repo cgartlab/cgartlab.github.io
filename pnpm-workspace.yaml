@@ -6,7 +6,17 @@ allowBuilds:
 shellEmulator: true
 
 trustPolicy: no-downgrade
+trustPolicyExclude:
+  - "@trickfilm400/rollup-plugin-off-main-thread"
+  - chokidar
+  - semver
+
+onlyTrustedDependencies:
+  - "@trickfilm400/rollup-plugin-off-main-thread"
+  - chokidar
+  - semver
 
 overrides:
-  esbuild: '>=0.28.1'
-  yaml: '>=2.8.3'
+  esbuild: ">=0.28.1"
+  yaml: ">=2.8.3"
+  chokidar: "5.0.0"

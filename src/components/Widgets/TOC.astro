@@ -16,69 +16,50 @@ const filteredHeadings = headings.filter(heading => heading.depth >= 2 && headin
 ---
 
 {filteredHeadings.length > 0 && (
-  // TOC Container
   <div
     id="toc-container"
     class="mb-6 uno-round-border bg-secondary/5 2xl:(fixed left-0 top-44.5 bottom-0 max-w-[min(calc(50vw-38rem),13rem)] border-none bg-secondary/0)"
   >
-    {/* Hidden Checkbox */}
-    <input
-      type="checkbox"
-      id="toc-toggle"
-      hidden
-    />
-    {/* TOC Toggle */}
-    <div class="relative h-12 w-full">
-      <label
-        for="toc-toggle"
-        class="absolute inset-0 flex cursor-pointer items-center 2xl:(static flex c-secondary/60 transition-colors ease-out hover:c-primary)"
-      >
-        {/* Title on Mobile */}
-        <span id="toc-mobile-text">
-          {currentUI.toc}
-        </span>
-
-        {/* Icon on Desktop */}
-        <TocIcon
-          id="toc-desktop-icon"
-          aria-hidden="true"
-          class="ml-4 hidden aspect-square w-4.2 2xl:(mt-4 block origin-center active:scale-90!)"
-          fill="currentColor"
-        />
-      </label>
+    <div class="flex h-12 w-full items-center 2xl:(static flex c-secondary/60)">
+      <span id="toc-mobile-text">
+        {currentUI.toc}
+      </span>
+      <TocIcon
+        id="toc-desktop-icon"
+        aria-hidden="true"
+        class="ml-4 hidden aspect-square w-4.2 2xl:block"
+        fill="currentColor"
+      />
     </div>
 
-    {/* Expandable Content Wrapper with Accordion Animation */}
-    <div id="toc-accordion-wrapper">
-      <nav
-        id="toc-accordion-content"
-        aria-label="Table of Contents"
-      >
-        {/* TOC List */}
-        <ul id="toc-links-list">
-          {filteredHeadings.map(heading => (
-            <li
-              class:list={{
-                'ml-0': heading.depth === 2,
-                'ml-4': heading.depth === 3,
-                'ml-8': heading.depth === 4,
-              }}
+    <nav
+      id="toc-accordion-content"
+      aria-label="Table of Contents"
+    >
+      <ul id="toc-links-list">
+        {filteredHeadings.map(heading => (
+          <li
+            class:list={{
+              'ml-0': heading.depth === 2,
+              'ml-4': heading.depth === 3,
+              'ml-8': heading.depth === 4,
+            }}
+          >
+            <a
+              href={`#${heading.slug}`}
+              title={heading.text}
+              class:list={[
+                { 'no-heti toc-links-h2': heading.depth === 2 },
+                { 'no-heti toc-links-h3': heading.depth === 3 },
+                { 'no-heti toc-links-h4': heading.depth === 4 },
+              ]}
             >
-              <a
-                href={`#${heading.slug}`}
-                class:list={[
-                  { 'no-heti toc-links-h2': heading.depth === 2 },
-                  { 'no-heti toc-links-h3': heading.depth === 3 },
-                  { 'no-heti toc-links-h4': heading.depth === 4 },
-                ]}
-              >
-                {heading.text}
-              </a>
-            </li>
-          ))}
-        </ul>
-      </nav>
-    </div>
+              {heading.text}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
   </div>
 )}
 
@@ -94,7 +75,6 @@ function setActiveLink(id: string | null) {
   const tocList = document.getElementById('toc-links-list')
   if (!tocList) return
 
-  // 移除旧高亮
   tocList.querySelectorAll('a.toc-active').forEach(a => a.classList.remove('toc-active'))
 
   if (!id) {
@@ -106,7 +86,6 @@ function setActiveLink(id: string | null) {
   if (link && link !== lastActiveLink) {
     link.classList.add('toc-active')
     if (is2xl.matches) {
-      // reduce-motion 模式下使用 instant，避免不必要的滚动动画
       const reducedMotion = document.documentElement.classList.contains('reduce-motion')
         || window.matchMedia('(prefers-reduced-motion: reduce)').matches
       link.scrollIntoView({ behavior: reducedMotion ? 'instant' : 'smooth', block: 'nearest' })
@@ -120,7 +99,6 @@ function scrollToActiveLinkFallback() {
     ticking = false
     return
   }
-  // 按 DOM 顺序找最靠前的可见标题（比字典序更可靠）
   const allHeadings = Array.from(document.querySelectorAll('h2[id], h3[id], h4[id]'))
   let firstVisible: string | undefined
   for (const h of allHeadings) {
@@ -173,7 +151,6 @@ function setupAutoScroll() {
   const tocList = document.getElementById('toc-links-list')
   if (!tocList) return
 
-  // 统一使用 IntersectionObserver 方案（scroll-target-group 已移除）
   setupFallbackObserver()
   document.addEventListener('scroll', handleScroll, { passive: true })
 }

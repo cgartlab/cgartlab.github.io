@@ -35,7 +35,7 @@ export const ui = {
   },
   'zh': {
     title: 'CGArtLab',
-    subtitle: '探索数字艺术的边界',
+    subtitle: '探索数字创作的边界',
     description: 'CG艺术实验室（cgartlab.com）是一个专注于数字艺术、视觉设计、技术分享和知识管理的视觉设计机构。致力于为数字艺术爱好者、专业设计师和初学者以及商业客户，提供最新、最全面的资讯、教程、作品展示以及设计服务。',
     posts: '文章',
     tags: '标签',
