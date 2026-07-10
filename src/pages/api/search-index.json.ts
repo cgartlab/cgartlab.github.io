@@ -1,11 +1,6 @@
 import type { APIRoute } from 'astro'
 import { getCollection } from 'astro:content'
-import { defaultLocale } from '@/config'
-import {
-  normalizePostLang,
-  normalizeSearchLang,
-  shouldIncludePostForSearch,
-} from '@/utils/search'
+import { normalizePostLang } from '@/utils/search'
 
 interface SearchIndex {
   title: string
@@ -17,13 +12,10 @@ interface SearchIndex {
   published: string
 }
 
-export const GET: APIRoute = async ({ request }) => {
+export const GET: APIRoute = async () => {
   try {
-    const url = new URL(request.url)
-    const lang = normalizeSearchLang(url.searchParams.get('lang') || defaultLocale)
-
     const posts = await getCollection('posts', ({ data }) => {
-      return shouldIncludePostForSearch(data, lang, import.meta.env.DEV)
+      return import.meta.env.DEV || !data.draft
     })
 
     const searchIndex: SearchIndex[] = posts.map((post) => {
@@ -39,7 +31,8 @@ export const GET: APIRoute = async ({ request }) => {
         const segmenter = new Intl.Segmenter()
         let idx = 0
         for (const { segment } of segmenter.segment(body)) {
-          if (idx + segment.length > 5000) break
+          if (idx + segment.length > 5000)
+            break
           idx += segment.length
         }
         content = body.slice(0, idx)

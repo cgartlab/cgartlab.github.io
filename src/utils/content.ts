@@ -1,7 +1,8 @@
 import type { CollectionEntry } from 'astro:content'
 import type { Language } from '@/i18n/config'
 import type { Post } from '@/types'
-import { getCollection, render } from 'astro:content'
+import { getCollection } from 'astro:content'
+import getReadingTime from 'reading-time'
 import { defaultLocale } from '@/config'
 import { memoize } from '@/utils/cache'
 
@@ -19,17 +20,20 @@ async function addMetaToPost(post: CollectionEntry<'posts'>): Promise<Post> {
   if (cachedMeta) {
     return {
       ...post,
-      remarkPluginFrontmatter: cachedMeta,
+      readingMinutes: cachedMeta.minutes,
     }
   }
 
-  const { remarkPluginFrontmatter } = await render(post)
-  const meta = remarkPluginFrontmatter as { minutes: number }
-  metaCache.set(cacheKey, meta)
+  // Calculate reading time from post body directly
+  // (avoids Astro 7's removed remarkPluginFrontmatter API)
+  const textOnPage = post.body || ''
+  const readingTime = getReadingTime(textOnPage)
+  const minutes = Math.max(1, Math.round(readingTime.minutes))
+  metaCache.set(cacheKey, { minutes })
 
   return {
     ...post,
-    remarkPluginFrontmatter: meta,
+    readingMinutes: minutes,
   }
 }
 
