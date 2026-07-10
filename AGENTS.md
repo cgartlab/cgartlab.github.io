@@ -1,6 +1,6 @@
 # AGENTS.md — cgartlab.github.io
 
-个人主站 (cgartlab.com)。Astro 6 + UnoCSS 66 + TypeScript 6 + pnpm 10 + Node 24，Cloudflare Pages 部署。
+个人主站 (cgartlab.com)。Astro 7 + UnoCSS 66 + TypeScript 6 + pnpm 11 + Node 24，Cloudflare Pages 部署。
 
 ## COMMANDS
 
@@ -28,6 +28,9 @@ pnpm exec playwright test # 端到端测试 (Playwright)
 - **`--at-apply` 已废弃** — `injectReset: true` 移除后，纯 CSS 文件中的 `--at-apply` 不再被 UnoCSS 处理，需转为显式 CSS 变量
 - **颜色 token** — 所有颜色必须用 `oklch(var(--un-preset-theme-colors-*))` token，禁止裸色值 `#xxx`/`rgb()`。唯一例外：毛玻璃/阴影中的物理透明度 `rgba(0,0,0,α)` 和固定功能语义色（如错误红）
 - **View Transitions 监听器** — 全局 `addEventListener` 必须配套 `astro:page-load`/`astro:before-swap`，`matchMedia` 需提取为模块级常量引用
+- **搜索索引路由** — `[lang].json.ts` 已移除，使用统一的 `api/search-index.json` 端点，客户端按 `item.lang` 过滤语言
+- **TOC 折叠/展开** — 文章页 TOC 顶部可点击折叠，设置 `data-toc-collapsed="true"` 属性控制；CSS `[data-toc-collapsed="true"]` 选择器严格匹配值
+- **返回顶部按钮** — 浮动在右下角，`z-50`，使用 `top-icon.svg` 图标；点击滚动到 `smooth` 顶部
 - **iOS 滚动锁定** — 使用 `.scroll-lock` class（`overflow:hidden + position:fixed + width:100%`），开启前保存 `scrollY`，关闭后恢复
 
 ## ARCHITECTURE
@@ -41,10 +44,11 @@ pnpm exec playwright test # 端到端测试 (Playwright)
 | 路由 | `src/pages/[...lang]/` | 多语言前缀动态路由 |
 | 评论 | Giscus + Twikoo + Waline 三套并行 |
 | 表单 | `src/components/InquiryForm.astro` | Web3Forms，submit 监听器在 `astro:page-load` 内绑定 |
-| 搜索 | 客户端搜索索引 (`api/search-index/[lang].json.ts` + `api/search-index.json.ts`) |
+| 搜索 | 客户端搜索索引 (`api/search-index.json`，语言过滤在客户端完成) |
 | OG 图片 | `astro-og-canvas` + `canvaskit-wasm` 构建时生成，过滤草稿 |
 | Wrangler | `wrangler.jsonc` | Workers + Static Assets (dist 目录)，含无尾斜杠 301 重定向 |
-| TOC 高亮 | `Widgets/TOC.astro` | IntersectionObserver 驱动 `.toc-active` class，按 DOM 顺序排序 |
+| TOC 高亮 + 折叠 | `Widgets/TOC.astro` | IntersectionObserver 驱动 `.toc-active` class，按 DOM 顺序排序；顶部点击可折叠/展开（max-height 动画），键盘可操作 |
+| 返回顶部 | `Widgets/TOC.astro` | 浮动按钮，滚动 >500px 淡入，点击平滑滚动到顶部，毛玻璃效果 |
 | 滚动锁定 | `global.css .scroll-lock` | iOS Safari 兼容：`overflow:hidden + position:fixed + width:100%` |
 
 ## BRANCH STRATEGY
