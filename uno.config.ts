@@ -70,7 +70,7 @@ export default defineConfig({
     'c-warning': 'text-warning',
     'c-caution': 'text-caution',
     // Footer: 2/3 of navbar text-4 (14px), relaxed line-height
-    'text-footer': 'text-2 leading-relaxed',
+    'text-footer': 'text-4 leading-relaxed',
   },
   // safelist forces unocss-preset-theme to emit CSS variable definitions for
   // ALL theme colors, even those not referenced by any utility in source files.
