@@ -9,6 +9,6 @@ export function remarkReadingTime() {
     const readingTime = getReadingTime(textOnPage)
 
     // 将分钟数四舍五入并设置为至少1分钟
-    data.astro.frontmatter.minutes = Math.max(1, Math.round(readingTime.minutes))
+    data.readingMinutes = Math.max(1, Math.round(readingTime.minutes))
   }
 }

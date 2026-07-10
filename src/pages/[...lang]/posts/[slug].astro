@@ -2,6 +2,7 @@
 import type { CollectionEntry } from 'astro:content'
 import type { Language } from '@/i18n/config'
 import { getCollection, render } from 'astro:content'
+import getReadingTime from 'reading-time'
 import AIDisclaimer from '@/components/AIDisclaimer.astro'
 import AuthorBox from '@/components/AuthorBox.astro'
 import Comment from '@/components/Comment/Index.astro'
@@ -79,7 +80,11 @@ const { post, supportedLangs } = Astro.props
 const currentLang = getLangFromLocale(Astro.currentLocale)
 const slug = post.data.abbrlink || post.id
 const description = getPostDescription(post, 'meta')
-const { Content, headings, remarkPluginFrontmatter } = await render(post)
+const { Content, headings } = await render(post)
+// Calculate reading time from post body (remarkPluginFrontmatter was removed in Astro 7)
+const readingText = post.body || ''
+const readingTimeResult = getReadingTime(readingText)
+const readingMinutes = Math.max(1, Math.round(readingTimeResult.minutes))
 ---
 
 <Layout
@@ -114,7 +119,7 @@ const { Content, headings, remarkPluginFrontmatter } = await render(post)
       <PostDate
         date={post.data.published}
         updatedDate={post.data.updated}
-        minutes={remarkPluginFrontmatter.minutes}
+        minutes={readingMinutes}
       />
     </div>
     <!-- TOC -->

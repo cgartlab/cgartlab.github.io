@@ -1,4 +1,5 @@
 import type { SitemapItem } from '@astrojs/sitemap'
+import { unified } from '@astrojs/markdown-remark'
 import mdx from '@astrojs/mdx'
 import partytown from '@astrojs/partytown'
 import sitemap from '@astrojs/sitemap'
@@ -17,9 +18,9 @@ import { rehypeCodeCopyButton } from './src/plugins/rehype-code-copy-button.mjs'
 import { rehypeExternalLinks } from './src/plugins/rehype-external-links.mjs'
 import { rehypeGlossary } from './src/plugins/rehype-glossary.ts'
 import { rehypeHeadingAnchor } from './src/plugins/rehype-heading-anchor.mjs'
-import { remarkGlossary } from './src/plugins/remark-glossary.ts'
 import { rehypeImageProcessor } from './src/plugins/rehype-image-processor.mjs'
 import { remarkContainerDirectives } from './src/plugins/remark-container-directives.mjs'
+import { remarkGlossary } from './src/plugins/remark-glossary.ts'
 import { remarkLeafDirectives } from './src/plugins/remark-leaf-directives.mjs'
 import { remarkReadingTime } from './src/plugins/remark-reading-time.mjs'
 
@@ -30,6 +31,7 @@ const imageConfig = imageHostURL
   : {}
 
 export default defineConfig({
+  compressHTML: false,
   site,
   base,
   output: 'static',
@@ -75,24 +77,26 @@ export default defineConfig({
     }),
   ],
   markdown: {
-    remarkPlugins: [
-      remarkDirective,
-      remarkMath,
-      remarkContainerDirectives,
-      remarkLeafDirectives,
-      remarkReadingTime,
-      remarkGlossary,
-    ],
-    rehypePlugins: [
-      rehypeKatex,
-      [rehypeMermaid, { strategy: 'pre-mermaid' }],
-      rehypeSlug,
-      rehypeHeadingAnchor,
-      rehypeImageProcessor,
-      rehypeGlossary,
-      rehypeExternalLinks,
-      rehypeCodeCopyButton,
-    ],
+    processor: unified({
+      remarkPlugins: [
+        remarkDirective,
+        remarkMath,
+        remarkContainerDirectives,
+        remarkLeafDirectives,
+        remarkReadingTime,
+        remarkGlossary,
+      ],
+      rehypePlugins: [
+        rehypeKatex,
+        [rehypeMermaid, { strategy: 'pre-mermaid' }],
+        rehypeSlug,
+        rehypeHeadingAnchor,
+        rehypeImageProcessor,
+        rehypeGlossary,
+        rehypeExternalLinks,
+        rehypeCodeCopyButton,
+      ],
+    }),
     syntaxHighlight: {
       type: 'shiki',
       excludeLangs: ['mermaid'],
