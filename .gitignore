@@ -86,3 +86,4 @@ patches/
 
 # LQIP 构建产物
 src/assets/lqip/
+.pnpm-store
