@@ -69,6 +69,7 @@ const currentUI = ui[currentLang as keyof typeof ui] ?? {}
     justify-content: center;
     padding-top: 15vh;
     padding-inline: 1rem;
+    overflow-y: auto;
   }
 
   .search-box {
@@ -182,10 +183,11 @@ const currentUI = ui[currentLang as keyof typeof ui] ?? {}
   }
 
   .search-results {
-    max-height: 60vh;
-    overflow-y: auto;
-    scrollbar-width: thin;
-    padding: 0.5rem;
+   max-height: 60vh;
+   overflow-y: auto;
+    overscroll-behavior: contain;
+   scrollbar-width: thin;
+   padding: 0.5rem;
   }
 
   .search-results:empty {
@@ -340,6 +342,11 @@ const currentUI = ui[currentLang as keyof typeof ui] ?? {}
       gap: 0.5rem;
     }
 
+
+    .search-close {
+      width: 2.75rem;
+      height: 2.75rem;
+    }
     .search-result-tag {
       font-size: 0.625rem;
       padding: 0.1875rem 0.5rem;
@@ -354,6 +361,7 @@ const currentUI = ui[currentLang as keyof typeof ui] ?? {}
   let debounceTimer = null
   let keydownHandler = null
   let inputHandler = null
+  let savedSearchScrollY = 0
   const base = document.querySelector('base')?.getAttribute('href') || '/'
 
   function getElements() {
@@ -374,7 +382,9 @@ const currentUI = ui[currentLang as keyof typeof ui] ?? {}
       return
     els.overlay.classList.add('active')
     els.overlay.setAttribute('aria-hidden', 'false')
-    document.body.style.overflow = 'hidden'
+    savedSearchScrollY = window.scrollY
+    document.body.style.top = `-${savedSearchScrollY}px`
+    document.body.classList.add('scroll-lock')
     setTimeout(() => {
       const currentInput = document.getElementById('search-input')
       if (currentInput)
@@ -388,7 +398,9 @@ const currentUI = ui[currentLang as keyof typeof ui] ?? {}
       return
     els.overlay.classList.remove('active')
     els.overlay.setAttribute('aria-hidden', 'true')
-    document.body.style.overflow = ''
+    document.body.classList.remove('scroll-lock')
+    document.body.style.top = ''
+    window.scrollTo(0, savedSearchScrollY)
     if (els.input)
       els.input.value = ''
     if (els.results)
@@ -641,6 +653,11 @@ const currentUI = ui[currentLang as keyof typeof ui] ?? {}
   }
 
   function init() {
+    // ensure scroll-lock is removed on page navigation
+    if (document.body.classList.contains('scroll-lock')) {
+      document.body.classList.remove('scroll-lock')
+      document.body.style.top = ''
+    }
     setupEventListeners()
     bindSearchTriggers()
   }
