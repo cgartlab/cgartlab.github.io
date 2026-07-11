@@ -21,6 +21,7 @@ async function main() {
   console.log("  \u{1F4C4}  布局 CSS: " + files[0] + " (" + (css.length / 1024).toFixed(1) + " KB)");
 
   // 2. Setup UnoCSS generator
+  // WARNING: Config duplicated from uno.config.ts — keep colors, fonts, shortcuts in sync!
   const config = defineConfig({
     presets: [
       presetWind3(), presetAttributify(),
@@ -35,7 +36,7 @@ async function main() {
         note: "oklch(48.8% 0.243 264.376 / 0.8)", tip: "oklch(50.8% 0.118 165.612 / 0.8)",
         important: "oklch(49.6% 0.265 301.924 / 0.8)", warning: "oklch(55.5% 0.163 48.998 / 0.8)",
         caution: "oklch(50.5% 0.213 27.518 / 0.8)" },
-      fontFamily: { title: ["Snell-Black"], navbar: ["STIX-Italic"], time: ["Snell-Bold"], serif: ["STIX"] },
+      fontFamily: { title: ["Snell-Black","EarlySummer-Subset","EarlySummer","ui-serif","Georgia","Cambria","Times New Roman","Times","serif"], navbar: ["STIX-Italic","EarlySummer-Subset","EarlySummer","ui-serif","Georgia","Cambria","Times New Roman","Times","serif"], time: ["Snell-Bold","ui-serif","Georgia","Cambria","Times New Roman","Times","serif"], serif: ["STIX","EarlySummer","ui-serif","Georgia","Cambria","Times New Roman","Times","serif"] },
     },
     shortcuts: {
       "uno-desktop-column": "absolute left-[min(calc(100vw-19rem),calc(50vw+21rem))] w-14rem",
@@ -54,7 +55,7 @@ async function main() {
         else if (e.name.endsWith(".astro") || e.name.endsWith(".ts"))
           r.push(join(dir, e.name));
       }
-    } catch {}
+    } catch (err) { console.warn("  \u26A0  \u65E0\u6CD5\u8BFB\u53D6\u76EE\u5F55:", err.message); }
     return r;
   }
 
@@ -80,7 +81,7 @@ async function main() {
           }
         }
       }
-    } catch {}
+    } catch (err) { console.warn("  \u26A0  \u8DF3\u8FC7\u6587\u4EF6:", err.message); }
   }
   console.log("  \u{1F4DA}  扫描了 " + srcFiles + " 个源文件，提取到 " + tokens.size + " 个变体标记");
 
