@@ -347,12 +347,14 @@ function getCategories(posts: Post[]): string[] {
   gap: 1rem;
   font-size: 0.8rem;
   color: color-mix(in srgb, oklch(var(--un-preset-theme-colors-secondary)) 50%, transparent);
-  padding-top: 0.75rem;
+  padding: 0.5rem 0;
+  margin: 0.25rem 0;
+  justify-content: flex-start;
   border-top: 1px solid color-mix(in srgb, oklch(var(--un-preset-theme-colors-secondary)) 15%, transparent);
-  margin-top: 0.5rem;
 }
 
 .album-date {
+  font-size: 0.875rem;
   font-weight: 500;
   font-variant-numeric: tabular-nums;
 }
