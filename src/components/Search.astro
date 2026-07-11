@@ -223,9 +223,10 @@ const currentUI = ui[currentLang as keyof typeof ui] ?? {}
   }
 
   .search-result-title mark {
-    background-color: oklch(var(--un-preset-theme-colors-primary));
-    color: oklch(var(--un-preset-theme-colors-background));
-    padding: 0.125rem 0.375rem;
+   background-color: oklch(var(--un-preset-theme-colors-primary));
+   color: oklch(var(--un-preset-theme-colors-background));
+    padding: 0.375rem 0.375rem 0.25rem;
+    margin: 0.125rem;
     border-radius: 0.25rem;
     opacity: 0.85;
   }
@@ -242,9 +243,10 @@ const currentUI = ui[currentLang as keyof typeof ui] ?? {}
   }
 
   .search-result-excerpt mark {
-    background-color: oklch(var(--un-preset-theme-colors-primary));
-    color: oklch(var(--un-preset-theme-colors-background));
-    padding: 0.125rem 0.375rem;
+   background-color: oklch(var(--un-preset-theme-colors-primary));
+   color: oklch(var(--un-preset-theme-colors-background));
+    padding: 0.3125rem 0.375rem 0.25rem;
+    margin: 0.125rem;
     border-radius: 0.25rem;
     opacity: 0.85;
   }
@@ -266,10 +268,10 @@ const currentUI = ui[currentLang as keyof typeof ui] ?? {}
   }
 
   .search-result-tag {
-    font-size: 0.6875rem;
-    padding: 0.25rem 0.625rem;
-    background-color: color-mix(in srgb, oklch(var(--un-preset-theme-colors-highlight)) 20%, transparent);
-    border: 1px solid color-mix(in srgb, oklch(var(--un-preset-theme-colors-highlight)) 30%, transparent);
+   font-size: 0.6875rem;
+   padding: 0.5rem 0.375rem;
+   background-color: color-mix(in srgb, oklch(var(--un-preset-theme-colors-highlight)) 20%, transparent);
+   border: 1px solid color-mix(in srgb, oklch(var(--un-preset-theme-colors-highlight)) 30%, transparent);
     border-radius: 0.375rem;
     color: oklch(var(--un-preset-theme-colors-primary));
     transform: translateY(-4px);

@@ -1,38 +1,105 @@
 <script>
 // Lazy load Mermaid: only render when mermaid code blocks enter the viewport
 function setupMermaidLazy() {
-  const mermaidBlocks = document.querySelectorAll<HTMLElement>('pre.mermaid')
-  if (mermaidBlocks.length === 0)
-    return
+  const blocks = document.querySelectorAll<HTMLElement>('pre.mermaid')
+  if (blocks.length === 0) return
+
+  // Store original code for re-rendering on theme change
+  blocks.forEach((b: HTMLElement) => {
+    if (!b.dataset.mermaidCode) {
+      b.dataset.mermaidCode = b.textContent?.trim() ?? ''
+    }
+  })
 
   const observer = new IntersectionObserver(
     async (entries: IntersectionObserverEntry[]) => {
       for (const entry of entries) {
-        if (!entry.isIntersecting)
-          continue
+        if (!entry.isIntersecting) continue
         const target = entry.target as HTMLElement
         observer.unobserve(target)
 
+        // Skip if already rendered or has SVG
+        if (target.dataset.mermaidLoaded || target.querySelector('svg')) return
+
         try {
           const mermaid = await import('mermaid')
-          mermaid.default.initialize({ startOnLoad: false })
+          mermaid.default.initialize({
+            startOnLoad: false,
+            theme: document.documentElement.classList.contains('dark') ? 'dark' : 'neutral',
+          })
           await mermaid.default.run({ nodes: [target] })
           target.dataset.mermaidLoaded = 'true'
         }
         catch (error) {
+          // Vite 504: dependency optimization in progress, retry after 2s
+          if ((error as any)?.message?.includes('Failed to fetch dynamically imported module')) {
+            await new Promise(r => setTimeout(r, 2000))
+            try {
+              const mermaid = await import('mermaid')
+              mermaid.default.initialize({
+                startOnLoad: false,
+                theme: document.documentElement.classList.contains('dark') ? 'dark' : 'neutral',
+              })
+              await mermaid.default.run({ nodes: [target] })
+              target.dataset.mermaidLoaded = 'true'
+              return
+            } catch {}
+          }
           console.error('[MermaidLazy] Failed to render:', error)
+          target.dataset.mermaidLoaded = 'error'
         }
       }
     },
     { rootMargin: '200px' },
   )
 
-  mermaidBlocks.forEach((block) => {
-    if (!block.dataset.mermaidLoaded) {
-      observer.observe(block)
-    }
+  blocks.forEach((b) => {
+    if (!(b as HTMLElement).dataset.mermaidLoaded && !(b as HTMLElement).querySelector('svg')) observer.observe(b)
   })
 }
 
+// Re-render all rendered Mermaid diagrams on theme change
+async function handleMermaidThemeChange() {
+  const blocks = document.querySelectorAll<HTMLElement>('pre.mermaid[data-mermaid-loaded=\"true\"]')
+  if (blocks.length === 0) return
+
+  const MAX_RETRIES = 3
+  for (let attempt = 0; attempt < MAX_RETRIES; attempt++) {
+    try {
+      const mermaid = await import('mermaid')
+      mermaid.default.initialize({
+        startOnLoad: false,
+        theme: document.documentElement.classList.contains('dark') ? 'dark' : 'neutral',
+      })
+
+    // Reset all mermaid blocks that were already rendered
+    const toReRender: HTMLElement[] = []
+    document.querySelectorAll<HTMLElement>('pre.mermaid').forEach((b: HTMLElement) => {
+      const code = b.dataset.mermaidCode
+      if (!code) return
+      b.innerHTML = code
+      b.removeAttribute('data-processed')
+      b.removeAttribute('data-mermaid-loaded')
+      toReRender.push(b)
+    })
+
+    if (toReRender.length > 0) {
+      await mermaid.default.run({ nodes: toReRender })
+      toReRender.forEach((b: HTMLElement) => { b.dataset.mermaidLoaded = 'true' })
+    }
+      break
+    }
+    catch (error) {
+      if (attempt < MAX_RETRIES - 1 && (error as any)?.message?.includes('Failed to fetch dynamically imported module')) {
+        await new Promise(r => setTimeout(r, 2000))
+        continue
+      }
+      console.error('[MermaidLazy] Theme re-render failed:', error)
+      break
+    }
+  }
+}
+
 document.addEventListener('astro:page-load', setupMermaidLazy)
+document.addEventListener('theme-changed', handleMermaidThemeChange)
 </script>
