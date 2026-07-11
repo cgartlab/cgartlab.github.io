@@ -1,61 +1,112 @@
 import { readFileSync, writeFileSync, readdirSync } from "fs";
 import { join } from "path";
-import { createGenerator, defineConfig, expandVariantGroup, presetWind3, presetAttributify } from "unocss";
+import { createGenerator } from "unocss";
+import { defineConfig, presetWind3, presetAttributify } from "unocss";
 import presetTheme from "unocss-preset-theme";
 import { themeConfig } from "../src/config.ts";
 
 const { light, dark } = themeConfig.color;
-const distDir = join(process.cwd(), "dist/_astro");
-const files = readdirSync(distDir).filter(f => f.startsWith("Layout.") && f.endsWith(".css"));
-if (!files.length) { console.error("No Layout CSS found"); process.exit(1); }
-
-const cssPath = join(distDir, files[0]);
-const css = readFileSync(cssPath, "utf-8");
-console.log("Processing", files[0]);
-
-const config = defineConfig({
-  presets: [
-    presetWind3(),
-    presetAttributify(),
-    presetTheme({ theme: { dark: { colors: { ...dark, note: "oklch(70.7% 0.165 254.624 / 0.8)", tip: "oklch(76.5% 0.177 163.223 / 0.8)", important: "oklch(71.4% 0.203 305.504 / 0.8)", warning: "oklch(82.8% 0.189 84.429 / 0.8)", caution: "oklch(70.4% 0.191 22.216 / 0.8)" } } } }),
-  ],
-  theme: {
-    breakpoints: { sm: "640px", md: "768px", lg: "1024px", xl: "1280px", "2xl": "1536px" },
-    colors: { ...light, note: "oklch(48.8% 0.243 264.376 / 0.8)", tip: "oklch(50.8% 0.118 165.612 / 0.8)", important: "oklch(49.6% 0.265 301.924 / 0.8)", warning: "oklch(55.5% 0.163 48.998 / 0.8)", caution: "oklch(50.5% 0.213 27.518 / 0.8)" },
-    fontFamily: { title: ["Snell-Black"], navbar: ["STIX-Italic"], time: ["Snell-Bold"], serif: ["STIX"] },
-  },
-  shortcuts: { "uno-desktop-column": "absolute left-[min(calc(100vw-19rem),calc(50vw+21rem))] w-14rem", "c-primary": "text-primary", "text-footer": "text-2.5 leading-relaxed" }
-});
+const respPrefixes = ["sm:", "md:", "lg:", "xl:", "2xl:"];
 
 async function main() {
+  console.log("\n  \u{1F504} Generating responsive CSS...\n");
+
+  // 1. Locate Layout CSS
+  const distDir = join(process.cwd(), "dist/_astro");
+  const files = readdirSync(distDir).filter(f => f.startsWith("Layout.") && f.endsWith(".css"));
+  if (!files.length) { console.error("  \u2717 No Layout CSS found in dist/_astro"); process.exit(1); }
+
+  const cssPath = join(distDir, files[0]);
+  const css = readFileSync(cssPath, "utf-8");
+  console.log("  \u{1F4C4}  Layout CSS: " + files[0] + " (" + (css.length / 1024).toFixed(1) + " KB)");
+
+  // 2. Setup UnoCSS generator
+  const config = defineConfig({
+    presets: [
+      presetWind3(), presetAttributify(),
+      presetTheme({ theme: { dark: { colors: { ...dark,
+        note: "oklch(70.7% 0.165 254.624 / 0.8)", tip: "oklch(76.5% 0.177 163.223 / 0.8)",
+        important: "oklch(71.4% 0.203 305.504 / 0.8)", warning: "oklch(82.8% 0.189 84.429 / 0.8)",
+        caution: "oklch(70.4% 0.191 22.216 / 0.8)" } } } }),
+    ],
+    theme: {
+      breakpoints: { sm: "640px", md: "768px", lg: "1024px", xl: "1280px", "2xl": "1536px" },
+      colors: { ...light,
+        note: "oklch(48.8% 0.243 264.376 / 0.8)", tip: "oklch(50.8% 0.118 165.612 / 0.8)",
+        important: "oklch(49.6% 0.265 301.924 / 0.8)", warning: "oklch(55.5% 0.163 48.998 / 0.8)",
+        caution: "oklch(50.5% 0.213 27.518 / 0.8)" },
+      fontFamily: { title: ["Snell-Black"], navbar: ["STIX-Italic"], time: ["Snell-Bold"], serif: ["STIX"] },
+    },
+    shortcuts: {
+      "uno-desktop-column": "absolute left-[min(calc(100vw-19rem),calc(50vw+21rem))] w-14rem",
+      "c-primary": "text-primary", "text-footer": "text-2.5 leading-relaxed"
+    }
+  });
   const gen = await createGenerator(config);
-  
-  // Scan src for astro files and extract tokens
+
+  // 3a. Collect tokens from source files
   function findFiles(dir) {
     const r = [];
     try {
       for (const e of readdirSync(dir, { withFileTypes: true })) {
-        if (e.isDirectory() && !e.name.startsWith(".") && e.name !== "node_modules") r.push(...findFiles(join(dir, e.name)));
-        else if (e.name.endsWith(".astro") || e.name.endsWith(".ts")) r.push(join(dir, e.name));
+        if (e.isDirectory() && !e.name.startsWith(".") && e.name !== "node_modules")
+          r.push(...findFiles(join(dir, e.name)));
+        else if (e.name.endsWith(".astro") || e.name.endsWith(".ts"))
+          r.push(join(dir, e.name));
       }
     } catch {}
     return r;
   }
-  
+
   const tokens = new Set();
+  const splitRE = new RegExp('[\\\\:]?[\\s\'"`;{}<>]+', "g");
+  
+  let srcFiles = 0;
   for (const f of findFiles(join(process.cwd(), "src"))) {
+    srcFiles++;
     try {
       const code = readFileSync(f, "utf-8");
-      for (const t of expandVariantGroup(code).split(/[\\:]?[\s'"`;{}<>]+/g).filter(Boolean)) {
-        if (t.includes(":") || t.startsWith("uno-")) tokens.add(t);
+      const expanded = code.replace(/[\w-]+:\([^)]*\)/g, function(m) {
+        const idx = m.indexOf(":(");
+        const variant = m.slice(0, idx);
+        const group = m.slice(idx + 2, -1);
+        return group.split(/\s+/).map(function(c) { return variant + ":" + c; }).join(" ");
+      });
+      const rawTokens = expanded.split(/\s+/).filter(Boolean);
+      for (const raw of rawTokens) {
+        if (raw.includes(":") || raw.startsWith("uno-") || raw.startsWith("op-")) {
+          for (const t of raw.split(splitRE).filter(Boolean)) {
+            if (t) tokens.add(t);
+          }
+        }
       }
     } catch {}
   }
-  
-  console.log("Found", tokens.size, "variant tokens");
+  console.log("  \u{1F4DA}  Scanned " + srcFiles + " source files, found " + tokens.size + " variant tokens");
+
+  // 3b. Extract base class names from existing CSS and add responsive variants
+  const baseClasses = new Set();
+  const classRE = /\.([a-zA-Z0-9_-]+)(?=[{.,\s\\:])/g;
+  let m;
+  while ((m = classRE.exec(css)) !== null) {
+    const cls = m[1];
+    if (!cls.includes(":") && !cls.includes("\\") && cls.length > 0) {
+      baseClasses.add(cls);
+    }
+  }
+  for (const cls of baseClasses) {
+    for (const bp of respPrefixes) {
+      tokens.add(bp + cls);
+    }
+  }
+  console.log("  \u{1F3AF}  Added responsive variants for " + baseClasses.size + " base CSS classes");
+  console.log("  \u26A1  Total tokens: " + tokens.size);
+
+  // 4. Generate CSS
   const result = await gen.generate(Array.from(tokens).join(" "));
-  
-  // Extract @media (min-width: ...) rules
+  console.log("  \u{1F4DD}  Generated CSS (" + (result.css.length / 1024).toFixed(1) + " KB)");
+
+  // 5. Extract @media (min-width: ...) rules
   const mediaRules = [];
   let cur = "", depth = 0;
   for (const line of result.css.split("\n")) {
@@ -65,17 +116,37 @@ async function main() {
     } else if (depth > 0) {
       cur += "\n" + line;
       depth += (line.match(/\{/g)||[]).length - (line.match(/\}/g)||[]).length;
-      if (depth <= 0) { if (cur.includes("min-width")) mediaRules.push(cur); cur = ""; depth = 0; }
+      if (depth <= 0) {
+        if (cur.includes("min-width")) mediaRules.push(cur);
+        cur = ""; depth = 0;
+      }
     }
   }
   if (cur && cur.includes("min-width")) mediaRules.push(cur);
-  
-  console.log("Generated", mediaRules.length, "responsive @media rules");
-  
+
+  // Count by breakpoint
+  const byBP = {};
+  for (const r of mediaRules) {
+    const bp = r.match(/min-width:\s*(\d+)/);
+    if (bp) {
+      const key = bp[1] + "px";
+      byBP[key] = (byBP[key] || 0) + 1;
+    }
+  }
+  const bpSummary = Object.entries(byBP)
+    .sort((a, b) => parseInt(a[0]) - parseInt(b[0]))
+    .map(function(e) { return e[0] + ": " + e[1] + " rules"; })
+    .join(", ");
+
+  // 6. Inject into CSS
   if (mediaRules.length > 0) {
     writeFileSync(cssPath, css + "\n/* unocss-responsive-injection */\n" + mediaRules.join("\n"));
-    console.log("Injected into", files[0]);
+    console.log("\n  \u2705  Done! Injected " + mediaRules.length + " responsive @media rules");
+    console.log("     Breakpoints: " + bpSummary);
+  } else {
+    console.log("\n  \u26A0  No responsive rules generated");
   }
+  console.log("  \u{1F4C1}  Output: " + files[0] + "\n");
 }
 
-main().catch(console.error);
+main().catch(function(e) { console.error("  \u2717 Error:", e.message); process.exit(1); });
