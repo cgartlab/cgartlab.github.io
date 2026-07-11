@@ -287,10 +287,85 @@ lite-youtube > .lty-playbtn {
 }
 
 /* Mermaid */
-pre.mermaid svg {
-  margin-left: auto;
-  margin-right: auto;
+pre.mermaid {
+  overflow-x: auto;
+  overflow-y: hidden;
+  border-radius: 0.5rem;
+  background-color: transparent !important;
+  border: 2px solid color-mix(in srgb, oklch(var(--un-preset-theme-colors-secondary)) 10%, transparent) !important;
+  padding: 1.25rem 1rem !important;
+  box-shadow: none;
+
+  scrollbar-width: thin;
+  scrollbar-color: oklch(var(--un-preset-theme-colors-secondary) / 0.12) transparent;
 }
+pre.mermaid svg {
+  display: block;
+  max-width: 70%;
+  height: auto;
+  margin-left: 2.25rem;
+  margin-right: 2.25rem;
+}
+pre.mermaid:hover {
+  box-shadow: none;
+}
+
+/* Transparent edge label background (Mermaid inline SVG override) */
+pre.mermaid svg .labelBkg {
+  background: transparent !important;
+  background-color: transparent !important;
+}
+
+/* Rounded corners on flowchart nodes */
+pre.mermaid svg .node rect {
+  rx: 6px;
+  ry: 6px;
+  stroke-width: 0.6px !important;
+  filter: none !important;
+}
+/* Softer line caps/joins */
+pre.mermaid svg .edgePath .path {
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+/* Transparent edge label backgrounds */
+pre.mermaid svg .edgeLabel {
+  background: transparent !important;
+}
+pre.mermaid svg .edgeLabel rect {
+  fill: transparent !important;
+  opacity: 1 !important;
+}
+pre.mermaid svg .edgeLabel p {
+  background: transparent !important;
+}
+/* Edge label text styles */
+pre.mermaid svg .labelBkg .edgeLabel,
+pre.mermaid svg .labelBkg .edgeLabel p {
+  color: oklch(var(--un-preset-theme-colors-primary)) !important;
+  font-size: 0.8125rem !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.03em !important;
+  line-height: 1.4 !important;
+}
+pre.mermaid svg .labelBkg .edgeLabel p {
+  background: transparent !important;
+}
+/* Remove border/padding from parent heti pre when mermaid */
+.heti pre.mermaid {
+  border: none !important;
+  padding: 1.25rem 1rem !important;
+}
+
+/* Force site serif font inside mermaid SVG */
+pre.mermaid svg text,
+pre.mermaid svg tspan,
+pre.mermaid svg .label text,
+pre.mermaid svg .edgeLabel .labelBkg .edgeLabel p,
+pre.mermaid svg .edgeLabel p {
+  font-family: 'Georgia', 'STIX', ui-serif, serif !important;
+}
+
 
 /* KaTeX Overflow Fix */
 .katex-display {
@@ -409,12 +484,14 @@ a.toc-active {
 }
 
 .subtitle-cursor-block {
-  width: 2px;
-  height: 1em;
-  margin: 0 6px;
+  border-radius: 2px;
+  transform: translateY(-2px);
+  width: 0.8em;
+  height: 0.8em;
+  margin: 4px;
   /* highlight color 光标，亮暗模式自适应 */
   background-color: oklch(var(--un-preset-theme-colors-highlight));
-  animation: cursor-blink 1s ease-in-out infinite;
+  animation: cursor-blink 1s ease-in infinite;
   flex-shrink: 0;
 }
 
@@ -440,3 +517,32 @@ a.toc-active {
     border-color: color-mix(in oklch, oklch(var(--un-preset-theme-colors-secondary)) 30%, transparent);
   }
 }
+
+/* ═══ Desktop Layout Breakpoint Fallback ═══
+   UnoCSS responsive variants (lg:) fail to generate @media queries
+   during Astro build. HTML has class="lg:uno-desktop-column" etc.
+   but no matching CSS selectors in the build output.
+   These rules provide the missing responsive styles.
+   Remove when UnoCSS variant generation is fixed. */
+@media (min-width: 1024px) {
+  [class*="lg:uno-desktop-column"] {
+    position: absolute;
+    left: min(calc(100vw - 19rem), calc(50vw + 21rem));
+    width: 14rem;
+  }
+  [class*="lg:fixed"] { position: fixed; }
+  [class*="lg:top-20"] { top: 5rem; }
+  [class*="lg:bottom-16.5rem"] { bottom: 16.5rem; }
+  [class*="lg:bottom-28"] { bottom: 7rem; }
+  [class*="lg:leading-2.45em"] { line-height: 2.45em; }
+  [lg~="uno-desktop-column"] {
+    position: absolute;
+    left: min(calc(100vw - 19rem), calc(50vw + 21rem));
+    width: 14rem;
+  }
+  [lg~="fixed"] { position: fixed; }
+  [lg~="bottom-28"] { bottom: 7rem; }
+}
+
+
+

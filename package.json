@@ -6,7 +6,7 @@
   "repository": "https://github.com/cgartlab/cgartlab.github.io",
   "scripts": {
     "dev": "astro check && astro dev",
-    "build": "astro check && astro build && tsx scripts/generate-llms.ts && pnpm apply-lqip",
+    "build": "astro check && astro build && tsx scripts/generate-llms.ts && pnpm apply-lqip && tsx scripts/inject-desktop-layout.ts",
     "preview": "astro preview --host",
     "astro": "astro",
     "lint": "eslint .",
@@ -16,6 +16,7 @@
     "format-posts": "tsx scripts/format-posts.ts",
     "fix-internal-links": "tsx scripts/fix-internal-links.ts",
     "verify-feed": "tsx scripts/verify-feed.ts",
+    "inject-desktop-layout": "tsx scripts/inject-desktop-layout.ts",
     "audit-glossary": "tsx scripts/audit-glossary.ts"
   },
   "dependencies": {

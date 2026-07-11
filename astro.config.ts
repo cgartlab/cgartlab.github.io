@@ -110,6 +110,9 @@ export default defineConfig({
     },
   },
   vite: {
+    optimizeDeps: {
+      include: ['mermaid'],
+    },
     build: {
       chunkSizeWarningLimit: 1000,
     },
