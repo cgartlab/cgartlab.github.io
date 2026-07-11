@@ -9,16 +9,16 @@ const { light, dark } = themeConfig.color;
 const respPrefixes = ["sm:", "md:", "lg:", "xl:", "2xl:"];
 
 async function main() {
-  console.log("\n  \u{1F504} Generating responsive CSS...\n");
+  console.log("\n  \u{1F504} 正在生成响应式 CSS...\n");
 
   // 1. Locate Layout CSS
   const distDir = join(process.cwd(), "dist/_astro");
   const files = readdirSync(distDir).filter(f => f.startsWith("Layout.") && f.endsWith(".css"));
-  if (!files.length) { console.error("  \u2717 No Layout CSS found in dist/_astro"); process.exit(1); }
+  if (!files.length) { console.error("  \u2717 在 dist/_astro 中未找到布局 CSS 文件"); process.exit(1); }
 
   const cssPath = join(distDir, files[0]);
   const css = readFileSync(cssPath, "utf-8");
-  console.log("  \u{1F4C4}  Layout CSS: " + files[0] + " (" + (css.length / 1024).toFixed(1) + " KB)");
+  console.log("  \u{1F4C4}  布局 CSS: " + files[0] + " (" + (css.length / 1024).toFixed(1) + " KB)");
 
   // 2. Setup UnoCSS generator
   const config = defineConfig({
@@ -82,7 +82,7 @@ async function main() {
       }
     } catch {}
   }
-  console.log("  \u{1F4DA}  Scanned " + srcFiles + " source files, found " + tokens.size + " variant tokens");
+  console.log("  \u{1F4DA}  扫描了 " + srcFiles + " 个源文件，提取到 " + tokens.size + " 个变体标记");
 
   // 3b. Extract base class names from existing CSS and add responsive variants
   const baseClasses = new Set();
@@ -99,14 +99,14 @@ async function main() {
       tokens.add(bp + cls);
     }
   }
-  console.log("  \u{1F3AF}  Added responsive variants for " + baseClasses.size + " base CSS classes");
-  console.log("  \u26A1  Total tokens: " + tokens.size);
+  console.log("  \u{1F3AF}  为基础类添加了 " + baseClasses.size + " 个响应式变体标记");
+  console.log("  \u26A1  总计 " + tokens.size + " 个标记");
 
   // 4. Generate CSS
   const result = await gen.generate(Array.from(tokens).join(" "));
-  console.log("  \u{1F4DD}  Generated CSS (" + (result.css.length / 1024).toFixed(1) + " KB)");
+  console.log("  \u{1F4DD}  生成了 " + (result.css.length / 1024).toFixed(1) + " KB）");
 
-  // 5. Extract @media (min-width: ...) rules
+  // 5. Extract @media (min-width: ...) 条
   const mediaRules = [];
   let cur = "", depth = 0;
   for (const line of result.css.split("\n")) {
@@ -135,18 +135,18 @@ async function main() {
   }
   const bpSummary = Object.entries(byBP)
     .sort((a, b) => parseInt(a[0]) - parseInt(b[0]))
-    .map(function(e) { return e[0] + ": " + e[1] + " rules"; })
+    .map(function(e) { return e[0] + ": " + e[1] + " 条"; })
     .join(", ");
 
   // 6. Inject into CSS
   if (mediaRules.length > 0) {
     writeFileSync(cssPath, css + "\n/* unocss-responsive-injection */\n" + mediaRules.join("\n"));
-    console.log("\n  \u2705  Done! Injected " + mediaRules.length + " responsive @media rules");
-    console.log("     Breakpoints: " + bpSummary);
+    console.log("\n  \u2705  完成！注入了 " + mediaRules.length + " 条响应式 @media 规则");
+    console.log("     断点分布：" + bpSummary);
   } else {
-    console.log("\n  \u26A0  No responsive rules generated");
+    console.log("\n  \u26A0  未生成任何响应式规则");
   }
-  console.log("  \u{1F4C1}  Output: " + files[0] + "\n");
+  console.log("  \u{1F4C1}  输出文件：" + files[0] + "\n");
 }
 
-main().catch(function(e) { console.error("  \u2717 Error:", e.message); process.exit(1); });
+main().catch(function(e) { console.error("  \u2717 错误：", e.message); process.exit(1); });
