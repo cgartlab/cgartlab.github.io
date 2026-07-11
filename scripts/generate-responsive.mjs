@@ -1,6 +1,6 @@
 import { readFileSync, writeFileSync, readdirSync } from "fs";
 import { join } from "path";
-import { createGenerator } from "unocss";
+import { createGenerator, expandVariantGroup } from "unocss";
 import { defineConfig, presetWind3, presetAttributify } from "unocss";
 import presetTheme from "unocss-preset-theme";
 import { themeConfig } from "../src/config.ts";
