@@ -17,8 +17,21 @@ async function main() {
   if (!files.length) { console.error("  \u2717 在 dist/_astro 中未找到布局 CSS 文件"); process.exit(1); }
 
   const cssPath = join(distDir, files[0]);
-  const css = readFileSync(cssPath, "utf-8");
+ let css = readFileSync(cssPath, "utf-8");
   console.log("  \u{1F4C4}  布局 CSS: " + files[0] + " (" + (css.length / 1024).toFixed(1) + " KB)");
+// 1.5 Dedup: remove any previous responsive CSS injection before regenerating
+var dedupCSS = css.replace(/\/\* unocss-responsive-injection \*\/[\s\S]*?$/, '');
+if (dedupCSS !== css) {
+    writeFileSync(cssPath, dedupCSS);
+    console.log("  \u{1F9F9}  移除了上一次注入的响应式 CSS (" + (css.length - dedupCSS.length) + " 字节)");
+    css = dedupCSS;
+}
+  var dlCSS = css.replace(/\/\* desktop-layout-injected \*\/[\s\S]*?$/, '');
+  if (dlCSS !== css) {
+    writeFileSync(cssPath, dlCSS);
+    console.log("  \u{1F9F9}  移除了上一次的 desktop-layout 注入");
+    css = dlCSS;
+  }
 
   // 2. Setup UnoCSS generator
   // WARNING: Config duplicated from uno.config.ts — keep colors, fonts, shortcuts in sync!
@@ -55,9 +68,11 @@ async function main() {
         else if (e.name.endsWith(".astro") || e.name.endsWith(".ts"))
           r.push(join(dir, e.name));
       }
-    } catch (err) { console.warn("  \u26A0  \u65E0\u6CD5\u8BFB\u53D6\u76EE\u5F55:", err.message); }
-    return r;
-  }
+   } catch (err) { console.warn("  \u26A0  \u65E0\u6CD5\u8BFB\u53D6\u76EE\u5F55:", err.message); }
+   return r;
+ }
+  // Attributify patterns to extract: responsive variants like lg="xxx yyy"
+  const attrPatternRE = /\b(lg|md|sm|xl|2xl)\s*=\s*"([^"]+)"/g;
 
   const tokens = new Set();
   const splitRE = new RegExp('[\\\\:]?[\\s\'"`;{}<>]+', "g");
@@ -66,8 +81,18 @@ async function main() {
   for (const f of findFiles(join(process.cwd(), "src"))) {
     srcFiles++;
     try {
-      const code = readFileSync(f, "utf-8");
-      const expanded = code.replace(/[\w-]+:\([^)]*\)/g, function(m) {
+     const code = readFileSync(f, "utf-8");
+     const expanded = code.replace(/[\w-]+:\([^)]*\)/g, function(m) {
+      // Extract tokens from Attributify patterns like lg="mx-4 p-0"
+      let attrMatch;
+      while ((attrMatch = attrPatternRE.exec(code)) !== null) {
+        const attrVariant = attrMatch[1];
+        const attrValues = attrMatch[2].split(/\s+/).filter(Boolean);
+        for (const attrVal of attrValues) {
+          tokens.add(attrVariant + ':' + attrVal);
+        }
+      }
+      
         const idx = m.indexOf(":(");
         const variant = m.slice(0, idx);
         const group = m.slice(idx + 2, -1);
