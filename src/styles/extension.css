@@ -410,7 +410,7 @@ a.toc-active {
 
 .subtitle-cursor-block {
   width: 2px;
-  height: 1.2em;
+  height: 1em;
   margin: 0 6px;
   /* highlight color 光标，亮暗模式自适应 */
   background-color: oklch(var(--un-preset-theme-colors-highlight));
