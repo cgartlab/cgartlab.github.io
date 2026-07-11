@@ -122,7 +122,7 @@ const currentUI = ui[currentLang as keyof typeof ui] ?? {}
     align-items: center;
     gap: 0.75rem;
     padding: 1.25rem 1.5rem;
-    border-bottom: 1px solid rgba(128, 128, 128, 0.15);
+    border-bottom: 1px solid color-mix(in srgb, oklch(var(--un-preset-theme-colors-secondary)) 15%, transparent);
   }
 
   .search-icon {
@@ -169,7 +169,7 @@ const currentUI = ui[currentLang as keyof typeof ui] ?? {}
   .search-close:hover,
   .search-close:focus-visible {
     opacity: 1;
-    background-color: rgba(128, 128, 128, 0.1);
+    background-color: color-mix(in srgb, oklch(var(--un-preset-theme-colors-secondary)) 10%, transparent);
   }
 
   .search-close:focus-visible {
@@ -205,7 +205,7 @@ const currentUI = ui[currentLang as keyof typeof ui] ?? {}
 
   .search-result-item:hover,
   .search-result-item:focus-visible {
-    background-color: rgba(128, 128, 128, 0.08);
+    background-color: color-mix(in srgb, oklch(var(--un-preset-theme-colors-secondary)) 8%, transparent);
     transform: translateX(0.25rem);
   }
 
@@ -303,7 +303,7 @@ const currentUI = ui[currentLang as keyof typeof ui] ?? {}
     width: 2rem;
     height: 2rem;
     margin: 0 auto;
-    border: 2px solid rgba(128, 128, 128, 0.2);
+    border: 2px solid color-mix(in srgb, oklch(var(--un-preset-theme-colors-secondary)) 20%, transparent);
     border-top-color: oklch(var(--un-preset-theme-colors-primary));
     border-radius: 50%;
     animation: spin 0.8s linear infinite;
@@ -667,3 +667,4 @@ const currentUI = ui[currentLang as keyof typeof ui] ?? {}
   document.addEventListener('astro:page-load', init)
 })()
 </script>
+

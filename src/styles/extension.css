@@ -303,8 +303,8 @@ pre.mermaid svg {
   display: block;
   max-width: 70%;
   height: auto;
-  margin-left: 36px;
-  margin-right: 36px;
+  margin-left: 2.25rem;
+  margin-right: 2.25rem;
 }
 pre.mermaid:hover {
   box-shadow: none;
@@ -543,5 +543,6 @@ a.toc-active {
   [lg~="fixed"] { position: fixed; }
   [lg~="bottom-28"] { bottom: 7rem; }
 }
+
 
 

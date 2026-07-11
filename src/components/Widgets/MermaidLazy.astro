@@ -43,7 +43,9 @@ function setupMermaidLazy() {
               await mermaid.default.run({ nodes: [target] })
               target.dataset.mermaidLoaded = 'true'
               return
-            } catch {}
+            } catch (retryError) {
+              console.warn('[MermaidLazy] Retry also failed:', retryError)
+            }
           }
           console.error('[MermaidLazy] Failed to render:', error)
           target.dataset.mermaidLoaded = 'error'
@@ -103,3 +105,4 @@ async function handleMermaidThemeChange() {
 document.addEventListener('astro:page-load', setupMermaidLazy)
 document.addEventListener('theme-changed', handleMermaidThemeChange)
 </script>
+
