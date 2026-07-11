@@ -451,7 +451,8 @@ document.addEventListener('astro:before-swap', cleanupHeatmapInteractions)
 }
 
 .gh-error-msg {
-  font-size: 0.8125rem;
+  font-size: 0.75rem;
+  font-weight: 200;
   color: oklch(var(--un-preset-theme-colors-secondary));
   opacity: 0.65;
   margin-top: 0.5rem;
@@ -613,19 +614,19 @@ document.addEventListener('astro:before-swap', cleanupHeatmapInteractions)
 /* Cell color tokens */
 :root {
   --gh-cell-0: oklch(91% 0.012 85);
-  --gh-cell-1: oklch(0.75 0.12 138 / 0.30);
-  --gh-cell-2: oklch(0.75 0.12 138 / 0.50);
-  --gh-cell-3: oklch(0.75 0.12 138 / 0.70);
-  --gh-cell-4: oklch(0.75 0.12 138 / 0.95);
+  --gh-cell-1: oklch(88% 0.03 138);
+  --gh-cell-2: oklch(78% 0.06 138);
+  --gh-cell-3: oklch(62% 0.10 138);
+  --gh-cell-4: oklch(42% 0.12 138);
   --gh-day-label-width: 28px;
 }
 
 html.dark {
   --gh-cell-0: oklch(28% 0.003 298);
-  --gh-cell-1: oklch(0.75 0.12 138 / 0.20);
-  --gh-cell-2: oklch(0.75 0.12 138 / 0.40);
-  --gh-cell-3: oklch(0.75 0.12 138 / 0.60);
-  --gh-cell-4: oklch(0.75 0.12 138 / 0.85);
+  --gh-cell-1: oklch(30% 0.02 138);
+  --gh-cell-2: oklch(36% 0.05 138);
+  --gh-cell-3: oklch(48% 0.09 138);
+  --gh-cell-4: oklch(62% 0.14 138);
 }
 
 /* Cell color application */
@@ -685,7 +686,8 @@ html.dark {
 }
 
 .gh-total {
-  font-size: 0.8125rem;
+  font-size: 0.75rem;
+  font-weight: 200;
   color: oklch(var(--un-preset-theme-colors-secondary));
   opacity: 0.75;
 }

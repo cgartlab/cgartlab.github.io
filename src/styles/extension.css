@@ -409,15 +409,13 @@ a.toc-active {
 }
 
 .subtitle-cursor-block {
-  width: 1em;
+  width: 2px;
   height: 1em;
   margin: 0 6px;
   /* highlight color 光标，亮暗模式自适应 */
   background-color: oklch(var(--un-preset-theme-colors-highlight));
   animation: cursor-blink 1s ease-in-out infinite;
-  transform: translateY(-2px);
   flex-shrink: 0;
-  border-radius: 2px;
 }
 
 
