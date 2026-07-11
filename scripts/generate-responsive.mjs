@@ -81,9 +81,9 @@ if (dedupCSS !== css) {
   for (const f of findFiles(join(process.cwd(), "src"))) {
     srcFiles++;
     try {
-     const code = readFileSync(f, "utf-8");
-     const expanded = code.replace(/[\w-]+:\([^)]*\)/g, function(m) {
+    const code = readFileSync(f, "utf-8");
       // Extract tokens from Attributify patterns like lg="mx-4 p-0"
+      attrPatternRE.lastIndex = 0;
       let attrMatch;
       while ((attrMatch = attrPatternRE.exec(code)) !== null) {
         const attrVariant = attrMatch[1];
@@ -92,7 +92,7 @@ if (dedupCSS !== css) {
           tokens.add(attrVariant + ':' + attrVal);
         }
       }
-      
+      const expanded = code.replace(/[\w-]+:\([^)]*\)/g, function(m) {
         const idx = m.indexOf(":(");
         const variant = m.slice(0, idx);
         const group = m.slice(idx + 2, -1);
