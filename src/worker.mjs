@@ -44,7 +44,17 @@ export default {
         }
       }
 
-      return asset
+      // 5.5. Set caching headers: CSS and JS should not be cached for long
+      // (Cloudflare CDN defaults to 30 days, which causes stale style issues)
+      const newHeaders = new Headers(asset.headers)
+      if (assetPath.endsWith('.css') || assetPath.endsWith('.js')) {
+        newHeaders.set('Cache-Control', 'public, max-age=0, must-revalidate')
+      }
+      return new Response(asset.body, {
+        status: asset.status,
+        statusText: asset.statusText,
+        headers: newHeaders,
+      })
     }
     catch (err) {
       console.error('[Worker] Unhandled error:', err)
