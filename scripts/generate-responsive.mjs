@@ -132,6 +132,12 @@ async function main() {
   const result = await gen.generate(Array.from(tokens).join(" "));
   console.log("  \u{1F4DD}  生成了 " + (result.css.length / 1024).toFixed(1) + " KB）");
 
+  
+  // Safety net: fix malformed calc inside min/max with multiple calc calls
+  // UnoCSS may generate calc(A,calc(B)) with missing paren, breaking CSS parser
+  // This fixes calc(...,calc( to calc(...), calc( for balanced parens
+  result.css = result.css.replace(/calc\(([^)]+),calc\(/g, 'calc($1), calc(');
+
   // 5. Extract @media (min-width: ...) 条
   const mediaRules = [];
   let cur = "", depth = 0;
@@ -176,3 +182,4 @@ async function main() {
 }
 
 main().catch(function(e) { console.error("  \u2717 错误：", e.message); process.exit(1); });
+
