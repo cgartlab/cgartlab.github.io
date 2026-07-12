@@ -315,36 +315,7 @@ const pageImage = postSlug
 })()
 </script>
 
-<!-- Google Analytics -->
-{googleAnalyticsID && (
-  <script
-    is:inline
-    type="text/partytown"
-    define:vars={{
-      googleAnalyticsID,
-      customGoogleAnalyticsJS,
-    }}
-  >
-  window.dataLayer = window.dataLayer || []
-  window.gtag = function () {
-    dataLayer.push(arguments)
-  }
-  window.gtag('js', new Date())
-  if (customGoogleAnalyticsJS) {
-    window.gtag('config', googleAnalyticsID, {
-      transport_url: new URL(customGoogleAnalyticsJS).origin,
-    })
-  } else {
-    window.gtag('config', googleAnalyticsID)
-  }
-  const gaScript = document.createElement('script')
-  gaScript.src = customGoogleAnalyticsJS || `https://www.googletagmanager.com/gtag/js?id=${googleAnalyticsID}`
-  gaScript.type = 'text/partytown'
-  document.head.appendChild(gaScript)
-  </script>
-)}
-
-<!-- Umami Analytics -->
+ <!-- Umami Analytics -->
 {umamiAnalyticsID && (
   <script
     is:inline

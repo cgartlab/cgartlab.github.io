@@ -36,10 +36,10 @@ export default defineConfig({
   base,
   output: 'static',
   trailingSlash: 'always', // 不建议更改
-  prefetch: {
-    prefetchAll: true,
-    defaultStrategy: 'viewport', // hover, tap, viewport, load
-  },
+   prefetch: {
+      prefetchAll: false,
+      defaultStrategy: 'hover', // hover, tap, viewport, load
+   },
   ...imageConfig,
   i18n: {
     locales: Object.entries(langMap).map(([path, codes]) => ({

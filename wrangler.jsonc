@@ -8,25 +8,24 @@
   },
   "compatibility_date": "2026-05-02",
   "compatibility_flags": ["nodejs_compat"],
-  "observability": {
-    "enabled": true,
-    "head_sampling_rate": 1,
-    "logs": {
-      "enabled": true,
-      "head_sampling_rate": 1,
-      "persist": true,
-      "invocation_logs": true
-    },
-    "traces": {
-      "enabled": true,
-      "persist": true,
-      "head_sampling_rate": 1
-    }
-  },
+ "observability": {
+   "enabled": true,
+    "head_sampling_rate": 0.1,
+   "logs": {
+     "enabled": true,
+      "head_sampling_rate": 0.1,
+     "persist": true,
+     "invocation_logs": true
+   },
+   "traces": {
+     "enabled": true,
+     "persist": true,
+      "head_sampling_rate": 0.01
+   }
+ },
   "routes": [
     { "pattern": "cgartlab.com", "custom_domain": true },
     { "pattern": "www.cgartlab.com", "custom_domain": true }
   ]
 }
-
 
