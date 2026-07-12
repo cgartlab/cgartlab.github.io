@@ -45,9 +45,16 @@ async function main() {
   ok('响应式 @media 规则: ' + mediaCount + ' 条')
 
   // 6. Check desktop layout rules (attribute selectors)
-  if (!css.includes('[class*="lg:fixed"]'))
-    fail('缺少桌面布局规则')
-  ok('桌面布局规则存在')
+  const desktopRules = [
+    ['uno-desktop-column', '[class*="lg:uno-desktop-column"]'],
+    ['fixed', '[class*="lg:fixed"]'],
+    ['hidden', '[class*="lg:hidden"]'],
+  ]
+  for (const [name, selector] of desktopRules) {
+    if (!css.includes(selector))
+      fail('缺少桌面布局规则: ' + name)
+  }
+  ok('桌面布局规则完整 (' + desktopRules.length + '/' + desktopRules.length + ')')
 
   console.log('\n  \u2705 构建验证通过\n')
 }
