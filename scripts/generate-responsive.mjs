@@ -136,12 +136,12 @@ async function main() {
   // Safety net: fix malformed calc inside min/max with multiple calc calls
   // UnoCSS may generate calc(A,calc(B)) with missing paren, breaking CSS parser
   // This fixes calc(...,calc( to calc(...), calc( for balanced parens
-  result.css = result.css.replace(/calc\(([^)]+),calc\(/g, 'calc($1), calc(');
+  const resultCSS = result.css.replace(/calc\(([^)]+),calc\(/g, 'calc($1), calc(');
 
   // 5. Extract @media (min-width: ...) 条
   const mediaRules = [];
   let cur = "", depth = 0;
-  for (const line of result.css.split("\n")) {
+  for (const line of resultCSS.split("\n")) {
     if (line.startsWith("@media")) {
       if (cur && cur.includes("min-width")) mediaRules.push(cur);
       cur = line; depth = 1;
