@@ -19,21 +19,15 @@ async function main() {
   const cssPath = join(distDir, files[0]);
  let css = readFileSync(cssPath, "utf-8");
   console.log("  \u{1F4C4}  布局 CSS: " + files[0] + " (" + (css.length / 1024).toFixed(1) + " KB)");
- // 1.5 Dedup: remove any previous responsive CSS injection before regenerating
+  // 1.5 Dedup: remove any previous responsive CSS injection before regenerating
  const dedupCSS = css.replace(/\/\* unocss-responsive-injection \*\/[\s\S]*?$/, '');
  if (dedupCSS !== css) {
     writeFileSync(cssPath, dedupCSS);
     console.log("  \u{1F9F9}  移除了上一次注入的响应式 CSS (" + (css.length - dedupCSS.length) + " 字节)");
     css = dedupCSS;
-}
- const dlCSS = css.replace(/\/\* desktop-layout-injected \*\/[\s\S]*?$/, '');
- if (dlCSS !== css) {
-    writeFileSync(cssPath, dlCSS);
-    console.log("  \u{1F9F9}  移除了上一次的 desktop-layout 注入");
-    css = dlCSS;
-  }
-
-  // 2. Setup UnoCSS generator
+ }
+ 
+ // 2. Setup UnoCSS generator
   // WARNING: Config duplicated from uno.config.ts — keep colors, fonts, shortcuts in sync!
   const config = defineConfig({
     presets: [
@@ -183,4 +177,3 @@ async function main() {
 }
 
 main().catch(function(e) { console.error("  \u2717 错误：", e.message); process.exit(1); });
-
