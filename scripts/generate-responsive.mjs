@@ -120,8 +120,9 @@ async function main() {
       baseClasses.add(cls);
     }
   }
-  for (const cls of baseClasses) {
-    for (const bp of respPrefixes) {
+ for (const cls of baseClasses) {
+    if (cls === 'uno-desktop-column') continue;
+   for (const bp of respPrefixes) {
       tokens.add(bp + cls);
     }
   }
@@ -182,5 +183,4 @@ async function main() {
 }
 
 main().catch(function(e) { console.error("  \u2717 错误：", e.message); process.exit(1); });
-
 
