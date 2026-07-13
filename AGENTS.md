@@ -1,25 +1,26 @@
 # AGENTS.md — cgartlab.github.io
 
-个人主站 (cgartlab.com)。Astro 6 + UnoCSS 66 + TypeScript 6 + pnpm 10 + Node 24，Cloudflare Pages 部署。
+个人主站 (cgartlab.com)。Astro 6 + UnoCSS 66 + TypeScript 6 + pnpm 11 + Node 24，Cloudflare Pages 部署。Codex 为主要开发工具，所有开发流程、验证和交付均通过 Codex Agent 执行。
 
 ## COMMANDS
 
 ```bash
-pnpm dev                  # astro check → astro dev
-pnpm build                # astro check → build → generate-llms → apply-lqip (顺序重要)
-pnpm preview              # astro preview --host (局域网可访问)
+pnpm dev                  # astro check → astro dev (HMR 热更新，快速迭代，但不代表最终产物样式)
+pnpm build                # astro check → build → generate-llms → apply-lqip (顺序重要：generate-llms 需要构建后的文章列表，apply-lqip 需要处理构建后的资源)
+pnpm preview              # astro preview --host (局域网可访问，使用 dist/ 生产构建产物，最接近线上效果)
 pnpm lint / lint:fix      # eslint (antfu config, 忽略 src/content/**)
 pnpm new-post "标题"       # 创建 MD 文章 (src/content/posts/)，周刊自动放入 weekly/
 pnpm format-posts         # CJK 文本规范化 (autocorrect)
 pnpm apply-lqip           # 生成 LQIP 占位图 (写入 src/assets/)
-pnpm fix-internal-links   # 修复内部链接
+pnpm verify-feed           # 验证 RSS/Atom feed 输出 (CI 中使用)
+pnpm audit-glossary        # 审计术语表引用完整性
 pnpm exec playwright test # 端到端测试 (Playwright)
 ```
 
 ## KEY QUIRKS
 
 - **`trailingSlash: 'always'`** — 禁止修改，所有 URL 依赖该设置
-- **pnpm only** — `package.json` 中 `packageManager` 强制 `pnpm@10.33.0`
+ - **pnpm only** — `package.json` 中 `packageManager` 强制 `pnpm@11.10.0`
 - **LQIP 自动生成** — `src/assets/` 下图片由 `apply-lqip.ts` 管理，禁止手动编辑
 - **文章图片** — 必须放在文章同名 `_images/` 目录下
 - **ESLint 跳过** — `src/content/**` 完全忽略
@@ -29,23 +30,35 @@ pnpm exec playwright test # 端到端测试 (Playwright)
 - **颜色 token** — 所有颜色必须用 `oklch(var(--un-preset-theme-colors-*))` token，禁止裸色值 `#xxx`/`rgb()`。唯一例外：毛玻璃/阴影中的物理透明度 `rgba(0,0,0,α)` 和固定功能语义色（如错误红）
 - **View Transitions 监听器** — 全局 `addEventListener` 必须配套 `astro:page-load`/`astro:before-swap`，`matchMedia` 需提取为模块级常量引用
 - **iOS 滚动锁定** — 使用 `.scroll-lock` class（`overflow:hidden + position:fixed + width:100%`），开启前保存 `scrollY`，关闭后恢复
+ - **Shiki 双主题** — `shikiConfig.themes` 设 `light: 'github-light'` / `dark: 'github-dark'`，`.dark` 下代码高亮自动切换，无需额外 JS
+ - **Mermaid 排除 Shiki** — `syntaxHighlight.excludeLangs: ['mermaid']` 确保 Mermaid 代码块不被 Shiki 处理，交由 `rehype-mermaid` 构建时渲染
+ - **remark/rehype 顺序敏感** — Astro markdown 管线中 6 个 Remark 插件 + 9 个 Rehype 插件，后者依赖上游 ID 生成，插入新插件必须确认顺序
+ - **`color-mix()` 色彩空间差异** — 项目混用 `color-mix(in srgb, ...)` 和 `color-mix(in oklch, ...)`，不同浏览器渲染有细微色差
 
 ## ARCHITECTURE
 
 | Area | Path | Notes |
 |------|------|-------|
 | 内容集合 | `src/content.config.ts` | `posts`, `about`, `privacy` 三个集合 |
-| i18n | `src/i18n/config.ts` | zh 默认, /en/, /zh-tw/ 路由前缀 |
+| i18n | `src/i18n/config.ts` | zh 默认, /en/ 路由前缀（zh-tw 基础设施就绪但未启用） |
 | 主题配置 | `src/config.ts` | 站点元数据、导航、颜色、评论、SEO |
 | UnoCSS | `uno.config.ts` | Wind3 + Attributify + theme preset, 非 Tailwind |
 | 路由 | `src/pages/[...lang]/` | 多语言前缀动态路由 |
-| 评论 | Giscus + Twikoo + Waline 三套并行 |
+| 评论 | Giscus（主用）+ Twikoo/Waline（需额外配置后启用） |
 | 表单 | `src/components/InquiryForm.astro` | Web3Forms，submit 监听器在 `astro:page-load` 内绑定 |
 | 搜索 | 客户端搜索索引 (`api/search-index/[lang].json.ts` + `api/search-index.json.ts`) |
 | OG 图片 | `astro-og-canvas` + `canvaskit-wasm` 构建时生成，过滤草稿 |
 | Wrangler | `wrangler.jsonc` | Workers + Static Assets (dist 目录)，含无尾斜杠 301 重定向 |
 | TOC 高亮 | `Widgets/TOC.astro` | IntersectionObserver 驱动 `.toc-active` class，按 DOM 顺序排序 |
 | 滚动锁定 | `global.css .scroll-lock` | iOS Safari 兼容：`overflow:hidden + position:fixed + width:100%` |
+| Mermaid 图表 | `Widgets/MermaidLazy.astro` | `rehype-mermaid` 构建时预渲染 + IntersectionObserver 延迟加载 |
+| 隐私同意 | `ConsentBanner.astro` | 三级 Cookie 同意（拒绝/仅功能/全部接受），聚焦陷阱，滚动锁定联动 |
+| reduceMotion | `themeConfig.global.reduceMotion` | 启用后在 `<html>` 添加 `.reduce-motion` 类，禁用入场动画，启用 0.3s 颜色/边框过渡 |
+| 主题上游 | `scripts/update-theme.ts` | 从 `radishzzz/astro-theme-retypeset` 合并主题更新 |
+ | Markdown 管线 | `astro.config.ts` | Remark 6 插件 + Rehype 9 插件，顺序敏感，插件间有依赖关系 |
+ | 样式分层 | `src/config.ts` + `uno.config.ts` + `src/styles/*.css` | 配置→UnoCSS 变量→纯 CSS，三层解耦，纯 CSS 不经过 UnoCSS transform |
+ | 暗色模式 | `uno.config.ts` + `src/styles/*.css` | unocss-preset-theme 生成 `:root`/`.dark` 两套 CSS 变量覆盖 |
+ | 字体系统 | `src/styles/font.css` + `uno.config.ts` fontFamily | 四组字体族（title/navbar/time/serif），Vite 插件在构建时重写 URL |
 
 ## BRANCH STRATEGY
 
@@ -110,9 +123,279 @@ pnpm exec playwright test # 端到端测试 (Playwright)
 - **修改配置层（UnoCSS/Vite）后必须验证构建产物** — 配置对不等于 CSS 对
 - **用户提到"之前是好的"立即查 git 历史** — 不要在当前代码里反复重建
 - **PR 改了部分文件时立即审计同类文件** — 很可能遗漏了同类文件
-- **CSS 变量同时查 `:root` 和 `.dark` 两个选择器** — 单边有值不等于两边都生效
+ - **CSS 变量同时查 `:root` 和 `.dark` 两个选择器** — 单边有值不等于两边都生效
+
+ ## 样式架构详解
+
+ ### 三层样式分层
+
+ | 层 | 位置 | 处理方 | 职责 |
+ |----|------|--------|------|
+ | 配置层 | `src/config.ts` | 项目代码 | 定义颜色、字体、布局 tokens 的单一声明源 |
+ | 桥梁层 | `uno.config.ts` | unocss-preset-theme | 将配置转化为 CSS 变量 `--un-preset-theme-colors-*`，生成亮色/暗色两套值 |
+ | 落地层 | `src/styles/*.css` + `.astro <style>` | 浏览器 / UnoCSS transform | 通过 CSS 变量引用颜色，不直接使用裸色值 |
+
+ ### 颜色系统完整链条
+
+ ```
+ src/config.ts → themeConfig.color (light/dark oklch 值)
+        ↓
+ uno.config.ts → theme.colors (展开 light 语义色 + note/tip/important/warning/caution)
+        ↓
+ unocss-preset-theme → 为每个出现在源码中的 utility class 生成 CSS 变量
+        ↓
+           ┌─ safelist → 强制生成仅在纯 CSS 文件中引用的变量
+           │              (如 bg-background, text-highlight 等)
+           ↓
+ src/styles/*.css → 使用 oklch(var(--un-preset-theme-colors-*))
+ ```
+
+ **关键约束**：
+ - 所有颜色必须用 `oklch(var(--un-preset-theme-colors-*))` 格式，避免 `#xxx` / `rgb()`
+ - 物理透明度（毛玻璃/阴影/按钮悬停等）允许 `rgba(0,0,0,α)` 或 `color-mix(in srgb, oklch(...), transparent)`
+ - 新增语义色时必须同步更新：`uno.config.ts` 中的 `theme.colors` → `presetTheme` 的 dark → `safelist`
+
+ ### safelist 机制细节
+
+ `unocss-preset-theme` 只对**源码中实际出现的 utility class** 生成 CSS 变量。`src/styles/*.css` 中的 `oklch(var(--un-preset-theme-colors-background))` 是纯 CSS 变量引用，不是 UnoCSS utility，不会触发变量生成。
+
+ ```ts
+ safelist: [
+   'bg-background', 'bg-highlight', 'bg-note',
+   'text-background', 'text-highlight',
+ ]
+ ```
+
+ safelist 通过列出不存在的 utility（如 `bg-background` 从未在任何 .astro 中出现）迫使 `unocss-preset-theme` 为它生成变量。如果新增了一个只在纯 CSS 中引用的颜色，必须同步添加 safelist 条目，否则暗色模式无覆盖值。
+
+ ## ASTRO 开发注意事项
+
+ ### 内容集合（Content Collections）
+
+ 定义于 `src/content.config.ts`，三个集合：
+ - `posts` — 文章/周刊 MDX/MD 内容
+ - `about` — 关于页面
+ - `privacy` — 隐私政策
+
+ Frontmatter 类型安全由 Astro 自动推断。集合加载：
+
+ ```astro
+ ---
+ import { getCollection } from 'astro:content'
+ const posts = await getCollection('posts')
+ ---
+ ```
+
+ ### i18n 路由结构
+
+ ```ts
+ // astro.config.ts
+ i18n: {
+   locales: [
+     { path: 'en', codes: ['en-US'] },
+     { path: 'zh', codes: ['zh-CN'] },
+     { path: 'zh-tw', codes: ['zh-TW'] },
+   ],
+   defaultLocale: 'zh',
+ }
+ ```
+
+ 路由文件位于 `src/pages/[...lang]/` 动态目录下。`zh` 为默认语言无 URL 前缀，`/en/` 和 `/zh-tw/` 带语言前缀。通过 `Astro.currentLocale` 获取当前页语言。
+
+ ### dev 与 build 的关键差异
+
+ | 方面 | `pnpm dev` (HMR) | `pnpm build && pnpm preview` (生产构建) |
+ |------|-------------------|------------------------------------------|
+ | View Transitions 动画 | **不触发** | 正常触发 |
+ | UnoCSS 变量生成 | 动态注入，可能覆盖缺失 | 仅 safelist + 源码扫描 |
+ | PWA Service Worker | 禁用 (`enabled: false`) | 注册生效 |
+ | CSS 压缩 | 无 | astro-compress 压缩 |
+ | vite-plugin-pwa | 不注入 | workbox 注入 |
+
+ **务必记住**：View Transitions 动画（`transition.css` 中的主题切换 clip-path 动画、文章内容渐入等）只在 `build + preview` 模式下运行。HMR 不会触发 `::view-transition-*` 伪元素。
+
+ ### Markdown 插件管线
+
+ Remark 和 Rehype 插件的**顺序敏感**，当前管线：
+
+ **Remark（顺序关键）：**
+ 1. `remarkDirective` — 解析 `::directive` 语法（基础，必须在容器/叶指令之前）
+ 2. `remarkMath` — 识别 `$...$` / `$$...$$` LaTeX
+ 3. `remarkContainerDirectives` — 自定义容器（警告框等）
+ 4. `remarkLeafDirectives` — 叶节点指令
+ 5. `remarkReadingTime` — 阅读时间
+ 6. `remarkGlossary` — 术语表标记
+
+ **Rehype（顺序关键）：**
+ 1. `rehypeKatex` — LaTeX 渲染
+ 2. `rehypeMermaid` — Mermaid 构建时渲染（`strategy: 'pre-mermaid'`）
+ 3. `rehypeSlug` — 标题 ID 生成（必须在 heading-anchor 之前）
+ 4. `rehypeHeadingAnchor` — 锚链图标（依赖 rehypeSlug 的 ID）
+ 5. `rehypeImageProcessor` — 图片路径处理
+ 6. `rehypeGlossary` — 术语表超链接
+ 7. `rehypeExternalLinks` — 外链安全属性
+ 8. `rehypeCodeCopyButton` — 代码块复制按钮
+
+ **注意事项**：
+ - 添加新插件时注意插入顺序，尤其是依赖上游 ID 或 AST 结构的插件
+ - `excludeLangs: ['mermaid']` 防止 Shiki 和 rehypeMermaid 冲突
+ - rehype 阶段不再有 remark 的 directive 上下文
+
+ ## UNOCSS 开发注意事项
+
+ ### Preset 组成与职责
+
+ ```ts
+ presets: [
+   presetWind3(),        // Tailwind Wind3 原子类
+   presetAttributify(),  // 属性化 class 写法
+   presetTheme(...),     // 暗色模式 CSS 变量生成
+ ]
+ ```
+
+ - **presetWind3**：提供 `text-*`、`bg-*`、`flex`、`grid`、`p-*` 等全套原子类。不是 Tailwind 3 的 1:1 复制，部分类名和断点有细微差异。
+ - **presetAttributify**：`<div p="x-4 y-2" text="center">` 等价于 `class="px-4 py-2 text-center"`。在 Layout.astro 中广泛用于响应式布局。
+ - **presetTheme**：唯一负责暗色模式 CSS 变量生成的 preset。将 `theme.colors` 映射为 `--un-preset-theme-colors-*`，在 `.dark` 选择器下输出覆盖值。
+
+ ### Shortcuts 与语义别名
+
+ ```ts
+ 'c-primary': 'text-primary',
+ 'c-secondary': 'text-secondary',
+ 'c-note': 'text-note',
+ 'text-footer': 'text-4 leading-relaxed',
+ ```
+
+ 语义别名使用 `shortcuts` 机制，比维护额外 CSS class 更轻量。opacity modifier 正常工作：`c-secondary/60` 等价于 `text-secondary/60`。
+
+ ### Custom Variant: `cjk:`
+
+ ```ts
+ (matcher) => {
+   if (!matcher.startsWith('cjk:')) return matcher
+   return {
+     matcher: matcher.slice(4),
+     selector: s => `${s}:is(:lang(zh), :lang(ja), :lang(ko))`,
+   }
+ }
+ ```
+
+ 生成 `.tracking-wide:is(:lang(zh), :lang(ja), :lang(ko))` 形式的选择器。在 `markdown.css` 中用于 CJK 文本间距和断词优化。
+
+ ### 纯 CSS 文件与 UnoCSS 的耦合关系
+
+ `src/styles/*.css` 通过 Vite 的 CSS pipeline 直接加载，**不经过 UnoCSS transform**。这意味着：
+ - 这些文件中的 `@apply` / `--at-apply` 不会被处理（`--at-apply` 已废弃）
+ - 这些文件中的颜色通过 `oklch(var(--un-preset-theme-colors-*))` 引用 UnoCSS 生成的变量
+ - 这些文件中的字体通过 `var(--un-preset-theme-font-family-*)` 引用
+
+ ### transformer 注意事项
+
+ 两个 transformer 作用于 UnoCSS 处理的文件范围（.astro/.vue/.jsx 等）：
+
+ - **`transformerDirectives()`** — 允许 `@apply text-primary bg-highlight` 语法。仅在 UnoCSS transform 范围内生效，纯 CSS 文件中不可用。
+ - **`transformerVariantGroup()`** — 允许 `hover:(text-primary bg-highlight)` 简写。同样仅限 UnoCSS transform 范围内。
+
+ ### 常见陷阱
+
+ 1. **新增颜色忘记同步 safelist** → 暗色模式无覆盖值，表现为切换后颜色不变化
+ 2. **在纯 CSS 文件中使用 `--at-apply`** → 静默失效，死代码残留
+ 3. **`color-mix(in srgb, ...)` 与 `(in oklch, ...)` 混用** → 不同浏览器渲染有差异
+ 4. **Attributify 与 Astro `class:list` 的边界** — 两者不冲突，但要避免在一个元素上混用两种写法的同类属性
 
 ## NOTE
 
 - 设备级配置 `.obsidian/` 通过 Syncthing 同步，不纳入 git 追踪
 - 如遇 Syncthing 冲突文件，运行 `scripts/syncthing-cleanup.ps1` (Windows) 或 `scripts/syncthing-cleanup.sh` (macOS/Linux)
+
+## UnoCSS Safelist Mechanism
+
+项目中的部分主题颜色 token 无法通过 UnoCSS 的静态扫描自动发现，因为它们在 raw CSS 文件中以 CSS 变量的形式引用（`oklch(var(--un-preset-theme-colors-*))`），而非以 utility class 形式出现在组件模板中。这些变量的 CSS 声明必须通过 `uno.config.ts` 中的 `safelist` 显式触发。
+
+当前 safelist 设计：
+
+- `bg-{color}` / `text-{color}` 条目 → 强制 `unocss-preset-theme` 生成 `:root` 和 `.dark` 的 CSS 变量定义
+- 仅需为**只在 raw CSS 中使用**的颜色添加 safelist 条目
+- 如果颜色同时也作为 utility class 出现在组件模板中（如 `text-primary`），UnoCSS 会自动扫描发现，无需加入 safelist
+
+修改 `src/config.ts` 中的主题颜色后，必须同步检查 `uno.config.ts` 的 `safelist`：
+
+- 新颜色只在 raw CSS 中使用？→ 添加 `bg-{name}` / `text-{name}` 到 safelist
+- 新颜色也作为 utility 在组件中使用？→ 无需 safelist 条目
+
+否则暗色模式变量不会发出，`oklch(var(--un-preset-theme-colors-{name}))` 会解析为无效颜色。
+
+## Development / Preview Difference
+
+本项目存在三个环境，各有不同的行为特征：
+
+| 环境 | 命令 | 特点 |
+|------|------|------|
+| Development | `pnpm dev` | Vite 开发服务器，HMR 热更新，无构建压缩，无 Service Worker |
+| Preview | `pnpm build && pnpm preview` | 基于 `dist/` 生产构建产物，包含 `astro-compress` 压缩结果，Service Worker 已注册 |
+| Production | Cloudflare Pages 部署 | 最终生产环境，CDN 缓存，Worker 重写规则 |
+
+### 常见陷阱
+
+**Service Worker 缓存** — `pnpm preview` 模式下，Service Worker 会缓存 CSS、图片（30天）、字体（1年）和文章页（7天）。修改代码后重建并刷新时，如果只做常规刷新（F5），可能看到旧版缓存内容。必须 `Ctrl + Shift + R` 硬刷新才能绕过 SW 缓存。
+
+**astro-compress 压缩** — `astro-compress`（CSS: true, HTML: true, JavaScript: true）仅在 `astro build` 阶段运行。修改 `lqip.css`、`global.css` 等使用现代 CSS 语法的文件后，需通过 `pnpm build && pnpm preview` 验证构建产物。
+
+**LQIP 占位图** — `apply-lqip.ts` 只在 `pnpm build` 阶段运行。Dev 模式下图片没有 `--lqip:` 渐变背景占位，直接显示原图。这是正常现象。
+
+**View Transitions 动画** — View Transitions 动画（主题切换、页面入场动效）仅在 MPA 导航（`pnpm preview`、生产环境）下触发。`pnpm dev` 的 HMR 热更新不会触发 View Transitions。
+
+### 调试流程
+
+修改样式/资源后，按此顺序排查：
+
+1. 确认修改在 `pnpm dev` 中正常工作
+2. 运行 `pnpm build && pnpm preview` 验证生产构建产物
+3. 如果 preview 与 dev 不一致，优先检查：
+   - Service Worker 缓存（`Ctrl + Shift + R` 硬刷新）
+   - 构建产物 `dist/` 中的 CSS 是否包含修改
+   - 浏览器 DevTools → Application → Cache Storage 清空缓存
+4. 不要直接认为是 CSS 逻辑错误 — 多数 preview/dev 差异来自缓存或构建压缩
+
+## CODEX DEVELOPMENT
+
+Codex 为主力开发工具。以下规则定义 Agent 行为边界和开发到生产的一致性保障。
+
+### Agent 行为规范
+
+- **任务边界** — 只做用户明确要求的修改。发现优化点或缺陷先报告，未经确认不得擅自执行。
+- **最小改动** — 优先局部修复、增量修改。禁止不必要的重构或依赖引入。
+- **先读再改** — 修改前必读相关文件、AGENTS.md、现有约定和配置。
+- **证据优先** — 不确定处明确标注，不猜测不存在的上下文。
+- **验证先行** — 每次变更后先跑最小相关检查（lint → typecheck → build），再扩大到完整验证。
+
+### 开发到生产一致性
+
+目标是确保最终交付到生产环境的功能和外观与开发预期完全一致。
+
+- **构建验证** — 任何代码修改后必须运行 `pnpm build`，确保构建通过。修改 UnoCSS/Vite/Astro 配置后必须检查构建产物。
+- **双模式样式验证** — 任何样式/UI 改动必须依次通过两项验证：
+  1. `pnpm dev`（HMR 热更新）— 确认无构建错误和运行时异常
+  2. `pnpm build && pnpm preview`（生产构建产物预览）— 验证最终产物样式（CSS 变换、UnoCSS safelist 变量生成、Astro 编译优化等）与线上完全一致
+- **暗色模式** — 涉及 CSS/主题时，按 DEBUGGING 章节清单验证亮色和暗色模式均正常。
+- **端到端测试** — 涉及页面结构/路由/交互时，运行 `pnpm exec playwright test`。
+- **View Transitions 验证** — View Transitions 动画（主题切换、页面进入动效等，定义于 `transition.css`）仅在 `pnpm build && pnpm preview` 产线模式下触发，`pnpm dev` 的 HMR 热更新不会触发。修改过渡动画后，必须通过生产构建产物预览验证效果。
+
+### 禁止事项（严格）
+
+### 双模式样式验证的具体操作
+
+`pnpm dev` 和 `pnpm preview` 默认使用相同端口（4321），无法同时运行。正确的验证顺序：
+
+1. 先运行 `pnpm dev` 在默认端口检查快速迭代效果
+2. `Ctrl+C` 停止 dev 服务器
+3. 运行 `pnpm build && pnpm preview` 验证生产构建产物
+
+如需在两者之间反复对比，可用 `--port` 参数让 preview 使用不同端口：
+`pnpm build && pnpm preview --port 4322`，此时 dev 和 preview 可在不同端口同时运行对比。
+
+- 未经确认不得新增 npm/pnpm 依赖
+- 不得修改 `trailingSlash: 'always'` 配置
+- 不得手动编辑 `src/assets/` 下的 LQIP 图片或 `lqip-map.json`
+- 不得对 `src/content/**` 运行 ESLint
+- 不得删除或修改 `.obsidian/` 设备级配置
