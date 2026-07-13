@@ -398,4 +398,42 @@ Codex 为主力开发工具。以下规则定义 Agent 行为边界和开发到�
 - 不得修改 `trailingSlash: 'always'` 配置
 - 不得手动编辑 `src/assets/` 下的 LQIP 图片或 `lqip-map.json`
 - 不得对 `src/content/**` 运行 ESLint
-- 不得删除或修改 `.obsidian/` 设备级配置
+ `pnpm build && pnpm preview --port 4322`，此时 dev 和 preview 可在不同端口同时运行对比。
+ 
+ - 未经确认不得新增 npm/pnpm 依赖
+ - 不得修改 `trailingSlash: 'always'` 配置
+ - 不得手动编辑 `src/assets/` 下的 LQIP 图片或 `lqip-map.json`
+ - 不得对 `src/content/**` 运行 ESLint
+ - 不得删除或修改 `.obsidian/` 设备级配置
+
+## CLOUDFLARE CONFIGURATION
+
+以下信息通过 Cloudflare API 获取，反映 cgartlab.com 的当前线上部署状态。
+
+站点通过 **Worker + Static Assets** 方式托管（非 Cloudflare Pages）。
+
+| 配置项 | 值 |
+|--------|-----|
+| Worker 名称 | `cgartlab` |
+| 主入口 | `src/worker.mjs` |
+| 静态资源目录 | `./dist` (Astro build) |
+| 兼容日期 | `2026-05-02` | `nodejs_compat` |
+| 可观测性 | 已启用 |
+| 路由 | `cgartlab.com`, `www.cgartlab.com` (custom_domain) |
+| 创建 | 2026-07-12 | 最后修改 2026-07-13 |
+
+### Worker 行为
+
+1. www → non-www 301
+2. 尾斜杠强制 301（跳过含 . 文件路径）
+3. 目录 → index.html
+4. 404 → 404.html 兜底
+
+### DNS
+- Apex `cgartlab.com` / `www` → AAAA `100::` (代理)
+- MX: `route{1,2,3}.mx.cloudflare.net` (Cloudflare Email)
+- SPF/DKIM/DMARC 已配置
+- 子域名 via GitHub Pages (`designsystem`, `edic`), Tunnel (多个服务), 直连 (NAS)
+- 验证: Google Search Console, OpenAI, GitHub Pages
+
+Zone ID: `40bc1e6e6b5ce02d16192609294ed2a2` / NS: `gerald`, `maeve` / Free Plan

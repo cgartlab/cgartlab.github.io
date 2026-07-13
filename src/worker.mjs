@@ -34,21 +34,45 @@ export default {
           const notFound = await env.ASSETS.fetch(
             new Request(new URL('/404.html', request.url), request),
           )
-          return new Response(notFound.body, {
-            status: 404,
-            headers: notFound.headers,
-          })
+          const resp = new Response(notFound.body, { status: 404, headers: notFound.headers })
+          resp.headers.set('Cache-Control', 'public, max-age=60')
+          return resp
         }
         catch {
-          return new Response('Not Found', { status: 404 })
+          return new Response('Not Found', { status: 404, headers: { 'Cache-Control': 'public, max-age=60' } })
         }
       }
 
-      return asset
+      // 6. Create new response so we can override cache headers
+      const response = new Response(asset.body, asset)
+
+      // 7. Set cache headers based on file type
+      if (/\/assets\/[^/]+\.[a-f0-9]{8,}\./.test(assetPath)) {
+        // Fingerprinted assets (Astro/Vite hash in filename) → 1 year, immutable
+        response.headers.set('Cache-Control', 'public, max-age=31536000, immutable')
+      }
+      else if (/\.(css|js|mjs)$/.test(assetPath)) {
+        // CSS/JS → 1 year, immutable
+        response.headers.set('Cache-Control', 'public, max-age=31536000, immutable')
+      }
+      else if (/\.(woff2?|ttf|otf|eot)$/.test(assetPath)) {
+        // Fonts → 1 year, immutable
+        response.headers.set('Cache-Control', 'public, max-age=31536000, immutable')
+      }
+      else if (/\.(png|jpg|jpeg|webp|avif|gif|svg|ico)$/.test(assetPath)) {
+        // Images → 30 days
+        response.headers.set('Cache-Control', 'public, max-age=2592000')
+      }
+      else if (assetPath.endsWith('.html') || assetPath.endsWith('/')) {
+        // HTML → 30 min edge, 10 min browser
+        response.headers.set('Cache-Control', 'public, max-age=600, s-maxage=1800')
+      }
+
+      return response
     }
     catch (err) {
       console.error('[Worker] Unhandled error:', err)
-      return new Response('Not Found', { status: 404 })
+      return new Response('Not Found', { status: 404, headers: { 'Cache-Control': 'public, max-age=60' } })
     }
   },
 }

@@ -354,13 +354,13 @@ pre.mermaid[data-mermaid-loaded] > code {
     gap: 0.25rem;
     width: 100%;
   }
-  #toc-links-list > li {
-    overflow: hidden;
-  }
+   #toc-links-list > li {
+     overflow: hidden;
+   }
 }
 #toc-links-list > * + * {
-  margin-top: 0.275rem;
-}
+   margin-top: 0.275rem;
+ }
 /* TOC 当前高亮由 JS IntersectionObserver 动态添加 .toc-active 类 */
 a.toc-active {
   color: oklch(var(--un-preset-theme-colors-primary));
@@ -386,18 +386,18 @@ a.toc-active {
 .toc-links-h4::after {
   bottom: 0.15em;
 }
-@media (min-width: 1536px) {
-  .toc-links-h2, .toc-links-h3, .toc-links-h4 {
-    font-size: 0.8rem;
-    line-height: 1.2rem;
+ @media (min-width: 1536px) {
+   .toc-links-h2, .toc-links-h3, .toc-links-h4 {
+     font-size: 0.8rem;
+     line-height: 1.2rem;
     color: color-mix(in srgb, oklch(var(--un-preset-theme-colors-secondary)) 80%, transparent);
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    overflow: hidden;
+     text-overflow: ellipsis;
+     white-space: nowrap;
+     overflow: hidden;
   }
   .toc-links-h2:hover,
-  .toc-links-h3:hover,
-  .toc-links-h4:hover {
+   .toc-links-h3:hover,
+   .toc-links-h4:hover {
     color: oklch(var(--un-preset-theme-colors-primary));
     font-weight: 500;
   }
