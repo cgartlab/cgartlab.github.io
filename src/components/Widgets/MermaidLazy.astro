@@ -15,7 +15,10 @@ function setupMermaidLazy() {
 
         try {
           const mermaid = await import('mermaid')
-          mermaid.default.initialize({ startOnLoad: false })
+          mermaid.default.initialize({
+            startOnLoad: false,
+            theme: document.documentElement.classList.contains('dark') ? 'dark' : 'default',
+          })
           await mermaid.default.run({ nodes: [target] })
           target.dataset.mermaidLoaded = 'true'
         }
