@@ -18,7 +18,7 @@ const filteredHeadings = headings.filter(heading => heading.depth >= 2 && headin
 {filteredHeadings.length > 0 && (
   <div
     id="toc-container"
-    class="mb-6 uno-round-border bg-secondary/5 2xl:(fixed left-0 top-44.5 bottom-0 max-w-[min(calc(50vw-38rem),13rem)] border-none bg-secondary/0)"
+    class="mb-6 uno-round-border bg-secondary/5 2xl:(fixed left-0 top-44.5 bottom-0 max-w-[calc(50vw-38rem)] border-none bg-secondary/0)"
   >
     <div class="flex h-12 w-full items-center 2xl:(static flex c-secondary/60)">
       <span id="toc-mobile-text">
@@ -160,9 +160,86 @@ function cleanupAutoScroll() {
   fallbackObserver?.disconnect()
   fallbackObserver = null
   visibleHeadings.clear()
-  lastActiveLink = null
+lastActiveLink = null
+}
+
+function setupTOCAccordion() {
+  const tocContainer = document.getElementById('toc-container')
+  const tocHeader = tocContainer?.querySelector('div:first-child')
+  const tocContent = document.getElementById('toc-accordion-content')
+  if (!tocContainer || !tocHeader || !tocContent) return
+
+  tocContainer.classList.remove('toc-hidden')
+  tocContent.style.display = ''
+  tocContent.style.transform = ''
+  tocContent.style.opacity = ''
+  tocContent.style.transition = ''
+  tocHeader.addEventListener('click', toggleTOC)
+}
+
+function cleanupTOCAccordion() {
+  const tocHeader = document.querySelector('#toc-container > div:first-child')
+  if (tocHeader) {
+    tocHeader.removeEventListener('click', toggleTOC)
+  }
+  const container = document.getElementById('toc-container')
+  const content = document.getElementById('toc-accordion-content')
+  if (content) {
+    content.style.display = ''
+    content.style.transform = ''
+    content.style.transformOrigin = ''
+    content.style.opacity = ''
+    content.style.transition = ''
+  }
+  if (container) {
+    container.classList.remove('toc-hidden')
+  }
+}
+
+function toggleTOC() {
+  const container = document.getElementById('toc-container')
+  const content = document.getElementById('toc-accordion-content')
+  if (!container || !content) return
+
+  const isCollapsed = container.classList.contains('toc-hidden')
+
+  if (isCollapsed) {
+    container.classList.remove('toc-hidden')
+    content.style.display = ''
+    content.style.transformOrigin = 'top center'
+    content.style.transform = 'scaleY(0)'
+    content.style.opacity = '0'
+    void content.offsetHeight
+    content.style.transition = 'transform 0.25s ease-out, opacity 0.2s ease-out'
+    content.style.transform = 'scaleY(1)'
+    content.style.opacity = '1'
+    content.addEventListener('transitionend', function onExpandEnd() {
+      content.style.transition = ''
+      content.style.transform = ''
+      content.style.transformOrigin = ''
+      content.style.opacity = ''
+      content.removeEventListener('transitionend', onExpandEnd)
+    })
+  } else {
+    content.style.transition = 'transform 0.2s ease-in, opacity 0.15s ease-in'
+    content.style.transformOrigin = 'top center'
+    content.style.transform = 'scaleY(0)'
+    content.style.opacity = '0'
+    content.addEventListener('transitionend', function onCollapseEnd() {
+      container.classList.add('toc-hidden')
+      content.style.display = 'none'
+      content.style.transition = ''
+      content.style.transform = ''
+      content.style.transformOrigin = ''
+      content.style.opacity = ''
+      content.removeEventListener('transitionend', onCollapseEnd)
+    })
+  }
 }
 
 document.addEventListener('astro:page-load', setupAutoScroll)
+document.addEventListener('astro:page-load', setupTOCAccordion)
 document.addEventListener('astro:before-swap', cleanupAutoScroll)
+document.addEventListener('astro:before-swap', cleanupTOCAccordion)
+
 </script>
