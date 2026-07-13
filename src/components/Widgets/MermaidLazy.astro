@@ -1,6 +1,11 @@
 <script>
 // Lazy load Mermaid: only render when mermaid code blocks enter the viewport
 function setupMermaidLazy() {
+  // Mark raw markdown code blocks (```mermaid) by adding the mermaid class
+  document.querySelectorAll('pre code.language-mermaid').forEach((code) => {
+    code.closest('pre')?.classList.add('mermaid')
+  })
+
   const mermaidBlocks = document.querySelectorAll<HTMLElement>('pre.mermaid')
   if (mermaidBlocks.length === 0)
     return
@@ -20,6 +25,9 @@ function setupMermaidLazy() {
             theme: document.documentElement.classList.contains('dark') ? 'dark' : 'default',
           })
           await mermaid.default.run({ nodes: [target] })
+          // Hide the raw code text after successful render
+          const codeEl = target.querySelector('code')
+          if (codeEl) codeEl.style.display = 'none'
           target.dataset.mermaidLoaded = 'true'
         }
         catch (error) {
