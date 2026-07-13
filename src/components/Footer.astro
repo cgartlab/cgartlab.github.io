@@ -11,11 +11,7 @@ const year = Number(startYear) === currentYear ? startYear : `${startYear}-${cur
 
 // i18n RSS Feed Path
 const currentLang = getLangFromPath(Astro.url.pathname)
-const links = socialLinks.map(({ name, url, ...rest }) => {
-  if (name === 'RSS') {
-    return { name, url: currentLang === defaultLocale ? url : `/${currentLang}${url}`, ...rest }
-  }
-
+const links = socialLinks.filter(({ name }) => name !== 'RSS').map(({ name, url, ...rest }) => {
   if (name === 'Email') {
     return { name, url: url.startsWith('mailto:') ? url : `mailto:${url}`, ...rest }
   }
@@ -23,7 +19,7 @@ const links = socialLinks.map(({ name, url, ...rest }) => {
   return { name, url, ...rest }
 })
 
-const footerLinkClass = 'highlight-hover py-1 transition-colors after:bottom-0.35em hover:c-primary'
+const footerLinkClass = 'highlight-hover transition-colors after:bottom-0.35em hover:c-primary'
 
 // 获取总字数
 let totalWords = 0
@@ -38,48 +34,14 @@ const wordCountText = {
   'zh-tw': '累計發表字數：',
 }[currentLang] || '累计发表字数：'
 
-// 关于页面路径（带锚点）
-const aboutPath = currentLang === defaultLocale ? '/about/#关于本站' : `/${currentLang}/about/#关于本站`
-
-// 隐私政策页面路径
-const privacyPath = currentLang === defaultLocale ? '/privacy/' : `/${currentLang}/privacy/`
-
-// 服务条款页面路径
 const termsPath = currentLang === defaultLocale ? '/terms/' : `/${currentLang}/terms/`
-
-// 联系页面路径（新独立页面）
-const contactPath = currentLang === defaultLocale ? '/contact/' : `/${currentLang}/contact/`
-
 // 免责声明页面路径
 const disclaimerPath = currentLang === defaultLocale ? '/disclaimer/' : `/${currentLang}/disclaimer/`
-
-// 公众号文本
-const wechatText = {
-  'zh': '公众号',
-  'en': 'WeChat',
-  'zh-tw': '公眾號',
-}[currentLang] || '公众号'
-
-// 隐私政策文本
-const privacyText = {
-  'zh': '隐私政策',
-  'en': 'Privacy',
-  'zh-tw': '隱私政策',
-}[currentLang] || '隐私政策'
-
-// 服务条款文本
 const termsText = {
   'zh': '服务条款',
   'en': 'Terms',
   'zh-tw': '服務條款',
 }[currentLang] || '服务条款'
-
-// 联系文本
-const contactText = {
-  'zh': '联系方式',
-  'en': 'Contact',
-  'zh-tw': '聯繫方式',
-}[currentLang] || '联系方式'
 
 // 免责声明文本
 const disclaimerText = {
@@ -90,8 +52,8 @@ const disclaimerText = {
 ---
 
 <footer
-  class="mb-2 mt-2 box-content h-30 flex flex-col gap-0 text-footer font-navbar"
-  lg="uno-desktop-column fixed bottom-28"
+  class="mb-2 mt-2 box-content h-30 flex flex-col gap-1 text-footer font-navbar"
+  lg="uno-desktop-column fixed bottom-24"
 >
   <!-- 第1行：社交媒体 -->
   <p class="m-0 text-footer font-navbar">
@@ -100,7 +62,6 @@ const disclaimerText = {
         <a class={footerLinkClass} href={link.url} target="_blank" rel="noopener noreferrer">{link.name}</a>&nbsp;{index < links.length - 1 && '/'}
       </>
     ))}
-    /&nbsp;<a class={footerLinkClass} href={aboutPath}>{wechatText}</a>
   </p>
 
   <!-- 第2行：累计字数 -->
@@ -110,12 +71,10 @@ const disclaimerText = {
     </p>
   )}
 
-  <!-- 第3行：法律与联系信息 -->
+  <!-- 第3行：法律信息 -->
   <p class="m-0 text-footer font-navbar">
-    <a class={footerLinkClass} href={privacyPath}>{privacyText}</a>
-    &nbsp; / &nbsp;<a class={footerLinkClass} href={termsPath}>{termsText}</a>
+    <a class={footerLinkClass} href={termsPath}>{termsText}</a>
     &nbsp; / &nbsp;<a class={footerLinkClass} href={disclaimerPath}>{disclaimerText}</a>
-    &nbsp; / &nbsp;<a class={footerLinkClass} href={contactPath}>{contactText}</a>
   </p>
 
   <!-- 第4行：版权 -->
@@ -125,20 +84,14 @@ const disclaimerText = {
 
   <!-- 第5行：许可 -->
   <p class="m-0 text-footer font-navbar">
-    {
-      {
-        'zh': '内容采用',
-        'en': 'Content licensed under',
-        'zh-tw': '內容採用',
-      }[currentLang] || '内容采用'
-    }
+    内容统一采用
     <a
       class={footerLinkClass}
       href="https://creativecommons.org/licenses/by-nc-sa/4.0/"
       target="_blank"
       rel="noopener noreferrer"
     >
-      CC BY-NC-SA 4.0
+      CC By-nc-sa 4.0
     </a>
   </p>
 </footer>

@@ -27,7 +27,7 @@ const nextUrl = supportedLangs.length > 0
 <div
   class:list={[
     'absolute right-7.25vw top-14.6 flex gap-6 min-[823px]:max-lg:right-[calc(50vw-22rem)]',
-    'lg:(fixed bottom-17rem left-[min(calc(100vw-19rem),calc(50vw+21rem))] right-auto top-auto w-14rem)',
+    'lg:(fixed bottom-16.5rem left-[min(calc(100vw-19rem),calc(50vw+21rem))] right-auto top-auto w-14rem)',
   ]}
 >
   <button
@@ -60,7 +60,7 @@ const nextUrl = supportedLangs.length > 0
     class="aspect-square w-4 c-secondary active:scale-90 hover:c-primary"
     data-light-mode={lightMode}
     data-dark-mode={darkMode}
-    aria-label="Switch light/dark theme"
+    aria-label="Switch theme: light / dark / system"
   >
     <ThemeToggleIcon
       aria-hidden="true"
@@ -88,27 +88,36 @@ function applyThemeToDom(isDark: boolean) {
   document.dispatchEvent(new Event('theme-changed'))
 }
 
-// Apply theme triggered by the USER clicking the toggle button
-// Persists choice to localStorage and marks as manually set
-function applyThemeManual(isDark: boolean) {
-  applyThemeToDom(isDark)
-  localStorage.setItem('theme', isDark ? 'dark' : 'light')
-  localStorage.setItem('theme-manual', 'true')
+// Migration: convert old localStorage (theme + theme-manual) to 'theme-mode'
+;(function migrateThemeMode() {
+  if (!localStorage.getItem('theme-mode') && localStorage.getItem('theme-manual') === 'true') {
+    const oldTheme = localStorage.getItem('theme')
+    localStorage.setItem('theme-mode', oldTheme === 'dark' ? 'dark' : 'light')
+  }
+})()
+
+// Determine effective dark state from theme-mode
+function getEffectiveDark(): boolean {
+  const mode = localStorage.getItem('theme-mode') || 'system'
+  if (mode === 'dark') return true
+  if (mode === 'light') return false
+  return window.matchMedia('(prefers-color-scheme: dark)').matches
 }
 
-// Apply theme triggered by SYSTEM preference change
-// Updates DOM only — never sets theme-manual flag, never writes to localStorage
-function applyThemeSystem(isDark: boolean) {
-  applyThemeToDom(isDark)
-  // Keep localStorage in sync so page reloads are consistent,
-  // but do NOT set theme-manual so auto-follow remains active
-  localStorage.setItem('theme', isDark ? 'dark' : 'light')
+// Cycle theme-mode: light → dark → system → light
+function getNextThemeMode(): string {
+  const current = localStorage.getItem('theme-mode') || 'system'
+  if (current === 'light') return 'dark'
+  if (current === 'dark') return 'system'
+  return 'light'
 }
 
-// Toggle theme on user click
-function toggleTheme() {
-  const isDark = !document.documentElement.classList.contains('dark')
-  applyThemeManual(isDark)
+// Cycle theme on user click
+function cycleTheme(): void {
+  const nextMode = getNextThemeMode()
+  localStorage.setItem('theme-mode', nextMode)
+  const isDark = getEffectiveDark()
+  applyThemeToDom(isDark)
 }
 
 // Handle theme toggle click events
@@ -124,7 +133,7 @@ function handleThemeToggle(e: MouseEvent) {
   // If reduceMotion is enabled or View Transitions API unavailable, update theme directly
   if (document.documentElement.classList.contains('reduce-motion')
     || !document.startViewTransition) {
-    toggleTheme()
+    cycleTheme()
     return
   }
 
@@ -134,7 +143,7 @@ function handleThemeToggle(e: MouseEvent) {
   // Force synchronous reflow to ensure CSS variables are recalculated before snapshot capture
   const transition = document.startViewTransition(() => {
     void document.documentElement.offsetHeight
-    toggleTheme()
+    cycleTheme()
   })
 
   // Remove temporary marker after view transition
@@ -146,12 +155,9 @@ function handleThemeToggle(e: MouseEvent) {
 // Listen to system theme changes in real time
 // Only follow system if the user has NOT manually overridden the theme
 function handleSystemChange(event: MediaQueryListEvent) {
-  const isManual = localStorage.getItem('theme-manual') === 'true'
-  if (isManual) {
-    return // User has explicitly chosen a theme — respect it
-  }
-
-  applyThemeSystem(event.matches)
+  const mode = localStorage.getItem('theme-mode') || 'system'
+  if (mode !== 'system') return
+  applyThemeToDom(event.matches)
 }
 
 // 固定 matchMedia 引用，确保 addEventListener 和 removeEventListener 操作同一对象
@@ -159,6 +165,9 @@ const systemColorScheme = window.matchMedia('(prefers-color-scheme: dark)')
 
 function setupThemeListeners() {
   document.addEventListener('click', handleThemeToggle)
+  // Re-apply theme on load to correct FOUC mismatch
+  // (e.g. migrateThemeMode() may have run after FOUC)
+  applyThemeToDom(getEffectiveDark())
   systemColorScheme.addEventListener('change', handleSystemChange)
 }
 
