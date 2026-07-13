@@ -54,14 +54,10 @@ const pageImage = postSlug
   }
   else {
     // auto mode
-    var _manual = localStorage.getItem('theme-manual')
-    if (_manual === 'true') {
-      var _stored = localStorage.getItem('theme')
-      _dark = _stored === 'dark'
-    }
-    else {
-      _dark = window.matchMedia('(prefers-color-scheme: dark)').matches
-    }
+    var _mode = localStorage.getItem('theme-mode') || 'system'
+    if (_mode === 'dark') _dark = true
+    else if (_mode === 'light') _dark = false
+    else _dark = window.matchMedia('(prefers-color-scheme: dark)').matches
   }
   if (_dark) document.documentElement.classList.add('dark')
 })()
@@ -271,11 +267,9 @@ const pageImage = postSlug
     if (defaultMode === 'light') return false
 
     // auto mode
-    const manualTheme = localStorage.getItem('theme-manual')
-    if (manualTheme === 'true') {
-      const storedTheme = localStorage.getItem('theme')
-      if (storedTheme) return storedTheme === 'dark'
-    }
+    const mode = localStorage.getItem('theme-mode') || 'system'
+    if (mode === 'dark') return true
+    if (mode === 'light') return false
 
     // No manual override — always follow system preference
     return window.matchMedia('(prefers-color-scheme: dark)').matches
