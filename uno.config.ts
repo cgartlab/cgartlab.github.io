@@ -54,7 +54,7 @@ export default defineConfig({
   ],
   shortcuts: {
     'uno-desktop-column': 'absolute left-[min(calc(100vw-19rem),calc(50vw+21rem))] w-14rem',
-    'uno-decorative-line': 'mb-4.5 h-0.25 w-10 bg-secondary/25 lg:(mb-6 w-11)',
+    'uno-decorative-line': 'mb-4.5 h-0.5 w-16 bg-secondary/50 lg:(mb-6 w-11)',
     'uno-round-border': 'border border-secondary/5 rounded border-solid',
     // Semantic color shortcuts — thin aliases over presetWind3 color utilities
     // so that opacity modifiers work correctly (e.g. c-secondary/60).
@@ -70,7 +70,7 @@ export default defineConfig({
     'c-warning': 'text-warning',
     'c-caution': 'text-caution',
     // Footer: 12px, relaxed line-height
-    'text-footer': 'text-xs leading-relaxed',
+    'text-footer': 'text-xs leading-normal',
   },
   // safelist forces unocss-preset-theme to emit CSS variable definitions for
   // ALL theme colors, even those not referenced by any utility in source files.

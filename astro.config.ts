@@ -5,11 +5,12 @@ import sitemap from '@astrojs/sitemap'
 import Compress from 'astro-compress'
 import { defineConfig } from 'astro/config'
 import rehypeKatex from 'rehype-katex'
-import rehypeMermaid from 'rehype-mermaid'
+ 
 import rehypeSlug from 'rehype-slug'
 import remarkDirective from 'remark-directive'
 import remarkMath from 'remark-math'
 import UnoCSS from 'unocss/astro'
+import rehypeMermaid from 'rehype-mermaid'
 import { VitePWA } from 'vite-plugin-pwa'
 import { base, defaultLocale, themeConfig } from './src/config'
 import { langMap } from './src/i18n/config'
@@ -84,8 +85,9 @@ export default defineConfig({
       remarkGlossary,
     ],
     rehypePlugins: [
-      rehypeKatex,
-      [rehypeMermaid, { strategy: 'pre-mermaid' }],
+    rehypeKatex,
+    [rehypeMermaid, { strategy: 'pre-mermaid' }],
+      
       rehypeSlug,
       rehypeHeadingAnchor,
       rehypeImageProcessor,
