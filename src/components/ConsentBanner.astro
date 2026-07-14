@@ -122,6 +122,7 @@ const currentUI = ui[currentLang as keyof typeof ui] ?? {}
     /* All buttons share same base size; per-variant tweaks below
        compensate for the visual-weight illusion created by fill/color. */
     padding: 0.3125rem 0.75rem;
+    padding: 0.25rem 0.75rem;
     border-radius: 0.375rem;
     font-size: 0.75rem;
     font-weight: 600;
@@ -191,10 +192,10 @@ const currentUI = ui[currentLang as keyof typeof ui] ?? {}
     .consent-actions {
       gap: 0.25rem;
     }
-    .consent-btn {
-      flex: 1;
-      min-width: 0;
-      padding: 0.3125rem 0.5rem;
+   .consent-btn {
+     flex: 1;
+     min-width: 0;
+      padding: 0.25rem 0.5rem;
       font-size: 0.75rem;
       text-align: center;
     }
