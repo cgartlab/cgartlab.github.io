@@ -612,11 +612,17 @@ export const glossary: TermEntry[] = [
     aliases: ['DALL·E', 'DALLE'],
     url: 'https://openai.com/dall-e-3',
     description: 'OpenAI 发布的文本生成图像模型',
+    langs: {
+      en: { description: 'OpenAI text-to-image generation model' },
+    },
   },
   {
     id: 'tailwind-css',
     term: 'Tailwind CSS',
     url: 'https://tailwindcss.com/',
     description: 'Utility-first CSS 框架',
+    langs: {
+      en: { description: 'Utility-first CSS framework' },
+    },
   },
 ]

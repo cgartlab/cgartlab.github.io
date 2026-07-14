@@ -72,7 +72,73 @@ async function setupMediaEmbeds() {
     setupYouTubeEmbeds(),
     setupTweetEmbeds(),
     setupMermaidEmbeds(),
+    setupVideoEmbeds(),
   ])
+}
+
+// Setup video autoplay and visibility-based pausing
+// Module-level observer reference so cleanup can disconnect it
+let videoObserver: IntersectionObserver | null = null;
+
+async function setupVideoEmbeds() {
+  const videos = document.querySelectorAll('.heti video')
+  if (videos.length === 0) {
+    return
+  }
+
+  // Disconnect previous observer before creating a new one
+  if (videoObserver) {
+    videoObserver.disconnect()
+    videoObserver = null
+  }
+
+  // Ensure muted + playsinline, load source, and play once ready
+  videos.forEach((video) => {
+    const vid = video as HTMLVideoElement
+    vid.muted = true
+    if (!vid.hasAttribute('playsinline')) {
+      vid.setAttribute('playsinline', '')
+    }
+    if (!vid.preload || vid.preload === 'none') {
+      vid.preload = 'auto'
+    }
+    // Kick off loading so the video actually fetches its source
+    vid.load()
+    // Wait until enough data is buffered, then play
+    function tryPlay() {
+      vid.play().catch((e) => {
+        console.warn('[Video] autoplay attempt 1 failed:', e)
+        // Some browsers may need a second attempt after metadata
+        vid.addEventListener('canplay', () => {
+          vid.play().catch((e2) => console.warn('[Video] autoplay attempt 2 failed:', e2))
+        }, { once: true })
+      })
+    }
+    if (vid.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA) {
+      tryPlay()
+    } else {
+      vid.addEventListener('loadedmetadata', tryPlay, { once: true })
+    }
+  })
+
+  // Pause videos when they scroll out of viewport
+  if ('IntersectionObserver' in window) {
+    videoObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          const video = entry.target as HTMLVideoElement
+          if (entry.isIntersecting) {
+            video.play().catch((e) => console.warn('[Video] autoplay on scroll-in failed:', e))
+          } else {
+            video.pause()
+          }
+        })
+      },
+      { threshold: 0.3 }
+    )
+
+    videos.forEach(video => videoObserver!.observe(video))
+  }
 }
 
 // Re-render Mermaid diagrams on theme change
@@ -127,6 +193,10 @@ function setupMediaEmbedsAndListeners() {
 }
 
 function cleanupMediaEmbedsAndListeners() {
+  if (videoObserver) {
+    videoObserver.disconnect()
+    videoObserver = null
+  }
   document.removeEventListener('wheel', handleGalleryWheel)
 }
 
