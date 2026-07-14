@@ -121,7 +121,6 @@ const currentUI = ui[currentLang as keyof typeof ui] ?? {}
   .consent-btn {
     /* All buttons share same base size; per-variant tweaks below
        compensate for the visual-weight illusion created by fill/color. */
-    padding: 0.3125rem 0.75rem;
     padding: 0.25rem 0.75rem;
     border-radius: 0.375rem;
     font-size: 0.75rem;
@@ -192,9 +191,9 @@ const currentUI = ui[currentLang as keyof typeof ui] ?? {}
     .consent-actions {
       gap: 0.25rem;
     }
-   .consent-btn {
-     flex: 1;
-     min-width: 0;
+    .consent-btn {
+      flex: 1;
+      min-width: 0;
       padding: 0.25rem 0.5rem;
       font-size: 0.75rem;
       text-align: center;
@@ -234,7 +233,7 @@ const currentUI = ui[currentLang as keyof typeof ui] ?? {}
     );
     backdrop-filter: blur(40px) saturate(150%);
     -webkit-backdrop-filter: blur(40px) saturate(150%);
-    border-top: 1px solid oklch(var(--un-preset-theme-colors-primary) / 0.06);
+    border-top: 1px solid oklch(var(--un-preset-theme-colors-secondary) / 0.06);
     box-shadow:
       0 -4px 20px oklch(var(--un-preset-theme-colors-primary) / 0.04),
       0 -1px 3px oklch(var(--un-preset-theme-colors-primary) / 0.02);
