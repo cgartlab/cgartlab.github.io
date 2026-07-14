@@ -87,7 +87,7 @@ for (const entry of sorted) {
               </li>
             )
           })}
-        </dl>
+        </ul>
       </section>
     ))}
     </div>
@@ -255,9 +255,7 @@ document.addEventListener('astro:page-load', () => {
   transition: color 0.15s;
 }
 
-.term-item:hover .term-name {
-  color: oklch(var(--un-preset-theme-colors-primary));
-}
+
 
 .term-item a:hover {
   text-decoration: underline;
