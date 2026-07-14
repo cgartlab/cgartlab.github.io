@@ -67,11 +67,11 @@ for (const entry of sorted) {
     {groups.map(group => (
       <section class="letter-section">
         <h2 id={`letter-${group.letter}`} class="letter-header">{group.letter}</h2>
-        <dl class="term-list">
+        <ul class="term-list">
           {group.entries.map(entry => {
             const url = resolveLinkUrl(entry, currentLang)
             return (
-              <div class="term-item">
+              <li class="term-item">
                 <a
                   href={url}
                   target="_blank"
@@ -84,7 +84,7 @@ for (const entry of sorted) {
                   </span>
                   <span class="term-desc">{resolveDescription(entry, currentLang)}</span>
                 </a>
-              </div>
+              </li>
             )
           })}
         </dl>
@@ -215,19 +215,6 @@ document.addEventListener('astro:page-load', () => {
   }
 }
 
-/* Mobile < 640px */
-@media (max-width: 639px) {
-  .letter-nav {
-    gap: 0;
-  }
-
-  .letter-jump {
-    width: 1.5rem;
-    height: 1.5rem;
-    font-size: 0.7rem;
-  }
-}
-
 /* ─── Letter section headers ─── */
 .letter-section {
   scroll-margin-top: 3rem;
@@ -270,6 +257,10 @@ document.addEventListener('astro:page-load', () => {
 
 .term-item:hover .term-name {
   color: oklch(var(--un-preset-theme-colors-primary));
+}
+
+.term-item a:hover {
+  text-decoration: underline;
 }
 
 .term-name {
