@@ -135,8 +135,7 @@ document.addEventListener('astro:page-load', () => {
 
 .glossary-subtitle {
   font-size: 0.9rem;
-  color: oklch(var(--un-preset-theme-colors-secondary));
-  opacity: 0.7;
+  color: color-mix(in srgb, oklch(var(--un-preset-theme-colors-secondary)) 70%, transparent);
   margin: 0 0 1.5rem;
 }
 
@@ -272,10 +271,8 @@ document.addEventListener('astro:page-load', () => {
 
 .term-desc {
   font-size: 0.875rem;
-  color: oklch(var(--un-preset-theme-colors-secondary));
-  opacity: 0.75;
+  color: color-mix(in srgb, oklch(var(--un-preset-theme-colors-secondary)) 75%, transparent);
   line-height: 1.4;
-  transition: opacity 0.15s;
 }
 
 @media (max-width: 640px) {
