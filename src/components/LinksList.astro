@@ -96,8 +96,7 @@ const { glossaryTitle, glossaryDesc, glossaryUrl, glossaryLinkText } = Astro.pro
 
 .glossary-desc {
   font-size: 0.9rem;
-  color: oklch(var(--un-preset-theme-colors-secondary));
-  opacity: 0.75;
+  color: color-mix(in srgb, oklch(var(--un-preset-theme-colors-secondary)) 70%, transparent);
   margin: 0 0 1rem;
   line-height: 1.5;
 }
