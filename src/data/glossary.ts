@@ -16,6 +16,10 @@ import type { Language } from '@/i18n/config'
 export interface TermLangOverride {
   /** 该语言下额外的匹配形式（不影响 term 主形式） */
   aliases?: string[]
+  /** 该语言下的显示名称 */
+  term?: string
+  /** 该语言下的翻译描述 */
+  description?: string
   /** 该语言下指向的 wikiPath；不填则回退到顶层 wikiPath */
   wikiPath?: string
   /** 自定义链接（优先级高于 wikiPath） */
@@ -608,11 +612,17 @@ export const glossary: TermEntry[] = [
     aliases: ['DALL·E', 'DALLE'],
     url: 'https://openai.com/dall-e-3',
     description: 'OpenAI 发布的文本生成图像模型',
+    langs: {
+      en: { description: 'OpenAI text-to-image generation model' },
+    },
   },
   {
     id: 'tailwind-css',
     term: 'Tailwind CSS',
     url: 'https://tailwindcss.com/',
     description: 'Utility-first CSS 框架',
+    langs: {
+      en: { description: 'Utility-first CSS framework' },
+    },
   },
 ]
