@@ -24,7 +24,7 @@ export const ui = {
     contributionYear: '{n} contributions in the past year',
     contributionUnavailable: 'Contribution data unavailable',
     glossaryTitle: 'Glossary',
-    glossaryDesc: 'This glossary collects technical terms that appear across our articles. When a term first appears in a non-weekly post, it is automatically linked to its Wikipedia entry for quick reference. The glossary is updated regularly and currently contains {n} terms.',
+    glossaryDesc: 'This glossary collects specialized technical terms that appear in articles on this site. When a term first appears in a non-weekly post, it is automatically linked to the corresponding Wikipedia entry, allowing readers to quickly understand its background. The glossary is continuously updated and currently contains {n} terms.',
     glossaryLetterNav: 'Alphabetical Index',
     glossaryViewAll: 'View Full Glossary →',
     consentTitle: 'Cookie Consent',
