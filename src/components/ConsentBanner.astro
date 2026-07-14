@@ -6,7 +6,7 @@ const { currentLang } = getPageInfo(Astro.url.pathname)
 const currentUI = ui[currentLang as keyof typeof ui] ?? {}
 ---
 
-<div id="consent-banner" class="consent-banner" aria-label={currentUI.consentTitle || 'Cookie Consent'} aria-describedby="consent-description" aria-hidden="true">
+<div id="consent-banner" class="consent-banner" role="region" aria-label={currentUI.consentTitle || 'Cookie Consent'} aria-describedby="consent-description" aria-hidden="true">
   <div class="consent-bar">
     <div class="consent-bar-inner">
       <div class="consent-text">
@@ -96,9 +96,9 @@ const currentUI = ui[currentLang as keyof typeof ui] ?? {}
   }
 
   .consent-title {
-    font-size: 0.8125rem;
+    font-size: 0.75rem;
     font-weight: 700;
-    margin: 0 0 0.0625rem;
+    margin: 0;
     letter-spacing: 0.01em;
     color: oklch(var(--un-preset-theme-colors-primary));
   }
@@ -114,7 +114,7 @@ const currentUI = ui[currentLang as keyof typeof ui] ?? {}
   .consent-actions {
     display: flex;
     align-items: center;
-    gap: 0.375rem;
+    gap: 0.25rem;
     flex-shrink: 0;
   }
 
@@ -179,7 +179,7 @@ const currentUI = ui[currentLang as keyof typeof ui] ?? {}
   @media (max-width: 768px) {
     .consent-bar-inner {
       flex-direction: column;
-      gap: 0.625rem;
+      gap: 0.5rem;
       align-items: stretch;
     }
     .consent-title {
@@ -189,13 +189,13 @@ const currentUI = ui[currentLang as keyof typeof ui] ?? {}
       font-size: 0.625rem;
     }
     .consent-actions {
-      gap: 0.3125rem;
+      gap: 0.25rem;
     }
     .consent-btn {
       flex: 1;
       min-width: 0;
       padding: 0.3125rem 0.5rem;
-      font-size: 0.6875rem;
+      font-size: 0.75rem;
       text-align: center;
     }
   }
@@ -262,6 +262,9 @@ const currentUI = ui[currentLang as keyof typeof ui] ?? {}
     if (!banner || banner.classList.contains('visible')) return
     banner.classList.add('visible')
     banner.setAttribute('aria-hidden', 'false')
+    // Move focus to the first button for keyboard users (WCAG 2.4.3)
+    var firstBtn = document.getElementById('consent-reject')
+    if (firstBtn) firstBtn.focus()
   }
 
   function hideBanner(banner) {
