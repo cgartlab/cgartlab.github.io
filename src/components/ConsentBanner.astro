@@ -6,404 +6,308 @@ const { currentLang } = getPageInfo(Astro.url.pathname)
 const currentUI = ui[currentLang as keyof typeof ui] ?? {}
 ---
 
-<!--
-  consent-banner-overlay: fixed full-screen wrapper, handles backdrop + centering
-  consent-backdrop:      click-to-dismiss semi-transparent backdrop with blur
-  consent-container:     flex centering container
-  consent-card:          the actual modal card with frosted glass, animation
--->
-<div id="consent-banner" class="consent-banner" role="dialog" aria-modal="true" aria-label={currentUI.consentTitle || 'Cookie Consent'} aria-describedby="consent-description" aria-hidden="true">
-  <div class="consent-backdrop" id="consent-backdrop"></div>
-  <div class="consent-container">
-    <div class="consent-card">
-<h2 class="consent-title">{currentUI.consentTitle || 'Cookie Consent'}</h2>
-       <p id="consent-description" class="consent-description">{currentUI.consentDescription || 'We use cookies to analyze site traffic and improve your experience. Your data is only collected with your explicit consent.'}</p>
-       <div class="consent-buttons">
-         <button id="consent-reject" class="consent-btn consent-btn-reject">
-           {currentUI.consentReject || 'Reject All'}
-         </button>
-         <button id="consent-functional" class="consent-btn consent-btn-functional">
-           {currentUI.consentFunctional || 'Functional Only'}
-         </button>
-         <button id="consent-accept" class="consent-btn consent-btn-accept">
-           {currentUI.consentAccept || 'Accept All'}
-         </button>
-       </div>
+<div id="consent-banner" class="consent-banner" aria-label={currentUI.consentTitle || 'Cookie Consent'} aria-describedby="consent-description" aria-hidden="true">
+  <div class="consent-bar">
+    <div class="consent-bar-inner">
+      <div class="consent-text">
+        <h2 class="consent-title">{currentUI.consentTitle || 'Cookie Consent'}</h2>
+        <p id="consent-description" class="consent-description">{currentUI.consentDescription || 'We use cookies to analyze site traffic and improve your experience.'}</p>
+      </div>
+      <div class="consent-actions">
+        <button id="consent-reject" class="consent-btn consent-btn-ghost">{currentUI.consentReject || 'Reject All'}</button>
+        <button id="consent-functional" class="consent-btn consent-btn-outline">{currentUI.consentFunctional || 'Functional Only'}</button>
+        <button id="consent-accept" class="consent-btn consent-btn-primary">{currentUI.consentAccept || 'Accept All'}</button>
+      </div>
     </div>
   </div>
 </div>
 
 <style>
-  /* ── overlay wrapper ─────────────────────────────── */
+  /* ── bottom banner wrapper ──────────────────────────── */
   .consent-banner {
     position: fixed;
-    inset: 0;
     z-index: 9000;
+    bottom: 0;
+    left: 0;
+    right: 0;
     visibility: hidden;
-    opacity: 0;
-    transition: opacity 0.35s ease-out, visibility 0.35s ease-out;
+    transform: translateY(100%);
+    transition:
+      transform 0.5s cubic-bezier(0.19, 1, 0.22, 1),
+      visibility 0s 0.5s;
   }
 
   .consent-banner.visible {
     visibility: visible;
-    opacity: 1;
+    transform: translateY(0);
+    transition:
+      transform 0.5s cubic-bezier(0.19, 1, 0.22, 1),
+      visibility 0s;
   }
 
-  /* ── backdrop ─────────────────────────────────────── */
-  .consent-backdrop {
-    position: absolute;
-    inset: 0;
-    background-color: rgba(0, 0, 0, 0.35);
-    backdrop-filter: blur(6px) saturate(120%);
-    -webkit-backdrop-filter: blur(6px) saturate(120%);
-  }
-
-  /* ── flex centering container ─────────────────────── */
-  .consent-container {
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-    padding: 1.5rem;
-  }
-
-  /* ── modal card ───────────────────────────────────── */
-  .consent-card {
-    width: 100%;
-    max-width: 28rem;
-    padding: 2rem 2rem 1.75rem;
-    border-radius: 1.25rem;
-    text-align: center;
-
-    /* frosted glass – light */
+  /* ── frosted glass bar (square edges, semi-transparent) ── */
+  .consent-bar {
+    /* Horizontal spacing matches page wrapper:
+       desktop: mx-[max(5.75rem,calc(50vw-34.25rem))]
+       mobile:  x-[min(7.25vw,3.731rem)]
+       (padding on the bar keeps inner content in exact page-wrapper position) */
+    padding: 0.5rem max(5.75rem, calc(50vw - 34.25rem));
+    border-radius: 0;
+    /* Frosted glass matching .search-box: gradient + backdrop-filter blur.
+       backdrop-filter is the banner's own glass surface, not a page overlay. */
     background: linear-gradient(
       135deg,
-      rgba(255, 255, 255, 0.82) 0%,
-      rgba(255, 255, 250, 0.68) 60%,
-      rgba(255, 255, 245, 0.58) 100%
+      color-mix(in srgb, oklch(var(--un-preset-theme-colors-background)) 92%, transparent) 0%,
+      color-mix(in srgb, oklch(var(--un-preset-theme-colors-background)) 82%, transparent) 50%,
+      color-mix(in srgb, oklch(var(--un-preset-theme-colors-background)) 72%, transparent) 100%
     );
-    backdrop-filter: blur(32px) saturate(180%);
-    -webkit-backdrop-filter: blur(32px) saturate(180%);
-    border: 1px solid rgba(255, 255, 255, 0.4);
-
+    backdrop-filter: blur(40px) saturate(200%);
+    -webkit-backdrop-filter: blur(40px) saturate(200%);
+    border-top: 1px solid oklch(var(--un-preset-theme-colors-secondary) / 0.10);
     box-shadow:
-      0 24px 64px rgba(0, 0, 0, 0.12),
-      0 8px 24px rgba(0, 0, 0, 0.06),
-      inset 0 1px 0 rgba(255, 255, 255, 0.7);
-
-    transform: scale(0.92);
-    opacity: 0;
-    transition:
-      transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1),
-      opacity 0.35s ease-out;
+      0 -4px 20px oklch(var(--un-preset-theme-colors-primary) / 0.05),
+      0 -1px 3px oklch(var(--un-preset-theme-colors-primary) / 0.03);
+    overflow: hidden;
   }
 
-  .consent-banner.visible .consent-card {
-    transform: scale(1);
-    opacity: 1;
+  /* ── inner content: width follows page responsive layout ── */
+  .consent-bar-inner {
+    /* Block-level default fills parent content width; max-width constrains
+       it so text/buttons don't stretch wider than the page wrapper does. */
+    max-width: min(calc(75vw - 16rem), 44rem);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
   }
 
-  /* ── typography ───────────────────────────────────── */
+  @media (max-width: 1023px) {
+    .consent-bar {
+      padding: 0.5rem min(7.25vw, 3.731rem);
+    }
+    .consent-bar-inner {
+      max-width: 205.848rem;
+    }
+  }
+
+  /* ── text ───────────────────────────────────────────── */
+  .consent-text {
+    flex: 1;
+    min-width: 0;
+  }
+
   .consent-title {
-    font-size: 1.125rem;
+    font-size: 0.8125rem;
     font-weight: 700;
-    margin-bottom: 0.625rem;
+    margin: 0 0 0.0625rem;
     letter-spacing: 0.01em;
     color: oklch(var(--un-preset-theme-colors-primary));
   }
 
   .consent-description {
-    font-size: 0.875rem;
-    color: oklch(var(--un-preset-theme-colors-secondary) / 0.75);
-    margin-bottom: 1.25rem;
-    line-height: 1.6;
-    max-width: 24rem;
-    margin-inline: auto;
+    font-size: 0.625rem;
+    color: oklch(var(--un-preset-theme-colors-secondary) / 0.7);
+    line-height: 1.4;
+    margin: 0;
   }
 
-  /* ── buttons ──────────────────────────────────────── */
-  .consent-buttons {
+  /* ── actions ────────────────────────────────────────── */
+  .consent-actions {
     display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
+    align-items: center;
+    gap: 0.375rem;
+    flex-shrink: 0;
   }
 
   .consent-btn {
-    width: 100%;
-    padding: 0.625rem 1rem;
-    border-radius: 0.625rem;
-    font-size: 0.875rem;
+    /* All buttons share same base size; per-variant tweaks below
+       compensate for the visual-weight illusion created by fill/color. */
+    padding: 0.3125rem 0.75rem;
+    border-radius: 0.375rem;
+    font-size: 0.78125rem;
     font-weight: 600;
     cursor: pointer;
+    white-space: nowrap;
     transition:
       background-color 0.2s ease,
       color 0.2s ease,
-      transform 0.12s ease,
       box-shadow 0.2s ease;
     border: 1px solid transparent;
     letter-spacing: 0.01em;
+    line-height: 1.4;
   }
 
   .consent-btn:active {
     transform: scale(0.97);
   }
 
-  /* Reject – ghost */
-  .consent-btn-reject {
+  .consent-btn-ghost {
     background: transparent;
     color: oklch(var(--un-preset-theme-colors-secondary) / 0.55);
-    border-color: oklch(var(--un-preset-theme-colors-secondary) / 0.15);
+    border-color: oklch(var(--un-preset-theme-colors-secondary) / 0.18);
   }
-
-  .consent-btn-reject:hover {
-    background: color-mix(in srgb, oklch(var(--un-preset-theme-colors-secondary)) 6%, transparent);
+  .consent-btn-ghost:hover {
+    background: color-mix(in srgb, oklch(var(--un-preset-theme-colors-secondary)) 7%, transparent);
     color: oklch(var(--un-preset-theme-colors-secondary) / 0.85);
   }
 
-  /* Functional – outlined */
-  .consent-btn-functional {
-    background: color-mix(in srgb, oklch(var(--un-preset-theme-colors-secondary)) 8%, transparent);
+  .consent-btn-outline {
+    background: color-mix(in srgb, oklch(var(--un-preset-theme-colors-secondary)) 12%, transparent);
     color: oklch(var(--un-preset-theme-colors-secondary));
     border-color: oklch(var(--un-preset-theme-colors-secondary) / 0.2);
   }
-
-  .consent-btn-functional:hover {
-    background: oklch(var(--un-preset-theme-colors-secondary) / 0.15);
+  .consent-btn-outline:hover {
+    background: oklch(var(--un-preset-theme-colors-secondary) / 0.16);
   }
 
-  /* Accept – filled primary */
-  .consent-btn-accept {
+  .consent-btn-primary {
     background: oklch(var(--un-preset-theme-colors-primary));
     color: oklch(var(--un-preset-theme-colors-background));
     border-color: oklch(var(--un-preset-theme-colors-primary));
-    box-shadow: 0 2px 8px oklch(var(--un-preset-theme-colors-primary) / 0.2);
+    box-shadow: 0 1px 4px oklch(var(--un-preset-theme-colors-primary) / 0.15);
+  }
+  .consent-btn-primary:hover {
+    background: color-mix(in srgb, oklch(var(--un-preset-theme-colors-primary)) 72%, oklch(var(--un-preset-theme-colors-background)));
+    box-shadow: 0 2px 8px oklch(var(--un-preset-theme-colors-primary) / 0.25);
   }
 
-  .consent-btn-accept:hover {
-    background: color-mix(in srgb, oklch(var(--un-preset-theme-colors-primary)) 70%, oklch(var(--un-preset-theme-colors-background)));
-    box-shadow: 0 4px 14px oklch(var(--un-preset-theme-colors-primary) / 0.3);
-  }
-
-  /* ── focus indicator ──────────────────────────────── */
   .consent-btn:focus-visible {
     outline: 2px solid oklch(var(--un-preset-theme-colors-highlight) / 0.6);
     outline-offset: 2px;
   }
 
+  /* ── responsive ─────────────────────────────────────── */
+  @media (max-width: 768px) {
+    .consent-bar-inner {
+      flex-direction: column;
+      gap: 0.625rem;
+      align-items: stretch;
+    }
+    .consent-title {
+      font-size: 0.75rem;
+    }
+    .consent-description {
+      font-size: 0.625rem;
+    }
+    .consent-actions {
+      gap: 0.3125rem;
+    }
+    .consent-btn {
+      flex: 1;
+      min-width: 0;
+      padding: 0.3125rem 0.5rem;
+      font-size: 0.71875rem;
+      text-align: center;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .consent-actions {
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+    .consent-btn {
+      width: 100%;
+    }
+  }
+
   /* ── reduced motion ────────────────────────────────── */
   @media (prefers-reduced-motion: reduce) {
     .consent-banner,
-    .consent-banner *,
-    .consent-banner.visible .consent-card {
+    .consent-banner * {
       transition-duration: 0.01ms !important;
-      animation-duration: 0.01ms !important;
     }
   }
 
-  /* 站点通过 JS 在 <html> 上设置 .reduce-motion 类时同样抑制动画 */
   :global(html.reduce-motion) .consent-banner,
-  :global(html.reduce-motion) .consent-banner *,
-  :global(html.reduce-motion) .consent-banner.visible .consent-card {
+  :global(html.reduce-motion) .consent-banner * {
     transition-duration: 0.01ms !important;
-    animation-duration: 0.01ms !important;
   }
 
-  /* ── mobile tweaks ────────────────────────────────── */
-  @media (max-width: 640px) {
-    .consent-container {
-      padding: 1rem;
-    }
-
-    .consent-card {
-      padding: 1.5rem 1.25rem 1.5rem;
-      border-radius: 1rem;
-    }
-
-    .consent-title {
-      font-size: 1rem;
-    }
-
-    .consent-description {
-      font-size: 0.8125rem;
-    }
-  }
-
-  /* ── dark mode frosted glass ─────────────────────── */
-  html.dark .consent-card {
-    /* Darker glass gradient */
+  /* ── dark mode ──────────────────────────────────────── */
+  html.dark .consent-bar {
     background: linear-gradient(
       135deg,
-      rgba(30, 30, 35, 0.88) 0%,
-      rgba(35, 35, 42, 0.78) 60%,
-      rgba(40, 40, 48, 0.68) 100%
+      color-mix(in srgb, oklch(var(--un-preset-theme-colors-background)) 62%, transparent) 0%,
+      color-mix(in srgb, oklch(var(--un-preset-theme-colors-background)) 48%, transparent) 50%,
+      color-mix(in srgb, oklch(var(--un-preset-theme-colors-background)) 36%, transparent) 100%
     );
-    border: 1px solid rgba(255, 255, 255, 0.07);
-
-    /* Deeper shadows for dark mode */
+    backdrop-filter: blur(40px) saturate(150%);
+    -webkit-backdrop-filter: blur(40px) saturate(150%);
+    border-top: 1px solid oklch(var(--un-preset-theme-colors-primary) / 0.06);
     box-shadow:
-      0 24px 64px rgba(0, 0, 0, 0.55),
-      0 8px 24px rgba(0, 0, 0, 0.35),
-      inset 0 1px 0 rgba(255, 255, 255, 0.04);
-  }
-
-  /* Dark mode backdrop - slightly darker for better contrast */
-  html.dark .consent-backdrop {
-    background-color: rgba(0, 0, 0, 0.5);
+      0 -4px 20px oklch(var(--un-preset-theme-colors-primary) / 0.04),
+      0 -1px 3px oklch(var(--un-preset-theme-colors-primary) / 0.02);
   }
 </style>
 
 <script is:inline>
 (function () {
+  'use strict'
+
   var STORAGE_KEY = 'consent-preference'
-  var banner = document.getElementById('consent-banner')
 
-  /** Manage body scroll lock while modal is open */
-  function lockBodyScroll(lock) {
-    document.body.classList.toggle('scroll-lock', lock)
+  function loadPref() {
+    try { return localStorage.getItem(STORAGE_KEY) }
+    catch { return null }
   }
 
-  function showBanner() {
-    if (banner) {
-      banner.classList.add('visible')
-      banner.setAttribute('aria-hidden', 'false')
-      lockBodyScroll(true)
-      trapFocus(banner)
-    }
+  function savePref(pref) {
+    try { localStorage.setItem(STORAGE_KEY, pref) }
+    catch { /* private browsing */ }
   }
 
-  function hideBanner() {
-    if (banner) {
-      banner.classList.remove('visible')
-      banner.setAttribute('aria-hidden', 'true')
-      lockBodyScroll(false)
-      releaseFocus()
-    }
+  function getBanner() { return document.getElementById('consent-banner') }
+
+  function showBanner(banner) {
+    if (!banner || banner.classList.contains('visible')) return
+    banner.classList.add('visible')
+    banner.setAttribute('aria-hidden', 'false')
+  }
+
+  function hideBanner(banner) {
+    if (!banner || !banner.classList.contains('visible')) return
+    banner.classList.remove('visible')
+    banner.setAttribute('aria-hidden', 'true')
   }
 
   function setPreference(pref) {
-    try {
-      localStorage.setItem(STORAGE_KEY, pref)
-    }
-    catch (e) {
-      /* localStorage may throw in private browsing / storage-quota contexts */
-    }
-    hideBanner()
-    if (pref === 'accepted') {
-      window.__CONSENT_STATUS = 'accepted'
-    }
-    else if (pref === 'functional') {
-      window.__CONSENT_STATUS = 'functional'
-    }
-    else {
-      window.__CONSENT_STATUS = 'rejected'
+    savePref(pref)
+    window.__CONSENT_STATUS = pref
+    hideBanner(getBanner())
+  }
+
+  function bindButtons() {
+    var ids = ['consent-reject', 'consent-functional', 'consent-accept']
+    var vals = ['rejected', 'functional', 'accepted']
+    for (var i = 0; i < 3; i++) {
+      var btn = document.getElementById(ids[i])
+      if (btn) btn.addEventListener('click', setPreference.bind(null, vals[i]))
     }
   }
 
-  /* ── Focus trap ───────────────────────────────────── */
-  var previousActiveElement = null
+  function initBanner() {
+    var banner = getBanner()
+    if (!banner) return
 
-  function trapFocus(container) {
-    if (!container) return
-    previousActiveElement = document.activeElement
-
-    var focusable = container.querySelectorAll(
-      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
-    )
-    var first = focusable[0]
-    var last  = focusable[focusable.length - 1]
-
-    if (first) first.focus()
-
-    function handler(e) {
-      if (e.key !== 'Tab') return
-      var current = document.activeElement
-      if (e.shiftKey) {
-        if (current === first) {
-          e.preventDefault()
-          if (last) last.focus()
-        }
-      }
-      else {
-        if (current === last) {
-          e.preventDefault()
-          if (first) first.focus()
-        }
-      }
+    var pref = loadPref()
+    if (!pref) {
+      showBanner(banner)
+    } else {
+      window.__CONSENT_STATUS = pref
     }
-
-    container._focusTrapHandler = handler
-    document.addEventListener('keydown', handler)
+    bindButtons()
   }
 
-  function releaseFocus() {
-    if (banner && banner._focusTrapHandler) {
-      document.removeEventListener('keydown', banner._focusTrapHandler)
-      delete banner._focusTrapHandler
-    }
-    if (previousActiveElement && previousActiveElement.focus) {
-      previousActiveElement.focus()
-      previousActiveElement = null
-    }
-  }
-
-  /* ── backdrop click dismiss (reject is the safe fallback) ── */
-  function setupBackdropDismiss() {
-    var backdrop = document.getElementById('consent-backdrop')
-    if (backdrop) {
-      backdrop.addEventListener('click', function () {
-        setPreference('rejected')
-      })
-    }
-  }
-
-  /* ── keyboard: Escape → reject ────────────────────── */
-  function setupKeyboardDismiss() {
+  if (!window.__CONSENT_GLOBAL_SETUP) {
+    window.__CONSENT_GLOBAL_SETUP = true
     document.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape' && banner && banner.classList.contains('visible')) {
-        setPreference('rejected')
+      if (e.key === 'Escape') {
+        var b = getBanner()
+        if (b && b.classList.contains('visible')) setPreference('rejected')
       }
     })
   }
 
-  /* ── init ──────────────────────────────────────────── */
-  function init() {
-    var pref
-    try {
-      pref = localStorage.getItem(STORAGE_KEY)
-    }
-    catch {
-      pref = null
-    }
-
-    if (!pref) {
-      showBanner()
-    }
-    else if (pref === 'accepted') {
-      window.__CONSENT_STATUS = 'accepted'
-    }
-    else if (pref === 'functional') {
-      window.__CONSENT_STATUS = 'functional'
-    }
-    else {
-      window.__CONSENT_STATUS = 'rejected'
-    }
-
-    var rejectBtn     = document.getElementById('consent-reject')
-    var functionalBtn = document.getElementById('consent-functional')
-    var acceptBtn     = document.getElementById('consent-accept')
-
-    if (rejectBtn)
-      rejectBtn.addEventListener('click', function () { setPreference('rejected') })
-    if (functionalBtn)
-      functionalBtn.addEventListener('click', function () { setPreference('functional') })
-    if (acceptBtn)
-      acceptBtn.addEventListener('click', function () { setPreference('accepted') })
-
-    setupBackdropDismiss()
-    setupKeyboardDismiss()
-  }
-
-  init()
+  initBanner()
 })()
 </script>
