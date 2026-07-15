@@ -56,6 +56,8 @@ for (const entry of sorted) {
     <div class="glossary-content">
     <h1 class="glossary-title">{t.glossaryTitle}</h1>
     <p class="glossary-subtitle">{t.glossaryDesc.replace('{n}', String(glossary.length))}</p>
+    <p class="glossary-intro">在一生的漫长学习和与他人讨论中，对概念的准确定义和理解无疑是建立一切的基本前提。此为制作这个页面和功能的出发点，另一方面它一定程度上也在反照出我自己的认知边界、擅长领域和兴趣爱好。愿你用的开心愉悦。</p>
+    <p class="glossary-feedback" set:html={t.glossaryFeedback}></p>
 
   <nav class="letter-nav" aria-label={t.glossaryLetterNav}>
     {groups.map(g => (
@@ -230,6 +232,25 @@ document.addEventListener('astro:page-load', () => {
   font-weight: 700;
   color: oklch(var(--un-preset-theme-colors-primary));
   margin: 0 0 0.25rem;
+}
+
+.glossary-intro {
+  font-size: 0.85rem;
+  color: color-mix(in srgb, oklch(var(--un-preset-theme-colors-secondary)) 65%, transparent);
+  line-height: 1.7;
+  margin: 0.25rem 0 1rem;
+}
+
+.glossary-feedback {
+  font-size: 0.85rem;
+  color: color-mix(in srgb, oklch(var(--un-preset-theme-colors-secondary)) 65%, transparent);
+  margin: 0 0 2rem;
+}
+
+.glossary-feedback a {
+  color: oklch(var(--un-preset-theme-colors-primary));
+  text-decoration: underline;
+  text-underline-offset: 2px;
 }
 
 .glossary-subtitle {
