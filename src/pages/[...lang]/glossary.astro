@@ -53,6 +53,7 @@ for (const entry of sorted) {
   <div class="uno-decorative-line" />
 
   <div class="glossary-page">
+    <div class="glossary-content">
     <h1 class="glossary-title">{t.glossaryTitle}</h1>
     <p class="glossary-subtitle">{t.glossaryDesc.replace('{n}', String(glossary.length))}</p>
 
@@ -93,9 +94,6 @@ for (const entry of sorted) {
     ))}
     </div>
   </div>
-
-  <!-- Letter Jump Nav: phone-contacts style on desktop -->
-  
 </Layout>
 
 <script>
@@ -117,18 +115,21 @@ document.addEventListener('astro:page-load', () => {
 
   function updateActiveLink() {
     if (clickPending || !nav) return;
-    const navHeight = nav.getBoundingClientRect().height + 8;
+    // Desktop: nav is sticky at top → use nav height as offset
+    // Mobile: nav is fixed on right → use scroll-margin-top (5rem ≈ 80px) + tolerance
+    const navStyle = window.getComputedStyle(nav);
+    const offset = navStyle.position === 'sticky'
+      ? Math.max(nav.getBoundingClientRect().height + 8, 84)
+      : 84;
     let current = sections[0]?.id || null;
     for (const section of sections) {
-      if (section.getBoundingClientRect().top <= navHeight) {
+      if (section.getBoundingClientRect().top <= offset) {
         current = section.id;
       }
     }
     if (!current) return;
 
     setActive(current);
-
-
   }
 
   // Initial update
@@ -347,4 +348,41 @@ document.addEventListener('astro:page-load', () => {
     min-width: auto;
   }
 }
+
+@media (max-width: 1023px) {
+  .letter-nav {
+    position: fixed;
+    right: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    padding: 0.5rem;
+    width: auto;
+    height: fit-content;
+    background: color-mix(in srgb, oklch(var(--un-preset-theme-colors-background)) 85%, transparent);
+    border-radius: 0.5rem;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid color-mix(in srgb, var(--un-preset-theme-colors-secondary) 10%, transparent);
+    overflow: visible;
+    scrollbar-width: none;
+    flex-wrap: nowrap;
+    border-bottom: none;
+    margin-bottom: 0;
+  }
+
+  .letter-nav::-webkit-scrollbar {
+    display: none;
+  }
+
+  .letter-jump {
+    width: 1.75rem;
+    height: 1.75rem;
+    font-size: 0.7rem;
+  }
+}
+
 </style>
