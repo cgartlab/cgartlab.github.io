@@ -105,7 +105,8 @@ document.addEventListener('astro:page-load', () => {
   if (!sections.length || !links.length) return;
 
   function updateActiveLink() {
-    const navHeight = 80;
+    const nav = document.querySelector('.letter-nav');
+    const navHeight = nav ? nav.getBoundingClientRect().height + 8 : 60;
     let current = sections[0]?.id || null;
     for (const section of sections) {
       if (section.getBoundingClientRect().top <= navHeight) {
