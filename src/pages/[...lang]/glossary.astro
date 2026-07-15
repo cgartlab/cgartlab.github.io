@@ -102,41 +102,52 @@ for (const entry of sorted) {
 document.addEventListener('astro:page-load', () => {
   const sections = document.querySelectorAll('.letter-section');
   const links = document.querySelectorAll('.letter-jump');
-  if (!sections.length || !links.length) return;
+  const nav = document.querySelector('.letter-nav');
+  
+  if (!sections.length || !links.length || !nav) return;
 
-  let prevActiveId = '';
+  let prevLetter = '';
+
+  function setActive(id = "") {
+    if (!nav) return;
+    links.forEach(link => link.classList.remove('active'));
+    const match = nav.querySelector('[href="#' + id + '"]');
+    if (match) match.classList.add('active');
+  }
 
   function updateActiveLink() {
-    const nav = document.querySelector('.letter-nav');
-    const navHeight = nav ? nav.getBoundingClientRect().height + 8 : 60;
+    if (!nav) return;
+    const navHeight = nav.getBoundingClientRect().height + 8;
     let current = sections[0]?.id || null;
     for (const section of sections) {
       if (section.getBoundingClientRect().top <= navHeight) {
         current = section.id;
       }
     }
-    if (current) {
-      links.forEach(link => {
-        link.classList.toggle('active', link.getAttribute('href') === '#' + current);
-      });
+    if (!current) return;
 
-      if (current !== prevActiveId) {
-        prevActiveId = current;
-        const activeLink = document.querySelector('.letter-jump.active');
-        if (activeLink) {
-          activeLink.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+    setActive(current);
+
+    // Scroll nav strip to center the active letter (only when it changes)
+    if (current !== prevLetter) {
+      prevLetter = current;
+      const activeLink = nav.querySelector('.letter-jump.active');
+      if (activeLink) {
+        const linkRect = activeLink.getBoundingClientRect();
+        const navRect = nav.getBoundingClientRect();
+        const linkLeft = linkRect.left - navRect.left + nav.scrollLeft;
+        const linkRight = linkLeft + linkRect.width;
+        if (linkLeft < nav.scrollLeft || linkRight > nav.scrollLeft + nav.getBoundingClientRect().width + 4) {
+          nav.scrollLeft = linkLeft + linkRect.width / 2 - nav.getBoundingClientRect().width / 2;
         }
       }
     }
   }
 
+  // Initial update
   updateActiveLink();
 
-  // Update after hash-click scroll completes
-  window.addEventListener('hashchange', () => {
-    requestAnimationFrame(() => requestAnimationFrame(updateActiveLink));
-  });
-
+  // Update on scroll (throttled via rAF)
   let ticking = false;
   window.addEventListener('scroll', () => {
     if (!ticking) {
@@ -147,6 +158,13 @@ document.addEventListener('astro:page-load', () => {
       ticking = true;
     }
   }, { passive: true });
+
+  // Click letter: instant visual feedback, then scroll event corrects
+  links.forEach(link => {
+    link.addEventListener('click', () => {
+      setActive(link.getAttribute('href')?.slice(1) ?? '');
+    });
+  });
 });
 </script>
 
