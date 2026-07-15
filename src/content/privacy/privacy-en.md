@@ -115,7 +115,7 @@ This Site uses the following third-party services, which may collect and process
 
 | Service | Provider | Purpose | Privacy Policy |
 |---------|----------|---------|---------------|
-| Cloudflare Pages | Cloudflare, Inc. | Website hosting and global acceleration | [Cloudflare Privacy Policy](https://www.cloudflare.com/privacy/) |
+| Cloudflare Workers | Cloudflare, Inc. | Website hosting and global acceleration | [Cloudflare Privacy Policy](https://www.cloudflare.com/privacy/) |
 
 **Notes**:
 - Cloudflare deploys CDN nodes globally to improve access speed
@@ -172,7 +172,7 @@ You can manage cookies and local storage through the following methods:
 This Site takes the following measures to protect your information:
 
 - Full-site HTTPS encrypted transmission (SSL/TLS)
-- Website hosted on Cloudflare Pages, inheriting enterprise-level security protection (including DDoS protection, WAF, etc.)
+- Website hosted on Cloudflare Workers, inheriting enterprise-level security protection (including DDoS protection, WAF, etc.)
 - Regular system and dependency updates to patch security vulnerabilities
 - Restricted access to personal information
 

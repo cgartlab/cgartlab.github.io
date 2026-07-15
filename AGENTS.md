@@ -1,6 +1,6 @@
 # AGENTS.md — cgartlab.github.io
 
-个人主站 (cgartlab.com)。Astro 6 + UnoCSS 66 + TypeScript 6 + pnpm 11 + Node 24，Cloudflare Pages 部署。Codex 为主要开发工具，所有开发流程、验证和交付均通过 Codex Agent 执行。
+个人主站 (cgartlab.com)。Astro 6 + UnoCSS 66 + TypeScript 6 + pnpm 11 + Node 24，Cloudflare Worker + Static Assets 部署。Codex 为主要开发工具，所有开发流程、验证和交付均通过 Codex Agent 执行。
 
 ## COMMANDS
 
@@ -89,7 +89,7 @@ pnpm exec playwright test # 端到端测试 (Playwright)
 
 ## CI/CD
 
-- push main → Cloudflare Pages 自动部署
+- push main → Cloudflare Worker + Static Assets 自动部署
 - 构建命令: `pnpm install --config.trustPolicy=off && pnpm build`
 - 域名: cgartlab.com (Cloudflare Pages 自定义域名)
 
@@ -333,7 +333,7 @@ pnpm exec playwright test # 端到端测试 (Playwright)
 |------|------|------|
 | Development | `pnpm dev` | Vite 开发服务器，HMR 热更新，无构建压缩，无 Service Worker |
 | Preview | `pnpm build && pnpm preview` | 基于 `dist/` 生产构建产物，包含 `astro-compress` 压缩结果，Service Worker 已注册 |
-| Production | Cloudflare Pages 部署 | 最终生产环境，CDN 缓存，Worker 重写规则 |
+| Production | Cloudflare Worker + Static Assets 部署 | 最终生产环境，CDN 缓存，Worker 重写规则 |
 
 ### 常见陷阱
 
@@ -368,6 +368,35 @@ Codex 为主力开发工具。以下规则定义 Agent 行为边界和开发到�
 - **先读再改** — 修改前必读相关文件、AGENTS.md、现有约定和配置。
 - **证据优先** — 不确定处明确标注，不猜测不存在的上下文。
 - **验证先行** — 每次变更后先跑最小相关检查（lint → typecheck → build），再扩大到完整验证。
+
+### 交付前自验清单
+
+根据近期 PR 修复历史总结的关键行为边界，Agent 必须遵守：
+
+**1. 边界情况全覆盖**
+- 数值参数：禁止硬编码 magic number（如 `80`、`120px`）—— 优先从 DOM 获取（offsetTop、scrollHeight），或使用已有的 CSS token / 变量
+
+**2. 模式一致性检查**
+- 颜色必须用 `oklch(var(--un-preset-theme-colors-*))` + `color-mix(in srgb, ...)` 处理透明度，禁止裸 `opacity` / `#xxx` / `rgb()`
+- 优先使用 UnoCSS 原子类（`text-*` / `p-*` / `c-*`），次选手写 CSS；选择器层级不超过 3 层
+- 同类文件修改应一起审计（如改了 TOC.astro 则检查 extension.css 中 TOC 样式是否需同步）
+
+**3. JS 监听器治理**
+- 所有全局监听器必须在 `astro:page-load` 中注册、在 `astro:before-swap` 中清理
+- 多监听器共存场景（如 scroll + click + hashchange）必须显式设计互斥逻辑和触发顺位
+
+**4. 双语言 & 响应式验证**
+- i18n 修改必须在所有启用语言版本中验证（zh + en），不能假设中文正常即所有语言正常
+- 布局修改须验证至少三种视口：≥1536px (2xl)、≥1024px (lg)、<768px (mobile)
+
+**5. 构建通过 ≠ 功能正确**
+- `astro check && astro build` 通过不代表样式/交互正确
+- JS 交互类修改必须通过 `pnpm build && pnpm preview` 在浏览器中实际操作验证
+
+**6. 首次交付原则**
+- 涉及多文件的修改，交付前通读所有相关文件的完整内容，确认无遗漏
+- 不确定处优先询问用户，而非自己猜测一个值先交付再说
+
 
 ### 开发到生产一致性
 

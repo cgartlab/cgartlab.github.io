@@ -83,11 +83,11 @@ function setActiveLink(id: string | null) {
   }
 
   const link = tocList.querySelector(`a[href="#${CSS.escape(id)}"]`)
-  if (link && link !== lastActiveLink) {
+   if (link && link !== lastActiveLink) {
     link.classList.add('toc-active')
+     const reducedMotion = document.documentElement.classList.contains('reduce-motion')
+       || window.matchMedia('(prefers-reduced-motion: reduce)').matches
     if (is2xl.matches) {
-      const reducedMotion = document.documentElement.classList.contains('reduce-motion')
-        || window.matchMedia('(prefers-reduced-motion: reduce)').matches
       link.scrollIntoView({ behavior: reducedMotion ? 'instant' : 'smooth', block: 'nearest' })
     }
     lastActiveLink = link
@@ -112,7 +112,7 @@ function scrollToActiveLinkFallback() {
 }
 
 function handleScroll() {
-  if (!ticking && is2xl.matches) {
+  if (!ticking) {
     window.requestAnimationFrame(scrollToActiveLinkFallback)
     ticking = true
   }
@@ -130,9 +130,9 @@ function setupFallbackObserver() {
       else {
         visibleHeadings.delete(entry.target.id)
       }
-    })
+      })
 
-    if (!ticking && is2xl.matches) {
+    if (!ticking) {
       window.requestAnimationFrame(scrollToActiveLinkFallback)
       ticking = true
     }
