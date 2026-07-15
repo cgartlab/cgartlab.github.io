@@ -106,7 +106,6 @@ document.addEventListener('astro:page-load', () => {
   
   if (!sections.length || !links.length || !nav) return;
 
-  let prevLetter = '';
   let clickPending = false;
 
   function setActive(id = "") {
@@ -129,20 +128,7 @@ document.addEventListener('astro:page-load', () => {
 
     setActive(current);
 
-    // Scroll nav strip to center the active letter (only when it changes)
-    if (current !== prevLetter) {
-      prevLetter = current;
-      const activeLink = nav.querySelector('.letter-jump.active');
-      if (activeLink) {
-        const linkRect = activeLink.getBoundingClientRect();
-        const navRect = nav.getBoundingClientRect();
-        const linkLeft = linkRect.left - navRect.left + nav.scrollLeft;
-        const linkRight = linkLeft + linkRect.width;
-        if (linkLeft < nav.scrollLeft || linkRight > nav.scrollLeft + nav.getBoundingClientRect().width + 4) {
-          nav.scrollLeft = linkLeft + linkRect.width / 2 - nav.getBoundingClientRect().width / 2;
-        }
-      }
-    }
+
   }
 
   // Initial update
