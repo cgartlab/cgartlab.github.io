@@ -168,7 +168,7 @@ document.addEventListener('astro:page-load', () => {
   gap: 0.125rem;
   padding: 0.5rem 0;
   margin-bottom: 1.5rem;
-  border-bottom: 1px solid color-mix(in srgb, var(--un-preset-theme-colors-secondary) 12%, transparent);
+  border-bottom: 1px solid color-mix(in srgb, oklch(var(--un-preset-theme-colors-secondary)) 12%, transparent);
 }
 
 .letter-nav::-webkit-scrollbar {
@@ -193,13 +193,13 @@ document.addEventListener('astro:page-load', () => {
 
 .letter-jump:hover {
   color: oklch(var(--un-preset-theme-colors-primary));
-  background: color-mix(in srgb, var(--un-preset-theme-colors-primary) 10%, transparent);
+  background: color-mix(in srgb, oklch(var(--un-preset-theme-colors-primary)) 10%, transparent);
 }
 
 .letter-jump.active {
   color: oklch(var(--un-preset-theme-colors-primary));
   font-weight: 700;
-  background: color-mix(in srgb, var(--un-preset-theme-colors-primary) 8%, transparent);
+  background: color-mix(in srgb, oklch(var(--un-preset-theme-colors-primary)) 8%, transparent);
 }
 
 /* Desktop: centered wrap layout */
@@ -232,7 +232,7 @@ document.addEventListener('astro:page-load', () => {
 
 /* ─── Letter section headers ─── */
 .letter-section {
-  scroll-margin-top: 3rem;
+  scroll-margin-top: 5rem;
 }
 
 .letter-divider {
@@ -265,7 +265,7 @@ document.addEventListener('astro:page-load', () => {
 }
 
 .term-item:hover {
-  background: color-mix(in srgb, var(--un-preset-theme-colors-primary) 6%, transparent);
+  background: color-mix(in srgb, oklch(var(--un-preset-theme-colors-primary)) 6%, transparent);
 }
 
 .term-item a {
