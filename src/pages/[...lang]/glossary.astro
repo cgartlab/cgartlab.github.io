@@ -115,7 +115,7 @@ document.addEventListener('astro:page-load', () => {
     if (match) match.classList.add('active');
   }
 
-  function updateActiveLink() {
+  function updateActiveLink(skipReveal = false) {
     if (clickPending || !nav) return;
     // Desktop: nav is sticky at top → use nav height as offset
     // Mobile: nav is fixed on right → use scroll-margin-top (5rem ≈ 80px) + tolerance
@@ -126,7 +126,7 @@ document.addEventListener('astro:page-load', () => {
       : 84;
 
     // Reveal mobile nav on scroll, reset idle timer
-    if (isMobile) revealNav();
+    if (isMobile && !skipReveal) revealNav();
 
     let current = sections[0]?.id || null;
     for (const section of sections) {
@@ -141,7 +141,7 @@ document.addEventListener('astro:page-load', () => {
 
   // Initial update
   requestAnimationFrame(() => {
-    updateActiveLink();
+    updateActiveLink(true);
   });
 
   // Update on scroll (throttled via rAF)
@@ -165,7 +165,7 @@ document.addEventListener('astro:page-load', () => {
       setActive(link.getAttribute('href')?.slice(1) ?? '');
       setTimeout(() => {
         clickPending = false;
-        updateActiveLink();
+        updateActiveLink(true);
       }, 400);
     });
   });
@@ -215,7 +215,7 @@ document.addEventListener('astro:page-load', () => {
 
   // Re-run scroll-spy on window load (catches race conditions in some browsers)
   window.addEventListener('load', () => {
-    requestAnimationFrame(updateActiveLink);
+    requestAnimationFrame(() => updateActiveLink(true));
   }, { once: true });
 });
 </script>
