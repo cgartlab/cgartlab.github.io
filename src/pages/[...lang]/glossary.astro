@@ -56,6 +56,8 @@ for (const entry of sorted) {
     <div class="glossary-content">
     <h1 class="glossary-title">{t.glossaryTitle}</h1>
     <p class="glossary-subtitle">{t.glossaryDesc.replace('{n}', String(glossary.length))}</p>
+    <p class="glossary-intro">{t.glossaryIntro}</p>
+    <p class="glossary-feedback" set:html={t.glossaryFeedback}></p>
 
   <nav class="letter-nav" aria-label={t.glossaryLetterNav}>
     {groups.map(g => (
@@ -118,9 +120,14 @@ document.addEventListener('astro:page-load', () => {
     // Desktop: nav is sticky at top → use nav height as offset
     // Mobile: nav is fixed on right → use scroll-margin-top (5rem ≈ 80px) + tolerance
     const navStyle = window.getComputedStyle(nav);
+    const isMobile = window.innerWidth < 1024;
     const offset = navStyle.position === 'sticky'
       ? Math.max(nav.getBoundingClientRect().height + 8, 84)
       : 84;
+
+    // Reveal mobile nav on scroll, reset idle timer
+    if (isMobile) revealNav();
+
     let current = sections[0]?.id || null;
     for (const section of sections) {
       if (section.getBoundingClientRect().top <= offset) {
@@ -133,7 +140,9 @@ document.addEventListener('astro:page-load', () => {
   }
 
   // Initial update
-  updateActiveLink();
+  requestAnimationFrame(() => {
+    updateActiveLink();
+  });
 
   // Update on scroll (throttled via rAF)
   let ticking = false;
@@ -150,14 +159,64 @@ document.addEventListener('astro:page-load', () => {
   // Click letter: instant visual feedback, then scroll event corrects
   links.forEach(link => {
     link.addEventListener('click', () => {
+      // Reveal nav on click (mobile)
+      revealNav();
       clickPending = true;
       setActive(link.getAttribute('href')?.slice(1) ?? '');
       setTimeout(() => {
         clickPending = false;
         updateActiveLink();
-      }, 300);
+      }, 400);
     });
   });
+
+  /* ── Mobile auto-hide nav: reveal on scroll, hide after 3s idle ── */
+  let idleTimer: ReturnType<typeof setTimeout> | null = null;
+  let isRevealed = false;
+
+  function isMobileLayout() {
+    if (!nav) return false;
+    return window.innerWidth < 1024;
+  }
+
+  function revealNav() {
+    if (!nav || !isMobileLayout()) return;
+    nav.classList.remove('hiding');
+    nav.classList.add('visible');
+    isRevealed = true;
+    resetIdleTimer();
+  }
+
+  function resetIdleTimer() {
+    if (idleTimer) clearTimeout(idleTimer);
+    if (!nav) return;
+    idleTimer = setTimeout(() => {
+      if (!nav || !isMobileLayout()) return;
+      nav.classList.remove('visible');
+      nav.classList.add('hiding');
+      isRevealed = false;
+    }, 3000);
+  }
+
+  function dismissNav() {
+    if (idleTimer) clearTimeout(idleTimer);
+    if (isRevealed) {
+      if (!nav) return;
+      nav.classList.remove('visible');
+      nav.classList.add('hiding');
+      isRevealed = false;
+    }
+  }
+
+  // Clean up on resize from mobile → desktop
+  window.addEventListener('resize', () => {
+    dismissNav();
+  }, { passive: true });
+
+  // Re-run scroll-spy on window load (catches race conditions in some browsers)
+  window.addEventListener('load', () => {
+    requestAnimationFrame(updateActiveLink);
+  }, { once: true });
 });
 </script>
 
@@ -172,13 +231,32 @@ document.addEventListener('astro:page-load', () => {
   font-size: 1.75rem;
   font-weight: 700;
   color: oklch(var(--un-preset-theme-colors-primary));
-  margin: 0 0 0.25rem;
+  margin: 0 0 0.5rem;
+}
+
+.glossary-intro {
+  font-size: 0.85rem;
+  color: color-mix(in srgb, oklch(var(--un-preset-theme-colors-secondary)) 65%, transparent);
+  line-height: 1.7;
+  margin: 0 0 0.75rem;
+}
+
+.glossary-feedback {
+  font-size: 0.85rem;
+  color: color-mix(in srgb, oklch(var(--un-preset-theme-colors-secondary)) 65%, transparent);
+  margin: 0 0 1.5rem;
+}
+
+.glossary-feedback a {
+  color: oklch(var(--un-preset-theme-colors-primary));
+  text-decoration: underline;
+  text-underline-offset: 2px;
 }
 
 .glossary-subtitle {
   font-size: 0.9rem;
   color: color-mix(in srgb, oklch(var(--un-preset-theme-colors-secondary)) 70%, transparent);
-  margin: 0 0 2rem;
+  margin: 0 0 1rem;
 }
 
 /* ─── TOC-style letter nav (sticky horizontal strip) ─── */
@@ -327,6 +405,7 @@ document.addEventListener('astro:page-load', () => {
 @media (max-width: 640px) {
   .glossary-title {
     font-size: 1.5rem;
+    margin: 0 0 0.5rem;
   }
 
   .letter-nav {
@@ -354,7 +433,11 @@ document.addEventListener('astro:page-load', () => {
     position: fixed;
     right: 0.75rem;
     top: 50%;
-    transform: translateY(-50%);
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(-50%) translateX(calc(100% + 1.5rem));
+    transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+                opacity 0.35s ease;
     z-index: 10;
     display: flex;
     flex-direction: column;
@@ -366,7 +449,8 @@ document.addEventListener('astro:page-load', () => {
     border-radius: 0.5rem;
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
-    border: 1px solid color-mix(in srgb, var(--un-preset-theme-colors-secondary) 10%, transparent);
+    border: 1px solid color-mix(in srgb, oklch(var(--un-preset-theme-colors-secondary)) 10%, transparent);
+    box-shadow: 0 2px 12px color-mix(in srgb, oklch(var(--un-preset-theme-colors-primary)) 8%, transparent);
     overflow: visible;
     scrollbar-width: none;
     flex-wrap: nowrap;
@@ -374,14 +458,22 @@ document.addEventListener('astro:page-load', () => {
     margin-bottom: 0;
   }
 
-  .letter-nav::-webkit-scrollbar {
-    display: none;
-  }
-
   .letter-jump {
     width: 1.75rem;
     height: 1.75rem;
     font-size: 0.7rem;
+  }
+
+  .letter-nav.visible {
+    transform: translateY(-50%) translateX(0);
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .letter-nav.hiding {
+    transform: translateY(-50%) translateX(calc(100% + 1.5rem));
+    opacity: 0;
+    pointer-events: none;
   }
 }
 

@@ -99,7 +99,8 @@ export const glossary: TermEntry[] = [
   },
   {
     id: 'proxy',
-    term: '代理',
+    term: '代理服务器',
+    aliases: ['代理'],
     wikiPath: '代理服务器',
     description: '网络代理服务器',
     langs: {
@@ -117,9 +118,9 @@ export const glossary: TermEntry[] = [
   },
   {
     id: 'terminal',
-    term: '终端',
-    wikiPath: '终端',
-    description: '计算机终端模拟器',
+    term: '终端模拟器',
+    wikiPath: '终端模拟器',
+    description: '用于访问 Shell 环境的命令行界面程序',
     langs: {
       en: { aliases: ['Terminal emulator', 'terminal'], wikiPath: 'Terminal_emulator' },
     },
@@ -293,13 +294,19 @@ export const glossary: TermEntry[] = [
     term: 'OpenClaw',
     aliases: ['龙虾'],
     url: 'https://openclaw.ai',
-    description: '开源 AI Agent 平台',
+    description: '开源个人 AI Agent 助手，可运行本地并执行自动化任务',
+    langs: {
+      en: { description: 'Personal AI assistant that runs on your machine' },
+    },
   },
   {
     id: 'opencode',
     term: 'OpenCode',
     url: 'https://opencode.ai',
-    description: 'AI 驱动的终端编程助手',
+    description: '开源 AI 编程 Agent，支持终端、桌面和 IDE',
+    langs: {
+      en: { description: 'Open-source AI coding agent for terminal, desktop and IDE' },
+    },
   },
 
   // ────────── 自托管 / 效率工具 ──────────
@@ -444,14 +451,14 @@ export const glossary: TermEntry[] = [
     id: 'proxmox',
     term: 'Proxmox',
     url: 'https://www.proxmox.com',
-    description: '开源虚拟化环境，支持容器和虚拟机管理',
+    description: '提供服务器虚拟化与开源基础设施解决方案的项目',
   },
   {
     id: 'pve',
     term: 'PVE',
     aliases: ['Proxmox VE'],
     url: 'https://www.proxmox.com/en/proxmox-ve',
-    description: 'Proxmox Virtual Environment，开源虚拟化平台',
+    description: 'Proxmox Virtual Environment，基于 KVM 和 LXC 的服务器虚拟化平台',
   },
   {
     id: 'hackintosh',
@@ -625,4 +632,309 @@ export const glossary: TermEntry[] = [
       en: { description: 'Utility-first CSS framework' },
     },
   },
-]
+  {
+    id: 'llm',
+    term: 'LLM',
+    aliases: ['大语言模型', 'Large Language Model'],
+    wikiPath: '大语言模型',
+    description: '大语言模型，Large Language Model',
+    langs: {
+      en: { aliases: ['Large Language Model', 'large language model'], wikiPath: 'Large_language_model' },
+    },
+  },
+  {
+    id: 'prompt',
+    term: 'Prompt',
+    aliases: ['提示词'],
+    wikiPath: '提示工程',
+    description: '向 AI 模型输入的指令文本，引导模型生成期望的输出',
+    langs: {
+      en: { aliases: ['prompt engineering'], wikiPath: 'Prompt_engineering' },
+    },
+  },
+  {
+    id: 'html',
+    term: 'HTML',
+    aliases: ['HyperText Markup Language'],
+    wikiPath: 'HTML',
+    description: '超文本标记语言',
+    langs: {
+      en: { wikiPath: 'HTML' },
+    },
+  },
+  {
+    id: 'css',
+    term: 'CSS',
+    aliases: ['Cascading Style Sheets'],
+    wikiPath: 'CSS',
+    description: '层叠样式表',
+    langs: {
+      en: { wikiPath: 'CSS' },
+    },
+  },
+  {
+    id: 'javascript',
+    term: 'JavaScript',
+    wikiPath: 'JavaScript',
+    description: '网页脚本编程语言',
+    langs: {
+      en: { wikiPath: 'JavaScript' },
+    },
+  },
+  {
+    id: 'dom',
+    term: 'DOM',
+    aliases: ['文档对象模型', 'Document Object Model'],
+    wikiPath: '文档对象模型',
+    description: '文档对象模型，网页的编程接口',
+    langs: {
+      en: { wikiPath: 'Document_Object_Model' },
+    },
+  },
+  {
+    id: 'json',
+    term: 'JSON',
+    aliases: ['JavaScript Object Notation'],
+    wikiPath: 'JSON',
+    description: '轻量级数据交换格式',
+    langs: {
+      en: { wikiPath: 'JSON' },
+    },
+  },
+  {
+    id: 'svg',
+    term: 'SVG',
+    aliases: ['Scalable Vector Graphics'],
+    wikiPath: 'SVG',
+    description: '可缩放矢量图形格式',
+    langs: {
+      en: { aliases: ['Scalable Vector Graphics'], wikiPath: 'SVG' },
+    },
+  },
+  {
+    id: 'react',
+    term: 'React',
+    wikiPath: 'React',
+    description: 'Meta 开发的声明式 UI 组件库',
+    langs: {
+      en: { wikiPath: 'React_(JavaScript_library)' },
+    },
+  },
+  {
+    id: 'vite',
+    term: 'Vite',
+    url: 'https://vite.dev',
+    description: '新一代前端构建与开发工具',
+  },
+  {
+    id: 'threejs',
+    term: 'Three.js',
+    wikiPath: 'Three.js',
+    description: 'Web 3D 图形 JavaScript 库',
+    langs: {
+      en: { wikiPath: 'Three.js' },
+    },
+  },
+  {
+    id: 'vpn',
+    term: 'VPN',
+    aliases: ['虚拟专用网络', 'Virtual Private Network', '虚拟私人网络'],
+    wikiPath: '虚拟私人网络',
+    description: '虚拟专用网络，通过加密通道安全访问远程网络',
+    langs: {
+      en: { aliases: ['Virtual Private Network', 'virtual private network'], wikiPath: 'Virtual_private_network' },
+    },
+  },
+  {
+    id: 'vps',
+    term: 'VPS',
+    aliases: ['虚拟专用服务器', 'Virtual Private Server'],
+    wikiPath: '虚拟专用服务器',
+    description: '虚拟专用服务器',
+    langs: {
+      en: { aliases: ['Virtual private server', 'virtual private server'], wikiPath: 'Virtual_private_server' },
+    },
+  },
+  {
+    id: 'cdn',
+    term: 'CDN',
+    aliases: ['内容分发网络', 'Content Delivery Network'],
+    wikiPath: '内容分发网络',
+    description: '内容分发网络，通过分布式节点加速内容传输',
+    langs: {
+      en: { aliases: ['Content delivery network', 'content delivery network'], wikiPath: 'Content_delivery_network' },
+    },
+  },
+  {
+    id: 'wireguard',
+    term: 'WireGuard',
+    wikiPath: 'WireGuard',
+    description: '现代 VPN 协议，以高性能和简洁代码著称',
+    langs: {
+      en: { wikiPath: 'WireGuard' },
+    },
+  },
+  {
+    id: 'tailscale',
+    term: 'Tailscale',
+    url: 'https://tailscale.com',
+    description: '基于 WireGuard 的零配置 VPN 组网服务',
+  },
+  {
+    id: 'frp',
+    term: 'frp',
+    url: 'https://github.com/fatedier/frp',
+    description: '开源内网穿透反向代理工具',
+  },
+  {
+    id: 'plex',
+    term: 'Plex',
+    wikiPath: 'Plex',
+    description: '多媒体服务器与流媒体管理软件',
+    langs: {
+      en: { wikiPath: 'Plex_(company)' },
+    },
+  },
+  {
+    id: 'synology',
+    term: '群晖',
+    aliases: ['Synology'],
+    wikiPath: 'Synology',
+    description: 'Synology 群晖科技推出的网络附加存储设备品牌',
+    langs: {
+      en: { aliases: ['Synology'], wikiPath: 'Synology' },
+    },
+  },
+  {
+    id: 'alist',
+    term: 'Alist',
+    url: 'https://alist.nn.ci',
+    description: '开源文件列表程序，支持多种存储后端挂载',
+  },
+  {
+    id: 'adguard-home',
+    term: 'AdGuard Home',
+    url: 'https://adguard.com/adguard-home.html',
+    description: '网络级广告拦截与 DNS 过滤服务',
+  },
+  {
+    id: 'self-hosted',
+    term: '自托管',
+    aliases: ['Self-hosted', '自部署'],
+    url: 'https://zh.wikipedia.org/wiki/自托管',
+    description: '自行部署运维应用而非使用云服务的模式',
+    langs: {
+      en: { aliases: ['Self-hosting', 'self-hosted'], wikiPath: 'Self-hosting_(web_services)' },
+    },
+  },
+  {
+    id: 'side-router',
+    term: '旁路由',
+    aliases: ['旁路网关', '旁路路由'],
+    description: '以旁路模式接入网络的路由器或网关设备',
+    wikiPath: '网关',
+    langs: {
+      en: { aliases: ['secondary router', 'bypass gateway'], wikiPath: 'Gateway_(telecommunications)' },
+    },
+  },
+  {
+    id: 'obs',
+    term: 'OBS',
+    aliases: ['Open Broadcaster Software', 'OBS Studio'],
+    wikiPath: 'Open_Broadcaster_Software',
+    description: '开源直播推流与屏幕录制软件',
+    langs: {
+      en: { aliases: ['Open Broadcaster Software', 'OBS Studio'], wikiPath: 'Open_Broadcaster_Software' },
+    },
+  },
+  {
+    id: 'blender',
+    term: 'Blender',
+    wikiPath: 'Blender',
+    description: '开源 3D 建模、动画与渲染软件',
+    langs: {
+      en: { wikiPath: 'Blender_(software)' },
+    },
+  },
+  {
+    id: 'figma',
+    term: 'Figma',
+    wikiPath: 'Figma',
+    url: 'https://www.figma.com',
+    description: '协作式界面设计工具',
+    langs: {
+      en: { wikiPath: 'Figma' },
+    },
+  },
+  {
+    id: 'eagle',
+    term: 'Eagle',
+    url: 'https://eagle.cool',
+    description: '设计师素材管理与收集工具',
+  },
+  {
+    id: 'anki',
+    term: 'Anki',
+    wikiPath: 'Anki_(软件)',
+    description: '基于间隔重复的记忆学习软件',
+    langs: {
+      en: { wikiPath: 'Anki_(software)' },
+    },
+  },
+  {
+    id: 'tmux',
+    term: 'tmux',
+    wikiPath: 'Tmux',
+    description: '终端复用器，支持多窗口与会话管理',
+    langs: {
+      en: { wikiPath: 'Tmux' },
+    },
+  },
+  {
+    id: 'second-brain',
+    term: '第二大脑',
+    aliases: ['Second Brain'],
+    wikiPath: '第二大脑',
+    description: '基于笔记和知识管理的个人知识体系方法论',
+    langs: {
+      en: { aliases: ['Second Brain', 'second brain'], wikiPath: 'Second_brain_(productivity)' },
+    },
+  },
+  {
+    id: 'bidirectional-link',
+    term: '双向链接',
+    description: '知识管理系统中文档之间相互关联的链接结构',
+    wikiPath: 'Help:链接',
+    langs: {
+      en: { aliases: ['bidirectional linking', 'bidirectional link', 'Wikilink'], wikiPath: 'Help:Link' },
+    },
+  },
+  {
+    id: 'seo-backlink',
+    term: '反向链接',
+    aliases: ['Backlink'],
+    description: '其他网站指向目标网站的外部链接',
+    langs: {
+      en: { aliases: ['Backlink'], wikiPath: 'Backlink' },
+    },
+  },
+  {
+    id: 'scp',
+    term: 'SCP',
+    aliases: ['SCP基金会', 'SCP Foundation', 'SCP財團'],
+    wikiPath: 'SCP基金会',
+    description: 'SCP 基金会，围绕超自然收容的共创写作宇宙',
+    langs: {
+      en: { aliases: ['SCP Foundation'], wikiPath: 'SCP_Foundation' },
+    },
+  },
+  {
+    id: 'seo',
+    term: 'SEO',
+    aliases: ['搜索引擎优化', 'Search Engine Optimization'],
+    wikiPath: '搜索引擎优化',
+    description: '通过优化网站结构、内容和技术因素，提高搜索引擎自然排名',
+    langs: {
+      en: { aliases: ['Search engine optimization', 'search engine optimization'], wikiPath: 'Search_engine_optimization' },
+    },
+  },]
