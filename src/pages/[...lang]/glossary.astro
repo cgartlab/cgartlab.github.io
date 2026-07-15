@@ -427,17 +427,13 @@ document.addEventListener('astro:page-load', () => {
     border-radius: 0.5rem;
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
-    border: 1px solid color-mix(in srgb, var(--un-preset-theme-colors-secondary) 10%, transparent);
+    border: 1px solid color-mix(in srgb, oklch(var(--un-preset-theme-colors-secondary)) 10%, transparent);
     box-shadow: 0 2px 12px color-mix(in srgb, oklch(var(--un-preset-theme-colors-primary)) 8%, transparent);
     overflow: visible;
     scrollbar-width: none;
     flex-wrap: nowrap;
     border-bottom: none;
     margin-bottom: 0;
-  }
-
-  .letter-nav::-webkit-scrollbar {
-    display: none;
   }
 
   .letter-jump {
