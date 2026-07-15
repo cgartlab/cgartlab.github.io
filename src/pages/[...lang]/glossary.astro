@@ -104,6 +104,8 @@ document.addEventListener('astro:page-load', () => {
   const links = document.querySelectorAll('.letter-jump');
   if (!sections.length || !links.length) return;
 
+  let prevActiveId = '';
+
   function updateActiveLink() {
     const nav = document.querySelector('.letter-nav');
     const navHeight = nav ? nav.getBoundingClientRect().height + 8 : 60;
@@ -115,12 +117,25 @@ document.addEventListener('astro:page-load', () => {
     }
     if (current) {
       links.forEach(link => {
-        link.classList.toggle('active', link.getAttribute('href') === "#" + current);
+        link.classList.toggle('active', link.getAttribute('href') === '#' + current);
       });
+
+      if (current !== prevActiveId) {
+        prevActiveId = current;
+        const activeLink = document.querySelector('.letter-jump.active');
+        if (activeLink) {
+          activeLink.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+        }
+      }
     }
   }
 
   updateActiveLink();
+
+  // Update after hash-click scroll completes
+  window.addEventListener('hashchange', () => {
+    requestAnimationFrame(() => requestAnimationFrame(updateActiveLink));
+  });
 
   let ticking = false;
   window.addEventListener('scroll', () => {
