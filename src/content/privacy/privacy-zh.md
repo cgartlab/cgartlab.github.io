@@ -115,7 +115,7 @@ CG 艺术实验室（以下简称"本站"）高度重视用户的隐私保护。
 
 | 服务名称 | 提供商 | 用途 | 隐私政策 |
 |---------|--------|------|---------|
-| Cloudflare Pages | Cloudflare, Inc. | 网站托管与全球加速 | [Cloudflare 隐私政策](https://www.cloudflare.com/privacy/) |
+| Cloudflare Workers | Cloudflare, Inc. | 网站托管与全球加速 | [Cloudflare 隐私政策](https://www.cloudflare.com/privacy/) |
 
 **说明**：
 - Cloudflare 在全球范围内部署 CDN 节点以提升访问速度
@@ -172,7 +172,7 @@ Cookie 是网站存储在您浏览器中的小型文本文件，用于记录您�
 本站采取以下措施保护您的信息安全：
 
 - 全站启用 HTTPS 加密传输（SSL/TLS）
-- 网站托管于 Cloudflare Pages，继承其企业级安全防护（包括 DDoS 防护、WAF 等）
+- 网站托管于 Cloudflare Workers，继承其企业级安全防护（包括 DDoS 防护、WAF 等）
 - 定期更新系统和依赖组件，修补安全漏洞
 - 限制对个人信息的访问权限
 

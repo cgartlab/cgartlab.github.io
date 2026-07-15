@@ -14,13 +14,13 @@ My work spans digital motion design, UI/UX, front-end development, AI tools and 
 
 # Creative Work
 
-Commercial design is an art of compromise. Most client projects don't enter my portfolio—they are products, not artworks. The few that do either touch areas I am passionate about, match a clients aesthetic vision, or challenge my skills.
+Commercial design is an art of compromise. Most client projects don't enter my portfolio—they are products, not artworks. The few that do either touch areas I am passionate about, match a client's aesthetic vision, or challenge my skills.
 
 Lately I have been carving out time for independent creation and AI tooling. Building private servers, DIY NAS, running local LLMs, integrating AI agents into creative workflows—the same impulse that once drove me to type commands now extends to natural language. This journey led me to what truly excites me: creation.
 
 # About This Site
 
-It started because having your own website is cool. Does not every artist have one?
+It started because having your own website is cool. Doesn't every artist have one?
 
 As more content piled up, it began to feel like a container for memories and thoughts—something like a **Pensieve**.
 

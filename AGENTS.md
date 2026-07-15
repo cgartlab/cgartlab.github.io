@@ -1,6 +1,6 @@
 # AGENTS.md — cgartlab.github.io
 
-个人主站 (cgartlab.com)。Astro 6 + UnoCSS 66 + TypeScript 6 + pnpm 11 + Node 24，Cloudflare Pages 部署。Codex 为主要开发工具，所有开发流程、验证和交付均通过 Codex Agent 执行。
+个人主站 (cgartlab.com)。Astro 6 + UnoCSS 66 + TypeScript 6 + pnpm 11 + Node 24，Cloudflare Worker + Static Assets 部署。Codex 为主要开发工具，所有开发流程、验证和交付均通过 Codex Agent 执行。
 
 ## COMMANDS
 
@@ -89,7 +89,7 @@ pnpm exec playwright test # 端到端测试 (Playwright)
 
 ## CI/CD
 
-- push main → Cloudflare Pages 自动部署
+- push main → Cloudflare Worker + Static Assets 自动部署
 - 构建命令: `pnpm install --config.trustPolicy=off && pnpm build`
 - 域名: cgartlab.com (Cloudflare Pages 自定义域名)
 
@@ -333,7 +333,7 @@ pnpm exec playwright test # 端到端测试 (Playwright)
 |------|------|------|
 | Development | `pnpm dev` | Vite 开发服务器，HMR 热更新，无构建压缩，无 Service Worker |
 | Preview | `pnpm build && pnpm preview` | 基于 `dist/` 生产构建产物，包含 `astro-compress` 压缩结果，Service Worker 已注册 |
-| Production | Cloudflare Pages 部署 | 最终生产环境，CDN 缓存，Worker 重写规则 |
+| Production | Cloudflare Worker + Static Assets 部署 | 最终生产环境，CDN 缓存，Worker 重写规则 |
 
 ### 常见陷阱
 
