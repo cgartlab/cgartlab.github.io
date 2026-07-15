@@ -23,14 +23,14 @@ export const linksData: Record<string, Record<string, LinkItem[]>> = {
       },
       {
         title: 'OpenCode',
-        description: 'AI 驱动的代码编辑器',
+        description: '开源 AI 编程 Agent，支持终端、桌面和 IDE',
         url: 'https://opencode.ai',
         icon: 'https://opencode.ai/favicon.ico',
       },
       {
         title: 'OpenClaw',
-        description: '开源设计资源管理',
-        url: 'https://openclaw.io',
+        description: '开源个人 AI Agent 助手',
+        url: 'https://openclaw.ai',
         icon: '/icons/openclaw.svg',
       },
       {
@@ -71,7 +71,7 @@ export const linksData: Record<string, Record<string, LinkItem[]>> = {
       },
       {
         title: 'FnOS',
-        description: '国产 NAS 系统',
+        description: '飞牛科技推出的 NAS 操作系统',
         url: 'https://www.fnnas.com',
         icon: 'https://www.fnnas.com/favicon.ico',
       },
@@ -82,8 +82,8 @@ export const linksData: Record<string, Record<string, LinkItem[]>> = {
         icon: '/icons/cinema-4d.svg',
       },
       {
-        title: 'After Effect',
-        description: '动态视觉特效',
+        title: 'After Effects',
+        description: '动态视觉特效与合成',
         url: 'https://www.adobe.com/products/aftereffects.html',
         icon: '/icons/adobe-after-effects.svg',
       },
@@ -169,14 +169,14 @@ export const linksData: Record<string, Record<string, LinkItem[]>> = {
       },
       {
         title: 'OpenCode',
-        description: 'AI-powered code editor',
+        description: 'Open-source AI coding agent for terminal, desktop and IDE',
         url: 'https://opencode.ai',
         icon: 'https://opencode.ai/favicon.ico',
       },
       {
         title: 'OpenClaw',
-        description: 'Open source design asset management',
-        url: 'https://openclaw.io',
+        description: 'Open-source personal AI Agent assistant',
+        url: 'https://openclaw.ai',
         icon: '/icons/openclaw.svg',
       },
       {
@@ -217,7 +217,7 @@ export const linksData: Record<string, Record<string, LinkItem[]>> = {
       },
       {
         title: 'FnOS',
-        description: 'Domestic NAS system',
+        description: 'NAS OS developed by Feiniao Technology',
         url: 'https://www.fnnas.com',
         icon: 'https://www.fnnas.com/favicon.ico',
       },
@@ -228,8 +228,8 @@ export const linksData: Record<string, Record<string, LinkItem[]>> = {
         icon: '/icons/cinema-4d.svg',
       },
       {
-        title: 'After Effect',
-        description: 'Motion visual effects',
+        title: 'After Effects',
+        description: 'Motion graphics and visual effects',
         url: 'https://www.adobe.com/products/aftereffects.html',
         icon: '/icons/adobe-after-effects.svg',
       },
@@ -315,14 +315,14 @@ export const linksData: Record<string, Record<string, LinkItem[]>> = {
       },
       {
         title: 'OpenCode',
-        description: 'AI 驅動的程式碼編輯器',
+        description: '開源 AI 程式碼 Agent，支援終端、桌面和 IDE',
         url: 'https://opencode.ai',
         icon: 'https://opencode.ai/favicon.ico',
       },
       {
         title: 'OpenClaw',
-        description: '開源設計資源管理',
-        url: 'https://openclaw.io',
+        description: '開源個人 AI Agent 助手',
+        url: 'https://openclaw.ai',
         icon: '/icons/openclaw.svg',
       },
       {
@@ -363,7 +363,7 @@ export const linksData: Record<string, Record<string, LinkItem[]>> = {
       },
       {
         title: 'FnOS',
-        description: '國產 NAS 系統',
+        description: '飛牛科技推出的 NAS 作業系統',
         url: 'https://www.fnnas.com',
         icon: 'https://www.fnnas.com/favicon.ico',
       },
@@ -374,8 +374,8 @@ export const linksData: Record<string, Record<string, LinkItem[]>> = {
         icon: '/icons/cinema-4d.svg',
       },
       {
-        title: 'After Effect',
-        description: '動態視覺特效',
+        title: 'After Effects',
+        description: '動態視覺特效與合成',
         url: 'https://www.adobe.com/products/aftereffects.html',
         icon: '/icons/adobe-after-effects.svg',
       },

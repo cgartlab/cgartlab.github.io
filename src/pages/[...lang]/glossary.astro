@@ -118,7 +118,7 @@ document.addEventListener('astro:page-load', () => {
     // Desktop: nav is sticky at top → use nav height as offset
     // Mobile: nav is fixed on right → use scroll-margin-top (5rem ≈ 80px) + tolerance
     const navStyle = window.getComputedStyle(nav);
-    const isMobile = navStyle.position === 'fixed';
+    const isMobile = window.innerWidth < 1024;
     const offset = navStyle.position === 'sticky'
       ? Math.max(nav.getBoundingClientRect().height + 8, 84)
       : 84;
@@ -138,7 +138,9 @@ document.addEventListener('astro:page-load', () => {
   }
 
   // Initial update
-  updateActiveLink();
+  requestAnimationFrame(() => {
+    updateActiveLink();
+  });
 
   // Update on scroll (throttled via rAF)
   let ticking = false;
@@ -172,7 +174,7 @@ document.addEventListener('astro:page-load', () => {
 
   function isMobileLayout() {
     if (!nav) return false;
-    return window.getComputedStyle(nav).position === 'fixed';
+    return window.innerWidth < 1024;
   }
 
   function revealNav() {
@@ -208,6 +210,11 @@ document.addEventListener('astro:page-load', () => {
   window.addEventListener('resize', () => {
     dismissNav();
   }, { passive: true });
+
+  // Re-run scroll-spy on window load (catches race conditions in some browsers)
+  window.addEventListener('load', () => {
+    requestAnimationFrame(updateActiveLink);
+  }, { once: true });
 });
 </script>
 
