@@ -107,6 +107,7 @@ document.addEventListener('astro:page-load', () => {
   if (!sections.length || !links.length || !nav) return;
 
   let prevLetter = '';
+  let clickPending = false;
 
   function setActive(id = "") {
     if (!nav) return;
@@ -116,7 +117,7 @@ document.addEventListener('astro:page-load', () => {
   }
 
   function updateActiveLink() {
-    if (!nav) return;
+    if (clickPending || !nav) return;
     const navHeight = nav.getBoundingClientRect().height + 8;
     let current = sections[0]?.id || null;
     for (const section of sections) {
@@ -162,7 +163,12 @@ document.addEventListener('astro:page-load', () => {
   // Click letter: instant visual feedback, then scroll event corrects
   links.forEach(link => {
     link.addEventListener('click', () => {
+      clickPending = true;
       setActive(link.getAttribute('href')?.slice(1) ?? '');
+      setTimeout(() => {
+        clickPending = false;
+        updateActiveLink();
+      }, 300);
     });
   });
 });
