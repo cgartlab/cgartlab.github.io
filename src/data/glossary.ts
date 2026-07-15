@@ -832,8 +832,9 @@ export const glossary: TermEntry[] = [
     term: '旁路由',
     aliases: ['旁路网关', '旁路路由'],
     description: '以旁路模式接入网络的路由器或网关设备',
+    wikiPath: '网关',
     langs: {
-      en: { aliases: ['secondary router', 'bypass gateway'] },
+      en: { aliases: ['secondary router', 'bypass gateway'], wikiPath: 'Gateway_(telecommunications)' },
     },
   },
   {
@@ -903,6 +904,7 @@ export const glossary: TermEntry[] = [
     id: 'bidirectional-link',
     term: '双向链接',
     description: '知识管理系统中文档之间相互关联的链接结构',
+    wikiPath: 'Help:链接',
     langs: {
       en: { aliases: ['bidirectional linking', 'bidirectional link', 'Wikilink'], wikiPath: 'Help:Link' },
     },
