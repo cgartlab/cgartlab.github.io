@@ -53,6 +53,7 @@ for (const entry of sorted) {
   <div class="uno-decorative-line" />
 
   <div class="glossary-page">
+    <div class="glossary-content">
     <h1 class="glossary-title">{t.glossaryTitle}</h1>
     <p class="glossary-subtitle">{t.glossaryDesc.replace('{n}', String(glossary.length))}</p>
 
@@ -93,35 +94,48 @@ for (const entry of sorted) {
     ))}
     </div>
   </div>
-
-  <!-- Letter Jump Nav: phone-contacts style on desktop -->
-  
 </Layout>
 
 <script>
 document.addEventListener('astro:page-load', () => {
   const sections = document.querySelectorAll('.letter-section');
   const links = document.querySelectorAll('.letter-jump');
-  if (!sections.length || !links.length) return;
+  const nav = document.querySelector('.letter-nav');
+  
+  if (!sections.length || !links.length || !nav) return;
+
+  let clickPending = false;
+
+  function setActive(id = "") {
+    if (!nav) return;
+    links.forEach(link => link.classList.remove('active'));
+    const match = nav.querySelector('[href="#' + id + '"]');
+    if (match) match.classList.add('active');
+  }
 
   function updateActiveLink() {
-    const nav = document.querySelector('.letter-nav');
-    const navHeight = nav ? nav.getBoundingClientRect().height + 8 : 60;
+    if (clickPending || !nav) return;
+    // Desktop: nav is sticky at top → use nav height as offset
+    // Mobile: nav is fixed on right → use scroll-margin-top (5rem ≈ 80px) + tolerance
+    const navStyle = window.getComputedStyle(nav);
+    const offset = navStyle.position === 'sticky'
+      ? Math.max(nav.getBoundingClientRect().height + 8, 84)
+      : 84;
     let current = sections[0]?.id || null;
     for (const section of sections) {
-      if (section.getBoundingClientRect().top <= navHeight) {
+      if (section.getBoundingClientRect().top <= offset) {
         current = section.id;
       }
     }
-    if (current) {
-      links.forEach(link => {
-        link.classList.toggle('active', link.getAttribute('href') === "#" + current);
-      });
-    }
+    if (!current) return;
+
+    setActive(current);
   }
 
+  // Initial update
   updateActiveLink();
 
+  // Update on scroll (throttled via rAF)
   let ticking = false;
   window.addEventListener('scroll', () => {
     if (!ticking) {
@@ -132,6 +146,18 @@ document.addEventListener('astro:page-load', () => {
       ticking = true;
     }
   }, { passive: true });
+
+  // Click letter: instant visual feedback, then scroll event corrects
+  links.forEach(link => {
+    link.addEventListener('click', () => {
+      clickPending = true;
+      setActive(link.getAttribute('href')?.slice(1) ?? '');
+      setTimeout(() => {
+        clickPending = false;
+        updateActiveLink();
+      }, 300);
+    });
+  });
 });
 </script>
 
@@ -322,4 +348,41 @@ document.addEventListener('astro:page-load', () => {
     min-width: auto;
   }
 }
+
+@media (max-width: 1023px) {
+  .letter-nav {
+    position: fixed;
+    right: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    padding: 0.5rem;
+    width: auto;
+    height: fit-content;
+    background: color-mix(in srgb, oklch(var(--un-preset-theme-colors-background)) 85%, transparent);
+    border-radius: 0.5rem;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid color-mix(in srgb, var(--un-preset-theme-colors-secondary) 10%, transparent);
+    overflow: visible;
+    scrollbar-width: none;
+    flex-wrap: nowrap;
+    border-bottom: none;
+    margin-bottom: 0;
+  }
+
+  .letter-nav::-webkit-scrollbar {
+    display: none;
+  }
+
+  .letter-jump {
+    width: 1.75rem;
+    height: 1.75rem;
+    font-size: 0.7rem;
+  }
+}
+
 </style>
