@@ -20,3 +20,20 @@ jobs:
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           sync-labels: true
+
+  triage:
+    if: github.event_name == 'pull_request' && github.event.action == 'opened'
+    permissions:
+      pull-requests: write
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions-ecosystem/action-add-assignees@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          assignees: ${{ github.actor }}
+
+      - name: Add to project
+        uses: actions/add-to-project@v1
+        with:
+          project-url: https://github.com/users/cgartlab/projects/3
+          github-token: ${{ secrets.GH_PROJECT_PAT }}
