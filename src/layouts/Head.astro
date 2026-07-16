@@ -34,10 +34,9 @@ const siteDescription = i18nTitle ? currentUI.description : description
 
 // Site SEO Metadata (longer, more descriptive, used only in <title> and OG tags)
 const seoSiteTitle = i18nTitle ? (currentUI.seoTitle || currentUI.title) : title
-const seoSiteSubtitle = i18nTitle ? (currentUI.seoSubtitle || currentUI.subtitle) : subtitle
 
 // Page Metadata
-const pageTitle = postTitle ? `${postTitle} | ${seoSiteTitle}` : `${seoSiteTitle} - ${seoSiteSubtitle}`
+const pageTitle = postTitle ? `${postTitle} | ${seoSiteTitle}` : `${seoSiteTitle} - ${siteSubtitle}`
 const pageDescription = postDescription || siteDescription
 const pageImage = postSlug
   ? new URL(`${base}/og/${postSlug}.png`, Astro.url.origin)
