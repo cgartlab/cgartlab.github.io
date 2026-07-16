@@ -1,7 +1,8 @@
 export const ui = {
   'en': {
     title: 'CGArtLab',
-    subtitle: 'Exploring the Boundaries of Digital Art',
+    subtitle: 'Exploring the Edge of Digital Creation',
+    seoTitle: 'CGArtLab Studio',
     description: 'CGArtLab (cgartlab.com) is a website focused on digital art, visual design, technical sharing, and knowledge management. It aims to provide CG art information, tutorials, work showcases, and an exchange platform for digital art enthusiasts, professional designers, beginners, and commercial clients.',
     posts: 'Posts',
     tags: 'Tags',
@@ -38,6 +39,7 @@ export const ui = {
   'zh': {
     title: 'CGArtLab',
     subtitle: '探索数字创作的边界',
+    seoTitle: 'CGArtLab | CG艺术实验室',
     description: 'CG艺术实验室（cgartlab.com）是一个专注于数字艺术、视觉设计、技术分享和知识管理的视觉设计机构。致力于为数字艺术爱好者、专业设计师和初学者以及商业客户，提供最新、最全面的资讯、教程、作品展示以及设计服务。',
     posts: '文章',
     tags: '标签',
@@ -73,6 +75,7 @@ export const ui = {
   'zh-tw': {
     title: 'CGArtLab',
     subtitle: '探索數位藝術的邊界',
+    seoTitle: 'CGArtLab | CG藝術實驗室',
     description: 'CG藝術實驗室（cgartlab.com）是一個專注於數位藝術、視覺設計、技術分享和知識管理的視覺設計機構。致力於為數位藝術愛好者、專業設計師和初學者以及商業客戶，提供最新、最全面的資訊、教程、作品展示以及設計服務。',
     posts: '文章',
     tags: '標籤',

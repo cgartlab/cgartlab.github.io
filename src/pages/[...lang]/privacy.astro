@@ -18,7 +18,13 @@ const privacyEntry = allPrivacyEntries.find(entry => entry.data.lang === current
 const { Content } = privacyEntry ? await render(privacyEntry) : { Content: null }
 ---
 
-<Layout>
+<Layout
+  postTitle={currentLang === "zh"
+    ? "隐私政策 - 个人信息保护"
+    : currentLang === "zh-tw"
+    ? "隱私政策 - 個人資訊保護"
+    : "Privacy Policy - Data Protection"}
+>
   <!-- Decorative Line -->
   <div class="uno-decorative-line" />
   <!-- Privacy Policy Page Content -->

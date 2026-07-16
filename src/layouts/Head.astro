@@ -32,8 +32,11 @@ const siteTitle = i18nTitle ? currentUI.title : title
 const siteSubtitle = i18nTitle ? currentUI.subtitle : subtitle
 const siteDescription = i18nTitle ? currentUI.description : description
 
+// Site SEO Metadata (longer, more descriptive, used only in <title> and OG tags)
+const seoSiteTitle = i18nTitle ? (currentUI.seoTitle || currentUI.title) : title
+
 // Page Metadata
-const pageTitle = postTitle ? `${postTitle} | ${siteTitle}` : `${siteTitle} - ${siteSubtitle}`
+const pageTitle = postTitle ? `${postTitle} | ${seoSiteTitle}` : `${seoSiteTitle} - ${siteSubtitle}`
 const pageDescription = postDescription || siteDescription
 const pageImage = postSlug
   ? new URL(`${base}/og/${postSlug}.png`, Astro.url.origin)
@@ -149,7 +152,7 @@ const pageImage = postSlug
     },
     'publisher': {
       '@type': 'Organization',
-      'name': siteTitle,
+      'name': seoSiteTitle,
       'logo': {
         '@type': 'ImageObject',
         'url': new URL(`${base}/icons/favicon.svg`, Astro.url.origin).toString(),
@@ -171,7 +174,7 @@ const pageImage = postSlug
     set:html={JSON.stringify({
     '@context': 'https://schema.org',
     '@type': 'WebSite',
-    'name': siteTitle,
+    'name': seoSiteTitle,
     'description': siteDescription,
     'url': Astro.url.toString(),
     'author': {
@@ -180,7 +183,7 @@ const pageImage = postSlug
     },
     'publisher': {
       '@type': 'Organization',
-      'name': siteTitle,
+      'name': seoSiteTitle,
     },
     'inLanguage': currentLang,
     'potentialAction': {
@@ -206,7 +209,7 @@ const pageImage = postSlug
     {
       '@type': 'ListItem',
       'position': 1,
-      'name': siteTitle,
+      'name': seoSiteTitle,
       'item': `${origin}${base}/`,
     },
   ]

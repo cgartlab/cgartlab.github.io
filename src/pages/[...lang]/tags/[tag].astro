@@ -28,7 +28,13 @@ const allTags = await getAllTags(currentLang)
 const supportedLangs = await getTagSupportedLangs(tag)
 ---
 
-<Layout supportedLangs={supportedLangs}>
+<Layout supportedLangs={supportedLangs}
+  postTitle={currentLang === "zh"
+    ? `标签: ${tag}`
+    : currentLang === "zh-tw"
+    ? `標籤: ${tag}`
+    : `Tag: ${tag}`}
+>
   <!-- Decorative Line -->
   <div class="uno-decorative-line" />
   <!-- Tag List -->

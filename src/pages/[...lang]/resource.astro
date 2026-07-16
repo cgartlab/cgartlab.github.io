@@ -18,7 +18,13 @@ const termCount = glossary.length
 const glossaryUrl = `/${currentLang === defaultLocale ? '' : currentLang + '/'}glossary/`
 ---
 
-<Layout>
+<Layout
+  postTitle={currentLang === "zh"
+    ? "资源与推荐"
+    : currentLang === "zh-tw"
+    ? "資源與推薦"
+    : "Resources - Recommended Links and Tools"}
+>
   <!-- Decorative Line -->
   <div class="uno-decorative-line" />
 
@@ -32,4 +38,3 @@ const glossaryUrl = `/${currentLang === defaultLocale ? '' : currentLang + '/'}g
     />
   </div>
 </Layout>
-
