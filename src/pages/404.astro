@@ -1,9 +1,17 @@
 ---
 import Layout from '@/layouts/Layout.astro'
+import { getLangFromPath } from '@/i18n/lang'
+
+const _currentLang = getLangFromPath(Astro.url.pathname)
+const _pageNotFoundTitle = {
+  'zh': '页面未找到 - 404',
+  'en': 'Page Not Found - 404',
+  'zh-tw': '頁面未找到 - 404',
+}[_currentLang] || 'Page Not Found - 404'
 ---
 
 <Layout
-  postTitle="Page Not Found - 404"
+  postTitle={_pageNotFoundTitle}
 >
   <!-- Decorative Line -->
   <div class="uno-decorative-line" />
