@@ -49,6 +49,12 @@ const disclaimerText = {
   'en': 'Disclaimer',
   'zh-tw': '免責聲明',
 }[currentLang] || '免责声明'
+// 许可协议文本
+const licenseText = {
+  'zh': '内容统一采用',
+  'en': 'All content licensed under',
+  'zh-tw': '內容統一採用',
+}[currentLang] || '内容统一采用'
 ---
 
 <footer
@@ -84,7 +90,7 @@ const disclaimerText = {
 
   <!-- 第5行：许可 -->
   <p class="m-0 text-footer font-navbar">
-    内容统一采用
+    {licenseText}
     <a
       class={footerLinkClass}
       href="https://creativecommons.org/licenses/by-nc-sa/4.0/"

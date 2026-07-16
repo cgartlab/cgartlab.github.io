@@ -28,7 +28,9 @@ const allTags = await getAllTags(currentLang)
 const supportedLangs = await getTagSupportedLangs(tag)
 ---
 
-<Layout supportedLangs={supportedLangs}>
+<Layout supportedLangs={supportedLangs}
+  postTitle={tag}
+>
   <!-- Decorative Line -->
   <div class="uno-decorative-line" />
   <!-- Tag List -->

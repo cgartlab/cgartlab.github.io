@@ -15,7 +15,13 @@ const currentLang = getLangFromLocale(Astro.currentLocale)
 const allTags = await getAllTags(currentLang)
 ---
 
-<Layout>
+<Layout
+  postTitle={currentLang === "zh"
+    ? "标签 - 文章分类"
+    : currentLang === "zh-tw"
+    ? "标签 - 文章分类"
+    : "Tags - Post Categories"}
+>
   <!-- Decorative Line -->
   <div class="uno-decorative-line" />
 
