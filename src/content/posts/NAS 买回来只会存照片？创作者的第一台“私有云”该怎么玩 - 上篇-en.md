@@ -7,7 +7,7 @@ tags:
   - Essay
   - knowledge-management
   - NAS
-description: "NAS is more than a hard drive box—it's your personal data center. Learn the basics of NAS setup for creators, from understanding storage needs to building efficient creative workflows without complex commands."
+description: "Why NAS is more than a hard drive box: a creator's personal data center. Part 1 covers storage needs and workflow design without complex commands."
 updated: 2026-01-24
 pin: 0
 toc: true
@@ -24,7 +24,7 @@ More and more people are using NAS these days. However, many people first hear a
 
 I happened to be the opposite. My first contact accelerated my efficiency by N times. Only later did I realize, oh, it's also a hard drive box.
 
-![It's been quite a while](_images/NAS-买回来只会存照片？创作者的第一台“私有云”该怎么玩-1769182523451.webp)
+![Personal photo timeline showing years of memories and milestones since first using a NAS for storage](_images/NAS-买回来只会存照片？创作者的第一台“私有云”该怎么玩-1769182523451.webp)
 
 I first learned about NAS in 2014 when I was still working at a TV station. At that time, I didn't even know what brand or model it was (probably Synology in those days). The director sent account credentials in a QQ group, and we could log in by entering the address in our browsers. I naively thought he had bought a website… Looking back now, that's both right and wrong.
 
@@ -36,7 +36,7 @@ Oh, so it's still just a hard drive box.
 
 ## What is NAS Really?
 
-![One I assembled myself last year](_images/11月的拔草记录和选荐-1754916668923%201.webp)
+![Custom-assembled NAS unit shown alongside the case used to build the creator's DIY home server](_images/11月的拔草记录和选荐-1754916668923%201.webp)
 
 Physically, NAS is essentially still a computer, fundamentally no different from the desktops and laptops we use daily.
 
@@ -46,7 +46,7 @@ Here's a side note: I use NAS, but I also have an annual subscription to a certa
 
 Okay, back to the main topic.
 
-![The question of renting vs. buying](_images/07%20玄光周刊-双钻石设计模型：从用户需求到产品落地的黄金框架解析-1754596998369%201.webp)
+![Infographic comparing cloud storage subscription versus owning a private NAS for data sovereignty](_images/07%20玄光周刊-双钻石设计模型：从用户需求到产品落地的黄金框架解析-1754596998369%201.webp)
 
 If cloud storage is like renting an apartment, NAS can be understood as buying a private villa outright.
 
@@ -64,7 +64,7 @@ From my experience so far, the more your work involves your own data flow, the m
 
 ## What Do You Really Need NAS to Solve?
 
-![Double Diamond Brand Demand Model](_images/07%20玄光周刊-双钻石设计模型：从用户需求到产品落地的黄金框架解析-1754597099879%201.webp)
+![Double Diamond design framework diagram illustrating the discover and define phases of identifying user needs](_images/07%20玄光周刊-双钻石设计模型：从用户需求到产品落地的黄金框架解析-1754597099879%201.webp)
 
 As a designer, clarifying needs is something I think about almost daily for my clients. Yes, many people seek help, even paying for it, without actually knowing their real needs.
 

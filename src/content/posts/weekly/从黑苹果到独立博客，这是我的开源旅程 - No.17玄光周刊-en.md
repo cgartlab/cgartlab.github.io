@@ -2,7 +2,7 @@
 title: "From Hackintosh to Indie Blog: My Open Source Journey - No.17 Black Light Weekly"
 published: 2026-05-02
 updated: 2026-05-02
-description: "During the early pandemic, I first encountered open source through tinkering with Hackintosh. Starting with using files shared by others, it wasn't until I read driver source code and saw hundreds of people debugging hardware IDs that I realized this system was built brick by brick by volunteers in their spare time."
+description: "From pandemic Hackintosh tinkering to indie blog building, discover how global volunteers and shared source code sparked a personal open source journey."
 tags:
   - Weekly
   - Open Source
@@ -14,7 +14,7 @@ lang: en
 abbrlink: weekly-17
 ---
 
-![cover](../_images/从黑苹果到独立博客，这是我的开源旅程%20-%20No.17玄光周刊-1777653407966.webp)
+![Hackintosh mini PC cover image showing custom-built compact desktop computer running macOS on Windows hardware components](../_images/从黑苹果到独立博客，这是我的开源旅程%20-%20No.17玄光周刊-1777653407966.webp)
 
 This issue's cover comes from a Hackintosh mini PC I configured the year before last. This cover was [used once before](https://cgartlab.com/posts/build-a-macmini/), and it's placed here because my open source journey is connected to it.
 
@@ -48,7 +48,7 @@ After solving more than a dozen problems of various sizes, the system gradually 
 
 ### Math Curve Animation Collection
 
-![](../_images/从黑苹果到独立博客，这是我的开源旅程%20-%20No.17玄光周刊-1777530794891.webp)
+![Math Curve Animation Collection website displaying Bezier curves, trigonometric functions, and parametric equations as loading animations](../_images/从黑苹果到独立博客，这是我的开源旅程%20-%20No.17玄光周刊-1777530794891.webp)
 
 🔗 https://paidax01.github.io/math-curve-loaders/
 
@@ -63,7 +63,7 @@ Each animation comes with source code, making it convenient for developers to le
 
 ### Krita — A Very Low-Key Open Source Digital Painting Tool
 
-![SCP_03](../_images/从黑苹果到独立博客，这是我的开源旅程%20-%20No.17玄光周刊-1777530092204.webp)
+![Krita open-source digital painting tool interface showing SCP series artwork created with the free painting application](../_images/从黑苹果到独立博客，这是我的开源旅程%20-%20No.17玄光周刊-1777530092204.webp)
 
 🔗 https://krita.org
 
@@ -83,7 +83,7 @@ Finally, returning to the thermodynamics perspective, because overall resources 
 
 ## Video Recommendation
 
-![](../_images/从黑苹果到独立博客，这是我的开源旅程%20-%20No.17玄光周刊-1777652961215.webp)
+![Christoph Niemann illustration documentary video thumbnail on Bilibili showcasing the artist's creative process and design philosophy](../_images/从黑苹果到独立博客，这是我的开源旅程%20-%20No.17玄光周刊-1777652961215.webp)
 
 [S01E01 Christoph Niemann: Illustration _ Bilibili](https://www.bilibili.com/video/BV1AE411t7Jo?spm_id_from=333.788.videopod.episodes&vd_source=55f768ce35e0b7a5a1934a62fcb29bd4&p=2)
 

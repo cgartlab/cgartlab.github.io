@@ -1,7 +1,7 @@
 ---
 title: Auto-generate Encyclopedia Links for Terms in Articles, Done in One Minute
 published: 2026-06-28
-description: Automatically generate encyclopedia links for technical terms in articles to improve reading flow. Explains the logic in plain language and documents the full implementation based on Astro remark/rehype plugins. Suitable for blog developers and technical writers.
+description: "Build an automated glossary link system for your blog in one minute. A plain-language walkthrough plus the full Astro remark/rehype plugin implementation for technical writers and developers."
 tags:
   - Site Update
   - Blog Development
@@ -13,7 +13,7 @@ abbrlink: auto-glossary-term-linking
 
 > **AI Disclosure:** The frontend visual design and written content in this article are original by the author. For the code, the author provided requirements, creative direction, and domain definitions for the terminology glossary, while [OpenCode](https://sspai.com/post/opencode.ai) handled the specific implementation. The author reviewed, manually adjusted, and then deployed the final version.
 
-![Automated processing outputs web pages with encyclopedia links](./_images/博客功能更新：一分钟给所有文章内的术语生成百科链接-1782638526361.webp)
+![Article rendered after automated glossary processing, with technical terms like RSS, Git, and Docker turned into Wikipedia links](./_images/博客功能更新：一分钟给所有文章内的术语生成百科链接-1782638526361.webp)
 
 # Why Add Links to Terms
 

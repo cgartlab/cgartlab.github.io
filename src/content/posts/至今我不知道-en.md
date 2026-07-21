@@ -1,6 +1,6 @@
 ---
 title: "I Still Don't Know: Authentic Perception in the Information Age"
-description: "Explore the tension between knowledge background and pure sensory experience in art appreciation. Discover how to maintain authentic perception while navigating information overload in digital culture."
+description: "Can you still feel art without context? A meditation on knowledge versus pure sensory experience — and why great works return us to the moment before we knew anything."
 published: 2024-03-28
 updated: 2024-11-24
 tags:
@@ -14,7 +14,7 @@ lang: en
 abbrlink: know-nothing
 ---
 
-![Abstract digital artwork representing the mystery of pure sensory experience beyond knowledge](./_images/至今我不知道-1754570365993.webp)
+![Abstract digital artwork symbolizing pure sensory experience — the moment of perception that exists before knowledge labels kick in](./_images/至今我不知道-1754570365993.webp)
 
 Every time I create something in a different style, I have to search for many references based on others' requirements or my own concepts.
 

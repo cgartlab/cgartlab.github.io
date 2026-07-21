@@ -1,7 +1,7 @@
 ---
 title: "How to Use Windows PC Elegantly in 2024: Optimization & Setup Guide"
 published: 2024-07-07
-description: "Master Windows 11 in 2024 with our complete optimization guide. Learn system settings, keyboard shortcuts, built-in tools like winget, and productivity tips for an efficient Windows experience."
+description: "Optimize Windows 11 for productivity in 2024 with setup strategies, keyboard shortcuts, performance tweaks, and essential free tools for power users and creators."
 updated: 2024-12-15
 tags:
   - tech-sharing
@@ -103,7 +103,7 @@ Besides system-level shortcuts, I also recommend memorizing frequently used shor
 
 If I mention common operations later, I'll note their corresponding shortcuts if available.
 
-Don't underestimate these small habits and changes—they accumulate over time and can save significant amounts of time while reducing unnecessary repetitive actions.
+Don't overlook these small habits and changes—they accumulate over time and can save significant amounts of time while reducing unnecessary repetitive actions.
 
 ## Performance Optimization
 
@@ -311,3 +311,22 @@ ipconfig /renew
 ## Hyper-V Virtual Machine
 
 ![Windows Hyper-V Virtual Machine Manager interface, showing how to create and manage virtual machines](./_images/2024年，如何优雅使用WindowsPC-1754583037058.webp)
+
+Simply put, a virtual machine is running another Windows inside Windows. Although this recommendation might be a bit challenging for beginners, Windows' built-in Hyper-V virtual machine is already very straightforward and easy to understand.
+
+One common work scenario: a client sends you a file in a format such as WPS Document, but you normally use Office and can't open it—or it opens with formatting issues. You might only need this format once, so installing WPS just for that one time isn't worth it. In such cases, you can install WPS in a virtual machine to handle the file without any impact on your main system. The entire virtual machine system runs as just a file within the main system. Even if the virtual machine gets infected and crashes, you can simply delete that file.
+
+In my own case, the most common situation is that many 3D models I download online are in 3ds Max format, but 3ds Max takes up a lot of space and resources and is difficult to uninstall cleanly when not in use. I use Cinema 4D most often, so I install 3ds Max in a virtual machine, open the model, export it to a suitable format, and then shut down the virtual machine.
+
+For developers or anyone with other needs, of course you can also try installing different systems to learn and test other production environments. So, I strongly recommend virtual machines. Besides Hyper-V, there are many third-party virtual machine applications, which I won't introduce in detail here.
+
+## Data Security and Privacy Protection
+
+Data is priceless. Generally speaking, just following two rules can avoid over 90% of data security issues.
+
+- Important files involving private and work matters are generally not recommended to be stored in any cloud drive. For even more sensitive files, local encryption should be applied, along with regular cold and hot backups.
+- Try not to download, install, or run any programs, code, or commands of unknown origin. If necessary, test them in a virtual machine first.
+
+## Summary
+
+A workman must first sharpen his tools. To do something well with the help of tools, you must first understand and master the tools themselves. Make full use of the computer's own capabilities, combined with maintaining good habits, and you will ultimately benefit from the cumulative effect of consistent practice.

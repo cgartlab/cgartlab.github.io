@@ -1,7 +1,7 @@
 ---
 title: "Writing Again, Farewell to Shanxi: A Creator's Return to Writing"
 published: 2022-05-08
-description: "A personal essay on returning to writing after studying abroad. Discover how RSS feeds, information management, and intentional content consumption can fuel creative inspiration and rebuild writing habits."
+description: "A personal reflection on returning to writing after years of drawing. Why text still matters, how RSS curates quality reading, and the creative power of focused information diets over algorithmic feeds."
 updated: 2024-12-11
 tags:
   - Essay
@@ -14,7 +14,7 @@ lang: en
 abbrlink: zaijianshanxi
 ---
 
-![Personal writing journey scene representing the return to creative expression and storytelling](./_images/再来码字，再见山西-1754470929070.webp)
+![Atmospheric scene from Shanxi evoking the author's return to writing after years of drawing-focused creative work](./_images/再来码字，再见山西-1754470929070.webp)
 
 Long time no see, I've started writing again.
 
@@ -34,7 +34,7 @@ From my own experience, compared to video content, text content consumes more of
 
 First step: limit input. The principle was to reduce the apps I used for consuming content to three or fewer. For example, I unfollowed all public accounts in WeChat and moved professional and work-related accounts to WeChat Reading. WeChat became just a chat app—pure social interaction.
 
-Second step: consolidate other content I was interested in. The solution I found was RSS. I aggregated all content I was interested in through RSS subscriptions. As for those authors who posted quality content on specific platforms—let them be. As a side note, I estimate few post-00s have heard of RSS. This is something from the ancient internet era—a way to subscribe to and push information, essentially the predecessor of "remember to follow, family". Quite interesting. When I first started using computers, I knew nothing about these. I definitely need to write something about how to handle information overload.
+Second step: consolidate other content I was interested in. The solution I found was RSS. I aggregated all content I was interested in through RSS subscriptions. As for those authors who posted quality content on specific platforms—let them be. As a side note, I estimate few people born after 2000 have heard of RSS. This is something from the ancient internet era—a way to subscribe to and push information, essentially the predecessor of "remember to follow, family". Quite interesting. When I first started using computers, I knew nothing about these. I definitely need to write something about how to handle information overload.
 
 Third step: After all this, the apps I used for consuming textual content were reduced to WeChat, RSS subscriptions, and Kindle. Another side note: recently, I'm not very optimistic about Kindle's development potential in China—it might just not be suitable for local conditions.
 

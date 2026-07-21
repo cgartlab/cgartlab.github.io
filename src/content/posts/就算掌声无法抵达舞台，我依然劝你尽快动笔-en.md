@@ -1,7 +1,7 @@
 ---
 title: "Even If Applause Can't Reach the Stage: A Creator's Guide to Starting Your Journey"
 published: 2026-01-31
-description: "Overcome creative fear and start your writing or artistic journey today. Learn from Dan Koe's content strategy, discover the 'Show Your Work' philosophy, and find practical motivation for creative beginners in the digital age."
+description: "Four reasons to start writing today, even before applause arrives. Lessons drawn from Dan Koe's viral essays, plus practical advice for creators on passion, observation, momentum, and creative detachment from income."
 updated: 2026-01-31
 tags:
   - Essay
@@ -14,7 +14,7 @@ lang: en
 abbrlink: pick-your-pencil-now
 ---
 
-![Inspirational landscape image representing the creative journey and stepping into the unknown as an artist](./_images/12%20玄光周刊-Dan%20Koe-1769310982170.webp)
+![AI-generated landscape from Dan Koe's website symbolizing the creator's paradox of facing the unknown with clear direction](./_images/12%20玄光周刊-Dan%20Koe-1769310982170.webp)
 
 This image is from Dan Koe's personal website. Even though it's AI-generated, I really like this picture. It reminds me of the day I went abroad to study—stepping out of the airport alone into an unfamiliar country, facing endless unknowns ahead, yet with direction and motivation exceptionally clear. Two seemingly contradictory forces harmoniously coexisting within.
 
@@ -49,7 +49,7 @@ His success isn't accidental; it's the result of combining a set of validated cr
 
 ## 02 Talking About Dan Koe
 
-![图片来自 thedankoe.com](./_images/就算掌声无法抵达舞台，我依然劝你尽快动笔-1769861516030.webp)
+![Screenshot of writer and creator Dan Koe's homepage header, the source of the article's central example](./_images/就算掌声无法抵达舞台，我依然劝你尽快动笔-1769861516030.webp)
 
 He recently wrote a long post on 𝕏 (Twitter) titled [“How to fix your entire life in 1 day”](https://x.com/thedankoe/status/2010751592346030461). As of this article's publication, less than half a month after he posted it, it had already garnered 170 million views on 𝕏 alone. I only started paying attention to him because my social media feeds and RSS subscriptions were flooded with mentions of this.
 
@@ -81,9 +81,9 @@ Writing is somewhat different from other creative pursuits like calligraphy, mus
 
 Speaking of this, I'm reminded of a small book particularly suitable for this stage: Austin Kleon's *Show Your Work!*.
 
-![show your work](./_images/就算掌声无法抵达舞台，我依然劝你尽快动笔-1769857863140.webp)
+![Cover of Austin Kleon's book "Show Your Work!", which inspires beginners to share creative process openly](./_images/就算掌声无法抵达舞台，我依然劝你尽快动笔-1769857863140.webp)
 
-The biggest inspiration this book gave me was that it pierced through a layer of window paper: **You don't need to be a perfect genius to have the right to share.**
+The biggest inspiration this book gave me was that it broke through a barrier that had seemed opaque: **You don't need to be a perfect genius to have the right to share.**
 
 We always think we need to master extraordinary skills or create masterpieces before we're worthy of showing them to others. But Kleon says no. What truly attracts and connects people is often your **clumsiness during practice, confusion when seeking inspiration, even post-failure reflections.** Sharing these "works in progress" is "showing your work." This perfectly echoes the "really like it" point. Only when you truly like something will you tirelessly record those trivial, imperfect processes: today you copied a painting, which part was always difficult; you read a particularly resonant sentence, why it moved you; or just venting about "wrote another 5,000 words that went nowhere."
 
@@ -115,11 +115,11 @@ I wrote the above "bits" (I couldn't find a better term) in 2015.
 
 It's only in recent years that I learned this "bad habit" now has a trendy name: "knowledge management." Over time, as experiences accumulated and skills gradually increased, I learned to use computers to amplify this "bad habit." Let these topics, viewpoints, concepts, and thoughts interconnect, collide, merge, and ferment. Every piece of content you see me write now originally evolved bit by bit from these fragments.
 
-Combining private and public writing, since starting my own website, I've written for 5 years total, 120,000 words. In the third year, I received my first writing fee from Minority Report. It wasn't much, but I was overjoyed.
+Combining private and public writing, since starting my own website, I've written for 5 years total, 120,000 words. In the third year, I received my first writing fee from sspai. It wasn't much, but I was overjoyed.
 
-![There were three articles](./_images/就算掌声无法抵达舞台，我依然劝你尽快动笔-1769854506058.webp)
+![Screenshot from the author's early publishing days showing only three published articles on the platform](./_images/就算掌声无法抵达舞台，我依然劝你尽快动笔-1769854506058.webp)
 
-![Current data](./_images/就算掌声无法抵达舞台，我依然劝你尽快动笔-1769855577045.webp)
+![Screenshot of the author's current writing portfolio metrics on sspai after five years of consistent output](./_images/就算掌声无法抵达舞台，我依然劝你尽快动笔-1769855577045.webp)
 
 This kind of very positive feedback—honestly, you can't clearly explain how it comes about. Luck, persistence, habit, fate—all play a part. I particularly like this example I heard:
 
@@ -167,15 +167,15 @@ At this point, your ceiling is whatever the market likes today, whatever the alg
 
 Conversely, **when you treat creation purely as a tool to know yourself and organize the world, the ceiling disappears.** Or rather, the ceiling becomes your own cognitive boundaries and life experiences. You write simply because you want to understand something, because a thought keeps you awake, because a feeling must be expressed. Your readers are no longer vague "traffic," but another "kindred spirit" in the world who might share your same confusion, same feelings.
 
-You stop studying viral formulas and start studying how to express more honestly, clearly. What you polish isn't 套路 (routines), but your thinking itself.
+You stop studying viral formulas and start studying how to express more honestly, clearly. What you polish isn't routines, but your thinking itself.
 
 At this point, two things happen:
 
 First, **you'll write with immense satisfaction.** Because you're writing for yourself. After finishing each piece, regardless of whether anyone reads it, you've first achieved clarity, satisfaction, understanding. Monetary compensation pales in comparison to this sense of acquisition.
 
-Second, **you're actually more likely to reach others.** Because human nature is universal. The deeper and more honestly you dig into your own heart, the more likely you are to touch that same place in others' hearts. The path you 梳理 (organize) to solve your own problems might also illuminate someone else's path. Dan Koe's long post went viral not because he studied what 170 million people wanted to see, but because he unreservedly, systematically presented his deep thinking on "how to fix your life." He just solved his own problem first, then shared it, incidentally solving countless others' problems.
+Second, **you're actually more likely to reach others.** Because human nature is universal. The deeper and more honestly you dig into your own heart, the more likely you are to touch that same place in others' hearts. The path you organize to solve your own problems might also illuminate someone else's path. Dan Koe's long post went viral not because he studied what 170 million people wanted to see, but because he unreservedly, systematically presented his deep thinking on "how to fix your life." He just solved his own problem first, then shared it, incidentally solving countless others' problems.
 
-So you see, "don't count on it for a living" isn't telling you to be passive; it's **telling you to use your energy in the right place.** Don't waste precious creative energy on 揣测 (speculating) and 迎合 (catering). Channel that effort entirely into inward excavation, outward exploration, telling your future self what you want to understand in the way you best understand it.
+So you see, "don't count on it for a living" isn't telling you to be passive; it's **telling you to use your energy in the right place.** Don't waste precious creative energy on speculating and catering. Channel that effort entirely into inward excavation, outward exploration, telling your future self what you want to understand in the way you best understand it.
 
 When you choose to be such a person, your words naturally carry weight. By then, whether applause comes, whether there's income, becomes a byproduct you don't need to worry about excessively. Because you know you already possess the most solid thing—a self-sufficient, abundant inner world built through writing. Actually, switching to this creative state, the ceiling no longer exists.
 
@@ -185,6 +185,6 @@ So, keep writing. For no other reason than to curiously see what you can ultimat
 
 A couple more words:
 
-The first section of this article came from a short 图文 (graphic post) I shared on my public account a few days ago. Originally planned for the weekly newsletter, but it kept getting longer. The next issue of the newsletter is almost ready too :）
+The first section of this article came from a short graphic post I shared on my public account a few days ago. Originally planned for the weekly newsletter, but it kept getting longer. The next issue of the newsletter is almost ready too :)
 
 This article was first published on [CGArtLab](https://cgartlab.com)
