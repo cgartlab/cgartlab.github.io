@@ -1,7 +1,7 @@
 ---
-title: 主题 - No.xx 玄光周刊
-published: 2026-05-01
-updated: 2026-05-01
+title: "{{title}}"
+published: 2026-07-21
+updated: 2026-07-21
 description: （这里写描述，140 字以内）
 tags:
   - 周刊
@@ -17,11 +17,11 @@ abbrlink: weekly-xx
 ---
 
 > [!note] 关于周刊
-> 这是一份专注知识管理，涵盖数字艺术、视觉设计、前端开发领域的电子周刊，发布频率目前为每周 1 期，每期精选一个细分话题展开思考。
+> 这是一份专注加速数字化生产力，覆盖知识管理、动态视觉设计、前端开发领域的电子周刊，发布频率目前为每周 1 期，每期精选一个主题展开思考。
 >
-> 如果你觉得这里的内容还不错，想获得更完善的阅读体验，更推荐使用浏览器来到官网阅读。
+> 如果你觉得周刊内容还不错，想获得更完善的阅读体验，更推荐使用浏览器来到官网 (https://cgartlab.com) 阅读。
 >
-> 也欢迎使用 **RSS** (https://weekly.cgartlab.com/feed/atom) 或**邮件订阅**（[https://weekly.cgartlab.com](https://weekly.cgartlab.com)）进行订阅。
+> 也欢迎使用 **RSS** (https://cgartlab.com/rss.xml) 进行订阅。
 
 ---
 
