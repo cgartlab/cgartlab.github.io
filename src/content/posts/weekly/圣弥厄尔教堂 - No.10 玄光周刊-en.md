@@ -1,12 +1,10 @@
 ---
-title: "St. Michael's Cathedral - No.10 Black Light Weekly | Astro Framework & Creative Tools"
+title: "St. Michael's Cathedral - No.10 Black Light Weekly"
 published: 2025-08-16
-description: "Discover Astro framework for frontend development, OpenCut video editing software, and MAKING SOFTWARE design resources. Explore how historical architecture inspires timeless digital design principles for creators."
-updated: 2026-06-26
+description: "Qingdao St. Michael's Cathedral visit, plus an Astro site rebuild, OpenCut as a CapCut alternative, MAKING SOFTWARE design reference, and ambient sounds app."
+updated: 2025-08-16
 tags:
   - Weekly
-  - Astro Framework
-  - Web Design
 draft: false
 pin: 0
 toc: true
@@ -14,15 +12,15 @@ lang: en
 abbrlink: weekly-10
 ---
 
-![St. Michael's Cathedral in Qingdao showcasing Gothic Revival architecture and historical design elements](../_images/10%20玄光周刊-圣弥厄尔教堂-1755279792823.webp)
+![St. Michael's Cathedral in Qingdao, a historic Catholic landmark with twin spires](../_images/10%20玄光周刊-圣弥厄尔教堂-1755279792823.webp)
 
-This week's cover was shot at Qingdao St. Michael's Cathedral. Rarely having leisure time to gather friends for an outing. Domestic tourism style emphasizes "since we're here anyway"—must visit a few landmarks. This Catholic cathedral wasn't as large as imagined, but seeing a full-scale pipe organ for the first time was quite impressive. Strangely, no nuns or priests were seen—perhaps they're on vacation during peak tourist season?
+This week's cover was shot at Qingdao St. Michael's Cathedral. Rarely had leisure time to gather friends for an outing. Domestic tourism style emphasizes "since we're here anyway"—must visit a few landmarks. This Catholic cathedral wasn't as large as imagined, but seeing a full-scale pipe organ for the first time was quite impressive. Strangely, no nuns or priests were seen—perhaps they're on vacation during peak tourist season?
 
 I don't follow any religion, only interested in their perspectives on viewing and deconstructing the world. For example, not believing in Buddhism but enjoying contemplating Buddhist teachings, even borrowing some of their thinking to incorporate into artistic creation. After all, humans can never avoid those ultimate questions.
 
 ## Astro Framework
 
-![Astro](../_images/10%20玄光周刊-圣弥厄尔教堂-1755281141229.webp)
+![Astro framework — a modern frontend framework for content-driven websites](../_images/10%20玄光周刊-圣弥厄尔教堂-1755281141229.webp)
 
 This is an emerging frontend framework from recent years, already rapidly updated to version 5.x.
 
@@ -32,15 +30,15 @@ Source: <https://astro.build>
 
 ## OpenCut
 
-![OpenCut](../_images/10%20玄光周刊-圣弥厄尔教堂-1755281016933.webp)
+![OpenCut open-source video editor interface, an alternative to CapCut](../_images/10%20玄光周刊-圣弥厄尔教堂-1755281016933.webp)
 
-An open-source video editing software competing with CapCut. Since the international version of CapCut also started membership systems, I had a 预感 an open-source alternative would appear—finally here, and sponsored by the famous Vercel! Early alpha public testing has begun, interested friends can try it.
+An open-source video editing software competing with CapCut. Since the international version of CapCut also started membership systems, I had a feeling that an open-source alternative would appear—finally here, and sponsored by the famous Vercel! Early alpha public testing has begun, interested friends can try it.
 
 Source: <https://opencut.app>
 
 ## MAKING SOFTWARE
 
-![MAKING SOFTWARE](../_images/10%20玄光周刊-圣弥厄尔教堂-1755281425069.webp)
+![MAKING SOFTWARE — a curated reference manual website for software designers](../_images/10%20玄光周刊-圣弥厄尔教堂-1755281425069.webp)
 
 A very exquisite website, described by the author as a reference manual written for software designers and builders.
 
@@ -48,21 +46,16 @@ Source: <https://www.makingsoftware.com>
 
 ## Ambient Sounds
 
-![Ambient Sounds](../_images/10%20玄光周刊-圣弥厄尔教堂-1755417602759.webp)
+![Ambient Sounds web app interface for mixing over 80 customizable soundscapes](../_images/10%20玄光周刊-圣弥厄尔教堂-1755417602759.webp)
 
 A white noise website I've been loving recently, with open-source code. Can freely combine over 80 different ambient sounds, adjust volumes, save as presets. Easily create your preferred atmosphere, and share preset sound combinations via links. Also, relatively simple site structure makes it great as a practice open-source project.
 
-Source: <https://www.ambientsounds.org> (已失效 2026-06-26)
+---
 
-## Architectural Reflections
+This article was first published on [Black Light Weekly](https://weekly.cgartlab.com) and simultaneously serialized on [CG Art Lab](https://cgartlab.com)
 
-Visiting historical architecture like St. Michael's Cathedral always makes me reflect on design principles that stand the test of time:
-
-- **Proportion and scale**: How buildings relate to human dimensions
-- **Material authenticity**: Using materials honestly rather than imitating others
-- **Functional beauty**: When practical requirements create aesthetic value
-- **Cultural context**: How design reflects and shapes its time and place
-
-These principles apply equally to digital design. Just as cathedrals were built to inspire and serve communities, good software should enhance human capabilities and experiences.
-
-What historical or architectural inspirations have influenced your creative work? How do timeless design principles inform your modern practice?
+> About Black Light Weekly
+>
+> This is an electronic weekly focused on knowledge management, covering digital art, visual design, and frontend development. Currently published at a frequency of one issue per week, with each issue selecting a niche topic for in-depth thinking. It shares my notes on entrepreneurship and products, including my thoughts, excerpts and annotations, reading notes, and quality content recommendations.
+>
+> If you find the content here good, for a more complete reading experience, we recommend visiting the official website via browser. You are also welcome to subscribe via [RSS](https://weekly.cgartlab.com/feed/atom) or [email subscription](https://weekly.cgartlab.com/)—we compile these notes into an email and send it to you every week. Of course, your [letters](mailto:hello@cgartlab.com) are also welcome.

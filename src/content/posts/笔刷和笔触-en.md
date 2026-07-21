@@ -1,6 +1,6 @@
 ---
 title: "Brush and Stroke: Essential Guide to Digital Painting Techniques"
-description: "Master digital painting fundamentals with our guide to brushes and strokes. Learn brush settings in Photoshop, understand shape and texture properties, and discover how strokes convey emotion in CG art."
+description: "Master brushes and strokes for digital painting in Photoshop. Learn how brush shape, texture, and opacity combine — and why stroke technique matters more than tool selection."
 published: 2022-05-29
 updated: 2022-12-11
 tags:
@@ -14,7 +14,7 @@ lang: en
 abbrlink: brush-and-stroke
 ---
 
-![Digital painting brushes collection showcasing various brush shapes and textures for CG artists](./_images/打造第二大脑-1754474053916.webp)
+![Featured image of digital painting brushes with varied shapes and textures used as CG artist starter tools](./_images/打造第二大脑-1754474053916.webp)
 
 ## Introduction
 
@@ -24,7 +24,7 @@ This article discusses brushes and strokes.
 
 Brushes can be considered essential tools for CG art creation and concept design. The internet is flooded with countless downloadable and purchasable brushes. Combined with the popularity of iPads and Apple Pencils in recent years, which have almost lowered the barrier to CG painting to its minimum, the choice of brushes has become an unavoidable question for beginners entering CG painting. A common mistake many novices make is seeing a beautiful painting, falling in love with it, and instead of asking how a particular part was painted, they ask what brush the master used and where to download it. It's like tasting a delicious dish and instead of asking the chef when they added water or turned up the heat, asking whether they used charcoal or gas, or whether the water was tap water or bottled water.
 
-![Some brushes I've collected and created](./_images/笔刷和笔触-1754475982783.webp)
+![A collection of custom Photoshop brushes the author has gathered and created over years of CG painting practice](./_images/笔刷和笔触-1754475982783.webp)
 
 ## Brush
 
@@ -38,7 +38,7 @@ There are many other properties in different software, such as smudge, random co
 
 I personally have about 7-8 sets of saved brushes, totaling over a thousand. But despite the variations, they all share the same essence. The fundamental nature of every brush is the arrangement and combination of shape and texture units.
 
-![Photoshop Brush Settings Interface](./_images/笔刷和笔触-1754476282274.webp)
+![Photoshop Brush Settings panel showing shape dynamics, texture, and opacity controls — the three foundational brush properties](./_images/笔刷和笔触-1754476282274.webp)
 
 In my CG painting creation process, a single painting rarely uses more than 5 different brushes. Classified by shape, it's even fewer - just square and round. Why is this? There are two reasons:
 

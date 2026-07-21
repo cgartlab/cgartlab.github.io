@@ -1,7 +1,7 @@
 ---
 title: "Router Configuration Guide: Whole-House Network Setup with SSH & ShellClash"
 published: 2023-03-12
-description: "Complete router configuration tutorial for whole-house network access. Learn SSH unlocking, root password calculation, Termius setup, and ShellClash installation using Redmi AX6S router example."
+description: "Configure whole-house router routing using SSH and ShellClash. Covers firmware unlocking, root access via Termius, and proxy setup with a Redmi AX6S example."
 updated: 2023-03-14
 tags:
   - tech-sharing
@@ -26,7 +26,7 @@ Hardware: Router, one network cable, a PC/Mac with normal internet access
 
 Software: Browser, download and install [Termius](http://www.termius.com/), unlock firmware file
 
-Knowledge: Experience with independent scientific internet access, understanding basic airport and VPS server usage methods.
+Knowledge: Experience with independent unrestricted internet access, understanding basic proxy services and VPS server usage methods.
 
 ## Unlocking SSH
 
@@ -42,15 +42,15 @@ Download the installation firmware in advance. For my Redmi AX6S, the correspond
 
 Enter the router backend in browser window. Xiaomi router address defaults to: 192.168.31.1, enter backend administrator account password (may vary by brand).
 
-![Router Backend Login](./_images/用路由器实现全屋科学上网-1754477288953.webp)
+![Xiaomi router admin login page accessed at 192.168.31.1 for initial Redmi AX6S configuration](./_images/用路由器实现全屋科学上网-1754477288953.webp)
 
 Click username in top right corner, select "System Upgrade"
 
-![System Upgrade Interface](./_images/用路由器实现全屋科学上网-1754477301211.webp)
+![Router backend system upgrade panel showing manual firmware upload option for installing development firmware](./_images/用路由器实现全屋科学上网-1754477301211.webp)
 
 In the upgrade detection section, select manual upgrade, choose the firmware file downloaded on your computer, click start upgrade. Don't worry about bricking it.
 
-![Upgrade Firmware](./_images/用路由器实现全屋科学上网-1754477318190.webp)
+![Router firmware upgrade progress screen during development firmware installation for SSH unlocking](./_images/用路由器实现全屋科学上网-1754477318190.webp)
 
 Wait for upgrade completion and restart, then reconnect to WiFi.
 
@@ -76,7 +76,7 @@ Open Termius, skip beginner steps, select Hosts in left column, click NEW HOST
 
 Other parameters as shown below, Label can be written arbitrarily, Address fill in router's IP address, note connection method select **Telnet**, then click blank space on left to save.
 
-![Termius Configuration](./_images/用路由器实现全屋科学上网-1754478711021.webp)
+![Termius SSH client new host configuration screen for connecting to the router via Telnet protocol](./_images/用路由器实现全屋科学上网-1754478711021.webp)
 
 Then double-click the saved Host for Telnet connection. ([Telnet is also a network communication protocol](https://baike.baidu.com/item/TELNET/810597))
 
@@ -127,7 +127,7 @@ export url='https://raw.githubusercontent.com/juewuy/ShellClash/master' && sh -c
 - Select "2" stable version
 - Then enter "1" confirm installation (I won't reinstall here)
 
-![ShellClash Installation](./_images/用路由器实现全屋科学上网-1754478987763.webp)
+![ShellClash installation menu in router SSH terminal showing version selection and installation confirmation prompts](./_images/用路由器实现全屋科学上网-1754478987763.webp)
 
 ### Configure Clash
 
@@ -136,7 +136,7 @@ After installation, continue entering Clash, press enter.
 - Select 1 Host or bypass router
 - Select 1 Do not proxy UDP
 
-![Clash Configuration Interface](./_images/用路由器实现全屋科学上网-1754479004205.webp)
+![ShellClash configuration interface showing host vs bypass router mode and UDP proxy selection options](./_images/用路由器实现全屋科学上网-1754479004205.webp)
 
 To avoid needing to open Termius every time setting Clash, we need to install a software interface, i.e., local Dashboard panel.
 
@@ -144,17 +144,17 @@ To avoid needing to open Termius every time setting Clash, we need to install a 
 - Select YACD panel (sequence numbers here may vary)
 - Select 1 /data/clash/ui directory installation
 
-![Dashboard Panel](./_images/用路由器实现全屋科学上网-1754479017651.webp)
+![ShellClash dashboard panel installation menu showing YACD selection and target directory options](./_images/用路由器实现全屋科学上网-1754479017651.webp)
 
 After installation, select 1 Enable public network access service
 
 - Select 1 Start import
 - Select 1 Online generate configuration file
-- Paste your subscription link (provided by your airport or VPS service provider)
+- Paste your subscription link (provided by your proxy service or VPS provider)
 
-![Subscription Link Configuration](./_images/用路由器实现全屋科学上网-1754479036417.webp)
+![ShellClash subscription configuration screen prompting entry of proxy provider subscription URL](./_images/用路由器实现全屋科学上网-1754479036417.webp)
 
-If you've made it this far, I believe you understand airports and VPS servers.
+If you've made it this far, I believe you're familiar with proxy services and VPS servers.
 
 - Select 1 Start generating configuration file
 - Select 1 Immediately start Clash service
@@ -166,11 +166,11 @@ Open `http://192.168.31.1:9999/ui` router IP address in browser to access your r
 
 If no other requirements, suggest turning off router firmware updates.
 
-![Clash Backend Interface](./_images/用路由器实现全屋科学上网-1754479052164.webp)
+![YACD web-based Clash dashboard running on the router showing proxy node selection and traffic monitoring](./_images/用路由器实现全屋科学上网-1754479052164.webp)
 
 ## Conclusion
 
-At this point, any device in your house accessing internet through this router will be "scientific". You can switch different nodes anytime through phone or tablet browser. This is currently the most scientific internet access method I've used.
+At this point, any device in your house accessing the internet through this router will enjoy unrestricted internet access. You can switch different nodes anytime through phone or tablet browser. This is currently the most seamless unrestricted internet access setup I've used.
 
 Good luck!
 
@@ -188,7 +188,7 @@ I created a version using iCloud calendar according to my situation, then synced
 
 Of course you can create your own version according to your habits. What tool used isn't important, initially just using phone's built-in calendar is enough.
 
-![TimeBlock Calendar](./_images/用路由器实现全屋科学上网-1754479225896.webp)
+![TimeBlock time management calendar created in iCloud showing the author's daily schedule blocks across synced devices](./_images/用路由器实现全屋科学上网-1754479225896.webp)
 
 Forgot where I saw this sentence:
 

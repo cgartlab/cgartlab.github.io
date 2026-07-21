@@ -1,7 +1,7 @@
 ---
 title: "RSS and Modern Reading Habits (Part 2): Regain Control Over Information Collection"
 published: 2025-06-30
-description: "Build a personal information collection system with RSS. Discover quality RSS sources, tool recommendations, and practical workflows for managing fragmented information and curating your digital reading experience."
+description: "Build an RSS-powered information collection system: find quality sources, configure keyword filters, and curate a focused reading workflow in Part 2."
 updated: 2025-06-30
 tags:
   - knowledge-management
@@ -95,7 +95,7 @@ On the internet, for example in academic fields, you can track renowned scholars
 
 Earlier this year, I learned about a new [GPU renderer](https://weekly.cgartlab.com/p/04-repair-gpu-and-new-renderer). Since this renderer was still in early development stages, many technical processes weren't aligned with industry standards. However, I discovered on their website that their team highly valued user feedback—the main creator directly opened a discussion group on Telegram with no barriers. So I joined the group and directly asked him about when unfinished features might be released, getting a reply within about ten minutes. This is the most direct and effective method I've used. At first glance, this method seems unrelated to RSS, but think about it—behind every subscription source are ultimately living people, aren't they?
 
-![Chat record at that time](./_images/RSS%20与现代阅读习惯（二）：重新获取信息收集的主动权-1754681172366.webp)
+![Telegram chat screenshot with a GPU renderer developer discussing upcoming feature releases in a creator community group](./_images/RSS%20与现代阅读习惯（二）：重新获取信息收集的主动权-1754681172366.webp)
 
 ### Method 2: Keyword Expansion
 

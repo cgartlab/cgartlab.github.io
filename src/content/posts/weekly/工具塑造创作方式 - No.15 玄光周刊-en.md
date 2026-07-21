@@ -1,7 +1,7 @@
 ---
 title: "Tools Shaping How We Create - No.15 Black Light Weekly | Creative Workflow Evolution"
 published: 2026-04-10
-description: "Explore how creative tools evolve from Photoshop to AI-powered workflows. Discover Jan local AI, Figma MCP pipelines, and Appwrite backend services that are reshaping digital creation and design processes."
+description: "As AI drives down creative execution costs, human judgment becomes the ultimate scarce resource. Learn why direction matters more than output speed."
 updated: 2026-04-10
 tags:
   - Weekly
@@ -50,7 +50,7 @@ More important than embracing tools is being clear about what you're doing with 
 
 ## This Week's Featured Recommendations
 
-![via Jan website](../_images/15%20玄光周刊-工具塑造的创作方式-1775831152633.webp)
+![Jan AI open-source local ChatGPT alternative website homepage featuring privacy-focused desktop AI assistant with extensible hub](../_images/15%20玄光周刊-工具塑造的创作方式-1775831152633.webp)
 
 ### Jan - Local ChatGPT Alternative
 
@@ -62,13 +62,13 @@ What truly makes Jan noteworthy isn't just the "local operation" feature, but it
 
 When the marginal cost of AI tools approaches zero, localized deployment is no longer just a preference for geeks—it becomes a rational economic choice, and Jan happens to stand at the forefront of this trend.
 
-> 💡 By the way, if your creative workflow needs to call commercial large model APIs, MiniMax is currently one of the most cost-effective domestic options I've used. Click [invite link](https://platform.minimaxi.com/subscribe/token-plan?code=9qDgEzTzWG&source=link) to get discounts together.
+> 💡 By the way, if your creative workflow needs to call commercial large model APIs, MiniMax is currently one of the most cost-effective domestic options I've used. Click [invite link](https://platform.minimaxi.com/subscribe/token-plan?code=9qDgEzTzWG&source=link) to snag some perks together.
 
 ---
 
 ### Figma MCP Production Pipeline
 
-![Figma dev mode](../_images/15%20玄光周刊-工具塑造的创作方式-1775831292259.webp)
+![Figma dev mode interface showing MCP integration for AI-driven UI code generation pipeline and design-to-code workflow](../_images/15%20玄光周刊-工具塑造的创作方式-1775831292259.webp)
 
 🔗 https://www.francescatabor.com/articles/2026/3/31/building-a-figma-driven-mcp-production-pipeline
 
@@ -84,7 +84,7 @@ This raises a practical question: **Is your design system ready?** The more stan
 
 ### 2026: AI Singularity Arrives, Reshuffling and Rebirth of Human Society
 
-![via web](../_images/15%20玄光周刊-工具塑造的创作方式-1775831314917.webp)
+![The Paper article cover on 2026 AI singularity impact on labor markets, employment, and social structure transformation](../_images/15%20玄光周刊-工具塑造的创作方式-1775831314917.webp)
 
 🔗 https://m.thepaper.cn/newsDetail_forward_32368134
 
@@ -98,7 +98,7 @@ This article raises a question worth seriously facing: In a future where AI can 
 
 ### Appwrite - Self-Hosted Backend as a Service
 
-![via Appwrite website](../_images/15%20玄光周刊-工具塑造的创作方式-1775831523848.webp)
+![Appwrite self-hosted Backend as a Service platform website homepage with Docker deployment options and privacy-first design](../_images/15%20玄光周刊-工具塑造的创作方式-1775831523848.webp)
 
 🔗 https://appwrite.io
 
@@ -112,7 +112,7 @@ For independent developers, Appwrite provides a pragmatic middle path: no need t
 
 ### TouchDesigner - Real-Time Visual Programming Universe
 
-![via TouchDesigner website](../_images/15%20玄光周刊-工具塑造的创作方式-1775831664666.webp)
+![TouchDesigner real-time visual programming environment interface for generative art, interactive installations, and live performance visuals](../_images/15%20玄光周刊-工具塑造的创作方式-1775831664666.webp)
 
 🔗 https://zipdo.co/best/visual-programming-software/
 
@@ -128,7 +128,7 @@ For creators, TouchDesigner provides another way to dialogue with tools: not thr
 
 ### Skill Integration and Efficiency Revolution
 
-![via web](../_images/15%20玄光周刊-工具塑造的创作方式-1775832027508.webp)
+![Zhihu article on Skill concept as executable operating manuals encapsulating creator workflows for AI agent automation](../_images/15%20玄光周刊-工具塑造的创作方式-1775832027508.webp)
 
 🔗 https://zhuanlan.zhihu.com/p/2024957518648997301
 
@@ -140,7 +140,7 @@ For simple tasks, the answer to this question is no. But for complex creation, u
 
 ### Agentic Workflow: From Tool to Collaborator
 
-![via web](../_images/15%20玄光周刊-工具塑造的创作方式-1775832585145.webp)
+![Agentic AI workflow tutorial diagram showing planner, memory system, tool calling, and reflection modules architecture](../_images/15%20玄光周刊-工具塑造的创作方式-1775832585145.webp)
 
 🔗 https://www.tinyash.com/blog/agentic-ai-workflow-tutorial/
 

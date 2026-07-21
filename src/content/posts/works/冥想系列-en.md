@@ -1,7 +1,7 @@
 ---
 title: "Meditation Series: Digital Art Exploring Consciousness and Inner Self"
 published: 2019-08-08
-description: "Explore the Meditation Series digital artworks exploring consciousness transformation and inner self-discovery. View CG art pieces that visualize psychological depth, mindfulness, and the journey toward authentic reality."
+description: "Explore the Meditation Series of CG paintings on consciousness and inner self. Each piece visualizes psychological depth, mindfulness, and authentic reality."
 updated: 2019-08-08
 tags:
   - Digital Painting
@@ -53,22 +53,22 @@ All represent the authentic self
 
 ---
 
-![Meditation Series 1](../_images/冥想系列-1754664750528.webp)
+![Meditation Series digital painting 1 exploring consciousness transformation through surreal CG artwork and abstract imagery](../_images/冥想系列-1754664750528.webp)
 
-![Meditation Series 2](../_images/冥想系列-1754664757458.webp)
+![Meditation Series digital painting 2 visualizing psychological depth and inner self-discovery in surreal CG art form](../_images/冥想系列-1754664757458.webp)
 
-![Meditation Series 3](../_images/冥想系列-1754664764581.webp)
+![Meditation Series digital painting 3 depicting mindfulness journey and meditative state through digital art](../_images/冥想系列-1754664764581.webp)
 
-![Meditation Series 4](../_images/冥想系列-1754664772045.webp)
+![Meditation Series digital painting 4 expressing heavy emotional oppression as part of the authentic self exploration in CG art](../_images/冥想系列-1754664772045.webp)
 
-![Meditation Series 5](../_images/冥想系列-1754664780351.webp)
+![Meditation Series digital painting 5 representing contradictory internal conflicts in CG artistic meditation form](../_images/冥想系列-1754664780351.webp)
 
-![Meditation Series 6](../_images/冥想系列-1754664786331.webp)
+![Meditation Series digital painting 6 exploring complex psychological struggles through surreal CG digital imagery](../_images/冥想系列-1754664786331.webp)
 
-![Meditation Series 7](../_images/冥想系列-1754664798635.webp)
+![Meditation Series digital painting 7 visualizing introspection and the path toward approaching reality infinitely](../_images/冥想系列-1754664798635.webp)
 
-![Meditation Series 8](../_images/冥想系列-1754664814920.webp)
+![Meditation Series digital painting 8 capturing meditation as a habit of communicating with oneself through art](../_images/冥想系列-1754664814920.webp)
 
-![Meditation Series 9](../_images/冥想系列-1754664822895.webp)
+![Meditation Series digital painting 9 representing stages of consciousness transformation in CG digital art form](../_images/冥想系列-1754664822895.webp)
 
-![Meditation Series 10](../_images/冥想系列-1754664829706.webp)
+![Meditation Series digital painting 10 final piece depicting the journey toward authentic reality through digital painting](../_images/冥想系列-1754664829706.webp)

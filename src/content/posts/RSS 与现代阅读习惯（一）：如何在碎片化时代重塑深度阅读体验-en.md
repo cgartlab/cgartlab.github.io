@@ -1,6 +1,6 @@
 ---
 title: "RSS and Modern Reading Habits (Part 1): Reshape Deep Reading in the Fragmented Era"
-description: "Master RSS for deep reading in the digital age. Learn how to escape algorithm recommendations, build focused reading habits, and reclaim your attention span with practical RSS setup strategies."
+description: "Reclaim deep reading with RSS. Part 1 explores why slowing down beats algorithm feeds and restores focus and meaningful long-form reading habits."
 published: 2024-12-05
 updated: 2024-12-15
 tags:

@@ -1,7 +1,7 @@
 ---
 title: "Let the World Keep Turning: Why Your Skills Won't Become Obsolete in the AI Era"
 published: 2026-03-08
-description: "Navigate the AI revolution with confidence. Discover why systematic thinking, aesthetic judgment, and creative workflows remain valuable despite AI advancement. Learn practical strategies for integrating AI tools into design and animation work."
+description: "Why your hard-earned design skills won't become obsolete in the AI era. A motion designer's reflections on AI agents, lifelong learning, and the compound value of systematic thinking and aesthetic judgment."
 updated: 2026-03-08
 tags:
   - Essay
@@ -38,7 +38,7 @@ This article aims to discuss: Against the backdrop of accelerated AI iteration, 
 
 ## What I Did with AI Initially
 
-![Movie "Hugo" still](./_images/世界让它去转，不用担心你学的东西会过时-1772811644887.webp)
+![Still from the film "Hugo" showing the steampunk automaton that first sparked the author's interest in AI creation](./_images/世界让它去转，不用担心你学的东西会过时-1772811644887.webp)
 
 ### Movie "Hugo"
 
@@ -50,23 +50,23 @@ At that time, I really didn't take it seriously because it really didn't draw ve
 
 By 2023, the emergence of local Stable Diffusion deployment started making me have to take this field seriously.
 
-![Meditation series](./_images/世界让它去转，不用担心你学的东西会过时-1772811693022.webp)
+![Author's Photoshop-painted Meditation series, later used to test Stable Diffusion and Seedance 2.0 animation capabilities](./_images/世界让它去转，不用担心你学的东西会过时-1772811693022.webp)
 
 The [paintings](https://cgartlab.com/works) in the image were created entirely using Photoshop digital painting during my study abroad period. Initially, it was a hobby, later used for graduation projects and some exhibitions and competitions.
 
 Then I tried to use Stable Diffusion to animate these paintings, and undoubtedly failed. The purpose of using AI to animate them was more to explore cutting-edge technology, just to see what stage it had developed to. As a result, when Seedance 2.0 was released this year, I also tried it with Doubao. Although there are still some limitations for such surreal style works, I clearly feel that the "omnipotent moment" I've been expecting is accelerating.
 
-![Original work](./_images/世界尽管让它去转，不用担心你学的东西会过时-1772944288662.webp)
+![Original digital painting from the author's 2017 master's thesis on "Entering the World of Digital Painting"](./_images/世界尽管让它去转，不用担心你学的东西会过时-1772944288662.webp)
 
 Back then, my master's thesis research direction was "Entering the World of Digital Painting." That was 2017, when VR was hot. I used Unity to make a VR app for experiencing digital painting works—not a virtual gallery, but actually walking into the world of the paintings. The case shown above is the scene restored by the app, shown below.
 
-![Recreating the painting world in the App](./_images/世界尽管让它去转，不用担心你学的东西会过时-1772944236997.webp)
+![Unity VR app screenshot reconstructing the original painting as an immersive 3D scene the viewer can walk into](./_images/世界尽管让它去转，不用担心你学的东西会过时-1772944236997.webp)
 
 This has always been my dream as an artist—to make the world in my works into an interactive immersive experience. But if you also understand the CG field, you would know what a huge project this is. Running on love alone is basically impossible. Only when studying as a student can you carelessly pursue passion.
 
 But now AI has brought this dusty dream back into my sight. Seeing such terrifying evolution speed of AI, I'm still very fortunate to be born in this era. At the same time, it also alerts me that such industry changes probably won't bring opportunities to tiny individual practitioners again in a couple of years.
 
-What's worth thinking about is that the people who created such technology are not from film, animation, or game industry companies, but internet companies. It's like "what killed Master Kong wasn't Xiaohunlang, but food delivery." But instant noodles didn't disappear. Even one day I just want to eat another bowl of instant noodles, not for anything else, just to know if the taste has changed.
+What's worth thinking about is that the people who created such technology are not from film, animation, or game industry companies, but internet companies. It's like "what killed Master Kong wasn't Xiaohuanxiong, but food delivery." But instant noodles didn't disappear. Even one day I just want to eat another bowl of instant noodles, not for anything else, just to know if the taste has changed.
 
 This is the impact and thinking of AI on my professional field.
 
@@ -92,7 +92,7 @@ The above is the impact and thinking of AI on my own work and learning. Next, I'
 
 First, my biggest feeling is not about professional technology, but about things I'm not good at.
 
-![Let AI write a function to rename invoices based on specific content, done in a few seconds](./_images/世界尽管让它去转，不用担心你学的东西会过时-1772956625665.webp)
+![AI assistant generating a small utility script that renames invoice files by parsed content, completed in seconds](./_images/世界尽管让它去转，不用担心你学的东西会过时-1772956625665.webp)
 
 For example, organizing invoices, quotations, checking contracts, evaluating costs, replying to emails, applying for various approval materials, etc. These would have consumed a lot of my time in the past. Now I basically leave them all to AI. Even with web versions, after desensitization processing, consulting it can save a lot of time.
 
@@ -106,23 +106,23 @@ This is just my opinion. If you're also a peer, welcome to exchange different vi
 
 Then there are specific applications. A typical case is that in 2024, I restored a set of murals for a museum. This kind of work is particularly suitable for AI. Whether characters or scene elements can be restored very well, and even extensions can be made based on existing picture plots.
 
-![Mural restoration of "Singing Under the Pine Tree"](./_images/世界尽管让它去转，不用担心你学的东西会过时-1772957091694.webp)
+![AI-assisted restoration of the museum mural "Singing Under the Pine Tree" showing restored characters and scene elements](./_images/世界尽管让它去转，不用担心你学的东西会过时-1772957091694.webp)
 
 It shouldn't be difficult to realize these animations with Seedance now, but the difficulty lies in accurately restoring the characters' expressions and clothing from the original mural. Because the purpose is museum exhibition, this information must be accurate.
 
 We referred to many older painters locally. They had tried to restore multiple times using traditional painting methods in their early years. This is information AI cannot search for and can only be completed by human effort. Including afterwards, when we referred back to the seniors' works, we also had to hand-draw the characters one by one. This workload cannot be saved at present.
 
-![Hand-drawn restoration of mural characters](./_images/世界尽管让它去转，不用担心你学的东西会过时-1772957506009.webp)
+![Side-by-side comparison of AI-restored and hand-corrected mural characters where human restoration was required for historical accuracy](./_images/世界尽管让它去转，不用担心你学的东西会过时-1772957506009.webp)
 
 Finally, it's worth mentioning that since there are about 40 character roles to paint in total, on average one character occupies 8-10 layers. Plus scene elements, the total number of layers will eventually reach over 500. When it comes to later stages entering AE to make animations, it's absolutely catastrophic.
 
-![Very basic but also very practical](./_images/世界尽管让它去转，不用担心你学的东西会过时-1772957939260.webp)
+![Simple Photoshop batch-layer renaming dialog generated with AI assistance, a small tool that saved hours on a 500+ layer mural project](./_images/世界尽管让它去转，不用担心你学的东西会过时-1772957939260.webp)
 
 For this, I also used AI to write a [batch layer renaming script for Photoshop](https://cgartlab.com/posts/layerrenamer-1/). Although the function is very simple, it indeed helped a lot.
 
 ### Personal Projects
 
-![Using group topics to assign different tasks to Agents](./_images/世界尽管让它去转，不用担心你学的东西会过时-1772958271741.webp)
+![Chat interface showing group topics being assigned to OpenClaw AI agents for parallel task execution](./_images/世界尽管让它去转，不用担心你学的东西会过时-1772958271741.webp)
 
 This brings us to Lobster [OpenClaw](https://openclaw.ai). Before it appeared, I treated web and App AI equally, focusing on pragmatism. Whichever family's product was good this week, I'd use theirs. After installing Lobster, even with the Qwen 3.5 9B model (GPU 5070Ti) I deployed locally on my workstation using [Ollama](https://ollama.com/), both speed and quality have completely exceeded my expectations.
 
@@ -132,7 +132,7 @@ For other relatively complex tasks, I discussed and developed specialized [Skill
 
 What was surprisingly impressive was the first time testing its development ability. One day before going to bed, I asked it to develop a global search function + weekly page for my website. I didn't expect it to succeed, but the next morning it delivered results that completely exceeded expectations. You can [go experience it](https://cgartlab.com).
 
-![High completion degree and aesthetic online](./_images/世界尽管让它去转，不用担心你学的东西会过时-1772959608287.webp)
+![Screenshot of the author new global search function and weekly archive page, delivered overnight by the local AI agent OpenClaw](./_images/世界尽管让它去转，不用担心你学的东西会过时-1772959608287.webp)
 
 After using it for nearly a month, my overall feeling about Lobster is that training AI using natural language is very interesting, especially for creators like me in visual creative fields. Because you can really create characters in your own stories. This character thinks, lives with you, and has its own memories and stories.
 
@@ -172,7 +172,7 @@ AI's long-term memory carrier may still be text vector data, but ultimately it's
 
 The most obvious example is the perspective change from part to whole, as shown below.
 
-![Close up it's just paint color blocks, far away you can see it's a person](./_images/世界尽管让它去转，不用担心你学的东西会过时-1772952427601.webp)
+![Impressionist painting demonstration: a close-up showing only abstract paint blocks, but from a distance revealing a clear human figure — illustrating the brain's perceptual completion](./_images/世界尽管让它去转，不用担心你学的东西会过时-1772952427601.webp)
 
 ### Future Software Tools Will Be Built Around AI
 

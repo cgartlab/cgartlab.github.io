@@ -2,7 +2,7 @@
 title: "My OpenClaw Workflow Skills - No.18 Black Light Weekly"
 published: 2026-05-24
 updated: 2026-05-24
-description: "After using OpenClaw for three months, my biggest feeling is that I have no idea what the upper limit of this tool is. Almost every day I learn new concepts, and every week I discover shortcomings in existing workflows. Among them, the concept of Skill is indispensable — it's too important."
+description: "After three months with OpenClaw AI agent, explore practical workflow Skills for news filtering, system monitoring, API management, and research reports."
 tags:
   - Weekly
   - AI Workflow
@@ -14,7 +14,7 @@ lang: en
 abbrlink: weekly-18
 ---
 
-![](../_images/主题%20-%20No.18%20玄光周刊-1779030168319.webp)
+![Cover photo of railway tracks running beneath a bridge at Kunming University of Science and Technology captured during golden hour](../_images/主题%20-%20No.18%20玄光周刊-1779030168319.webp)
 
 This issue's cover was photographed at Kunming University of Science and Technology. During the pandemic, every time I picked up a package, I would pass by a bridge on campus. Below the bridge is this railway running through the city. At different times of the day, the color tones here are all beautifully different.
 
@@ -49,7 +49,7 @@ This issue will first introduce the first category.
 
 **api-usage**: Query Token usage and balance information from various providers. For a Token-consuming tool like OpenClaw, the importance of being able to query balance and usage information in a timely manner goes without saying. In addition to manual queries being more convenient, it can also be combined with automated scheduled tasks to report overall consumption twice a day.
 
-![The three providers I currently use|415](../_images/我常用的%20OpenClaw%20工作流%20Skill%20-%20No.18%20玄光周刊-1779519862582.webp)
+![Screenshot showing three AI API providers used for OpenClaw including MiniMax, DeepSeek V4, and SiliconFlow pricing and balance dashboards](../_images/我常用的%20OpenClaw%20工作流%20Skill%20-%20No.18%20玄光周刊-1779519862582.webp)
 
 I currently use the three providers shown above for OpenClaw. Among them, MiniMax offers large volume at affordable prices, billed by call count, suitable for dirty work. DeepSeek V4 is used for planning and designing execution schemes. If even it can't handle it, I manually switch to SiliconFlow for Kimi 2.6 or GLM 5.1. They [have been giving out benefits](https://cloud.siliconflow.cn/i/09r0o1Ax) — register and get 16 yuan in credits, 500 yuan for enterprise verification, with sufficiently rich and stable models.
 
@@ -75,7 +75,7 @@ The above Skills I usually package directly into a scheduled task, running twice
 
 ### Oh My OpenAgent — Redefining the Open Source Toolbox for AI Agents
 
-![Image from original article page](../_images/我常用的%20OpenClaw%20工作流%20Skill%20-%20No.18%20玄光周刊-1779036148975.webp)
+![Oh My OpenAgent open-source AI Agent toolchain website homepage featuring multi-model orchestration with Claude, GPT, Gemini, and Kimi](../_images/我常用的%20OpenClaw%20工作流%20Skill%20-%20No.18%20玄光周刊-1779036148975.webp)
 
 🔗 https://ohmyopenagent.com
 
@@ -83,11 +83,11 @@ Oh My OpenAgent (omo) is an open source AI Agent toolchain, formerly known as oh
 
 Its core philosophy is "not binding to any single model provider," completing tasks through multi-Agent collaboration, real-time coordination, and Side-by-side tmux visualization. The maintainer completely publicly builds the process on Discord, and claims that Anthropic once blocked OpenCode because of this project.
 
-Community feedback is quite enthusiastic, with some saying "it made me cancel my Cursor subscription." For those interested in 深入了解，you can check its AGENTS.md file to understand the 11 Agent role definitions and lifecycle hook systems.
+Community feedback is quite enthusiastic, with some saying "it made me cancel my Cursor subscription." For those interested in learning more, you can check its AGENTS.md file to understand the 11 Agent role definitions and lifecycle hook systems.
 
 ### GEO — Generative Engine Optimization, the Next Battlefield of SEO
 
-![Image from original article page](../_images/我常用的%20OpenClaw%20工作流%20Skill%20-%20No.18%20玄光周刊-1779036210576.webp)
+![Generative Engine Optimization GEO article header explaining SEO strategies for AI-powered search engines and citation visibility](../_images/我常用的%20OpenClaw%20工作流%20Skill%20-%20No.18%20玄光周刊-1779036210576.webp)
 
 🔗 https://www.digital4design.com/blog/what-is-geo-in-2026
 
@@ -107,13 +107,13 @@ In terms of coping strategies, the article suggests increasing one's own diversi
 
 ### 2026 Design Trends — From Minimalism to Boldness, Visual Design Direction is Changing
 
-![](../_images/我常用的%20OpenClaw%20工作流%20Skill%20-%20No.18%20玄光周刊-1779036673128.webp)
+![Behance 2026 design trends report cover featuring minimalism with bold typography and contrasting color palettes for visual impact](../_images/我常用的%20OpenClaw%20工作流%20Skill%20-%20No.18%20玄光周刊-1779036673128.webp)
 
 🔗 https://www.behance.net/gallery/239027109/Design-Trends-2026
 
 In Behance's 2026 design trends report, a notable change is that minimalism is beginning to coexist with bold typography — clean layouts paired with bold fonts and strong contrasting colors. This means "minimal" no longer equals "boring," but rather seeks breakthroughs in visual impact through restraint.
 
-The report also mentions that 2026 design focuses more on personal expression and emotional resonance. In the context of rapid AI tool 普及，handmade textures, texture details, and conscious design decisions 反而 become differentiated competitive advantages.
+The report also mentions that 2026 design focuses more on personal expression and emotional resonance. In the context of rapid AI tool democratization, handmade textures, texture details, and conscious design decisions instead become differentiated competitive advantages.
 
 ### Buzz — Offline Audio Transcription and Translation Tool
 
@@ -123,7 +123,7 @@ The report also mentions that 2026 design focuses more on personal expression an
 
 Buzz is a completely offline audio transcription and translation tool powered by OpenAI's Whisper. It supports processing audio files locally on your computer without uploading to the cloud, protecting privacy while being suitable for network-restricted environments.
 
-Compared to many online transcription services, Buzz's advantages lie in local operation, customizable model selection, and multi-language translation support. For podcast enthusiasts, meeting recorders, or users who need to process sensitive audio content, it is a noteworthy open source option. My own usage is to download many podcasts of 人物访谈 that I don't have time to listen to but am interested in, throw them in locally. Usually, a super long podcast of about three hours can be processed into text in 5 minutes using 5070Ti acceleration, and then directly let an Agent 梳理 out interesting viewpoints and cases and other valuable information — quite good.
+Compared to many online transcription services, Buzz's advantages lie in local operation, customizable model selection, and multi-language translation support. For podcast enthusiasts, meeting recorders, or users who need to process sensitive audio content, it is a noteworthy open source option. My own usage is to download many podcasts of interviews that I don't have time to listen to but am interested in, throw them in locally. Usually, a super long podcast of about three hours can be processed into text in 5 minutes using 5070Ti acceleration, and then directly let an Agent extract interesting viewpoints and cases and other valuable information — quite good.
 
 ---
 
@@ -139,7 +139,7 @@ A very thought-provoking and interesting question 👆.
 
 There is so much to write about AI Agents this year. After thinking for a long time, I believe I need to find a suitable entry point, otherwise the topic is too big to start with.
 
-Starting from this issue, I'll first try to 切入 from the Skills I use most frequently every day and are relatively practical, slowly 梳理 out the AI-accelerated productivity path that creators can most easily get started with. But unfortunately, this is not a so-called "shortcut," just sharing the joy of my own creations.
+Starting from this issue, I'll first try to approach from the Skills I use most frequently every day and are relatively practical, slowly extract the AI-accelerated productivity path that creators can most easily get started with. But unfortunately, this is not a so-called "shortcut," just sharing the joy of my own creations.
 
 Next issue: introducing the second category, those Skills that truly carry the workload.
 

@@ -7,7 +7,7 @@ tags:
   - Knowledge Management
   - Tech Sharing
   - NAS
-description: "Build your creator NAS storage system with our practical guide. Learn hard drive selection, RAID configuration, four-layer storage logic, and workflow optimization for creative professionals."
+description: "Build a creator NAS system with Part 2: hard drive selection, RAID configuration, Docker services, four-layer storage logic, and remote access setup."
 updated: 2026-06-26
 pin: 0
 toc: true
@@ -107,14 +107,14 @@ Docker (yes, specifically for running Docker), which runs:
 - RSShub subscribe to everything
 - ddns-go internal network penetration
 
-![Docker services in LXC containers](./_images/NAS%20买回来只会存照片？创作者的第一台“私有云”该怎么玩%20-%20下篇-1769522207006.webp)
+![Proxmox VE dashboard listing Docker services such as Miniflux, Memos, and RSSHub running inside LXC containers for self-hosted apps](./_images/NAS%20买回来只会存照片？创作者的第一台“私有云”该怎么玩%20-%20下篇-1769522207006.webp)
 
 Two instances for my retired parents to play with blogging
 And one final instance for various experimental tests.
 
 It typically runs like this, with very low resource consumption while simultaneously handling various tedious tasks automatically.
 
-![Memory usage not even half, potential is significant](./_images/NAS%20买回来只会存照片？创作者的第一台“私有云”该怎么玩%20-%20下篇-1769522609092.webp)
+![Proxmox resource monitor showing low memory usage across running Docker services with significant headroom remaining](./_images/NAS%20买回来只会存照片？创作者的第一台“私有云”该怎么玩%20-%20下篇-1769522609092.webp)
 
 As for Feiniu OS, my overall impression is that there's a group of idealistic, tasteful people behind it.
 
@@ -152,7 +152,7 @@ Actually, using NAS for music and movies is a well-known function. Compared to e
 
 First recommendation is Calibre-web. For specific setup methods, see this previous [article](https://cgartlab.com/posts/how-to-build-library/). Additionally, since I've collected many large art books and setting collections for various games and films (over 100GB), and these files are PDFs, Calibre isn't very convenient for viewing them. So I found [Komga](https://komga.org/), which currently supports PDF and comic .cbz formats quite well.
 
-![Marvel setting collection](./_images/NAS%20买回来只会存照片？创作者的第一台“私有云”该怎么玩%20-%20下篇-1769527882995.webp)
+![Komga comic and PDF reader interface displaying a curated Marvel movie concept art and setting collection](./_images/NAS%20买回来只会存照片？创作者的第一台“私有云”该怎么玩%20-%20下篇-1769527882995.webp)
 
 #### Download Station: Liberate Your Main Computer
 
@@ -180,7 +180,7 @@ Through my practice, I've found three major benefits to this container design ph
 
 For example, the "machine" responsible for Docker in my NAS looks like this:
 
-![Extremely low resource consumption](./_images/NAS%20买回来只会存照片？创作者的第一台“私有云”该怎么玩%20-%20下篇-1769523704356.webp)
+![Proxmox resource panel showing minimal CPU and memory consumption of a Docker host container despite running multiple services](./_images/NAS%20买回来只会存照片？创作者的第一台“私有云”该怎么玩%20-%20下篇-1769523704356.webp)
 
 At this point, the content shared in this third layer isn't about showing off technology, but rather telling you:
 

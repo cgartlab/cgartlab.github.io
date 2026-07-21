@@ -1,6 +1,6 @@
 ---
 title: "Breaking Emotional Binary Opposition with Math: Emotional Intelligence Guide"
-description: "Discover a unique mathematical approach to emotional intelligence. Learn how emotions exist on a continuous spectrum rather than binary oppositions, and develop practical emotional regulation skills through this framework."
+description: "Reframe emotional intelligence with elementary-school math. See positive emotions as capacity for resilience, not just good feelings — a practical framework for healthier emotional regulation."
 published: 2023-10-03
 tags:
   - Essay
@@ -19,7 +19,7 @@ When people talk about emotions online, they often jump straight to emotional ma
 
 When I paint, I definitely have emotions and feelings. Each stroke carries emotional sensations until the painting is complete. If you look at my paintings, you might guess that the artist was probably in a bad mood while painting, or at least not a good one. Why would you make this judgment? Because the artwork gives you negative feelings, and you conclude that the artist's emotions were also negative. But even if the artist's emotions were terrible, you wouldn't necessarily feel bad emotions when viewing their work - unless they painted you in an unflattering way.
 
-![Digital Artwork "Meditation" Series](./_images/用小学数学破除情绪的二元对立-1754567037492.webp)
+![Digital painting from the Meditation series depicting calm introspection and the emotional spectrum beyond binary opposites](./_images/用小学数学破除情绪的二元对立-1754567037492.webp)
 
 It took me a long time of painting and experiencing many things to realize that emotions and feelings are different and should not be confused. Feelings can be physical or psychological. People often describe "good emotions" using "good feelings" - such as happiness, pleasure, excitement, comfort... In short, no more than two types: physical comfort and psychological comfort.
 

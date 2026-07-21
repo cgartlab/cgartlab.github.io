@@ -1,6 +1,6 @@
 ---
 title: "How I Built a Cloud Library: Self-Hosted E-Book Server Tutorial"
-description: "Build your own cloud library with this step-by-step tutorial. Learn how to set up Calibre on Proxmox VE Debian 12 VM, configure X11 forwarding, and create a personal e-book management system."
+description: "Step-by-step tutorial to build a self-hosted cloud library. Install Calibre on a Proxmox VE Debian 12 VM, configure X11 forwarding, and manage your personal e-book collection from anywhere."
 published: 2024-06-11
 updated: 2024-11-24
 draft: false
@@ -13,7 +13,7 @@ lang: en
 abbrlink: how-to-build-library
 ---
 
-![Cloud library server setup with Debian 12 VM running Calibre e-book management software](./_images/我是怎样搭建一个云端图书馆的-1754580900976.webp)
+![Self-hosted cloud library running Calibre e-book server on a Debian 12 VM inside Proxmox VE](./_images/我是怎样搭建一个云端图书馆的-1754580900976.webp)
 
 This article documents how to build your own cloud library using an idle computer.
 

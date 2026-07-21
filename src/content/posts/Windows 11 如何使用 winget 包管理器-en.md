@@ -1,6 +1,6 @@
 ---
 title: "How to Use Winget Package Manager in Windows 11: Complete Tutorial"
-description: "Master Windows 11 winget package manager with our complete guide. Learn installation, search, update, uninstall commands, and automated script configuration for efficient software management."
+description: "Master winget for software management: search, install, update, and uninstall from Windows Terminal. Includes a batch automation script for fresh Windows 11 setups."
 published: 2024-03-01
 updated: 2024-03-09
 tags:

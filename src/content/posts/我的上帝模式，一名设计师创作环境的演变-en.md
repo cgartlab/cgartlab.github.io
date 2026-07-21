@@ -5,14 +5,14 @@ abbrlink: designer-creative-environment-evolution
 published: 2026-07-21
 tags:
   - 随笔
-description: A motion designer with twelve years of experience reflects on the evolution of his creative workspace — from the early days of survival-driven headphones, through an Hi-Fi exploration, back to speakers, and finally to rebuilding desktop order. Sharing the "What matters more? What matters most? Does it have long-term value?" methodology for every creator building their own corner.
+description: "How a motion designer built his ideal creative workspace over twelve years — from survival-mode headphones through Hi-Fi exploration to speakers and a long-term-value methodology for any creator."
 updated: 2026-07-21
 pin: 0
 toc: true
 lang: en
 ---
 
-![Cover photo of the workspace](./_images/我的上帝模式，一名设计师创作环境的演变-1784633103078.webp)
+![Cover photo of the author's current designer workstation featuring dual ultrawide monitors and Edifier speakers](./_images/我的上帝模式，一名设计师创作环境的演变-1784633103078.webp)
 
 **This article was written for the Audioengine × sspai "New Sound in the Corner" writing contest.**
 
@@ -62,7 +62,7 @@ Hopefully this will spark some different thinking for you.
 
 ## The Novice Village — Learning the Rules
 
-![The computer I used in college, still serving as a set-top box today](./_images/我的上帝模式，一名设计师创作环境的演变-1784633126273.webp)
+![Bulky college-era desktop computer that survived into adulthood and now quietly serves as a living-room set-top box](./_images/我的上帝模式，一名设计师创作环境的演变-1784633126273.webp)
 
 From graduating college to deciding to quit my job and study abroad (roughly 2014–2016) — that was my Novice Village period.
 
@@ -76,7 +76,7 @@ As time went on, I got more skilled at my work, but I also became increasingly a
 
 I could feel that something was off, that things weren't quite right — but I didn't know how to improve them. The ever-increasing workload left me no time to address these issues. Most of my free time was spent leveling up my skills.
 
-![The TV station work environment](./_images/我的上帝模式，一名设计师创作环境的演变-1784633186714.webp)
+![Open-plan TV station editing bay from the early career years, with shared reference monitors and monitoring headphones on every desk](./_images/我的上帝模式，一名设计师创作环境的演变-1784633186714.webp)
 
 At the time, my main job was editing trailers and designing channel branding for a TV station. To quickly find the right music and sound effects for each piece, I spent hours every day browsing music and sound libraries. The bosses used speakers for reviews; designers were issued Sennheiser HD569 closed-back monitoring headphones, and later PX90 and HD201 models for travel.
 
@@ -105,7 +105,7 @@ If you're at this stage too, here are some recommendations:
 
 ## The Growth Phase — Learning and Imitating
 
-![The redesigned desktop layout](./_images/我的上帝模式，一名设计师创作环境的演变-1784633207389.webp)
+![Redesigned studio desktop during the growth phase, with cleaner cable routing and the first dedicated audio setup](./_images/我的上帝模式，一名设计师创作环境的演变-1784633207389.webp)
 
 After returning from abroad, from starting my next job to going fully freelance (2016–2020). During this period, changes in workflow and goals led me to start consciously improving my creative environment. In retrospect, I had begun to actively explore and adapt — and in practice, that meant learning and imitating.
 
@@ -138,19 +138,19 @@ As my professional horizons expanded, I encountered Hi-Fi for the first time —
 
 Oh, so sound is also this complex a discipline. Unsurprisingly, in 2015, I spent a whopping 1,800 RMB (my salary was only 2,500 at the time…) on my first Hi-Fi headphones — the SONY MDR 1A.
 
-![SONY MDR 1A headphones](./_images/我的上帝模式，一名设计师创作环境的演变-1784633233277.webp)
+![First serious Hi-Fi purchase: SONY MDR 1A over-ear headphones, the gateway into intentional music listening](./_images/我的上帝模式，一名设计师创作环境的演变-1784633233277.webp)
 
 Looking back, I'm definitely not an audiophile. ~~Due to financial constraints and~~ from my listening perspective, equipment in the 2,000 RMB range is already good enough for me. Going higher might improve the experience by another 5%, but the cost would multiply several times. So I didn't keep trying more equipment or cables. As for audio sources, PCs, Macs, and iPhones are already excellent.
 
 If you're interested in Hi-Fi too, what you really need to know is: **all else being equal, larger drivers typically deliver better bass response and a greater sense of scale.**
 
-![The magical tube amplifier](./_images/我的上帝模式，一名设计师创作环境的演变-1784633271033.webp)
+![Chinese-made tube amplifier adding warm, "charcoal-roasted" character to entry-level Sennheiser monitoring headphones](./_images/我的上帝模式，一名设计师创作环境的演变-1784633271033.webp)
 
-One thing worth mentioning: I once used a Chinese-made tube amplifier as a front-end source. The sound was surprisingly magical — even with entry-level editing headphones like the Sennheiser HD201, the music had a distinctly warm, cozy feeling, as if it had been gently "roasted" over charcoal.[^1] To this day I don't fully understand the原理 involved, but if you're curious, give it a try.
+One thing worth mentioning: I once used a Chinese-made tube amplifier as a front-end source. The sound was surprisingly magical — even with entry-level editing headphones like the Sennheiser HD201, the music had a distinctly warm, cozy feeling, as if it had been gently "roasted" over charcoal.[^1] To this day I don't fully understand the principles involved, but if you're curious, give it a try.
 
 By the time I went freelance, my budget had gradually improved. Apple released the M1 chip, and I decisively bought a MacBook Pro, adding a mobile option to my creative environment.
 
-![Mobile studio setup](./_images/我的上帝模式，一名设计师创作环境的演变-1784633291335.webp)
+![Mobile studio setup with a MacBook Pro on a portable stand — the freedom to create from any room](./_images/我的上帝模式，一名设计师创作环境的演变-1784633291335.webp)
 
 With the Mac now in my workflow — perhaps because its built-in audio was already impressive, and freelancing meant no need to worry about disturbing colleagues — I gradually found myself wearing headphones less and less. Whether using a laptop or desktop, I preferred working and creating atmosphere with speakers.
 
@@ -169,7 +169,7 @@ After returning from studying abroad, the bloggers I followed were mostly YouTub
 
 Of course, I couldn't (and didn't) copy their setups exactly. Everything in a creative environment must be built around your actual needs. For heavy design work, my main workstation was upgraded to a 13700K CPU + 64GB RAM + RTX 5070Ti — a solid above-mainstream configuration. It handles concurrent daily tasks with ease and can tackle virtually any [large-scale commercial design project](https://cgartlab.com/posts/good-name-for-better-work/).
 
-![Dual 4K monitors in a horizontal + vertical layout](./_images/我的上帝模式，一名设计师创作环境的演变-1784633310253.webp)
+![Dual 4K monitors arranged in a horizontal + vertical layout, used for documentation reading and design work side by side](./_images/我的上帝模式，一名设计师创作环境的演变-1784633310253.webp)
 
 During this period, my most noticeable upgrade was in screen needs. Beyond my familiar domain, I also got into knowledge management, self-hosted servers, and programming. Reading documentation and writing consumed a lot of screen time. My monitor went from an entry-level AOC 27-inch 2K display to a dual 4K setup with one horizontal and one vertical monitor.
 
@@ -177,7 +177,7 @@ But then, problems started cropping up one by one.
 
 ## The Bottleneck — Facing Difficulties and Challenges
 
-![Dual monitor setup — gave up on cable management after one attempt](./_images/我的上帝模式，一名设计师创作环境的演变-1784633324271.webp)
+![Dual monitor setup with visible cable clutter — the moment the author gave up on perfect cable management](./_images/我的上帝模式，一名设计师创作环境的演变-1784633324271.webp)
 
 This period roughly spanned 2020–2025. Looking back, the very concept and architecture of the setup were doomed to be unsustainable. Like how hardware performance, no matter how much you improve it, will always be quickly consumed by new software.
 
@@ -303,7 +303,7 @@ I think great products should be the same — they should blend effortlessly int
 
 When I do need a "speaker" these days, it's almost always to mask noise — construction, square dancers, screaming kids. The form factor is still the same, but it has gradually lost its "sound quality" dimension; it's now just "does it work or not."
 
-![Edifier R33BT speakers on the desk](./_images/我的上帝模式，一名设计师创作环境的演变-1784633343316.webp)
+![Edifier R33BT powered bookshelf speakers on the desk — the author's long-term choice for everyday music and ambient sound](./_images/我的上帝模式，一名设计师创作环境的演变-1784633343316.webp)
 
 After going through the stages above, my approach to building this corner has become very clear:
 
@@ -315,13 +315,13 @@ These three questions cut through everything else.
 
 For example:
 
-![A dedicated writing environment](./_images/我的上帝模式，一名设计师创作环境的演变-1784633354285.webp)
+![Dedicated writing nook with proper lighting, mechanical keyboard, and a single high-resolution monitor for long-form work](./_images/我的上帝模式，一名设计师创作环境的演变-1784633354285.webp)
 
 Building a space better suited for writing: compared to better speakers, more powerful computers, or more monitors, what matters more is lighting, a keyboard with better feel, and a high-resolution screen.
 
 Writing something useful for others matters most — the long-term value speaks for itself.
 
-![The current creative workspace](./_images/我的上帝模式，一名设计师创作环境的演变-1784633366156.webp)
+![Final creative workspace featuring a 49-inch 5K ultrawide DIY monitor split into three virtual screens for motion design work](./_images/我的上帝模式，一名设计师创作环境的演变-1784633366156.webp)
 
 For professional creative work, monitor width matters more than height. I switched to a 5K 144Hz 49-inch DIY monitor with an LG panel. With AI in the picture, I no longer need to spend hours flipping through documentation (not that reading docs isn't important — it's just much less frequent). This monitor has the equivalent area of two 27-inch displays seamlessly joined; I actually split it into three virtual screens — left, center, and right.
 

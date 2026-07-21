@@ -1,7 +1,7 @@
 ---
 title: "WordPress Plugin Store Loop Error: Troubleshooting & Fix Guide"
 published: 2025-07-01
-description: "Fix WordPress plugin store loop errors with our step-by-step troubleshooting guide. Learn DNS resolution fixes using Baota Panel and terminal commands for WordPress site health restoration."
+description: "Fix WordPress plugin store loop errors via DNS troubleshooting using Baota Panel or terminal commands. Restore plugin installation and site health."
 updated: 2025-07-01
 tags:
   - tech-sharing
@@ -20,7 +20,7 @@ abbrlink: fix-wordpress-plugin-store
 
 Recently, while installing and replacing page caching plugins for my blog backend (WordPress), the plugin store wouldn't open. The site health page indicated a loop error problem. The prompt message said it was a DNS resolution error, but checking the host server system's DNS configuration still showed default settings.
 
-![Loop Error Prompt](./_images/WordPress插件商店打不开，搞定回环错误排查与修复步骤-1754594749932.webp)
+![WordPress site health diagnostic screen displaying the loopback request failure error message with DNS resolution details](./_images/WordPress插件商店打不开，搞定回环错误排查与修复步骤-1754594749932.webp)
 
 ## Method 1: Install Linux Toolbox via Baota Panel
 

@@ -1,12 +1,10 @@
 ---
-title: "The Pine Trees of Golden Beach - No.08 Black Light Weekly | RSS & Interaction Design"
+title: "The Pine Trees of Golden Beach - No.08 Black Light Weekly"
 published: 2025-07-31
-description: "Learn how to build your own RSS service and discover invisible interaction design details in iOS and macOS. Plus practical tools for migrating music playlists to Apple Music for creative professionals."
+description: "How to self-host TinyTinyRSS for a private RSS reader, hidden iOS and macOS interaction design details, and a free tool for migrating playlists to Apple Music."
 updated: 2025-08-08
 tags:
   - Weekly
-  - RSS
-  - Interaction Design
 draft: false
 pin: 0
 toc: true
@@ -14,55 +12,52 @@ lang: en
 abbrlink: weekly-08
 ---
 
-![Pine trees shaped by sea wind on Qingdao Golden Beach island showcasing natural resilience and organic textures](../_images/08%20玄光周刊-金沙滩的松树-1754597325224.webp)
+![Sea-wind-shaped pine trees lining the loop path on a small island near Qingdao Golden Beach](../_images/08%20玄光周刊-金沙滩的松树-1754597325224.webp)
 
-This week's cover was shot on a small island near Qingdao Golden Beach. The inner side of the circular island path is lined with these pine trees blown sideways by sea winds, combined with dense pine needles creating unique textures resembling waves and rolling clouds.
+This week's cover was shot on a small island near Qingdao Golden Beach. The inner side of the loop path around the island is lined with these pine trees, all blown sideways by the sea wind. Combined with their dense pine needles, they form a unique texture reminiscent of rolling waves and drifting clouds.
 
-> About Xuan Guang Weekly
+> About Black Light Weekly
 >
-> This is an electronic weekly focusing on knowledge management, covering digital art, visual design, and frontend development. Currently published weekly, each issue selects a specific topic for in-depth reflection. It shares my notes about entrepreneurship and products, including my thoughts, excerpts and annotations, reading notes, and quality content recommendations.
+> This is an electronic weekly focusing on knowledge management, covering digital art, visual design, and frontend development. Currently published at a rate of one issue per week, each issue selects a single focused topic to explore in depth. It shares my notes on entrepreneurship and products, including my thoughts, excerpts and annotations, reading notes, and quality content recommendations.
 >
-> If you find the content here worthwhile and want a better reading experience, we recommend using a browser to visit the official website. You're also welcome to use [RSS](https://weekly.cgartlab.com/feed/atom) or [Email Subscription](https://weekly.cgartlab.com/) , we summarize these notes into an email sent to you weekly. Of course, your [letters](mailto:hello@cgartlab.com) are also welcome.
+> If you find the content here worthwhile and want a better reading experience, we recommend visiting the official site in your browser. You're also welcome to use [RSS](https://weekly.cgartlab.com/feed/atom) or [Email Subscription](https://weekly.cgartlab.com/) —we compile these notes into an email sent to you each week. Of course, your [letters](mailto:hello@cgartlab.com) are also welcome.
 
 ## Built My Own RSS Service
 
-![TinyTinyRSS Reader Interface Screenshot](../_images/08%20玄光周刊-金沙滩的松树-1754597334133.webp)
+![TinyTinyRSS self-hosted reader interface showing Black Light Weekly article updates](../_images/08%20玄光周刊-金沙滩的松树-1754597334133.webp)
 
-I replaced Folo with TinyTinyRSS as my main reader. The image above shows how it looks viewing this public account's official website article pushes in a desktop browser. After about a week of use, I'm very satisfied with both speed and stability. I'll gradually add extension features based on other needs.
+I replaced Folo with TinyTinyRSS as my main reader. The image above shows how it looks when viewing this account's official-site article pushes in a desktop browser. After about a week of use, I'm very satisfied with both the speed and stability. I'll gradually add extensions based on other needs going forward.
 
-Folo + RSSHub's combined scalability is already quite rich, almost the ceiling in the RSS field. However, Folo recently launched an Android client. Perhaps for initial marketing promotion, clicking the update popup on the mobile web version automatically redirects to Google Store without any option to return to the web version, even after clearing cache and refreshing. But after downloading and installing, I couldn't log in using either GitHub or Google accounts. Google Play Store shows many others encountered the same issue.
+Folo + RSSHub's combined extensibility is already quite rich—pretty much the ceiling in the RSS space. However, Folo recently released an Android client. Perhaps for initial marketing purposes, clicking the update prompt on the mobile web version automatically redirects to the Google Play Store, with no option to return to the web version—even after clearing the cache and refreshing. But once downloaded and installed, I couldn't log in with either my GitHub or Google account. The Google Play Store reviews show many others ran into the same issue.
 
-Being unable to log into the app, plus the web version being unusable, made me realize again that any third-party service is uncontrollable. Whether in UI design, product philosophy, lifecycle, or personal data, you can't achieve maximum freedom and security.
+Being unable to log in to the app, combined with the web version being unusable, reminded me once again that any third-party service is uncontrollable. Whether it's UI design, product philosophy, lifecycle, or personal data, you can never achieve the highest degree of freedom and security.
 
-Only you can rely on yourself.
+You can only count on yourself.
 
 ## Invisible Details in Interaction Design
 
-![iOS and macOS Interaction Design Analysis Diagram](../_images/08%20玄光周刊-金沙滩的松树-1754597345226.webp)
+![Curated analysis of subtle iOS and macOS interaction design details by Rauno Freiberg](../_images/08%20玄光周刊-金沙滩的松树-1754597345226.webp)
 
-> Interaction design is an art form that creates smooth experiences responding to human intentions.
+> Interaction design is an art form that creates fluid experiences responsive to human intent.
 
-The author carefully selected and meticulously organized parts of iOS and macOS interaction interfaces, attempting to analyze various design thoughts behind human-computer interaction design. He believes such reflection can greatly help designers develop more design intuition. Friends engaged in UI design should definitely check it out—the article embeds many high-quality real-shot videos helping understand principles.
+The author has carefully curated and meticulously organized a selection of iOS and macOS interaction interfaces, attempting to analyze the various design ideas behind human-computer interaction. He believes this kind of reflection is a great way to help designers develop more design intuition. Anyone doing UI design should definitely take a look—the article is embedded with many real-shot videos that help illustrate the principles, and the production quality is excellent.
 
-Currently, my work also relates to human-computer interaction, but applied to human-computer interaction in sci-fi movies (FUI). Compared to real-world UI, the biggest difference in film UI design is needing to simultaneously satisfy world-building settings and actor performances. It requires more consideration of interaction rationality and artistic visual consistency—technical implementation is relatively easier. After the project's confidentiality period ends, I can start a separate series to properly share this.
+The work I'm currently doing is also related to human-computer interaction—just applied to sci-fi films (FUI). Compared to real-world UI, the biggest difference with film UI design is that it has to simultaneously serve the world-building and the actors' performances. It demands more consideration of interaction rationality and consistency in art direction—the technical implementation side is actually relatively easy. Once the project's embargo lifts, I'd love to start a separate series to share it properly.
 
 🔗 <https://rauno.me/craft/interaction-design>
 
 ## Migrating Playlists to Apple Music
 
-![SongShift Playlist Migration Tool](../_images/08%20玄光周刊-金沙滩的松树-1754597354573.webp)
+![GoMusic open-source tool interface for extracting playlists to import into Apple Music](../_images/08%20玄光周刊-金沙滩的松树-1754597354573.webp)
 
-Recently needed to migrate music playlists from another platform to Apple Music. After trying several tools, found SongShift works quite well. It supports migration between multiple music platforms, with relatively high matching accuracy. The free version has some limitations, but for occasional use it's sufficient.
+A handy little open-source tool—it essentially extracts the song list from a playlist, which you then copy and paste into [TunemyMusic](https://www.tunemymusic.com/zh-CN/transfer) (remember to select "Any Text" at the bottom), then import it into Apple Music or other international music platforms. It supports parsing playlist links from virtually all major Chinese music platforms.
 
-What I appreciate is its batch processing capability—you don't need to migrate songs one by one. Just authorize both platforms, select playlists, and it automatically matches and transfers. Of course, some niche songs might not match perfectly, requiring manual checking.
+🔗 <https://music.unmeta.cn>
 
-## Personal Workflow Insights
+🔗 <https://github.com/Bistutu/GoMusic> (GitHub)
 
-Building my own RSS service taught me several valuable lessons:
+---
 
-- **Control matters**: Self-hosting gives you full control over data and features
-- **Simplicity beats complexity**: Sometimes the simplest solutions work best
-- **Backup plans are essential**: Always have alternatives ready
-- **Document everything**: Keep records of configurations and processes
+OK, that's it for this issue. If you find the content here worthwhile, welcome to use [RSS](https://weekly.cgartlab.com/feed/atom) or [Email Subscription](https://weekly.cgartlab.com/) —we compile these notes into an email sent to you each week. Of course, your [letters](mailto:hello@cgartlab.com) are also welcome; we'll do our best to reply.
 
-What tools or services have you found indispensable in your creative workflow? Have you ever considered self-hosting any of them?
+This article was first published on [Black Light Weekly](https://weekly.cgartlab.com) and is simultaneously serialized on [CG Art Lab](https://cgartlab.com/).

@@ -1,7 +1,7 @@
 ---
 title: EDIC Design System
 published: 2026-06-08
-description: An editorial design system for both humans and AI agents. Built with OKLch colors and design tokens, framework-agnostic, dark-mode ready.
+description: "EDIC is an open-source editorial design system for humans and AI agents. Features 200+ OKLch tokens, 25 components, 100 icons, and framework-agnostic CSS."
 tags:
   - Design Tool
 draft: false
@@ -10,7 +10,7 @@ toc: true
 lang: en
 ---
 
-![EDIC Design System cover](../_images/EDIC设计系统-1754664829706.webp)
+![EDIC Design System cover image showcasing components, design tokens, and the editorial design interface for content creation](../_images/EDIC设计系统-1754664829706.webp)
 
 ## Overview
 

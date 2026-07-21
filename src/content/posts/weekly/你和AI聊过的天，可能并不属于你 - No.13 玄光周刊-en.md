@@ -1,7 +1,7 @@
 ---
 title: "AI Data Privacy: Your Conversations Might Not Belong to You - No.13 Weekly"
 published: 2026-02-05
-description: "Protect your AI conversation data with our guide to data sovereignty and self-hosted solutions. Learn which AI platforms allow data export and how to build a private home data center for complete control."
+description: "Explore AI data sovereignty: why your ChatGPT and Claude conversations may not belong to you. Compare data export features across AI platforms."
 updated: 2026-06-26
 tags:
   - Weekly
@@ -52,7 +52,7 @@ Companies may close down, platforms may go bankrupt, but the data and skills you
 
 ## Good Things I Saw This Week
 
-![selfh](../_images/13%20玄光周刊-你和AI聊过的天，可能并不属于你-1772115538531.webp)
+![Selfh.st homepage featuring curated self-hosted application recommendations and open-source tools directory](../_images/13%20玄光周刊-你和AI聊过的天，可能并不属于你-1772115538531.webp)
 
 ### Self-hosted Apps Collection
 
@@ -64,7 +64,7 @@ In my view, when my data is stored on someone else's server, I'm essentially tra
 
 ---
 
-![GitHub Certificate Generator](../_images/13%20玄光周刊-你和AI聊过的天，可能并不属于你-1772115659495.webp)
+![GitHub Certificate Generator website showcasing personalized 2025 developer contribution certificates with elegant design](../_images/13%20玄光周刊-你和AI聊过的天，可能并不属于你-1772115659495.webp)
 
 ### GitHub Certificate Generator - Time Capsule
 
@@ -74,7 +74,7 @@ Generate GitHub certificates for 2025. I have to say, the design is very beautif
 
 ---
 
-![Times New American](../_images/13%20玄光周刊-你和AI聊过的天，可能并不属于你-1772115864422.webp)
+![Article header on Times New American font system design and government document typography standards analysis](../_images/13%20玄光周刊-你和AI聊过的天，可能并不属于你-1772115864422.webp)
 
 ### Times New American - System Design Behind Fonts
 
@@ -88,7 +88,7 @@ Writers care about fonts, designers care about systems. Politicians seek presenc
 
 ---
 
-![Black Hole Effect](../_images/13%20玄光周刊-你和AI聊过的天，可能并不属于你-1772116506972.webp)
+![Three.js black hole gravitational lensing effect visualization running smoothly in web browser on iPad and desktop](../_images/13%20玄光周刊-你和AI聊过的天，可能并不属于你-1772116506972.webp)
 
 ### Black Hole V5 - The Romance of Technology
 

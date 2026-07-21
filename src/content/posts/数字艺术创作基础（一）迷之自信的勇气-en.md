@@ -1,7 +1,7 @@
 ---
 title: "Digital Art Creation Basics (Part 1): The Courage to Start Creating"
 published: 2024-05-05
-description: "Begin your digital art journey with confidence. Learn fundamental concepts, overcome creative fear, and discover why starting before you're ready is the key to success in CG art and digital painting."
+description: "Start creating digital art before you feel ready. Build confidence through small wins, overcome creative fear, and learn why beginners hold an edge in CG art and digital painting."
 updated: 2024-11-25
 tags:
   - digital-art
@@ -14,7 +14,7 @@ lang: en
 abbrlink: digitalpainting1-confidence
 ---
 
-![Digital art creation cover showcasing creativity, courage, and the beginner's journey in CG painting](./_images/数字艺术创作基础（一）迷之自信的勇气-1754579749806.webp)
+![Cover illustration for the Digital Art Creation Basics series, symbolizing the courage to start creating before feeling ready](./_images/数字艺术创作基础（一）迷之自信的勇气-1754579749806.webp)
 
 ## Introduction
 
@@ -54,7 +54,7 @@ There's also an interesting incident - I discovered that a designer I greatly re
 
 ![Matthew Encina's handwritten poster "Start before you're ready"](./_images/数字艺术创作基础（一）迷之自信的勇气-1754579771541.webp)
 
-![Designer Matthew Encina's studio environment photo](./_images/数字艺术创作基础（一）迷之自信的勇气-1754579810291.webp)
+![Designer Matthew Encina's handwritten office whiteboard outlining the "connect the dots" creative philosophy](./_images/数字艺术创作基础（一）迷之自信的勇气-1754579810291.webp)
 
 ## What is Digital Art: Redefining Creation Boundaries
 
@@ -121,9 +121,9 @@ When I have free time, I enjoy looking at works by artists I'm interested in. Ho
 
 The most important thing is that as long as the subject doesn't offend others, no matter how weak the foundation, people dare to post for everyone to see, raise their confusions, let everyone give suggestions. Even dare to price and sell, like setting up their own small stall. Such maximum inclusive environments I only found domestically around 2000s, now almost no such environments or platforms exist. Filled with aesthetically similar works and course promotion ads. If you find any, please tell me, greatly appreciated.
 
-![Foreign art forum interface screenshot, showing community communication atmosphere](./_images/数字艺术创作基础（一）迷之自信的勇气-1754579839675.webp)
+![International CG art forum interface showing amateurs and professionals sharing feedback in an inclusive community](./_images/数字艺术创作基础（一）迷之自信的勇气-1754579839675.webp)
 
-![Art forum interface showing artists displaying works and pricing](./_images/数字艺术创作基础（一）迷之自信的勇气-1754579888397.webp)
+![Foreign art forum thread where emerging artists openly display finished works, set prices, and ask for critique](./_images/数字艺术创作基础（一）迷之自信的勇气-1754579888397.webp)
 
 ## No True Fresh Start: Digital Art's Iterative Advantage
 
@@ -194,7 +194,7 @@ Due to professional reasons, I enjoy collecting movie soundtrack music. If heari
 
 Just last month, I met a German medical student on Discord. All because I shared my [painting speed-up video](https://www.youtube.com/watch?v=4myVMqJurtI&t=7s) in forums - for professional video creators, this could be called a simple video. She saw it, found it useful. Added as friends, started chatting. Ended up discovering she's also a starting YouTuber, sharing many suggestions more suitable for international media development, like optimizing titles/thumbnails, tags, keywords, filming, voiceovers, etc. Whether drawing or making videos, we're both amateurs, but this is the unexpected value sharing brings.
 
-![Discord chat record screenshot with German medical student](./_images/数字艺术创作基础（一）迷之自信的勇气-1754580164387.webp)
+![Discord chat exchange with a German medical student who discovered the author's digital painting speed-up video online](./_images/数字艺术创作基础（一）迷之自信的勇气-1754580164387.webp)
 
 Finally, others' feelings about your work and their understanding naturally affect their evaluation. Believe me, even if you only draw a realistic basket of eggs. If you say nothing, some still won't understand your expression. Professionals would probably consider it practice, other amateurs would probably think you're showing off.
 

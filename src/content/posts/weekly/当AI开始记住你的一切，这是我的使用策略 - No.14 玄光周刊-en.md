@@ -1,7 +1,7 @@
 ---
 title: "AI Long-Term Memory Strategy: When AI Remembers Everything - No.14 Weekly"
 published: 2026-03-20
-description: "Master AI long-term memory features with proven strategies for ChatGPT, Claude, and other LLMs. Learn how to organize AI projects, manage conversation context, and maintain data privacy while maximizing AI productivity."
+description: "Master AI long-term memory with ChatGPT and Claude strategies. Organize AI projects, manage conversation context, and protect data privacy."
 updated: 2026-03-20
 tags:
   - Weekly
@@ -16,7 +16,7 @@ abbrlink: weekly-14
 
 ![Custom-built mechanical keyboard for lightweight development tasks and creative writing workflows](../_images/14%20玄光周刊-当%20AI%20开始记住你的一切，这是我的使用策略-1774007950655.webp)
 
-This issue's cover was photographed from a newly assembled 'typewriter', just taken. This machine's positioning is: if the main workstation is doing heavy work, it can simultaneously allow me to handle some lightweight development tasks. (This weekly issue was written using it, very pleasant.)
+This issue's cover was freshly photographed from a newly assembled 'typewriter'. This machine's positioning is: if the main workstation is doing heavy work, it can simultaneously allow me to handle some lightweight development tasks. (This weekly issue was written using it, very pleasant.)
 
 ---
 
@@ -58,7 +58,7 @@ Language Style and Word Count Requirements:
 
 **Then, I collect everyday trivial conversations into a project called 'Inbox'.** As the name suggests, this tells the large model that anything can be discussed here. The great benefit of doing this is that in the future, with just one command or export, you can remove the rough and keep the refined. If there are dozens or hundreds of sessions in the conversation list, I haven't yet seen any platform that can support automatic organization of sessions.
 
-![Qwen Chat](../_images/14%20玄光周刊 - 当%20AI%20开始记住人的一切，这是我的使用策略 -1774001083736.webp)
+![Qwen Chat interface showing project organization with Long-Term Memory and Inbox project categories for AI workflow management](../_images/14%20玄光周刊-当%20AI%20开始记住人的一切，这是我的使用策略-1774001083736.webp)
 
 **Finally, there's session granularity.** As shown in the figure above, besides 'Long-Term Memory' and 'Inbox', I also separately open projects like GitHub, Ollama, CSS Styles, etc.
 
@@ -70,7 +70,7 @@ If this is hard to understand, you can simply think of it as Weibo's #topic tag 
 
 ## Workany - AI Agent Comes to Desktop
 
-![Workany](../_images/14%20玄光周刊-当%20AI%20开始记住你的一切-1773999087736.webp)
+![Workany open-source AI Agent desktop client for local file manipulation and autonomous task execution similar to Claude Cowork](../_images/14%20玄光周刊-当%20AI%20开始记住你的一切-1773999087736.webp)
 
 🔗 https://github.com/workany-ai/workany
 
@@ -80,7 +80,7 @@ This is an open-source AI Agent desktop client that can execute tasks and manipu
 
 ## HP Eliteboard G1a Keyboard Host Form Factor Thinking
 
-![HP Eliteboard G1a](../_images/14%20玄光周刊-当%20AI%20开始记住你的一切-1773999327236.webp)
+![HP Eliteboard G1a keyboard host form factor showing compact computing device with detachable keyboard design for portable workstations](../_images/14%20玄光周刊-当%20AI%20开始记住你的一切-1773999327236.webp)
 
 🔗 https://www.ithome.com/0/910/806.htm
 
@@ -98,17 +98,17 @@ The contradiction I see is that what competes with this device won't be mini PCs
 
 🔗 https://www.notion.com/zh-cn/blog/steam-steel-and-infinite-minds-ai
 
-This is an article published by Notion's CEO at the end of last year. He uses the 'post-window' metaphor to remind us: don't treat AI merely as a smarter search box, just like early movies were just 'moving stage plays'. The real transformation lies in **reconstructing workflows**—letting AI agents handle fragmented tasks, humans upgrade from pedaling bicycles to driving cars, or even managing fleets.
+This is an article published by Notion's CEO at the end of last year. He uses the 'Rear Window' metaphor to remind us: don't treat AI merely as a smarter search box, just like early movies were just 'moving stage plays'. The real transformation lies in **reconstructing workflows**—letting AI agents handle fragmented tasks, humans upgrade from pedaling bicycles to driving cars, or even managing fleets.
 
 Re-reading this article over the weekend, I have to sigh that within 3 months, the 'infinite minds' he talked about have already shown visible progress and implementation of AI integrating into workflows across various fields.
 
 ---
 
-This article was first published in [Blacklight Weekly](https://weekly.cgartlab.com)
+This article was first published in [Black Light Weekly](https://weekly.cgartlab.com)
 
 Also serialized at [CGArtLab](https://cgartlab.com/weekly)
 
-## About Blacklight Weekly
+## About Black Light Weekly
 
 This is an electronic weekly focused on knowledge management, covering digital art, visual design, and frontend development fields. The publication frequency is currently weekly, with each issue selecting a specific sub-topic for discussion.
 
