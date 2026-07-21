@@ -2,6 +2,7 @@ export default {
   async fetch(request, env) {
     try {
       const url = new URL(request.url)
+      const pathname = url.pathname
 
       // 1. Force www → non-www canonical redirect (301 permanent)
       if (url.hostname === 'www.cgartlab.com') {
@@ -9,9 +10,13 @@ export default {
         return Response.redirect(url.toString(), 301)
       }
 
+      // 1b. Feed shortcut: /feed and /feed/ → RSS feed
+      if (pathname === '/feed' || pathname === '/feed/') {
+        return Response.redirect('https://cgartlab.com/rss.xml', 301)
+      }
+
       // 2. Trailing slash enforcement: redirect paths without trailing slash (301)
       //    Skip file-like paths (containing a dot in the last segment)
-      const pathname = url.pathname
       if (!pathname.endsWith('/') && !pathname.split('/').pop()?.includes('.')) {
         url.pathname = pathname + '/'
         return Response.redirect(url.toString(), 301)
