@@ -1,3 +1,8 @@
+# 跨平台兼容：Windows exFAT 不支持 symlink，故使用 hoisted 模式
+# macOS/Linux 上 hoisted 模式同样正常工作，无 phantom dep 风险
+nodeLinker: hoisted
+packages:
+  - '.'
 allowBuilds:
   esbuild: false
   sharp: false
