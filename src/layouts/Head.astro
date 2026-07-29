@@ -28,7 +28,6 @@ const { customGoogleAnalyticsJS = '', customUmamiAnalyticsJS = '' } = themeConfi
 
 // Site Metadata
 const metaTheme = defaultMode === 'dark' ? darkMode : lightMode
-const siteTitle = i18nTitle ? currentUI.title : title
 const siteSubtitle = i18nTitle ? currentUI.subtitle : subtitle
 const siteDescription = i18nTitle ? currentUI.description : description
 
@@ -48,7 +47,7 @@ const pageImage = postSlug
 <script is:inline define:vars={{ defaultMode }}>
 (function () {
   // Priority: forced mode > auto+manual > auto+system
-  var _dark
+  let _dark
   if (defaultMode === 'dark') {
     _dark = true
   }
@@ -57,12 +56,15 @@ const pageImage = postSlug
   }
   else {
     // auto mode
-    var _mode = localStorage.getItem('theme-mode') || 'system'
-    if (_mode === 'dark') _dark = true
-    else if (_mode === 'light') _dark = false
+    const _mode = localStorage.getItem('theme-mode') || 'system'
+    if (_mode === 'dark')
+      _dark = true
+    else if (_mode === 'light')
+      _dark = false
     else _dark = window.matchMedia('(prefers-color-scheme: dark)').matches
   }
-  if (_dark) document.documentElement.classList.add('dark')
+  if (_dark)
+    document.documentElement.classList.add('dark')
 })()
 </script>
 <!-- Basic Info -->
@@ -205,7 +207,7 @@ const pageImage = postSlug
   const segments = pathname.split('/').filter(Boolean)
 
   // Build breadcrumb items from URL path
-  const items: { '@type': 'ListItem'; position: number; name: string; item: string }[] = [
+  const items: { '@type': 'ListItem', 'position': number, 'name': string, 'item': string }[] = [
     {
       '@type': 'ListItem',
       'position': 1,
@@ -235,14 +237,19 @@ const pageImage = postSlug
     }
   }
 
-  if (items.length <= 1) return null
+  if (items.length <= 1)
+return null
 
   return (
-    <script is:inline type="application/ld+json" set:html={JSON.stringify({
+    <script
+      is:inline
+      type="application/ld+json"
+      set:html={JSON.stringify({
       '@context': 'https://schema.org',
       '@type': 'BreadcrumbList',
       'itemListElement': items.slice(0, 5), // Max 5 items
-    })} />
+    })}
+    />
   )
 })()}
 
@@ -266,13 +273,17 @@ const pageImage = postSlug
   //   2. auto mode + user has manually toggled — respect stored choice
   //   3. auto mode + no manual override — follow system preference
   function isCurrentDark() {
-    if (defaultMode === 'dark') return true
-    if (defaultMode === 'light') return false
+    if (defaultMode === 'dark')
+      return true
+    if (defaultMode === 'light')
+      return false
 
     // auto mode
     const mode = localStorage.getItem('theme-mode') || 'system'
-    if (mode === 'dark') return true
-    if (mode === 'light') return false
+    if (mode === 'dark')
+      return true
+    if (mode === 'light')
+      return false
 
     // No manual override — always follow system preference
     return window.matchMedia('(prefers-color-scheme: dark)').matches
@@ -301,7 +312,7 @@ const pageImage = postSlug
 
   // Apply theme to the INCOMING document BEFORE the swap so there is
   // zero flash between the outgoing and incoming pages.
-  document.addEventListener('astro:before-swap', function (e) {
+  document.addEventListener('astro:before-swap', (e) => {
     initTheme(e.newDocument)
     initMotionPref(e.newDocument)
   })
@@ -322,23 +333,24 @@ const pageImage = postSlug
       customGoogleAnalyticsJS,
     }}
   >
-  window.dataLayer = window.dataLayer || []
-  window.gtag = function () {
-    dataLayer.push(arguments)
-  }
-  window.gtag('js', new Date())
-  if (customGoogleAnalyticsJS) {
-    window.gtag('config', googleAnalyticsID, {
-      transport_url: new URL(customGoogleAnalyticsJS).origin,
-    })
-  } else {
-    window.gtag('config', googleAnalyticsID)
-  }
-  const gaScript = document.createElement('script')
-  gaScript.src = customGoogleAnalyticsJS || `https://www.googletagmanager.com/gtag/js?id=${googleAnalyticsID}`
-  gaScript.type = 'text/partytown'
-  document.head.appendChild(gaScript)
-  </script>
+ window.dataLayer = window.dataLayer || []
+ window.gtag = function (...args) {
+   dataLayer.push(...args)
+ }
+ window.gtag('js', new Date())
+ if (customGoogleAnalyticsJS) {
+   window.gtag('config', googleAnalyticsID, {
+     transport_url: new URL(customGoogleAnalyticsJS).origin,
+   })
+ }
+ else {
+   window.gtag('config', googleAnalyticsID)
+ }
+ const gaScript = document.createElement('script')
+ gaScript.src = customGoogleAnalyticsJS || `https://www.googletagmanager.com/gtag/js?id=${googleAnalyticsID}`
+ gaScript.type = 'text/partytown'
+ document.head.appendChild(gaScript)
+ </script>
 )}
 
 <!-- Umami Analytics -->
@@ -350,8 +362,8 @@ const pageImage = postSlug
       umamiAnalyticsID,
       customUmamiAnalyticsJS,
     }}
-   >
-  var umamiScript = document.createElement('script')
+  >
+  const umamiScript = document.createElement('script')
   umamiScript.src = customUmamiAnalyticsJS || 'https://cloud.umami.is/script.js'
   umamiScript.setAttribute('data-website-id', umamiAnalyticsID)
   umamiScript.type = 'text/partytown'
