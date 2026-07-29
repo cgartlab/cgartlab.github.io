@@ -202,12 +202,13 @@ const pageImage = postSlug
 
 <!-- BreadcrumbList Structured Data -->
 {(() => {
+  const MAX_BREADCRUMB_ITEMS = 5
   const origin = Astro.url.origin
   const pathname = Astro.url.pathname
   const segments = pathname.split('/').filter(Boolean)
 
   // Build breadcrumb items from URL path
-  const items: { '@type': 'ListItem', 'position': number, 'name': string, 'item': string }[] = [
+  const items: { '@type': 'ListItem'; position: number; name: string; item: string }[] = [
     {
       '@type': 'ListItem',
       'position': 1,
@@ -231,25 +232,20 @@ const pageImage = postSlug
       items.push({
         '@type': 'ListItem',
         'position': pos++,
-        'name': seg.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase()),
+        'name': seg.replace(/[-]/g, ' ').replace(/\b\w/g, c => c.toUpperCase()),
         'item': accumPath,
       })
     }
   }
 
-  if (items.length <= 1)
-return null
+  if (items.length <= 1) return null
 
   return (
-    <script
-      is:inline
-      type="application/ld+json"
-      set:html={JSON.stringify({
+    <script is:inline type="application/ld+json" set:html={JSON.stringify({
       '@context': 'https://schema.org',
       '@type': 'BreadcrumbList',
-      'itemListElement': items.slice(0, 5), // Max 5 items
-    })}
-    />
+      'itemListElement': items.slice(0, MAX_BREADCRUMB_ITEMS),
+    })} />
   )
 })()}
 
