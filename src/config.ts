@@ -75,6 +75,8 @@ export const themeConfig: ThemeConfig = {
     katex: true, // true, false
     // reduce motion
     reduceMotion: false, // true, false
+    // max breadcrumb items for structured data
+    maxBreadcrumbItems: 5, // 1-10
   },
   // GLOBAL SETTINGS >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> END
 

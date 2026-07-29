@@ -151,6 +151,12 @@ export const linksData: Record<string, Record<string, LinkItem[]>> = {
         url: 'https://www.craftz.dog/',
         icon: 'https://www.craftz.dog/favicon.ico',
       },
+      {
+        title: 'Bo.Ke',
+        description: '独立博客聚合平台',
+        url: 'https://bo.ke/',
+        icon: 'https://bo.ke/favicon.ico',
+      },
     ],
   },
   'en': {
@@ -297,6 +303,12 @@ export const linksData: Record<string, Record<string, LinkItem[]>> = {
         url: 'https://www.craftz.dog/',
         icon: 'https://www.craftz.dog/favicon.ico',
       },
+      {
+        title: 'Bo.Ke',
+        description: 'Independent blog aggregation platform',
+        url: 'https://bo.ke/',
+        icon: 'https://bo.ke/favicon.ico',
+      },
     ],
   },
   'zh-tw': {
@@ -442,6 +454,12 @@ export const linksData: Record<string, Record<string, LinkItem[]>> = {
         description: '獨立開發者，Inkdrop創始人',
         url: 'https://www.craftz.dog/',
         icon: 'https://www.craftz.dog/favicon.ico',
+      },
+      {
+        title: 'Bo.Ke',
+        description: '獨立部落格聚合平臺',
+        url: 'https://bo.ke/',
+        icon: 'https://bo.ke/favicon.ico',
       },
     ],
   },
