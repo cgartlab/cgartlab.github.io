@@ -65,6 +65,7 @@ export interface ThemeConfig {
     katex: boolean
     // 减少动画效果
     reduceMotion: boolean
+    maxBreadcrumbItems: number
   }
   comment: {
     // 启用评论系统
