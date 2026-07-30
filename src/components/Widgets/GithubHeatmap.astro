@@ -5,6 +5,8 @@
 
 import { ui } from '@/i18n/ui'
 import { getPageInfo } from '@/utils/page'
+import { getContributions } from '@/lib/github-contributions'
+import type { ContributionCell, ContributionData } from '@/lib/github-contributions'
 
 interface Props {
   class?: string
@@ -14,40 +16,8 @@ const { class: className = '' } = Astro.props
 const { currentLang } = getPageInfo(Astro.url.pathname)
 const currentUI = ui[currentLang as keyof typeof ui] ?? ui.zh
 
-interface ContributionCell {
-  color: string
-  contributionCount: number
-  contributionLevel: 'NONE' | 'FIRST_QUARTILE' | 'SECOND_QUARTILE' | 'THIRD_QUARTILE' | 'FOURTH_QUARTILE'
-  date: string
-}
-
-interface ContributionData {
-  contributions: ContributionCell[][]
-  total: number
-}
-
-const API_URL = 'https://github-contributions-api.deno.dev/cgartlab.json'
-
-let data: ContributionData = { contributions: [], total: 0 }
-let fetchError = false
-
-try {
-  const response = await fetch(API_URL)
-  if (response.ok) {
-    const json = await response.json()
-    data = {
-      contributions: json.contributions as ContributionCell[][],
-      total: json.totalContributions as number,
-    }
-  }
-  else {
-    fetchError = true
-  }
-}
-catch (e) {
-  console.error('[GithubHeatmap] Failed to fetch data:', e)
-  fetchError = true
-}
+const data: ContributionData = await getContributions()
+const fetchError = data.contributions.length === 0
 
 // Date formatters (must be before getMonthLabels which uses them)
 const monthFormatter = new Intl.DateTimeFormat(currentLang, { month: 'short' })
@@ -67,7 +37,7 @@ return
     const month = date.getMonth()
 
     if (month !== lastMonth) {
-      labels.push({ month: monthFormatter.format(new Date(2024, month, 1)), weekIndex })
+      labels.push({ month: monthFormatter.format(new Date(Date.UTC(0, month, 1))), weekIndex })
       lastMonth = month
     }
   })
@@ -90,7 +60,7 @@ function formatDateStr(dateStr: string): string {
   })
 }
 
-const levelClassMap: Record<string, string> = {
+const levelClassMap: Record<ContributionCell['contributionLevel'], string> = {
   NONE: 'gh-cell--none',
   FIRST_QUARTILE: 'gh-cell--first-quartile',
   SECOND_QUARTILE: 'gh-cell--second-quartile',
@@ -100,11 +70,12 @@ const levelClassMap: Record<string, string> = {
 
 const dayIndices = [0, 1, 2, 3, 4, 5, 6]
 const dayLabelMap: Record<number, string> = {
-  0: dayFormatter.format(new Date(2024, 0, 7)),
-  6: dayFormatter.format(new Date(2024, 0, 6)),
+  0: dayFormatter.format(new Date(Date.UTC(0, 0, 7))),
+  6: dayFormatter.format(new Date(Date.UTC(0, 0, 6))),
 }
 
 // Cell pitch: 10px cell + 2px gap = 12px per column
+// This must match the CSS variable --gh-cell-pitch (see :root block)
 const CELL_PITCH = 12
 ---
 
@@ -171,7 +142,9 @@ const CELL_PITCH = 12
                           aria-describedby={tooltipId}
                         >
                           <span class="gh-tooltip" role="tooltip" id={tooltipId}>
-                            {formatDateStr(cell.date)} 提交 {cell.contributionCount} 次
+                            {(currentUI.contributionTooltip || '{date} — {n} contribution')
+                              .replace('{date}', formatDateStr(cell.date))
+                              .replace('{n}', String(cell.contributionCount))}
                           </span>
                         </span>
                       )
@@ -211,6 +184,10 @@ const CELL_PITCH = 12
 (function () {
   var SCALE_CONTAINER_ID = 'heatmap-scale-container'
   var WRAPPER_ID = 'heatmap-wrapper'
+  var _ro = null
+  var _resizeHandler = null
+  var _resizeTimer = null
+  var _orientationHandler = null
 
   function initHeatmapScale() {
     var container = document.getElementById(SCALE_CONTAINER_ID)
@@ -256,24 +233,38 @@ const CELL_PITCH = 12
 
     // Use ResizeObserver for accurate, throttled recalculation
     if (typeof ResizeObserver !== 'undefined') {
-      var ro = new ResizeObserver(function () {
+      _ro = new ResizeObserver(function () {
         requestAnimationFrame(updateScale)
       })
-      ro.observe(container)
+      _ro.observe(container)
     } else {
       // Fallback for older browsers
-      var timer
-      window.addEventListener('resize', function () {
-        clearTimeout(timer)
-        timer = setTimeout(updateScale, 100)
-      })
+      _resizeHandler = function () {
+        clearTimeout(_resizeTimer)
+        _resizeTimer = setTimeout(updateScale, 100)
+      }
+      window.addEventListener('resize', _resizeHandler)
     }
 
     // ResizeObserver does NOT fire on device orientation change (iPad rotate,
     // phone rotate) — supplement with orientationchange for full coverage.
-    window.addEventListener('orientationchange', function () {
-      updateScale()
-    })
+    _orientationHandler = function () { updateScale() }
+    window.addEventListener('orientationchange', _orientationHandler)
+  }
+
+  function cleanupHeatmapScale() {
+    if (_ro) {
+      _ro.disconnect()
+      _ro = null
+    }
+    if (_resizeHandler) {
+      window.removeEventListener('resize', _resizeHandler)
+      _resizeHandler = null
+    }
+    if (_orientationHandler) {
+      window.removeEventListener('orientationchange', _orientationHandler)
+      _orientationHandler = null
+    }
   }
 
   if (document.readyState === 'loading') {
@@ -281,6 +272,9 @@ const CELL_PITCH = 12
   } else {
     initHeatmapScale()
   }
+
+  // Cleanup on View Transitions navigation
+  document.addEventListener('astro:before-swap', cleanupHeatmapScale)
 })()
 </script>
 
@@ -618,6 +612,7 @@ document.addEventListener('astro:before-swap', cleanupHeatmapInteractions)
   --gh-cell-3: oklch(52% 0.15 138);
   --gh-cell-4: oklch(35% 0.13 138);
   --gh-day-label-width: 28px;
+  --gh-cell-pitch: 12px; /* 10px cell + 2px gap — must match CELL_PITCH constant */
 }
 
 html.dark {
