@@ -83,8 +83,8 @@ async function writeDiskCache(data: ContributionData): Promise<void> {
     const cachePath = join(cacheDir, CACHE_FILE)
     await writeFile(cachePath, JSON.stringify({ data, ts: Date.now() }), 'utf-8')
   }
-  catch {
-    // Cache write failure is non-fatal
+  catch (e) {
+    console.warn('[GithubHeatmap] Cache write failed:', e instanceof Error ? e.message : e)
   }
 }
 

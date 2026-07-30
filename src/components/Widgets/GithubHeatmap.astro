@@ -75,6 +75,7 @@ const dayLabelMap: Record<number, string> = {
 }
 
 // Cell pitch: 10px cell + 2px gap = 12px per column
+// This must match the CSS variable --gh-cell-pitch (see :root block)
 const CELL_PITCH = 12
 ---
 
@@ -611,6 +612,7 @@ document.addEventListener('astro:before-swap', cleanupHeatmapInteractions)
   --gh-cell-3: oklch(52% 0.15 138);
   --gh-cell-4: oklch(35% 0.13 138);
   --gh-day-label-width: 28px;
+  --gh-cell-pitch: 12px; /* 10px cell + 2px gap — must match CELL_PITCH constant */
 }
 
 html.dark {

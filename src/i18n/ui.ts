@@ -24,7 +24,7 @@ export const ui = {
     contributionCount: 'contribution',
     contributionYear: '{n} contributions in the past year',
     contributionUnavailable: 'Contribution data unavailable',
-    contributionTooltip: '{date} — {n} contribution',
+    contributionTooltip: '{date} — {n} contributions',
     glossaryTitle: 'Glossary',
     glossaryDesc: 'This glossary collects specialized technical terms that appear in articles on this site. When a term first appears in a non-weekly post, it is automatically linked to the corresponding Wikipedia entry, allowing readers to quickly understand its background. The glossary is manually curated, so not every term from every article may be included — some entries may also lag behind recent posts. It currently contains {n} terms.',
     glossaryLetterNav: 'Alphabetical Index',
