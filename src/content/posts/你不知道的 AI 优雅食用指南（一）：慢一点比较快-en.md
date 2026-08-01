@@ -104,7 +104,7 @@ This article is already several thousand words long. If you've made it this far,
 
 ### Identifying Long-Term Value
 
-![](./_images/1-慢一点比较快-1785423198130.webp)
+![Identifying Long-Term Value](./_images/1-慢一点比较快-1785423198130.webp)
 
 Slowing down and staying patient serves another critical purpose: identifying long-term value. In my experience, this is the foundation of virtually every important decision.
 
@@ -127,7 +127,7 @@ This is one reason I chose to write this booklet. Learning techniques matters, b
 Things with long-term value tend to share these traits:
 
 - **General enough** — once you learn it, you can apply it across domains.
-- **Stable enough** — it has persisted through civilization and won't be easily淘汰.
+- **Stable enough** — it has persisted through civilization and won't be easily outdated.
 - **Simple enough** — like the laws of nature themselves.
 
 If you've made it this far, you probably already know who in your circle is working on things with long-term value.
