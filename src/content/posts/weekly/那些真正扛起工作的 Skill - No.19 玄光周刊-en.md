@@ -4,7 +4,7 @@ published: 2026-06-02
 updated: 2026-06-27
 description: "Continuing from last issue, this week I introduce the second category of my OpenClaw Skills — the dedicated ones that truly carry the workload. They are deeply integrated with self-hosted services and have become part of my production workflow."
 tags:
-  - Newsletter
+  - Weekly
   - Tech
   - Workflow
   - OpenClaw
