@@ -17,7 +17,7 @@ abbrlink: digitalpainting2-shape-and-shadow
 
 ## Introduction: From Psychology to Practice
 
-The [previous article](https://cgartlab.com/en/posts/digitalpainting1-confidence) covered confidence and courage — how to take the first step. It was fundamentally about mindset.
+The [previous article](https://cgartlab.com/en/posts/digitalpainting1-confidence/) covered confidence and courage — how to take the first step. It was fundamentally about mindset.
 
 Mindset is intangible; execution is concrete.
 

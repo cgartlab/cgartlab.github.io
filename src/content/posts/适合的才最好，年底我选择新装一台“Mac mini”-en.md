@@ -27,7 +27,7 @@ Simple. It comes down to needs:
 - As far as I know, this is the AMD mini PC with the most mature and stable Hackintosh solution.
 - ![AMD Hackintosh diagram](./_images/适合的才最好，年底我选择新装一台“Mac mini”-1754828899593.webp)
 - I've been tinkering with Hackintosh for years — built a dual-platform desktop setup (now at my parents' place as a backup workstation) that I still update occasionally. I still browse forums and Discord from time to time, and recently discovered that AMD support made big strides, including integrated GPU drivers, with open-source bootloader configs available.
-- Extreme value for money. My build with 32GB RAM + 1TB + 2TB SSDs cost just over . A comparable Mac mini would run ,300+. I'd rather save that for a next-gen NVIDIA GPU for my desktop.
+- Extreme value for money. My build with 32GB RAM + 1TB + 2TB SSDs cost just over ¥2,000. A comparable Mac mini would run ¥13,000+. I'd rather save that for a next-gen NVIDIA GPU for my desktop.
 - I already have a powerful desktop workstation, and I don't game.
 - Had a spare 27" 4K monitor lying around — too good to sell.
 - Windows offers more freedom and expandability. It can double as a TV box (it already can, anytime) or a small server.
@@ -117,7 +117,7 @@ The process is simple: select the image, select the USB drive, and write. It tak
 
 ### Booting from USB
 
-Press \del\ or \F7\ during boot to enter BIOS or the boot menu, then select the USB drive.
+Press `del` or `F7` during boot to enter BIOS or the boot menu, then select the USB drive.
 
 If everything goes well, you'll see the installation options.
 
