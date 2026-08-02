@@ -14,7 +14,7 @@ lang: en
 abbrlink: build-a-macmini
 ---
 
-![Cover](./_images/适合的才最好，年底我选择新装一台\u201CMac%20mini\u201D-1754592163345.webp)
+![Cover](./_images/适合的才最好，年底我选择新装一台“Mac%20mini”-1754592163345.webp)
 
 ## Foreword
 
@@ -25,7 +25,7 @@ I'd wanted a Mac mini for development and testing for a while — my MacBook Pro
 Simple. It comes down to needs:
 
 - As far as I know, this is the AMD mini PC with the most mature and stable Hackintosh solution.
-- ![AMD Hackintosh diagram](./_images/适合的才最好，年底我选择新装一台"Mac mini"-1754828899593.webp)
+- ![AMD Hackintosh diagram](./_images/适合的才最好，年底我选择新装一台“Mac mini”-1754828899593.webp)
 - I've been tinkering with Hackintosh for years — built a dual-platform desktop setup (now at my parents' place as a backup workstation) that I still update occasionally. I still browse forums and Discord from time to time, and recently discovered that AMD support made big strides, including integrated GPU drivers, with open-source bootloader configs available.
 - Extreme value for money. My build with 32GB RAM + 1TB + 2TB SSDs cost just over . A comparable Mac mini would run ,300+. I'd rather save that for a next-gen NVIDIA GPU for my desktop.
 - I already have a powerful desktop workstation, and I don't game.
@@ -38,15 +38,15 @@ Let me be clear: unless you have specific **macOS** software or development/desi
 
 ## Hardware Specs
 
-![Front view of the mini PC](./_images/适合的才最好，年底我选择新装一台\u201CMac%20mini\u201D-1754592194079.webp)
+![Front view of the mini PC](./_images/适合的才最好，年底我选择新装一台“Mac%20mini”-1754592194079.webp)
 
-![Side ports](./_images/适合的才最好，年底我选择新装一台\u201CMac%20mini\u201D-1754592202748.webp)
+![Side ports](./_images/适合的才最好，年底我选择新装一台“Mac%20mini”-1754592202748.webp)
 
-![Top view](./_images/适合的才最好，年底我选择新装一台\u201CMac%20mini\u201D-1754593201679.webp)
+![Top view](./_images/适合的才最好，年底我选择新装一台“Mac%20mini”-1754593201679.webp)
 
 The device is compact and well-built. I picked the gray version. After heavy use, dust is already collecting on the top air intake. But as a designer, I just couldn't stomach the bright red power button on the black model.
 
-![Thickness comparison](./_images/适合的才最好，年底我选择新装一台\u201CMac%20mini\u201D-1754592228596.webp)
+![Thickness comparison](./_images/适合的才最好，年底我选择新装一台“Mac%20mini”-1754592228596.webp)
 
 It's thin enough to fit under a monitor stand alongside a 68-key keyboard.
 
@@ -81,7 +81,7 @@ I wouldn't recommend setting this above 8GB. The iGPU's VRAM is actually system 
 
 If you bought the barebones version like I did, you'll need to install the OS yourself. Windows installation is straightforward, so I won't bore you with the details. If you've read this far, I trust you can handle it.
 
-![Windows 11 installation screen](./_images/适合的才最好，年底我选择新装一台\u201CMac%20mini\u201D-1754592263015.webp)
+![Windows 11 installation screen](./_images/适合的才最好，年底我选择新装一台“Mac%20mini”-1754592263015.webp)
 
 One thing worth mentioning: the system comes with a USB installation drive in the box, version 23H2, containing all the official hardware drivers. One-click installation, very convenient.
 
@@ -89,7 +89,7 @@ One thing worth mentioning: the system comes with a USB installation drive in th
 
 Before installing macOS, partition your disk. I split the 1TB NVMe SSD in half for system drives. When installing Windows 11, it automatically creates a 200MB EFI boot partition. I recommend expanding this to 300MB.
 
-![Disk partition scheme](./_images/适合的才最好，年底我选择新装一台\u201CMac%20mini\u201D-1754593268652.webp)
+![Disk partition scheme](./_images/适合的才最好，年底我选择新装一台“Mac%20mini”-1754593268652.webp)
 
 The image shows my partition layout under macOS Disk Utility. disk0s3 is the Windows 11 partition. To resize partitions, use DiskGenius or other tools within Windows 11.
 
@@ -107,13 +107,13 @@ The image shows my partition layout under macOS Disk Utility. disk0s3 is the Win
 
 There are many tools for writing the image. I recommend [balenaEtcher](https://www.balena.io/etcher) — it's open source and free.
 
-![Creating the installation USB](./_images/适合的才最好，年底我选择新装一台\u201CMac%20mini\u201D-1754592284478.webp)
+![Creating the installation USB](./_images/适合的才最好，年底我选择新装一台“Mac%20mini”-1754592284478.webp)
 
 It supports Windows, macOS, and Linux. Just download and use it.
 
 The process is simple: select the image, select the USB drive, and write. It takes about ten minutes.
 
-![Etcher writing the image](./_images/适合的才最好，年底我选择新装一台\u201CMac%20mini\u201D-1754592772660.webp)
+![Etcher writing the image](./_images/适合的才最好，年底我选择新装一台“Mac%20mini”-1754592772660.webp)
 
 ### Booting from USB
 
@@ -121,17 +121,17 @@ Press \del\ or \F7\ during boot to enter BIOS or the boot menu, then select the 
 
 If everything goes well, you'll see the installation options.
 
-![USB boot menu](./_images/适合的才最好，年底我选择新装一台\u201CMac%20mini\u201D-1754592761617.webp)
+![USB boot menu](./_images/适合的才最好，年底我选择新装一台“Mac%20mini”-1754592761617.webp)
 
 Proceed with a normal macOS installation. The bootloader config currently supports Sequoia, but I chose Ventura for stability. After installation, you can update to 13.7.1.
 
 When formatting disks, keep the system partition as APFS. If you have a SATA SSD (like I do), format it as exFAT so both systems can share a common storage drive with read/write access.
 
-![macOS Disk Utility](./_images/适合的才最好，年底我选择新装一台\u201CMac%20mini\u201D-1754592748300.webp)
+![macOS Disk Utility](./_images/适合的才最好，年底我选择新装一台“Mac%20mini”-1754592748300.webp)
 
 **Important: Don't sign in to your Apple ID yet** — you'll need to modify the system serial number first.
 
-![macOS initial setup](./_images/适合的才最好，年底我选择新装一台\u201CMac%20mini\u201D-1754592737930.webp)
+![macOS initial setup](./_images/适合的才最好，年底我选择新装一台“Mac%20mini”-1754592737930.webp)
 
 ### Replacing the Bootloader
 
@@ -143,25 +143,25 @@ Remember, you're currently booted from the USB drive, so the boot partition you'
 
 Open Finder, copy all files from the USB drive's EFI partition to the system's EFI partition. Now you can remove the USB drive. If you encounter boot issues later, you can still use the USB drive to boot.
 
-![OC bootloader config](./_images/适合的才最好，年底我选择新装一台\u201CMac%20mini\u201D-1754592707550.webp)
+![OC bootloader config](./_images/适合的才最好，年底我选择新装一台“Mac%20mini”-1754592707550.webp)
 
 ### Updating Drivers and Bootloader
 
 In the menu bar: Edit > Mount ESP > System drive > Mount and open the config file.
 
-![Mounting ESP partition](./_images/适合的才最好，年底我选择新装一台\u201CMac%20mini\u201D-1754592720341.webp)
+![Mounting ESP partition](./_images/适合的才最好，年底我选择新装一台“Mac%20mini”-1754592720341.webp)
 
 First, set a system serial number. Generate a random one and check on Apple's website to make sure it's valid.
 
-![Setting serial number](./_images/适合的才最好，年底我选择新装一台\u201CMac%20mini\u201D-1754909105968.webp)
+![Setting serial number](./_images/适合的才最好，年底我选择新装一台“Mac%20mini”-1754909105968.webp)
 
 Then select "Update OpenCore and kexts." OpenCore is the core bootloader component, and kexts are hardware driver files.
 
-![OpenCore update](./_images/适合的才最好，年底我选择新装一台\u201CMac%20mini\u201D-1754592648900.webp)
+![OpenCore update](./_images/适合的才最好，年底我选择新装一台“Mac%20mini”-1754592648900.webp)
 
 Check for Kext updates. Files with available updates will show a red square. Check them and update. I don't recommend using development versions of drivers.
 
-![Driver update check](./_images/适合的才最好，年底我选择新装一台\u201CMac%20mini\u201D-1754592624013.webp)
+![Driver update check](./_images/适合的才最好，年底我选择新装一台“Mac%20mini”-1754592624013.webp)
 
 After updating, save the EFI file and exit.
 
@@ -171,7 +171,7 @@ Download and install [Hackintool](https://www.baker76.com/hackintool/).
 
 First, go to the "Power" tab and check if the sleep/wake parameter is set to "0". If not, click the screwdriver button to fix it, ensuring the system can wake from sleep properly.
 
-![Hackintool](./_images/适合的才最好，年底我选择新装一台\u201CMac%20mini\u201D-1754592608215.webp)
+![Hackintool](./_images/适合的才最好，年底我选择新装一台“Mac%20mini”-1754592608215.webp)
 
 Then go to the Tools tab, click the white square in the bottom-right corner, enter your system password, and confirm. This fixes system permissions and driver caches. This approach is generally the most reliable.
 
@@ -181,17 +181,17 @@ Finally, restart and select macOS. You should now be able to sign in with your A
 
 System info.
 
-![macOS system info](./_images/适合的才最好，年底我选择新装一台\u201CMac%20mini\u201D-1754592593051.webp)
+![macOS system info](./_images/适合的才最好，年底我选择新装一台“Mac%20mini”-1754592593051.webp)
 
 This is what it looks like as I'm writing this article.
 
 Software compatibility — at least for the software I use (shown below), I haven't experienced any crashes or restarts (except when I broke things myself).
 
-![Development software running](./_images/适合的才最好，年底我选择新装一台\u201CMac%20mini\u201D-1754592576870.webp)
+![Development software running](./_images/适合的才最好，年底我选择新装一台“Mac%20mini”-1754592576870.webp)
 
-![Software compatibility test](./_images/适合的才最好，年底我选择新装一台\u201CMac%20mini\u201D-1754592564637.webp)
+![Software compatibility test](./_images/适合的才最好，年底我选择新装一台“Mac%20mini”-1754592564637.webp)
 
-![Apps running normally](./_images/适合的才最好，年底我选择新装一台\u201CMac%20mini\u201D-1754592548286.webp)
+![Apps running normally](./_images/适合的才最好，年底我选择新装一台“Mac%20mini”-1754592548286.webp)
 
 ## Summary
 
