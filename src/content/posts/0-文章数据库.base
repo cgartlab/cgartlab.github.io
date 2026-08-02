@@ -50,7 +50,6 @@ views:
     filters:
       and:
         - file.folder.contains("src/content")
-        - lang == "zh"
         - '!file.tags.contains("周刊")'
         - draft == false
     sort:

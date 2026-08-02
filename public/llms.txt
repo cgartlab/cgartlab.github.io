@@ -4,6 +4,7 @@
 
 ## 近期文章
 
+- [你不知道的 AI 优雅食用指南（一）：慢一点比较快](https://cgartlab.com/zh/posts/ai-guide-slow-is-fast): 面对 AI，我们和长辈其实没什么两样——都习惯了执行规则，却从未学习设计规则。从「规则执行者」到「规则设计师」，慢一点，才能真正用好 AI。
 - [我的上帝模式，一名设计师创作环境的演变](https://cgartlab.com/zh/posts/designer-creative-environment-evolution): 从业十二年的动态视觉设计师，回顾从新手村到自由职业的创作环境演变历程。从最初的耳机刚需、Hi-Fi 探索，到音箱回归与桌面秩序重建，分享「什么更重要、什么最重要、是否具有长期价值」的三板斧方法论——分享给每一位正在打造自己创作角落的人。
 - [自动给文章术语加百科链接，这个方案一分钟搞定](https://cgartlab.com/zh/posts/auto-glossary-term-linking): 自动为技术文章内的术语生成百科链接，提升阅读体验。本文用小学生都能听懂的语言讲原理，记录基于 Astro 的 remark/rehype 插件实现过程。适合博客开发者和技术写作者。
 - [我常用的 OpenClaw 工作流 Skill - No.18 玄光周刊](https://cgartlab.com/zh/weekly/weekly-18): 用了 OpenClaw 三个月，给我最大的感受是根本不知道这个工具的上限在哪里。几乎每天都会认识到新的概念，每周都会发现已有工作流的不足之处。其中 Skill 这个概念不得不提，它太重要了。
@@ -33,10 +34,10 @@
 - ["WordPress插件商店打不开，搞定回环错误排查与修复步骤](https://cgartlab.com/zh/posts/fix-wordpress-plugin-store): "WordPress插件商店打不开的回环错误排查与修复步骤，包含宝塔面板和终端命令两种解决方案。
 - [RSS 与现代阅读习惯（二）：重新获取信息收集的主动权](https://cgartlab.com/zh/posts/rss-2): 基于RSS构建个人碎片信息收集系统的实践经验分享，包含优质RSS源推荐和工具使用心得
 - [发刊词 - No.01 玄光周刊](https://cgartlab.com/zh/weekly/weekly-01): 周刊从这里出发
-- [12月拔草记录的好物](https://cgartlab.com/zh/posts/2024-12-good-things): 12月拔草记录的好物分享，包含农科院无蔗糖燕麦、Pidan猫薄荷玩具、米家石墨烯电暖器、Keychron K3 Max键盘等好物推荐。
 
 ## English Articles
 
+- ["The AI Graceful Dining Guide (Part 1): Slow Is Fast](https://cgartlab.com/en/posts/ai-guide-slow-is-fast): When it comes to AI, we're all beginners — whether you're 18 or 80. We've spent our lives executing rules, but never learned to design them. The shift from "rule executor" to "rule designer" is the one skill that makes AI truly useful.
 - ["My God Mode: The Evolution of a Designer's Creative Environment](https://cgartlab.com/en/posts/designer-creative-environment-evolution): "How a motion designer built his ideal creative workspace over twelve years — from survival-mode headphones through Hi-Fi exploration to speakers and a long-term-value methodology for any creator.
 - [Auto-generate Encyclopedia Links for Terms in Articles, Done in One Minute](https://cgartlab.com/en/posts/auto-glossary-term-linking): "Build an automated glossary link system for your blog in one minute. A plain-language walkthrough plus the full Astro remark/rehype plugin implementation for technical writers and developers.
 - ["My OpenClaw Workflow Skills - No.18 Black Light Weekly](https://cgartlab.com/en/weekly/weekly-18): "After three months with OpenClaw AI agent, explore practical workflow Skills for news filtering, system monitoring, API management, and research reports.
@@ -49,6 +50,7 @@
 - ["The Left Foot Stepping on Right Foot Creative Method - No.12 Weekly | Knowledge Management](https://cgartlab.com/en/weekly/weekly-12): "Discover the 'left foot on right foot' creative method linking knowledge management to writing. Build self-propelling systems through interconnected notes.
 - ["Even If Applause Can't Reach the Stage: A Creator's Guide to Starting Your Journey](https://cgartlab.com/en/posts/pick-your-pencil-now): "Four reasons to start writing today, even before applause arrives. Lessons drawn from Dan Koe's viral essays, plus practical advice for creators on passion, observation, momentum, and creative detachment from income.
 - ["NAS for Creators Part 2: Build Your Private Cloud Storage System](https://cgartlab.com/en/posts/nas-beyond-photos-your-first-private-cloud-2): "Build a creator NAS system with Part 2: hard drive selection, RAID configuration, Docker services, four-layer storage logic, and remote access setup.
+- ["Gear Roundup: Copper Cooler, Bluetooth Dongle, and the RTX 5070 Ti](https://cgartlab.com/en/posts/good-things-2026-01): "Reviews: Thermalright AXP90 copper cooler, FiiO BTR11 LDAC Bluetooth receiver, Colorful RTX 5070 Ti, Liangong PDU power strip, and WD-40 precision electronics cleaner.
 - ["NAS for Creators Part 1: Your First Private Cloud Setup Guide](https://cgartlab.com/en/posts/nas-beyond-photos-your-first-private-cloud-1): "Why NAS is more than a hard drive box: a creator's personal data center. Part 1 covers storage needs and workflow design without complex commands.
 - ["Google's UI Design Philosophy - No.11 Black Light Weekly](https://cgartlab.com/en/weekly/weekly-11): "Explore UI design philosophies from Google Design, Motion Awards 2025, and Vitsœ's timeless products. Plus why modern screens favor Heiti over Kaiti fonts.
 - ["2025 Productivity Tools That Stayed in My Workflow | Designer Software Stack](https://cgartlab.com/en/posts/good-tools-for-production-in-my-2025): "Productivity stack that survived 2025: Notion, Obsidian, Syncthing, Memos, Miniflux, and RustDesk. An honest designer review of self-hosted and cloud creative tools.
@@ -61,9 +63,7 @@
 - [Refurbished Graphics Card and New Renderer - No.04 Black Light Weekly](https://cgartlab.com/en/weekly/weekly-04): "Hands-on with Centileo Render, a free GPU renderer for 3ds Max and Cinema 4D. Plus a Colorful RTX 3070 repair, Microsoft Store Android emulator, Obsidian plugins.
 - ["Free Benefits - No.03 Black Light Weekly | Freelancer Sleep Schedule & Productivity Tips](https://cgartlab.com/en/weekly/weekly-03): "How early rising gives freelancers 'free benefits' through reclaimed focus. Plus Dropbox's rebrand, Severance S2, indie dev lessons, DeepSeek on SiliconFlow.
 - ["The Magic Numbers on the Clock - No.02 Black Light Weekly | Time Perception & Productivity](https://cgartlab.com/en/weekly/weekly-02): "Explore the psychology of time perception — why time accelerates with age. Plus productivity strategies, logo design trends, and beginner drawing fundamentals.
+- ["Designer's Toolbox: Lightweight Mouse, 3D-Printed Wrist Rest, and Everyday Carry](https://cgartlab.com/en/posts/2025-06-good-things): "June product reviews from a designer's perspective: VGN Dragonfly A9 Plus mouse, 3D-printed wrist rest, UCC freeze-dried coffee, and the legendary MX500 earbuds.
 - ["WordPress Plugin Store Loop Error: Troubleshooting & Fix Guide](https://cgartlab.com/en/posts/fix-wordpress-plugin-store): "Fix WordPress plugin store loop errors via DNS troubleshooting using Baota Panel or terminal commands. Restore plugin installation and site health.
 - ["RSS and Modern Reading Habits (Part 2): Regain Control Over Information Collection](https://cgartlab.com/en/posts/rss-2): "Build an RSS-powered information collection system: find quality sources, configure keyword filters, and curate a focused reading workflow in Part 2.
 - ["Launch Statement - No.01 Black Light Weekly | CG Art Lab](https://cgartlab.com/en/weekly/weekly-01): "Launch issue of Black Light Weekly, a designer-led newsletter on digital art, visual design, and frontend development. Editorial vision explained.
-- ["How to Use Mac More Elegantly in 2024: Complete Optimization Guide](https://cgartlab.com/en/posts/2024-elegant-use-mac): "Maximize Mac productivity on Apple Silicon. Learn macOS settings, battery management, native apps, and cross-platform workflows tailored for designers and creators.
-- ["RSS and Modern Reading Habits (Part 1): Reshape Deep Reading in the Fragmented Era](https://cgartlab.com/en/posts/rss-1): "Reclaim deep reading with RSS. Part 1 explores why slowing down beats algorithm feeds and restores focus and meaningful long-form reading habits.
-- ["LayerRenamer 1.0: Photoshop Batch Layer Renaming Script for Designers](https://cgartlab.com/en/posts/layerrenamer-1): "Free LayerRenamer 1.0 Photoshop script for batch layer renaming. Supports custom naming, sequential numbering, color tags, and nested groups for designers.
