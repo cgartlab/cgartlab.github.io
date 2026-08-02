@@ -59,7 +59,7 @@ This approach is **category-first**. Another approach is **search-first**. I per
 
 For search to work well, you need consistent naming conventions for files or paths. My habits do support that advantage, but honestly, I rarely need to search for anything specific. If a file goes missing, professional applications usually tell you which path it was in. And typically, files don't disappear one at a time — they vanish in bulk, haha. But that's beyond what search can solve.
 
-There is one place where I always use search, though: my second brain. I've written about [building the second brain](https://cgartlab.com/posts/build-the-second-brain/) before. In that space, I don't force myself to remember anything, and even my categories are quite loose.
+There is one place where I always use search, though: my second brain. I've written about [building the second brain](https://cgartlab.com/en/posts/build-the-second-brain/) before. In that space, I don't force myself to remember anything, and even my categories are quite loose.
 
 ### Bonus Thoughts
 

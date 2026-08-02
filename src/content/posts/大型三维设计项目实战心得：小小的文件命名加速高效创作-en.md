@@ -28,7 +28,7 @@ Our team was 10 people, spread across multiple provinces and cities, working rem
 
 ## Clear Directory Structure
 
-I briefly mentioned my work directory template in [How to Elegantly Use Windows PC in 2024](https://cgartlab.com/posts/2024-elegant-use-windows/):
+I briefly mentioned my work directory template in [How to Elegantly Use Windows PC in 2024](https://cgartlab.com/en/posts/2024-elegant-use-windows/):
 
 ~~~shell
 project name

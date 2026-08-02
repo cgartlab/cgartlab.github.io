@@ -36,7 +36,7 @@ Last issue introduced the first category of Skills — infrastructure-type Skill
 
 If the first category solves "what to see," the second category solves "what to get done." These Skills share common characteristics: they require self-hosted services, involve real automated execution, and handle core parts of critical workflows.
 
-> ℹ️ **About cgart-analysis / news-report**: The workflow for these two Skills was covered in detail last issue, so I won't重复 it here. Please refer back to [XuanGuang Weekly No.18](https://cgartlab.com/zh/weekly/weekly-18) if needed.
+> ℹ️ **About cgart-analysis / news-report**: The workflow for these two Skills was covered in detail last issue, so I won't重复 it here. Please refer back to [XuanGuang Weekly No.18](https://cgartlab.com/en/posts/weekly-18/) if needed.
 
 **affine-cli**: An Affine command-line tool. This is my core tool for managing Affine documents, supporting both cloud and self-hosted modes. It lets me handle all operations on documents, tags, folders, collections, databases, comments, journals, and workspaces through the command line.
 

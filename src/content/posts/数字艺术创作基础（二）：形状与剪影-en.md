@@ -17,7 +17,7 @@ abbrlink: digitalpainting2-shape-and-shadow
 
 ## Introduction: From Psychology to Practice
 
-The [previous article](https://cgartlab.com/posts/digitalpainting1-confidence) covered confidence and courage — how to take the first step. It was fundamentally about mindset.
+The [previous article](https://cgartlab.com/en/posts/digitalpainting1-confidence) covered confidence and courage — how to take the first step. It was fundamentally about mindset.
 
 Mindset is intangible; execution is concrete.
 
@@ -65,7 +65,7 @@ In artistic creation, the definition and use of shape are far more complex. It c
 
 Shape can also be abstract — a color block or the shape of a line. Abstract shapes no longer directly depict reality; they are the artist's understanding and expression of the essence of shape. Creating abstract shapes requires rich imagination — twisting, deforming, combining, and subverting shapes to create something unique and expressive.
 
-From this perspective, a line enlarged is a shape; a dot enlarged is also a shape. This is why I said in a [previous article](https://cgartlab.com/posts/fragmented-writing/): "The essence of calligraphy is drawing."
+From this perspective, a line enlarged is a shape; a dot enlarged is also a shape. This is why I said in a [previous article](https://cgartlab.com/en/posts/fragmented-writing/): "The essence of calligraphy is drawing."
 
 ## What Is Silhouette: The Art of Contour
 
@@ -117,7 +117,7 @@ Simply put, the architect thinks in terms of categories and structure first — 
 
 The second is the archaeologist. As the name suggests, this process isn't planned in advance. You might start with only a vague image or element in your mind — especially suitable for abstract subjects.
 
-For example, in my [Meditation Series](https://cgartlab.com/works/), many pieces ended up nothing like what I initially imagined. They often started as nothing more than "blobs" of combined shapes. Gradually, these blobs took form as a creature making a gesture, then a background was added. But a day or two later, when I looked at the subject from a different angle, the entire image became just a small part of the final piece.
+For example, in my [Meditation Series](https://cgartlab.com/en/works/), many pieces ended up nothing like what I initially imagined. They often started as nothing more than "blobs" of combined shapes. Gradually, these blobs took form as a creature making a gesture, then a background was added. But a day or two later, when I looked at the subject from a different angle, the entire image became just a small part of the final piece.
 
 The architect and archaeologist approaches are flexible — there's no rule that you must stick to one. I find these two approaches useful for two common creative situations:
 

@@ -44,6 +44,6 @@ Once that boundary is crossed, judgment comes naturally. Even if they don't unde
 
 "That's so f***ing art!"
 
-For more on AI and art, see [this post](https://cgartlab.com/posts/vangogh-level-artists-ai-replacement/).
+For more on AI and art, see [this post](https://cgartlab.com/en/posts/vangogh-level-artists-ai-replacement/).
 
 Originally published on [Zhihu](https://www.zhihu.com/question/439930978/answer/3623694886)

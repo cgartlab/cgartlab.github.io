@@ -14,7 +14,7 @@ lang: en
 abbrlink: scp-digital-artwork
 ---
 
-As you can see, [this is a series of digital paintings created in the spirit of the SCP Foundation, combined with classical Chinese culture](https://cgartlab.com/works).
+As you can see, [this is a series of digital paintings created in the spirit of the SCP Foundation, combined with classical Chinese culture](https://cgartlab.com/en/works/).
 
 Currently updated to the third piece: *The Drunken Servant*.
 

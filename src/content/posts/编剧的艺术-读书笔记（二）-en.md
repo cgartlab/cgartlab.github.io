@@ -20,7 +20,7 @@ abbrlink: bianjudeyishu-2
 
 This is a classic work that deeply explores the process of writing film and television scripts. The author reveals the key to crafting compelling, emotionally resonant stories through detailed techniques on plot construction, character development, and dialogue writing. It was also my first book on screenwriting, and there are so many points worth recording and reflecting on. I'm sharing them here, and I hope you find them helpful.
 
-The following are notes I compiled during reading — not a verbatim copy of the original. To make it easier for myself to understand later, I've adjusted some wording and context. For the previous part, see [The Art of Dramatic Writing - Reading Notes (Part 1)](https://cgartlab.com/posts/bianjudeyishu-1/).
+The following are notes I compiled during reading — not a verbatim copy of the original. To make it easier for myself to understand later, I've adjusted some wording and context. For the previous part, see [The Art of Dramatic Writing - Reading Notes (Part 1)](https://cgartlab.com/en/posts/bianjudeyishu-1/).
 
 # 3. Conflict
 

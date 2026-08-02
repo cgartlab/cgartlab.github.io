@@ -17,7 +17,7 @@ abbrlink: revisit-local-2
 
 ## Foreword
 
-Previous post here: [Revisiting 'The Local' (Part One)](https://cgartlab.com/posts/revisit-local-1/)
+Previous post here: [Revisiting 'The Local' (Part One)](https://cgartlab.com/en/posts/revisit-local-1/)
 
 In the end, I didn't finish Season 2 of "The Local." The on-site exhibition format focused more on the works themselves or the artists' biographies. I was more interested in the intriguing theories and perspectives.
 

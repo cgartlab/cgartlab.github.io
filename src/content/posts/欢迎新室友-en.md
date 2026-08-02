@@ -36,7 +36,7 @@ Over the next few days, I watched her every day. I slowly realized that cats see
 
 I've heard from cat-owning friends that cats don't think they're cats, and they don't think you're their owner. They just see you as a tall roommate living under the same roof. Come to think of it, no animal has a name — names are human inventions. A lot of people wish they could come back as someone's cat in the next life: carefree, well-fed, petted all day. Living proof to those running the rat race of what life is really about.
 
-If there is a next life, I wouldn't want to be a cat. I've written about why in [Cats, Dogs, and Your Confidence](https://cgartlab.com/posts/cat-dog-confidence/) — it's a life of being at someone's mercy. But if I'm lucky enough to be human again, I'd still keep cats. Animals have a unique kind of magic. You don't choose them — they choose you. Like a wand choosing its wizard.
+If there is a next life, I wouldn't want to be a cat. I've written about why in [Cats, Dogs, and Your Confidence](https://cgartlab.com/en/posts/cat-dog-confidence/) — it's a life of being at someone's mercy. But if I'm lucky enough to be human again, I'd still keep cats. Animals have a unique kind of magic. You don't choose them — they choose you. Like a wand choosing its wizard.
 
 ![Loya gradually settling into her new environment — a Munchkin cat's curious expression as she explores the home](./_images/欢迎新室友-1754590663829.webp)
 

@@ -24,7 +24,7 @@ Enough talk — let me show you the results first.
 
 ![Results showcase](./_images/解析设计师的第二大脑：从理念到实践-1754577011576.webp)
 
-Previous article: [Building the Second Brain](https://cgartlab.com/posts/build-the-second-brain/)
+Previous article: [Building the Second Brain](https://cgartlab.com/en/posts/build-the-second-brain/)
 
 As a freelance designer, the accumulated mass of long-term project materials, creative assets, and learning notes has made me acutely aware of the immense information management challenges designers face in the digital age.
 
