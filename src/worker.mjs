@@ -1,8 +1,31 @@
+import { pushNewPosts } from './lib/tg.mjs'
+
 export default {
+  async scheduled(event, env, ctx) {
+    ctx.waitUntil(
+      pushNewPosts(env)
+        .then(({ pushed, baseline }) => {
+          console.log(`[TG] ${baseline ? 'baseline set (no push)' : `pushed ${pushed} post(s)`}`)
+        })
+        .catch((err) => {
+          console.error('[TG] push failed:', err)
+        }),
+    )
+  },
+
   async fetch(request, env) {
     try {
       const url = new URL(request.url)
       const pathname = url.pathname
+
+      // 0. Manual trigger: POST /api/tg-notify with x-tg-secret header
+      if (pathname === '/api/tg-notify' && request.method === 'POST') {
+        if (!env.TG_NOTIFY_SECRET || request.headers.get('x-tg-secret') !== env.TG_NOTIFY_SECRET) {
+          return new Response('Unauthorized', { status: 401 })
+        }
+        const result = await pushNewPosts(env)
+        return Response.json(result)
+      }
 
       // 1. Force www → non-www canonical redirect (301 permanent)
       if (url.hostname === 'www.cgartlab.com') {
