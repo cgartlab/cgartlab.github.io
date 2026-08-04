@@ -4,8 +4,13 @@ export default {
   async scheduled(event, env, ctx) {
     ctx.waitUntil(
       pushNewPosts(env)
-        .then(({ pushed, baseline }) => {
-          console.log(`[TG] ${baseline ? 'baseline set (no push)' : `pushed ${pushed} post(s)`}`)
+        .then(({ pushed, baseline, skipped }) => {
+          if (baseline)
+            console.log('[TG] baseline set (no push)')
+          else if (skipped)
+            console.log(`[TG] skipped (${skipped})`)
+          else
+            console.log(`[TG] pushed ${pushed} post(s)`)
         })
         .catch((err) => {
           console.error('[TG] push failed:', err)
@@ -13,7 +18,7 @@ export default {
     )
   },
 
-  async fetch(request, env) {
+  async fetch(request, env, ctx) {
     try {
       const url = new URL(request.url)
       const pathname = url.pathname
