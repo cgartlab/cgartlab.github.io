@@ -21,6 +21,12 @@ const LOCK_TTL = 120 // seconds：锁超时自愈（持有者崩溃后自动释�
 const FETCH_TIMEOUT = 10_000
 const TG_TIMEOUT = 5_000
 const MAX_TG_ATTEMPTS = 3 // 429 限流时的最大重试次数
+const EXCERPT_MAX_LEN = 180 // 摘要截断长度
+const CATCH_UP_CAP = 10 // baseline 丢失时最多补推条数
+const THROTTLE_MS = 300 // 频道消息限速余量
+const ERROR_TRUNCATE_LEN = 200 // 错误详情截断长度
+const RETRY_BACKOFF_MS = 500 // KV 重试退避基数
+const MAX_RETRY_AFTER = 5 // 429 Retry-After 上限（秒）
 
 /** 解析 RSS XML 为文章列表（按 pubDate 升序返回） */
 export function parseRSS(xml) {
@@ -59,12 +65,12 @@ function unescapeXML(str) {
 }
 
 /** 摘要：剥 HTML 标签 + 截断 */
-function makeExcerpt(html, maxLen = 180) {
+function makeExcerpt(html) {
   const text = html
     .replace(/<[^>]+>/g, ' ')
     .replace(/\s+/g, ' ')
     .trim()
-  return text.length > maxLen ? `${text.slice(0, maxLen)}…` : text
+  return text.length > EXCERPT_MAX_LEN ? `${text.slice(0, EXCERPT_MAX_LEN)}…` : text
 }
 
 /** 组装 TG 消息文本 */
@@ -120,14 +126,14 @@ async function putWithRetry(kv, key, value, maxRetries = 2) {
     catch (err) {
       if (i === maxRetries)
         throw err
-      await new Promise(resolve => setTimeout(resolve, 500 * (i + 1)))
+      await new Promise(resolve => setTimeout(resolve, RETRY_BACKOFF_MS * (i + 1)))
     }
   }
 }
 
 /**
  * 推送新文章到频道。
- * @returns {Promise<{pushed: number, baseline?: boolean, skipped?: string}>} 推送统计：pushed=成功条数，baseline=仅建立基线，skipped=跳过原因
+ * @returns {Promise<{pushed: number, skippedPermanent?: number, baseline?: boolean, skipped?: string}>} 推送统计：pushed=成功条数，skippedPermanent=永久错误跳过条数，baseline=仅建立基线，skipped=跳过原因
  */
 export async function pushNewPosts(env) {
   // 尝试获取锁（返回 token 表示获取成功），失败说明已有其他实例在执行
@@ -153,6 +159,13 @@ export async function pushNewPosts(env) {
     const botToken = env.TG_BOT_TOKEN
     const channel = env.TG_CHANNEL_ID
 
+    // 配置守卫：secrets 缺失时立刻抛错，绝不推进 cursor。
+    // 否则 TG 请求会打到 /botundefined → 404/400 → 被误判为永久错误并推进
+    // cursor，导致所有文章被永久丢弃（Argus P2）。
+    if (!botToken || !channel) {
+      throw new Error('TG secrets missing: TG_BOT_TOKEN and TG_CHANNEL_ID must be set')
+    }
+
     // 首次运行：建立 baseline，不推送存量
     if (!lastGuid) {
       await env.TG_STATE.put(STATE_KEY, posts.at(-1).guid)
@@ -162,11 +175,20 @@ export async function pushNewPosts(env) {
     const newPosts = posts.filter(p => p.guid !== lastGuid)
     const lastIndex = posts.findIndex(p => p.guid === lastGuid)
     // 取 baseline 之后的新文章（容忍 RSS 中 baseline 消失的情况）
-    const toPush = lastIndex >= 0
-      ? posts.slice(lastIndex + 1)
-      : newPosts.slice(-10)
+    let toPush
+    if (lastIndex >= 0) {
+      toPush = posts.slice(lastIndex + 1)
+    }
+    else {
+      // baseline 丢失（如停机超过 feed 保留窗口）：只补推最新 CATCH_UP_CAP 条，并记录警告
+      const dropped = newPosts.length - CATCH_UP_CAP
+      if (dropped > 0)
+        console.warn(`[TG] last_guid not in feed, ${dropped} older post(s) dropped, pushing newest ${CATCH_UP_CAP}`)
+      toPush = newPosts.slice(-CATCH_UP_CAP)
+    }
 
     let pushed = 0
+    let skippedPermanent = 0
     for (const post of toPush) {
       // 发送 + 429 限流重试（最多 MAX_TG_ATTEMPTS 次）
       let sent = false
@@ -189,33 +211,37 @@ export async function pushNewPosts(env) {
         }
 
         const errText = await r.text()
-        // 永久性错误（400/403/404）：跳过该条，推进 cursor，不阻塞后续文章
+        // 永久性错误（400/403/404）：跳过该条，推进 cursor，不阻塞后续文章。
+        // 计入 skippedPermanent（不混入 pushed，避免日志/响应误导）。
         if (r.status === 400 || r.status === 403 || r.status === 404) {
-          console.error(`[TG] Permanent error, skipping ${post.guid} (${r.status}): ${errText.slice(0, 200)}`)
+          console.error(`[TG] Permanent error, skipping ${post.guid} (${r.status}): ${errText.slice(0, ERROR_TRUNCATE_LEN)}`)
           await putWithRetry(env.TG_STATE, STATE_KEY, post.guid)
-          pushed++ // 计入已处理，避免下次 cron 重推
+          skippedPermanent++
           break
         }
         // 429 限流：按 Retry-After 等待后重试（临时错误，可恢复）
         if (r.status === 429 && attempt < MAX_TG_ATTEMPTS) {
-          const retryAfter = Math.min(Number(r.headers.get('Retry-After') || 1), 5)
+          const retryAfter = Math.min(Number(r.headers.get('Retry-After') || 1), MAX_RETRY_AFTER)
           console.warn(`[TG] Rate limited, retrying in ${retryAfter}s (attempt ${attempt}/${MAX_TG_ATTEMPTS})`)
           await new Promise(resolve => setTimeout(resolve, retryAfter * 1000))
           continue
         }
         // 其他错误（5xx 等）：抛错中止本批，cursor 停在最后成功处，下次 cron 继续
-        throw new Error(`TG sendMessage failed (${r.status}): ${errText.slice(0, 200)}`)
+        throw new Error(`TG sendMessage failed (${r.status}): ${errText.slice(0, ERROR_TRUNCATE_LEN)}`)
       }
 
       if (sent) {
         await putWithRetry(env.TG_STATE, STATE_KEY, post.guid)
+        // 续期锁：防止 429 长批次（最坏 ~20s/篇 × 10 篇）超过 LOCK_TTL 后锁过期，
+        // 避免重叠运行同时推送造成重复（Argus P2）
+        await env.TG_STATE.put(LOCK_KEY, lockToken, { expirationTtl: LOCK_TTL })
         pushed++
-        // 频道消息限速约 1 msg/s，留 300ms 余量
-        await new Promise(resolve => setTimeout(resolve, 300))
+        // 频道消息限速约 1 msg/s，留 THROTTLE_MS 余量
+        await new Promise(resolve => setTimeout(resolve, THROTTLE_MS))
       }
     }
 
-    return { pushed, baseline: false }
+    return { pushed, skippedPermanent, baseline: false }
   }
   finally {
     await releaseLock(env, lockToken)

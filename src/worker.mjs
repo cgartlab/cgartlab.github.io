@@ -1,14 +1,26 @@
 import { pushNewPosts } from './lib/tg.mjs'
 
+/** 恒时字符串比较：长度不匹配直接返回，等长时逐字符 XOR，避免 timing side-channel */
+function timingSafeEqual(a, b) {
+  if (typeof a !== 'string' || typeof b !== 'string' || a.length !== b.length)
+    return false
+  let diff = 0
+  for (let i = 0; i < a.length; i++)
+    diff |= a.charCodeAt(i) ^ b.charCodeAt(i)
+  return diff === 0
+}
+
 export default {
   async scheduled(event, env, ctx) {
     ctx.waitUntil(
       pushNewPosts(env)
-        .then(({ pushed, baseline, skipped }) => {
+        .then(({ pushed, skippedPermanent, baseline, skipped }) => {
           if (baseline)
             console.warn('[TG] baseline set (no push)')
           else if (skipped)
             console.warn(`[TG] skipped (${skipped})`)
+          else if (skippedPermanent)
+            console.warn(`[TG] pushed ${pushed}, skipped-permanent ${skippedPermanent}`)
           else
             console.warn(`[TG] pushed ${pushed} post(s)`)
         })
@@ -25,11 +37,18 @@ export default {
 
       // 0. Manual trigger: POST /api/tg-notify with x-tg-secret header
       if (pathname === '/api/tg-notify' && request.method === 'POST') {
-        if (!env.TG_NOTIFY_SECRET || request.headers.get('x-tg-secret') !== env.TG_NOTIFY_SECRET) {
+        if (!env.TG_NOTIFY_SECRET || !timingSafeEqual(request.headers.get('x-tg-secret') || '', env.TG_NOTIFY_SECRET)) {
           return new Response('Unauthorized', { status: 401 })
         }
-        const result = await pushNewPosts(env)
-        return Response.json(result)
+        try {
+          const result = await pushNewPosts(env)
+          return Response.json(result)
+        }
+        catch (err) {
+          // 推送失败返回 500 而非被外层 catch 吞成 404，便于运维发现
+          console.error('[TG] manual push failed:', err)
+          return Response.json({ error: String(err.message || err) }, { status: 500 })
+        }
       }
 
       // 1. Force www → non-www canonical redirect (301 permanent)
