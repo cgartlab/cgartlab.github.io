@@ -12,7 +12,7 @@
     { "cron": "*/15 * * * *" }
   ],
   "kv_namespaces": [
-    { "binding": "TG_STATE", "id": "<KV_ID_FROM_wrangler-kv-namespace-create>" }
+    { "binding": "TG_STATE", "id": "5826fda6e7d94b64afd31d73cbff6c65" }
   ],
   "observability": {
     "enabled": true
