@@ -219,9 +219,12 @@ export async function pushNewPosts(env) {
           skippedPermanent++
           break
         }
-        // 429 限流：按 Retry-After 等待后重试（临时错误，可恢复）
+        // 429 限流：按 Retry-After 等待后重试（临时错误，可恢复）。
+        // Retry-After 可能是秒数或 HTTP-date，Number() 对非数字返回 NaN，
+        // setTimeout(NaN) 会变成立即重试——统一兜底为 1s。
         if (r.status === 429 && attempt < MAX_TG_ATTEMPTS) {
-          const retryAfter = Math.min(Number(r.headers.get('Retry-After') || 1), MAX_RETRY_AFTER)
+          const raw = Number(r.headers.get('Retry-After'))
+          const retryAfter = Number.isFinite(raw) && raw > 0 ? Math.min(raw, MAX_RETRY_AFTER) : 1
           console.warn(`[TG] Rate limited, retrying in ${retryAfter}s (attempt ${attempt}/${MAX_TG_ATTEMPTS})`)
           await new Promise(resolve => setTimeout(resolve, retryAfter * 1000))
           continue
@@ -233,8 +236,11 @@ export async function pushNewPosts(env) {
       if (sent) {
         await putWithRetry(env.TG_STATE, STATE_KEY, post.guid)
         // 续期锁：防止 429 长批次（最坏 ~20s/篇 × 10 篇）超过 LOCK_TTL 后锁过期，
-        // 避免重叠运行同时推送造成重复（Argus P2）
-        await env.TG_STATE.put(LOCK_KEY, lockToken, { expirationTtl: LOCK_TTL })
+        // 避免重叠运行同时推送造成重复（Argus P2）。
+        // 续期前先校验锁仍归自己：若锁已过期且被后继者获取，则不再续期覆盖其锁。
+        const currentLock = await env.TG_STATE.get(LOCK_KEY, { cacheTtl: 0 })
+        if (currentLock === lockToken)
+          await env.TG_STATE.put(LOCK_KEY, lockToken, { expirationTtl: LOCK_TTL })
         pushed++
         // 频道消息限速约 1 msg/s，留 THROTTLE_MS 余量
         await new Promise(resolve => setTimeout(resolve, THROTTLE_MS))
