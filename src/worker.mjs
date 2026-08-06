@@ -6,11 +6,11 @@ export default {
       pushNewPosts(env)
         .then(({ pushed, baseline, skipped }) => {
           if (baseline)
-            console.log('[TG] baseline set (no push)')
+            console.warn('[TG] baseline set (no push)')
           else if (skipped)
-            console.log(`[TG] skipped (${skipped})`)
+            console.warn(`[TG] skipped (${skipped})`)
           else
-            console.log(`[TG] pushed ${pushed} post(s)`)
+            console.warn(`[TG] pushed ${pushed} post(s)`)
         })
         .catch((err) => {
           console.error('[TG] push failed:', err)
@@ -18,7 +18,7 @@ export default {
     )
   },
 
-  async fetch(request, env, ctx) {
+  async fetch(request, env) {
     try {
       const url = new URL(request.url)
       const pathname = url.pathname
@@ -46,7 +46,7 @@ export default {
       // 2. Trailing slash enforcement: redirect paths without trailing slash (301)
       //    Skip file-like paths (containing a dot in the last segment)
       if (!pathname.endsWith('/') && !pathname.split('/').pop()?.includes('.')) {
-        url.pathname = pathname + '/'
+        url.pathname = `${pathname}/`
         return Response.redirect(url.toString(), 301)
       }
 
@@ -84,15 +84,15 @@ export default {
         // Fingerprinted assets (Astro/Vite hash in filename) → 1 year, immutable
         response.headers.set('Cache-Control', 'public, max-age=31536000, immutable')
       }
-      else if (/\.(css|js|mjs)$/.test(assetPath)) {
+      else if (/\.(?:css|js|mjs)$/.test(assetPath)) {
         // CSS/JS → 1 year, immutable
         response.headers.set('Cache-Control', 'public, max-age=31536000, immutable')
       }
-      else if (/\.(woff2?|ttf|otf|eot)$/.test(assetPath)) {
+      else if (/\.(?:woff2?|ttf|otf|eot)$/.test(assetPath)) {
         // Fonts → 1 year, immutable
         response.headers.set('Cache-Control', 'public, max-age=31536000, immutable')
       }
-      else if (/\.(png|jpg|jpeg|webp|avif|gif|svg|ico)$/.test(assetPath)) {
+      else if (/\.(?:png|jpg|jpeg|webp|avif|gif|svg|ico)$/.test(assetPath)) {
         // Images → 30 days
         response.headers.set('Cache-Control', 'public, max-age=2592000')
       }

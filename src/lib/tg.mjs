@@ -17,16 +17,17 @@ const RSS_URL = 'https://cgartlab.com/rss.xml'
 const TG_API = 'https://api.telegram.org'
 const STATE_KEY = 'last_guid'
 const LOCK_KEY = 'push_lock'
+const LOCK_TTL = 120 // seconds：锁超时自愈（持有者崩溃后自动释放）
 const FETCH_TIMEOUT = 10_000
 const TG_TIMEOUT = 5_000
+const MAX_TG_ATTEMPTS = 3 // 429 限流时的最大重试次数
 
 /** 解析 RSS XML 为文章列表（按 pubDate 升序返回） */
 export function parseRSS(xml) {
   const items = []
   const itemRe = /<item>([\s\S]*?)<\/item>/g
-  let match
 
-  while ((match = itemRe.exec(xml)) !== null) {
+  for (let match = itemRe.exec(xml); match !== null; match = itemRe.exec(xml)) {
     const block = match[1]
     const pick = (tag) => {
       const m = block.match(new RegExp(`<${tag}>([\\s\\S]*?)</${tag}>`))
@@ -53,7 +54,7 @@ function unescapeXML(str) {
     .replace(/&lt;/g, '<')
     .replace(/&gt;/g, '>')
     .replace(/&quot;/g, '"')
-    .replace(/&apos;/g, "'")
+    .replace(/&apos;/g, '\'')
     .replace(/&amp;/g, '&')
 }
 
@@ -76,17 +77,37 @@ function buildMessage(post) {
   return lines.join('\n')
 }
 
-/** 加锁：防止 cron 和手动触发并发执行 */
+/**
+ * 加锁：防止 cron 和手动触发并发执行。
+ *
+ * 注意：Workers KV 的 put() 只有 { expiration, expirationTtl, metadata } 三个选项，
+ * 没有 onlyIfAbsent 条件写（官方文档 developers.cloudflare.com/kv/api/write-key-value-pairs）。
+ * 因此用 get → put → 回读校验 三步实现 best-effort 锁：
+ * - 先 get 检查是否已被占用
+ * - put 写入随机 token（带 TTL 自愈，防止持有者崩溃后死锁）
+ * - 回读校验 token 仍属于自己（缩小 get/put 间的 TOCTOU 窗口）
+ *
+ * 局限：KV 最终一致性下跨 PoP 并发仍可能有极小窗口，个人博客 cron 15min + 手动
+ * 触发频率下可接受（与官方推荐的 get-then-put 模式一致）。
+ * @returns {Promise<string|null>} 锁 token；获取失败返回 null
+ */
 async function acquireLock(env) {
-  return await env.TG_STATE.put(LOCK_KEY, '1', {
-    expirationTtl: 120,
-    onlyIfAbsent: true,
-  })
+  const existing = await env.TG_STATE.get(LOCK_KEY, { cacheTtl: 0 })
+  if (existing)
+    return null
+
+  const token = crypto.randomUUID()
+  await env.TG_STATE.put(LOCK_KEY, token, { expirationTtl: LOCK_TTL })
+  // 回读校验：确认锁仍归自己（另一并发写入者可能覆盖）
+  const verify = await env.TG_STATE.get(LOCK_KEY, { cacheTtl: 0 })
+  return verify === token ? token : null
 }
 
-/** 释放锁 */
-async function releaseLock(env) {
-  await env.TG_STATE.delete(LOCK_KEY)
+/** 释放锁：仅当锁仍属于当前持有者时删除，避免 TTL 过期后误删他人锁 */
+async function releaseLock(env, token) {
+  const current = await env.TG_STATE.get(LOCK_KEY, { cacheTtl: 0 })
+  if (current === token)
+    await env.TG_STATE.delete(LOCK_KEY)
 }
 
 /** KV 带重试写入 */
@@ -106,11 +127,12 @@ async function putWithRetry(kv, key, value, maxRetries = 2) {
 
 /**
  * 推送新文章到频道。
- * @returns {Promise<{pushed: number, baseline?: boolean, skipped?: string}>}
+ * @returns {Promise<{pushed: number, baseline?: boolean, skipped?: string}>} 推送统计：pushed=成功条数，baseline=仅建立基线，skipped=跳过原因
  */
 export async function pushNewPosts(env) {
-  // 尝试获取锁，获取失败说明已有其他实例在执行
-  if (!(await acquireLock(env))) {
+  // 尝试获取锁（返回 token 表示获取成功），失败说明已有其他实例在执行
+  const lockToken = await acquireLock(env)
+  if (!lockToken) {
     return { pushed: 0, skipped: 'locked' }
   }
 
@@ -128,12 +150,12 @@ export async function pushNewPosts(env) {
       return { pushed: 0, baseline: true }
 
     const lastGuid = await env.TG_STATE.get(STATE_KEY)
-    const token = env.TG_BOT_TOKEN
+    const botToken = env.TG_BOT_TOKEN
     const channel = env.TG_CHANNEL_ID
 
     // 首次运行：建立 baseline，不推送存量
     if (!lastGuid) {
-      await env.TG_STATE.put(STATE_KEY, posts[posts.length - 1].guid)
+      await env.TG_STATE.put(STATE_KEY, posts.at(-1).guid)
       return { pushed: 0, baseline: true }
     }
 
@@ -146,38 +168,56 @@ export async function pushNewPosts(env) {
 
     let pushed = 0
     for (const post of toPush) {
-      const payload = {
-        chat_id: channel,
-        text: buildMessage(post),
-        link_preview_options: { is_disabled: false },
-      }
-      const r = await fetch(`${TG_API}/bot${token}/sendMessage`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-        signal: AbortSignal.timeout(TG_TIMEOUT),
-      })
+      // 发送 + 429 限流重试（最多 MAX_TG_ATTEMPTS 次）
+      let sent = false
+      for (let attempt = 1; attempt <= MAX_TG_ATTEMPTS; attempt++) {
+        const payload = {
+          chat_id: channel,
+          text: buildMessage(post),
+          link_preview_options: { is_disabled: false },
+        }
+        const r = await fetch(`${TG_API}/bot${botToken}/sendMessage`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+          signal: AbortSignal.timeout(TG_TIMEOUT),
+        })
 
-      if (!r.ok) {
+        if (r.ok) {
+          sent = true
+          break
+        }
+
         const errText = await r.text()
-        // 永久性错误（400/403/404）：跳过该条，继续下一条
+        // 永久性错误（400/403/404）：跳过该条，推进 cursor，不阻塞后续文章
         if (r.status === 400 || r.status === 403 || r.status === 404) {
           console.error(`[TG] Permanent error, skipping ${post.guid} (${r.status}): ${errText.slice(0, 200)}`)
           await putWithRetry(env.TG_STATE, STATE_KEY, post.guid)
+          pushed++ // 计入已处理，避免下次 cron 重推
+          break
+        }
+        // 429 限流：按 Retry-After 等待后重试（临时错误，可恢复）
+        if (r.status === 429 && attempt < MAX_TG_ATTEMPTS) {
+          const retryAfter = Math.min(Number(r.headers.get('Retry-After') || 1), 5)
+          console.warn(`[TG] Rate limited, retrying in ${retryAfter}s (attempt ${attempt}/${MAX_TG_ATTEMPTS})`)
+          await new Promise(resolve => setTimeout(resolve, retryAfter * 1000))
           continue
         }
+        // 其他错误（5xx 等）：抛错中止本批，cursor 停在最后成功处，下次 cron 继续
         throw new Error(`TG sendMessage failed (${r.status}): ${errText.slice(0, 200)}`)
       }
 
-      await putWithRetry(env.TG_STATE, STATE_KEY, post.guid)
-      pushed++
-      // 频道消息限速约 1 msg/s，留 300ms 余量
-      await new Promise(resolve => setTimeout(resolve, 300))
+      if (sent) {
+        await putWithRetry(env.TG_STATE, STATE_KEY, post.guid)
+        pushed++
+        // 频道消息限速约 1 msg/s，留 300ms 余量
+        await new Promise(resolve => setTimeout(resolve, 300))
+      }
     }
 
     return { pushed, baseline: false }
   }
   finally {
-    await releaseLock(env)
+    await releaseLock(env, lockToken)
   }
 }
