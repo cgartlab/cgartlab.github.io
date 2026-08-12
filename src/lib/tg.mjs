@@ -2,7 +2,7 @@
  * tg.mjs — 博客 RSS → Telegram 频道推送
  *
  * 职责：
- * 1. 抓取站点默认语言的 RSS（https://cgartlab.com/rss.xml）
+ * 1. 抓取站点默认语言的 RSS（通过本地 ASSETS 绑定读取 /rss.xml）
  * 2. 与 KV（TG_STATE）中记录的最后推送 GUID 对比，推送新文章
  * 3. 调用 Telegram Bot API 发送到频道
  *
@@ -13,12 +13,11 @@
  * - 首次运行只建立 baseline（记录最新 GUID），不推存量文章，避免轰炸订阅者
  */
 
-const RSS_URL = 'https://cgartlab.com/rss.xml'
+const RSS_PATH = '/rss.xml'
 const TG_API = 'https://api.telegram.org'
 const STATE_KEY = 'last_guid'
 const LOCK_KEY = 'push_lock'
 const LOCK_TTL = 120 // seconds：锁超时自愈（持有者崩溃后自动释放）
-const FETCH_TIMEOUT = 10_000
 const TG_TIMEOUT = 5_000
 const MAX_TG_ATTEMPTS = 3 // 429 限流时的最大重试次数
 const EXCERPT_MAX_LEN = 180 // 摘要截断长度
@@ -143,11 +142,11 @@ export async function pushNewPosts(env) {
   }
 
   try {
-    const res = await fetch(RSS_URL, {
-      signal: AbortSignal.timeout(FETCH_TIMEOUT),
+    // 通过本地 ASSETS 绑定获取 RSS，避免 Worker 请求自身公开 URL 造成超时（522）
+    const rssReq = new Request(new URL(RSS_PATH, 'https://cgartlab.com'), {
       headers: { 'User-Agent': 'cgartlab-blog-tg-pusher/1.0' },
-      cf: { cacheTtl: 0 },
     })
+    const res = await env.ASSETS.fetch(rssReq)
     if (!res.ok)
       throw new Error(`RSS fetch failed: ${res.status}`)
 
