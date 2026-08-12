@@ -175,6 +175,10 @@ export const themeConfig: ThemeConfig = {
         url: '/rss.xml', // or /rss.xml
       },
       {
+        name: 'Telegram',
+        url: 'https://t.me/cg_artlab',
+      },
+      {
         name: 'GitHub',
         url: 'https://github.com/cgartlab',
       },
