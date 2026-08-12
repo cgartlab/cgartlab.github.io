@@ -98,20 +98,20 @@ function buildMessage(post) {
  * @returns {Promise<string|null>} 锁 token；获取失败返回 null
  */
 async function acquireLock(env) {
-  const existing = await env.TG_STATE.get(LOCK_KEY, { cacheTtl: 0 })
+  const existing = await env.TG_STATE.get(LOCK_KEY, { cacheTtl: 30 })
   if (existing)
     return null
 
   const token = crypto.randomUUID()
   await env.TG_STATE.put(LOCK_KEY, token, { expirationTtl: LOCK_TTL })
   // 回读校验：确认锁仍归自己（另一并发写入者可能覆盖）
-  const verify = await env.TG_STATE.get(LOCK_KEY, { cacheTtl: 0 })
+  const verify = await env.TG_STATE.get(LOCK_KEY, { cacheTtl: 30 })
   return verify === token ? token : null
 }
 
 /** 释放锁：仅当锁仍属于当前持有者时删除，避免 TTL 过期后误删他人锁 */
 async function releaseLock(env, token) {
-  const current = await env.TG_STATE.get(LOCK_KEY, { cacheTtl: 0 })
+  const current = await env.TG_STATE.get(LOCK_KEY, { cacheTtl: 30 })
   if (current === token)
     await env.TG_STATE.delete(LOCK_KEY)
 }
@@ -238,7 +238,7 @@ export async function pushNewPosts(env) {
         // 续期锁：防止 429 长批次（最坏 ~20s/篇 × 10 篇）超过 LOCK_TTL 后锁过期，
         // 避免重叠运行同时推送造成重复（Argus P2）。
         // 续期前先校验锁仍归自己：若锁已过期且被后继者获取，则不再续期覆盖其锁。
-        const currentLock = await env.TG_STATE.get(LOCK_KEY, { cacheTtl: 0 })
+        const currentLock = await env.TG_STATE.get(LOCK_KEY, { cacheTtl: 30 })
         if (currentLock === lockToken)
           await env.TG_STATE.put(LOCK_KEY, lockToken, { expirationTtl: LOCK_TTL })
         pushed++
