@@ -72,10 +72,9 @@ export const GET: APIRoute = async ({ params }) => {
       },
     })
   }
-  catch (err) {
-    const message = err instanceof Error ? err.message : String(err)
+  catch {
     return new Response(
-      JSON.stringify({ error: 'Failed to build search index', details: message }),
+      JSON.stringify({ error: 'Failed to build search index' }),
       {
         status: 500,
         headers: { 'Content-Type': 'application/json' },
