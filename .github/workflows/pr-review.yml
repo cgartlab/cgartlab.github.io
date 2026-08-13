@@ -25,6 +25,6 @@ jobs:
           app-id: ${{ secrets.ARGUS_FLASH_APP_ID }}
           private-key: ${{ secrets.ARGUS_FLASH_PRIVATE_KEY }}
 
-      - uses: cgartlab/argus/.github/actions/argus-review@3de07b013b58a4e021dc9353fa96cc1a2d11d969
+      - uses: cgartlab/argus/.github/actions/argus-review@a4b43f88c1088752441572684d183ceef7bd59f7
         with:
           github-token: ${{ steps.app-token.outputs.token }}
