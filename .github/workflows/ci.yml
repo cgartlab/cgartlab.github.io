@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     permissions:
-      contents: write
+      contents: read
     steps:
       - uses: actions/checkout@v7
         with:
@@ -30,19 +30,7 @@ jobs:
           node-version: 24
           cache: pnpm
 
-      - run: pnpm install --no-frozen-lockfile --config.trustPolicy=off
-
-      - name: Commit lockfile if changed
-        run: |
-          if git diff --quiet pnpm-lock.yaml; then
-            echo "Lockfile unchanged"
-          else
-            git config user.name 'github-actions[bot]'
-            git config user.email 'github-actions[bot]@users.noreply.github.com'
-            git add pnpm-lock.yaml
-            git commit -m 'chore: update lockfile for pnpm overrides'
-            git push --force origin HEAD:${{ github.head_ref || github.ref_name }}
-          fi
+      - run: pnpm install --config.trustPolicy=off
 
       - run: pnpm build
         env:
