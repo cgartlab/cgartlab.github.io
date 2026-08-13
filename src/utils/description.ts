@@ -76,6 +76,23 @@ function getExcerpt(text: string, lang: Language, scene: ExcerptScene): string {
   return excerpt
 }
 
+// 按行解析去除 fenced code block，避免 regex 误判嵌套/相邻代码块
+function stripCodeBlocks(text: string): string {
+  const lines = text.split('\n')
+  const result: string[] = []
+  let inCodeBlock = false
+  for (const line of lines) {
+    if (line.trimStart().startsWith('```')) {
+      inCodeBlock = !inCodeBlock
+      continue
+    }
+    if (!inCodeBlock) {
+      result.push(line)
+    }
+  }
+  return result.join('\n')
+}
+
 // 从现有描述或内容生成文章描述
 export function getPostDescription(
   post: CollectionEntry<'posts'>,
@@ -84,19 +101,16 @@ export function getPostDescription(
   const lang = (post.data.lang || defaultLocale) as Language
 
   if (post.data.description) {
-    // frontmatter description 可能含有 Markdown 语法，先渲染再截断
     const rendered = markdownParser.render(post.data.description)
     return getExcerpt(rendered, lang, scene)
   }
 
   const rawContent = post.body || ''
-  const cleanContent = rawContent
-    .replace(/<!--[\s\S]*?-->/g, '') // 移除HTML注释
-    .replace(/```[\s\S]*?```/g, '') // 移除代码块
-    .replace(/^\s*#{1,6}\s+\S.*$/gm, '') // 移除Markdown标题
-    .replace(/^\s*::.*$/gm, '') // 移除指令容器
-    .replace(/^\s*>\s*\[!.*\]$/gm, '') // 移除GitHub警告标记
-    .replace(/\n{2,}/g, '\n\n') // 规范化换行符
+  const cleanContent = stripCodeBlocks(rawContent)
+    .replace(/^\s*#{1,6}\s+\S.*$/gm, '')
+    .replace(/^\s*::.*$/gm, '')
+    .replace(/^\s*>\s*\[!.*\]$/gm, '')
+    .replace(/\n{2,}/g, '\n\n')
 
   const renderedContent = markdownParser.render(cleanContent)
   return getExcerpt(renderedContent, lang, scene)

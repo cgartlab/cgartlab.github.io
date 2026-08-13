@@ -12,6 +12,9 @@ on:
           - 'on'
           - 'off'
 
+permissions:
+  contents: read
+
 jobs:
   toggle-bot-fight-mode:
     runs-on: ubuntu-latest
