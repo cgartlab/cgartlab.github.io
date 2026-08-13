@@ -78,26 +78,26 @@ export default defineConfig({
     }),
   ],
   markdown: {
-    processor: unified(),
-    remarkPlugins: [
-      remarkDirective,
-      remarkMath,
-      remarkContainerDirectives,
-      remarkLeafDirectives,
-      remarkReadingTime,
-      remarkGlossary,
-    ],
-    rehypePlugins: [
-    rehypeKatex,
-    [rehypeMermaid, { strategy: 'pre-mermaid' }],
-      
-      rehypeSlug,
-      rehypeHeadingAnchor,
-      rehypeImageProcessor,
-      rehypeGlossary,
-      rehypeExternalLinks,
-      rehypeCodeCopyButton,
-    ],
+    processor: unified({
+      remarkPlugins: [
+        remarkDirective,
+        remarkMath,
+        remarkContainerDirectives,
+        remarkLeafDirectives,
+        remarkReadingTime,
+        remarkGlossary,
+      ],
+      rehypePlugins: [
+        rehypeKatex,
+        [rehypeMermaid, { strategy: 'pre-mermaid' }],
+        rehypeSlug,
+        rehypeHeadingAnchor,
+        rehypeImageProcessor,
+        rehypeGlossary,
+        rehypeExternalLinks,
+        rehypeCodeCopyButton,
+      ],
+    }),
     syntaxHighlight: {
       type: 'shiki',
       excludeLangs: ['mermaid'],
