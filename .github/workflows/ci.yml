@@ -41,7 +41,7 @@ jobs:
             git config user.email 'github-actions[bot]@users.noreply.github.com'
             git add pnpm-lock.yaml
             git commit -m 'chore: update lockfile for pnpm overrides'
-            git push origin HEAD:${{ github.head_ref || github.ref_name }}
+            git push --force origin HEAD:${{ github.head_ref || github.ref_name }}
           fi
 
       - run: pnpm build
