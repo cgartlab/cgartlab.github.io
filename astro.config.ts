@@ -7,7 +7,7 @@ import { defineConfig } from 'astro/config'
 import { unified } from '@astrojs/markdown-remark'
 import rehypeKatex from 'rehype-katex'
 import rehypeMermaid from 'rehype-mermaid'
- 
+
 import rehypeSlug from 'rehype-slug'
 import remarkDirective from 'remark-directive'
 import remarkMath from 'remark-math'
@@ -36,11 +36,11 @@ export default defineConfig({
   site,
   base,
   output: 'static',
-  trailingSlash: 'always', // 不建议更改
+  trailingSlash: 'always',
   compressHTML: true,
   prefetch: {
     prefetchAll: true,
-    defaultStrategy: 'viewport', // hover, tap, viewport, load
+    defaultStrategy: 'viewport',
   },
   ...imageConfig,
   i18n: {
@@ -104,7 +104,6 @@ export default defineConfig({
       excludeLangs: ['mermaid'],
     },
     shikiConfig: {
-      // 可用主题: https://shiki.style/themes
       themes: {
         light: 'github-light',
         dark: 'github-dark',
@@ -180,16 +179,6 @@ export default defineConfig({
     ],
     css: {
       devSourcemap: true,
-    },
-    build: {
-      rollupOptions: {
-        output: {
-          assetFileNames: (assetInfo) => {
-            if (assetInfo.name.endsWith('.css')) return '_astro/[name].[hash][extname]'
-            return '_astro/[name].[hash][extname]'
-          },
-        },
-      },
     },
   },
 })
