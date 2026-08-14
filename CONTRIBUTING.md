@@ -78,7 +78,7 @@ PR title should mirror the commit message format (it becomes the squash commit m
 
 ### 6. PR Review
 
-- PRs trigger the **Argus** GitHub App for automatic code review
+- PRs trigger the **Argus-Flash** GitHub App for automatic code review
 - Argus reports issues with priority labels P0/P1/P2/P3; assess each finding:
   - **Verify first** — confirm the issue actually exists in the code before fixing
   - `rgba()`/`hsl()` values in frosted-glass gradients and shadows are **intentional** and should not be converted to theme tokens
@@ -129,9 +129,8 @@ PR title should mirror the commit message format (it becomes the squash commit m
 
 ## TypeScript Type Safety
 
-The project uses `@ts-expect-error` in exactly **2 places** (AGENTS.md-enforced):
+The project uses `@ts-expect-error` in exactly **1 place** (AGENTS.md-enforced):
 1. `MediaEmbed.astro` — MediaEmbed component
-2. Head.astro — ESLint disable
 
 **Do not add new suppressions.** If you encounter a type error, fix the underlying code instead.
 
@@ -155,8 +154,8 @@ pwsh scripts/syncthing-cleanup.ps1
 
 | Environment | How |
 |-------------|-----|
-| Production | Push to `main` → Cloudflare Pages auto-deploys |
-| Preview | PR → Cloudflare Pages creates preview URL |
+| Production | Push to `main` → Cloudflare Worker + Static Assets auto-deploys |
+| Preview | PR → Cloudflare Worker + Static Assets creates preview URL |
 
 No manual deployment steps needed. The `dist/` directory is not committed.
 

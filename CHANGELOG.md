@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-## [Unreleased]
+## Unreleased
 
 ### Fixed — PR #199 全面 Bug 修复与加固 (2026-06-29)
 
@@ -58,9 +58,111 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - **docs/ARCHITECTURE.md** — Complete rewrite: removed outdated `blog/` content reference, updated project structure to reflect actual `posts/works/weekly/_images/` organization, added tech architecture sections (SSG, Markdown pipeline, theme system, i18n routing, LQIP pipeline), documented the 5 key architectural decisions (trailing slash, LQIP auto-management, language filtering, triple comments, Worker scope)
 
+### Added — PR #268 全部文章英译、100% 双语覆盖 (2026-08-02)
+
+- **feat(posts)**: translate all 29 remaining Chinese articles to English, achieving 100% bilingual coverage (里程碑)
+
+### Added — PR #267 AI Graceful Dining Guide (2026-08-01)
+
+- **feat(posts)**: add AI Graceful Dining Guide (Part 1: Slow Is Fast) — Chinese & English versions
+
+### Added — PR #266 GitHub 热力图迁移至 GraphQL API (2026-07-30)
+
+- **feat(heatmap)**: migrate to official GitHub GraphQL API with file-based caching and build-time error tolerance
+
+### Added / Changed — PR #263 sharp 升级 + 友链 (2026-07-29)
+
+- **feat(links)**: add Bo.Ke friend link
+- **fix(deps)**: upgrade sharp 0.34.5 → 0.35.3 to fix libvips CVE
+- **fix**: Head.astro lint cleanup
+
+### Fixed — PR #260 跨平台 pnpm 兼容性 (2026-07-27)
+
+- **fix**: cross-platform `pnpm install` compatibility (Windows/macOS/Linux) and dead code cleanup
+
+### Chore — PR #255 dependabot actions/labeler 升级 (2026-07-27)
+
+- **chore(deps)**: bump actions/labeler from 6 to 7
+
+### Fixed — PR #258 /feed 快捷重定向 (2026-07-22)
+
+- **fix(worker)**: add `/feed` shortcut redirect to RSS feed
+
+### Fixed — PR #257 英文版翻译质量全面审查 (2026-07-22)
+
+- **fix(posts)**: 全面修正英文版翻译质量、图片链接与 SEO 优化
+
+### Added — PR #254 英文版「我的上帝模式」 (2026-07-21)
+
+- **feat(posts)**: 发布英文版「我的上帝模式，一名设计师创作环境的演变」
+
+### CI — PR #253 PR triage action 修复 (2026-07-21)
+
+- **ci**: 升级 `actions/add-to-project` 到 v2.0.0
+
+### Chore — PR #252 模板与周刊描述更新 (2026-07-21)
+
+- **chore**: 更新模板默认元数据与修订周刊描述
+
+### Added — PR #251 「我的上帝模式」中文版 (2026-07-21)
+
+- **feat(posts)**: 发布「我的上帝模式，一名设计师创作环境的演变」
+
+### CI — PR #248 自动分配 assignee + Project (2026-07-17)
+
+- **chore(ci)**: auto-assign author and add PRs to Project 3 on open
+
+### Added — PR #247 SEO 标题优化 (2026-07-17)
+
+- **feat(seo)**: optimize page titles with `seoTitle` frontmatter field, fix footer EN i18n
+
+### Docs — PR #246 About 页面法律文档更新 (2026-07-16)
+
+- **docs/about**: legal update
+
+### Added — PR #245 glossary 移动端导航自动隐藏 (2026-07-15)
+
+- **feat(glossary)**: mobile nav auto-hide, reveal on scroll, hide after 3s idle
+
+### Fixed — PR #244 glossary 移动端侧边导航 + scroll-spy 偏移 (2026-07-15)
+
+- **fix(glossary)**: vertical nav on mobile, fix scroll-spy offset for click navigation
+
+### Fixed — PR #243 glossary scroll-spy + 分隔符渲染 (2026-07-15)
+
+- **fix(glossary)**: scroll-spy and divider rendering
+
+### Style — PR #242 Cookie 弹窗样式优化 (2026-07-15)
+
+- **style**: 优化 cookie 弹窗样式
+
+### Added — PR #241 视频文章居中样式 + autoplay (2026-07-15)
+
+- **feat(article)**: optimize video display with centered styling and reliable autoplay
+
+### Added — PR #240 glossary 完整 i18n 支持 (2026-07-15)
+
+- **feat**: optimize glossary with full i18n support
+
+### Fixed — PR #236 TOC 手风琴折叠 + 侧边栏加宽 (2026-07-14)
+
+- **fix(toc)**: add accordion collapse/expand with animation, widen sidebar to fit longest title
+
+### Fixed — PR #235 Mermaid 暗色模式 + 构建时渲染恢复 (2026-07-13)
+
+- **fix(mermaid)**: restore build-time rendering and prepare dark mode support
+
+### Chore — PR #238 dependabot 补丁更新（批量） (2026-07-17)
+
+- **chore(deps)**: bump the patch-updates group with 2 updates
+
+### Chore — PR #237 dependabot setup-node 升级 (2026-07-17)
+
+- **chore(deps)**: bump actions/setup-node from 6 to 7
+
 ---
 
-## [1.0.0] — 2026-06-14
+## 1.0.0 — 2026-06-14
 
 ### Added
 
@@ -104,9 +206,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-## [0.1.0] — 2021
+## 0.1.0 — 2021
 
 Initial release. Single-language (zh) Astro site with basic blog functionality.
 
-[unreleased]: https://github.com/cgartlab/cgartlab.github.io/compare/v1.0.0...HEAD
-[1.0.0]: https://github.com/cgartlab/cgartlab.github.io/tree/v1.0.0
+

@@ -49,6 +49,7 @@
 | `.gitattributes` | `cgartlab.github.io/` | 换行符策略（LF 统一） |
 | `scripts/syncthing-cleanup.sh` | `cgartlab.github.io/scripts/` | macOS/Linux 清理脚本 |
 | `scripts/syncthing-cleanup.ps1` | `cgartlab.github.io/scripts/` | Windows 清理脚本 |
+| `scripts/clean-sync-conflicts.sh` | `cgartlab.github.io/scripts/` | 批量清理 SyncConflict 文件 |
 
 ---
 
@@ -195,6 +196,9 @@ rm -rf /volume1/github-repos/cgartlab.github.io/.copilot-index
 ```bash
 # 查找所有冲突文件
 find . -name "*.sync-conflict-*" 2>/dev/null
+
+# 推荐使用 clean-sync-conflicts.sh 自动批量清理
+./scripts/clean-sync-conflicts.sh
 
 # 手动比较差异，合并后删除冲突文件
 rm "path/to/file.sync-conflict-20260527-xxxxxx.xxx"
