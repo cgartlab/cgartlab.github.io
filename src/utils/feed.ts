@@ -164,8 +164,7 @@ export async function generateFeed({ lang }: { lang?: Language } = {}) {
     const postContent = post.body
       ? sanitizeHtml(
           await fixRelativeImagePaths(
-            // 渲染markdown之前移除HTML注释
-            markdownParser.render(post.body.replace(/<!--[\s\S]*?-->/g, '')),
+            markdownParser.render(post.body),
             `${url}${base}/`,
           ),
           {

@@ -1,16 +1,17 @@
 name: PR Triage
 
+# WARNING: pull_request_target runs with a write-scoped GITHUB_TOKEN and
+# access to repo secrets. Do NOT add actions/checkout, build steps, or any
+# execution of code/files from the PR in this workflow.
+
 on:
   pull_request_target:
     types: [opened, reopened, synchronize]
-  pull_request:
-    types: [opened, ready_for_review]
 
 permissions: {}
 
 jobs:
   label:
-    if: github.event_name == 'pull_request_target'
     permissions:
       contents: read
       pull-requests: write
@@ -22,15 +23,17 @@ jobs:
           sync-labels: true
 
   triage:
-    if: github.event_name == 'pull_request' && github.event.action == 'opened'
+    if: github.event.action == 'opened'
     permissions:
       pull-requests: write
     runs-on: ubuntu-latest
     steps:
-      - uses: actions-ecosystem/action-add-assignees@v1
+      - name: Assign author (skip bots)
+        if: github.event.pull_request.user.type != 'Bot'
+        uses: actions-ecosystem/action-add-assignees@v1
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          assignees: ${{ github.actor }}
+          assignees: ${{ github.event.pull_request.user.login }}
 
       - name: Add to project
         uses: actions/add-to-project@v2.0.0

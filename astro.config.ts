@@ -4,6 +4,7 @@ import partytown from '@astrojs/partytown'
 import sitemap from '@astrojs/sitemap'
 import Compress from 'astro-compress'
 import { defineConfig } from 'astro/config'
+import { unified } from '@astrojs/markdown-remark'
 import rehypeKatex from 'rehype-katex'
  
 import rehypeSlug from 'rehype-slug'
@@ -35,6 +36,7 @@ export default defineConfig({
   base,
   output: 'static',
   trailingSlash: 'always', // 不建议更改
+  compressHTML: true,
   prefetch: {
     prefetchAll: true,
     defaultStrategy: 'viewport', // hover, tap, viewport, load
@@ -76,25 +78,26 @@ export default defineConfig({
     }),
   ],
   markdown: {
-    remarkPlugins: [
-      remarkDirective,
-      remarkMath,
-      remarkContainerDirectives,
-      remarkLeafDirectives,
-      remarkReadingTime,
-      remarkGlossary,
-    ],
-    rehypePlugins: [
-    rehypeKatex,
-    [rehypeMermaid, { strategy: 'pre-mermaid' }],
-      
-      rehypeSlug,
-      rehypeHeadingAnchor,
-      rehypeImageProcessor,
-      rehypeGlossary,
-      rehypeExternalLinks,
-      rehypeCodeCopyButton,
-    ],
+    processor: unified({
+      remarkPlugins: [
+        remarkDirective,
+        remarkMath,
+        remarkContainerDirectives,
+        remarkLeafDirectives,
+        remarkReadingTime,
+        remarkGlossary,
+      ],
+      rehypePlugins: [
+        rehypeKatex,
+        [rehypeMermaid, { strategy: 'pre-mermaid' }],
+        rehypeSlug,
+        rehypeHeadingAnchor,
+        rehypeImageProcessor,
+        rehypeGlossary,
+        rehypeExternalLinks,
+        rehypeCodeCopyButton,
+      ],
+    }),
     syntaxHighlight: {
       type: 'shiki',
       excludeLangs: ['mermaid'],
@@ -200,3 +203,4 @@ export default defineConfig({
     enabled: false,
   },
 })
+
