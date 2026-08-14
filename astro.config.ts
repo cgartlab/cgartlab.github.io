@@ -6,12 +6,13 @@ import Compress from 'astro-compress'
 import { defineConfig } from 'astro/config'
 import { unified } from '@astrojs/markdown-remark'
 import rehypeKatex from 'rehype-katex'
+import rehypeMermaid from 'rehype-mermaid'
  
 import rehypeSlug from 'rehype-slug'
 import remarkDirective from 'remark-directive'
 import remarkMath from 'remark-math'
 import UnoCSS from 'unocss/astro'
-import rehypeMermaid from 'rehype-mermaid'
+
 import { VitePWA } from 'vite-plugin-pwa'
 import { base, defaultLocale, themeConfig } from './src/config'
 import { langMap } from './src/i18n/config'
@@ -111,96 +112,84 @@ export default defineConfig({
     },
   },
   vite: {
-    build: {
-      chunkSizeWarningLimit: 1000,
-    },
     plugins: [
       VitePWA({
         registerType: 'autoUpdate',
-        devOptions: {
-          enabled: false, // Disable SW in dev to avoid interference
-        },
+        includeAssets: ['fonts/**/*'],
         manifest: {
-          name: 'CGArtLab - 探索数字艺术的边界',
+          name: 'CGArtLab | CG艺术实验室',
           short_name: 'CGArtLab',
-          description: 'CG艺术实验室官方博客',
-          theme_color: '#ffFAF0',
-          background_color: '#ffFAF0',
+          description: '探索数字创作的边界',
+          theme_color: themeConfig.color.light.background,
+          background_color: themeConfig.color.light.background,
           display: 'standalone',
-          start_url: '/',
-          scope: '/',
           icons: [
-            {
-              src: '/icons/icon-192.png',
-              sizes: '192x192',
-              type: 'image/png',
-            },
-            {
-              src: '/icons/icon-512.png',
-              sizes: '512x512',
-              type: 'image/png',
-            },
-            {
-              src: '/icons/icon-512-maskable.png',
-              sizes: '512x512',
-              type: 'image/png',
-              purpose: 'maskable',
-            },
+            { src: '/icons/favicon.png', sizes: '512x512', type: 'image/png' },
           ],
         },
         workbox: {
-          globPatterns: ['**/*.{js,css,html,svg,png,webp,jpg,woff2}'],
+          globPatterns: ['**\/*.{js,css,html,svg,woff,woff2}'],
           runtimeCaching: [
             {
-              urlPattern: /\.(?:png|jpg|jpeg|webp|svg|gif)$/,
+              urlPattern: /^https:\/\/cdn\.jsdelivr\.net\/npm\//,
               handler: 'CacheFirst',
               options: {
-                cacheName: 'image-cache',
-                expiration: {
-                  maxEntries: 100,
-                  maxAgeSeconds: 30 * 24 * 60 * 60, // 30 days
-                },
-              },
-            },
-            {
-              urlPattern: /\.(?:woff|woff2|ttf|otf)$/,
-              handler: 'CacheFirst',
-              options: {
-                cacheName: 'font-cache',
-                expiration: {
-                  maxEntries: 10,
-                  maxAgeSeconds: 365 * 24 * 60 * 60, // 1 year
-                },
-              },
-            },
-            {
-              urlPattern: /\/posts\//,
-              handler: 'StaleWhileRevalidate',
-              options: {
-                cacheName: 'posts-cache',
+                cacheName: 'npm-cdn',
                 expiration: {
                   maxEntries: 50,
-                  maxAgeSeconds: 7 * 24 * 60 * 60, // 7 days
+                  maxAgeSeconds: 60 * 60 * 24 * 30,
+                },
+              },
+            },
+            {
+              urlPattern: /.*\.(?:png|jpg|jpeg|gif|webp)$/,
+              handler: 'CacheFirst',
+              options: {
+                cacheName: 'images',
+                expiration: {
+                  maxEntries: 100,
+                  maxAgeSeconds: 60 * 60 * 24 * 30,
+                },
+              },
+            },
+            {
+              urlPattern: /.*\.(?:woff|woff2|ttf|otf)$/,
+              handler: 'CacheFirst',
+              options: {
+                cacheName: 'fonts',
+                expiration: {
+                  maxEntries: 20,
+                  maxAgeSeconds: 60 * 60 * 24 * 365,
+                },
+              },
+            },
+            {
+              urlPattern: /.*\/posts\/.*/,
+              handler: 'NetworkFirst',
+              options: {
+                cacheName: 'posts',
+                expiration: {
+                  maxEntries: 50,
+                  maxAgeSeconds: 60 * 60 * 24 * 7,
                 },
               },
             },
           ],
         },
       }),
-      {
-        name: 'prefix-font-urls-with-base',
-        transform(code, id) {
-          if (!id.split('?')[0].endsWith('src/styles/font.css')) {
-            return null
-          }
-
-          return code.replace(/url\(\s*(['"]?)\/fonts\//g, `url($1${base}/fonts/`)
+    ],
+    css: {
+      devSourcemap: true,
+    },
+    build: {
+      rollupOptions: {
+        output: {
+          assetFileNames: (assetInfo) => {
+            if (assetInfo.name.endsWith('.css')) return '_astro/[name].[hash][extname]'
+            return '_astro/[name].[hash][extname]'
+          },
         },
       },
-    ],
-  },
-  devToolbar: {
-    enabled: false,
+    },
   },
 })
-

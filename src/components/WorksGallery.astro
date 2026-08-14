@@ -1,8 +1,8 @@
 ---
-import type { ImageMetadata } from 'astro'
 import type { Language } from '@/i18n/config'
 import type { Post } from '@/types'
 import { getPostPath } from '@/i18n/path'
+import { getPostDescription } from '@/utils/description'
 
 interface Props {
   posts: Post[]
@@ -10,419 +10,53 @@ interface Props {
 }
 
 const { posts, lang } = Astro.props
-
-// 动态导入 src/content/posts/_images 目录下的所有图片
-const imagesGlob = import.meta.glob<{ default: ImageMetadata }>(
-  '/src/content/posts/_images/**/*.{jpeg,jpg,png,gif,webp}',
-  { eager: true },
-)
-
-// 提取文章的第一张图片
-async function getThumbnail(post: Post): Promise<{ type: 'image', src: string } | null> {
-  const content = post.body || ''
-
-  // 检查是否有第一张图片
-  const imageMatch = content.match(/!\[.*?\]\((.*?\.(?:webp|jpg|jpeg|png|gif))\)/)
-  if (imageMatch) {
-    const imagePath = imageMatch[1]
-
-    // 处理相对路径，转换为绝对路径
-    if (imagePath.startsWith('./_images/') || imagePath.startsWith('../_images/')) {
-      // 解码 URL 编码的字符（如%20）
-      const decodedPath = decodeURIComponent(imagePath)
-      // 正确处理各种相对路径情况，保留子目录结构
-      const imageName = decodedPath.replace(/^(\.\.?\/)?_images\//, '')
-      const absolutePath = `/src/content/posts/_images/${imageName}`
-
-      // 查找对应的图片模块
-      const imageImporter = imagesGlob[absolutePath]
-      if (imageImporter) {
-        const imageMetadata = imageImporter.default
-        // 直接返回图片路径，Astro 会自动处理优化
-        return { type: 'image', src: imageMetadata.src }
-      }
-    }
-
-    // 如果是外部链接，直接使用
-    if (imagePath.startsWith('http')) {
-      return { type: 'image', src: imagePath }
-    }
-
-    // 其他情况返回原路径
-    return { type: 'image', src: imagePath }
-  }
-
-  return null
-}
-
-// 获取文章描述
-function getDescription(post: Post): string {
-  return post.data.description || '暂无描述'
-}
-
-// 获取所有分类标签
-function getCategories(posts: Post[]): string[] {
-  const categories = new Set<string>()
-  posts.forEach((post) => {
-    if (post.data.tags && post.data.tags.length > 0) {
-      post.data.tags.forEach((tag: string) => categories.add(tag))
-    }
-  })
-  return Array.from(categories).sort()
-}
 ---
 
-<div class="works-gallery">
-  <!-- 分类标签 -->
-  <div class="category-tags">
-    <div class="no-heti flex flex-wrap gap-x-3 gap-y-3.2">
-      <button class="category-tag active" data-category="all">
-        <span class="category-text">{lang === 'zh' ? '全部' : lang === 'zh-tw' ? '全部' : 'All'}</span>
-      </button>
-      {getCategories(posts).map(category => (
-        <button class="category-tag" data-category={category}>
-          <span class="category-text">{category}</span>
-        </button>
-      ))}
-    </div>
-  </div>
+{
+  posts.map((post) => {
+    const slug = post.data.abbrlink || post.id
+    const description = getPostDescription(post, 'list')
 
-  <!-- 相册列表 -->
-  <div class="album-list">
-    {await Promise.all(posts.map(async (post) => {
-      const slug = post.data.abbrlink || post.id
-      const thumbnail = await getThumbnail(post)
-      const description = getDescription(post)
-      const postCategories = post.data.tags || []
-
-      return (
-        <div class="album-item" data-categories={postCategories.join(',')}>
-          <a
-            href={getPostPath(slug, lang)}
-            class="album-link"
-            transition:name={`post-${slug}${lang ? `-${lang}` : ''}`}
-            data-disable-theme-toggle-transition
-          >
-            <!-- 大图区域 -->
-            <div class="album-thumbnail">
-              {thumbnail
-? (
+    return (
+      <a
+        href={getPostPath(slug, lang)}
+        class="album-card"
+        transition:name={`post-${slug}${lang ? `-${lang}` : ''}`}
+        data-disable-theme-toggle-transition
+      >
+        <div class="album-thumbnail">
+          {
+            post.data.thumbnail
+              ? (
                 <img
-                  src={thumbnail.src}
+                  src={post.data.thumbnail}
                   alt={post.data.title}
                   loading="lazy"
-                  class="thumbnail-image"
+                  class="thumbnail-img"
                 />
               )
-: (
+              : (
                 <div class="thumbnail-placeholder">
-                  <span class="placeholder-text">{lang === 'zh' ? '暂无图片' : 'No Image'}</span>
+                  <span class="placeholder-text">
+                    {post.data.title}
+                  </span>
                 </div>
-              )}
-            </div>
-
-            <!-- 内容区域 -->
-            <div class="album-info">
-              <h3 class="album-title">{post.data.title}</h3>
-              <p class="album-description">{description}</p>
-              <div class="album-meta">
-                <span class="album-date">
-                  {post.data.published.toLocaleDateString(lang === 'zh' ? 'zh-CN' : 'en-US')}
-                </span>
-                {postCategories.length > 0 && (
-                  <div class="album-tags">
-                    {postCategories.map((tag: string) => (
-                      <span class="album-tag">{tag}</span>
-                    ))}
-                  </div>
-                )}
-              </div>
-            </div>
-          </a>
+              )
+          }
         </div>
-      )
-    }))}
-  </div>
-
-  <!-- 分类筛选脚本 -->
-  <script>
-    function setupWorksFilter() {
-      const categoryTags = document.querySelectorAll<HTMLButtonElement>('.category-tag')
-      const albumItems = document.querySelectorAll<HTMLElement>('.album-item')
-
-      categoryTags.forEach((tag) => {
-        tag.addEventListener('click', (event) => {
-          // 使用 currentTarget 确保始终指向绑定事件的 <button> 元素，
-          // 而非点击到内层 <span> 时返回的子元素
-          const btn = event.currentTarget as HTMLButtonElement
-
-          // 移除所有标签的激活状态
-          categoryTags.forEach(t => t.classList.remove('active'))
-
-          // 添加当前按钮的激活状态
-          btn.classList.add('active')
-
-          const selectedCategory = btn.dataset.category || 'all'
-
-          // 筛选作品
-          albumItems.forEach((item) => {
-            if (selectedCategory === 'all') {
-              item.style.display = 'block'
-            }
-            else {
-              const categories = item.dataset.categories?.split(',') || []
-              item.style.display = categories.includes(selectedCategory) ? 'block' : 'none'
-            }
-          })
-        })
-      })
-    }
-
-    // astro:page-load 在首次加载和每次 View Transition 导航后均会触发
-    document.addEventListener('astro:page-load', setupWorksFilter)
-  </script>
-</div>
-
-<style>
-.works-gallery {
-  max-width: 1000px;
-  margin: 0 auto;
-  padding: 1.5rem 0;
+        <div class="album-info">
+          <h3 class="album-title font-serif">{post.data.title}</h3>
+          <p class="album-description">{description}</p>
+          <div class="album-meta">
+            <time datetime={post.data.published.toISOString()}>
+              {post.data.published.toLocaleDateString(lang === 'zh' ? 'zh-CN' : 'en-US', {
+                year: 'numeric',
+                month: 'long',
+              })}
+            </time>
+          </div>
+        </div>
+      </a>
+    )
+  })
 }
-
-@media (min-width: 1024px) {
-  .works-gallery {
-    padding: 2rem 0;
-  }
-}
-
-/* 分类标签样式 - 精致线框设计 */
-.category-tags {
-  margin-bottom: 3rem;
-  margin-top: -0.5rem;
-}
-
-.category-tags .no-heti {
-  justify-content: flex-start;
-  gap: 0.75rem;
-}
-
-.category-tag {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border: 1px solid color-mix(in srgb, oklch(var(--un-preset-theme-colors-secondary)) 15%, transparent);
-  border-radius: 6px;
-  padding: 0.5rem 1.25rem;
-  background: transparent;
-  color: color-mix(in srgb, oklch(var(--un-preset-theme-colors-secondary)) 80%, transparent);
-  font-size: 0.875rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-  min-height: 2.25rem;
-  letter-spacing: 0.01em;
-}
-
-.category-text {
-  transform: translateY(1px);
-}
-
-.category-tag:hover,
-.category-tag:focus-visible {
-  border-color: color-mix(in srgb, oklch(var(--un-preset-theme-colors-primary)) 30%, transparent);
-  color: oklch(var(--un-preset-theme-colors-primary));
-  transform: translateY(-1px);
-}
-
-.category-tag:focus-visible {
-  outline: 2px solid oklch(var(--un-preset-theme-colors-highlight) / 0.6);
-  outline-offset: 2px;
-}
-
-.category-tag.active {
-  border-color: color-mix(in srgb, oklch(var(--un-preset-theme-colors-primary)) 40%, transparent);
-  color: oklch(var(--un-preset-theme-colors-primary));
-  background: color-mix(in srgb, oklch(var(--un-preset-theme-colors-primary)) 8%, transparent);
-}
-
-/* 相册列表样式 - 单列大图布局 */
-.album-list {
-  display: flex;
-  flex-direction: column;
-  gap: 3rem;
-}
-
-.album-item {
-  width: 100%;
-}
-
-.album-link {
-  text-decoration: none;
-  color: inherit;
-  display: block;
-  transition: transform 0.3s ease;
-  border: 1px solid color-mix(in srgb, oklch(var(--un-preset-theme-colors-secondary)) 15%, transparent);
-  border-radius: 8px;
-  overflow: hidden;
-  background: color-mix(in srgb, oklch(var(--un-preset-theme-colors-background)) 50%, transparent);
-}
-
-.album-link:hover {
-  transform: translateY(-4px);
-  border-color: color-mix(in srgb, oklch(var(--un-preset-theme-colors-primary)) 30%, transparent);
-}
-
-/* 大图区域 - 与按钮对齐 */
-.album-thumbnail {
-  width: 100%;
-  height: 400px;
-  overflow: hidden;
-  position: relative;
-  background: color-mix(in srgb, oklch(var(--un-preset-theme-colors-background)) 30%, transparent);
-  border-bottom: 1px solid color-mix(in srgb, oklch(var(--un-preset-theme-colors-secondary)) 15%, transparent);
-}
-
-.thumbnail-image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  filter: grayscale(100%) contrast(0.55) brightness(1.05) sepia(15%);
-  transition: all 0.6s ease;
-}
-
-.album-link:hover .thumbnail-image {
-  filter: grayscale(0%) contrast(1) brightness(1) sepia(0%);
-  transform: scale(1.03);
-}
-
-.thumbnail-placeholder {
-  width: 100%;
-  height: 100%;
-  background: color-mix(in srgb, oklch(var(--un-preset-theme-colors-background)) 30%, transparent);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: color-mix(in srgb, oklch(var(--un-preset-theme-colors-secondary)) 60%, transparent);
-}
-
-.placeholder-text {
-  font-size: 1rem;
-  opacity: 0.6;
-}
-
-/* 内容区域 */
-.album-info {
-  padding: 1.5rem 1.75rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.6rem;
-}
-
-.album-title {
-  margin: 0;
-  font-size: 1.4rem;
-  font-weight: 600;
-  line-height: 1.35;
-  color: oklch(var(--un-preset-theme-colors-primary));
-  letter-spacing: -0.01em;
-}
-
-.album-description {
-  margin: 0;
-  font-size: 0.95rem;
-  line-height: 1.65;
-  color: color-mix(in srgb, oklch(var(--un-preset-theme-colors-secondary)) 75%, transparent);
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-/* 元信息区域 */
-.album-meta {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  font-size: 0.8rem;
-  color: color-mix(in srgb, oklch(var(--un-preset-theme-colors-secondary)) 50%, transparent);
-  padding-top: 0.75rem;
-  border-top: 1px solid color-mix(in srgb, oklch(var(--un-preset-theme-colors-secondary)) 15%, transparent);
-  margin-top: 0.5rem;
-}
-
-.album-date {
-  font-weight: 500;
-  font-variant-numeric: tabular-nums;
-}
-
-/* 标签样式 */
-.album-tags {
-  display: flex;
-  gap: 0.5rem;
-  flex-wrap: wrap;
-}
-
-.album-tag {
-  border: 1px solid color-mix(in srgb, oklch(var(--un-preset-theme-colors-secondary)) 15%, transparent);
-  padding: 0.2rem 0.6rem;
-  border-radius: 4px;
-  font-size: 0.75rem;
-  color: color-mix(in srgb, oklch(var(--un-preset-theme-colors-secondary)) 60%, transparent);
-  transition: all 0.2s ease;
-  background: transparent;
-}
-
-.album-tag:hover {
-  border-color: color-mix(in srgb, oklch(var(--un-preset-theme-colors-primary)) 30%, transparent);
-  color: oklch(var(--un-preset-theme-colors-primary));
-}
-
-/* 分割线已移除，改用卡片间隔 */
-.album-divider {
-  display: none;
-}
-
-/* 响应式设计 */
-@media (max-width: 768px) {
-  .works-gallery {
-    padding: 1.5rem 0;
-  }
-  .album-thumbnail {
-    height: 300px;
-  }
-  .album-info {
-    padding: 1.25rem 1.5rem;
-  }
-  .album-title {
-    font-size: 1.25rem;
-  }
-  .category-tags {
-    margin-bottom: 2rem;
-  }
-  .category-tag {
-    padding: 0.45rem 1rem;
-    font-size: 0.85rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .album-thumbnail {
-    height: 240px;
-  }
-  .album-title {
-    font-size: 1.15rem;
-  }
-  .album-description {
-    font-size: 0.9rem;
-  }
-  .album-info {
-    padding: 1rem 1.25rem;
-  }
-  .category-tag {
-    padding: 0.4rem 0.875rem;
-    font-size: 0.8rem;
-  }
-}
-</style>

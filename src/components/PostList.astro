@@ -24,16 +24,16 @@ const isHome = isHomePage(Astro.url.pathname)
     return (
       <li
         class:list={[
-          'mb-8',
-          isHome ? 'lg:mb-10' : '',
+          'pt-8 pb-5 border-b border-secondary/10 last:border-b-0',
+          isHome ? 'lg:pt-10 lg:pb-6' : '',
         ]}
       >
         {/* post title */}
-        <h3 class="inline transition-colors hover:c-primary">
+        <h3 class="inline font-serif text-4.5 transition-colors hover:c-primary">
           <a
             class:list={[
               'cjk:tracking-wide',
-              isHome ? 'lg:font-medium lg:text-4.5' : '',
+              isHome ? 'lg:font-medium lg:text-5' : '',
             ]}
             href={getPostPath(slug, lang)}
             transition:name={`post-${slug}${lang ? `-${lang}` : ''}`}

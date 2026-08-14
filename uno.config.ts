@@ -44,6 +44,7 @@ export default defineConfig({
       navbar: ['STIX-Italic', 'EarlySummer-Subset', 'EarlySummer', 'ui-serif', 'Georgia', 'Cambria', 'Times New Roman', 'Times', 'serif'],
       time: ['Snell-Bold', 'ui-serif', 'Georgia', 'Cambria', 'Times New Roman', 'Times', 'serif'],
       serif: ['STIX', 'EarlySummer', 'ui-serif', 'Georgia', 'Cambria', 'Times New Roman', 'Times', 'serif'],
+      sans: ['OPPOSans', 'ui-sans-serif', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial', 'Noto Sans', 'sans-serif'],
     },
   },
   rules: [
@@ -56,11 +57,6 @@ export default defineConfig({
     'uno-desktop-column': 'absolute left-[min(calc(100vw-19rem),calc(50vw+21rem))] w-14rem',
     'uno-decorative-line': 'mb-4.5 h-0.5 w-16 bg-secondary/50 lg:(mb-6 w-11)',
     'uno-round-border': 'border border-secondary/5 rounded border-solid',
-    // Semantic color shortcuts — thin aliases over presetWind3 color utilities
-    // so that opacity modifiers work correctly (e.g. c-secondary/60).
-    // unocss-preset-theme replaces theme.colors.* with var(--un-preset-theme-colors-*)
-    // so text-primary / text-secondary etc. already resolve to the correct
-    // dark-mode CSS variable at build time.
     'c-primary': 'text-primary',
     'c-secondary': 'text-secondary',
     'c-highlight': 'text-highlight',
@@ -69,15 +65,8 @@ export default defineConfig({
     'c-important': 'text-important',
     'c-warning': 'text-warning',
     'c-caution': 'text-caution',
-    // Footer: 12px, relaxed line-height
     'text-footer': 'text-xs leading-normal',
   },
-  // safelist forces unocss-preset-theme to emit CSS variable definitions for
-  // ALL theme colors, even those not referenced by any utility in source files.
-  // Without this, colors only used in raw CSS (global.css, extension.css, etc.)
-  // like 'background' and 'highlight' never get their --un-preset-theme-colors-*
-  // variables generated, so oklch(var(--un-preset-theme-colors-background)) in
-  // global.css resolves to an invalid color and the browser discards it entirely.
   safelist: [
     'bg-background',
     'bg-highlight',
