@@ -9,11 +9,15 @@ pnpm dev                  # astro check → astro dev (HMR 热更新，快速迭
 pnpm build                # astro check → build → generate-llms → apply-lqip (顺序重要：generate-llms 需要构建后的文章列表，apply-lqip 需要处理构建后的资源)
 pnpm preview              # astro preview --host (局域网可访问，使用 dist/ 生产构建产物，最接近线上效果)
 pnpm lint / lint:fix      # eslint (antfu config, 忽略 src/content/**)
+pnpm astro                # Astro CLI 透传
 pnpm new-post "标题"       # 创建 MD 文章 (src/content/posts/)，周刊自动放入 weekly/
 pnpm format-posts         # CJK 文本规范化 (autocorrect)
 pnpm apply-lqip           # 生成 LQIP 占位图 (写入 src/assets/)
+pnpm fix-internal-links   # 批量修复双语文章内部链接 (中→/en/ 版本)
 pnpm verify-feed           # 验证 RSS/Atom feed 输出 (CI 中使用)
 pnpm audit-glossary        # 审计术语表引用完整性
+pnpm sync-docs             # 同步核心文档自动生成数据块 (版本/统计/管线，勿手改)
+pnpm sync-docs:check       # 校验数据块是否最新 (CI 中使用，stale 则退出码 1)
 pnpm exec playwright test # 端到端测试 (Playwright)
 ```
 
@@ -25,15 +29,24 @@ pnpm exec playwright test # 端到端测试 (Playwright)
 - **文章图片** — 必须放在文章同名 `_images/` 目录下
 - **ESLint 跳过** — `src/content/**` 完全忽略
 - **pre-commit hook** — `simple-git-hooks` + `lint-staged` 自动 eslint --fix `.js/.ts/.astro`
-- **Type suppressions** — 仅 2 处 (`@ts-expect-error` in MediaEmbed.astro, `eslint-disable` in Head.astro)
+- **Type suppressions** — 仅 1 处 (`@ts-expect-error` in MediaEmbed.astro)
 - **`--at-apply` 已废弃** — `injectReset: true` 移除后，纯 CSS 文件中的 `--at-apply` 不再被 UnoCSS 处理，需转为显式 CSS 变量
 - **颜色 token** — 所有颜色必须用 `oklch(var(--un-preset-theme-colors-*))` token，禁止裸色值 `#xxx`/`rgb()`。唯一例外：毛玻璃/阴影中的物理透明度 `rgba(0,0,0,α)` 和固定功能语义色（如错误红）
 - **View Transitions 监听器** — 全局 `addEventListener` 必须配套 `astro:page-load`/`astro:before-swap`，`matchMedia` 需提取为模块级常量引用
 - **iOS 滚动锁定** — 使用 `.scroll-lock` class（`overflow:hidden + position:fixed + width:100%`），开启前保存 `scrollY`，关闭后恢复
  - **Shiki 双主题** — `shikiConfig.themes` 设 `light: 'github-light'` / `dark: 'github-dark'`，`.dark` 下代码高亮自动切换，无需额外 JS
  - **Mermaid 排除 Shiki** — `syntaxHighlight.excludeLangs: ['mermaid']` 确保 Mermaid 代码块不被 Shiki 处理，交由 `rehype-mermaid` 构建时渲染
- - **remark/rehype 顺序敏感** — Astro markdown 管线中 6 个 Remark 插件 + 9 个 Rehype 插件，后者依赖上游 ID 生成，插入新插件必须确认顺序
+ - **remark/rehype 顺序敏感** — Astro markdown 管线中 6 个 Remark 插件 + 8 个 Rehype 插件，后者依赖上游 ID 生成，插入新插件必须确认顺序
  - **`color-mix()` 色彩空间差异** — 项目混用 `color-mix(in srgb, ...)` 和 `color-mix(in oklch, ...)`，不同浏览器渲染有细微色差
+
+<!-- DOC-FACTS:START -->
+> 自动生成数据（由 `pnpm sync-docs` 更新，勿手改）
+
+> 技术栈：Astro 6.4.8 · TypeScript 6.0.3 · UnoCSS 66.6.8 · pnpm 11.10.0 · Node 24
+> 内容：148 个文章文件（74 中文 + 74 英文），周刊 19 期
+> Markdown 管线：6 remark + 8 rehype 插件
+> 脚本：14 个（apply-lqip / astro / audit-glossary / build / dev / fix-internal-links / format-posts / lint / lint:fix / new-post / preview / sync-docs / sync-docs:check / verify-feed）
+<!-- DOC-FACTS:END -->
 
 ## ARCHITECTURE
 
@@ -44,6 +57,7 @@ pnpm exec playwright test # 端到端测试 (Playwright)
 | 主题配置 | `src/config.ts` | 站点元数据、导航、颜色、评论、SEO |
 | UnoCSS | `uno.config.ts` | Wind3 + Attributify + theme preset, 非 Tailwind |
 | 路由 | `src/pages/[...lang]/` | 多语言前缀动态路由 |
+| Telegram 推送 | `src/lib/tg.mjs` + Worker scheduled | RSS → 频道推送，KV 状态去重，Cron 每 15 分钟 + `/api/tg-notify` 手动触发 |
 | 评论 | Giscus（主用）+ Twikoo/Waline（需额外配置后启用） |
 | 表单 | `src/components/InquiryForm.astro` | Web3Forms，submit 监听器在 `astro:page-load` 内绑定 |
 | 搜索 | 客户端搜索索引 (`api/search-index/[lang].json.ts` + `api/search-index.json.ts`) |
@@ -54,8 +68,9 @@ pnpm exec playwright test # 端到端测试 (Playwright)
 | Mermaid 图表 | `Widgets/MermaidLazy.astro` | `rehype-mermaid` 构建时预渲染 + IntersectionObserver 延迟加载 |
 | 隐私同意 | `ConsentBanner.astro` | 三级 Cookie 同意（拒绝/仅功能/全部接受），聚焦陷阱，滚动锁定联动 |
 | reduceMotion | `themeConfig.global.reduceMotion` | 启用后在 `<html>` 添加 `.reduce-motion` 类，禁用入场动画，启用 0.3s 颜色/边框过渡 |
-| 主题上游 | `scripts/update-theme.ts` | 从 `radishzzz/astro-theme-retypeset` 合并主题更新 |
- | Markdown 管线 | `astro.config.ts` | Remark 6 插件 + Rehype 9 插件，顺序敏感，插件间有依赖关系 |
+ | 主题上游 | `scripts/update-theme.ts` | 从 `radishzzz/astro-theme-retypeset` 合并主题更新 |
+ | GitHub 热力图 | `Widgets/GithubHeatmap.astro` + `src/lib/github-contributions.ts` | GitHub GraphQL API + 文件缓存 (`.temp/gh-contributions.json`, 2h TTL, 10s 超时)，构建时容错，用于 `[...lang]/works.astro` |
+ |  Markdown 管线 | `astro.config.ts` | Remark 6 插件 + Rehype 8 插件，顺序敏感，插件间有依赖关系 |
  | 样式分层 | `src/config.ts` + `uno.config.ts` + `src/styles/*.css` | 配置→UnoCSS 变量→纯 CSS，三层解耦，纯 CSS 不经过 UnoCSS transform |
  | 暗色模式 | `uno.config.ts` + `src/styles/*.css` | unocss-preset-theme 生成 `:root`/`.dark` 两套 CSS 变量覆盖 |
  | 字体系统 | `src/styles/font.css` + `uno.config.ts` fontFamily | 四组字体族（title/navbar/time/serif），Vite 插件在构建时重写 URL |
@@ -89,9 +104,9 @@ pnpm exec playwright test # 端到端测试 (Playwright)
 
 ## CI/CD
 
-- push main → Cloudflare Worker + Static Assets 自动部署
-- 构建命令: `pnpm install --config.trustPolicy=off && pnpm build`
-- 域名: cgartlab.com (Cloudflare Pages 自定义域名)
+- push main → Cloudflare Worker + Static Assets 自动部署（Cloudflare Git 集成，非 GitHub Actions 部署）
+- 构建命令: `pnpm install --config.trustPolicy=off && pnpm build && pnpm verify-feed`
+- 域名: cgartlab.com (Cloudflare Worker + Static Assets 自定义域名)
 
 ## DEBUGGING
 
@@ -162,7 +177,9 @@ pnpm exec playwright test # 端到端测试 (Playwright)
  ```ts
  safelist: [
    'bg-background', 'bg-highlight', 'bg-note',
+   'bg-tip', 'bg-important', 'bg-warning', 'bg-caution',
    'text-background', 'text-highlight',
+   'text-note', 'text-tip', 'text-important', 'text-warning', 'text-caution',
  ]
  ```
 
@@ -263,7 +280,7 @@ pnpm exec playwright test # 端到端测试 (Playwright)
  'c-primary': 'text-primary',
  'c-secondary': 'text-secondary',
  'c-note': 'text-note',
- 'text-footer': 'text-4 leading-relaxed',
+ 'text-footer': 'text-xs leading-normal',
  ```
 
  语义别名使用 `shortcuts` 机制，比维护额外 CSS class 更轻量。opacity modifier 正常工作：`c-secondary/60` 等价于 `text-secondary/60`。
@@ -410,8 +427,6 @@ Codex 为主力开发工具。以下规则定义 Agent 行为边界和开发到�
 - **端到端测试** — 涉及页面结构/路由/交互时，运行 `pnpm exec playwright test`。
 - **View Transitions 验证** — View Transitions 动画（主题切换、页面进入动效等，定义于 `transition.css`）仅在 `pnpm build && pnpm preview` 产线模式下触发，`pnpm dev` 的 HMR 热更新不会触发。修改过渡动画后，必须通过生产构建产物预览验证效果。
 
-### 禁止事项（严格）
-
 ### 双模式样式验证的具体操作
 
 `pnpm dev` 和 `pnpm preview` 默认使用相同端口（4321），无法同时运行。正确的验证顺序：
@@ -423,17 +438,57 @@ Codex 为主力开发工具。以下规则定义 Agent 行为边界和开发到�
 如需在两者之间反复对比，可用 `--port` 参数让 preview 使用不同端口：
 `pnpm build && pnpm preview --port 4322`，此时 dev 和 preview 可在不同端口同时运行对比。
 
+### 禁止事项（严格）
+
 - 未经确认不得新增 npm/pnpm 依赖
 - 不得修改 `trailingSlash: 'always'` 配置
 - 不得手动编辑 `src/assets/` 下的 LQIP 图片或 `lqip-map.json`
 - 不得对 `src/content/**` 运行 ESLint
- `pnpm build && pnpm preview --port 4322`，此时 dev 和 preview 可在不同端口同时运行对比。
- 
- - 未经确认不得新增 npm/pnpm 依赖
- - 不得修改 `trailingSlash: 'always'` 配置
- - 不得手动编辑 `src/assets/` 下的 LQIP 图片或 `lqip-map.json`
- - 不得对 `src/content/**` 运行 ESLint
- - 不得删除或修改 `.obsidian/` 设备级配置
+- 不得删除或修改 `.obsidian/` 设备级配置
+
+## DEPENDENCY UPGRADE
+
+依赖升级遵循「分级 → 侦查 → 最小验证 → 渐进放行」四步，禁止看到 Dependabot PR 直接合并。
+
+### 风险分级
+
+| 等级 | 类型 | 策略 |
+|------|------|------|
+| 🟢 Patch (x.x.y) | bug fix | CI 全绿即可自动合并 |
+| 🟡 Minor (x.y.z) | 新特性 | 批量合并，走标准验证管道 |
+| 🔴 Major (y.x.z) | 破坏性 | 单个处理，人工迁移 + 专项验证 |
+| 🔴 安全漏洞 | CVE | 优先于一切，当天处理 |
+
+**major 永远不与 minor 混批**。Dependabot 批量 PR 若混入跨大版本包，必须拆分后再合并。
+
+### 升级前侦查清单
+
+1. 读官方 changelog + migration guide，逐个映射破坏性变更到项目实际用法
+2. 检查 peerDependencies 兼容矩阵（`pnpm why <pkg>` / lockfile）—— 相邻依赖不兼容是翻车主因
+3. 核对 engines（Node/pnpm 版本要求）与本地环境
+4. 查上游是否停更或锁死依赖版本（如 rehype-katex@7 硬钉 katex `^0.16.0`，是 katex 升不动的根因）
+5. grep 项目实际用法：不是「装了啥」而是「用了哪个 API」—— 按调用点排查移除/变更的选项
+
+### 验证管道
+
+```
+pnpm lint → pnpm build → pnpm build && pnpm preview（实测：暗色/双语/公式/OG/交互）→ pnpm exec playwright test
+```
+
+- 构建通过 ≠ 功能正确：公式渲染、OG 图片、View Transitions、Mermaid 等必须 preview 实测
+- 升级构建链（UnoCSS/Vite/Astro）后必须检查构建产物，配置对 ≠ CSS 对
+- 回滚保险：每个包的升级单独 commit + 独立分支，出问题 revert 单个 commit，lockfile 一起回滚
+
+### 当前版本约束（决策记录）
+
+- **katex 锁定 `^0.16.47`** — rehype-katex@7.0.1 依赖 `katex: ^0.16.0`，升 0.17+/0.18 会产生双 katex 实例，且 0.18 起 CSS 类名加 `katex-` 前缀（`.base`→`.katex-base`），渲染 HTML 与加载 CSS 类名不匹配导致公式破版。待 rehype-katex 发布兼容版本后再升
+- **astro-og-canvas 升级要求 ≥ 0.13.0（当前仍为 `^0.11.1`）** — `param` 选项已移除（改由 endpoint 文件名自动推导）；`OGImageRoute()` 为异步必须 `await`。0.13.0 的 peer 范围才含 astro 7
+- **astro 7 升级（PR #264/#265 挂起）** — astro-og-canvas@0.11.1 peer 范围不含 astro 7，合并 astro 7 必须同步 og-canvas@0.13+；Astro 7 默认 Markdown 处理器切换为 Sätteri，`markdown.remarkPlugins`/`rehypePlugins` 顶层配置已弃用（建议迁移 `markdown.processor: unified({...})`），合并前必须验证 6 remark + 8 rehype 管线行为一致
+
+### 禁止事项
+
+- major 升级不得与 minor 混批合并
+- 未经上述侦查与验证不得合并依赖 PR
 
 ## CLOUDFLARE CONFIGURATION
 
@@ -449,14 +504,32 @@ Codex 为主力开发工具。以下规则定义 Agent 行为边界和开发到�
 | 兼容日期 | `2026-05-02` | `nodejs_compat` |
 | 可观测性 | 已启用 |
 | 路由 | `cgartlab.com`, `www.cgartlab.com` (custom_domain) |
+| Cron 触发 | `*/15 * * * *` (Telegram 推送) ※ |
+| KV 绑定 | `TG_STATE` (Telegram 推送去重状态) ※ |
 | 创建 | 2026-07-12 | 最后修改 2026-07-13 |
+
+※ Cron 与 KV 定义于 `wrangler.jsonc`，随 `feat/telegram-channel-sync` 分支部署后生效；上线前需创建 KV namespace 并替换占位符 id（当前为 `<KV_ID_FROM_wrangler-kv-namespace-create>`）且配置 Secret（见下方 Telegram 推送）。
 
 ### Worker 行为
 
+按顺序执行（`src/worker.mjs`）：
+
+0. **`/api/tg-notify` POST 手动触发** — 校验 `x-tg-secret` 头后推送，401 未授权
 1. www → non-www 301
-2. 尾斜杠强制 301（跳过含 . 文件路径）
-3. 目录 → index.html
-4. 404 → 404.html 兜底
+2. `/feed` 与 `/feed/` → `https://cgartlab.com/rss.xml` 301 重定向
+3. 尾斜杠强制 301（跳过含 . 文件路径）
+4. 目录 → index.html
+5. 404 → 404.html 兜底（`Cache-Control: public, max-age=60`）
+6. 缓存头按文件类型：指纹资源 / CSS/JS / 字体 → 1 年 immutable；图片 → 30 天；HTML → `max-age=600, s-maxage=1800`（浏览器 10min / 边缘 30min）
+7. 兜底 catch → 404 `max-age=60`
+
+### Telegram 推送（`src/lib/tg.mjs`）
+
+- 抓取 `https://cgartlab.com/rss.xml`（默认语言）→ 与 KV `TG_STATE` 中最后 GUID 对比 → 推送新文章到频道
+- 纯正则解析 RSS（不引入 XML 依赖）；消息用纯文本 + 链接预览，不设 `parse_mode`（规避 Markdown 转义坑）
+- **首次运行只建立 baseline**（记录最新 GUID），不推存量文章
+- 所需 Secret/Env：`TG_BOT_TOKEN`、`TG_CHANNEL_ID`、`TG_NOTIFY_SECRET`；KV namespace 名为 `TG_STATE`
+- 并发保护：KV `push_lock` 防止 Cron 与手动触发重叠
 
 ### DNS
 - Apex `cgartlab.com` / `www` → AAAA `100::` (代理)

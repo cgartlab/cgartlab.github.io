@@ -16,7 +16,9 @@
     "format-posts": "tsx scripts/format-posts.ts",
     "fix-internal-links": "tsx scripts/fix-internal-links.ts",
     "verify-feed": "tsx scripts/verify-feed.ts",
-    "audit-glossary": "tsx scripts/audit-glossary.ts"
+    "audit-glossary": "tsx scripts/audit-glossary.ts",
+    "sync-docs": "tsx scripts/sync-doc-facts.ts --write",
+    "sync-docs:check": "tsx scripts/sync-doc-facts.ts --check"
   },
   "dependencies": {
     "@astrojs/mdx": "^5.0.6",
