@@ -9,6 +9,11 @@ html {
   overflow-x: hidden;
 }
 
+/* 方形引号 — 全局默认使用非衬线字体时，CJK 引号统一为直角引号 */
+:root:is(:lang(zh), :lang(ja), :lang(ko)) {
+  quotes: "「" "」" "『" "』";
+}
+
 /* Skip to Content Link (WCAG 2.4.1 Bypass Blocks) */
 .skip-to-content {
   position: absolute;

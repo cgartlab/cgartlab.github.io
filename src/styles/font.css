@@ -109,3 +109,37 @@
 @font-face{font-family:"EarlySummer";src: url("/fonts/EarlySummer-VF-Split/714b459658a7321ceeb1e1386ce165c2.woff2")format("woff2-variations");font-display:swap;font-weight:400 700;unicode-range:U+B7;}
 @font-face{font-family:"EarlySummer";src: url("/fonts/EarlySummer-VF-Split/298d96ea561e419a4104bc9fc18499ce.woff2")format("woff2-variations");font-display:swap;font-weight:400 700;unicode-range:U+61-7E;}
 @font-face{font-family:"EarlySummer";src: url("/fonts/EarlySummer-VF-Split/f612c78a5544ff2dd3e8296ac3e58344.woff2")format("woff2-variations");font-display:swap;font-weight:400 700;unicode-range:U+20-60;}
+
+/* OPPO Sans — open-source free font from OPPO */
+/* Loaded via jsDelivr CDN (npm package @zf-web-font/opposans) */
+/* License: Free for commercial use, custom OPPO license (not SIL OFL) */
+@font-face {
+  font-family: "OPPOSans";
+  src: url("https://cdn.jsdelivr.net/npm/@zf-web-font/opposans/OPPOSans-Regular.woff2") format("woff2");
+  font-display: swap;
+  font-weight: 400;
+}
+@font-face {
+  font-family: "OPPOSans";
+  src: url("https://cdn.jsdelivr.net/npm/@zf-web-font/opposans/OPPOSans-Medium.woff2") format("woff2");
+  font-display: swap;
+  font-weight: 500;
+}
+@font-face {
+  font-family: "OPPOSans";
+  src: url("https://cdn.jsdelivr.net/npm/@zf-web-font/opposans/OPPOSans-Bold.woff2") format("woff2");
+  font-display: swap;
+  font-weight: 700;
+}
+@font-face {
+  font-family: "OPPOSans";
+  src: url("https://cdn.jsdelivr.net/npm/@zf-web-font/opposans/OPPOSans-Light.woff2") format("woff2");
+  font-display: swap;
+  font-weight: 300;
+}
+@font-face {
+  font-family: "OPPOSans";
+  src: url("https://cdn.jsdelivr.net/npm/@zf-web-font/opposans/OPPOSans-Heavy.woff2") format("woff2");
+  font-display: swap;
+  font-weight: 800;
+}

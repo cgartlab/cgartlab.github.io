@@ -18,6 +18,8 @@
 
 /* Customized Post Title */
 .heti .post-title {
+  font-family: 'STIX', 'EarlySummer', 'ui-serif', 'Georgia', 'Cambria', 'Times New Roman', 'Times', serif;
+  width: 100%;
   margin-bottom: 0.5rem;
   margin-top: 0;
   font-size: 2.125rem;
@@ -33,37 +35,50 @@
 
 /* Headings */
 .heti :where(h1, h2, h3, h4, h5, h6) {
-  margin-bottom: 1rem;
-  margin-top: 1.5em;
+  font-family: 'STIX', 'EarlySummer', 'ui-serif', 'Georgia', 'Cambria', 'Times New Roman', 'Times', serif;
+  margin-bottom: 1.875rem;
+  margin-top: 3.75em;
   scroll-margin-top: 5rem;
   font-weight: 600;
 }
+.heti :where(h2, h3, h4, h5, h6)::before {
+  content: "";
+  display: inline-block;
+  width: 4px;
+  height: 1em;
+  margin-right: 8px;
+  background-color: color-mix(in srgb, oklch(var(--un-preset-theme-colors-highlight)) 60%, transparent);
+  vertical-align: middle;
+  border-radius: 1px;
+  flex-shrink: 0;
+  transform: translateY(-3px);
+}
 .heti :where(h1) {
+  font-size: 2rem;
+  line-height: 2.5rem;
+  color: oklch(var(--un-preset-theme-colors-primary));
+}
+.heti :where(h2) {
   font-size: 1.75rem;
   line-height: 2.25rem;
   color: oklch(var(--un-preset-theme-colors-primary));
 }
-.heti :where(h2) {
-  font-size: 1.375rem;
-  line-height: 1.75rem;
-  color: oklch(var(--un-preset-theme-colors-primary));
-}
 .heti :where(h3) {
-  font-size: 1.125rem;
-  line-height: 1.75rem;
+  font-size: 1.5rem;
+  line-height: 2rem;
 }
 .heti :where(h4) {
-  font-size: 1rem;
-  line-height: 1.5rem;
+  font-size: 1.25rem;
+  line-height: 1.75rem;
 }
 .heti :where(h5) {
-  font-size: 0.875rem;
-  line-height: 1.25rem;
+  font-size: 1.125rem;
+  line-height: 1.5rem;
 }
 .heti :where(h6) {
   font-weight: 400;
-  font-size: 0.8125rem;
-  line-height: 1.25rem;
+  font-size: 1rem;
+  line-height: 1.375rem;
 }
 .heti :where(h1, h2, h3) {
   text-wrap: balance;
@@ -76,14 +91,14 @@
   }
 }
 .heti :where(h1 + h2, h2 + h3, h3 + h4, h4 + h5, h5 + h6) {
-  margin-top: 1rem;
+  margin-top: 1.5rem;
 }
 
 /* Paragraphs */
 .heti :where(p:not(.no-heti):not(.no-heti *)) {
-  margin-bottom: 1rem;
+  margin-bottom: 2rem;
   text-wrap: pretty;
-  line-height: 1.8;
+  line-height: 2.4;
 }
 .heti :where(p:not(.no-heti):not(.no-heti *)):is(:lang(zh), :lang(ja), :lang(ko)) {
   text-align: justify;
@@ -95,6 +110,8 @@
   letter-spacing: 0em;
   text-decoration-line: underline;
   text-underline-offset: 0.1em;
+  color: oklch(var(--un-preset-theme-colors-highlight));
+  text-decoration-color: color-mix(in srgb, oklch(var(--un-preset-theme-colors-highlight)) 60%, transparent);
   transition: color 0.15s ease-out, text-decoration-color 0.15s ease-out;
 }
 .heti :where(a:not(.no-heti):not(.no-heti *)):is(:lang(zh), :lang(ja), :lang(ko)) {
@@ -106,8 +123,8 @@
   }
 }
 .heti :where(a:not(.no-heti):not(.no-heti *)):hover {
-  color: oklch(var(--un-preset-theme-colors-primary));
-  text-decoration-color: color-mix(in srgb, oklch(var(--un-preset-theme-colors-primary)) 80%, transparent);
+  color: color-mix(in srgb, oklch(var(--un-preset-theme-colors-highlight)) 80%, transparent);
+  text-decoration-color: oklch(var(--un-preset-theme-colors-highlight));
 }
 
 /* Images */
@@ -416,6 +433,7 @@ html.dark .heti :where(u) {
 /* Bold */
 .heti :where(b, strong) {
   font-weight: 600;
+  color: oklch(var(--un-preset-theme-colors-highlight));
 }
 
 /* Italic */
