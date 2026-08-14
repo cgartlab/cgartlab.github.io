@@ -11,7 +11,7 @@ function timingSafeEqual(a, b) {
 }
 
 export default {
-  async scheduled(event, env, ctx) {
+  async scheduled(_event, env, ctx) {
     ctx.waitUntil(
       pushNewPosts(env)
         .then(({ pushed, skippedPermanent, baseline, skipped }) => {

@@ -52,6 +52,11 @@ export function rehypeCodeCopyButton() {
         return
       }
 
+      // 跳过 Mermaid 代码块（由客户端渲染）
+      if (node.children[0].properties?.className?.includes?.('language-mermaid')) {
+        return
+      }
+
       // 避免重复添加按钮
       if (node._hasCopyButton) {
         return
