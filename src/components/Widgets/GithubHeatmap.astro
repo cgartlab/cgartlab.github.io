@@ -130,22 +130,20 @@ const CELL_PITCH = 12
                         return <span class="gh-cell gh-cell--none" aria-hidden="true"></span>
                       }
                       const levelClass = levelClassMap[cell.contributionLevel] ?? 'gh-cell--none'
-                      const tooltipId = `gh-tooltip-${cell.date}`
                       const isFirstCell = weekIndex === 0 && dayIndex === 0
+                      const tooltipText = (currentUI.contributionTooltip || '{date} — {n} contribution')
+                        .replace('{date}', formatDateStr(cell.date))
+                        .replace('{n}', String(cell.contributionCount))
                       return (
                         <span
                           class={`gh-cell ${levelClass}`}
                           data-date={cell.date}
                           data-count={cell.contributionCount}
+                          data-tooltip={tooltipText}
                           tabindex={isFirstCell ? '0' : '-1'}
                           role="gridcell"
-                          aria-describedby={tooltipId}
+                          aria-label={tooltipText}
                         >
-                          <span class="gh-tooltip" role="tooltip" id={tooltipId}>
-                            {(currentUI.contributionTooltip || '{date} — {n} contribution')
-                              .replace('{date}', formatDateStr(cell.date))
-                              .replace('{n}', String(cell.contributionCount))}
-                          </span>
                         </span>
                       )
                     })}
@@ -281,6 +279,7 @@ const CELL_PITCH = 12
 <script>
 let heatmapKeydownHandler: ((e: KeyboardEvent) => void) | null = null
 let heatmapClickHandler: ((e: MouseEvent) => void) | null = null
+let heatmapTooltip: HTMLElement | null = null
 
 function setupHeatmapInteractions() {
   const cells = document.querySelectorAll<HTMLElement>('.gh-cell[data-date]')
@@ -312,28 +311,76 @@ function setupHeatmapInteractions() {
     })
   })
 
-  // Tooltip show/hide
+  /* ── Floating tooltip (position: fixed at body level) ── */
+  if (!heatmapTooltip) {
+    heatmapTooltip = document.createElement('div')
+    heatmapTooltip.className = 'gh-tooltip'
+    heatmapTooltip.setAttribute('role', 'tooltip')
+    document.body.appendChild(heatmapTooltip)
+  }
+  const tooltip = heatmapTooltip
+
+  function positionTooltip(cell: HTMLElement): void {
+    const rect = cell.getBoundingClientRect()
+    const text = cell.dataset.tooltip || ''
+    tooltip.textContent = text
+
+    // Remove any vertical flip class before measuring
+    tooltip.classList.remove('gh-tooltip--top')
+
+    // Force layout so offsetWidth/offsetHeight are accurate
+    const tooltipWidth = tooltip.offsetWidth
+    const tooltipHeight = tooltip.offsetHeight
+    const gap = 6
+    const viewW = window.innerWidth
+    const viewH = window.innerHeight
+
+    // Vertical: below by default, flip above if it overflows viewport bottom
+    if (rect.bottom + gap + tooltipHeight > viewH) {
+      tooltip.style.top = `${Math.max(gap, rect.top - gap - tooltipHeight)}px`
+      tooltip.classList.add('gh-tooltip--top')
+    }
+    else {
+      tooltip.style.top = `${rect.bottom + gap}px`
+    }
+
+    // Horizontal: center on cell, clamp to viewport edges
+    const centerX = rect.left + rect.width / 2
+    let left = centerX - tooltipWidth / 2
+    left = Math.max(gap, Math.min(left, viewW - tooltipWidth - gap))
+    tooltip.style.left = `${left}px`
+  }
+
+  function showTooltip(cell: HTMLElement): void {
+    positionTooltip(cell)
+    tooltip.classList.add('gh-tooltip--visible')
+  }
+
+  function hideTooltip(): void {
+    tooltip.classList.remove('gh-tooltip--visible')
+  }
+
+  // Attach events to each cell
   cells.forEach((cell) => {
-    const tooltip = cell.querySelector<HTMLElement>('.gh-tooltip')
-    if (!tooltip)
-      return
-
-    const showTooltip = () => tooltip.classList.add('gh-tooltip--visible')
-    const hideTooltip = () => tooltip.classList.remove('gh-tooltip--visible')
-
-    cell.addEventListener('mouseenter', showTooltip)
+    cell.addEventListener('mouseenter', () => showTooltip(cell))
     cell.addEventListener('mouseleave', hideTooltip)
-    cell.addEventListener('focus', showTooltip)
+    cell.addEventListener('focus', () => showTooltip(cell))
     cell.addEventListener('blur', hideTooltip)
     // Touch: toggle tooltip on tap
     cell.addEventListener('click', (e) => {
       e.stopPropagation()
-      // Close any other open tooltip
-      document.querySelectorAll('.gh-tooltip--visible').forEach((t) => {
-        if (t !== tooltip)
-          t.classList.remove('gh-tooltip--visible')
-      })
-      tooltip.classList.toggle('gh-tooltip--visible')
+      // Close any other visible tooltip (only one floating tooltip — close it)
+      if (tooltip.classList.contains('gh-tooltip--visible') && tooltip.dataset.activeCell !== cell.dataset.date) {
+        hideTooltip()
+      }
+      // Toggle
+      if (tooltip.classList.contains('gh-tooltip--visible')) {
+        hideTooltip()
+      }
+      else {
+        tooltip.dataset.activeCell = cell.dataset.date
+        showTooltip(cell)
+      }
     })
   })
 
@@ -404,9 +451,8 @@ function setupHeatmapInteractions() {
   // Dismiss when tapping outside
   heatmapClickHandler = (e: MouseEvent) => {
     const target = e.target as HTMLElement
-    if (!target.closest('.gh-cell[data-date]')) {
-      document.querySelectorAll('.gh-tooltip--visible')
-        .forEach(t => t.classList.remove('gh-tooltip--visible'))
+    if (!target.closest('.gh-cell[data-date]') && !target.closest('.gh-tooltip')) {
+      hideTooltip()
     }
   }
 
@@ -415,6 +461,10 @@ function setupHeatmapInteractions() {
 }
 
 function cleanupHeatmapInteractions() {
+  if (heatmapTooltip) {
+    heatmapTooltip.remove()
+    heatmapTooltip = null
+  }
   if (heatmapKeydownHandler) {
     document.removeEventListener('keydown', heatmapKeydownHandler)
     heatmapKeydownHandler = null
@@ -639,12 +689,10 @@ html.dark {
   }
 }
 
-/* Tooltip */
+/* Tooltip — floating layer at body level, never clipped by overflow */
 .gh-tooltip {
-  position: absolute;
-  top: calc(100% + 6px);
-  left: 50%;
-  transform: translateX(-50%);
+  position: fixed;
+  z-index: 1000;
   padding: 4px 8px;
   border-radius: 4px;
   font-size: 0.6875rem;
@@ -654,10 +702,20 @@ html.dark {
   opacity: 0;
   visibility: hidden;
   transition: opacity 0.15s ease-out, visibility 0.15s ease-out;
-  z-index: 100;
   line-height: 1.4;
   background-color: oklch(var(--un-preset-theme-colors-primary));
   color: oklch(var(--un-preset-theme-colors-background));
+}
+
+/* Arrow: pointing up (tooltip below cell) */
+.gh-tooltip::before {
+  content: '';
+  position: absolute;
+  top: -6px;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 6px solid transparent;
+  border-bottom-color: oklch(var(--un-preset-theme-colors-primary));
 }
 
 .gh-tooltip--visible {
@@ -665,11 +723,12 @@ html.dark {
   visibility: visible;
 }
 
-@media (pointer: coarse) {
-  .gh-tooltip {
-    top: auto;
-    bottom: calc(100% + 6px);
-  }
+/* Flip: tooltip appears above cell, arrow points down */
+.gh-tooltip--top::before {
+  top: auto;
+  bottom: -6px;
+  border-bottom-color: transparent;
+  border-top-color: oklch(var(--un-preset-theme-colors-primary));
 }
 
 /* Footer */
