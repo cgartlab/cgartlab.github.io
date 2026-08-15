@@ -106,7 +106,7 @@ const CELL_PITCH = 12
 
       <div class="gh-grid-scale-container" id="heatmap-scale-container">
         <div class="gh-grid-wrapper" id="heatmap-wrapper">
-          <div class="gh-grid" role="grid" aria-label="GitHub contribution activity">
+          <div class="gh-grid" role="grid" aria-label={currentUI.contributionGridLabel || 'GitHub contribution activity'}>
           <!-- Month labels row -->
           <div class="gh-months" aria-hidden="true">
             <div class="gh-day-labels-placeholder"></div>
@@ -337,6 +337,10 @@ function setupHeatmapInteractions() {
 
     // Vertical: below by default, flip above if it overflows viewport bottom
     if (rect.bottom + gap + tooltipHeight > viewH) {
+      // Edge case: when the cell is also near the viewport top (short viewport),
+      // the flipped position may go negative, causing the tooltip to overlap
+      // the cell it annotates. This is a rare edge case with no clean solution
+      // that avoids clipping; the tooltip remains fully visible and readable.
       tooltip.style.top = `${Math.max(gap, rect.top - gap - tooltipHeight)}px`
       tooltip.classList.add('gh-tooltip--top')
     }
@@ -349,8 +353,10 @@ function setupHeatmapInteractions() {
     let left = centerX - tooltipWidth / 2
     left = Math.max(gap, Math.min(left, viewW - tooltipWidth - gap))
     tooltip.style.left = `${left}px`
-    // Keep the arrow pointing at the hovered cell even when clamped
-    tooltip.style.setProperty('--gh-arrow-x', `${centerX - left}px`)
+    // Keep the arrow pointing at the hovered cell; clamp inside the tooltip
+    // box so the arrow triangle never extends past the tooltip edge
+    const arrowX = Math.min(Math.max(centerX - left, 8), tooltipWidth - 8)
+    tooltip.style.setProperty('--gh-arrow-x', `${arrowX}px`)
   }
 
   function showTooltip(cell: HTMLElement): void {
@@ -704,7 +710,7 @@ html.dark {
   line-height: 1.4;
   background-color: oklch(var(--un-preset-theme-colors-primary));
   color: oklch(var(--un-preset-theme-colors-background));
-  /* Gap between tooltip and cell — must match JS GAP_OFFSET fallback */
+  /* Gap between tooltip and cell — must match the JS `|| 6` fallback (line 334) */
   --gh-tooltip-gap: 6px;
 }
 
