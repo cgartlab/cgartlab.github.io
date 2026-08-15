@@ -315,7 +315,6 @@ function setupHeatmapInteractions() {
   if (!heatmapTooltip) {
     heatmapTooltip = document.createElement('div')
     heatmapTooltip.className = 'gh-tooltip'
-    heatmapTooltip.setAttribute('role', 'tooltip')
     document.body.appendChild(heatmapTooltip)
   }
   const tooltip = heatmapTooltip
@@ -331,7 +330,8 @@ function setupHeatmapInteractions() {
     // Force layout so offsetWidth/offsetHeight are accurate
     const tooltipWidth = tooltip.offsetWidth
     const tooltipHeight = tooltip.offsetHeight
-    const gap = 6
+    // Gap between tooltip and cell — single source of truth in CSS
+    const gap = Number.parseFloat(getComputedStyle(tooltip).getPropertyValue('--gh-tooltip-gap')) || 6
     const viewW = window.innerWidth
     const viewH = window.innerHeight
 
@@ -349,6 +349,8 @@ function setupHeatmapInteractions() {
     let left = centerX - tooltipWidth / 2
     left = Math.max(gap, Math.min(left, viewW - tooltipWidth - gap))
     tooltip.style.left = `${left}px`
+    // Keep the arrow pointing at the hovered cell even when clamped
+    tooltip.style.setProperty('--gh-arrow-x', `${centerX - left}px`)
   }
 
   function showTooltip(cell: HTMLElement): void {
@@ -369,12 +371,9 @@ function setupHeatmapInteractions() {
     // Touch: toggle tooltip on tap
     cell.addEventListener('click', (e) => {
       e.stopPropagation()
-      // Close any other visible tooltip (only one floating tooltip — close it)
-      if (tooltip.classList.contains('gh-tooltip--visible') && tooltip.dataset.activeCell !== cell.dataset.date) {
-        hideTooltip()
-      }
-      // Toggle
-      if (tooltip.classList.contains('gh-tooltip--visible')) {
+      const isActive = tooltip.classList.contains('gh-tooltip--visible')
+        && tooltip.dataset.activeCell === cell.dataset.date
+      if (isActive) {
         hideTooltip()
       }
       else {
@@ -451,7 +450,7 @@ function setupHeatmapInteractions() {
   // Dismiss when tapping outside
   heatmapClickHandler = (e: MouseEvent) => {
     const target = e.target as HTMLElement
-    if (!target.closest('.gh-cell[data-date]') && !target.closest('.gh-tooltip')) {
+    if (!target.closest('.gh-cell[data-date]')) {
       hideTooltip()
     }
   }
@@ -705,6 +704,8 @@ html.dark {
   line-height: 1.4;
   background-color: oklch(var(--un-preset-theme-colors-primary));
   color: oklch(var(--un-preset-theme-colors-background));
+  /* Gap between tooltip and cell — must match JS GAP_OFFSET fallback */
+  --gh-tooltip-gap: 6px;
 }
 
 /* Arrow: pointing up (tooltip below cell) */
@@ -712,7 +713,7 @@ html.dark {
   content: '';
   position: absolute;
   top: -6px;
-  left: 50%;
+  left: var(--gh-arrow-x, 50%);
   transform: translateX(-50%);
   border: 6px solid transparent;
   border-bottom-color: oklch(var(--un-preset-theme-colors-primary));
