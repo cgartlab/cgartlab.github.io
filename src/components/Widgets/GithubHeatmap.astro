@@ -158,7 +158,7 @@ const CELL_PITCH = 12
 
       <div class="gh-footer">
         <span class="gh-total">
-          {(currentUI.contributionYear || '{n} contributions in the past year').replace('{n}', totalFormatted)}
+          {(currentUI.contributionYear || '{n} total commits in the past 365 days').replace('{n}', totalFormatted)}
         </span>
       </div>
     </div>
@@ -332,6 +332,8 @@ function setupHeatmapInteractions() {
     const tooltipHeight = tooltip.offsetHeight
     // Gap between tooltip and cell — single source of truth in CSS
     const gap = Number.parseFloat(getComputedStyle(tooltip).getPropertyValue('--gh-tooltip-gap')) || 6
+    // Arrow triangle half-width = the same border value as --gh-tooltip-gap
+    const arrowHalf = gap
     const viewW = window.innerWidth
     const viewH = window.innerHeight
 
@@ -355,7 +357,7 @@ function setupHeatmapInteractions() {
     tooltip.style.left = `${left}px`
     // Keep the arrow pointing at the hovered cell; clamp inside the tooltip
     // box so the arrow triangle never extends past the tooltip edge
-    const arrowX = Math.min(Math.max(centerX - left, 8), tooltipWidth - 8)
+    const arrowX = Math.min(Math.max(centerX - left, arrowHalf), tooltipWidth - arrowHalf)
     tooltip.style.setProperty('--gh-arrow-x', `${arrowX}px`)
   }
 
@@ -718,10 +720,10 @@ html.dark {
 .gh-tooltip::before {
   content: '';
   position: absolute;
-  top: -6px;
+  top: calc(-1 * var(--gh-tooltip-gap));
   left: var(--gh-arrow-x, 50%);
   transform: translateX(-50%);
-  border: 6px solid transparent;
+  border: var(--gh-tooltip-gap) solid transparent;
   border-bottom-color: oklch(var(--un-preset-theme-colors-primary));
 }
 
@@ -733,7 +735,7 @@ html.dark {
 /* Flip: tooltip appears above cell, arrow points down */
 .gh-tooltip--top::before {
   top: auto;
-  bottom: -6px;
+  bottom: calc(-1 * var(--gh-tooltip-gap));
   border-bottom-color: transparent;
   border-top-color: oklch(var(--un-preset-theme-colors-primary));
 }
