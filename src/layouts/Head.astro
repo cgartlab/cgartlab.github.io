@@ -10,10 +10,11 @@ interface Props {
   postDescription?: string
   postSlug?: string
   postDate?: Date
+  postUpdated?: Date
 }
 
 // Props and Language
-const { postTitle, postDescription, postSlug, postDate } = Astro.props
+const { postTitle, postDescription, postSlug, postDate, postUpdated } = Astro.props
 const { currentLang } = getPageInfo(Astro.url.pathname)
 const currentUI = ui[currentLang as keyof typeof ui] ?? {}
 
@@ -161,7 +162,7 @@ const pageImage = postSlug
       },
     },
     'datePublished': (postDate || new Date()).toISOString(),
-    'dateModified': (postDate || new Date()).toISOString(),
+    'dateModified': (postUpdated ?? postDate ?? new Date()).toISOString(),
     'mainEntityOfPage': {
       '@type': 'WebPage',
       '@id': Astro.url.toString(),
@@ -208,7 +209,7 @@ const pageImage = postSlug
   const segments = pathname.split('/').filter(Boolean)
 
   // Build breadcrumb items from URL path
-  const items: { '@type': 'ListItem'; position: number; name: string; item: string }[] = [
+  const items: { '@type': 'ListItem', 'position': number, 'name': string, 'item': string }[] = [
     {
       '@type': 'ListItem',
       'position': 1,
@@ -232,20 +233,25 @@ const pageImage = postSlug
       items.push({
         '@type': 'ListItem',
         'position': pos++,
-        'name': seg.replace(/[-]/g, ' ').replace(/\b\w/g, c => c.toUpperCase()),
+        'name': seg.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase()),
         'item': accumPath,
       })
     }
   }
 
-  if (items.length <= 1) return null
+  if (items.length <= 1)
+return null
 
   return (
-    <script is:inline type="application/ld+json" set:html={JSON.stringify({
+    <script
+      is:inline
+      type="application/ld+json"
+      set:html={JSON.stringify({
       '@context': 'https://schema.org',
       '@type': 'BreadcrumbList',
       'itemListElement': items.slice(0, maxBreadcrumbItems),
-    })} />
+    })}
+    />
   )
 })()}
 

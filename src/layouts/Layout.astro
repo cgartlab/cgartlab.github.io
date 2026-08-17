@@ -9,8 +9,8 @@ import Search from '@/components/Search.astro'
 import CodeCopyButton from '@/components/Widgets/CodeCopyButton.astro'
 import GithubCard from '@/components/Widgets/GithubCard.astro'
 import ImageZoom from '@/components/Widgets/ImageZoom.astro'
-import MermaidLazy from '@/components/Widgets/MermaidLazy.astro'
 import MediaEmbed from '@/components/Widgets/MediaEmbed.astro'
+import MermaidLazy from '@/components/Widgets/MermaidLazy.astro'
 import SoundEffect from '@/components/Widgets/SoundEffect.astro'
 import { themeConfig } from '@/config'
 import Head from '@/layouts/Head.astro'
@@ -29,10 +29,11 @@ interface Props {
   postDescription?: string
   postSlug?: string
   postDate?: Date
+  postUpdated?: Date
   supportedLangs?: Language[]
 }
 
-const { postTitle, postDescription, postSlug, postDate, supportedLangs = [] } = Astro.props
+const { postTitle, postDescription, postSlug, postDate, postUpdated, supportedLangs = [] } = Astro.props
 const { isPost } = getPageInfo(Astro.url.pathname)
 const fontStyle = themeConfig.global.fontStyle === 'serif' ? 'font-serif' : 'font-sans'
 const MarginBottom = isPost && themeConfig.comment.enabled
@@ -47,7 +48,7 @@ const MarginBottom = isPost && themeConfig.comment.enabled
     isPost ? 'scroll-smooth' : '',
   ]}
 >
-  <Head {postTitle} {postDescription} {postSlug} {postDate} />
+  <Head {postTitle} {postDescription} {postSlug} {postDate} {postUpdated} />
   <body>
     <div
       class="mx-auto max-w-205.848 min-h-vh w-full min-h-dvh"
