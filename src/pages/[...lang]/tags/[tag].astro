@@ -2,9 +2,19 @@
 import PostList from '@/components/PostList.astro'
 import TagList from '@/components/TagList.astro'
 import { allLocales } from '@/config'
+import tagMetaRaw from '@/config/tag-meta.json'
 import { getLangFromLocale, getLangRouteParam } from '@/i18n/lang'
 import Layout from '@/layouts/Layout.astro'
 import { getAllTags, getPostsByTag, getTagSupportedLangs } from '@/utils/content'
+
+interface TagMetaEntry {
+  title: string
+  description: string
+}
+
+type TagMetaMap = Record<string, Record<string, TagMetaEntry>>
+
+const tagMeta = tagMetaRaw as TagMetaMap
 
 export async function getStaticPaths() {
   const paths = await Promise.all(allLocales.map(async (lang) => {
@@ -26,14 +36,22 @@ const currentLang = getLangFromLocale(Astro.currentLocale)
 const posts = await getPostsByTag(tag, currentLang)
 const allTags = await getAllTags(currentLang)
 const supportedLangs = await getTagSupportedLangs(tag)
+
+const customMeta = tagMeta[tag]?.[currentLang]
+
+const pageTitle = customMeta?.title ?? (currentLang === 'zh'
+  ? `标签: ${tag}`
+  : currentLang === 'zh-tw'
+  ? `標籤: ${tag}`
+  : `Tag: ${tag}`)
+
+const pageDescription = customMeta?.description
 ---
 
-<Layout supportedLangs={supportedLangs}
-  postTitle={currentLang === "zh"
-    ? `标签: ${tag}`
-    : currentLang === "zh-tw"
-    ? `標籤: ${tag}`
-    : `Tag: ${tag}`}
+<Layout
+  supportedLangs={supportedLangs}
+  postTitle={pageTitle}
+  postDescription={pageDescription}
 >
   <!-- Decorative Line -->
   <div class="uno-decorative-line" />
