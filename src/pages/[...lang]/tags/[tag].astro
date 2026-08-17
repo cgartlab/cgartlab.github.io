@@ -14,7 +14,7 @@ interface TagMetaEntry {
 
 type TagMetaMap = Record<string, Record<string, TagMetaEntry>>
 
-const tagMeta = tagMetaRaw as TagMetaMap
+const tagMeta: TagMetaMap = tagMetaRaw satisfies TagMetaMap
 
 export async function getStaticPaths() {
   const paths = await Promise.all(allLocales.map(async (lang) => {

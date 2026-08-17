@@ -82,18 +82,21 @@ function buildLastmodMap(): Map<string, string> {
           slug = abbrlink
         }
         else {
+          // Fallback must mirror post.id semantics (keeps '-en' suffix and subdir prefix),
+          // matching the route layer (posts/[slug].astro uses post.id as the slug).
           const relPath = fullPath.slice(postsDir.length + 1) // remove postsDir + '/'
-          // Remove -en suffix before extension for lang detection, but slug comes from base name
-          const withoutExt = relPath.replace(/\.(md|mdx)$/, '')
-          // Strip -en suffix for slug (slug is shared between languages)
-          const baseSlug = withoutExt.endsWith('-en') ? withoutExt.slice(0, -3) : withoutExt
-          slug = baseSlug
+          slug = relPath.replace(/\.(md|mdx)$/, '')
         }
 
         // Encode each path segment
         const encodedSlug = slug.split('/').map(encodeURIComponent).join('/')
 
-        const lastmodIso = new Date(lastmod).toISOString()
+        const parsed = new Date(lastmod)
+        if (Number.isNaN(parsed.valueOf())) {
+          console.warn(`[sitemap] invalid lastmod "${lastmod}" in ${fullPath}, skipping`)
+          continue
+        }
+        const lastmodIso = parsed.toISOString()
 
         // Determine which URL(s) this file serves based on its lang,
         // so zh/en files never overwrite each other regardless of readdirSync order
