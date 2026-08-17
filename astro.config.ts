@@ -55,6 +55,7 @@ function buildLastmodMap(): Map<string, string> {
         let updated = ''
         let published = ''
         let abbrlink = ''
+        let lang = ''
 
         for (const line of frontmatter.split('\n')) {
           const trimmed = line.trim()
@@ -66,6 +67,9 @@ function buildLastmodMap(): Map<string, string> {
 
           if (trimmed.startsWith('abbrlink:'))
             abbrlink = trimmed.slice('abbrlink:'.length).trim()
+
+          if (trimmed.startsWith('lang:'))
+            lang = trimmed.slice('lang:'.length).trim()
         }
 
         const lastmod = updated || published
@@ -91,9 +95,19 @@ function buildLastmodMap(): Map<string, string> {
 
         const lastmodIso = new Date(lastmod).toISOString()
 
-        // Insert both language variants
-        map.set(`/posts/${encodedSlug}/`, lastmodIso)
-        map.set(`/en/posts/${encodedSlug}/`, lastmodIso)
+        // Determine which URL(s) this file serves based on its lang,
+        // so zh/en files never overwrite each other regardless of readdirSync order
+        if (lang === 'en') {
+          map.set(`/en/posts/${encodedSlug}/`, lastmodIso)
+        }
+        else if (lang === 'zh') {
+          map.set(`/posts/${encodedSlug}/`, lastmodIso)
+        }
+        else {
+          // universal (lang '') renders in every locale
+          map.set(`/posts/${encodedSlug}/`, lastmodIso)
+          map.set(`/en/posts/${encodedSlug}/`, lastmodIso)
+        }
       }
     }
   }
