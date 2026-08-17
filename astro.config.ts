@@ -1,13 +1,16 @@
 import type { SitemapItem } from '@astrojs/sitemap'
+import { readdirSync, readFileSync } from 'node:fs'
+import { join } from 'node:path'
+import { fileURLToPath } from 'node:url'
+import { unified } from '@astrojs/markdown-remark'
 import mdx from '@astrojs/mdx'
 import partytown from '@astrojs/partytown'
 import sitemap from '@astrojs/sitemap'
 import Compress from 'astro-compress'
 import { defineConfig } from 'astro/config'
-import { unified } from '@astrojs/markdown-remark'
 import rehypeKatex from 'rehype-katex'
 import rehypeMermaid from 'rehype-mermaid'
- 
+
 import rehypeSlug from 'rehype-slug'
 import remarkDirective from 'remark-directive'
 import remarkMath from 'remark-math'
@@ -20,9 +23,9 @@ import { rehypeCodeCopyButton } from './src/plugins/rehype-code-copy-button.mjs'
 import { rehypeExternalLinks } from './src/plugins/rehype-external-links.mjs'
 import { rehypeGlossary } from './src/plugins/rehype-glossary.ts'
 import { rehypeHeadingAnchor } from './src/plugins/rehype-heading-anchor.mjs'
-import { remarkGlossary } from './src/plugins/remark-glossary.ts'
 import { rehypeImageProcessor } from './src/plugins/rehype-image-processor.mjs'
 import { remarkContainerDirectives } from './src/plugins/remark-container-directives.mjs'
+import { remarkGlossary } from './src/plugins/remark-glossary.ts'
 import { remarkLeafDirectives } from './src/plugins/remark-leaf-directives.mjs'
 import { remarkReadingTime } from './src/plugins/remark-reading-time.mjs'
 
@@ -31,6 +34,75 @@ const { imageHostURL } = themeConfig.preload ?? {}
 const imageConfig = imageHostURL
   ? { image: { domains: [imageHostURL], remotePatterns: [{ protocol: 'https' }] } }
   : {}
+
+function buildLastmodMap(): Map<string, string> {
+  const map = new Map<string, string>()
+  const postsDir = fileURLToPath(new URL('./src/content/posts', import.meta.url))
+
+  function walk(dir: string): void {
+    const entries = readdirSync(dir, { withFileTypes: true })
+    for (const entry of entries) {
+      const fullPath = join(dir, entry.name)
+      if (entry.isDirectory()) {
+        walk(fullPath)
+      }
+      else if (entry.isFile() && /\.(?:md|mdx)$/.test(entry.name)) {
+        const content = readFileSync(fullPath, 'utf-8')
+        const frontmatter = content.split('---', 3)[1]
+        if (!frontmatter)
+          continue
+
+        let updated = ''
+        let published = ''
+        let abbrlink = ''
+
+        for (const line of frontmatter.split('\n')) {
+          const trimmed = line.trim()
+          if (trimmed.startsWith('updated:'))
+            updated = trimmed.slice('updated:'.length).trim()
+
+          if (trimmed.startsWith('published:'))
+            published = trimmed.slice('published:'.length).trim()
+
+          if (trimmed.startsWith('abbrlink:'))
+            abbrlink = trimmed.slice('abbrlink:'.length).trim()
+        }
+
+        const lastmod = updated || published
+        if (!lastmod)
+          continue
+
+        // Generate slug
+        let slug: string
+        if (abbrlink) {
+          slug = abbrlink
+        }
+        else {
+          const relPath = fullPath.slice(postsDir.length + 1) // remove postsDir + '/'
+          // Remove -en suffix before extension for lang detection, but slug comes from base name
+          const withoutExt = relPath.replace(/\.(md|mdx)$/, '')
+          // Strip -en suffix for slug (slug is shared between languages)
+          const baseSlug = withoutExt.endsWith('-en') ? withoutExt.slice(0, -3) : withoutExt
+          slug = baseSlug
+        }
+
+        // Encode each path segment
+        const encodedSlug = slug.split('/').map(encodeURIComponent).join('/')
+
+        const lastmodIso = new Date(lastmod).toISOString()
+
+        // Insert both language variants
+        map.set(`/posts/${encodedSlug}/`, lastmodIso)
+        map.set(`/en/posts/${encodedSlug}/`, lastmodIso)
+      }
+    }
+  }
+
+  walk(postsDir)
+  return map
+}
+
+const lastmodMap = buildLastmodMap()
 
 export default defineConfig({
   site,
@@ -59,15 +131,9 @@ export default defineConfig({
       },
     }),
     sitemap({
-      lastmod: new Date(),
       serialize(item: SitemapItem): SitemapItem | undefined {
-        if (/\/tags\/[^/]+\/$/.test(item.url)) {
-          return { ...item, priority: 0.4, changefreq: 'weekly' as SitemapItem['changefreq'] }
-        }
-        if (/\/posts\/[^/]+\/$/.test(item.url)) {
-          return { ...item, priority: 0.8, changefreq: 'monthly' as SitemapItem['changefreq'] }
-        }
-        return item
+        const lm = lastmodMap.get(new URL(item.url).pathname)
+        return lm ? { ...item, lastmod: lm } : item
       },
     }),
     Compress({
@@ -204,4 +270,3 @@ export default defineConfig({
     enabled: false,
   },
 })
-
