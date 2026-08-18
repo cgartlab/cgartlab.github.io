@@ -1,0 +1,32 @@
+{
+  "Windows 11": {
+    "en": {
+      "title": "Windows 11 Guide: Winget Package Manager, Tips & Productivity Setup",
+      "description": "Practical Windows 11 tutorials covering winget package manager installation, common commands, automation scripts, and workflow optimization for developers and creators."
+    }
+  },
+  "NAS": {
+    "en": {
+      "title": "NAS Private Cloud Guide: Build Your Creator Data Center",
+      "description": "A practical NAS guide for creators: hard drive selection, RAID setup, Docker services, four-layer storage logic, and remote access — turn your NAS into a true private cloud."
+    }
+  },
+  "Productivity": {
+    "en": {
+      "title": "Productivity Tools & Methods for Creators and Designers",
+      "description": "Curated productivity tool reviews and workflow methods for creators: software selection, second-brain building, and AI-assisted workflows tested in real design practice."
+    }
+  },
+  "digital-art": {
+    "en": {
+      "title": "Digital Art & CG Painting: Brushes, Techniques & Original Artworks",
+      "description": "Digital art and CG painting tutorials and artworks: brush techniques, shape language, silhouette fundamentals, plus original digital meditation art series with creator insights."
+    }
+  },
+  "数字绘画": {
+    "zh": {
+      "title": "数字绘画教程与作品集：笔刷技法、造型基础与创作思考",
+      "description": "数字绘画与 CG 艺术创作专栏，分享笔刷笔触实验、造型语言训练、剪影设计方法等技法教程，以及冥想系列等原创数字艺术作品与幕后创作思路。"
+    }
+  }
+}
