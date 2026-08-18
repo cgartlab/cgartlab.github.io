@@ -1,6 +1,6 @@
 import type { SitemapItem } from '@astrojs/sitemap'
 import { readdirSync, readFileSync } from 'node:fs'
-import { join } from 'node:path'
+import { join, sep } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { unified } from '@astrojs/markdown-remark'
 import mdx from '@astrojs/mdx'
@@ -56,6 +56,7 @@ function buildLastmodMap(): Map<string, string> {
         let published = ''
         let abbrlink = ''
         let lang = ''
+        let isDraft = false
 
         for (const line of frontmatter.split('\n')) {
           const trimmed = line.trim()
@@ -70,7 +71,14 @@ function buildLastmodMap(): Map<string, string> {
 
           if (trimmed.startsWith('lang:'))
             lang = trimmed.slice('lang:'.length).trim()
+
+          if (trimmed.startsWith('draft:'))
+            isDraft = trimmed.slice('draft:'.length).trim() === 'true'
         }
+
+        // Skip drafts — mirror the route filter so no dead keys or warnings are emitted
+        if (isDraft)
+          continue
 
         const lastmod = updated || published
         if (!lastmod)
@@ -84,14 +92,18 @@ function buildLastmodMap(): Map<string, string> {
         else {
           // Fallback must mirror post.id semantics (keeps '-en' suffix and subdir prefix),
           // matching the route layer (posts/[slug].astro uses post.id as the slug).
-          const relPath = fullPath.slice(postsDir.length + 1) // remove postsDir + '/'
+          // Normalize Windows separators so keys match real URLs on any platform.
+          const relPath = fullPath.slice(postsDir.length + 1).split(sep).join('/')
           slug = relPath.replace(/\.(md|mdx)$/, '')
         }
 
         // Encode each path segment
         const encodedSlug = slug.split('/').map(encodeURIComponent).join('/')
 
-        const parsed = new Date(lastmod)
+        // Strip YAML quoting and inline comments so the map agrees with the
+        // collection schema, which parses these via a real YAML parser
+        const raw = lastmod.replace(/^["']|["']$/g, '').split(' #')[0].trim()
+        const parsed = new Date(raw)
         if (Number.isNaN(parsed.valueOf())) {
           console.warn(`[sitemap] invalid lastmod "${lastmod}" in ${fullPath}, skipping`)
           continue

@@ -162,7 +162,7 @@ const pageImage = postSlug
       },
     },
     'datePublished': (postDate || new Date()).toISOString(),
-    'dateModified': (postUpdated ?? postDate ?? new Date()).toISOString(),
+    'dateModified': (postUpdated ?? postDate)?.toISOString(),
     'mainEntityOfPage': {
       '@type': 'WebPage',
       '@id': Astro.url.toString(),

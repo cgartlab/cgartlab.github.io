@@ -1,39 +1,23 @@
 {
   "Windows 11": {
-    "zh": {
-      "title": "Windows 11 效率指南：winget 包管理器安装、常用命令与自动化脚本配置",
-      "description": "汇总 Windows 11 实用技巧与工具精选，从 winget 包管理器的安装启用、搜索更新卸载等常用命令，到批量安装自动化脚本配置，助你从零搭建高效的创作者与开发者工作流。"
-    },
     "en": {
       "title": "Windows 11 Guide: Winget Package Manager, Tips & Productivity Setup",
       "description": "Practical Windows 11 tutorials covering winget package manager installation, common commands, automation scripts, and workflow optimization for developers and creators."
     }
   },
   "NAS": {
-    "zh": {
-      "title": "NAS 私有云搭建指南：创作者的第一台私人数据中心（从入门到进阶）",
-      "description": "面向创作者的 NAS 入门与进阶完整指南，涵盖硬盘选购原则、RAID 配置策略、Docker 常用服务部署、四层存储逻辑设计与外网远程访问方案，把 NAS 从硬盘盒真正变成你的私有云数据中心。"
-    },
     "en": {
       "title": "NAS Private Cloud Guide: Build Your Creator Data Center",
       "description": "A practical NAS guide for creators: hard drive selection, RAID setup, Docker services, four-layer storage logic, and remote access — turn your NAS into a true private cloud."
     }
   },
   "Productivity": {
-    "zh": {
-      "title": "生产力工具与效率方法：创作者的软件选型、第二大脑与工作流实战",
-      "description": "精选生产力工具评测与效率方法论合集，从软件工具选型标准、第二大脑知识管理搭建，到 AI 辅助工作流的实战案例，分享经过真实创作验证的效率提升经验与思考。"
-    },
     "en": {
       "title": "Productivity Tools & Methods for Creators and Designers",
       "description": "Curated productivity tool reviews and workflow methods for creators: software selection, second-brain building, and AI-assisted workflows tested in real design practice."
     }
   },
   "digital-art": {
-    "zh": {
-      "title": "数字绘画与 CG 艺术创作：笔刷技法、造型基础与原创作品分享",
-      "description": "数字绘画与 CG 艺术创作专栏，分享笔刷笔触实验、造型语言训练、剪影设计方法等技法教程，以及冥想系列等原创数字艺术作品与幕后创作思路分享。"
-    },
     "en": {
       "title": "Digital Art & CG Painting: Brushes, Techniques & Original Artworks",
       "description": "Digital art and CG painting tutorials and artworks: brush techniques, shape language, silhouette fundamentals, plus original digital meditation art series with creator insights."
@@ -43,10 +27,6 @@
     "zh": {
       "title": "数字绘画教程与作品集：笔刷技法、造型基础与创作思考",
       "description": "数字绘画与 CG 艺术创作专栏，分享笔刷笔触实验、造型语言训练、剪影设计方法等技法教程，以及冥想系列等原创数字艺术作品与幕后创作思路。"
-    },
-    "en": {
-      "title": "Digital Painting Tutorials & Artworks: Brushes, Techniques & Portfolio",
-      "description": "Digital painting tutorials and original artworks: brush techniques, shape language, silhouette fundamentals, and creator insights behind the digital meditation art series."
     }
   }
 }
