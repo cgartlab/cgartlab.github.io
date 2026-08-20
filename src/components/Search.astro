@@ -265,7 +265,7 @@ const currentUI = ui[currentLang as keyof typeof ui] ?? {}
         score += 10
 
       if (score > 0) {
-        searchResults.push({ item, score })
+        searchResults.push({ item, lower, score })
       }
     }
 
@@ -286,7 +286,7 @@ const currentUI = ui[currentLang as keyof typeof ui] ?? {}
     els.empty.classList.remove('visible')
     const fragment = document.createDocumentFragment()
     for (let i = 0; i < topResults.length; i++) {
-      const item = topResults[i].item
+      const { item, lower } = topResults[i]
       const prefix = item.lang === 'zh' ? '' : `/${item.lang}`
       const href = `${prefix}/posts/${item.slug}/`
       const fullHref = base.replace(/\/$/, '') + href
