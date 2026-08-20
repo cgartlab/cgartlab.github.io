@@ -131,7 +131,7 @@ pnpm exec playwright test # 端到端测试 (Playwright)
      .getPropertyValue('--un-preset-theme-colors-background')
    ```
    - 亮色应返回含 `98%`，暗色应返回含 `22%`
-5. **PWA 缓存** — 暗色模式下硬刷新 `Ctrl+Shift+R`，排除 Service Worker 缓存
+5. **硬刷新排除缓存** — 暗色模式下 `Ctrl+Shift+R` 硬刷新
 
 ### 关键规则
 
@@ -176,10 +176,20 @@ pnpm exec playwright test # 端到端测试 (Playwright)
 
  ```ts
  safelist: [
-   'bg-background', 'bg-highlight', 'bg-note',
-   'bg-tip', 'bg-important', 'bg-warning', 'bg-caution',
-   'text-background', 'text-highlight',
-   'text-note', 'text-tip', 'text-important', 'text-warning', 'text-caution',
+   'bg-background',
+   'bg-highlight',
+   'bg-note',
+   'bg-tip',
+   'bg-important',
+   'bg-warning',
+   'bg-caution',
+   'text-background',
+   'text-highlight',
+   'text-note',
+   'text-tip',
+   'text-important',
+   'text-warning',
+   'text-caution',
  ]
  ```
 
@@ -199,6 +209,7 @@ pnpm exec playwright test # 端到端测试 (Playwright)
  ```astro
  ---
  import { getCollection } from 'astro:content'
+
  const posts = await getCollection('posts')
  ---
  ```
@@ -225,9 +236,7 @@ pnpm exec playwright test # 端到端测试 (Playwright)
  |------|-------------------|------------------------------------------|
  | View Transitions 动画 | **不触发** | 正常触发 |
  | UnoCSS 变量生成 | 动态注入，可能覆盖缺失 | 仅 safelist + 源码扫描 |
- | PWA Service Worker | 禁用 (`enabled: false`) | 注册生效 |
  | CSS 压缩 | 无 | astro-compress 压缩 |
- | vite-plugin-pwa | 不注入 | workbox 注入 |
 
  **务必记住**：View Transitions 动画（`transition.css` 中的主题切换 clip-path 动画、文章内容渐入等）只在 `build + preview` 模式下运行。HMR 不会触发 `::view-transition-*` 伪元素。
 
@@ -289,7 +298,8 @@ pnpm exec playwright test # 端到端测试 (Playwright)
 
  ```ts
  (matcher) => {
-   if (!matcher.startsWith('cjk:')) return matcher
+   if (!matcher.startsWith('cjk:'))
+     return matcher
    return {
      matcher: matcher.slice(4),
      selector: s => `${s}:is(:lang(zh), :lang(ja), :lang(ko))`,
@@ -348,13 +358,11 @@ pnpm exec playwright test # 端到端测试 (Playwright)
 
 | 环境 | 命令 | 特点 |
 |------|------|------|
-| Development | `pnpm dev` | Vite 开发服务器，HMR 热更新，无构建压缩，无 Service Worker |
-| Preview | `pnpm build && pnpm preview` | 基于 `dist/` 生产构建产物，包含 `astro-compress` 压缩结果，Service Worker 已注册 |
+| Development | `pnpm dev` | Vite 开发服务器，HMR 热更新，无构建压缩 |
+| Preview | `pnpm build && pnpm preview` | 基于 `dist/` 生产构建产物，包含 `astro-compress` 压缩结果 |
 | Production | Cloudflare Worker + Static Assets 部署 | 最终生产环境，CDN 缓存，Worker 重写规则 |
 
 ### 常见陷阱
-
-**Service Worker 缓存** — `pnpm preview` 模式下，Service Worker 会缓存 CSS、图片（30天）、字体（1年）和文章页（7天）。修改代码后重建并刷新时，如果只做常规刷新（F5），可能看到旧版缓存内容。必须 `Ctrl + Shift + R` 硬刷新才能绕过 SW 缓存。
 
 **astro-compress 压缩** — `astro-compress`（CSS: true, HTML: true, JavaScript: true）仅在 `astro build` 阶段运行。修改 `lqip.css`、`global.css` 等使用现代 CSS 语法的文件后，需通过 `pnpm build && pnpm preview` 验证构建产物。
 
@@ -369,7 +377,7 @@ pnpm exec playwright test # 端到端测试 (Playwright)
 1. 确认修改在 `pnpm dev` 中正常工作
 2. 运行 `pnpm build && pnpm preview` 验证生产构建产物
 3. 如果 preview 与 dev 不一致，优先检查：
-   - Service Worker 缓存（`Ctrl + Shift + R` 硬刷新）
+   - 浏览器/边缘缓存（`Ctrl + Shift + R` 硬刷新）
    - 构建产物 `dist/` 中的 CSS 是否包含修改
    - 浏览器 DevTools → Application → Cache Storage 清空缓存
 4. 不要直接认为是 CSS 逻辑错误 — 多数 preview/dev 差异来自缓存或构建压缩

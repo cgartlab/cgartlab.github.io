@@ -6,7 +6,7 @@ const { currentLang } = getPageInfo(Astro.url.pathname)
 const currentUI = ui[currentLang as keyof typeof ui] ?? {}
 ---
 
-<div id="search-overlay" class="search-overlay" aria-hidden="true">
+<div id="search-overlay" class="search-overlay" role="dialog" aria-modal="true" aria-labelledby="search-input" aria-hidden="true" inert>
   <div class="search-backdrop" id="search-backdrop"></div>
   <div class="search-container">
     <div class="search-box">
@@ -25,7 +25,7 @@ const currentUI = ui[currentLang as keyof typeof ui] ?? {}
           </svg>
         </button>
       </div>
-      <div id="search-results" class="search-results"></div>
+      <div id="search-results" class="search-results" aria-live="polite"></div>
       <div id="search-empty" class="search-empty">
         <span>{currentUI.searchEmpty || 'No results found'}</span>
       </div>
@@ -41,10 +41,15 @@ const currentUI = ui[currentLang as keyof typeof ui] ?? {}
 <script is:inline>
 (function () {
   const searchIndexCache = new Map()
+  const CACHE_TTL = 60 * 60 * 1000
   let searchIndex = []
+  let searchIndexLower = []
   let debounceTimer = null
   let keydownHandler = null
   let inputHandler = null
+  let indexPromise = null
+  let lastFocused = null
+  let loadFailed = false
   const base = document.querySelector('base')?.getAttribute('href') || '/'
 
   function getElements() {
@@ -63,9 +68,13 @@ const currentUI = ui[currentLang as keyof typeof ui] ?? {}
     const els = getElements()
     if (!els.overlay)
       return
+    lastFocused = document.activeElement
     els.overlay.classList.add('active')
+    els.overlay.removeAttribute('inert')
     els.overlay.setAttribute('aria-hidden', 'false')
     document.body.style.overflow = 'hidden'
+    // 预加载索引，与 UI 动画并行
+    loadIndex()
     setTimeout(() => {
       const currentInput = document.getElementById('search-input')
       if (currentInput)
@@ -78,6 +87,7 @@ const currentUI = ui[currentLang as keyof typeof ui] ?? {}
     if (!els.overlay)
       return
     els.overlay.classList.remove('active')
+    els.overlay.setAttribute('inert', '')
     els.overlay.setAttribute('aria-hidden', 'true')
     document.body.style.overflow = ''
     if (els.input)
@@ -86,6 +96,8 @@ const currentUI = ui[currentLang as keyof typeof ui] ?? {}
       els.results.innerHTML = ''
     if (els.empty)
       els.empty.classList.remove('visible')
+    if (lastFocused && document.contains(lastFocused))
+      lastFocused.focus()
   }
 
   function normalizeLang(lang) {
@@ -99,30 +111,63 @@ const currentUI = ui[currentLang as keyof typeof ui] ?? {}
     return 'zh'
   }
 
-  async function loadIndex() {
-    const currentLang = normalizeLang(document.documentElement.lang)
-    if (searchIndexCache.has(currentLang)) {
-      searchIndex = searchIndexCache.get(currentLang)
-      return
-    }
-
+  async function fetchIndexForLang(currentLang) {
     const els = getElements()
     if (els.loading)
       els.loading.classList.add('visible')
     try {
       const response = await fetch(`${base}api/search-index/${currentLang}.json`)
       const indexData = await response.json()
-      searchIndexCache.set(currentLang, indexData)
+      const lowerData = indexData.map((item) => {
+        const cleanContent = item.content
+          .replace(/^---[\s\S]*?---/, '')
+          .replace(/[#*`[\]!]/g, '')
+          .replace(/\n+/g, ' ')
+          .trim()
+        return {
+          title: item.title.toLowerCase(),
+          desc: item.description.toLowerCase(),
+          tags: item.tags.map(t => t.toLowerCase()),
+          content: item.content.toLowerCase(),
+          cleanContent,
+          lowerContent: cleanContent.toLowerCase(),
+        }
+      })
+      searchIndexCache.set(currentLang, { data: indexData, lower: lowerData, ts: Date.now() })
       searchIndex = indexData
+      searchIndexLower = lowerData
+      loadFailed = false
     }
     catch (error) {
       console.error('Failed to load search index:', error)
+      loadFailed = true
     }
     finally {
       const els = getElements()
       if (els.loading)
         els.loading.classList.remove('visible')
     }
+  }
+
+  async function loadIndex() {
+    const currentLang = normalizeLang(document.documentElement.lang)
+    // 过期清理：缓存超过 1 小时后强制刷新，保证新文章尽快进入搜索索引
+    const now = Date.now()
+    for (const [lang, cached] of searchIndexCache) {
+      if (now - cached.ts > CACHE_TTL)
+        searchIndexCache.delete(lang)
+    }
+    if (searchIndexCache.has(currentLang)) {
+      const cached = searchIndexCache.get(currentLang)
+      searchIndex = cached.data
+      searchIndexLower = cached.lower
+      loadFailed = false
+      return
+    }
+    if (!indexPromise) {
+      indexPromise = fetchIndexForLang(currentLang).finally(() => { indexPromise = null })
+    }
+    await indexPromise
   }
 
   function escapeHtml(text) {
@@ -139,18 +184,11 @@ const currentUI = ui[currentLang as keyof typeof ui] ?? {}
     return escaped.replace(regex, '<mark>$1</mark>')
   }
 
-  function getExcerpt(content, query) {
-    const cleanContent = content
-      .replace(/^---[\s\S]*?---/, '')
-      .replace(/[#*`[\]!]/g, '')
-      .replace(/\n+/g, ' ')
-      .trim()
-
+  function getExcerpt(lowerContent, cleanContent, query) {
     if (!query) {
       return escapeHtml(cleanContent.slice(0, 150))
     }
 
-    const lowerContent = cleanContent.toLowerCase()
     const lowerQuery = query.toLowerCase()
     const index = lowerContent.indexOf(lowerQuery)
 
@@ -192,29 +230,32 @@ const currentUI = ui[currentLang as keyof typeof ui] ?? {}
 
     await loadIndex()
 
+    if (loadFailed && searchIndex.length === 0) {
+      const span = els.empty?.querySelector('span')
+      if (span)
+        span.textContent = document.documentElement.lang.startsWith('zh')
+          ? '搜索索引加载失败，请刷新页面'
+          : 'Search index failed to load, please refresh'
+      els.empty.classList.add('visible')
+      return
+    }
+
     const lowerQuery = query.toLowerCase().trim()
     const searchResults = []
 
     for (let i = 0; i < searchIndex.length; i++) {
       const item = searchIndex[i]
-      const titleLower = item.title.toLowerCase()
-      const descLower = item.description.toLowerCase()
-      const tagsLower = item.tags.map((t) => {
-        return t.toLowerCase()
-      })
-      const contentLower = item.content.toLowerCase()
+      const lower = searchIndexLower[i]
 
       let score = 0
-      const titleMatch = titleLower.includes(lowerQuery)
-      const tagMatch = tagsLower.some((t) => {
-        return t.includes(lowerQuery)
-      })
-      const descMatch = descLower.includes(lowerQuery)
-      const contentMatch = contentLower.includes(lowerQuery)
+      const titleMatch = lower.title.includes(lowerQuery)
+      const tagMatch = lower.tags.some(t => t.includes(lowerQuery))
+      const descMatch = lower.desc.includes(lowerQuery)
+      const contentMatch = lower.content.includes(lowerQuery)
 
       if (titleMatch)
         score += 100
-      if (titleLower.startsWith(lowerQuery))
+      if (lower.title.startsWith(lowerQuery))
         score += 50
       if (tagMatch)
         score += 80
@@ -235,43 +276,60 @@ const currentUI = ui[currentLang as keyof typeof ui] ?? {}
 
     if (topResults.length === 0) {
       els.results.innerHTML = ''
+      const span = els.empty?.querySelector('span')
+      if (span)
+        span.textContent = currentUI.searchEmpty || 'No results found'
       els.empty.classList.add('visible')
       return
     }
 
     els.empty.classList.remove('visible')
-    let html = ''
+    const fragment = document.createDocumentFragment()
     for (let i = 0; i < topResults.length; i++) {
       const item = topResults[i].item
       const prefix = item.lang === 'zh' ? '' : `/${item.lang}`
       const href = `${prefix}/posts/${item.slug}/`
       const fullHref = base.replace(/\/$/, '') + href
 
-      html += `<a href="${fullHref}" class="search-result-item">`
-      html += `<div class="search-result-title">${highlight(item.title, query)}</div>`
-      html += `<div class="search-result-excerpt">${getExcerpt(item.content, query)}</div>`
+      const wrapper = document.createElement('a')
+      wrapper.href = fullHref
+      wrapper.className = 'search-result-item'
+
+      const titleDiv = document.createElement('div')
+      titleDiv.className = 'search-result-title'
+      titleDiv.innerHTML = highlight(item.title, query)
+
+      const excerptDiv = document.createElement('div')
+      excerptDiv.className = 'search-result-excerpt'
+      excerptDiv.innerHTML = getExcerpt(lower.lowerContent, lower.cleanContent, query)
+
+      wrapper.appendChild(titleDiv)
+      wrapper.appendChild(excerptDiv)
 
       if (item.tags.length > 0) {
-        html += '<div class="search-result-tags">'
+        const tagsDiv = document.createElement('div')
+        tagsDiv.className = 'search-result-tags'
         for (let j = 0; j < Math.min(item.tags.length, 5); j++) {
-          html += `<span class="search-result-tag">${escapeHtml(item.tags[j])}</span>`
+          const tag = document.createElement('span')
+          tag.className = 'search-result-tag'
+          tag.textContent = item.tags[j]
+          tagsDiv.appendChild(tag)
         }
-        html += '</div>'
+        wrapper.appendChild(tagsDiv)
       }
 
-      html += '<div class="search-result-meta">'
-      html += `<span>${formatDate(item.published)}</span>`
-      html += '</div>'
-      html += '</a>'
-    }
-    els.results.innerHTML = html
+      const metaDiv = document.createElement('div')
+      metaDiv.className = 'search-result-meta'
+      const dateSpan = document.createElement('span')
+      dateSpan.textContent = formatDate(item.published)
+      metaDiv.appendChild(dateSpan)
+      wrapper.appendChild(metaDiv)
 
-    const items = els.results.querySelectorAll('.search-result-item')
-    items.forEach((el) => {
-      el.addEventListener('click', () => {
-        close()
-      })
-    })
+      wrapper.addEventListener('click', () => close())
+      fragment.appendChild(wrapper)
+    }
+    els.results.innerHTML = ''
+    els.results.appendChild(fragment)
   }
 
   function setupEventListeners() {
@@ -287,6 +345,22 @@ const currentUI = ui[currentLang as keyof typeof ui] ?? {}
       const els = getElements()
       if (e.key === 'Escape' && els.overlay && els.overlay.classList.contains('active')) {
         close()
+      }
+      if (e.key === 'Tab' && els.overlay && els.overlay.classList.contains('active')) {
+        const resultLinks = els.results ? Array.from(els.results.querySelectorAll('a[href]')) : []
+        const focusables = [els.input, els.closeBtn, ...resultLinks].filter(Boolean)
+        if (focusables.length < 2)
+          return
+        const first = focusables[0]
+        const last = focusables[focusables.length - 1]
+        if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault()
+          last.focus()
+        }
+        else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault()
+          first.focus()
+        }
       }
     }
     document.addEventListener('keydown', keydownHandler)
@@ -336,5 +410,4 @@ const currentUI = ui[currentLang as keyof typeof ui] ?? {}
 
   document.addEventListener('astro:page-load', init)
 })()
-
 </script>

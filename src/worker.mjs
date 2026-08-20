@@ -99,25 +99,34 @@ export default {
       const response = new Response(asset.body, asset)
 
       // 7. Set cache headers based on file type
-      if (/\/assets\/[^/]+\.[a-f0-9]{8,}\./.test(assetPath)) {
-        // Fingerprinted assets (Astro/Vite hash in filename) → 1 year, immutable
+
+      // 指纹资源（_astro/ 目录，所有文件均为 Astro 内容哈希命名）→ 1 年 immutable
+      if (assetPath.startsWith('/_astro/')) {
         response.headers.set('Cache-Control', 'public, max-age=31536000, immutable')
       }
+      // 非指纹 CSS/JS（giscus、partytown 等第三方脚本）→ 1 小时，must-revalidate
       else if (/\.(?:css|js|mjs)$/.test(assetPath)) {
-        // CSS/JS → 1 year, immutable
-        response.headers.set('Cache-Control', 'public, max-age=31536000, immutable')
+        response.headers.set('Cache-Control', 'public, max-age=3600, must-revalidate')
       }
+      // 字体 → 1 年 immutable
       else if (/\.(?:woff2?|ttf|otf|eot)$/.test(assetPath)) {
-        // Fonts → 1 year, immutable
         response.headers.set('Cache-Control', 'public, max-age=31536000, immutable')
       }
-      else if (/\.(?:png|jpg|jpeg|webp|avif|gif|svg|ico)$/.test(assetPath)) {
-        // Images → 30 days
+      // 图片 + 音效 → 30 天
+      else if (/\.(?:png|jpg|jpeg|webp|avif|gif|svg|ico|wav)$/.test(assetPath)) {
         response.headers.set('Cache-Control', 'public, max-age=2592000')
       }
-      else if (assetPath.endsWith('.html') || assetPath.endsWith('/')) {
-        // HTML → 30 min edge, 10 min browser
-        response.headers.set('Cache-Control', 'public, max-age=600, s-maxage=1800')
+      // 搜索索引 JSON → 24 小时，1 小时 stale-while-revalidate（保证新文章尽快可搜索）
+      else if (/^\/api\/search-index(?:\/[\w-]+)?\.json$/.test(assetPath)) {
+        response.headers.set('Cache-Control', 'public, max-age=86400, stale-while-revalidate=3600')
+      }
+      // HTML → 浏览器 10 分钟 SWR，边缘 30 分钟
+      else if (assetPath.endsWith('.html')) {
+        response.headers.set('Cache-Control', 'public, max-age=600, stale-while-revalidate=120')
+        response.headers.set('Cloudflare-Cdn-Cache-Control', 'max-age=1800')
+        // 列表页 noindex，避免与正文页抢权重
+        if (/^\/(?:en\/)?(?:weekly|tags)\//.test(pathname))
+          response.headers.set('X-Robots-Tag', 'noindex, follow')
       }
 
       return response

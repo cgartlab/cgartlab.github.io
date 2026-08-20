@@ -17,10 +17,10 @@ interface SearchIndex {
   published: string
 }
 
-export const GET: APIRoute = async ({ request }) => {
+export const GET: APIRoute = async () => {
   try {
-    const url = new URL(request.url)
-    const lang = normalizeSearchLang(url.searchParams.get('lang') || defaultLocale)
+    // 静态预渲染路由，响应在构建时固定；lang 固定为 defaultLocale（对应 zh.json 的另一种路由形态）
+    const lang = normalizeSearchLang(defaultLocale)
 
     const posts = await getCollection('posts', ({ data }) => {
       return shouldIncludePostForSearch(data, lang, import.meta.env.DEV)
@@ -39,7 +39,8 @@ export const GET: APIRoute = async ({ request }) => {
         const segmenter = new Intl.Segmenter()
         let idx = 0
         for (const { segment } of segmenter.segment(body)) {
-          if (idx + segment.length > 5000) break
+          if (idx + segment.length > 5000)
+            break
           idx += segment.length
         }
         content = body.slice(0, idx)
@@ -63,7 +64,7 @@ export const GET: APIRoute = async ({ request }) => {
       status: 200,
       headers: {
         'Content-Type': 'application/json',
-        'Cache-Control': 'public, max-age=3600',
+        'Cache-Control': 'public, max-age=86400, stale-while-revalidate=3600',
       },
     })
   }

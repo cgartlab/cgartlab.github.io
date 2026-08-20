@@ -81,7 +81,7 @@ This website adopts a dual-licensing strategy.
 
 This site is heavily customized from the [radishzzz/astro-theme-retypeset](https://github.com/radishzzz/astro-theme-retypeset) theme, which is licensed under the [MIT License](https://opensource.org/licenses/MIT).
 
-Customizations include, but are not limited to: a custom color system (oklch) with dark/light mode, full i18n (zh/en/zh-tw), custom components and layouts, gallery and portfolio components, AI-generated content disclosure, search index and glossary, PWA support, and Cloudflare Worker deployment architecture.
+Customizations include, but are not limited to: a custom color system (oklch) with dark/light mode, full i18n (zh/en/zh-tw), custom components and layouts, gallery and portfolio components, AI-generated content disclosure, search index and glossary, and Cloudflare Worker deployment architecture.
 
 In compliance with the MIT License, the theme code portion of this site, as a derivative work, is distributed under the [MIT License](https://opensource.org/licenses/MIT).
 

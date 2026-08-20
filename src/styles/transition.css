@@ -8,7 +8,7 @@
 ::view-transition-new(theme-toggle-transition) {
   z-index: 99;
   clip-path: inset(0 0 0 0);
-  animation: reveal 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+  animation: reveal 0.45s cubic-bezier(0.4, 0, 0.2, 1);
 }
 ::view-transition-old(theme-toggle-transition) {
   z-index: -1;
@@ -90,7 +90,7 @@ html[data-resizing] [style*="view-transition-name"] {
 #post-content > *:nth-child(n+16) { animation-delay: 0.9s; }
 
 @media (max-width: 767px) {
-  #post-content > *:nth-child(n+8) {
+  #post-content > *:nth-child(n+5) {
     opacity: 1;
     transform: translateY(0);
     animation: none;
