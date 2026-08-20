@@ -377,7 +377,7 @@ pnpm exec playwright test # 端到端测试 (Playwright)
 1. 确认修改在 `pnpm dev` 中正常工作
 2. 运行 `pnpm build && pnpm preview` 验证生产构建产物
 3. 如果 preview 与 dev 不一致，优先检查：
-   - Service Worker 缓存（`Ctrl + Shift + R` 硬刷新）
+   - 浏览器/边缘缓存（`Ctrl + Shift + R` 硬刷新）
    - 构建产物 `dist/` 中的 CSS 是否包含修改
    - 浏览器 DevTools → Application → Cache Storage 清空缓存
 4. 不要直接认为是 CSS 逻辑错误 — 多数 preview/dev 差异来自缓存或构建压缩

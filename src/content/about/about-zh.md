@@ -85,7 +85,7 @@ lang: zh
 
 本站基于 [radishzzz/astro-theme-retypeset](https://github.com/radishzzz/astro-theme-retypeset) 主题（以下简称 " 原主题 "）深度修改而成，原主题采用 [MIT License](https://opensource.org/licenses/MIT)。
 
-我们在原主题基础上进行了大量自定义修改和功能扩展，包括但不限于：自定义配色系统（基于 oklch 色彩空间）与暗色/亮色模式、完整的 i18n 多语言支持（zh/en/zh-tw）、自定义组件和布局、画廊与作品展示、AI 生成内容声明与互动区域、搜索索引与术语表、PWA 支持、Cloudflare Worker 部署架构，以及其他大量功能增强。
+我们在原主题基础上进行了大量自定义修改和功能扩展，包括但不限于：自定义配色系统（基于 oklch 色彩空间）与暗色/亮色模式、完整的 i18n 多语言支持（zh/en/zh-tw）、自定义组件和布局、画廊与作品展示、AI 生成内容声明与互动区域、搜索索引与术语表、Cloudflare Worker 部署架构，以及其他大量功能增强。
 
 根据原主题的 MIT 许可要求，本网站的主题代码部分作为原主题的衍生作品，以 [MIT License](https://opensource.org/licenses/MIT) 发布。
 

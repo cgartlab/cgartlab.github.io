@@ -116,12 +116,12 @@ export default {
       else if (/\.(?:png|jpg|jpeg|webp|avif|gif|svg|ico|wav)$/.test(assetPath)) {
         response.headers.set('Cache-Control', 'public, max-age=2592000')
       }
-      // 搜索索引 JSON → 24 小时，7 天 stale-while-revalidate（与 API 端点一致）
+      // 搜索索引 JSON → 24 小时，1 小时 stale-while-revalidate（保证新文章尽快可搜索）
       else if (/^\/api\/search-index(?:\/[\w-]+)?\.json$/.test(assetPath)) {
-        response.headers.set('Cache-Control', 'public, max-age=86400, stale-while-revalidate=604800')
+        response.headers.set('Cache-Control', 'public, max-age=86400, stale-while-revalidate=3600')
       }
       // HTML → 浏览器 10 分钟 SWR，边缘 30 分钟
-      else if (assetPath.endsWith('.html') || assetPath.endsWith('/')) {
+      else if (assetPath.endsWith('.html')) {
         response.headers.set('Cache-Control', 'public, max-age=600, stale-while-revalidate=120')
         response.headers.set('Cloudflare-Cdn-Cache-Control', 'max-age=1800')
         // 列表页 noindex，避免与正文页抢权重
