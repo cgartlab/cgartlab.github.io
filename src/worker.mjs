@@ -69,11 +69,12 @@ export default {
         return Response.redirect(url.toString(), 301)
       }
 
-      // 3. Normalize path: if requesting a directory, append index.html
-      let assetPath = pathname
-      if (assetPath.endsWith('/')) {
-        assetPath += 'index.html'
-      }
+      // 3. Serve the path directly. Cloudflare Static Assets resolves the
+      //    directory index (e.g. `/` → `/index.html`) and returns 200.
+      //    Do NOT append `index.html`: ASSETS issues a 307 canonical redirect
+      //    (`/index.html` → `/`), which the Worker would return verbatim and
+      //    cause an infinite redirect loop on every directory/index page.
+      const assetPath = pathname
 
       // 4. Try serving the asset from the assets namespace
       const asset = await env.ASSETS.fetch(
@@ -121,7 +122,8 @@ export default {
         response.headers.set('Cache-Control', 'public, max-age=86400, stale-while-revalidate=3600')
       }
       // HTML → 浏览器 10 分钟 SWR，边缘 30 分钟
-      else if (assetPath.endsWith('.html')) {
+      // 目录页（/、/en/、/about/ 等）的 assetPath 以 / 结尾，需同时匹配 .html 和 /
+      else if (assetPath.endsWith('.html') || assetPath.endsWith('/')) {
         response.headers.set('Cache-Control', 'public, max-age=600, stale-while-revalidate=120')
         response.headers.set('Cloudflare-Cdn-Cache-Control', 'max-age=1800')
         // 列表页 noindex，避免与正文页抢权重
