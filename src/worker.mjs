@@ -100,12 +100,8 @@ export default {
 
       // 7. Set cache headers based on file type
 
-      // sw.js / workbox 必须短缓存，浏览器会主动检查更新，immutable 会导致 SW 永不更新
-      if (/\/(?:sw|workbox-[\w.-]+)\.js$/.test(assetPath)) {
-        response.headers.set('Cache-Control', 'no-cache')
-      }
       // 指纹资源（_astro/ 目录 + 文件名含 8+ 位 hex hash）→ 1 年 immutable
-      else if (/\/_astro\/[^/]+\.[a-f0-9]{8,}\./.test(assetPath)) {
+      if (/\/_astro\/[^/]+\.[a-f0-9]{8,}\./.test(assetPath)) {
         response.headers.set('Cache-Control', 'public, max-age=31536000, immutable')
       }
       // 非指纹 CSS/JS（giscus、partytown 等第三方脚本）→ 1 小时，must-revalidate
@@ -119,10 +115,6 @@ export default {
       // 图片 + 音效 → 30 天
       else if (/\.(?:png|jpg|jpeg|webp|avif|gif|svg|ico|wav)$/.test(assetPath)) {
         response.headers.set('Cache-Control', 'public, max-age=2592000')
-      }
-      // Web App Manifest → 1 小时
-      else if (/\.webmanifest$/.test(assetPath)) {
-        response.headers.set('Cache-Control', 'public, max-age=3600, must-revalidate')
       }
       // 搜索索引 JSON → 24 小时，7 天 stale-while-revalidate（与 API 端点一致）
       else if (/^\/api\/search-index(?:\/[\w-]+)?\.json$/.test(assetPath)) {

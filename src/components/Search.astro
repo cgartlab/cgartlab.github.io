@@ -46,6 +46,8 @@ const currentUI = ui[currentLang as keyof typeof ui] ?? {}
   let debounceTimer = null
   let keydownHandler = null
   let inputHandler = null
+  let indexPromise = null
+  let lastFocused = null
   const base = document.querySelector('base')?.getAttribute('href') || '/'
 
   function getElements() {
@@ -64,6 +66,7 @@ const currentUI = ui[currentLang as keyof typeof ui] ?? {}
     const els = getElements()
     if (!els.overlay)
       return
+    lastFocused = document.activeElement
     els.overlay.classList.add('active')
     els.overlay.setAttribute('aria-hidden', 'false')
     document.body.style.overflow = 'hidden'
@@ -89,6 +92,8 @@ const currentUI = ui[currentLang as keyof typeof ui] ?? {}
       els.results.innerHTML = ''
     if (els.empty)
       els.empty.classList.remove('visible')
+    if (lastFocused && document.contains(lastFocused))
+      lastFocused.focus()
   }
 
   function normalizeLang(lang) {
@@ -102,27 +107,28 @@ const currentUI = ui[currentLang as keyof typeof ui] ?? {}
     return 'zh'
   }
 
-  async function loadIndex() {
-    const currentLang = normalizeLang(document.documentElement.lang)
-    if (searchIndexCache.has(currentLang)) {
-      const cached = searchIndexCache.get(currentLang)
-      searchIndex = cached.data
-      searchIndexLower = cached.lower
-      return
-    }
-
+  async function fetchIndexForLang(currentLang) {
     const els = getElements()
     if (els.loading)
       els.loading.classList.add('visible')
     try {
       const response = await fetch(`${base}api/search-index/${currentLang}.json`)
       const indexData = await response.json()
-      const lowerData = indexData.map(item => ({
-        title: item.title.toLowerCase(),
-        desc: item.description.toLowerCase(),
-        tags: item.tags.map(t => t.toLowerCase()),
-        content: item.content.toLowerCase(),
-      }))
+      const lowerData = indexData.map((item) => {
+        const cleanContent = item.content
+          .replace(/^---[\s\S]*?---/, '')
+          .replace(/[#*`[\]!]/g, '')
+          .replace(/\n+/g, ' ')
+          .trim()
+        return {
+          title: item.title.toLowerCase(),
+          desc: item.description.toLowerCase(),
+          tags: item.tags.map(t => t.toLowerCase()),
+          content: item.content.toLowerCase(),
+          cleanContent,
+          lowerContent: cleanContent.toLowerCase(),
+        }
+      })
       searchIndexCache.set(currentLang, { data: indexData, lower: lowerData })
       searchIndex = indexData
       searchIndexLower = lowerData
@@ -135,6 +141,20 @@ const currentUI = ui[currentLang as keyof typeof ui] ?? {}
       if (els.loading)
         els.loading.classList.remove('visible')
     }
+  }
+
+  async function loadIndex() {
+    const currentLang = normalizeLang(document.documentElement.lang)
+    if (searchIndexCache.has(currentLang)) {
+      const cached = searchIndexCache.get(currentLang)
+      searchIndex = cached.data
+      searchIndexLower = cached.lower
+      return
+    }
+    if (!indexPromise) {
+      indexPromise = fetchIndexForLang(currentLang).finally(() => { indexPromise = null })
+    }
+    await indexPromise
   }
 
   function escapeHtml(text) {
@@ -151,18 +171,11 @@ const currentUI = ui[currentLang as keyof typeof ui] ?? {}
     return escaped.replace(regex, '<mark>$1</mark>')
   }
 
-  function getExcerpt(content, query) {
-    const cleanContent = content
-      .replace(/^---[\s\S]*?---/, '')
-      .replace(/[#*`[\]!]/g, '')
-      .replace(/\n+/g, ' ')
-      .trim()
-
+  function getExcerpt(lowerContent, cleanContent, query) {
     if (!query) {
       return escapeHtml(cleanContent.slice(0, 150))
     }
 
-    const lowerContent = cleanContent.toLowerCase()
     const lowerQuery = query.toLowerCase()
     const index = lowerContent.indexOf(lowerQuery)
 
@@ -262,7 +275,7 @@ const currentUI = ui[currentLang as keyof typeof ui] ?? {}
 
       const excerptDiv = document.createElement('div')
       excerptDiv.className = 'search-result-excerpt'
-      excerptDiv.innerHTML = getExcerpt(item.content, query)
+      excerptDiv.innerHTML = getExcerpt(lower.lowerContent, lower.cleanContent, query)
 
       wrapper.appendChild(titleDiv)
       wrapper.appendChild(excerptDiv)
