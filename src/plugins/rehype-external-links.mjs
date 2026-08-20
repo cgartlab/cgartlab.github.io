@@ -3,7 +3,8 @@ import { visit } from 'unist-util-visit'
 const SITE_HOSTNAMES = ['cgartlab.com', 'www.cgartlab.com']
 
 function isExternalUrl(href) {
-  if (!/^(?:https?:|\/\/)/.test(href)) return false
+  if (!/^(?:https?:|\/\/)/.test(href))
+    return false
   try {
     const { hostname } = new URL(href.startsWith('//') ? `https:${href}` : href)
     return !SITE_HOSTNAMES.includes(hostname)

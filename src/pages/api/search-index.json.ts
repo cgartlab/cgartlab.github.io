@@ -39,7 +39,8 @@ export const GET: APIRoute = async ({ request }) => {
         const segmenter = new Intl.Segmenter()
         let idx = 0
         for (const { segment } of segmenter.segment(body)) {
-          if (idx + segment.length > 5000) break
+          if (idx + segment.length > 5000)
+            break
           idx += segment.length
         }
         content = body.slice(0, idx)

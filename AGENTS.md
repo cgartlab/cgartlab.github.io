@@ -176,10 +176,20 @@ pnpm exec playwright test # 端到端测试 (Playwright)
 
  ```ts
  safelist: [
-   'bg-background', 'bg-highlight', 'bg-note',
-   'bg-tip', 'bg-important', 'bg-warning', 'bg-caution',
-   'text-background', 'text-highlight',
-   'text-note', 'text-tip', 'text-important', 'text-warning', 'text-caution',
+   'bg-background',
+   'bg-highlight',
+   'bg-note',
+   'bg-tip',
+   'bg-important',
+   'bg-warning',
+   'bg-caution',
+   'text-background',
+   'text-highlight',
+   'text-note',
+   'text-tip',
+   'text-important',
+   'text-warning',
+   'text-caution',
  ]
  ```
 
@@ -199,6 +209,7 @@ pnpm exec playwright test # 端到端测试 (Playwright)
  ```astro
  ---
  import { getCollection } from 'astro:content'
+
  const posts = await getCollection('posts')
  ---
  ```
@@ -289,7 +300,8 @@ pnpm exec playwright test # 端到端测试 (Playwright)
 
  ```ts
  (matcher) => {
-   if (!matcher.startsWith('cjk:')) return matcher
+   if (!matcher.startsWith('cjk:'))
+     return matcher
    return {
      matcher: matcher.slice(4),
      selector: s => `${s}:is(:lang(zh), :lang(ja), :lang(ko))`,

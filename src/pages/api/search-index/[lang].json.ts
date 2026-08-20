@@ -43,7 +43,8 @@ export const GET: APIRoute = async ({ params }) => {
         const segmenter = new Intl.Segmenter()
         let idx = 0
         for (const { segment } of segmenter.segment(body)) {
-          if (idx + segment.length > 5000) break
+          if (idx + segment.length > 5000)
+            break
           idx += segment.length
         }
         content = body.slice(0, idx)
@@ -68,7 +69,7 @@ export const GET: APIRoute = async ({ params }) => {
       status: 200,
       headers: {
         'Content-Type': 'application/json',
-        'Cache-Control': 'public, max-age=3600',
+        'Cache-Control': 'public, max-age=86400, stale-while-revalidate=604800',
       },
     })
   }

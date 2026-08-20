@@ -1,11 +1,11 @@
 ---
-import Layout from '@/layouts/Layout.astro'
-import { allLocales } from '@/config'
 import type { Language } from '@/i18n/config'
+import { allLocales } from '@/config'
 import { glossary } from '@/data/glossary'
-import { resolveLinkUrl, resolveDescription, resolveTerm } from '@/utils/glossary'
 import { getLangRouteParam } from '@/i18n/lang'
 import { ui } from '@/i18n/ui'
+import Layout from '@/layouts/Layout.astro'
+import { resolveDescription, resolveLinkUrl, resolveTerm } from '@/utils/glossary'
 
 export async function getStaticPaths() {
   return allLocales.map(lang => ({
@@ -35,12 +35,13 @@ let currentGroup: LetterGroup | null = null
 for (const entry of sorted) {
   const displayTerm = resolveTerm(entry, currentLang)
   const first = displayTerm.charAt(0).toUpperCase()
-  const letter = /[A-Za-z]/.test(first) ? first : '#'
+  const letter = /[A-Z]/i.test(first) ? first : '#'
   if (!currentGroup) {
     currentGroup = { letter, entries: [] }
     currentLetter = letter
     groups.push(currentGroup)
-  } else if (letter !== currentLetter) {
+  }
+ else if (letter !== currentLetter) {
     currentGroup = { letter, entries: [] }
     groups.push(currentGroup)
     currentLetter = letter
@@ -50,11 +51,11 @@ for (const entry of sorted) {
 ---
 
 <Layout
-  postTitle={currentLang === "zh"
-    ? "术语表 - 专业术语索引"
-    : currentLang === "zh-tw"
-    ? "術語表 - 專業術語索引"
-    : "Glossary - Technical Terms Reference"}
+  postTitle={currentLang === 'zh'
+    ? '术语表 - 专业术语索引'
+    : currentLang === 'zh-tw'
+    ? '術語表 - 專業術語索引'
+    : 'Glossary - Technical Terms Reference'}
 >
   <div class="uno-decorative-line" />
 
@@ -78,7 +79,7 @@ for (const entry of sorted) {
         {i > 0 && <div class="letter-divider" aria-hidden="true"></div>}
         <h2 class="letter-header">{group.letter}</h2>
         <ul class="term-list">
-          {group.entries.map(entry => {
+          {group.entries.map((entry) => {
             const url = resolveLinkUrl(entry, currentLang)
             return (
               <li class="term-item">
@@ -107,124 +108,137 @@ for (const entry of sorted) {
 
 <script>
 document.addEventListener('astro:page-load', () => {
-  const sections = document.querySelectorAll('.letter-section');
-  const links = document.querySelectorAll('.letter-jump');
-  const nav = document.querySelector('.letter-nav');
-  
-  if (!sections.length || !links.length || !nav) return;
+  const sections = document.querySelectorAll('.letter-section')
+  const links = document.querySelectorAll('.letter-jump')
+  const nav = document.querySelector('.letter-nav')
 
-  let clickPending = false;
+  if (!sections.length || !links.length || !nav)
+    return
 
-  function setActive(id = "") {
-    if (!nav) return;
-    links.forEach(link => link.classList.remove('active'));
-    const match = nav.querySelector('[href="#' + id + '"]');
-    if (match) match.classList.add('active');
+  let clickPending = false
+
+  function setActive(id = '') {
+    if (!nav)
+      return
+    links.forEach(link => link.classList.remove('active'))
+    const match = nav.querySelector(`[href="#${id}"]`)
+    if (match)
+      match.classList.add('active')
   }
 
   function updateActiveLink(skipReveal = false) {
-    if (clickPending || !nav) return;
+    if (clickPending || !nav)
+      return
     // Desktop: nav is sticky at top → use nav height as offset
     // Mobile: nav is fixed on right → use scroll-margin-top (5rem ≈ 80px) + tolerance
-    const navStyle = window.getComputedStyle(nav);
-    const isMobile = window.innerWidth < 1024;
+    const navStyle = window.getComputedStyle(nav)
+    const isMobile = window.innerWidth < 1024
     const offset = navStyle.position === 'sticky'
       ? Math.max(nav.getBoundingClientRect().height + 8, 84)
-      : 84;
+      : 84
 
     // Reveal mobile nav on scroll, reset idle timer
-    if (isMobile && !skipReveal) revealNav();
+    if (isMobile && !skipReveal)
+      revealNav()
 
-    let current = sections[0]?.id || null;
+    let current = sections[0]?.id || null
     for (const section of sections) {
       if (section.getBoundingClientRect().top <= offset) {
-        current = section.id;
+        current = section.id
       }
     }
-    if (!current) return;
+    if (!current)
+      return
 
-    setActive(current);
+    setActive(current)
   }
 
   // Initial update
   requestAnimationFrame(() => {
-    updateActiveLink(true);
-  });
+    updateActiveLink(true)
+  })
 
   // Update on scroll (throttled via rAF)
-  let ticking = false;
+  let ticking = false
   window.addEventListener('scroll', () => {
     if (!ticking) {
       requestAnimationFrame(() => {
-        updateActiveLink();
-        ticking = false;
-      });
-      ticking = true;
+        updateActiveLink()
+        ticking = false
+      })
+      ticking = true
     }
-  }, { passive: true });
+  }, { passive: true })
 
   // Click letter: instant visual feedback, then scroll event corrects
-  links.forEach(link => {
+  links.forEach((link) => {
     link.addEventListener('click', () => {
       // Reveal nav on click (mobile)
-      revealNav();
-      clickPending = true;
-      setActive(link.getAttribute('href')?.slice(1) ?? '');
+      revealNav()
+      clickPending = true
+      setActive(link.getAttribute('href')?.slice(1) ?? '')
       setTimeout(() => {
-        clickPending = false;
-        updateActiveLink(true);
-      }, 400);
-    });
-  });
+        clickPending = false
+        updateActiveLink(true)
+      }, 400)
+    })
+  })
 
   /* ── Mobile auto-hide nav: reveal on scroll, hide after 3s idle ── */
-  let idleTimer: ReturnType<typeof setTimeout> | null = null;
-  let isRevealed = false;
+  let idleTimer: ReturnType<typeof setTimeout> | null = null
+  let isRevealed = false
 
   function isMobileLayout() {
-    if (!nav) return false;
-    return window.innerWidth < 1024;
+    if (!nav)
+      return false
+    return window.innerWidth < 1024
   }
 
   function revealNav() {
-    if (!nav || !isMobileLayout()) return;
-    nav.classList.remove('hiding');
-    nav.classList.add('visible');
-    isRevealed = true;
-    resetIdleTimer();
+    if (!nav || !isMobileLayout())
+      return
+    nav.classList.remove('hiding')
+    nav.classList.add('visible')
+    isRevealed = true
+    resetIdleTimer()
   }
 
   function resetIdleTimer() {
-    if (idleTimer) clearTimeout(idleTimer);
-    if (!nav) return;
+    if (idleTimer)
+      clearTimeout(idleTimer)
+    if (!nav)
+      return
     idleTimer = setTimeout(() => {
-      if (!nav || !isMobileLayout()) return;
-      nav.classList.remove('visible');
-      nav.classList.add('hiding');
-      isRevealed = false;
-    }, 3000);
+      if (!nav || !isMobileLayout())
+        return
+      nav.classList.remove('visible')
+      nav.classList.add('hiding')
+      isRevealed = false
+    }, 3000)
   }
 
   function dismissNav() {
-    if (idleTimer) clearTimeout(idleTimer);
+    if (idleTimer)
+      clearTimeout(idleTimer)
     if (isRevealed) {
-      if (!nav) return;
-      nav.classList.remove('visible');
-      nav.classList.add('hiding');
-      isRevealed = false;
+      if (!nav)
+        return
+      nav.classList.remove('visible')
+      nav.classList.add('hiding')
+      isRevealed = false
     }
   }
 
   // Clean up on resize from mobile → desktop
   window.addEventListener('resize', () => {
-    dismissNav();
-  }, { passive: true });
+    dismissNav()
+  }, { passive: true })
 
   // Re-run scroll-spy on window load (catches race conditions in some browsers)
   window.addEventListener('load', () => {
-    requestAnimationFrame(() => updateActiveLink(true));
-  }, { once: true });
-});
+    requestAnimationFrame(() => updateActiveLink(true))
+  }, { once: true })
+})
 </script>
 
 <style>

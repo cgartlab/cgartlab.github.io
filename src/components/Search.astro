@@ -42,6 +42,7 @@ const currentUI = ui[currentLang as keyof typeof ui] ?? {}
 (function () {
   const searchIndexCache = new Map()
   let searchIndex = []
+  let searchIndexLower = []
   let debounceTimer = null
   let keydownHandler = null
   let inputHandler = null
@@ -66,6 +67,8 @@ const currentUI = ui[currentLang as keyof typeof ui] ?? {}
     els.overlay.classList.add('active')
     els.overlay.setAttribute('aria-hidden', 'false')
     document.body.style.overflow = 'hidden'
+    // 预加载索引，与 UI 动画并行
+    loadIndex()
     setTimeout(() => {
       const currentInput = document.getElementById('search-input')
       if (currentInput)
@@ -102,7 +105,9 @@ const currentUI = ui[currentLang as keyof typeof ui] ?? {}
   async function loadIndex() {
     const currentLang = normalizeLang(document.documentElement.lang)
     if (searchIndexCache.has(currentLang)) {
-      searchIndex = searchIndexCache.get(currentLang)
+      const cached = searchIndexCache.get(currentLang)
+      searchIndex = cached.data
+      searchIndexLower = cached.lower
       return
     }
 
@@ -112,8 +117,15 @@ const currentUI = ui[currentLang as keyof typeof ui] ?? {}
     try {
       const response = await fetch(`${base}api/search-index/${currentLang}.json`)
       const indexData = await response.json()
-      searchIndexCache.set(currentLang, indexData)
+      const lowerData = indexData.map(item => ({
+        title: item.title.toLowerCase(),
+        desc: item.description.toLowerCase(),
+        tags: item.tags.map(t => t.toLowerCase()),
+        content: item.content.toLowerCase(),
+      }))
+      searchIndexCache.set(currentLang, { data: indexData, lower: lowerData })
       searchIndex = indexData
+      searchIndexLower = lowerData
     }
     catch (error) {
       console.error('Failed to load search index:', error)
@@ -197,24 +209,17 @@ const currentUI = ui[currentLang as keyof typeof ui] ?? {}
 
     for (let i = 0; i < searchIndex.length; i++) {
       const item = searchIndex[i]
-      const titleLower = item.title.toLowerCase()
-      const descLower = item.description.toLowerCase()
-      const tagsLower = item.tags.map((t) => {
-        return t.toLowerCase()
-      })
-      const contentLower = item.content.toLowerCase()
+      const lower = searchIndexLower[i]
 
       let score = 0
-      const titleMatch = titleLower.includes(lowerQuery)
-      const tagMatch = tagsLower.some((t) => {
-        return t.includes(lowerQuery)
-      })
-      const descMatch = descLower.includes(lowerQuery)
-      const contentMatch = contentLower.includes(lowerQuery)
+      const titleMatch = lower.title.includes(lowerQuery)
+      const tagMatch = lower.tags.some(t => t.includes(lowerQuery))
+      const descMatch = lower.desc.includes(lowerQuery)
+      const contentMatch = lower.content.includes(lowerQuery)
 
       if (titleMatch)
         score += 100
-      if (titleLower.startsWith(lowerQuery))
+      if (lower.title.startsWith(lowerQuery))
         score += 50
       if (tagMatch)
         score += 80
@@ -240,38 +245,52 @@ const currentUI = ui[currentLang as keyof typeof ui] ?? {}
     }
 
     els.empty.classList.remove('visible')
-    let html = ''
+    const fragment = document.createDocumentFragment()
     for (let i = 0; i < topResults.length; i++) {
       const item = topResults[i].item
       const prefix = item.lang === 'zh' ? '' : `/${item.lang}`
       const href = `${prefix}/posts/${item.slug}/`
       const fullHref = base.replace(/\/$/, '') + href
 
-      html += `<a href="${fullHref}" class="search-result-item">`
-      html += `<div class="search-result-title">${highlight(item.title, query)}</div>`
-      html += `<div class="search-result-excerpt">${getExcerpt(item.content, query)}</div>`
+      const wrapper = document.createElement('a')
+      wrapper.href = fullHref
+      wrapper.className = 'search-result-item'
+
+      const titleDiv = document.createElement('div')
+      titleDiv.className = 'search-result-title'
+      titleDiv.innerHTML = highlight(item.title, query)
+
+      const excerptDiv = document.createElement('div')
+      excerptDiv.className = 'search-result-excerpt'
+      excerptDiv.innerHTML = getExcerpt(item.content, query)
+
+      wrapper.appendChild(titleDiv)
+      wrapper.appendChild(excerptDiv)
 
       if (item.tags.length > 0) {
-        html += '<div class="search-result-tags">'
+        const tagsDiv = document.createElement('div')
+        tagsDiv.className = 'search-result-tags'
         for (let j = 0; j < Math.min(item.tags.length, 5); j++) {
-          html += `<span class="search-result-tag">${escapeHtml(item.tags[j])}</span>`
+          const tag = document.createElement('span')
+          tag.className = 'search-result-tag'
+          tag.textContent = item.tags[j]
+          tagsDiv.appendChild(tag)
         }
-        html += '</div>'
+        wrapper.appendChild(tagsDiv)
       }
 
-      html += '<div class="search-result-meta">'
-      html += `<span>${formatDate(item.published)}</span>`
-      html += '</div>'
-      html += '</a>'
-    }
-    els.results.innerHTML = html
+      const metaDiv = document.createElement('div')
+      metaDiv.className = 'search-result-meta'
+      const dateSpan = document.createElement('span')
+      dateSpan.textContent = formatDate(item.published)
+      metaDiv.appendChild(dateSpan)
+      wrapper.appendChild(metaDiv)
 
-    const items = els.results.querySelectorAll('.search-result-item')
-    items.forEach((el) => {
-      el.addEventListener('click', () => {
-        close()
-      })
-    })
+      wrapper.addEventListener('click', () => close())
+      fragment.appendChild(wrapper)
+    }
+    els.results.innerHTML = ''
+    els.results.appendChild(fragment)
   }
 
   function setupEventListeners() {
@@ -336,5 +355,4 @@ const currentUI = ui[currentLang as keyof typeof ui] ?? {}
 
   document.addEventListener('astro:page-load', init)
 })()
-
 </script>

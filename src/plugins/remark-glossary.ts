@@ -12,7 +12,8 @@ import { defaultLocale } from '../config.ts'
 
 export function remarkGlossary(): any {
   return (_tree: any, vfile: any) => {
-    if (!vfile) return
+    if (!vfile)
+      return
     const fm = vfile?.data?.astro?.frontmatter
     if (!fm) {
       vfile.data.glossaryLang = defaultLocale ?? 'zh'
@@ -21,7 +22,8 @@ export function remarkGlossary(): any {
     const rawLang = typeof fm.lang === 'string' ? fm.lang.trim() : ''
     if (rawLang === '') {
       vfile.data.glossaryLang = defaultLocale ?? 'zh'
-    } else {
+    }
+    else {
       vfile.data.glossaryLang = rawLang
     }
   }

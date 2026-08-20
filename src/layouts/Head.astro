@@ -44,6 +44,10 @@ const pageImage = postSlug
 ---
 
 <head>
+<!-- Preconnect to third-party domains -->
+<link rel="preconnect" href="https://www.googletagmanager.com" crossorigin />
+<link rel="preconnect" href="https://giscus.app" crossorigin />
+<link rel="dns-prefetch" href="//fonts.gstatic.com" />
 <!-- Prevent FOUC: Apply theme class before any rendering -->
 <script is:inline define:vars={{ defaultMode }}>
 (function () {

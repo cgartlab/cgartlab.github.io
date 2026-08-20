@@ -1,8 +1,8 @@
 ---
 import LinksList from '@/components/LinksList.astro'
 import { allLocales, defaultLocale } from '@/config'
-import { getLangFromLocale, getLangRouteParam } from '@/i18n/lang'
 import { glossary } from '@/data/glossary'
+import { getLangFromLocale, getLangRouteParam } from '@/i18n/lang'
 import { ui } from '@/i18n/ui'
 import Layout from '@/layouts/Layout.astro'
 
@@ -19,11 +19,11 @@ const glossaryUrl = `/${currentLang === defaultLocale ? '' : currentLang + '/'}g
 ---
 
 <Layout
-  postTitle={currentLang === "zh"
-    ? "资源与推荐"
-    : currentLang === "zh-tw"
-    ? "資源與推薦"
-    : "Resources - Recommended Links and Tools"}
+  postTitle={currentLang === 'zh'
+    ? '资源与推荐'
+    : currentLang === 'zh-tw'
+    ? '資源與推薦'
+    : 'Resources - Recommended Links and Tools'}
 >
   <!-- Decorative Line -->
   <div class="uno-decorative-line" />
