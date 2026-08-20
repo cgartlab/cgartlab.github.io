@@ -6,7 +6,7 @@ const { currentLang } = getPageInfo(Astro.url.pathname)
 const currentUI = ui[currentLang as keyof typeof ui] ?? {}
 ---
 
-<div id="search-overlay" class="search-overlay" aria-hidden="true">
+<div id="search-overlay" class="search-overlay" aria-hidden="true" inert>
   <div class="search-backdrop" id="search-backdrop"></div>
   <div class="search-container">
     <div class="search-box">
@@ -68,6 +68,7 @@ const currentUI = ui[currentLang as keyof typeof ui] ?? {}
       return
     lastFocused = document.activeElement
     els.overlay.classList.add('active')
+    els.overlay.removeAttribute('inert')
     els.overlay.setAttribute('aria-hidden', 'false')
     document.body.style.overflow = 'hidden'
     // 预加载索引，与 UI 动画并行
@@ -84,6 +85,7 @@ const currentUI = ui[currentLang as keyof typeof ui] ?? {}
     if (!els.overlay)
       return
     els.overlay.classList.remove('active')
+    els.overlay.setAttribute('inert', '')
     els.overlay.setAttribute('aria-hidden', 'true')
     document.body.style.overflow = ''
     if (els.input)
