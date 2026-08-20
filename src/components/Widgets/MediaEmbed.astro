@@ -78,7 +78,7 @@ async function setupMediaEmbeds() {
 
 // Setup video autoplay and visibility-based pausing
 // Module-level observer reference so cleanup can disconnect it
-let videoObserver: IntersectionObserver | null = null
+let videoObserver: IntersectionObserver | null = null;
 
 async function setupVideoEmbeds() {
   const videos = document.querySelectorAll('.heti video')
@@ -110,14 +110,13 @@ async function setupVideoEmbeds() {
         console.warn('[Video] autoplay attempt 1 failed:', e)
         // Some browsers may need a second attempt after metadata
         vid.addEventListener('canplay', () => {
-          vid.play().catch(e2 => console.warn('[Video] autoplay attempt 2 failed:', e2))
+          vid.play().catch((e2) => console.warn('[Video] autoplay attempt 2 failed:', e2))
         }, { once: true })
       })
     }
     if (vid.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA) {
       tryPlay()
-    }
-    else {
+    } else {
       vid.addEventListener('loadedmetadata', tryPlay, { once: true })
     }
   })
@@ -129,14 +128,13 @@ async function setupVideoEmbeds() {
         entries.forEach((entry) => {
           const video = entry.target as HTMLVideoElement
           if (entry.isIntersecting) {
-            video.play().catch(e => console.warn('[Video] autoplay on scroll-in failed:', e))
-          }
-          else {
+            video.play().catch((e) => console.warn('[Video] autoplay on scroll-in failed:', e))
+          } else {
             video.pause()
           }
         })
       },
-      { threshold: 0.3 },
+      { threshold: 0.3 }
     )
 
     videos.forEach(video => videoObserver!.observe(video))

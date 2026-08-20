@@ -21,13 +21,12 @@ const posts = await getPostsByTags(tags, currentLang)
 const supportedLangs = await getTagSupportedLangs(tags[0])
 ---
 
-<Layout
-  supportedLangs={supportedLangs}
-  postTitle={currentLang === 'zh'
-    ? '作品展示 - 设计作品集'
-    : currentLang === 'zh-tw'
-    ? '作品展示 - 設計作品集'
-    : 'Portfolio - Design Works and Projects'}
+<Layout supportedLangs={supportedLangs}
+  postTitle={currentLang === "zh"
+    ? "作品展示 - 设计作品集"
+    : currentLang === "zh-tw"
+    ? "作品展示 - 設計作品集"
+    : "Portfolio - Design Works and Projects"}
 >
   <!-- Decorative Line -->
   <div class="uno-decorative-line" />

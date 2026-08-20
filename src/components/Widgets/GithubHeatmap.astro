@@ -3,10 +3,10 @@
 // Fetches data at build time from github-contributions-api
 // Displays a contribution grid similar to GitHub's profile heatmap
 
-import type { ContributionCell, ContributionData } from '@/lib/github-contributions'
 import { ui } from '@/i18n/ui'
-import { getContributions } from '@/lib/github-contributions'
 import { getPageInfo } from '@/utils/page'
+import { getContributions } from '@/lib/github-contributions'
+import type { ContributionCell, ContributionData } from '@/lib/github-contributions'
 
 interface Props {
   class?: string
@@ -180,18 +180,17 @@ const CELL_PITCH = 12
  * - Compatible with Astro View Transitions (astro:page-load cleanup)
  */
 (function () {
-  const SCALE_CONTAINER_ID = 'heatmap-scale-container'
-  const WRAPPER_ID = 'heatmap-wrapper'
-  let _ro = null
-  let _resizeHandler = null
-  let _resizeTimer = null
-  let _orientationHandler = null
+  var SCALE_CONTAINER_ID = 'heatmap-scale-container'
+  var WRAPPER_ID = 'heatmap-wrapper'
+  var _ro = null
+  var _resizeHandler = null
+  var _resizeTimer = null
+  var _orientationHandler = null
 
   function initHeatmapScale() {
-    const container = document.getElementById(SCALE_CONTAINER_ID)
-    const wrapper = document.getElementById(WRAPPER_ID)
-    if (!container || !wrapper)
-      return
+    var container = document.getElementById(SCALE_CONTAINER_ID)
+    var wrapper = document.getElementById(WRAPPER_ID)
+    if (!container || !wrapper) return
 
     function updateScale() {
       // Temporarily reset transform to measure natural (unscaled) dimensions
@@ -201,25 +200,29 @@ const CELL_PITCH = 12
       // the grid's actual max-content width (~678px vs true 664px).
       // IMPORTANT: Do NOT add padding or border to .gh-grid-wrapper —
       // offsetWidth includes both, which would overcount and underscale.
-      const naturalWidth = wrapper.offsetWidth
-      const naturalHeight = wrapper.scrollHeight
+      var naturalWidth = wrapper.offsetWidth
+      var naturalHeight = wrapper.scrollHeight
 
-      const containerWidth = container.clientWidth
-      if (containerWidth === 0)
-        return
+      var containerWidth = container.clientWidth
+      if (containerWidth === 0) return
 
-      const scale = containerWidth / naturalWidth
+      var scale = containerWidth / naturalWidth
 
-      wrapper.style.transform = `scale(${scale})`
+      wrapper.style.transform = 'scale(' + scale + ')'
       // Sync container height so subsequent content is not displaced
-      container.style.height = `${naturalHeight * scale}px`
+      container.style.height = (naturalHeight * scale) + 'px'
 
       // One-shot diagnostic: verify offsetWidth matches the true layout width.
       // scale < 1 means grid shrinks to fit (mobile). scale > 1 means grid
       // expands to fill container (desktop, up to ~1.06×). scrollWidth vs
       // offsetWidth shows the month-label-inflation gap if any.
       if (!container.dataset.scaleDiagnosed) {
-        console.log('[Heatmap Scale] offsetWidth:', naturalWidth, '| scrollWidth:', wrapper.scrollWidth, '| container:', containerWidth, '| scale:', scale.toFixed(4), '| cell size:', `${(10 * scale).toFixed(1)}px`, '| gap:', scale > 0 ? `${(2 * scale).toFixed(1)}px` : '0px')
+        console.log('[Heatmap Scale] offsetWidth:', naturalWidth,
+          '| scrollWidth:', wrapper.scrollWidth,
+          '| container:', containerWidth,
+          '| scale:', scale.toFixed(4),
+          '| cell size:', (10 * scale).toFixed(1) + 'px',
+          '| gap:', scale > 0 ? (2 * scale).toFixed(1) + 'px' : '0px')
         container.dataset.scaleDiagnosed = 'true'
       }
     }
@@ -228,12 +231,11 @@ const CELL_PITCH = 12
 
     // Use ResizeObserver for accurate, throttled recalculation
     if (typeof ResizeObserver !== 'undefined') {
-      _ro = new ResizeObserver(() => {
+      _ro = new ResizeObserver(function () {
         requestAnimationFrame(updateScale)
       })
       _ro.observe(container)
-    }
-    else {
+    } else {
       // Fallback for older browsers
       _resizeHandler = function () {
         clearTimeout(_resizeTimer)
@@ -265,8 +267,7 @@ const CELL_PITCH = 12
 
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initHeatmapScale)
-  }
-  else {
+  } else {
     initHeatmapScale()
   }
 

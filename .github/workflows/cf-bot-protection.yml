@@ -6,11 +6,11 @@ on:
       action:
         description: 'on = 开启 Bot Fight Mode, off = 关闭'
         required: true
-        default: on
+        default: 'on'
         type: choice
         options:
-          - on
-          - off
+          - 'on'
+          - 'off'
 
 permissions:
   contents: read

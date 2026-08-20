@@ -10,8 +10,8 @@
  * - Module-level deduplication for same-build reuse
  */
 
-import { existsSync } from 'node:fs'
 import { mkdir, readFile, writeFile } from 'node:fs/promises'
+import { existsSync } from 'node:fs'
 import { join } from 'node:path'
 
 export interface ContributionCell {
@@ -54,16 +54,16 @@ const CONTRIBUTIONS_QUERY = `
 `
 
 // Module-level cache for same-build deduplication
-let moduleCache: { data: ContributionData, ts: number } | null = null
+let moduleCache: { data: ContributionData; ts: number } | null = null
 
 /**
  * Read cached data from disk
  */
-async function readDiskCache(): Promise<{ data: ContributionData, ts: number } | null> {
+async function readDiskCache(): Promise<{ data: ContributionData; ts: number } | null> {
   try {
     const cachePath = join(process.cwd(), CACHE_DIR, CACHE_FILE)
     const raw = await readFile(cachePath, 'utf-8')
-    const cached = JSON.parse(raw) as { data: ContributionData, ts: number }
+    const cached = JSON.parse(raw) as { data: ContributionData; ts: number }
     return cached
   }
   catch {

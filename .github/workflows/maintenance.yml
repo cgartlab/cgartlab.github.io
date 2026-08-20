@@ -3,7 +3,7 @@ name: Repository Maintenance
 on:
   push:
     paths:
-      - labels.yml
+      - 'labels.yml'
     branches: [main]
   workflow_dispatch:
 

@@ -18,9 +18,9 @@ const filteredHeadings = headings.filter(heading => heading.depth >= 2 && headin
 {filteredHeadings.length > 0 && (
   <div
     id="toc-container"
-    class="mb-6 uno-round-border bg-secondary/5 2xl:(fixed bottom-0 left-0 top-44.5 max-w-[calc(50vw-38rem)] border-none bg-secondary/0)"
+    class="mb-6 uno-round-border bg-secondary/5 2xl:(fixed left-0 top-44.5 bottom-0 max-w-[calc(50vw-38rem)] border-none bg-secondary/0)"
   >
-    <div class="h-12 w-full flex items-center 2xl:(static flex c-secondary/60)">
+    <div class="flex h-12 w-full items-center 2xl:(static flex c-secondary/60)">
       <span id="toc-mobile-text">
         {currentUI.toc}
       </span>
@@ -73,8 +73,7 @@ const visibleHeadings = new Set<string>()
 
 function setActiveLink(id: string | null) {
   const tocList = document.getElementById('toc-links-list')
-  if (!tocList)
-    return
+  if (!tocList) return
 
   tocList.querySelectorAll('a.toc-active').forEach(a => a.classList.remove('toc-active'))
 
@@ -84,10 +83,10 @@ function setActiveLink(id: string | null) {
   }
 
   const link = tocList.querySelector(`a[href="#${CSS.escape(id)}"]`)
-  if (link && link !== lastActiveLink) {
+   if (link && link !== lastActiveLink) {
     link.classList.add('toc-active')
-    const reducedMotion = document.documentElement.classList.contains('reduce-motion')
-      || window.matchMedia('(prefers-reduced-motion: reduce)').matches
+     const reducedMotion = document.documentElement.classList.contains('reduce-motion')
+       || window.matchMedia('(prefers-reduced-motion: reduce)').matches
     if (is2xl.matches) {
       link.scrollIntoView({ behavior: reducedMotion ? 'instant' : 'smooth', block: 'nearest' })
     }
@@ -121,8 +120,7 @@ function handleScroll() {
 
 function setupFallbackObserver() {
   const headings = document.querySelectorAll('h2[id], h3[id], h4[id]')
-  if (headings.length === 0)
-    return
+  if (headings.length === 0) return
 
   fallbackObserver = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
@@ -132,7 +130,7 @@ function setupFallbackObserver() {
       else {
         visibleHeadings.delete(entry.target.id)
       }
-    })
+      })
 
     if (!ticking) {
       window.requestAnimationFrame(scrollToActiveLinkFallback)
@@ -143,7 +141,7 @@ function setupFallbackObserver() {
     threshold: 0,
   })
 
-  headings.forEach(h => fallbackObserver?.observe(h))
+  headings.forEach((h) => fallbackObserver?.observe(h))
 }
 
 function setupAutoScroll() {
@@ -151,8 +149,7 @@ function setupAutoScroll() {
   lastActiveLink = null
 
   const tocList = document.getElementById('toc-links-list')
-  if (!tocList)
-    return
+  if (!tocList) return
 
   setupFallbackObserver()
   document.addEventListener('scroll', handleScroll, { passive: true })
@@ -163,15 +160,14 @@ function cleanupAutoScroll() {
   fallbackObserver?.disconnect()
   fallbackObserver = null
   visibleHeadings.clear()
-  lastActiveLink = null
+lastActiveLink = null
 }
 
 function setupTOCAccordion() {
   const tocContainer = document.getElementById('toc-container')
   const tocHeader = tocContainer?.querySelector('div:first-child')
   const tocContent = document.getElementById('toc-accordion-content')
-  if (!tocContainer || !tocHeader || !tocContent)
-    return
+  if (!tocContainer || !tocHeader || !tocContent) return
 
   tocContainer.classList.remove('toc-hidden')
   tocContent.style.display = ''
@@ -203,8 +199,7 @@ function cleanupTOCAccordion() {
 function toggleTOC() {
   const container = document.getElementById('toc-container')
   const content = document.getElementById('toc-accordion-content')
-  if (!container || !content)
-    return
+  if (!container || !content) return
 
   const isCollapsed = container.classList.contains('toc-hidden')
 
@@ -225,8 +220,7 @@ function toggleTOC() {
       content.style.opacity = ''
       content.removeEventListener('transitionend', onExpandEnd)
     })
-  }
-  else {
+  } else {
     content.style.transition = 'transform 0.2s ease-in, opacity 0.15s ease-in'
     content.style.transformOrigin = 'top center'
     content.style.transform = 'scaleY(0)'
@@ -247,4 +241,5 @@ document.addEventListener('astro:page-load', setupAutoScroll)
 document.addEventListener('astro:page-load', setupTOCAccordion)
 document.addEventListener('astro:before-swap', cleanupAutoScroll)
 document.addEventListener('astro:before-swap', cleanupTOCAccordion)
+
 </script>

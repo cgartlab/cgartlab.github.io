@@ -51,7 +51,7 @@ export const glossary: TermEntry[] = [
     wikiPath: 'RSS',
     description: '一种基于 XML 的内容订阅协议',
     langs: {
-      'en': { aliases: ['Really Simple Syndication', 'Rich Site Summary'] },
+      en: { aliases: ['Really Simple Syndication', 'Rich Site Summary'] },
       'zh-tw': { wikiPath: 'RSS' },
     },
   },
@@ -238,7 +238,7 @@ export const glossary: TermEntry[] = [
     wikiPath: '人工智能',
     description: '人工智能技术',
     langs: {
-      'en': { aliases: ['Artificial intelligence', 'artificial intelligence'], wikiPath: 'Artificial_intelligence' },
+      en: { aliases: ['Artificial intelligence', 'artificial intelligence'], wikiPath: 'Artificial_intelligence' },
       'zh-tw': { aliases: ['人工智慧'], wikiPath: '人工智慧' },
     },
   },
@@ -937,5 +937,4 @@ export const glossary: TermEntry[] = [
     langs: {
       en: { aliases: ['Search engine optimization', 'search engine optimization'], wikiPath: 'Search_engine_optimization' },
     },
-  },
-]
+  },]
