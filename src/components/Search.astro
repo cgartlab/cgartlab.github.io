@@ -25,7 +25,7 @@ const currentUI = ui[currentLang as keyof typeof ui] ?? {}
           </svg>
         </button>
       </div>
-      <div id="search-results" class="search-results" role="listbox" aria-live="polite"></div>
+      <div id="search-results" class="search-results" aria-live="polite"></div>
       <div id="search-empty" class="search-empty">
         <span>{currentUI.searchEmpty || 'No results found'}</span>
       </div>
@@ -133,10 +133,10 @@ const currentUI = ui[currentLang as keyof typeof ui] ?? {}
           lowerContent: cleanContent.toLowerCase(),
         }
       })
-      loadFailed = false
       searchIndexCache.set(currentLang, { data: indexData, lower: lowerData, ts: Date.now() })
       searchIndex = indexData
       searchIndexLower = lowerData
+      loadFailed = false
     }
     catch (error) {
       console.error('Failed to load search index:', error)
@@ -161,6 +161,7 @@ const currentUI = ui[currentLang as keyof typeof ui] ?? {}
       const cached = searchIndexCache.get(currentLang)
       searchIndex = cached.data
       searchIndexLower = cached.lower
+      loadFailed = false
       return
     }
     if (!indexPromise) {
@@ -275,6 +276,9 @@ const currentUI = ui[currentLang as keyof typeof ui] ?? {}
 
     if (topResults.length === 0) {
       els.results.innerHTML = ''
+      const span = els.empty?.querySelector('span')
+      if (span)
+        span.textContent = currentUI.searchEmpty || 'No results found'
       els.empty.classList.add('visible')
       return
     }
