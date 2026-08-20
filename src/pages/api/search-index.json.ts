@@ -17,10 +17,10 @@ interface SearchIndex {
   published: string
 }
 
-export const GET: APIRoute = async ({ request }) => {
+export const GET: APIRoute = async () => {
   try {
-    const url = new URL(request.url)
-    const lang = normalizeSearchLang(url.searchParams.get('lang') || defaultLocale)
+    // 静态预渲染路由，响应在构建时固定；lang 固定为 defaultLocale（对应 zh.json 的另一种路由形态）
+    const lang = normalizeSearchLang(defaultLocale)
 
     const posts = await getCollection('posts', ({ data }) => {
       return shouldIncludePostForSearch(data, lang, import.meta.env.DEV)

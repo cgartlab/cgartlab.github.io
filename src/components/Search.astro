@@ -41,6 +41,7 @@ const currentUI = ui[currentLang as keyof typeof ui] ?? {}
 <script is:inline>
 (function () {
   const searchIndexCache = new Map()
+  const CACHE_TTL = 60 * 60 * 1000
   let searchIndex = []
   let searchIndexLower = []
   let debounceTimer = null
@@ -131,7 +132,7 @@ const currentUI = ui[currentLang as keyof typeof ui] ?? {}
           lowerContent: cleanContent.toLowerCase(),
         }
       })
-      searchIndexCache.set(currentLang, { data: indexData, lower: lowerData })
+      searchIndexCache.set(currentLang, { data: indexData, lower: lowerData, ts: Date.now() })
       searchIndex = indexData
       searchIndexLower = lowerData
     }
@@ -147,6 +148,12 @@ const currentUI = ui[currentLang as keyof typeof ui] ?? {}
 
   async function loadIndex() {
     const currentLang = normalizeLang(document.documentElement.lang)
+    // 过期清理：缓存超过 1 小时后强制刷新，保证新文章尽快进入搜索索引
+    const now = Date.now()
+    for (const [lang, cached] of searchIndexCache) {
+      if (now - cached.ts > CACHE_TTL)
+        searchIndexCache.delete(lang)
+    }
     if (searchIndexCache.has(currentLang)) {
       const cached = searchIndexCache.get(currentLang)
       searchIndex = cached.data
@@ -323,7 +330,8 @@ const currentUI = ui[currentLang as keyof typeof ui] ?? {}
         close()
       }
       if (e.key === 'Tab' && els.overlay && els.overlay.classList.contains('active')) {
-        const focusables = [els.input, els.closeBtn].filter(Boolean)
+        const resultLinks = els.results ? Array.from(els.results.querySelectorAll('a[href]')) : []
+        const focusables = [els.input, els.closeBtn, ...resultLinks].filter(Boolean)
         if (focusables.length < 2)
           return
         const first = focusables[0]
