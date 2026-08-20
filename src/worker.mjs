@@ -100,8 +100,8 @@ export default {
 
       // 7. Set cache headers based on file type
 
-      // 指纹资源（_astro/ 目录 + 文件名含 8+ 位 hex hash）→ 1 年 immutable
-      if (/\/_astro\/[^/]+\.[a-f0-9]{8,}\./.test(assetPath)) {
+      // 指纹资源（_astro/ 目录，所有文件均为 Astro 内容哈希命名）→ 1 年 immutable
+      if (assetPath.startsWith('/_astro/')) {
         response.headers.set('Cache-Control', 'public, max-age=31536000, immutable')
       }
       // 非指纹 CSS/JS（giscus、partytown 等第三方脚本）→ 1 小时，must-revalidate
