@@ -3,6 +3,7 @@ title: Inkard Card Generator
 published: 2026-06-30
 description: Online card image generator. 4 templates, 6 color schemes, 3 fonts, batch Markdown/JSON import, local rendering, instant export.
 tags:
+  - Design Tool
   - AI
   - Frontend
 draft: false
