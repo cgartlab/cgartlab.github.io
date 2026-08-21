@@ -4,9 +4,9 @@ published: 2022-05-08
 description: "A personal reflection on returning to writing after years of drawing. Why text still matters, how RSS curates quality reading, and the creative power of focused information diets over algorithmic feeds."
 updated: 2024-12-11
 tags:
-  - Essay
-  - Writing
-  - RSS
+    - Essay
+    - Writing
+    - RSS
 draft: false
 pin: 0
 toc: true

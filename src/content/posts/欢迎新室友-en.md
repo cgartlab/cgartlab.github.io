@@ -4,9 +4,9 @@ published: 2024-08-09
 description: "I've always loved animals. Growing up, I've had dogs, rabbits, chickens, parrots, crabs, shrimp, river clams, golden snails, loaches, turtles, and katydids. But I'd never had a cat — until now."
 updated: 2024-12-11
 tags:
-  - Essay
-  - Life
-  - Pets
+    - Essay
+    - Life
+    - Pets
 draft: false
 pin: 0
 toc: false

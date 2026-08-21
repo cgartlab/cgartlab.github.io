@@ -3,8 +3,8 @@ title: "A Few Notes from Over a Decade Ago: Old Thoughts on Knowledge, Art, and 
 published: 2024-06-22
 updated: 2025-08-07
 tags:
-  - knowledge-management
-  - Essay
+    - knowledge-management
+    - Essay
 lang: en
 abbrlink: 10-years-old-note
 toc: true

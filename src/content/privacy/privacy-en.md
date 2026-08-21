@@ -37,10 +37,10 @@ When you browse this Site, the following information may be automatically record
 
 This Site uses browser LocalStorage to store the following information:
 
-| Storage Type | Purpose | Lifecycle |
-|--------------|---------|-----------|
-| Theme Preference | Record your chosen light/dark theme mode | Persistent (until manually cleared) |
-| Search History | Record your search keywords (optional feature) | Session-level |
+| Storage Type     | Purpose                                        | Lifecycle                           |
+| ---------------- | ---------------------------------------------- | ----------------------------------- |
+| Theme Preference | Record your chosen light/dark theme mode       | Persistent (until manually cleared) |
+| Search History   | Record your search keywords (optional feature) | Session-level                       |
 
 ### 1.4 Information We Do NOT Collect
 
@@ -79,45 +79,49 @@ This Site uses the following third-party services, which may collect and process
 
 ### 3.1 Analytics
 
-| Service | Provider | Purpose | Privacy Policy |
-|---------|----------|---------|---------------|
-| Google Analytics | Google LLC | Website traffic analysis and user behavior statistics | [Google Privacy Policy](https://policies.google.com/privacy) |
-| Umami Analytics | Umami Software, Inc. | Privacy-friendly open-source analytics | [Umami Privacy](https://umami.is/privacy) |
+| Service          | Provider             | Purpose                                               | Privacy Policy                                               |
+| ---------------- | -------------------- | ----------------------------------------------------- | ------------------------------------------------------------ |
+| Google Analytics | Google LLC           | Website traffic analysis and user behavior statistics | [Google Privacy Policy](https://policies.google.com/privacy) |
+| Umami Analytics  | Umami Software, Inc. | Privacy-friendly open-source analytics                | [Umami Privacy](https://umami.is/privacy)                    |
 
 **Notes**:
+
 - Google Analytics uses cookies to collect anonymized visit data
 - You can install the [Google Analytics Opt-out Browser Add-on](https://tools.google.com/dlpage/gaoptout) to prevent data collection
 - Umami is a privacy-friendly analytics solution that does not collect personally identifiable information or use cookie tracking
 
 ### 3.2 Comment System
 
-| Service | Provider | Purpose | Privacy Policy |
-|---------|----------|---------|---------------|
-| Giscus | Open Source Project | Comment system based on GitHub Discussions | [GitHub Privacy Policy](https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement) |
+| Service | Provider            | Purpose                                    | Privacy Policy                                                                                                    |
+| ------- | ------------------- | ------------------------------------------ | ----------------------------------------------------------------------------------------------------------------- |
+| Giscus  | Open Source Project | Comment system based on GitHub Discussions | [GitHub Privacy Policy](https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement) |
 
 **Notes**:
+
 - Posting comments requires logging in with a GitHub account
 - Comment content is stored in GitHub Discussions and follows GitHub's data processing rules
 - Your GitHub public profile (avatar, username) may be displayed in the comment section
 
 ### 3.3 Content Embedding
 
-| Service | Provider | Purpose | Privacy Policy |
-|---------|----------|---------|---------------|
-| YouTube Embed | Google LLC | Video content display | [YouTube Terms](https://www.youtube.com/t/terms) |
+| Service        | Provider                                     | Purpose               | Privacy Policy                                                                 |
+| -------------- | -------------------------------------------- | --------------------- | ------------------------------------------------------------------------------ |
+| YouTube Embed  | Google LLC                                   | Video content display | [YouTube Terms](https://www.youtube.com/t/terms)                               |
 | Bilibili Embed | Shanghai Kuanyu Digital Technology Co., Ltd. | Video content display | [Bilibili Privacy Policy](https://www.bilibili.com/blackboard/privacy-pc.html) |
 
 **Notes**:
+
 - Embedded videos may allow the respective platform to record your playback behavior
 - Video loading may involve cookie settings from the respective platform
 
 ### 3.4 Hosting and CDN
 
-| Service | Provider | Purpose | Privacy Policy |
-|---------|----------|---------|---------------|
+| Service            | Provider         | Purpose                                 | Privacy Policy                                                   |
+| ------------------ | ---------------- | --------------------------------------- | ---------------------------------------------------------------- |
 | Cloudflare Workers | Cloudflare, Inc. | Website hosting and global acceleration | [Cloudflare Privacy Policy](https://www.cloudflare.com/privacy/) |
 
 **Notes**:
+
 - Cloudflare deploys CDN nodes globally to improve access speed
 - Cloudflare may record access logs for security protection and performance optimization
 - Compliant with GDPR, CCPA and other data protection regulations
@@ -137,18 +141,18 @@ Cookies are small text files that websites store in your browser to record your 
 
 ### 4.2 Cookies Used on This Site
 
-| Cookie Type | Purpose | Duration |
-|------------|---------|----------|
-| Theme Preference | Record your chosen light/dark theme mode | Persistent (until manually cleared) |
-| Analytics Cookie | Google Analytics for distinguishing unique visitors | 2 years |
+| Cookie Type      | Purpose                                             | Duration                            |
+| ---------------- | --------------------------------------------------- | ----------------------------------- |
+| Theme Preference | Record your chosen light/dark theme mode            | Persistent (until manually cleared) |
+| Analytics Cookie | Google Analytics for distinguishing unique visitors | 2 years                             |
 
 ### 4.3 Browser Local Storage
 
 In addition to cookies, this Site uses browser LocalStorage:
 
-| Storage Key | Purpose | Notes |
-|------------|---------|-------|
-| `theme` | Theme mode | Value is `light` or `dark` |
+| Storage Key    | Purpose                        | Notes                                  |
+| -------------- | ------------------------------ | -------------------------------------- |
+| `theme`        | Theme mode                     | Value is `light` or `dark`             |
 | `theme-manual` | Whether theme was manually set | Value `true` ignores system preference |
 
 ### 4.4 Your Privacy Controls
@@ -157,7 +161,7 @@ You can manage cookies and local storage through the following methods:
 
 - **Browser Settings**: Clear, block, or manage cookies in your browser preferences
 - **Analytics Opt-out**:
-  - [Google Analytics Opt-out](https://tools.google.com/dlpage/gaoptout)
+    - [Google Analytics Opt-out](https://tools.google.com/dlpage/gaoptout)
 - **Reduced Motion**: If your system preference is set to `prefers-reduced-motion: reduce`, this Site will automatically disable page animations
 - **Private Browsing Mode**: Use your browser's privacy/incognito mode when visiting this Site
 
@@ -186,6 +190,7 @@ This Site takes the following measures to protect your information:
 ### 5.3 Security Incident Response
 
 In the event of a data breach or security incident, we will:
+
 - Assess the impact within 72 hours
 - Notify affected users promptly if sensitive personal information is involved
 - Take remedial measures to prevent further impact
@@ -211,11 +216,13 @@ If you find that your personal information is inaccurate, you have the right to 
 ### 6.4 Right to Deletion
 
 You have the right to request deletion of your personal information in the following circumstances:
+
 - Information collection violates laws and regulations
 - Information use exceeds the agreed purpose and scope
 - You withdraw consent and there is no other legal basis for continued processing
 
 **Specific Actions**:
+
 - Comment deletion: Please contact the site administrator or delete your Discussion comment via GitHub
 - Email subscription cancellation: Click the "Unsubscribe" link at the bottom of the newsletter email
 - Local storage clearing: Clear this Site's data through browser settings
@@ -272,13 +279,13 @@ We will respond within 15 business days of receiving your request.
 
 If you have any questions, comments, or complaints about this Privacy Policy, please contact us through:
 
-| Channel | Contact |
-|---------|---------|
-| Email | hello@cgartlab.com |
-| GitHub | [cgartlab/cgartlab.github.io](https://github.com/cgartlab/cgartlab.github.io) |
-| X (Twitter) | [@cgartlab](https://x.com/cgartlab) |
-| Bilibili | [cgartlab](https://space.bilibili.com/38043072) |
-| SSPai | [cgartlab](https://sspai.com/u/cgartlab/updates) |
+| Channel     | Contact                                                                       |
+| ----------- | ----------------------------------------------------------------------------- |
+| Email       | hello@cgartlab.com                                                            |
+| GitHub      | [cgartlab/cgartlab.github.io](https://github.com/cgartlab/cgartlab.github.io) |
+| X (Twitter) | [@cgartlab](https://x.com/cgartlab)                                           |
+| Bilibili    | [cgartlab](https://space.bilibili.com/38043072)                               |
+| SSPai       | [cgartlab](https://sspai.com/u/cgartlab/updates)                              |
 
 For disputes that cannot be resolved, you have the right to file a complaint or report to the relevant regulatory authorities.
 
@@ -290,4 +297,4 @@ This Privacy Policy is governed by, executed, and interpreted in accordance with
 
 ---
 
-*This Privacy Policy is effective as of May 28, 2026.*
+_This Privacy Policy is effective as of May 28, 2026._

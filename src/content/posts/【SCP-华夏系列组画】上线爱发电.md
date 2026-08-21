@@ -4,8 +4,8 @@ published: 2024-12-16
 description: 目前更新至第三幅 《醉奴》
 updated: 2025-08-06
 tags:
-  - 随笔
-  - 数字艺术
+    - 随笔
+    - 数字艺术
 draft: false
 pin: 0
 toc: true

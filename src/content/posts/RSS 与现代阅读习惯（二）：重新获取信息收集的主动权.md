@@ -4,7 +4,7 @@ published: 2025-06-30
 description: 基于RSS构建个人碎片信息收集系统的实践经验分享，包含优质RSS源推荐和工具使用心得
 updated: 2025-06-30
 tags:
-  - 知识管理
+    - 知识管理
 draft: false
 pin: 0
 toc: true
@@ -58,20 +58,20 @@ abbrlink: rss-2
 还是以我自身为例，我的职业是 3D 设计师，它的父级领域显然是设计。那么若根据时效性可将设计领域的信息划分为以下几个类别，然后每个部分的查看频率会逐级递增：
 
 - 每日/实时
-  - 行业前沿技术新闻
-  - 软件更新日志
-  - 技术论坛热帖
+    - 行业前沿技术新闻
+    - 软件更新日志
+    - 技术论坛热帖
 - 每周/月
-  - 插件/脚本更新
-  - 工作流优化案例
-  - 视频教学
-  - 优秀作者采访
+    - 插件/脚本更新
+    - 工作流优化案例
+    - 视频教学
+    - 优秀作者采访
 - 季度/年
-  - 资产和素材更新
-  - 大型赛事获奖作品
-  - 优秀摄影/绘画/平面/动效作者社交媒体
-  - 经典案例研究
-  - 大师级作品
+    - 资产和素材更新
+    - 大型赛事获奖作品
+    - 优秀摄影/绘画/平面/动效作者社交媒体
+    - 经典案例研究
+    - 大师级作品
 
 这样一来，随着时间推移，自然会养成一个正向良好的习惯，帮你维持开放乐观的心态，无论身处职场还是运作一个创意团队，都会保持一定的竞争力，不会被市场轻易淘汰。当然，这些分类完全是灵活的，无须刻意遵循，它们会根据你的需求自然做出微调，我罗列出来的也是微调多年后的结果。
 
@@ -126,23 +126,23 @@ abbrlink: rss-2
 ## **资源推荐**
 
 - 优质 RSS 订阅源
-  - [阮一峰网络日志](https://www.ruanyifeng.com/blog/)
-  - [少数派首页推荐和派早报](https://sspai.com/)
-  - [产品沉思录](https://sspai.com/)
-  - [潮流周刊](https://weekly.tw93.fun/)
-  - [月光博客](https://www.williamlong.info/)
-  - [土木坛子](https://tumutanzi.com/)
-  - [椒盐豆豉](https://blog.douchi.space/)
-  - [Anyway.fm](https://anyway.fm/)
+    - [阮一峰网络日志](https://www.ruanyifeng.com/blog/)
+    - [少数派首页推荐和派早报](https://sspai.com/)
+    - [产品沉思录](https://sspai.com/)
+    - [潮流周刊](https://weekly.tw93.fun/)
+    - [月光博客](https://www.williamlong.info/)
+    - [土木坛子](https://tumutanzi.com/)
+    - [椒盐豆豉](https://blog.douchi.space/)
+    - [Anyway.fm](https://anyway.fm/)
 - 常用 RSS 工具
-  - [Folo（web）](https://app.follow.is)
-  - [Fluent-reader（Windows）](https://hyliu.me/fluent-reader/)
-  - [Reeder（iOS & macOS）](https://reederapp.com/)
-  - [FeedMe（Android）](https://play.google.com/store/apps/details?id=com.seazon.feedme)
-  - [Feedly（web）](https://feedly.com/)
-  - [The old reader（web）](https://theoldreader.com/)
-  - [Inoreader（web）](https://www.innoreader.com/)
-欢迎大家在评论区分享更多优质工具和订阅源
+    - [Folo（web）](https://app.follow.is)
+    - [Fluent-reader（Windows）](https://hyliu.me/fluent-reader/)
+    - [Reeder（iOS & macOS）](https://reederapp.com/)
+    - [FeedMe（Android）](https://play.google.com/store/apps/details?id=com.seazon.feedme)
+    - [Feedly（web）](https://feedly.com/)
+    - [The old reader（web）](https://theoldreader.com/)
+    - [Inoreader（web）](https://www.innoreader.com/)
+      欢迎大家在评论区分享更多优质工具和订阅源
 
 ---
 

@@ -4,9 +4,9 @@ description: "Master winget for software management: search, install, update, an
 published: 2024-03-01
 updated: 2024-03-09
 tags:
-  - tech-sharing
-  - Windows 11
-  - Tutorial
+    - tech-sharing
+    - Windows 11
+    - Tutorial
 draft: false
 pin: 0
 toc: true

@@ -4,7 +4,7 @@ published: 2025-07-31
 description: "How to self-host TinyTinyRSS for a private RSS reader, hidden iOS and macOS interaction design details, and a free tool for migrating playlists to Apple Music."
 updated: 2025-08-08
 tags:
-  - Weekly
+    - Weekly
 draft: false
 pin: 0
 toc: true

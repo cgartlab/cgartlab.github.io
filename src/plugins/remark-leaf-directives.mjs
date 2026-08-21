@@ -1,21 +1,21 @@
-import { visit } from 'unist-util-visit'
+import { visit } from "unist-util-visit";
 
 const embedHandlers = {
-  // GitHub Repository Card
-  github: (node) => {
-    const repo = node.attributes?.repo ?? ''
-    if (!repo) {
-      console.warn(`Missing GitHub repository`)
-      return false
-    }
+	// GitHub Repository Card
+	github: (node) => {
+		const repo = node.attributes?.repo ?? "";
+		if (!repo) {
+			console.warn(`Missing GitHub repository`);
+			return false;
+		}
 
-    const [owner, name] = repo.split('/')
-    if (!owner || !name) {
-      console.warn(`Invalid GitHub repository format: "${repo}"`)
-      return false
-    }
+		const [owner, name] = repo.split("/");
+		if (!owner || !name) {
+			console.warn(`Invalid GitHub repository format: "${repo}"`);
+			return false;
+		}
 
-    return `
+		return `
     <a href="https://github.com/${repo}" class="no-heti gc-container" target="_blank" rel="noopener noreferrer" data-repo="${repo}">
       <div class="gc-title-bar">
         <div class="gc-owner-avatar" style="background-size: cover; background-position: center;" aria-hidden="true"></div>
@@ -42,33 +42,33 @@ const embedHandlers = {
         <span class="gc-license-info" aria-label="License">--</span>
       </div>
     </a>
-    `
-  },
+    `;
+	},
 
-  // Youtube
-  youtube: (node) => {
-    const videoId = node.attributes?.id ?? ''
-    if (!videoId) {
-      console.warn(`Missing YouTube video ID`)
-      return false
-    }
+	// Youtube
+	youtube: (node) => {
+		const videoId = node.attributes?.id ?? "";
+		if (!videoId) {
+			console.warn(`Missing YouTube video ID`);
+			return false;
+		}
 
-    return `
+		return `
     <figure>
       <lite-youtube videoid="${videoId}"></lite-youtube>
     </figure>
-    `
-  },
+    `;
+	},
 
-  // Bilibili
-  bilibili: (node) => {
-    const bvid = node.attributes?.id ?? ''
-    if (!bvid) {
-      console.warn(`Missing Bilibili video ID`)
-      return false
-    }
+	// Bilibili
+	bilibili: (node) => {
+		const bvid = node.attributes?.id ?? "";
+		if (!bvid) {
+			console.warn(`Missing Bilibili video ID`);
+			return false;
+		}
 
-    return `
+		return `
     <figure>
       <iframe
         class="bilibili-player"
@@ -78,45 +78,45 @@ const embedHandlers = {
         loading="lazy"
       ></iframe>
     </figure>
-    `
-  },
+    `;
+	},
 
-  // Tweet Card
-  tweet: (node) => {
-    const url = node.attributes?.url ?? ''
-    if (!url) {
-      console.warn(`Missing Tweet URL`)
-      return false
-    }
+	// Tweet Card
+	tweet: (node) => {
+		const url = node.attributes?.url ?? "";
+		if (!url) {
+			console.warn(`Missing Tweet URL`);
+			return false;
+		}
 
-    const tweetUrl = url.replace(/(\w+:\/\/)?x\.com\//g, '$1twitter.com/')
+		const tweetUrl = url.replace(/(\w+:\/\/)?x\.com\//g, "$1twitter.com/");
 
-    return `
+		return `
     <figure>
       <blockquote class="twitter-tweet" data-dnt="true">
         <a href="${tweetUrl}"></a>
       </blockquote>
     </figure>
-    `
-  },
+    `;
+	},
 
-  // CodePen
-  codepen: (node) => {
-    const url = node.attributes?.url ?? ''
-    if (!url) {
-      console.warn(`Missing CodePen URL`)
-      return false
-    }
+	// CodePen
+	codepen: (node) => {
+		const url = node.attributes?.url ?? "";
+		if (!url) {
+			console.warn(`Missing CodePen URL`);
+			return false;
+		}
 
-    const match = url.match(/codepen\.io\/([^/]+)\/pen\/([^/?#]+)/)
-    if (!match) {
-      console.warn(`Invalid CodePen URL: ${url}`)
-      return false
-    }
+		const match = url.match(/codepen\.io\/([^/]+)\/pen\/([^/?#]+)/);
+		if (!match) {
+			console.warn(`Invalid CodePen URL: ${url}`);
+			return false;
+		}
 
-    const [, user, slug] = match
+		const [, user, slug] = match;
 
-    return `
+		return `
     <figure>
       <iframe
         class="codepen-embed"
@@ -125,27 +125,29 @@ const embedHandlers = {
         loading="lazy"
       ></iframe>
     </figure>
-    `
-  },
+    `;
+	},
 
-  // Spotify
-  spotify: (node) => {
-    const url = node.attributes?.url ?? ''
-    if (!url) {
-      console.warn(`Missing Spotify URL`)
-      return false
-    }
+	// Spotify
+	spotify: (node) => {
+		const url = node.attributes?.url ?? "";
+		if (!url) {
+			console.warn(`Missing Spotify URL`);
+			return false;
+		}
 
-    const match = url.match(/open\.spotify\.com\/(track|album|playlist|artist|episode|show)\/([^/?#]+)/)
-    if (!match) {
-      console.warn(`Invalid Spotify URL: ${url}`)
-      return false
-    }
+		const match = url.match(
+			/open\.spotify\.com\/(track|album|playlist|artist|episode|show)\/([^/?#]+)/,
+		);
+		if (!match) {
+			console.warn(`Invalid Spotify URL: ${url}`);
+			return false;
+		}
 
-    const [, type, id] = match
-    const height = ['track', 'episode', 'show'].includes(type) ? 152 : 352
+		const [, type, id] = match;
+		const height = ["track", "episode", "show"].includes(type) ? 152 : 352;
 
-    return `
+		return `
     <figure>
       <iframe
         class="spotify-embed"
@@ -156,33 +158,33 @@ const embedHandlers = {
         loading="lazy"
       ></iframe>
     </figure>
-    `
-  },
-}
+    `;
+	},
+};
 
 export function remarkLeafDirectives() {
-  return (tree) => {
-    visit(tree, 'leafDirective', (node) => {
-      // 获取处理器
-      const handler = embedHandlers[node.name]
-      if (!handler) {
-        return
-      }
+	return (tree) => {
+		visit(tree, "leafDirective", (node) => {
+			// 获取处理器
+			const handler = embedHandlers[node.name];
+			if (!handler) {
+				return;
+			}
 
-      // 获取HTML内容
-      const htmlContent = handler(node)
-      if (!htmlContent) {
-        return
-      }
+			// 获取HTML内容
+			const htmlContent = handler(node);
+			if (!htmlContent) {
+				return;
+			}
 
-      // 转换节点为HTML
-      node.type = 'html'
-      node.value = htmlContent
+			// 转换节点为HTML
+			node.type = "html";
+			node.value = htmlContent;
 
-      // 删除原始属性
-      delete node.name
-      delete node.attributes
-      delete node.children
-    })
-  }
+			// 删除原始属性
+			delete node.name;
+			delete node.attributes;
+			delete node.children;
+		});
+	};
 }

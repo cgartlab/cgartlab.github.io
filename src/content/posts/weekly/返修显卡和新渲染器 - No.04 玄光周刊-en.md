@@ -4,7 +4,7 @@ published: 2025-07-11
 description: "Hands-on with Centileo Render, a free GPU renderer for 3ds Max and Cinema 4D. Plus a Colorful RTX 3070 repair, Microsoft Store Android emulator, Obsidian plugins."
 updated: 2025-08-06
 tags:
-  - Weekly
+    - Weekly
 draft: false
 pin: 0
 toc: true

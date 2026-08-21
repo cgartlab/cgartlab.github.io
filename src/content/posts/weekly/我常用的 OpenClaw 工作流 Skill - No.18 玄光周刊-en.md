@@ -4,9 +4,9 @@ published: 2026-05-24
 updated: 2026-05-24
 description: "After three months with OpenClaw AI agent, explore practical workflow Skills for news filtering, system monitoring, API management, and research reports."
 tags:
-  - Weekly
-  - AI Workflow
-  - OpenClaw
+    - Weekly
+    - AI Workflow
+    - OpenClaw
 draft: false
 pin: 0
 toc: true

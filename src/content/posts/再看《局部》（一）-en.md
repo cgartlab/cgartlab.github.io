@@ -4,8 +4,8 @@ published: 2024-03-27
 description: "I recently rewatched Chen Danqing's documentary series 'The Local' and jotted down some thoughts that resonated with me."
 updated: 2024-12-11
 tags:
-  - Essay
-  - Art-Appreciation
+    - Essay
+    - Art-Appreciation
 draft: false
 pin: 0
 toc: true
@@ -39,10 +39,10 @@ A truism (not meant pejoratively). Composition, element arrangement, shot scale,
 
 Reminds me of a line I can't remember where I read: "Never miss the five minutes after an idea appears."
 
-> Orson Welles, *Citizen Kane*.
-> Bernardo Bertolucci, *1900*.
-> Federico Fellini, *8½*.
-> Andrei Tarkovsky, *The Sacrifice*.
+> Orson Welles, _Citizen Kane_.
+> Bernardo Bertolucci, _1900_.
+> Federico Fellini, _8½_.
+> Andrei Tarkovsky, _The Sacrifice_.
 
 These are four great directors mentioned in the book, said to have masterful command of camera and scene choreography. Added to the watchlist.
 

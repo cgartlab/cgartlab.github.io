@@ -4,9 +4,9 @@ published: 2026-05-02
 updated: 2026-05-02
 description: "From pandemic Hackintosh tinkering to indie blog building, discover how global volunteers and shared source code sparked a personal open source journey."
 tags:
-  - Weekly
-  - Open Source
-  - Hackintosh
+    - Weekly
+    - Open Source
+    - Hackintosh
 draft: false
 pin: 0
 toc: true

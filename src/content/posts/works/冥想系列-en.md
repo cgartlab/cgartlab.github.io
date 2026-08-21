@@ -4,10 +4,10 @@ published: 2019-08-08
 description: "Explore the Meditation Series of CG paintings on consciousness and inner self. Each piece visualizes psychological depth, mindfulness, and authentic reality."
 updated: 2019-08-08
 tags:
-  - Digital Painting
-  - Meditation
-  - Mindfulness
-  - Portfolio
+    - Digital Painting
+    - Meditation
+    - Mindfulness
+    - Portfolio
 draft: false
 pin: 0
 toc: true

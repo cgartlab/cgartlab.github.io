@@ -37,10 +37,10 @@ CG 艺术实验室（以下简称"本站"）高度重视用户的隐私保护。
 
 本站使用浏览器本地存储（LocalStorage）保存以下信息：
 
-| 存储类型 | 用途 | 生命周期 |
-|---------|------|---------|
-| 主题偏好 | 记录您选择的亮色/暗色主题模式 | 持久性（直到手动清除） |
-| 搜索历史 | 记录您的搜索关键词（可选功能） | 会话级 |
+| 存储类型 | 用途                           | 生命周期               |
+| -------- | ------------------------------ | ---------------------- |
+| 主题偏好 | 记录您选择的亮色/暗色主题模式  | 持久性（直到手动清除） |
+| 搜索历史 | 记录您的搜索关键词（可选功能） | 会话级                 |
 
 ### 1.4 本站不收集的信息
 
@@ -79,45 +79,49 @@ CG 艺术实验室（以下简称"本站"）高度重视用户的隐私保护。
 
 ### 3.1 网站分析
 
-| 服务名称 | 提供商 | 用途 | 隐私政策 |
-|---------|--------|------|---------|
-| Google Analytics | Google LLC | 网站流量分析、用户行为统计 | [Google 隐私政策](https://policies.google.com/privacy) |
-| Umami Analytics | Umami Software, Inc. | 开源网站分析（隐私友好） | [Umami 隐私政策](https://umami.is/privacy) |
+| 服务名称         | 提供商               | 用途                       | 隐私政策                                               |
+| ---------------- | -------------------- | -------------------------- | ------------------------------------------------------ |
+| Google Analytics | Google LLC           | 网站流量分析、用户行为统计 | [Google 隐私政策](https://policies.google.com/privacy) |
+| Umami Analytics  | Umami Software, Inc. | 开源网站分析（隐私友好）   | [Umami 隐私政策](https://umami.is/privacy)             |
 
 **说明**：
+
 - Google Analytics 使用 Cookie 收集匿名化的访问数据
 - 您可以通过安装 [Google Analytics 停用浏览器插件](https://tools.google.com/dlpage/gaoptout) 阻止数据被收集
 - Umami 为隐私友好的分析方案，不收集个人身份信息，不使用 Cookie 追踪
 
 ### 3.2 评论系统
 
-| 服务名称 | 提供商 | 用途 | 隐私政策 |
-|---------|--------|------|---------|
-| Giscus | 开源项目 | 基于 GitHub Discussions 的评论系统 | [GitHub 隐私政策](https://docs.github.com/zh/site-policy/privacy-policies/github-general-privacy-statement) |
+| 服务名称 | 提供商   | 用途                               | 隐私政策                                                                                                    |
+| -------- | -------- | ---------------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| Giscus   | 开源项目 | 基于 GitHub Discussions 的评论系统 | [GitHub 隐私政策](https://docs.github.com/zh/site-policy/privacy-policies/github-general-privacy-statement) |
 
 **说明**：
+
 - 发表评论需要登录 GitHub 账号
 - 评论内容存储于 GitHub Discussions，遵循 GitHub 的数据处理规则
 - 您的 GitHub 公开资料（头像、用户名）可能在评论区域展示
 
 ### 3.3 内容分发与嵌入
 
-| 服务名称 | 提供商 | 用途 | 隐私政策 |
-|---------|--------|------|---------|
-| YouTube 嵌入 | Google LLC | 视频内容展示 | [YouTube 服务条款](https://www.youtube.com/t/terms) |
+| 服务名称      | 提供商                   | 用途         | 隐私政策                                                                 |
+| ------------- | ------------------------ | ------------ | ------------------------------------------------------------------------ |
+| YouTube 嵌入  | Google LLC               | 视频内容展示 | [YouTube 服务条款](https://www.youtube.com/t/terms)                      |
 | Bilibili 嵌入 | 上海宽娱数码科技有限公司 | 视频内容展示 | [Bilibili 隐私政策](https://www.bilibili.com/blackboard/privacy-pc.html) |
 
 **说明**：
+
 - 嵌入视频可能允许对应平台记录您的播放行为
 - 视频加载时可能涉及对应平台的 Cookie 设置
 
 ### 3.4 网站托管与 CDN
 
-| 服务名称 | 提供商 | 用途 | 隐私政策 |
-|---------|--------|------|---------|
+| 服务名称           | 提供商           | 用途               | 隐私政策                                                   |
+| ------------------ | ---------------- | ------------------ | ---------------------------------------------------------- |
 | Cloudflare Workers | Cloudflare, Inc. | 网站托管与全球加速 | [Cloudflare 隐私政策](https://www.cloudflare.com/privacy/) |
 
 **说明**：
+
 - Cloudflare 在全球范围内部署 CDN 节点以提升访问速度
 - Cloudflare 可能记录访问日志用于安全防护和性能优化
 - 符合 GDPR、CCPA 等数据保护法规要求
@@ -137,18 +141,18 @@ Cookie 是网站存储在您浏览器中的小型文本文件，用于记录您�
 
 ### 4.2 本站使用的 Cookie
 
-| Cookie 类型 | 用途 | 有效期 |
-|------------|------|--------|
-| 主题偏好 | 记录您选择的亮色/暗色主题模式 | 持久性（直到手动清除） |
-| 分析 Cookie | Google Analytics 用于区分独立访客 | 2 年 |
+| Cookie 类型 | 用途                              | 有效期                 |
+| ----------- | --------------------------------- | ---------------------- |
+| 主题偏好    | 记录您选择的亮色/暗色主题模式     | 持久性（直到手动清除） |
+| 分析 Cookie | Google Analytics 用于区分独立访客 | 2 年                   |
 
 ### 4.3 浏览器本地存储
 
 除 Cookie 外，本站还使用浏览器的 LocalStorage 功能：
 
-| 存储键 | 用途 | 说明 |
-|--------|------|------|
-| `theme` | 主题模式 | 值为 `light` 或 `dark` |
+| 存储键         | 用途             | 说明                       |
+| -------------- | ---------------- | -------------------------- |
+| `theme`        | 主题模式         | 值为 `light` 或 `dark`     |
 | `theme-manual` | 是否手动设置主题 | 值为 `true` 时忽略系统偏好 |
 
 ### 4.4 您的隐私控制权
@@ -157,7 +161,7 @@ Cookie 是网站存储在您浏览器中的小型文本文件，用于记录您�
 
 - **浏览器设置**：在浏览器偏好设置中清除、阻止或管理 Cookie
 - **分析工具退出**：
-  - [Google Analytics 退出](https://tools.google.com/dlpage/gaoptout)
+    - [Google Analytics 退出](https://tools.google.com/dlpage/gaoptout)
 - **减少动画效果**：如您的系统偏好设置 `prefers-reduced-motion: reduce`，本站将自动禁用页面动画
 - **隐私浏览模式**：使用浏览器的隐私/无痕模式访问本站
 
@@ -186,6 +190,7 @@ Cookie 是网站存储在您浏览器中的小型文本文件，用于记录您�
 ### 5.3 安全事件响应
 
 如发生数据泄露等安全事件，我们将：
+
 - 在 72 小时内评估事件影响
 - 如涉及个人敏感信息泄露，将及时通知受影响用户
 - 采取补救措施防止事件扩大
@@ -211,11 +216,13 @@ Cookie 是网站存储在您浏览器中的小型文本文件，用于记录您�
 ### 6.4 删除权
 
 在以下情况下，您有权要求我们删除您的个人信息：
+
 - 信息收集违反法律法规
 - 信息使用超出约定目的和范围
 - 您撤回同意且没有继续处理的合法依据
 
 **具体操作**：
+
 - 评论删除：请联系本站管理员，或通过 GitHub 删除您的 Discussion 评论
 - 邮件订阅取消：点击周刊邮件底部的"取消订阅"链接
 - 本地存储清除：通过浏览器设置清除本站相关数据
@@ -272,13 +279,13 @@ Cookie 是网站存储在您浏览器中的小型文本文件，用于记录您�
 
 如您对本隐私政策有任何疑问、意见或投诉，请通过以下方式联系：
 
-| 渠道 | 联系方式 |
-|------|---------|
-| 电子邮箱 | hello@cgartlab.com |
-| GitHub | [cgartlab/cgartlab.github.io](https://github.com/cgartlab/cgartlab.github.io) |
-| X (Twitter) | [@cgartlab](https://x.com/cgartlab) |
-| Bilibili | [cgartlab](https://space.bilibili.com/38043072) |
-| 少数派 | [cgartlab](https://sspai.com/u/cgartlab/updates) |
+| 渠道        | 联系方式                                                                      |
+| ----------- | ----------------------------------------------------------------------------- |
+| 电子邮箱    | hello@cgartlab.com                                                            |
+| GitHub      | [cgartlab/cgartlab.github.io](https://github.com/cgartlab/cgartlab.github.io) |
+| X (Twitter) | [@cgartlab](https://x.com/cgartlab)                                           |
+| Bilibili    | [cgartlab](https://space.bilibili.com/38043072)                               |
+| 少数派      | [cgartlab](https://sspai.com/u/cgartlab/updates)                              |
 
 对于无法解决的争议，您有权向中华人民共和国相关监管部门投诉或举报。
 
@@ -290,4 +297,4 @@ Cookie 是网站存储在您浏览器中的小型文本文件，用于记录您�
 
 ---
 
-*本隐私政策自 2026 年 5 月 28 日起生效。*
+_本隐私政策自 2026 年 5 月 28 日起生效。_

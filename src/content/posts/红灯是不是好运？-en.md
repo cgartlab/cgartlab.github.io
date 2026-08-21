@@ -4,9 +4,9 @@ published: 2023-09-27
 description: "I wasn't a good student back then. After a year of retaking the college entrance exam, I switched to studying art. Many of my classmates chose the art track too, signing up for all kinds of studios."
 updated: 2023-09-27
 tags:
-  - Essay
-  - Life
-  - Art
+    - Essay
+    - Life
+    - Art
 draft: false
 pin: 0
 toc: true

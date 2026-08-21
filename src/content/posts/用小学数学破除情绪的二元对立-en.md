@@ -3,9 +3,9 @@ title: "Breaking Emotional Binary Opposition with Math: Emotional Intelligence G
 description: "Reframe emotional intelligence with elementary-school math. See positive emotions as capacity for resilience, not just good feelings — a practical framework for healthier emotional regulation."
 published: 2023-10-03
 tags:
-  - Essay
-  - Emotional Intelligence
-  - Psychology
+    - Essay
+    - Emotional Intelligence
+    - Psychology
 toc: true
 pin: 0
 draft: false

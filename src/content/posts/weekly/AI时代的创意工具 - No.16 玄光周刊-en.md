@@ -5,9 +5,9 @@ description: "Are AI creative tools expanding or flattening artistic boundaries?
 updated: 2026-04-20
 abbrlink: weekly-16
 tags:
-  - Weekly
-  - AI Art
-  - Digital Creation
+    - Weekly
+    - AI Art
+    - Digital Creation
 draft: false
 pin: 0
 toc: true

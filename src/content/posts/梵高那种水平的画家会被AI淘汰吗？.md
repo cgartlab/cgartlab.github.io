@@ -4,7 +4,7 @@ published: 2023-04-16
 description: 这是我在知乎上被邀请回答的一个问题，这个回答写到一半，我觉得把它作为一篇博文收录到博客专栏很不错，打算再写一些自己的想法。
 updated: 2023-04-16
 tags:
-  - 随笔
+    - 随笔
 draft: false
 pin: 0
 toc: true

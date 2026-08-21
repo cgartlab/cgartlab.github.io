@@ -1,22 +1,22 @@
-import type { AttributifyAttributes } from '@unocss/preset-attributify'
+import type { AttributifyAttributes } from "@unocss/preset-attributify";
 
 declare global {
-  namespace astroHTML.JSX {
-    interface HTMLAttributes extends AttributifyAttributes {}
-  }
+	namespace astroHTML.JSX {
+		interface HTMLAttributes extends AttributifyAttributes {}
+	}
 
-  interface Window {
-    webkitAudioContext: typeof AudioContext
-  }
-  interface Document {
-    startViewTransition: (updateCallback: () => void) => ViewTransition
-  }
+	interface Window {
+		webkitAudioContext: typeof AudioContext;
+	}
+	interface Document {
+		startViewTransition: (updateCallback: () => void) => ViewTransition;
+	}
 
-  interface ViewTransition {
-    finished: Promise<void>
-    ready: Promise<void>
-    updateCallbackDone: Promise<void>
-  }
+	interface ViewTransition {
+		finished: Promise<void>;
+		ready: Promise<void>;
+		updateCallbackDone: Promise<void>;
+	}
 }
 
-export {}
+export {};

@@ -4,7 +4,7 @@ title: "My God Mode: The Evolution of a Designer's Creative Environment"
 abbrlink: designer-creative-environment-evolution
 published: 2026-07-21
 tags:
-  - 随笔
+    - 随笔
 description: "How a motion designer built his ideal creative workspace over twelve years — from survival-mode headphones through Hi-Fi exploration to speakers and a long-term-value methodology for any creator."
 updated: 2026-07-21
 pin: 0
@@ -44,18 +44,18 @@ If "Earth Online" had a level system, I'd rather divide each stage by cognitive 
 Before you decide to invest more time reading, here's some context you should know:
 
 - My starting profession was animation designer
-  - Industry boundaries are much blurrier now; "motion designer" is more accurate today.
+    - Industry boundaries are much blurrier now; "motion designer" is more accurate today.
 - Twelve years in the industry
-  - Roles I've held include project manager, graphic designer, training instructor, and film UI/motion designer.
-  - These days I'm broadly a product engineer — too many interests, a bit of a jack-of-all-trades.
+    - Roles I've held include project manager, graphic designer, training instructor, and film UI/motion designer.
+    - These days I'm broadly a product engineer — too many interests, a bit of a jack-of-all-trades.
 - Photos in this article
-  - All taken by the author unless otherwise noted.
-  - Not in strict chronological order.
-  - They roughly reflect the state of the creative environment at the time.
-  - The images and examples are for reference only — I'm not endorsing any specific equipment or brands.
+    - All taken by the author unless otherwise noted.
+    - Not in strict chronological order.
+    - They roughly reflect the state of the creative environment at the time.
+    - The images and examples are for reference only — I'm not endorsing any specific equipment or brands.
 - My premise
-  - I believe what specific equipment you use doesn't really matter.
-  - What matters more is understanding your actual workflow and habits.
+    - I believe what specific equipment you use doesn't really matter.
+    - What matters more is understanding your actual workflow and habits.
 - So I'd rather share books, videos, and methodologies that helped me improve my creative environment at each stage.
 
 Hopefully this will spark some different thinking for you.
@@ -95,13 +95,13 @@ Compared to my working days, I also had more free time. So alongside my studies,
 If you're at this stage too, here are some recommendations:
 
 - [Design Ah!](https://www.bilibili.com/video/BV1hwKfzmEr4)
-  - Observing and understanding good design
+    - Observing and understanding good design
 - [The Non-Designer's Design Book](https://book.douban.com/subject/26657933/)
-  - A classic, need I say more?
+    - A classic, need I say more?
 - [Show Your Work!](https://book.douban.com/subject/36471384/)
-  - I recommend reading the English original; the Chinese translation is mediocre
+    - I recommend reading the English original; the Chinese translation is mediocre
 - [IT之家](https://www.ithome.com/)
-  - I've been reading it since college, but this was when I started truly understanding mainstream brands and products
+    - I've been reading it since college, but this was when I started truly understanding mainstream brands and products
 
 ## The Growth Phase — Learning and Imitating
 
@@ -118,13 +118,13 @@ But like many newcomers, what I initially cared about was hardware specs: the sc
 The screen is only "in use" when you're looking at it. The mouse and keyboard are only "in use" when you're moving or clicking. But the desk, chair, lighting, and sound are in use the moment you sit down — even the moment you enter the space. From this perspective, which items have the longer real usage time is obvious. But I didn't think about this back then; I was too busy obsessing over other hardware. I read countless posts and reviews, bookmarked every brand website I liked. The most notable ones include:
 
 - [sspai](https://sspai.com/)
-  - I lurked and learned for a long time; now I'm a contributor there too
+    - I lurked and learned for a long time; now I'm a contributor there too
 - [Chiphell](https://www.chiphell.com/)
-  - Still lurking — the forum regulars are impressively well-funded, but great for elevating your taste
+    - Still lurking — the forum regulars are impressively well-funded, but great for elevating your taste
 - [硬件茶谈](https://space.bilibili.com/14871346)
-  - Top-tier hardware explainer video channel with exceptionally polished animations
+    - Top-tier hardware explainer video channel with exceptionally polished animations
 - [远古时代装机猿](https://space.bilibili.com/35359510)
-  - Also top-tier ~~stand-up comedy~~ PC hardware explainer channel
+    - Also top-tier ~~stand-up comedy~~ PC hardware explainer channel
 
 Beyond becoming familiar with computer hardware, I also started exploring different operating systems and software. My knowledge base began expanding beyond my professional skills — during this phase, it was more like an explosion.
 
@@ -289,11 +289,11 @@ If you're at this stage, here are some recommendations:
 If the evolution of the creative environment is a process of "slicing and reassembling," the transformation of sound within it went roughly like this:
 
 - A survival necessity
-  - Headphones were almost the only carrier
+    - Headphones were almost the only carrier
 - Returning to enjoying music
-  - Speakers began to replace headphones; music was no longer purely a tool
+    - Speakers began to replace headphones; music was no longer purely a tool
 - Infrastructure for the environment
-  - No longer limited to speakers — pure music and ambient sounds were both considered part of the environment
+    - No longer limited to speakers — pure music and ambient sounds were both considered part of the environment
 
 To me, the "New Sound in the Corner" isn't about "switching to different equipment" or "improving audio quality." What I really need to address is the "environmental medium." These mediums exist to improve productivity. Sound is one of them, and its role is to help me enter a state of focus — or even flow — more easily.
 
@@ -330,11 +330,11 @@ I also added a modest 1080p 60Hz portable monitor that serves as a secondary dis
 The speakers are still the same Edifier set. The final decision logic was:
 
 - Compared to agonizing over tools, building a system and iterative thinking matter more.
-  - In other words, discovering what remains unchanged amid technological change.
+    - In other words, discovering what remains unchanged amid technological change.
 - Compared to pursuing a perfect workflow, finishing the work at hand matters more.
-  - There's nothing wrong with pursuing perfection, provided you truly have the time and ability to approach it infinitely. Otherwise, prioritize completion.
+    - There's nothing wrong with pursuing perfection, provided you truly have the time and ability to approach it infinitely. Otherwise, prioritize completion.
 - Compared to finishing the work at hand, health matters more.
-  - I'm still not great at this one — there always seems to be something more important than health.
+    - I'm still not great at this one — there always seems to be something more important than health.
 
 ## Conclusion
 

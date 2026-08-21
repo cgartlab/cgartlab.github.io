@@ -3,7 +3,7 @@ title: EDIC设计系统
 published: 2026-06-08
 description: 同时面向人类与 Agent 的编辑主义设计系统。基于 OKLch 色彩与设计令牌构建，框架无关、暗色就绪、中英文混排优化。
 tags:
-  - 设计工具
+    - 设计工具
 draft: false
 abbrlink: edic-design-system
 toc: true

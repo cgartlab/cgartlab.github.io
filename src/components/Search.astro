@@ -237,10 +237,11 @@ const currentUI = ui[currentLang as keyof typeof ui] ?? {}
 
     if (loadFailed && searchIndex.length === 0) {
       const span = els.empty?.querySelector('span')
-      if (span)
+      if (span) {
         span.textContent = document.documentElement.lang.startsWith('zh')
           ? '搜索索引加载失败，请刷新页面'
           : 'Search index failed to load, please refresh'
+      }
       els.empty.classList.add('visible')
       return
     }
@@ -357,7 +358,7 @@ const currentUI = ui[currentLang as keyof typeof ui] ?? {}
         if (focusables.length < 2)
           return
         const first = focusables[0]
-        const last = focusables[focusables.length - 1]
+        const last = focusables.at(-1)
         if (e.shiftKey && document.activeElement === first) {
           e.preventDefault()
           last.focus()

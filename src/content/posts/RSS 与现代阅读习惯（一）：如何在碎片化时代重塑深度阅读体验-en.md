@@ -4,9 +4,9 @@ description: "Reclaim deep reading with RSS. Part 1 explores why slowing down be
 published: 2024-12-05
 updated: 2024-12-15
 tags:
-  - knowledge-management
-  - tech-sharing
-  - RSS
+    - knowledge-management
+    - tech-sharing
+    - RSS
 draft: false
 pin: 0
 toc: true

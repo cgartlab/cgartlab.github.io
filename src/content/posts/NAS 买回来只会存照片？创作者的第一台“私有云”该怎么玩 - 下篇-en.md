@@ -4,9 +4,9 @@ title: "NAS for Creators Part 2: Build Your Private Cloud Storage System"
 abbrlink: nas-beyond-photos-your-first-private-cloud-2
 published: 2026-01-27
 tags:
-  - Knowledge Management
-  - Tech Sharing
-  - NAS
+    - Knowledge Management
+    - Tech Sharing
+    - NAS
 description: "Build a creator NAS system with Part 2: hard drive selection, RAID configuration, Docker services, four-layer storage logic, and remote access setup."
 updated: 2026-06-26
 pin: 0
@@ -70,16 +70,16 @@ This brings us to the advantages of DIY NAS:
 
 Here's my hardware assembly plan as an example (reference the approach, as there are likely better value components now):
 
-| **Component Name**                    | **Purchase Price** |
-| --------------------------------- | -------------- |
-| **CPU:** Intel i3-8100T           | **¥158.00**    |
-| **Motherboard:** Yunxing CS2 B250 NAS Board | **¥469.00**    |
-| **RAM:** Kingston DDR4 32GB (2x16GB) | **¥145.00**    |
-| **Case:** Sagittarius 8-Bay (with SATA cables) | **¥359.00**    |
-| **Power Supply:** Great Wall HOPE-6000DS 500W | **¥279.00**    |
-| **Cooler:** Intel Original Thermal Cooler | **¥9.30**      |
-| **System Drive:** Ruidun M.2 NVMe 256GB SSD | **¥99.90**     |
-| **Total (excluding hard drives)**      | **¥1,520.20**  |
+| **Component Name**                             | **Purchase Price** |
+| ---------------------------------------------- | ------------------ |
+| **CPU:** Intel i3-8100T                        | **¥158.00**        |
+| **Motherboard:** Yunxing CS2 B250 NAS Board    | **¥469.00**        |
+| **RAM:** Kingston DDR4 32GB (2x16GB)           | **¥145.00**        |
+| **Case:** Sagittarius 8-Bay (with SATA cables) | **¥359.00**        |
+| **Power Supply:** Great Wall HOPE-6000DS 500W  | **¥279.00**        |
+| **Cooler:** Intel Original Thermal Cooler      | **¥9.30**          |
+| **System Drive:** Ruidun M.2 NVMe 256GB SSD    | **¥99.90**         |
+| **Total (excluding hard drives)**              | **¥1,520.20**      |
 
 When assembled, it looks like the cover image. My main requirements were:
 
@@ -232,11 +232,11 @@ Have you thought about what you'll create with it?
 - [Syncthing Official Website](https://syncthing.net/)
 - [Tailscale Official Website](https://tailscale.com/)
 - [DDNS-GO Official Website](https://github.com/jeessy2/ddns-go)
-<<<<<<< HEAD
+  <<<<<<< HEAD
 - [Calibre-web Official Website](https://calibre-web.readthedocs.io/en/latest/) (Dead 2026-06-26)
-=======
+  \=======
 - [Calibre-web Official Website](https://calibre-web.readthedocs.io/en/latest/)
->>>>>>> origin/main
+
+> > > > > > > origin/main
 
 ---
-

@@ -3,7 +3,7 @@ title: EDIC Design System
 published: 2026-06-08
 description: "EDIC is an open-source editorial design system for humans and AI agents. Features 200+ OKLch tokens, 25 components, 100 icons, and framework-agnostic CSS."
 tags:
-  - Design Tool
+    - Design Tool
 draft: false
 abbrlink: edic-design-system
 toc: true

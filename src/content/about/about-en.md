@@ -4,7 +4,7 @@ lang: en
 
 ![Meditation Series](../posts/_images/冥想系列-1754664780351.webp)
 
-*Tools are extensions of human limbs, computers are extensions of the brain, and writing is thinking itself.*
+_Tools are extensions of human limbs, computers are extensions of the brain, and writing is thinking itself._
 
 # About the Author
 
@@ -28,7 +28,7 @@ The content inside is my public spiritual world. CG Art handles the visual and a
 
 In recent years the experiment has expanded from traditional digital visuals to include UI/UX design and AI-assisted workflows. The impulse stays the same: use ever better, more interesting tools to express ideas, methods, and perspectives worth spreading.
 
-A weekly [newsletter](/en/weekly/) called *XuanGuang Weekly* — my public notebook. Sharing what I think, use, see, and hear throughout the week.
+A weekly [newsletter](/en/weekly/) called _XuanGuang Weekly_ — my public notebook. Sharing what I think, use, see, and hear throughout the week.
 
 # Creative Philosophy
 
@@ -40,7 +40,7 @@ Tools extend our limbs, computers extend our minds, wheels extend our legs. From
 
 Computers were built by some of the brightest minds on the planet and are the most accessible and empowering creation tool we have.
 
-Problems are everywhere if you push your thinking a little. Finding the *right* problem, however, is often the hard part. Once you have invested the time, documenting the problem and its solution is valuable in itself.
+Problems are everywhere if you push your thinking a little. Finding the _right_ problem, however, is often the hard part. Once you have invested the time, documenting the problem and its solution is valuable in itself.
 
 ## Writing is Thinking
 

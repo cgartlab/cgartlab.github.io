@@ -4,9 +4,9 @@ published: 2026-02-05
 description: "Explore AI data sovereignty: why your ChatGPT and Claude conversations may not belong to you. Compare data export features across AI platforms."
 updated: 2026-06-26
 tags:
-  - Weekly
-  - Data Privacy
-  - Self-Hosting
+    - Weekly
+    - Data Privacy
+    - Self-Hosting
 draft: false
 pin: 0
 toc: true

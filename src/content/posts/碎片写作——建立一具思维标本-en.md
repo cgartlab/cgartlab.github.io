@@ -4,9 +4,9 @@ published: 2024-03-22
 description: "Turn scattered ideas into polished articles through fragmented writing. Borrow Git's version control, branching, and backup principles to build a writing workflow that compounds over time."
 updated: 2024-11-25
 tags:
-  - knowledge-management
-  - Writing
-  - Git
+    - knowledge-management
+    - Writing
+    - Git
 draft: false
 pin: 0
 toc: true

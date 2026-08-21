@@ -4,7 +4,7 @@ published: 2026-06-02
 updated: 2026-06-27
 description: 承接上期内容，本期继续介绍我的 OpenClaw 第二类 Skill——那些真正扛起工作的专用 Skill。它们与自部署服务深度集成，已经融入正式的工作流。
 tags:
-  - 周刊
+    - 周刊
 draft: true
 pin: 0
 toc: true
@@ -20,9 +20,9 @@ abbrlink: weekly-19
 
 > [!note] 关于周刊
 > 这是一份专注知识管理，涵盖数字艺术、视觉设计、前端开发领域的电子周刊，发布频率目前为每周 1 期，每期精选一个细分话题展开思考。
-> 
+>
 > 如果你觉得这里的内容还不错，想获得更完善的阅读体验，更推荐使用浏览器来到官网阅读。
-> 
+>
 > 也欢迎使用 **RSS** (https://weekly.cgartlab.com/feed/atom) 或**邮件订阅**（[https://weekly.cgartlab.com](https://weekly.cgartlab.com)）进行订阅。
 
 ---

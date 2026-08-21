@@ -4,9 +4,9 @@ published: 2024-07-07
 description: "Optimize Windows 11 for productivity in 2024 with setup strategies, keyboard shortcuts, performance tweaks, and essential free tools for power users and creators."
 updated: 2024-12-15
 tags:
-  - tech-sharing
-  - Windows 11
-  - Tutorial
+    - tech-sharing
+    - Windows 11
+    - Tutorial
 draft: false
 pin: 0
 toc: true

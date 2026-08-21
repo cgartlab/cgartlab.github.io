@@ -4,7 +4,7 @@ published: 2026-01-15
 description: "Explore UI design philosophies from Google Design, Motion Awards 2025, and Vitsœ's timeless products. Plus why modern screens favor Heiti over Kaiti fonts."
 updated: 2026-01-15
 tags:
-  - Weekly
+    - Weekly
 draft: false
 pin: 0
 toc: true

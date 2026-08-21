@@ -4,9 +4,9 @@ description: "Can you still feel art without context? A meditation on knowledge 
 published: 2024-03-28
 updated: 2024-11-24
 tags:
-  - Essay
-  - Art Appreciation
-  - Mindfulness
+    - Essay
+    - Art Appreciation
+    - Mindfulness
 draft: false
 pin: 0
 toc: true

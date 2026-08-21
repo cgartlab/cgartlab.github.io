@@ -4,9 +4,9 @@ published: 2026-02-03
 description: "Discover the 'left foot on right foot' creative method linking knowledge management to writing. Build self-propelling systems through interconnected notes."
 updated: 2026-02-03
 tags:
-  - Weekly
-  - Knowledge Management
-  - Creativity
+    - Weekly
+    - Knowledge Management
+    - Creativity
 draft: false
 pin: 0
 toc: true

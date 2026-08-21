@@ -4,9 +4,9 @@ published: 2025-07-07
 description: "Explore the psychology of time perception — why time accelerates with age. Plus productivity strategies, logo design trends, and beginner drawing fundamentals."
 updated: 2025-08-06
 tags:
-  - Weekly
-  - Productivity
-  - Psychology
+    - Weekly
+    - Productivity
+    - Psychology
 draft: false
 pin: 0
 toc: true

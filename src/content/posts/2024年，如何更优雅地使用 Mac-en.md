@@ -4,9 +4,9 @@ published: 2024-12-11
 description: "Maximize Mac productivity on Apple Silicon. Learn macOS settings, battery management, native apps, and cross-platform workflows tailored for designers and creators."
 updated: 2024-12-11
 tags:
-  - tech-sharing
-  - macOS
-  - Tutorial
+    - tech-sharing
+    - macOS
+    - Tutorial
 draft: false
 pin: 0
 toc: true

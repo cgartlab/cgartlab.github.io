@@ -5,9 +5,9 @@ published: 2024-06-11
 updated: 2024-11-24
 draft: false
 tags:
-  - tech-sharing
-  - knowledge-management
-  - Self-Hosting
+    - tech-sharing
+    - knowledge-management
+    - Self-Hosting
 pin: 0
 lang: en
 abbrlink: how-to-build-library

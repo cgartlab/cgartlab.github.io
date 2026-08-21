@@ -4,8 +4,8 @@ published: 2026-08-01
 description: When it comes to AI, we're all beginners — whether you're 18 or 80. We've spent our lives executing rules, but never learned to design them. The shift from "rule executor" to "rule designer" is the one skill that makes AI truly useful.
 updated: 2026-08-01
 tags:
-  - AI
-  - Productivity
+    - AI
+    - Productivity
 draft: false
 pin: 0
 toc: true
@@ -64,7 +64,7 @@ And AI? By every measure — content generation speed, pace of development, capi
 
 You might wonder: what does this have to do with using AI well? Everything. Because AI is already fast, and we built it to help us go even faster.
 
-So what's the rush? When it comes to actually *using* this tool well, I think rushing is exactly the wrong thing to do.
+So what's the rush? When it comes to actually _using_ this tool well, I think rushing is exactly the wrong thing to do.
 
 If there's only one reason, it's this: **AI is an amplifier.** Everything you have — strengths and weaknesses alike — gets amplified. Faced with this revolutionary amplifier, you should be more cautious, not less, and learn to use it systematically.
 
@@ -148,15 +148,15 @@ Remember the patterns from the beginning?
 - Finally knowing what you want to ask, but not knowing how to phrase it
 ```
 
-At first, I thought the inability to ask good questions was a language and expression problem. But I quickly realized that couldn't be right — AI is *great* at organizing thoughts and polishing language. So why was I still getting mediocre answers?
+At first, I thought the inability to ask good questions was a language and expression problem. But I quickly realized that couldn't be right — AI is _great_ at organizing thoughts and polishing language. So why was I still getting mediocre answers?
 
-Then it clicked. It's the inertia of being an employee. I'm a designer by trade — design is fundamentally about solving problems. Most jobs are the same. But now the roles are reversed: I want AI to solve *my* problem, which means I suddenly have to be the one who defines the problem and the requirements.
+Then it clicked. It's the inertia of being an employee. I'm a designer by trade — design is fundamentally about solving problems. Most jobs are the same. But now the roles are reversed: I want AI to solve _my_ problem, which means I suddenly have to be the one who defines the problem and the requirements.
 
 And defining good problems and requirements is essentially **designing rules**.
 
 At work — and actually, not just at work — during our waking hours, most of us are rule executors. Wake up by the alarm, shower, eat, commute, work, overtime, go home, sleep. Most people never stop to ask whether the rules they follow every day are even correct, let alone how to design better ones.
 
-And when something feels off? The most common thought is: "Great, finally done following rules for today. Time to relax." And then you seamlessly switch into *another* set of rules...
+And when something feels off? The most common thought is: "Great, finally done following rules for today. Time to relax." And then you seamlessly switch into _another_ set of rules...
 
 The first real step to using AI well is learning to design rules yourself.
 
@@ -164,7 +164,7 @@ Who do you learn from? The people who are good at designing rules, of course. Bu
 
 The good news is, AI is also great at designing rules.
 
-Asking AI a high-quality question *is* a miniature act of rule design. We'll explore how to systematically design these "rules" in Chapter 3.
+Asking AI a high-quality question _is_ a miniature act of rule design. We'll explore how to systematically design these "rules" in Chapter 3.
 
 ### Finding the Best Rule Designer
 
@@ -223,6 +223,7 @@ Most people only encounter the first three. So why do I insist on using the Chat
 > **Phase 2: Mobile App**
 > Turn ChatGPT into a daily tool.
 > For example:
+>
 > - Take a photo of a menu and have AI translate it
 > - Take a photo of a problem you can't solve and have AI explain it
 > - Use voice chat while walking
@@ -231,15 +232,16 @@ Most people only encounter the first three. So why do I insist on using the Chat
 > **Phase 3: Desktop**
 > When ChatGPT starts being part of your work, the desktop version becomes much more valuable.
 > For designers:
+>
 > - Upload a design draft and have AI analyze it
 > - Discuss solutions
 > - Read project files
 > - Help with copywriting
-> For programmers:
+>   For programmers:
 > - Review code
 > - Modify files
 > - Debug issues
-> The desktop app has now deeply integrated with local files, browsers, and development tools
+>   The desktop app has now deeply integrated with local files, browsers, and development tools
 >
 > [Original conversation link](https://chatgpt.com/share/6a5394a8-df34-83ee-a3f1-efc39e5d0b8c)
 
@@ -248,27 +250,27 @@ After getting that answer, I also considered my own experience:
 When I first started using AI, the mobile app was the first thing I ruled out.
 
 - **First, small screens are not suitable for productive work**[^1].
-  - If someone can do their entire job on a phone, they're probably not doing the kind of work that requires deep thinking and complex creation.
-  - For high-complexity information processing, creation, and management tasks, a computer remains the most productive personal device.
+    - If someone can do their entire job on a phone, they're probably not doing the kind of work that requires deep thinking and complex creation.
+    - For high-complexity information processing, creation, and management tasks, a computer remains the most productive personal device.
 - **Second, it's easy to get distracted.**
-  - A phone has dozens of other apps. A call or message can break your train of thought instantly.
-  - Switching to entertainment mode is one tap away — need I say more?
+    - A phone has dozens of other apps. A call or message can break your train of thought instantly.
+    - Switching to entertainment mode is one tap away — need I say more?
 - **Third, staring at a phone screen damages your eyesight faster. Moving on.**
 
-At the end of the day, I see the phone as a device for communication and entertainment consumption. It's for *maintaining* production, not *engaging* in it. Also, on phones, there's both a web version and an app version. For ChatGPT, I still recommend the web version because installing apps from international app stores is genuinely inconvenient, regardless of your phone's OS. You can use the "Add to Home Screen" feature in your mobile browser to create a shortcut.
+At the end of the day, I see the phone as a device for communication and entertainment consumption. It's for _maintaining_ production, not _engaging_ in it. Also, on phones, there's both a web version and an app version. For ChatGPT, I still recommend the web version because installing apps from international app stores is genuinely inconvenient, regardless of your phone's OS. You can use the "Add to Home Screen" feature in your mobile browser to create a shortcut.
 
 This naturally leads to the web version's core advantages:
 
 - **Works almost everywhere.**
-  - Any device with an internet connection and a decent browser can use it.
+    - Any device with an internet connection and a decent browser can use it.
 - **Data and features update instantly.**
-  - Data sync is obvious.
-  - For features: apps require downloading new versions; the web always has the latest.
-  - Platform announcements and changes are usually published on the website first.
+    - Data sync is obvious.
+    - For features: apps require downloading new versions; the web always has the latest.
+    - Platform announcements and changes are usually published on the website first.
 - **Lower learning curve.**
-  - This might be counterintuitive, so let me explain. The web version and clients (desktop + mobile apps) share one thing: almost all advanced or pro features are in that "Settings" panel.
-  - But finding an advanced feature in the web version usually takes fewer steps than in the app. Apps bury advanced features deeper.
-  - Don't underestimate that extra click. One more step, and click-through rates drop off a cliff.
+    - This might be counterintuitive, so let me explain. The web version and clients (desktop + mobile apps) share one thing: almost all advanced or pro features are in that "Settings" panel.
+    - But finding an advanced feature in the web version usually takes fewer steps than in the app. Apps bury advanced features deeper.
+    - Don't underestimate that extra click. One more step, and click-through rates drop off a cliff.
 
 I have to admit that in 2026, the web version is no longer as dominant as it once was:
 
@@ -286,13 +288,13 @@ After more than a decade working in visual creative fields, I've come to a firm 
 
 ### Images and Sound Are Weakening Reading Ability
 
-Here's a counterintuitive fact: in the digital age, people are actually reading *more* than ever.
+Here's a counterintuitive fact: in the digital age, people are actually reading _more_ than ever.
 
 I studied animation in college, and for years I believed that images and video carried more information than text. It seemed obvious on a computer: a high-definition movie is at least 10GB, while all seven Harry Potter books are barely 10MB. So I naively thought text was trivial.
 
 The big misunderstanding is this: **file size ≠ information density.** When it comes to the information density your brain actually processes, **text and images carry fundamentally different types of information** — images excel at recording concrete, sensory, spatial information; text excels at abstract, logical, structured information.
 
-An image contains fixed visual elements: color, light, space, subject, environment. Notice that unless you're the creator, every image is *fixed*. Video is the same, just adding a time dimension — a sequence of images played in order. Still *fixed*.
+An image contains fixed visual elements: color, light, space, subject, environment. Notice that unless you're the creator, every image is _fixed_. Video is the same, just adding a time dimension — a sequence of images played in order. Still _fixed_.
 
 But text is different. A single sentence carries information beyond sight and sound — smell, taste, even the rhetorical device of synesthesia where you "see sweetness." Compared to images, text doesn't convey fixed information.
 
@@ -304,15 +306,15 @@ The flip side: it's actually getting easier to surpass most people. You just nee
 
 ### AI Evolved Through Text First
 
-From the moment ChatGPT appeared, this fact was on the table: all large language models are trained by reading massive amounts of text *before* they can generate images or video.
+From the moment ChatGPT appeared, this fact was on the table: all large language models are trained by reading massive amounts of text _before_ they can generate images or video.
 
-I once wrote an article on CGArtLab called *Fragmented Writing: Building a Thinking Specimen*, where I used an analogy:
+I once wrote an article on CGArtLab called _Fragmented Writing: Building a Thinking Specimen_, where I used an analogy:
 
 > **"Writing is also a form of programming. Articles and books are like programs that the human brain can run."**
 
 This means: the words you read and write aren't just "information data" — they're "code." They should be structured, reusable, and connectable. And AI is the tool best suited to processing this kind of "code."
 
-So when you use AI, you're actually having a conversation with an intelligence that *evolved through text*. It understands text more purely, comprehensively, and thoroughly than most humans do.
+So when you use AI, you're actually having a conversation with an intelligence that _evolved through text_. It understands text more purely, comprehensively, and thoroughly than most humans do.
 
 Remember this line from earlier?
 
@@ -326,7 +328,7 @@ Most people want to grab the conclusion and run, unwilling to spend an extra sec
 
 Because AI learns through text, it also inherits text's errors, biases, and contradictions. When facing AI output, patient reading serves two purposes: getting the most complete, high-density information, and building a critical line of defense against hallucination.
 
-Li Xiaolai wrote in *You Must Use Computers Well*:
+Li Xiaolai wrote in _You Must Use Computers Well_:
 
 > If you're willing to read the manual as soon as you get any tool, you've already beaten 99% of people.
 
@@ -355,7 +357,7 @@ Think of official documentation as a software's "user manual." It's often called
 
 You might wonder: why should I read official documentation when I can just ask AI?
 
-In the age of AI, official documentation is actually *more* valuable. Here's why:
+In the age of AI, official documentation is actually _more_ valuable. Here's why:
 
 **First, documentation is the source of rules.** AI can help interpret documentation, but the documentation itself is the authority. When AI gives an answer, cross-referencing it with official documentation is the best way to avoid being misled by confident nonsense. (Of course, if you're skilled with Agents, this problem can be mitigated — but that's a topic for later.)
 
@@ -365,21 +367,21 @@ In the age of AI, official documentation is actually *more* valuable. Here's why
 
 **Fourth, when you learn to verify AI through official documentation, you're practicing a fundamental form of data sovereignty — not blindly trusting a single source.** In the next chapter, we'll extend this awareness to an even more fundamental level: how to ensure your data itself is secure and under your control.
 
-In my personal knowledge management system, I have a principle: **every important framework design decision should be backed by corresponding theoretical documentation.** Not because I trust the documentation, but because I trust *traceability* — when AI gives a suggestion, I can quickly trace back to the original documentation and verify its soundness.
+In my personal knowledge management system, I have a principle: **every important framework design decision should be backed by corresponding theoretical documentation.** Not because I trust the documentation, but because I trust _traceability_ — when AI gives a suggestion, I can quickly trace back to the original documentation and verify its soundness.
 
 ## Summary
 
 I used to dismiss these so-called "fundamental understandings" too. I thought I already "knew" them. Then reality slapped me back to square one, again and again, until I finally accepted that there are no shortcuts. If you've made it this far and still think "OK, I already know this," let me share a quote that hit me hard:
 
-> You know that a hot kettle will burn you. No, you don't. You only *know* when you've actually touched it, felt what "hot" means, and will never touch it again.
+> You know that a hot kettle will burn you. No, you don't. You only _know_ when you've actually touched it, felt what "hot" means, and will never touch it again.
 
-The other point is this: that initial feeling of helplessness with AI — having nothing to say, not knowing where to start, getting answers you can't use — the root cause isn't that AI is hard. It's that we've spent our entire lives *executing* rules, but never deliberately learned or practiced *designing* them.
+The other point is this: that initial feeling of helplessness with AI — having nothing to say, not knowing where to start, getting answers you can't use — the root cause isn't that AI is hard. It's that we've spent our entire lives _executing_ rules, but never deliberately learned or practiced _designing_ them.
 
 AI is a ruthless amplifier. It doesn't distinguish between good and bad. It just amplifies whatever you already have — strengths and weaknesses alike. If you want it to amplify your strengths rather than your weaknesses, the only path is to slow down and systematically rebuild your relationship with information, with tools, and with thinking itself.
 
 Before you learn how to use AI well, there are three foundational understandings to establish:
 
-1. **Identify long-term value.** In an age obsessed with "faster, cheaper, better," you should be *more* cautious, not less. Things with long-term value are usually general enough, stable enough, and simple enough — like the skill of "learning to design rules."
+1. **Identify long-term value.** In an age obsessed with "faster, cheaper, better," you should be _more_ cautious, not less. Things with long-term value are usually general enough, stable enough, and simple enough — like the skill of "learning to design rules."
 
 2. **Shift your identity.** From rule executor to rule designer. AI is the most powerful and affordable mentor for rule design — but only if you're willing to invest in it, whether in money or time.
 
@@ -391,18 +393,18 @@ Don't be afraid to go slow. Slowing down is how you find your direction. In the 
 
 ## References
 
-- [Graphite.io, *AI Is Much Bigger Than You Think*, 2026](https://graphite.io/five-percent/research/ai-is-much-bigger-than-you-think) — Global AI usage distribution (83% mobile)
-- [Sensor Tower, *State of AI 2026*](https://sensortower.com/report/state-of-ai-2026) — ChatGPT's 1B MAU milestone and market landscape
-- [Similarweb, *AI Search Stats 2026*](https://www.similarweb.com/blog/marketing/geo/gen-ai-stats/) — Global AI platform web traffic share
-- [Microsoft, *2026 Work Trend Index*](https://www.microsoft.com/en-us/worklab/work-trend-index/agents-human-agency-and-the-opportunity-for-every-organization) — The shifting role of humans in the AI era
-- [OECD, *Empowering Learners for the Age of AI*, 2026](https://www.oecd.org/en/publications/empowering-learners-for-the-age-of-ai_65cd27d4-en.html) — AI literacy framework and "metacognitive laziness"
-- [World Economic Forum, *Shaping the Future of Learning*, 2026](https://www.weforum.org/publications/shaping-the-future-of-learning-education-readiness-for-the-age-of-ai/) — AI education risks and cognitive atrophy
-- [World Economic Forum, *Asia's Human-led AI Opportunity*, 2026](https://reports.weforum.org/docs/WEF_Human_Centric_AI_Transformation_in_Asia_2026.pdf) — Direction setters / Judgement keepers / Accountability holders
-- [Stanford HAI, *AI Index Report 2026*](https://hai.stanford.edu/ai-index/2026-ai-index-report) — AI hallucination rates and sycophancy data
+- [Graphite.io, _AI Is Much Bigger Than You Think_, 2026](https://graphite.io/five-percent/research/ai-is-much-bigger-than-you-think) — Global AI usage distribution (83% mobile)
+- [Sensor Tower, _State of AI 2026_](https://sensortower.com/report/state-of-ai-2026) — ChatGPT's 1B MAU milestone and market landscape
+- [Similarweb, _AI Search Stats 2026_](https://www.similarweb.com/blog/marketing/geo/gen-ai-stats/) — Global AI platform web traffic share
+- [Microsoft, _2026 Work Trend Index_](https://www.microsoft.com/en-us/worklab/work-trend-index/agents-human-agency-and-the-opportunity-for-every-organization) — The shifting role of humans in the AI era
+- [OECD, _Empowering Learners for the Age of AI_, 2026](https://www.oecd.org/en/publications/empowering-learners-for-the-age-of-ai_65cd27d4-en.html) — AI literacy framework and "metacognitive laziness"
+- [World Economic Forum, _Shaping the Future of Learning_, 2026](https://www.weforum.org/publications/shaping-the-future-of-learning-education-readiness-for-the-age-of-ai/) — AI education risks and cognitive atrophy
+- [World Economic Forum, _Asia's Human-led AI Opportunity_, 2026](https://reports.weforum.org/docs/WEF_Human_Centric_AI_Transformation_in_Asia_2026.pdf) — Direction setters / Judgement keepers / Accountability holders
+- [Stanford HAI, _AI Index Report 2026_](https://hai.stanford.edu/ai-index/2026-ai-index-report) — AI hallucination rates and sycophancy data
 - [Andrej Karpathy, Software 3.0 / Context Engineering](https://www.mindstudio.ai/blog/software-3-0-explained-karpathy-context-window-ram-model-weights-cpu) — The "context engineer" framework
-- [Kevin Kelly, *1,000 True Fans*, 2008](https://kk.org/thetechnium/1000-true-fans/) — The 1,000 true fans theory
-- [Li Jin, *The Passion Economy and the Future of Work*, 2019](https://a16z.com/the-passion-economy-and-the-future-of-work/) — The passion economy and creator economy
-- [Nathan Baschez, *Creator Platforms Neglect the Sell*, 2021](https://future.com/creator-platforms-neglect-the-sell/) — The missing marketing layer in creator platforms
+- [Kevin Kelly, _1,000 True Fans_, 2008](https://kk.org/thetechnium/1000-true-fans/) — The 1,000 true fans theory
+- [Li Jin, _The Passion Economy and the Future of Work_, 2019](https://a16z.com/the-passion-economy-and-the-future-of-work/) — The passion economy and creator economy
+- [Nathan Baschez, _Creator Platforms Neglect the Sell_, 2021](https://future.com/creator-platforms-neglect-the-sell/) — The missing marketing layer in creator platforms
 - [Wikipedia: Geek](https://en.wikipedia.org/wiki/Geek) / [TL;DR](https://en.wikipedia.org/wiki/TL;DR)
 
 ### Original Conversations

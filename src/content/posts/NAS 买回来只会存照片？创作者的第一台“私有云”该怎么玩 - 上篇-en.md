@@ -4,9 +4,9 @@ title: "NAS for Creators Part 1: Your First Private Cloud Setup Guide"
 abbrlink: nas-beyond-photos-your-first-private-cloud-1
 published: 2026-01-24
 tags:
-  - Essay
-  - knowledge-management
-  - NAS
+    - Essay
+    - knowledge-management
+    - NAS
 description: "Why NAS is more than a hard drive box: a creator's personal data center. Part 1 covers storage needs and workflow design without complex commands."
 updated: 2026-01-24
 pin: 0

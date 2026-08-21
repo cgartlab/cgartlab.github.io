@@ -4,7 +4,7 @@ published: 2025-08-02
 description: "OpenAI launches ChatGPT Learning Mode to fight homework over-reliance. Plus why newsletters beat social media, and IGLOO's stunning 3D interactive website."
 updated: 2025-08-02
 tags:
-  - Weekly
+    - Weekly
 draft: false
 pin: 0
 toc: true

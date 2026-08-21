@@ -4,9 +4,9 @@ published: 2023-03-12
 description: "Configure whole-house router routing using SSH and ShellClash. Covers firmware unlocking, root access via Termius, and proxy setup with a Redmi AX6S example."
 updated: 2023-03-14
 tags:
-  - tech-sharing
-  - Networking
-  - Tutorial
+    - tech-sharing
+    - Networking
+    - Tutorial
 draft: false
 pin: 0
 toc: true
@@ -112,7 +112,7 @@ If you see this interface, you're mostly successful!
 
 ## Install and Configure ShellClash
 
->[!note] Friends who don't know what Clash is can search Baidu to understand.
+> [!note] Friends who don't know what Clash is can search Baidu to understand.
 
 ShellClash is a variant version of Clash that supports running on various router systems and Linux environments. Specific introduction here:
 

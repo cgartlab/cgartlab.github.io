@@ -4,9 +4,9 @@ published: 2025-07-13
 description: "Behind the scenes of a theatrical film production. Plus NotebookLM, NoteGen, and SiliconFlow AI tools for creatives, and Mode's brand redesign case study."
 updated: 2025-08-08
 tags:
-  - Weekly
-  - Film Production
-  - AI Tools
+    - Weekly
+    - Film Production
+    - AI Tools
 draft: false
 pin: 0
 lang: en

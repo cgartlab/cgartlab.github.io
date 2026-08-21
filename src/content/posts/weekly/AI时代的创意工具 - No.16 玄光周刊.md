@@ -3,7 +3,7 @@ published: 2026-04-20
 updated: 2026-04-20
 abbrlink: weekly-16
 tags:
-  - 周刊
+    - 周刊
 title: AI时代的创意工具 - No.16玄光周刊
 description: AI工具已从“赋能”卖点变为行业标配，但核心问题在于：它们是在扩展还是抹平创作边界？
 draft: false
@@ -20,9 +20,9 @@ lang: zh
 
 > [!note] 关于周刊
 > 这是一份专注知识管理，涵盖数字艺术、视觉设计、前端开发领域的电子周刊，发布频率目前为每周 1 期，每期精选一个细分话题展开思考。
-> 
+>
 > 如果你觉得这里的内容还不错，想获得更完善的阅读体验，更推荐使用浏览器来到官网阅读。
-> 
+>
 > 也欢迎使用 **RSS** (https://weekly.cgartlab.com/feed/atom) 或**邮件订阅**（[https://weekly.cgartlab.com](https://weekly.cgartlab.com)）进行订阅。
 
 ---

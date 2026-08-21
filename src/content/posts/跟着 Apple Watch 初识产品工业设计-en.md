@@ -4,9 +4,9 @@ published: 2024-07-27
 description: "A deep dive into Apple Watch industrial design, from continuous curves and NURBS surfaces to the manufacturing precision that defines Apple's design philosophy."
 updated: 2024-11-30
 tags:
-  - Design
-  - Industrial-Design
-  - Apple
+    - Design
+    - Industrial-Design
+    - Apple
 draft: false
 pin: 0
 toc: true

@@ -4,9 +4,9 @@ published: 2023-04-16
 description: "This was a question I was invited to answer on Zhihu. Halfway through writing my response, I decided it would make a great blog post, so I expanded on my thoughts."
 updated: 2023-04-16
 tags:
-  - Essay
-  - AI
-  - Art
+    - Essay
+    - AI
+    - Art
 draft: false
 pin: 0
 toc: true
