@@ -4,9 +4,9 @@ published: 2024-12-04
 description: "Practical insights on file naming and management in large-scale 3D design projects, sharing how standardized naming boosts creative efficiency."
 updated: 2024-12-04
 tags:
-  - Tech
-  - 3D-Design
-  - Workflow
+    - Tech
+    - 3D-Design
+    - Workflow
 draft: false
 pin: 0
 toc: true
@@ -30,16 +30,16 @@ Our team was 10 people, spread across multiple provinces and cities, working rem
 
 I briefly mentioned my work directory template in [How to Elegantly Use Windows PC in 2024](https://cgartlab.com/en/posts/2024-elegant-use-windows/):
 
-~~~shell
+```shell
 project name
 - doc
 - pj
 - render
-~~~
+```
 
 But for team collaboration, the structure was adapted for this project:
 
-~~~shell
+```shell
 project name
 - 01-in         # files from upstream colleagues
 - 02-doc        # documentation and references
@@ -48,7 +48,7 @@ project name
 - 04-export     # output directory
   - pre         # preview files for review
   - render      # final output for downstream colleagues
-~~~
+```
 
 This approach has several benefits:
 
@@ -138,7 +138,7 @@ If you have better file naming methods, feel free to share in the comments.
 ## References
 
 - https://learn.microsoft.com/en-us/windows/win32/fileio/naming-a-file
-- [Wikipedia: Naming Convention (Programming)](https://en.wikipedia.org/wiki/Naming_convention_(programming))
+- [Wikipedia: Naming Convention (Programming)](<https://en.wikipedia.org/wiki/Naming_convention_(programming)>)
 - [Wikipedia: Computer File](https://en.wikipedia.org/wiki/Computer_file)
 
 Originally published on [CGArtLab](https://cgartlab.com)

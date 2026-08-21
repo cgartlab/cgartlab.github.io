@@ -4,8 +4,8 @@ published: 2024-04-28
 description: "In the end, I didn't finish Season 2 of 'The Local.' The on-site exhibition format focused more on the works themselves or the artists' biographies. I was more interested in the intriguing theories and perspectives."
 updated: 2024-12-11
 tags:
-  - Essay
-  - Art-Appreciation
+    - Essay
+    - Art-Appreciation
 draft: false
 pin: 0
 toc: true

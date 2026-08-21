@@ -4,9 +4,9 @@ published: 2024-05-05
 description: "Start creating digital art before you feel ready. Build confidence through small wins, overcome creative fear, and learn why beginners hold an edge in CG art and digital painting."
 updated: 2024-11-25
 tags:
-  - digital-art
-  - Tutorial
-  - Creativity
+    - digital-art
+    - Tutorial
+    - Creativity
 draft: false
 pin: 0
 toc: true

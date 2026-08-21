@@ -4,9 +4,9 @@ published: 2024-12-22
 description: "A complete walkthrough of setting up a WeChat Official Account with AI assistant integration, including agent configuration, knowledge base setup, and multi-platform content distribution."
 updated: 2024-12-23
 tags:
-  - Tech
-  - AI
-  - Content-Creation
+    - Tech
+    - AI
+    - Content-Creation
 draft: false
 pin: 0
 toc: true

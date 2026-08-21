@@ -1,8 +1,8 @@
-name-template: 'v$RESOLVED_VERSION'
-tag-template: 'v$RESOLVED_VERSION'
+name-template: v$RESOLVED_VERSION
+tag-template: v$RESOLVED_VERSION
 exclude-labels:
-  - '🏁 good first issue'
-  - '🤝 help wanted'
+  - 🏁 good first issue
+  - 🤝 help wanted
   - '🚧 status:blocked'
   - '💤 status:stale'
   - '🔥 priority:high'
@@ -12,32 +12,32 @@ exclude-labels:
   - '⚙️ area:infra'
   - '🔍 area:seo'
 categories:
-  - title: '🚀 Features'
+  - title: 🚀 Features
     labels:
       - '✨ type:enhancement'
-  - title: '🐛 Bug Fixes'
+  - title: 🐛 Bug Fixes
     labels:
       - '🐛 type:bug'
-  - title: '📝 Documentation'
+  - title: 📝 Documentation
     labels:
       - '📝 type:docs'
-      - '🎯 milestone'
-  - title: '🧰 Maintenance'
+      - 🎯 milestone
+  - title: 🧰 Maintenance
     labels:
       - '🔧 type:chore'
-  - title: '💥 Breaking Changes'
+  - title: 💥 Breaking Changes
     labels:
-      - '💥 breaking'
+      - 💥 breaking
 change-template: '- $TITLE (#$NUMBER)'
 change-title-escapes: '\<*_&'
 version-resolver:
   major:
     labels:
-      - '💥 breaking'
+      - 💥 breaking
   minor:
     labels:
       - '✨ type:enhancement'
-      - '🎯 milestone'
+      - 🎯 milestone
   patch:
     labels:
       - '🐛 type:bug'

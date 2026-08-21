@@ -4,9 +4,9 @@ published: 2024-12-01
 description: "A detailed guide on building a Beelink SER5 Max Hackintosh — hardware selection, dual-boot setup, BIOS tuning, and everything in between."
 updated: 2024-12-01
 tags:
-  - Tech
-  - Hardware
-  - Mini-PC
+    - Tech
+    - Hardware
+    - Mini-PC
 draft: false
 pin: 0
 toc: true
@@ -52,13 +52,13 @@ It's thin enough to fit under a monitor stand alongside a 68-key keyboard.
 
 Specs:
 
-| Component | Model | |
-|-----------|-------|---|
-| CPU | AMD 5800H | |
-| GPU | AMD Radeon RX Vega 8 | |
-| RAM | JUHOR 16GB DDR4 3200MHz x 2 | |
-| SSD 1 | Galaxy Xingyao X4 Pro M 1TB | |
-| SSD 2 | Colorful CF500 2TB | |
+| Component | Model                       |     |
+| --------- | --------------------------- | --- |
+| CPU       | AMD 5800H                   |     |
+| GPU       | AMD Radeon RX Vega 8        |     |
+| RAM       | JUHOR 16GB DDR4 3200MHz x 2 |     |
+| SSD 1     | Galaxy Xingyao X4 Pro M 1TB |     |
+| SSD 2     | Colorful CF500 2TB          |     |
 
 Looking at the [detailed CPU benchmarks](https://www.notebookcheck.net/AMD-Ryzen-7-5800H-Processor-Benchmarks-and-Specs.512759.0.html), the 5800H has 8 cores and 16 threads on a 7nm process. It's sufficient for my needs. Power-efficient? Not really — you can adjust that in the BIOS. This is my first AMD processor, and I was surprised to see idle temps of 50+ degrees in winter. That's not exactly low. Open a few browser tabs and the fan easily spins past 2500 RPM. So I made some optimizations before setting up the dual-boot system.
 
@@ -97,10 +97,10 @@ The image shows my partition layout under macOS Disk Utility. disk0s3 is the Win
 
 - A working Windows PC
 - macOS system image
-  - You can create your own image or download a pre-built one-click installation image. The more well-known ones come from Daliansky (黑果小兵). My bootloader config is based on his work.
+    - You can create your own image or download a pre-built one-click installation image. The more well-known ones come from Daliansky (黑果小兵). My bootloader config is based on his work.
 - OpenCore bootloader
-  - You can use my config directly: <https://github.com/cgartlab/Beelink-SER5-Max-Hackintosh>, or find one that suits you better online.
-  - **Warning: I'm using the stock Intel AX200 wireless card. Internet works fine, but AirDrop, Sidecar, etc. won't work (I don't use them). If you need those features, buy an Apple-compatible wireless card.**
+    - You can use my config directly: <https://github.com/cgartlab/Beelink-SER5-Max-Hackintosh>, or find one that suits you better online.
+    - **Warning: I'm using the stock Intel AX200 wireless card. Internet works fine, but AirDrop, Sidecar, etc. won't work (I don't use them). If you need those features, buy an Apple-compatible wireless card.**
 - A spare 16GB USB drive
 
 ### Creating the Installation USB

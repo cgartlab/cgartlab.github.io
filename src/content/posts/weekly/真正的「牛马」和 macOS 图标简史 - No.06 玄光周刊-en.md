@@ -4,9 +4,9 @@ published: 2025-07-18
 description: "30 years of macOS icon design, from skeuomorphism to liquid glass. Plus Cyber Wooden Fish, Centileo Renderer 0.70 updates, and Apple's AR design strategy."
 updated: 2025-08-08
 tags:
-  - Weekly
-  - UI Design
-  - macOS
+    - Weekly
+    - UI Design
+    - macOS
 draft: false
 pin: 0
 toc: true
@@ -63,31 +63,31 @@ It targets RedShift and Octane. If you commonly use these two renderers, getting
 ## **Main Updates in This Release**
 
 - **Performance Optimization**
-  - 2.5× compression ratio for bitmap.cntx cache.
-  - 10× faster bitmap.cntx cache generation.
-  - Option to store bitmap.cntx cache in RAM rather than only on disk.
+    - 2.5× compression ratio for bitmap.cntx cache.
+    - 10× faster bitmap.cntx cache generation.
+    - Option to store bitmap.cntx cache in RAM rather than only on disk.
 - **Material & Texture Updates**
-  - Materials now include basic metal and glossiness properties.
-  - Subsurface material workflow changed: now uses a single color and color radius.
-  - New thin-film texture node, suited for connecting to material reflection color.
-  - New complex refractive index texture node, suited for connecting to material reflection color.
-  - Edge shading option added to the attenuation texture node.
+    - Materials now include basic metal and glossiness properties.
+    - Subsurface material workflow changed: now uses a single color and color radius.
+    - New thin-film texture node, suited for connecting to material reflection color.
+    - New complex refractive index texture node, suited for connecting to material reflection color.
+    - Edge shading option added to the attenuation texture node.
 - **Lighting Improvements**
-  - Textured regular light sources: textured emission materials must be assigned to the light.
-  - Regular light sources now include a diffusion/directional option (for area rectangle, disc, and spotlight).
-  - Regular light sources now include a projector/gobo option (for area rectangle, disc, and spotlight).
-  - Regular light sources now include IES light distribution (for area rectangle, disc, and spotlight).
+    - Textured regular light sources: textured emission materials must be assigned to the light.
+    - Regular light sources now include a diffusion/directional option (for area rectangle, disc, and spotlight).
+    - Regular light sources now include a projector/gobo option (for area rectangle, disc, and spotlight).
+    - Regular light sources now include IES light distribution (for area rectangle, disc, and spotlight).
 - **Other Features & Fixes**
-  - Forward UVW texture coordinate mode based on camera pixel position, available in the UVW projection texture node and material tags.
-  - Camera-aligned perspective correction, aligning the camera up vector with the Y-axis.
-  - Interactive preview render adds a gray render mode.
-  - Fixed the issue where .exr bitmaps couldn't be used.
-  - Fixed a crash related to referenced materials.
-  - CUDA version support with RTX 50XX GPUs.
+    - Forward UVW texture coordinate mode based on camera pixel position, available in the UVW projection texture node and material tags.
+    - Camera-aligned perspective correction, aligning the camera up vector with the Y-axis.
+    - Interactive preview render adds a gray render mode.
+    - Fixed the issue where .exr bitmaps couldn't be used.
+    - Fixed a crash related to referenced materials.
+    - CUDA version support with RTX 50XX GPUs.
 - **Future Development Plans**
-  - A material converter for this version of the Cinema 4D CentiLeo plugin is in development—has been for some time.
-  - Will continue to fix bugs in this free version.
-  - The next paid version will add new graphics features.
+    - A material converter for this version of the Cinema 4D CentiLeo plugin is in development—has been for some time.
+    - Will continue to fix bugs in this free version.
+    - The next paid version will add new graphics features.
 
 ---
 

@@ -4,7 +4,7 @@ published: 2024-03-01
 description: "When you are alone and no one else comes to mind, you are happy and feel no loneliness."
 updated: 2024-11-24
 tags:
-  - Essay
+    - Essay
 lang: en
 abbrlink: strong-out-of-accident
 draft: false
@@ -30,4 +30,3 @@ When you are alone and no one else comes to mind, you are happy and feel no lone
 - This is also why most people who suffered trauma in their original families decide not to have children. They don't have enough ability, opportunity, or time to fully resolve the harm their environment caused them — yet they still possess enough self-reflection and sense of responsibility.
 - The shallow and selfish side will blame the other person for not building a relationship, for not responding. They haven't realized that in a relationship, all you need to do is provide what the other needs. If you can't provide it, and you refuse to face your own inadequacy, instead blaming and attacking — aren't you just recreating the same traumatic environment they once knew?
 - A truly strong person understands: even with unlimited power and resources, coercion only gets you a slave.
-

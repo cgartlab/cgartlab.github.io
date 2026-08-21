@@ -4,8 +4,8 @@ published: 2023-04-23
 description: "Computers get replaced, software gets updated — only your data, barring accidents, will stay with you for life."
 updated: 2023-04-23
 tags:
-  - knowledge-management
-  - Tech
+    - knowledge-management
+    - Tech
 draft: false
 pin: 0
 toc: true
@@ -27,19 +27,19 @@ I set a few core principles for this system:
 
 - **Don't add categories unless necessary**
 
-  Only if the category can be exhaustive — for example, file types are finite, but formats are endless.
+    Only if the category can be exhaustive — for example, file types are finite, but formats are endless.
 
 - **Archive within 1 minute**
 
-  I've seen many people who know archiving is important but rarely stick with it for more than a year. After finishing work, you're already exhausted and irritable — who wants to deal with tedious filing? But if you've designed your categories well, a 1-minute archive is just a natural flow.
+    I've seen many people who know archiving is important but rarely stick with it for more than a year. After finishing work, you're already exhausted and irritable — who wants to deal with tedious filing? But if you've designed your categories well, a 1-minute archive is just a natural flow.
 
 - **Use English + date-based naming when possible**
 
-  This is a professional habit. Many professional applications only recognize English paths, and some fonts don't support Chinese, causing garbled text.
+    This is a professional habit. Many professional applications only recognize English paths, and some fonts don't support Chinese, causing garbled text.
 
 - **Back up important files weekly — both hot and cold backups**
 
-  You can skip organizing, but please back up your files. For world peace.
+    You can skip organizing, but please back up your files. For world peace.
 
 ### Designing the Category Structure
 

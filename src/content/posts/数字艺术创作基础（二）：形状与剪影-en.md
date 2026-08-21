@@ -4,8 +4,8 @@ published: 2024-05-08
 description: "A deep dive into the importance of shape and silhouette in digital art, with practical techniques and creative approaches."
 updated: 2024-12-11
 tags:
-  - digital-art
-  - Tutorial
+    - digital-art
+    - Tutorial
 draft: false
 pin: 0
 toc: true

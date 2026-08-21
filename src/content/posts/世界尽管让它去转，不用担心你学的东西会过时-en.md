@@ -4,9 +4,9 @@ published: 2026-03-08
 description: "Why your hard-earned design skills won't become obsolete in the AI era. A motion designer's reflections on AI agents, lifelong learning, and the compound value of systematic thinking and aesthetic judgment."
 updated: 2026-03-08
 tags:
-  - Essay
-  - AI Strategy
-  - Career Development
+    - Essay
+    - AI Strategy
+    - Career Development
 draft: false
 pin: 0
 toc: true

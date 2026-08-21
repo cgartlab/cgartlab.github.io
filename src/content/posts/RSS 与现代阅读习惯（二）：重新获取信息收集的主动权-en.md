@@ -4,9 +4,9 @@ published: 2025-06-30
 description: "Build an RSS-powered information collection system: find quality sources, configure keyword filters, and curate a focused reading workflow in Part 2."
 updated: 2025-06-30
 tags:
-  - knowledge-management
-  - tech-sharing
-  - RSS
+    - knowledge-management
+    - tech-sharing
+    - RSS
 draft: false
 pin: 0
 toc: true
@@ -60,20 +60,20 @@ Classifying by format is more suitable for handling multiple weakly related inte
 Taking myself as an example again: my profession is 3D designer, and its parent field is obviously design. Then classifying design field information by timeliness could be divided into the following categories, with viewing frequency increasing progressively:
 
 - Daily/Real-time
-  - Industry cutting-edge technology news
-  - Software update logs
-  - Technical forum hot posts
+    - Industry cutting-edge technology news
+    - Software update logs
+    - Technical forum hot posts
 - Weekly/Monthly
-  - Plugin/script updates
-  - Workflow optimization cases
-  - Video tutorials
-  - Excellent author interviews
+    - Plugin/script updates
+    - Workflow optimization cases
+    - Video tutorials
+    - Excellent author interviews
 - Quarterly/Yearly
-  - Asset and material updates
-  - Major competition winning works
-  - Excellent photography/painting/graphic/motion graphics artists' social media
-  - Classic case studies
-  - Master-level works
+    - Asset and material updates
+    - Major competition winning works
+    - Excellent photography/painting/graphic/motion graphics artists' social media
+    - Classic case studies
+    - Master-level works
 
 This way, over time, you'll naturally develop positive habits that help maintain an open and optimistic mindset. Whether in the workplace or running a creative team, you'll maintain certain competitiveness and won't be easily eliminated by the market. Of course, these classifications are completely flexible—no need to deliberately follow them. They'll naturally adjust according to your needs, and what I've listed are results after years of fine-tuning.
 
@@ -128,22 +128,22 @@ This article was first published on [CG Art Lab](https://cgartlab.com/)
 ## **Resource Recommendations**
 
 - Quality RSS Subscription Sources
-  - [Ruan Yifeng's Network Log](https://www.ruanyifeng.com/blog/)
-  - [SSPAI Homepage Recommendations and Morning Briefings](https://sspai.com/)
-  - [Product Meditation Record](https://sspai.com/)
-  - [Trend Weekly](https://weekly.tw93.fun/)
-  - [Moonlight Blog](https://www.williamlong.info/)
-  - [Civil Engineering Forum](https://tumutanzi.com/)
-  - [Pepper Salt Fermented Black Beans](https://blog.douchi.space/)
-  - [Anyway.fm](https://anyway.fm/)
+    - [Ruan Yifeng's Network Log](https://www.ruanyifeng.com/blog/)
+    - [SSPAI Homepage Recommendations and Morning Briefings](https://sspai.com/)
+    - [Product Meditation Record](https://sspai.com/)
+    - [Trend Weekly](https://weekly.tw93.fun/)
+    - [Moonlight Blog](https://www.williamlong.info/)
+    - [Civil Engineering Forum](https://tumutanzi.com/)
+    - [Pepper Salt Fermented Black Beans](https://blog.douchi.space/)
+    - [Anyway.fm](https://anyway.fm/)
 - Common RSS Tools
-  - [Folo (web)](https://app.follow.is)
-  - [Fluent-reader (Windows)](https://hyliu.me/fluent-reader/)
-  - [Reeder (iOS & macOS)](https://reederapp.com/)
-  - [FeedMe (Android)](https://play.google.com/store/apps/details?id=com.seazon.feedme)
-  - [Feedly (web)](https://feedly.com/)
-  - [The old reader (web)](https://theoldreader.com/)
-  - [Inoreader (web)](https://www.innoreader.com/)
+    - [Folo (web)](https://app.follow.is)
+    - [Fluent-reader (Windows)](https://hyliu.me/fluent-reader/)
+    - [Reeder (iOS & macOS)](https://reederapp.com/)
+    - [FeedMe (Android)](https://play.google.com/store/apps/details?id=com.seazon.feedme)
+    - [Feedly (web)](https://feedly.com/)
+    - [The old reader (web)](https://theoldreader.com/)
+    - [Inoreader (web)](https://www.innoreader.com/)
 
 Welcome to share more quality tools and subscription sources in the comments
 

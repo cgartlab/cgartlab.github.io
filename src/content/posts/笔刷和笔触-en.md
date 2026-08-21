@@ -4,9 +4,9 @@ description: "Master brushes and strokes for digital painting in Photoshop. Lear
 published: 2022-05-29
 updated: 2022-12-11
 tags:
-  - digital-art
-  - Photoshop
-  - Tutorial
+    - digital-art
+    - Photoshop
+    - Tutorial
 toc: true
 pin: 0
 draft: false

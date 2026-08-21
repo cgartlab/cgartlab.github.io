@@ -4,7 +4,7 @@ published: 2026-08-01
 description: 面对 AI，我们和长辈其实没什么两样——都习惯了执行规则，却从未学习设计规则。从「规则执行者」到「规则设计师」，慢一点，才能真正用好 AI。
 updated: 2026-08-01
 tags:
-  - AI
+    - AI
 draft: false
 pin: 0
 toc: true
@@ -213,34 +213,23 @@ AI 毫无疑问是普通人能买得到，买得起的最强规则设计师。�
 节选部分回答如下：
 
 > **如果只推荐普通用户学习顺序**
-> 	大多数人不需要一开始研究所有入口。
-> 	比较合理的路径是：
+> 大多数人不需要一开始研究所有入口。
+> 比较合理的路径是：
 >
-> 	**第一阶段：网页端**
-> 	理解 ChatGPT 的基本逻辑：
-> 	“提出问题 → 提供背景 → 让 AI 生成结果 → 继续修改”。
-> 	这是最重要的一步。
+> **第一阶段：网页端**
+> 理解 ChatGPT 的基本逻辑：
+> “提出问题 → 提供背景 → 让 AI 生成结果 → 继续修改”。
+> 这是最重要的一步。
 >
-> 	**第二阶段：手机 App**
-> 	把 ChatGPT 变成日常工具。
-> 	例如：
-> 		- 拍一张菜单，让 AI 翻译；
-> 		- 拍一个不会的题，让 AI 解释；
-> 		- 走路时用语音交流；
-> 		- 随时记录想法。
+> **第二阶段：手机 App**
+> 把 ChatGPT 变成日常工具。
+> 例如：- 拍一张菜单，让 AI 翻译；- 拍一个不会的题，让 AI 解释；- 走路时用语音交流；- 随时记录想法。
 >
-> 	**第三阶段：桌面端**
-> 	当 ChatGPT 开始参与工作时，桌面端价值明显提升。
-> 	例如设计师：
-> 		- 上传设计稿，让 AI 分析；
-> 		- 讨论方案；
-> 		- 阅读项目文件；
-> 		- 辅助写文案。
-> 	例如程序员：
-> 		- 查看代码；
-> 		- 修改文件；
-> 		- 调试问题。
-> 	桌面应用目前已经强化了与本地文件、浏览器和开发工具的结合
+> **第三阶段：桌面端**
+> 当 ChatGPT 开始参与工作时，桌面端价值明显提升。
+> 例如设计师：- 上传设计稿，让 AI 分析；- 讨论方案；- 阅读项目文件；- 辅助写文案。
+> 例如程序员：- 查看代码；- 修改文件；- 调试问题。
+> 桌面应用目前已经强化了与本地文件、浏览器和开发工具的结合
 >
 > https://chatgpt.com/share/6a5394a8-df34-83ee-a3f1-efc39e5d0b8c 👈原回答链接
 
@@ -249,11 +238,11 @@ AI 毫无疑问是普通人能买得到，买得起的最强规则设计师。�
 在我最早使用 AI 的时候，最先排除的就是手机版。
 
 - 首先，小屏幕注定不适合进行生产工作 [^1] 的。
-	- 在我的认知里，一个普通人的全部工作如果能够全部在一台手机上完成，想必也不会是普通人了吧。
-	- 在需要高复杂度信息处理、创造和管理任务时，电脑仍然是目前综合生产效率最高的个人设备。
+    - 在我的认知里，一个普通人的全部工作如果能够全部在一台手机上完成，想必也不会是普通人了吧。
+    - 在需要高复杂度信息处理、创造和管理任务时，电脑仍然是目前综合生产效率最高的个人设备。
 - 第二，容易分心。
-	- 手机还有其他众多 App，来一个电话或信息就会打断思路。
-	- 切换到娱乐模式太容易了，不赘述。
+    - 手机还有其他众多 App，来一个电话或信息就会打断思路。
+    - 切换到娱乐模式太容易了，不赘述。
 - 第三，看手机视力明显会下降更快，不赘述。
 
 总之说到底，在我看来手机终究是个用来通讯和娱乐消费的设备，最多用来维护生产而不是从事生产。再者，手机上也分网页版和 App 两种形态，以 GPT 举例，我依然更推荐使用网页版，因为无论什么系统的手机，安装国外市场的 App 真的很不方便。可以使用手机浏览器里的「添加到桌面」功能，在手机桌面上保存一个「快捷方式」即可。
@@ -261,15 +250,15 @@ AI 毫无疑问是普通人能买得到，买得起的最强规则设计师。�
 与之相应，这也自然引入了网页版的核心优势：
 
 - 几乎哪里都能用。
-	- 只要是一台能联网的设备，网络顺畅就可以直接用。
+    - 只要是一台能联网的设备，网络顺畅就可以直接用。
 - 数据和功能及时更新同步。
-	- 数据同步显而易见，不赘述。
-	- 功能方面， App 想用新功能肯定需要下载安装新版，网页端每次使用一定是最新版。
-	- 相应的，平台调整和公告等信息通常也是网站最先发布。
+    - 数据同步显而易见，不赘述。
+    - 功能方面， App 想用新功能肯定需要下载安装新版，网页端每次使用一定是最新版。
+    - 相应的，平台调整和公告等信息通常也是网站最先发布。
 - 学习成本低。
-	- 这一点或许有些反直觉，我解释下，网页版和客户端（包含桌面端和移动 App）相同的地方是，几乎所有相对进阶或高级的功能都在那个「设置」面板里。
-	- 但是网页版要找到一个高级功能通常要比 App 步骤少，App 的高级功能会藏的更深一些。
-	- 不要小看多出的这一步，交互上多出一步，点击率是会直线下滑的。
+    - 这一点或许有些反直觉，我解释下，网页版和客户端（包含桌面端和移动 App）相同的地方是，几乎所有相对进阶或高级的功能都在那个「设置」面板里。
+    - 但是网页版要找到一个高级功能通常要比 App 步骤少，App 的高级功能会藏的更深一些。
+    - 不要小看多出的这一步，交互上多出一步，点击率是会直线下滑的。
 
 事实上 2026 年，网页版已经没有那么流行了。从数据来看不得不承认：
 
@@ -343,7 +332,7 @@ AI 毫无疑问是普通人能买得到，买得起的最强规则设计师。�
 > - 医疗
 > - 新闻热点，人物
 > - 学术、参考文献
-> 
+>
 > 原会话链接：https://chatgpt.com/share/6a6d74fa-84b8-83ea-bf90-ee5851b34c08
 
 大多数人是习惯不求甚解的，拿到结论很容易不假思索就去用了。反过来说，想要超过大多数人，至少「再检查核对一次」就可以。
@@ -390,18 +379,18 @@ AI 是个无情的放大器。它不会区分优劣，只会将我们已有的�
 
 ## 参考资料
 
-- [Graphite.io, *AI Is Much Bigger Than You Think*, 2026](https://graphite.io/five-percent/research/ai-is-much-bigger-than-you-think) — 全球 AI 使用形态分布（移动端 83%）
-- [Sensor Tower, *State of AI 2026*](https://sensortower.com/report/state-of-ai-2026) — ChatGPT 10 亿月活里程碑与市场格局
-- [Similarweb, *AI Search Stats 2026*](https://www.similarweb.com/blog/marketing/geo/gen-ai-stats/) — 全球 AI 平台网页流量份额
-- [Microsoft, *2026 Work Trend Index*](https://www.microsoft.com/en-us/worklab/work-trend-index/agents-human-agency-and-the-opportunity-for-every-organization) — AI 时代人类角色转变调研
-- [OECD, *Empowering Learners for the Age of AI*, 2026](https://www.oecd.org/en/publications/empowering-learners-for-the-age-of-ai_65cd27d4-en.html) — AI 素养框架与「元认知懒惰」研究
-- [世界经济论坛, *Shaping the Future of Learning*, 2026](https://www.weforum.org/publications/shaping-the-future-of-learning-education-readiness-for-the-age-of-ai/) — AI 教育风险与认知萎缩
-- [世界经济论坛, *Asia's Human-led AI Opportunity*, 2026](https://reports.weforum.org/docs/WEF_Human_Centric_AI_Transformation_in_Asia_2026.pdf) — 方向设定者 / 判断保持者 / 责任承担者
-- [Stanford HAI, *AI Index Report 2026*](https://hai.stanford.edu/ai-index/2026-ai-index-report) — AI 幻觉率与谄媚效应数据
+- [Graphite.io, _AI Is Much Bigger Than You Think_, 2026](https://graphite.io/five-percent/research/ai-is-much-bigger-than-you-think) — 全球 AI 使用形态分布（移动端 83%）
+- [Sensor Tower, _State of AI 2026_](https://sensortower.com/report/state-of-ai-2026) — ChatGPT 10 亿月活里程碑与市场格局
+- [Similarweb, _AI Search Stats 2026_](https://www.similarweb.com/blog/marketing/geo/gen-ai-stats/) — 全球 AI 平台网页流量份额
+- [Microsoft, _2026 Work Trend Index_](https://www.microsoft.com/en-us/worklab/work-trend-index/agents-human-agency-and-the-opportunity-for-every-organization) — AI 时代人类角色转变调研
+- [OECD, _Empowering Learners for the Age of AI_, 2026](https://www.oecd.org/en/publications/empowering-learners-for-the-age-of-ai_65cd27d4-en.html) — AI 素养框架与「元认知懒惰」研究
+- [世界经济论坛, _Shaping the Future of Learning_, 2026](https://www.weforum.org/publications/shaping-the-future-of-learning-education-readiness-for-the-age-of-ai/) — AI 教育风险与认知萎缩
+- [世界经济论坛, _Asia's Human-led AI Opportunity_, 2026](https://reports.weforum.org/docs/WEF_Human_Centric_AI_Transformation_in_Asia_2026.pdf) — 方向设定者 / 判断保持者 / 责任承担者
+- [Stanford HAI, _AI Index Report 2026_](https://hai.stanford.edu/ai-index/2026-ai-index-report) — AI 幻觉率与谄媚效应数据
 - [Andrej Karpathy, Software 3.0 / Context Engineering](https://www.mindstudio.ai/blog/software-3-0-explained-karpathy-context-window-ram-model-weights-cpu) — 「上下文工程师」框架
-- [Kevin Kelly, *1,000 True Fans*, 2008](https://kk.org/thetechnium/1000-true-fans/) — 「一千个铁杆粉丝」理论
-- [Li Jin, *The Passion Economy and the Future of Work*, 2019](https://a16z.com/the-passion-economy-and-the-future-of-work/) — 热情经济与创作者经济
-- [Nathan Baschez, *Creator Platforms Neglect the Sell*, 2021](https://future.com/creator-platforms-neglect-the-sell/) — 创作者营销赋能的缺位
+- [Kevin Kelly, _1,000 True Fans_, 2008](https://kk.org/thetechnium/1000-true-fans/) — 「一千个铁杆粉丝」理论
+- [Li Jin, _The Passion Economy and the Future of Work_, 2019](https://a16z.com/the-passion-economy-and-the-future-of-work/) — 热情经济与创作者经济
+- [Nathan Baschez, _Creator Platforms Neglect the Sell_, 2021](https://future.com/creator-platforms-neglect-the-sell/) — 创作者营销赋能的缺位
 - [方可成, 《把你的邮箱调教成最好的新闻阅读器》, 2017](https://newslab2020.github.io/Collection/%E5%AA%92%E4%BD%93%E9%A3%9F%E8%B0%B1/%5B%E6%96%B0%E9%97%BB%E5%AE%9E%E9%AA%8C%E5%AE%A4%5D%20-%202017-05-10%20%E6%8A%8A%E4%BD%A0%E7%9A%84%E9%82%AE%E7%AE%B1%E8%B0%83%E6%95%99%E6%88%90%E6%9C%80%E5%A5%BD%E7%9A%84%E6%96%B0%E9%97%BB%E9%98%85%E8%AF%BB%E5%99%A8%EF%BD%9C%E5%AA%92%E4%BD%93%E9%A3%9F%E8%B0%B107.html) — 信息饮食与媒体素养
 - [维基百科：极客](https://zh.wikipedia.org/wiki/%E6%9E%81%E5%AE%A2) / [TL;DR](https://zh.wikipedia.org/wiki/TL;DR)
 
@@ -411,5 +400,3 @@ AI 是个无情的放大器。它不会区分优劣，只会将我们已有的�
 - [AI 高概率幻觉领域整理](https://chatgpt.com/share/6a6d74fa-84b8-83ea-bf90-ee5851b34c08)
 
 [^1]: 可以简单理解为能赚到钱的工作
-
-

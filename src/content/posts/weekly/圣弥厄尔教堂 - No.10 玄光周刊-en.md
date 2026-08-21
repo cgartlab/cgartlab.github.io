@@ -4,7 +4,7 @@ published: 2025-08-16
 description: "Qingdao St. Michael's Cathedral visit, plus an Astro site rebuild, OpenCut as a CapCut alternative, MAKING SOFTWARE design reference, and ambient sounds app."
 updated: 2025-08-16
 tags:
-  - Weekly
+    - Weekly
 draft: false
 pin: 0
 toc: true

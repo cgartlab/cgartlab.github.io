@@ -8,21 +8,21 @@
  * lang 为 'zh-tw' → 保持 'zh-tw'（rehype 插件内会映射到 zh.wikipedia.org）
  */
 
-import { defaultLocale } from '../config.ts'
+import { defaultLocale } from "../config.ts";
 
 export function remarkGlossary(): any {
-  return (_tree: any, vfile: any) => {
-    if (!vfile) return
-    const fm = vfile?.data?.astro?.frontmatter
-    if (!fm) {
-      vfile.data.glossaryLang = defaultLocale ?? 'zh'
-      return
-    }
-    const rawLang = typeof fm.lang === 'string' ? fm.lang.trim() : ''
-    if (rawLang === '') {
-      vfile.data.glossaryLang = defaultLocale ?? 'zh'
-    } else {
-      vfile.data.glossaryLang = rawLang
-    }
-  }
+	return (_tree: any, vfile: any) => {
+		if (!vfile) return;
+		const fm = vfile?.data?.astro?.frontmatter;
+		if (!fm) {
+			vfile.data.glossaryLang = defaultLocale ?? "zh";
+			return;
+		}
+		const rawLang = typeof fm.lang === "string" ? fm.lang.trim() : "";
+		if (rawLang === "") {
+			vfile.data.glossaryLang = defaultLocale ?? "zh";
+		} else {
+			vfile.data.glossaryLang = rawLang;
+		}
+	};
 }

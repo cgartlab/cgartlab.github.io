@@ -4,9 +4,9 @@ published: 2024-07-14
 description: "A personal journey through 15 years of browser experimentation, from IE to Edge, with tips and configurations for a better browsing experience."
 updated: 2024-11-25
 tags:
-  - Tech
-  - Browser
-  - History
+    - Tech
+    - Browser
+    - History
 draft: false
 pin: 0
 toc: true

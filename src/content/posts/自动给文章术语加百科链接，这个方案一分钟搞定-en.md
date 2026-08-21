@@ -3,8 +3,8 @@ title: Auto-generate Encyclopedia Links for Terms in Articles, Done in One Minut
 published: 2026-06-28
 description: "Build an automated glossary link system for your blog in one minute. A plain-language walkthrough plus the full Astro remark/rehype plugin implementation for technical writers and developers."
 tags:
-  - Site Update
-  - Blog Development
+    - Site Update
+    - Blog Development
 draft: false
 lang: en
 toc: true

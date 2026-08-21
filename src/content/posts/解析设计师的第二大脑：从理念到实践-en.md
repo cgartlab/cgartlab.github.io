@@ -4,9 +4,9 @@ published: 2024-04-14
 description: "A designer's deep dive into building a personal knowledge management system — from tool selection to practical methodology, a complete guide."
 updated: 2024-11-25
 tags:
-  - second-brain
-  - knowledge-management
-  - Design
+    - second-brain
+    - knowledge-management
+    - Design
 draft: false
 pin: 0
 toc: true
@@ -72,7 +72,7 @@ After aggressively streamlining all my work and life workflows, the core process
 
 The only difference is the type of data being processed under different tasks. For example: recording ideas, mind mapping, routine meetings, writing — these involve text. Drawing and design involve models, images, and occasionally video and audio. The files I use on a daily basis really only come in a few types. Other project files and software tools are usually only touched when I'm recycling assets or learning new skills. I use a separate method for managing purely work-related items — but let's get back to knowledge management.
 
-Based on my needs, the overall design framework for my second brain is **CODE**: **Capture, Organize, Distill, Express** (from Tiago Forte's *Building a Second Brain*). I also jotted down which tools I planned to use for each stage.
+Based on my needs, the overall design framework for my second brain is **CODE**: **Capture, Organize, Distill, Express** (from Tiago Forte's _Building a Second Brain_). I also jotted down which tools I planned to use for each stage.
 
 ![Design framework diagram](./_images/解析设计师的第二大脑：从理念到实践-1754577712733.webp)
 

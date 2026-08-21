@@ -4,7 +4,7 @@ published: 2025-07-25
 description: "Master the Double Diamond design model — a four-stage UX framework for product development. Plus PNG 3 features and how Stylescapes improve on moodboards."
 updated: 2025-08-08
 tags:
-  - Weekly
+    - Weekly
 draft: false
 pin: 0
 toc: true
@@ -94,7 +94,7 @@ The biggest differences between the two come down to this: moodboards are static
 
 It's not hard to see that moodboards have their limits: they only cover the early stages of a project. Once a specific visual style is locked in and you move into production, the cost of making changes later becomes very high. Stylescapes run through the entire design cycle—from concept design to product development and brand communication—providing a unified visual language framework. They also support horizontal expansion across digital interfaces, physical products, and offline events, keeping the brand style consistent throughout.
 
-Stepping outside the project workflow and looking from the designer's perspective: moodboards tend to be designer-led, relying heavily on the designer's intuition, experience, and aesthetic judgment—they emphasize *feel*. Stylescapes are user-centered, using scenario simulation and user research to analyze real feedback from target audiences in different contexts. They focus more on how visual styles are *perceived and used*.
+Stepping outside the project workflow and looking from the designer's perspective: moodboards tend to be designer-led, relying heavily on the designer's intuition, experience, and aesthetic judgment—they emphasize _feel_. Stylescapes are user-centered, using scenario simulation and user research to analyze real feedback from target audiences in different contexts. They focus more on how visual styles are _perceived and used_.
 
 ---
 

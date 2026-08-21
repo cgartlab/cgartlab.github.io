@@ -4,9 +4,9 @@ published: 2024-12-16
 description: "Now updated to the third piece: The Drunken Servant"
 updated: 2025-08-06
 tags:
-  - Essay
-  - digital-art
-  - SCP
+    - Essay
+    - digital-art
+    - SCP
 draft: false
 pin: 0
 toc: true
@@ -16,7 +16,7 @@ abbrlink: scp-digital-artwork
 
 As you can see, [this is a series of digital paintings created in the spirit of the SCP Foundation, combined with classical Chinese culture](https://cgartlab.com/en/works/).
 
-Currently updated to the third piece: *The Drunken Servant*.
+Currently updated to the third piece: _The Drunken Servant_.
 
 If you really enjoy this series, you can [support me on Aifadian](https://afdian.com/a/cgartlab-scp) to accelerate my创作.
 

@@ -1,301 +1,367 @@
 /* Twikoo */
 #twikoo svg,
 #twikoo .tk-action-count {
-  color: color-mix(in srgb, oklch(var(--un-preset-theme-colors-secondary)) 80%, transparent);
+	color: color-mix(
+		in srgb,
+		oklch(var(--un-preset-theme-colors-secondary)) 80%,
+		transparent
+	);
 }
 #twikoo .tk-comments-container {
-  font-size: 0.875rem;
-  line-height: 1.5rem;
+	font-size: 0.875rem;
+	line-height: 1.5rem;
 }
 #twikoo .tk-comments-container .tk-avatar {
-  margin-top: 0.2rem;
+	margin-top: 0.2rem;
 }
 @media (min-width: 1024px) {
-  #twikoo .tk-avatar,
-  #twikoo .tk-avatar-img {
-    height: 3rem;
-    width: 3rem;
-  }
+	#twikoo .tk-avatar,
+	#twikoo .tk-avatar-img {
+		height: 3rem;
+		width: 3rem;
+	}
 }
 #twikoo .tk-main .tk-avatar,
 #twikoo .tk-main .tk-avatar-img {
-  height: 1.925rem;
-  width: 1.925rem;
+	height: 1.925rem;
+	width: 1.925rem;
 }
 @media (min-width: 1024px) {
-  #twikoo .tk-main .tk-avatar,
-  #twikoo .tk-main .tk-avatar-img {
-    height: 2.3rem;
-    width: 2.3rem;
-  }
+	#twikoo .tk-main .tk-avatar,
+	#twikoo .tk-main .tk-avatar-img {
+		height: 2.3rem;
+		width: 2.3rem;
+	}
 }
 #twikoo .el-input__count,
 #twikoo .tk-submit-action-icon.__markdown,
-#twikoo .tk-action-link:has(svg path[d*="256 32C114.6 32 0 125.1"]) .tk-action-count,
+#twikoo
+	.tk-action-link:has(svg path[d*="256 32C114.6 32 0 125.1"])
+	.tk-action-count,
 #twikoo .tk-icon.__comments:has(svg path[d^="M440.65 12.57"]),
 #twikoo .tk-extras,
 #twikoo .tk-footer {
-  display: none;
+	display: none;
 }
 
 /* Input fields */
 #twikoo .tk-meta-input {
-  border: 1px solid;
-  border-color: color-mix(in srgb, oklch(var(--un-preset-theme-colors-secondary)) 25%, transparent);
-  border-radius: 0.25rem;
+	border: 1px solid;
+	border-color: color-mix(
+		in srgb,
+		oklch(var(--un-preset-theme-colors-secondary)) 25%,
+		transparent
+	);
+	border-radius: 0.25rem;
 }
 #twikoo .tk-meta-input .el-input + .el-input {
-  margin-left: 0;
-  margin-top: 0;
+	margin-left: 0;
+	margin-top: 0;
 }
 #twikoo .tk-meta-input > * {
-  border: none;
-  background-color: transparent;
+	border: none;
+	background-color: transparent;
 }
 #twikoo .el-input-group__prepend {
-  border: none;
-  background-color: transparent;
-  padding-left: 0.75rem;
-  padding-right: 0.75rem;
-  font-size: 0.75rem;
-  color: oklch(var(--un-preset-theme-colors-secondary));
+	border: none;
+	background-color: transparent;
+	padding-left: 0.75rem;
+	padding-right: 0.75rem;
+	font-size: 0.75rem;
+	color: oklch(var(--un-preset-theme-colors-secondary));
 }
 @media (min-width: 1024px) {
-  #twikoo .el-input:has(input[name="mail"]) .el-input-group__prepend,
-  #twikoo.el-input:has(input[name="link"]) .el-input-group__prepend {
-    padding-left: 0;
-  }
+	#twikoo .el-input:has(input[name="mail"]) .el-input-group__prepend,
+	#twikoo.el-input:has(input[name="link"]) .el-input-group__prepend {
+		padding-left: 0;
+	}
 }
 #twikoo .el-input__inner {
-  margin-top: 0.125rem;
-  margin-bottom: 0.125rem;
-  border: none;
-  padding: 0;
-  font-size: 0.75rem;
+	margin-top: 0.125rem;
+	margin-bottom: 0.125rem;
+	border: none;
+	padding: 0;
+	font-size: 0.75rem;
 }
 #twikoo .el-input__inner::placeholder {
-  color: color-mix(in srgb, oklch(var(--un-preset-theme-colors-secondary)) 25%, transparent);
+	color: color-mix(
+		in srgb,
+		oklch(var(--un-preset-theme-colors-secondary)) 25%,
+		transparent
+	);
 }
 #twikoo .el-textarea__inner {
-  border-color: color-mix(in srgb, oklch(var(--un-preset-theme-colors-secondary)) 25%, transparent);
-  padding-top: 0.5rem;
-  padding-bottom: 0.5rem;
-  line-height: 1.5rem;
+	border-color: color-mix(
+		in srgb,
+		oklch(var(--un-preset-theme-colors-secondary)) 25%,
+		transparent
+	);
+	padding-top: 0.5rem;
+	padding-bottom: 0.5rem;
+	line-height: 1.5rem;
 }
 #twikoo .OwO-body {
-  border-color: color-mix(in srgb, oklch(var(--un-preset-theme-colors-secondary)) 25%, transparent);
-  border-radius: 0.25rem;
-  background-color: oklch(var(--un-preset-theme-colors-background));
-  color: oklch(var(--un-preset-theme-colors-secondary));
+	border-color: color-mix(
+		in srgb,
+		oklch(var(--un-preset-theme-colors-secondary)) 25%,
+		transparent
+	);
+	border-radius: 0.25rem;
+	background-color: oklch(var(--un-preset-theme-colors-background));
+	color: oklch(var(--un-preset-theme-colors-secondary));
 }
 #twikoo .OwO-item:hover {
-  box-shadow: none;
+	box-shadow: none;
 }
 #twikoo .OwO-items-show {
-  overflow-x: hidden;
-  overflow-y: auto;
+	overflow-x: hidden;
+	overflow-y: auto;
 }
 #twikoo .tk-cancel,
 #twikoo .tk-preview {
-  border-color: color-mix(in srgb, oklch(var(--un-preset-theme-colors-secondary)) 25%, transparent);
-  background-color: transparent;
-  color: oklch(var(--un-preset-theme-colors-secondary));
-  font-weight: 400;
+	border-color: color-mix(
+		in srgb,
+		oklch(var(--un-preset-theme-colors-secondary)) 25%,
+		transparent
+	);
+	background-color: transparent;
+	color: oklch(var(--un-preset-theme-colors-secondary));
+	font-weight: 400;
 }
 #twikoo .tk-cancel:active,
 #twikoo .tk-preview:active {
-  border-color: color-mix(in srgb, oklch(var(--un-preset-theme-colors-secondary)) 80%, transparent);
-  color: oklch(var(--un-preset-theme-colors-primary));
+	border-color: color-mix(
+		in srgb,
+		oklch(var(--un-preset-theme-colors-secondary)) 80%,
+		transparent
+	);
+	color: oklch(var(--un-preset-theme-colors-primary));
 }
 #twikoo .tk-cancel:hover,
 #twikoo .tk-preview:hover {
-  border-color: color-mix(in srgb, oklch(var(--un-preset-theme-colors-secondary)) 80%, transparent);
-  color: oklch(var(--un-preset-theme-colors-primary));
+	border-color: color-mix(
+		in srgb,
+		oklch(var(--un-preset-theme-colors-secondary)) 80%,
+		transparent
+	);
+	color: oklch(var(--un-preset-theme-colors-primary));
 }
 #twikoo .tk-send {
-  background-color: oklch(var(--un-preset-theme-colors-primary));
-  font-weight: 400;
+	background-color: oklch(var(--un-preset-theme-colors-primary));
+	font-weight: 400;
 }
 #twikoo .tk-send span {
-  color: oklch(var(--un-preset-theme-colors-background));
+	color: oklch(var(--un-preset-theme-colors-background));
 }
 #twikoo .el-button--primary {
-  border: none;
+	border: none;
 }
 
 /* Margins */
 #twikoo .el-loading-spinner svg {
-  margin-left: auto;
-  margin-right: auto;
+	margin-left: auto;
+	margin-right: auto;
 }
 #twikoo .el-loading-spinner .path {
-  stroke: oklch(var(--un-preset-theme-colors-note));
+	stroke: oklch(var(--un-preset-theme-colors-note));
 }
 #twikoo .tk-submit.tk-fade-in {
-  margin-top: 1.5rem;
+	margin-top: 1.5rem;
 }
 #twikoo .tk-row.actions {
-  margin-bottom: 0;
+	margin-bottom: 0;
 }
 @media (min-width: 1024px) {
-  #twikoo .tk-row.actions {
-    margin-left: 4rem;
-  }
+	#twikoo .tk-row.actions {
+		margin-left: 4rem;
+	}
 }
 @media (min-width: 1024px) {
-  #twikoo .tk-comments-container .tk-row.actions {
-    margin-left: 3.5rem;
-  }
+	#twikoo .tk-comments-container .tk-row.actions {
+		margin-left: 3.5rem;
+	}
 }
 #twikoo .tk-preview-container {
-  margin-left: 3.5rem;
-  margin-top: 1rem;
-  min-height: 2rem;
-  border-color: color-mix(in srgb, oklch(var(--un-preset-theme-colors-secondary)) 25%, transparent);
-  padding-top: 0.5rem;
-  padding-bottom: 0.5rem;
-  font-size: 0.875rem;
-  line-height: 1.5rem;
+	margin-left: 3.5rem;
+	margin-top: 1rem;
+	min-height: 2rem;
+	border-color: color-mix(
+		in srgb,
+		oklch(var(--un-preset-theme-colors-secondary)) 25%,
+		transparent
+	);
+	padding-top: 0.5rem;
+	padding-bottom: 0.5rem;
+	font-size: 0.875rem;
+	line-height: 1.5rem;
 }
 #twikoo .tk-comments-title {
-  margin-bottom: 0;
-  margin-top: 1.75rem;
+	margin-bottom: 0;
+	margin-top: 1.75rem;
 }
 #twikoo .tk-comment {
-  margin-top: 2rem;
+	margin-top: 2rem;
 }
 #twikoo .tk-nick {
-  margin-right: 0.25rem;
+	margin-right: 0.25rem;
 }
 #twikoo .tk-tag {
-  margin-right: 0.25rem;
-  border-color: oklch(var(--un-preset-theme-colors-note));
-  border-radius: 0.25rem;
-  background-color: transparent;
-  padding-left: 0.3em;
-  padding-right: 0.3em;
-  font-size: 0.75rem;
-  color: oklch(var(--un-preset-theme-colors-note));
-  line-height: 1.25rem;
+	margin-right: 0.25rem;
+	border-color: oklch(var(--un-preset-theme-colors-note));
+	border-radius: 0.25rem;
+	background-color: transparent;
+	padding-left: 0.3em;
+	padding-right: 0.3em;
+	font-size: 0.75rem;
+	color: oklch(var(--un-preset-theme-colors-note));
+	line-height: 1.25rem;
 }
 #twikoo .tk-replies .tk-comment {
-  margin-top: 1.5rem;
+	margin-top: 1.5rem;
 }
 
 /* Waline >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> */
 #waline .wl-login-info {
-  margin-right: 0.75rem;
-  margin-top: 0;
+	margin-right: 0.75rem;
+	margin-top: 0;
 }
 #waline .wl-avatar {
-  border: none;
+	border: none;
 }
 #waline .wl-logout-btn {
-  z-index: 99;
+	z-index: 99;
 }
 #waline .wl-login-nick:not(:has(img)) {
-  margin-top: 0.35rem;
-  line-height: 0.9rem;
+	margin-top: 0.35rem;
+	line-height: 0.9rem;
 }
 #waline .wl-panel {
-  margin: 0;
-  border-color: color-mix(in srgb, oklch(var(--un-preset-theme-colors-secondary)) 25%, transparent);
-  border-radius: 0.5rem;
-  background-color: transparent;
+	margin: 0;
+	border-color: color-mix(
+		in srgb,
+		oklch(var(--un-preset-theme-colors-secondary)) 25%,
+		transparent
+	);
+	border-radius: 0.5rem;
+	background-color: transparent;
 }
 #waline .wl-header {
-  padding: 0;
+	padding: 0;
 }
 #waline .wl-header-item {
-  border-bottom: 1px solid oklch(var(--un-preset-theme-colors-primary) / 0.25);
+	border-bottom: 1px solid oklch(var(--un-preset-theme-colors-primary) / 0.25);
 }
 #waline .wl-header label {
-  font-size: 0.75rem;
+	font-size: 0.75rem;
 }
 #waline .wl-header input {
-  font-size: 0.7rem;
+	font-size: 0.7rem;
 }
 #waline .wl-card,
 #waline .wl-header.item3 {
-  border-bottom: none;
+	border-bottom: none;
 }
 #waline .wl-card .wl-quote {
-  margin-top: 1rem;
-  border-inline-start: none;
+	margin-top: 1rem;
+	border-inline-start: none;
 }
 #waline .wl-editor {
-  min-height: 5rem;
+	min-height: 5rem;
 }
 #waline .wl-editor::placeholder {
-  color: oklch(var(--un-preset-theme-colors-primary) / 0.25);
+	color: oklch(var(--un-preset-theme-colors-primary) / 0.25);
 }
 #waline .wl-footer {
-  margin: 0.5rem;
+	margin: 0.5rem;
 }
 #waline .wl-text-number,
 #waline .wl-action[title="Markdown Guide"],
 #waline .wl-sort,
 #waline .wl-gallery::-webkit-scrollbar {
-  display: none;
+	display: none;
 }
 #waline .wl-emoji-popup {
-  inset-inline-start: 0;
-  max-width: 532px;
-  border-color: color-mix(in srgb, oklch(var(--un-preset-theme-colors-secondary)) 25%, transparent);
+	inset-inline-start: 0;
+	max-width: 532px;
+	border-color: color-mix(
+		in srgb,
+		oklch(var(--un-preset-theme-colors-secondary)) 25%,
+		transparent
+	);
 }
 #waline .wl-emoji-popup .wl-tab-wrapper {
-  scrollbar-width: thin;
+	scrollbar-width: thin;
 }
 #waline .wl-gif-popup {
-  border-color: color-mix(in srgb, oklch(var(--un-preset-theme-colors-secondary)) 25%, transparent);
+	border-color: color-mix(
+		in srgb,
+		oklch(var(--un-preset-theme-colors-secondary)) 25%,
+		transparent
+	);
 }
 #waline .wl-gif-popup input {
-  border-color: color-mix(in srgb, oklch(var(--un-preset-theme-colors-secondary)) 25%, transparent);
-  background-color: oklch(var(--un-preset-theme-colors-background));
+	border-color: color-mix(
+		in srgb,
+		oklch(var(--un-preset-theme-colors-secondary)) 25%,
+		transparent
+	);
+	background-color: oklch(var(--un-preset-theme-colors-background));
 }
 #waline .wl-gif-popup input::placeholder {
-  font-size: 0.875rem;
-  color: color-mix(in srgb, oklch(var(--un-preset-theme-colors-secondary)) 30%, transparent);
+	font-size: 0.875rem;
+	color: color-mix(
+		in srgb,
+		oklch(var(--un-preset-theme-colors-secondary)) 30%,
+		transparent
+	);
 }
 #waline .wl-gallery {
-  scrollbar-width: none;
-  -ms-overflow-style: none;
+	scrollbar-width: none;
+	-ms-overflow-style: none;
 }
 #waline .wl-btn {
-  transition-duration: 0.15s;
+	transition-duration: 0.15s;
 }
 #waline .wl-btn:hover {
-  border-color: color-mix(in srgb, oklch(var(--un-preset-theme-colors-secondary)) 80%, transparent);
+	border-color: color-mix(
+		in srgb,
+		oklch(var(--un-preset-theme-colors-secondary)) 80%,
+		transparent
+	);
 }
 #waline .wl-meta-head {
-  padding-left: 0;
-  padding-right: 0;
-  padding-top: 0.75rem;
-  padding-bottom: 0.75rem;
+	padding-left: 0;
+	padding-right: 0;
+	padding-top: 0.75rem;
+	padding-bottom: 0.75rem;
 }
 #waline .wl-card-item {
-  padding-left: 0;
-  padding-right: 0;
-  padding-top: 0.25rem;
-  padding-bottom: 0.25rem;
+	padding-left: 0;
+	padding-right: 0;
+	padding-top: 0.25rem;
+	padding-bottom: 0.25rem;
 }
 #waline .wl-user-avatar {
-  margin-top: 0.25rem;
+	margin-top: 0.25rem;
 }
 #waline .wl-content p {
-  font-size: 0.875rem;
-  line-height: 1.5rem;
+	font-size: 0.875rem;
+	line-height: 1.5rem;
 }
 #waline .wl-time {
-  color: color-mix(in srgb, oklch(var(--un-preset-theme-colors-primary)) 75%, transparent);
+	color: color-mix(
+		in srgb,
+		oklch(var(--un-preset-theme-colors-primary)) 75%,
+		transparent
+	);
 }
 #waline .wl-edit,
 #waline .wl-delete {
-  margin-right: 0.1rem;
+	margin-right: 0.1rem;
 }
 #waline .wl-like {
-  margin-right: 0.3rem;
+	margin-right: 0.3rem;
 }
 #waline .wl-meta-foot {
-  display: none;
+	display: none;
 }

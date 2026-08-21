@@ -4,9 +4,9 @@ published: 2024-11-30
 description: "Exploring whether guangchangwu (Chinese square dancing) can be called art, analyzing the nature of art from the audience's perspective."
 updated: 2024-11-30
 tags:
-  - Essay
-  - Art-Appreciation
-  - Culture
+    - Essay
+    - Art-Appreciation
+    - Culture
 draft: false
 pin: 0
 toc: true

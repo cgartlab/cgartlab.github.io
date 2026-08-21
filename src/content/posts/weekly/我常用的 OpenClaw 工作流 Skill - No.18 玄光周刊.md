@@ -4,7 +4,7 @@ published: 2026-05-24
 updated: 2026-05-24
 description: 用了 OpenClaw 三个月，给我最大的感受是根本不知道这个工具的上限在哪里。几乎每天都会认识到新的概念，每周都会发现已有工作流的不足之处。其中 Skill 这个概念不得不提，它太重要了。
 tags:
-  - 周刊
+    - 周刊
 draft: false
 pin: 0
 toc: true

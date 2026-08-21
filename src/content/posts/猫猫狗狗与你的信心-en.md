@@ -3,8 +3,8 @@ title: "Cats, Dogs, and Your Confidence: On Craftsmanship and Self-Worth"
 description: "Exploring how pets reveal deeper truths about freedom, craftsmanship, and the unshakable confidence that comes from mastering something difficult."
 published: 2023-09-29
 tags:
-  - Essay
-  - Life
+    - Essay
+    - Life
 lang: en
 abbrlink: cat-dog-confidence
 toc: true
@@ -20,9 +20,9 @@ People who've raised cats or dogs often snap photos and post them on social medi
 
 Dig one layer deeper: modern people need cats and dogs more for companionship. Ancient people needed them for their innate skills — guarding, tracking, hunting. And the very thing that most affects their freedom is precisely these "innate skills."
 
-A cat's or dog's innate skills are inborn. A cat is born knowing how to catch mice. It can choose *which* mouse to catch, but it cannot choose not to be born with the ability to catch mice at all — that's hardcoded in its genes. It's also very difficult for cats and dogs to learn new skills. Sure, there are guide dogs trained to assist the blind, but if humans need them to be guide dogs, they can't refuse. Humans, on the other hand, are born with no innate skills. We have to learn even basic things like walking and talking. The reason human life is freer than a cat or dog's is that humans can choose *what* to learn as their craft. Catching mice? Professionals do it too, not just cats. A painter isn't born painting; a programmer isn't born coding. But a painter can choose to code, and a programmer can choose to paint. Humans have many ways to spend their lives. The more possibilities, the greater the freedom. A farmer in the mountains might never learn to fly a plane or become a director — the possibility is almost zero. But his child's chance of doing so is already greater than his from birth.
+A cat's or dog's innate skills are inborn. A cat is born knowing how to catch mice. It can choose _which_ mouse to catch, but it cannot choose not to be born with the ability to catch mice at all — that's hardcoded in its genes. It's also very difficult for cats and dogs to learn new skills. Sure, there are guide dogs trained to assist the blind, but if humans need them to be guide dogs, they can't refuse. Humans, on the other hand, are born with no innate skills. We have to learn even basic things like walking and talking. The reason human life is freer than a cat or dog's is that humans can choose _what_ to learn as their craft. Catching mice? Professionals do it too, not just cats. A painter isn't born painting; a programmer isn't born coding. But a painter can choose to code, and a programmer can choose to paint. Humans have many ways to spend their lives. The more possibilities, the greater the freedom. A farmer in the mountains might never learn to fly a plane or become a director — the possibility is almost zero. But his child's chance of doing so is already greater than his from birth.
 
-Go one layer deeper: after choosing your craft, another factor that affects freedom is *how well* you've mastered it. Truly mastering a craft takes a lot of effort. And it's not just about your own hard work — environment and opportunity matter too. The environment must not strip away your possibilities. Human freedom is reflected in having the opportunity to strive and the power to choose your direction. Your achievement is the result of your actions. The more your fate is shaped by your actions, the freer you are.
+Go one layer deeper: after choosing your craft, another factor that affects freedom is _how well_ you've mastered it. Truly mastering a craft takes a lot of effort. And it's not just about your own hard work — environment and opportunity matter too. The environment must not strip away your possibilities. Human freedom is reflected in having the opportunity to strive and the power to choose your direction. Your achievement is the result of your actions. The more your fate is shaped by your actions, the freer you are.
 
 But a craft doesn't necessarily bring income. Someone who's great at raising dogs might not run a pet store. They can't make a living raising dogs — the dog might even eat their food. Because they're raising their own dog. Running a store means learning to raise other people's dogs, all kinds of dogs — that's a whole different skill. In other words, your craft may not have market demand. But whether it has demand or not, there's a side effect: once you possess a craft, you'll never see yourself as a useless person again.
 

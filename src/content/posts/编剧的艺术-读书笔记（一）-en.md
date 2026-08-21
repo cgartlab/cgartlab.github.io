@@ -4,9 +4,9 @@ description: "A dramatist's job is to organize the elements of a script so that 
 published: 2023-08-19
 updated: 2023-08-19
 tags:
-  - Reading-Notes
-  - Writing
-  - Screenwriting
+    - Reading-Notes
+    - Writing
+    - Screenwriting
 toc: true
 pin: 0
 draft: false

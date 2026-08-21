@@ -4,9 +4,9 @@ published: 2025-07-01
 description: "Fix WordPress plugin store loop errors via DNS troubleshooting using Baota Panel or terminal commands. Restore plugin installation and site health."
 updated: 2025-07-01
 tags:
-  - tech-sharing
-  - WordPress
-  - Tutorial
+    - tech-sharing
+    - WordPress
+    - Tutorial
 draft: false
 pin: 0
 toc: true

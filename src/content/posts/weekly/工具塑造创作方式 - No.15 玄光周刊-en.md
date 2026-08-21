@@ -4,9 +4,9 @@ published: 2026-04-10
 description: "As AI drives down creative execution costs, human judgment becomes the ultimate scarce resource. Learn why direction matters more than output speed."
 updated: 2026-04-10
 tags:
-  - Weekly
-  - Creative Tools
-  - AI Workflow
+    - Weekly
+    - Creative Tools
+    - AI Workflow
 draft: false
 pin: 0
 toc: true

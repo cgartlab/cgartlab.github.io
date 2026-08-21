@@ -1,6 +1,6 @@
 ---
-import Layout from '@/layouts/Layout.astro'
 import { getLangFromPath } from '@/i18n/lang'
+import Layout from '@/layouts/Layout.astro'
 
 const _currentLang = getLangFromPath(Astro.url.pathname)
 const _pageNotFoundTitle = {

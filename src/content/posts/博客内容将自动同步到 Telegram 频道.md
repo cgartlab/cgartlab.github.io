@@ -4,7 +4,7 @@ published: 2024-09-06
 description: "博客内容将自动同步到 Telegram 频道的实现方案和配置步骤。"
 updated: 2024-11-25
 tags:
-- 技术分享
+    - 技术分享
 draft: false
 pin: 0
 toc: true

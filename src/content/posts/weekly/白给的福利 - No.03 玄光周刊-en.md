@@ -4,9 +4,9 @@ published: 2025-07-10
 description: "How early rising gives freelancers 'free benefits' through reclaimed focus. Plus Dropbox's rebrand, Severance S2, indie dev lessons, DeepSeek on SiliconFlow."
 updated: 2025-08-06
 tags:
-  - Weekly
-  - Productivity
-  - Freelancing
+    - Weekly
+    - Productivity
+    - Freelancing
 draft: false
 pin: 0
 toc: true

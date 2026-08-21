@@ -99,16 +99,20 @@ function applyThemeToDom(isDark: boolean) {
 // Determine effective dark state from theme-mode
 function getEffectiveDark(): boolean {
   const mode = localStorage.getItem('theme-mode') || 'system'
-  if (mode === 'dark') return true
-  if (mode === 'light') return false
+  if (mode === 'dark')
+    return true
+  if (mode === 'light')
+    return false
   return window.matchMedia('(prefers-color-scheme: dark)').matches
 }
 
 // Cycle theme-mode: light → dark → system → light
 function getNextThemeMode(): string {
   const current = localStorage.getItem('theme-mode') || 'system'
-  if (current === 'light') return 'dark'
-  if (current === 'dark') return 'system'
+  if (current === 'light')
+    return 'dark'
+  if (current === 'dark')
+    return 'system'
   return 'light'
 }
 
@@ -156,7 +160,8 @@ function handleThemeToggle(e: MouseEvent) {
 // Only follow system if the user has NOT manually overridden the theme
 function handleSystemChange(event: MediaQueryListEvent) {
   const mode = localStorage.getItem('theme-mode') || 'system'
-  if (mode !== 'system') return
+  if (mode !== 'system')
+    return
   applyThemeToDom(event.matches)
 }
 

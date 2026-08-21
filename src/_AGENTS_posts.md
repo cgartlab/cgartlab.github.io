@@ -15,13 +15,13 @@ posts/
 
 ## WHERE TO LOOK
 
-| Task | Location | Notes |
-|------|----------|-------|
-| 新建文章 | `pnpm new-post "标题"` | 自动创建 frontmatter |
-| 周刊 | `weekly/` | 命名: `[主题] - No.XX 玄光周刊.md` |
-| 文章图片 | `_images/` | 与文章同名子目录 |
-| 作品 | `works/` | 作品展示页面 |
-| 双语文章 | `*.md` + `*-en.md` | 英文版加 `-en` 后缀 |
+| Task     | Location               | Notes                              |
+| -------- | ---------------------- | ---------------------------------- |
+| 新建文章 | `pnpm new-post "标题"` | 自动创建 frontmatter               |
+| 周刊     | `weekly/`              | 命名: `[主题] - No.XX 玄光周刊.md` |
+| 文章图片 | `_images/`             | 与文章同名子目录                   |
+| 作品     | `works/`               | 作品展示页面                       |
+| 双语文章 | `*.md` + `*-en.md`     | 英文版加 `-en` 后缀                |
 
 ## CONVENTIONS
 

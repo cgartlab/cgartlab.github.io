@@ -4,9 +4,9 @@ published: 2025-01-03
 description: "Launch issue of Black Light Weekly, a designer-led newsletter on digital art, visual design, and frontend development. Editorial vision explained."
 updated: 2025-01-03
 tags:
-  - Weekly
-  - Digital Art
-  - Design
+    - Weekly
+    - Digital Art
+    - Design
 draft: false
 pin: 0
 toc: true

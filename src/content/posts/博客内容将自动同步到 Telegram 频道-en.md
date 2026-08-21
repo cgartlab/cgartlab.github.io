@@ -4,9 +4,9 @@ published: 2024-09-06
 description: "Implementation strategy and setup steps for auto-syncing blog content to a Telegram channel."
 updated: 2024-11-25
 tags:
-  - Tech
-  - Automation
-  - Workflow
+    - Tech
+    - Automation
+    - Workflow
 draft: false
 pin: 0
 toc: true
@@ -47,6 +47,7 @@ Here's the official feature description:
 > Module Overview:
 >
 > 1. Send to Telegram
+>
 > - Automatically send posts to Telegram when published or updated
 > - Send to Telegram channels, groups, supergroups, or private chats
 > - Support for multiple channels/chats
@@ -67,6 +68,7 @@ Here's the official feature description:
 > - WP Telegram Pro supports multiple channels based on category/tag/author/post type, plus unlimited reaction buttons
 >
 > 2. Private Notifications
+>
 > - Get email notifications on Telegram
 > - Support for WooCommerce order notifications, Contact Form 7, and other plugin notifications
 > - Allow users to receive email notifications on Telegram
@@ -74,6 +76,7 @@ Here's the official feature description:
 > - Users can manually enter their Telegram chat ID
 >
 > 3. Proxy
+>
 > - Bypass Telegram blocks if your host blocks Telegram
 > - Support for Cloudflare Worker as proxy with file upload
 > - Option to use custom Google Script as proxy

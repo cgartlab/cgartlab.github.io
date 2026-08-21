@@ -4,9 +4,9 @@ published: 2026-01-31
 description: "Four reasons to start writing today, even before applause arrives. Lessons drawn from Dan Koe's viral essays, plus practical advice for creators on passion, observation, momentum, and creative detachment from income."
 updated: 2026-01-31
 tags:
-  - Essay
-  - Creativity
-  - Writing
+    - Essay
+    - Creativity
+    - Writing
 draft: false
 pin: 0
 toc: true
@@ -79,7 +79,7 @@ Writing is a pure hobby for me. If I had to say why I like doing this, it's beca
 
 Writing is somewhat different from other creative pursuits like calligraphy, music, painting, or performance. I've painted quite a bit too (cgartlab.com/works). Take painting: first, it genuinely requires some talent; even with AI, you need aesthetic accumulation. Second, even with talent, painting requires extensive practice—it's a vocational skill, don't lightly challenge someone's livelihood with a hobby. Finally, if you still like it after experiencing all this and believe you're the chosen one, you can ignore all advice and just paint. Even if you don't become a master, you won't be far off.
 
-Speaking of this, I'm reminded of a small book particularly suitable for this stage: Austin Kleon's *Show Your Work!*.
+Speaking of this, I'm reminded of a small book particularly suitable for this stage: Austin Kleon's _Show Your Work!_.
 
 ![Cover of Austin Kleon's book "Show Your Work!", which inspires beginners to share creative process openly](./_images/就算掌声无法抵达舞台，我依然劝你尽快动笔-1769857863140.webp)
 

@@ -4,9 +4,9 @@ published: 2022-05-16
 description: "Last week everything landed safely. In the first post, I mentioned how to deal with information overload — I knew I'd have to write about it sooner or later. My method for handling information overload was learned piece by piece online, and by 'piece by piece' I mean I took many detours. So far, the best tool I've found is building your own second brain."
 updated: 2022-12-11
 tags:
-  - knowledge-management
-  - second-brain
-  - Productivity
+    - knowledge-management
+    - second-brain
+    - Productivity
 draft: false
 pin: 0
 toc: true

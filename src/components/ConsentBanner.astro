@@ -248,7 +248,7 @@ const currentUI = ui[currentLang as keyof typeof ui] ?? {}
 (function () {
   'use strict'
 
-  var STORAGE_KEY = 'consent-preference'
+  const STORAGE_KEY = 'consent-preference'
 
   function loadPref() {
     try { return localStorage.getItem(STORAGE_KEY) }
@@ -263,16 +263,19 @@ const currentUI = ui[currentLang as keyof typeof ui] ?? {}
   function getBanner() { return document.getElementById('consent-banner') }
 
   function showBanner(banner) {
-    if (!banner || banner.classList.contains('visible')) return
+    if (!banner || banner.classList.contains('visible'))
+      return
     banner.classList.add('visible')
     banner.setAttribute('aria-hidden', 'false')
     // Move focus to the first button for keyboard users (WCAG 2.4.3)
-    var firstBtn = document.getElementById('consent-reject')
-    if (firstBtn) firstBtn.focus()
+    const firstBtn = document.getElementById('consent-reject')
+    if (firstBtn)
+      firstBtn.focus()
   }
 
   function hideBanner(banner) {
-    if (!banner || !banner.classList.contains('visible')) return
+    if (!banner || !banner.classList.contains('visible'))
+      return
     banner.classList.remove('visible')
     banner.setAttribute('aria-hidden', 'true')
   }
@@ -284,22 +287,25 @@ const currentUI = ui[currentLang as keyof typeof ui] ?? {}
   }
 
   function bindButtons() {
-    var ids = ['consent-reject', 'consent-functional', 'consent-accept']
-    var vals = ['rejected', 'functional', 'accepted']
-    for (var i = 0; i < 3; i++) {
-      var btn = document.getElementById(ids[i])
-      if (btn) btn.addEventListener('click', setPreference.bind(null, vals[i]))
+    const ids = ['consent-reject', 'consent-functional', 'consent-accept']
+    const vals = ['rejected', 'functional', 'accepted']
+    for (let i = 0; i < 3; i++) {
+      const btn = document.getElementById(ids[i])
+      if (btn)
+        btn.addEventListener('click', setPreference.bind(null, vals[i]))
     }
   }
 
   function initBanner() {
-    var banner = getBanner()
-    if (!banner) return
+    const banner = getBanner()
+    if (!banner)
+      return
 
-    var pref = loadPref()
+    const pref = loadPref()
     if (!pref) {
       showBanner(banner)
-    } else {
+    }
+    else {
       window.__CONSENT_STATUS = pref
     }
     bindButtons()
@@ -307,10 +313,11 @@ const currentUI = ui[currentLang as keyof typeof ui] ?? {}
 
   if (!window.__CONSENT_GLOBAL_SETUP) {
     window.__CONSENT_GLOBAL_SETUP = true
-    document.addEventListener('keydown', function (e) {
+    document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') {
-        var b = getBanner()
-        if (b && b.classList.contains('visible')) setPreference('rejected')
+        const b = getBanner()
+        if (b && b.classList.contains('visible'))
+          setPreference('rejected')
       }
     })
   }
