@@ -18,7 +18,8 @@
     "verify-feed": "tsx scripts/verify-feed.ts",
     "audit-glossary": "tsx scripts/audit-glossary.ts",
     "sync-docs": "tsx scripts/sync-doc-facts.ts --write",
-    "sync-docs:check": "tsx scripts/sync-doc-facts.ts --check"
+    "sync-docs:check": "tsx scripts/sync-doc-facts.ts --check",
+    "update-gh-contributions": "tsx scripts/update-gh-contributions.ts"
   },
   "dependencies": {
     "@astrojs/markdown-remark": "^7.2.1",
