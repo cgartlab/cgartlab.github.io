@@ -6,6 +6,7 @@ tags:
     - Design System
     - AI
     - Open Source
+    - Design Tool
 draft: false
 abbrlink: edic-design-system
 toc: true

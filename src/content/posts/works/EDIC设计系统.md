@@ -6,6 +6,7 @@ tags:
     - 设计系统
     - AI
     - 开源
+    - 设计工具
 draft: false
 abbrlink: edic-design-system
 toc: true
