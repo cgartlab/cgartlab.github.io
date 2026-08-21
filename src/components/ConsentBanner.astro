@@ -54,7 +54,9 @@ const currentUI = ui[currentLang as keyof typeof ui] ?? {}
     padding: 0.5rem max(5.75rem, calc(50vw - 34.25rem));
     border-radius: 0;
     /* Frosted glass matching .search-box: gradient + backdrop-filter blur.
-       backdrop-filter is the banner's own glass surface, not a page overlay. */
+        backdrop-filter is the banner's own glass surface, not a page overlay. */
+    /* Fallback for browsers without color-mix: solid semi-transparent glass */
+    background-color: oklch(var(--un-preset-theme-colors-background) / 0.92);
     background: linear-gradient(
       135deg,
       color-mix(in srgb, oklch(var(--un-preset-theme-colors-background)) 92%, transparent) 0%,
@@ -225,6 +227,8 @@ const currentUI = ui[currentLang as keyof typeof ui] ?? {}
 
   /* ── dark mode ──────────────────────────────────────── */
   html.dark .consent-bar {
+    /* Fallback for browsers without color-mix */
+    background-color: oklch(var(--un-preset-theme-colors-background) / 0.62);
     background: linear-gradient(
       135deg,
       color-mix(in srgb, oklch(var(--un-preset-theme-colors-background)) 62%, transparent) 0%,
