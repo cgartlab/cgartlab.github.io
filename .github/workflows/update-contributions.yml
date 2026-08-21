@@ -35,6 +35,12 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Sanity-check artifact size
+        run: |
+          LINES=$(wc -l < src/data/github-contributions.json)
+          echo "data file: ${LINES} lines (budget: 5000)"
+          test "$LINES" -lt 5000
+
       - name: Configure git identity
         run: |
           git config user.name  'github-actions[bot]'
