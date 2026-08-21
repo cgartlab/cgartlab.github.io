@@ -25,7 +25,6 @@ async function initOGRouter() {
   )
 
   ogRouteResult = await OGImageRoute({
-    param: 'image',
     pages,
     getImageOptions: (_path, page: { title: string, description: string }) => ({
       title: page.title,
