@@ -106,7 +106,7 @@
 .heti :where(p:not(.no-heti):not(.no-heti *)) {
 	margin-bottom: 2rem;
 	text-wrap: pretty;
-	line-height: 2.4;
+	line-height: 1.8;
 }
 .heti
 	:where(p:not(.no-heti):not(.no-heti *)):is(
