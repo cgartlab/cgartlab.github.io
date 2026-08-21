@@ -39,10 +39,12 @@ const CACHE_TTL = 2 * 60 * 60 * 1000 // 2 hours
 const FETCH_TIMEOUT = 10_000 // 10 seconds
 
 // Git-tracked fallback data (updated by CI cron: scripts/update-gh-contributions.ts)
-const TRACKED_DATA_FILE = new URL(
-  '../data/github-contributions.json',
-  import.meta.url,
-).pathname
+const TRACKED_DATA_FILE = join(
+  process.cwd(),
+  'src',
+  'data',
+  'github-contributions.json',
+)
 
 const CONTRIBUTIONS_QUERY = `
   query($userName: String!) {
@@ -189,11 +191,16 @@ async function readTrackedDataFile(): Promise<{
       data: ContributionData
       ts?: number
     }
-    if (!parsed.data || !Array.isArray(parsed.data.contributions))
+    if (!parsed.data || !Array.isArray(parsed.data.contributions)) {
+      console.warn('[GithubHeatmap] Tracked file: invalid structure')
       return null
+    }
     return { data: parsed.data, ts: parsed.ts ?? 0 }
   }
-  catch {
+  catch (e) {
+    console.warn(
+      `[GithubHeatmap] Tracked file read failed (${TRACKED_DATA_FILE}): ${e instanceof Error ? e.message : 'unknown'}`,
+    )
     return null
   }
 }
