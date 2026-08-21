@@ -452,6 +452,8 @@ document.addEventListener('astro:page-load', () => {
     padding: 0.5rem;
     width: auto;
     height: fit-content;
+    /* Fallback for browsers without color-mix */
+    background-color: oklch(var(--un-preset-theme-colors-background) / 0.85);
     background: color-mix(in srgb, oklch(var(--un-preset-theme-colors-background)) 85%, transparent);
     border-radius: 0.5rem;
     -webkit-backdrop-filter: blur(8px);

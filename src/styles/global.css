@@ -287,6 +287,8 @@ h4:hover .heading-anchor-link svg:hover {
   transition: transform 0.3s cubic-bezier(0.165, 0.84, 0.44, 1), opacity 0.25s ease-out;
 }
 html.dark .search-box {
+  /* Fallback for browsers without color-mix: solid semi-transparent glass */
+  background-color: oklch(var(--un-preset-theme-colors-background) / 0.85);
   background: linear-gradient(
     135deg,
     color-mix(in srgb, oklch(var(--un-preset-theme-colors-background)) 85%, transparent) 0%,
