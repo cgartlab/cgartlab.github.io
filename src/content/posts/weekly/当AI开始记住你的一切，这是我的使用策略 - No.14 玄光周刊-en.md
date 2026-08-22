@@ -107,7 +107,7 @@ Re-reading this article over the weekend, I have to sigh that within 3 months, t
 
 ---
 
-This article was first published in [Black Light Weekly](https://weekly.cgartlab.com)
+This article was first published in [Black Light Weekly](https://cgartlab.com/weekly/)
 
 Also serialized at [CGArtLab](https://cgartlab.com/weekly)
 
@@ -115,4 +115,4 @@ Also serialized at [CGArtLab](https://cgartlab.com/weekly)
 
 This is an electronic weekly focused on knowledge management, covering digital art, visual design, and frontend development fields. The publication frequency is currently weekly, with each issue selecting a specific sub-topic for discussion.
 
-If you think the content here is good and want a more complete reading experience, it's more recommended to use a browser to visit the official website. You're also welcome to subscribe via **RSS** (https://weekly.cgartlab.com/feed/atom) or **Newsletter** (https://weekly.cgartlab.com).
+If you think the content here is good and want a more complete reading experience, it's more recommended to use a browser to visit the official website. You're also welcome to subscribe via **RSS** (https://cgartlab.com/rss.xml) or **Newsletter** (https://cgartlab.com/weekly/).

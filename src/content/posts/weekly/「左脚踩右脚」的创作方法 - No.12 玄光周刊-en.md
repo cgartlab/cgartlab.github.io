@@ -98,10 +98,10 @@ I'm considering whether to merge the "Good Stuff" series into the weekly. Digita
 
 ---
 
-This article first published on [Black Light Weekly](https://weekly.cgartlab.com) simultaneously serialized on [CG Art Lab](https://cgartlab.com)
+This article first published on [Black Light Weekly](https://cgartlab.com/weekly/) simultaneously serialized on [CG Art Lab](https://cgartlab.com)
 
 > About Black Light Weekly
 >
 > This is an electronic weekly focusing on knowledge management, covering digital art, visual design, and frontend development. Currently published weekly, each issue selects a specific topic for in-depth reflection. It shares my notes about entrepreneurship and products, including my thoughts, excerpts and annotations, reading notes, and quality content recommendations.
 >
-> If you find the content here worthwhile and want a better reading experience, more recommended to use browser to visit the official website. Also welcome to use **RSS** (<https://weekly.cgartlab.com/feed/atom>) or **Email Subscription** (<https://weekly.cgartlab.com>), we summarize these notes into an email sent to you weekly. Of course, your [letters](mailto:hello@cgartlab.com) are also welcome.
+> If you find the content here worthwhile and want a better reading experience, more recommended to use browser to visit the official website. Also welcome to use **RSS** (<https://cgartlab.com/rss.xml>) or **Email Subscription** (<https://cgartlab.com/weekly/>), we summarize these notes into an email sent to you weekly. Of course, your [letters](mailto:hello@cgartlab.com) are also welcome.

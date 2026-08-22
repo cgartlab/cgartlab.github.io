@@ -20,7 +20,7 @@ abbrlink: weekly-15
 
 > 关于玄光周刊
 >
-> 这是一份专注知识管理，涵盖数字艺术、视觉设计、前端开发领域的电子周刊，发布频率目前为每~~周~~ 1 期，每期精选一个主要话题展开思考。如果你觉得这里的内容还不错，想获得更完善的阅读体验，更推荐使用浏览器来到主站阅读，也欢迎使用 **RSS** (https://weekly.cgartlab.com/feed/atom) 或**邮箱**（[https://weekly.cgartlab.com](https://weekly.cgartlab.com)）进行订阅。
+> 这是一份专注知识管理，涵盖数字艺术、视觉设计、前端开发领域的电子周刊，发布频率目前为每~~周~~ 1 期，每期精选一个主要话题展开思考。如果你觉得这里的内容还不错，想获得更完善的阅读体验，更推荐使用浏览器来到主站阅读，也欢迎使用 **RSS** (https://cgartlab.com/rss.xml) 或**邮箱**（[https://cgartlab.com/weekly/](https://cgartlab.com/weekly/)）进行订阅。
 
 ---
 
@@ -162,6 +162,6 @@ Skill 的概念很有意思：它不是提示词，而是一套**包含上下文
 
 ---
 
-周刊首发在 [玄光周刊](https://weekly.cgartlab.com)
+周刊首发在 [玄光周刊](https://cgartlab.com/weekly/)
 
 同时连载在 [CG 艺术实验室](https://cgartlab.com/weekly)

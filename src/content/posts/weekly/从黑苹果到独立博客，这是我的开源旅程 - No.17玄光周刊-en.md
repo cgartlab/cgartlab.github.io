@@ -22,7 +22,7 @@ This issue's cover comes from a Hackintosh mini PC I configured the year before 
 
 ## About Black Light Weekly
 
-> This is an electronic weekly focusing on knowledge management, covering digital art, visual design, and frontend development. Currently published once a week, each issue selects a specific topic for in-depth reflection. If you find the content here worthwhile and want a better reading experience, we recommend using a browser to visit the official website. You're also welcome to use **RSS** (https://weekly.cgartlab.com/feed/atom) or **Email Subscription** ([https://weekly.cgartlab.com](https://weekly.cgartlab.com)) to subscribe.
+> This is an electronic weekly focusing on knowledge management, covering digital art, visual design, and frontend development. Currently published once a week, each issue selects a specific topic for in-depth reflection. If you find the content here worthwhile and want a better reading experience, we recommend using a browser to visit the official website. You're also welcome to use **RSS** (https://cgartlab.com/rss.xml) or **Email Subscription** ([https://cgartlab.com/weekly/](https://cgartlab.com/weekly/)) to subscribe.
 
 ---
 
