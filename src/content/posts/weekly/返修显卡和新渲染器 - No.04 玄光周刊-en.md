@@ -22,7 +22,7 @@ The whole process was fairly pleasant. When it came back, not only was the noise
 >
 > This is an electronic weekly focused on knowledge management, covering digital art, visual design, and frontend development. Currently published at a rate of one issue per week, with each issue diving deep into a specific subtopic. It shares my notes on entrepreneurship and products, including my thoughts, excerpts and annotations, reading notes, and quality content recommendations.
 >
-> If you find the content here worthwhile, feel free to use [RSS](https://weekly.cgartlab.com/feed/atom) or [Email Subscription](https://weekly.cgartlab.com/) — we'll compile these notes into an email and send it to you every week. Of course, your [letters](mailto:hello@cgartlab.com) are also welcome.
+> If you find the content here worthwhile, feel free to use [RSS](https://cgartlab.com/rss.xml) or [Email Subscription](https://cgartlab.com/weekly/) — we'll compile these notes into an email and send it to you every week. Of course, your [letters](mailto:hello@cgartlab.com) are also welcome.
 
 ## A New GPU Renderer — Centileo Render
 
@@ -54,4 +54,4 @@ Also, Obsidian paired with [Git sync](https://github.com/ViscousPot/GitSync) fin
 
 ---
 
-OK, that's it for this issue. If you find the content here worthwhile, feel free to use [RSS](https://weekly.cgartlab.com/feed/atom) or [Email Subscription](https://weekly.cgartlab.com/), and we'll compile these notes into an email and send it to you weekly. Of course, your [letters](mailto:hello@cgartlab.com) are also welcome — we'll do our best to reply.
+OK, that's it for this issue. If you find the content here worthwhile, feel free to use [RSS](https://cgartlab.com/rss.xml) or [Email Subscription](https://cgartlab.com/weekly/), and we'll compile these notes into an email and send it to you weekly. Of course, your [letters](mailto:hello@cgartlab.com) are also welcome — we'll do our best to reply.

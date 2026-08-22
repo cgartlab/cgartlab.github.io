@@ -22,7 +22,7 @@ abbrlink: weekly-04
 >
 > 这是一份专注知识管理，涵盖数字艺术、视觉设计、前端开发领域的电子周刊，发布频率目前为每周 1 期，每期精选一个细分话题展开思考。其中会分享我写的关于创业、产品的笔记，包括我的所思所想、摘抄与批注、读书笔记、优质内容推荐。
 >
-> 如果你觉得这里的内容还不错，欢迎使用 [RSS](https://weekly.cgartlab.com/feed/atom) 或 [邮件订阅](https://weekly.cgartlab.com/)，我们每周把这些笔记汇总为一封邮件发送给你。当然也欢迎你的 [来信](mailto:hello@cgartlab.com)。
+> 如果你觉得这里的内容还不错，欢迎使用 [RSS](https://cgartlab.com/rss.xml) 或 [邮件订阅](https://cgartlab.com/weekly/)，我们每周把这些笔记汇总为一封邮件发送给你。当然也欢迎你的 [来信](mailto:hello@cgartlab.com)。
 
 ## 新的 GPU 渲染器——Centileo Render
 
@@ -54,4 +54,4 @@ Obsidian 在 2025 年 2 月 18 日的更新中，新增了一个名为 **Web Vie
 
 ---
 
-OK，本期就到这里。如果你觉得这里的内容还不错，欢迎使用 [RSS](https://weekly.cgartlab.com/feed/atom) 或 [邮件订阅](https://weekly.cgartlab.com/) ，我们每周把这些笔记汇总为一封邮件发送给你。当然也欢迎你的 [来信](mailto:hello@cgartlab.com) ，我们会尽全力回复的
+OK，本期就到这里。如果你觉得这里的内容还不错，欢迎使用 [RSS](https://cgartlab.com/rss.xml) 或 [邮件订阅](https://cgartlab.com/weekly/) ，我们每周把这些笔记汇总为一封邮件发送给你。当然也欢迎你的 [来信](mailto:hello@cgartlab.com) ，我们会尽全力回复的

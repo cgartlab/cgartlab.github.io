@@ -87,7 +87,7 @@ This Site uses the following third-party services, which may collect and process
 **Notes**:
 
 - Google Analytics uses cookies to collect anonymized visit data
-- You can install the [Google Analytics Opt-out Browser Add-on](https://tools.google.com/dlpage/gaoptout) to prevent data collection
+- You can install the [Google Analytics Opt-out Browser Add-on](https://myaccount.google.com/data-and-privacy) to prevent data collection
 - Umami is a privacy-friendly analytics solution that does not collect personally identifiable information or use cookie tracking
 
 ### 3.2 Comment System
@@ -161,7 +161,7 @@ You can manage cookies and local storage through the following methods:
 
 - **Browser Settings**: Clear, block, or manage cookies in your browser preferences
 - **Analytics Opt-out**:
-    - [Google Analytics Opt-out](https://tools.google.com/dlpage/gaoptout)
+    - [Google Analytics Opt-out](https://myaccount.google.com/data-and-privacy)
 - **Reduced Motion**: If your system preference is set to `prefers-reduced-motion: reduce`, this Site will automatically disable page animations
 - **Private Browsing Mode**: Use your browser's privacy/incognito mode when visiting this Site
 

@@ -26,7 +26,7 @@ This issue's cover photo was taken from an old wall on a Kunming street. The pee
 >
 > If you enjoy the content here and want a better reading experience, I recommend visiting the official website in your browser.
 >
-> You can also subscribe via **RSS** (https://weekly.cgartlab.com/feed/atom) or **email** (https://weekly.cgartlab.com).
+> You can also subscribe via **RSS** (https://cgartlab.com/rss.xml) or **email** (https://cgartlab.com/weekly/).
 
 ---
 

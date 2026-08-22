@@ -52,10 +52,10 @@ A white noise website I've been loving recently, with open-source code. Can free
 
 ---
 
-This article was first published on [Black Light Weekly](https://weekly.cgartlab.com) and simultaneously serialized on [CG Art Lab](https://cgartlab.com)
+This article was first published on [Black Light Weekly](https://cgartlab.com/weekly/) and simultaneously serialized on [CG Art Lab](https://cgartlab.com)
 
 > About Black Light Weekly
 >
 > This is an electronic weekly focused on knowledge management, covering digital art, visual design, and frontend development. Currently published at a frequency of one issue per week, with each issue selecting a niche topic for in-depth thinking. It shares my notes on entrepreneurship and products, including my thoughts, excerpts and annotations, reading notes, and quality content recommendations.
 >
-> If you find the content here good, for a more complete reading experience, we recommend visiting the official website via browser. You are also welcome to subscribe via [RSS](https://weekly.cgartlab.com/feed/atom) or [email subscription](https://weekly.cgartlab.com/)—we compile these notes into an email and send it to you every week. Of course, your [letters](mailto:hello@cgartlab.com) are also welcome.
+> If you find the content here good, for a more complete reading experience, we recommend visiting the official website via browser. You are also welcome to subscribe via [RSS](https://cgartlab.com/rss.xml) or [email subscription](https://cgartlab.com/weekly/)—we compile these notes into an email and send it to you every week. Of course, your [letters](mailto:hello@cgartlab.com) are also welcome.

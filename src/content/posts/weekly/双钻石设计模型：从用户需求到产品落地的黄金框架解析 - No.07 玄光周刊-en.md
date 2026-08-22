@@ -22,7 +22,7 @@ Additionally, while editing each issue's content, I'm also fine-tuning the text 
 >
 > This is an electronic weekly focusing on knowledge management, covering digital art, visual design, and frontend development. Currently published at a rate of one issue per week, each issue selects a single focused topic to explore in depth. It shares my notes on entrepreneurship and products, including my thoughts, excerpts and annotations, reading notes, and quality content recommendations.
 >
-> If you find the content here worthwhile, welcome to use [RSS](https://weekly.cgartlab.com/feed/atom) or [Email Subscription](https://weekly.cgartlab.com/) —we compile these notes into an email sent to you each week. Of course, your [letters](mailto:hello@cgartlab.com) are also welcome.
+> If you find the content here worthwhile, welcome to use [RSS](https://cgartlab.com/rss.xml) or [Email Subscription](https://cgartlab.com/weekly/) —we compile these notes into an email sent to you each week. Of course, your [letters](mailto:hello@cgartlab.com) are also welcome.
 
 ## Worthwhile New Updates
 
@@ -54,7 +54,7 @@ For designers, PNG 3 brings a few new features worth attention:
 
 ![Double Diamond design model diagram showing the four stages: discover, define, develop, deliver](../_images/07%20玄光周刊-双钻石设计模型：从用户需求到产品落地的黄金框架解析-1754597085815.webp)
 
-The Double Diamond design philosophy is an innovation methodology widely used in product development, brand design, and other fields. I mentioned it in [The Art of Dream-Making: Behind the Scenes of Film Production and the Innovation of AI Tools](https://cgartlab.com/05-the-art-of-dreammaking-behind-the-scenes-of-film-production-and-the-innovation-of-ai-tools/)—I've rewatched that video several times. The author's overall framework for building a brand is an extension of this philosophy, and it's well worth studying. Highly recommended. This philosophy very clearly and precisely divides the design process into four stages:
+The Double Diamond design philosophy is an innovation methodology widely used in product development, brand design, and other fields. I mentioned it in [The Art of Dream-Making: Behind the Scenes of Film Production and the Innovation of AI Tools](https://cgartlab.com/posts/weekly-05/)—I've rewatched that video several times. The author's overall framework for building a brand is an extension of this philosophy, and it's well worth studying. Highly recommended. This philosophy very clearly and precisely divides the design process into four stages:
 
 #### **1. Discover**
 
@@ -98,6 +98,6 @@ Stepping outside the project workflow and looking from the designer's perspectiv
 
 ---
 
-OK, that's it for this issue. If you find the content here worthwhile, welcome to use [RSS](https://weekly.cgartlab.com/feed/atom) or [Email Subscription](https://weekly.cgartlab.com/) —we compile these notes into an email sent to you each week. Of course, your [letters](mailto:hello@cgartlab.com) are also welcome; we'll do our best to reply.
+OK, that's it for this issue. If you find the content here worthwhile, welcome to use [RSS](https://cgartlab.com/rss.xml) or [Email Subscription](https://cgartlab.com/weekly/) —we compile these notes into an email sent to you each week. Of course, your [letters](mailto:hello@cgartlab.com) are also welcome; we'll do our best to reply.
 
-This article was first published on [Black Light Weekly](https://weekly.cgartlab.com/) and is simultaneously serialized on [CG Art Lab](https://cgartlab.com/).
+This article was first published on [Black Light Weekly](https://cgartlab.com/weekly/) and is simultaneously serialized on [CG Art Lab](https://cgartlab.com/).

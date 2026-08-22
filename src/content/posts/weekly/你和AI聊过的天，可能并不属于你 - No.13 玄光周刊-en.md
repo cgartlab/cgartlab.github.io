@@ -98,10 +98,10 @@ A black hole effect implemented with Three.js. It can run smoothly even on an iP
 
 ---
 
-This article was first published in [Xuanguang Weekly](https://weekly.cgartlab.com) and is also serialized in [CG Art Lab](https://cgartlab.com)
+This article was first published in [Xuanguang Weekly](https://cgartlab.com/weekly/) and is also serialized in [CG Art Lab](https://cgartlab.com)
 
 > About Xuanguang Weekly
 >
 > This is an electronic weekly focusing on knowledge management, covering digital art, visual design, and front-end development. It is currently published once a week, with each issue selecting a niche topic for in-depth discussion. It will share my notes on entrepreneurship and products, including my thoughts, excerpts and annotations, book notes, and recommendations of high-quality content.
 >
-> If you think the content here is good and want a better reading experience, I recommend visiting the official website using a browser. You are also welcome to use **RSS** (<https://weekly.cgartlab.com/feed/atom>) or **email subscription** (<https://weekly.cgartlab.com>), and we will send you a weekly email summarizing these notes. Of course, you are also welcome to [send us a letter](mailto:hello@cgartlab.com).
+> If you think the content here is good and want a better reading experience, I recommend visiting the official website using a browser. You are also welcome to use **RSS** (<https://cgartlab.com/rss.xml>) or **email subscription** (<https://cgartlab.com/weekly/>), and we will send you a weekly email summarizing these notes. Of course, you are also welcome to [send us a letter](mailto:hello@cgartlab.com).

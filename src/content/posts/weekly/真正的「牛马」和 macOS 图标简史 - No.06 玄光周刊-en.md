@@ -18,7 +18,7 @@ abbrlink: weekly-06
 >
 > This is an electronic weekly focusing on knowledge management, covering digital art, visual design, and frontend development. Currently published weekly, each issue selects a specific topic for in-depth reflection. It shares my notes about entrepreneurship and products, including my thoughts, excerpts and annotations, reading notes, and quality content recommendations.
 >
-> If you find the content here worthwhile, welcome to use [RSS](https://weekly.cgartlab.com/feed/atom) or [Email Subscription](https://weekly.cgartlab.com/) , we summarize these notes into an email sent to you weekly. Of course, your [letters](mailto:hello@cgartlab.com) are also welcome.
+> If you find the content here worthwhile, welcome to use [RSS](https://cgartlab.com/rss.xml) or [Email Subscription](https://cgartlab.com/weekly/) , we summarize these notes into an email sent to you weekly. Of course, your [letters](mailto:hello@cgartlab.com) are also welcome.
 
 ![Qingdao Oriental Movie Metropolis film studio complex viewed across the river](../_images/06-真正的「牛马」和%20macOS%20图标简史-1754596615417.webp)
 
@@ -91,6 +91,6 @@ It targets RedShift and Octane. If you commonly use these two renderers, getting
 
 ---
 
-OK, that's it for this issue. If you find the content here worthwhile, welcome to use [RSS](https://weekly.cgartlab.com/feed/atom) or [Email Subscription](https://weekly.cgartlab.com/) , we summarize these notes into an email sent to you weekly. Of course, your [letters](mailto:hello@cgartlab.com) are also welcome, and we'll do our best to reply.
+OK, that's it for this issue. If you find the content here worthwhile, welcome to use [RSS](https://cgartlab.com/rss.xml) or [Email Subscription](https://cgartlab.com/weekly/) , we summarize these notes into an email sent to you weekly. Of course, your [letters](mailto:hello@cgartlab.com) are also welcome, and we'll do our best to reply.
 
-This article was first published on [Black Light Weekly](https://weekly.cgartlab.com) and is also serialized on [CG Art Lab](https://cgartlab.com/).
+This article was first published on [Black Light Weekly](https://cgartlab.com/weekly/) and is also serialized on [CG Art Lab](https://cgartlab.com/).

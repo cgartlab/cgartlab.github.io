@@ -20,7 +20,7 @@ This week's cover was shot on a small island near Qingdao Golden Beach. The inne
 >
 > This is an electronic weekly focusing on knowledge management, covering digital art, visual design, and frontend development. Currently published at a rate of one issue per week, each issue selects a single focused topic to explore in depth. It shares my notes on entrepreneurship and products, including my thoughts, excerpts and annotations, reading notes, and quality content recommendations.
 >
-> If you find the content here worthwhile and want a better reading experience, we recommend visiting the official site in your browser. You're also welcome to use [RSS](https://weekly.cgartlab.com/feed/atom) or [Email Subscription](https://weekly.cgartlab.com/) —we compile these notes into an email sent to you each week. Of course, your [letters](mailto:hello@cgartlab.com) are also welcome.
+> If you find the content here worthwhile and want a better reading experience, we recommend visiting the official site in your browser. You're also welcome to use [RSS](https://cgartlab.com/rss.xml) or [Email Subscription](https://cgartlab.com/weekly/) —we compile these notes into an email sent to you each week. Of course, your [letters](mailto:hello@cgartlab.com) are also welcome.
 
 ## Built My Own RSS Service
 
@@ -58,6 +58,6 @@ A handy little open-source tool—it essentially extracts the song list from a p
 
 ---
 
-OK, that's it for this issue. If you find the content here worthwhile, welcome to use [RSS](https://weekly.cgartlab.com/feed/atom) or [Email Subscription](https://weekly.cgartlab.com/) —we compile these notes into an email sent to you each week. Of course, your [letters](mailto:hello@cgartlab.com) are also welcome; we'll do our best to reply.
+OK, that's it for this issue. If you find the content here worthwhile, welcome to use [RSS](https://cgartlab.com/rss.xml) or [Email Subscription](https://cgartlab.com/weekly/) —we compile these notes into an email sent to you each week. Of course, your [letters](mailto:hello@cgartlab.com) are also welcome; we'll do our best to reply.
 
-This article was first published on [Black Light Weekly](https://weekly.cgartlab.com) and is simultaneously serialized on [CG Art Lab](https://cgartlab.com/).
+This article was first published on [Black Light Weekly](https://cgartlab.com/weekly/) and is simultaneously serialized on [CG Art Lab](https://cgartlab.com/).
