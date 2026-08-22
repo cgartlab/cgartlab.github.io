@@ -23,7 +23,7 @@ abbrlink: weekly-19
 >
 > 如果你觉得这里的内容还不错，想获得更完善的阅读体验，更推荐使用浏览器来到官网阅读。
 >
-> 也欢迎使用 **RSS** (https://weekly.cgartlab.com/feed/atom) 或**邮件订阅**（[https://weekly.cgartlab.com](https://weekly.cgartlab.com)）进行订阅。
+> 也欢迎使用 **RSS** (https://cgartlab.com/rss.xml) 或**邮件订阅**（[https://cgartlab.com/weekly/](https://cgartlab.com/weekly/)）进行订阅。
 
 ---
 
@@ -33,7 +33,7 @@ abbrlink: weekly-19
 
 如果说第一类 Skill 解决了「看到什么」的问题，那么第二类 Skill 要解决的是「做成什么」。这类 Skill 的共同特点是：需要结合 self-hosted 服务、涉及真实的自动化执行、承担关键工作流的核心环节。
 
-> ℹ️ **关于 cgart-analysis / news-report**：上期已经详细介绍了这两个 Skill 的工作流程，本期不再重复展开。如有需要请回看 [No.18 玄光周刊](https://cgartlab.com/zh/weekly/weekly-18)。
+> ℹ️ **关于 cgart-analysis / news-report**：上期已经详细介绍了这两个 Skill 的工作流程，本期不再重复展开。如有需要请回看 [No.18 玄光周刊](https://cgartlab.com/posts/weekly-18/)。
 
 **affine-cli** ：Affine 命令行工具。这是我管理 Affine 文档的核心工具，支持云端和自部署两种模式。它让我通过命令行完成文档、标签、文件夹、集合、数据库、评论、日记和工作区的所有操作。
 

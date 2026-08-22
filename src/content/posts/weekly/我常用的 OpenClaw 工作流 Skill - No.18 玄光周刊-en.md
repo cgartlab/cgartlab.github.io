@@ -25,7 +25,7 @@ This issue's cover was photographed at Kunming University of Science and Technol
 >
 > If you find the content here worthwhile and want a better reading experience, we recommend using a browser to visit the official website.
 >
-> You're also welcome to use **RSS** (https://weekly.cgartlab.com/feed/atom) or **Email Subscription** ([https://weekly.cgartlab.com](https://weekly.cgartlab.com)) to subscribe.
+> You're also welcome to use **RSS** (https://cgartlab.com/rss.xml) or **Email Subscription** ([https://cgartlab.com/weekly/](https://cgartlab.com/weekly/)) to subscribe.
 
 ---
 

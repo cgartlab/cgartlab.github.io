@@ -22,7 +22,7 @@ This week's cover was taken during my study abroad in Thailand. What does it hav
 >
 > This is an electronic weekly focusing on knowledge management, covering digital art, visual design, and frontend development. Currently published weekly, each issue selects a specific topic for in-depth reflection. It shares my notes about entrepreneurship and products, including my thoughts, excerpts and annotations, reading notes, and quality content recommendations.
 >
-> If you find the content here worthwhile, welcome to use [RSS](https://weekly.cgartlab.com/feed/atom) or [Email Subscription](https://weekly.cgartlab.com/). We summarize these notes into an email sent to you weekly. Of course, your [messages](mailto:hello@cgartlab.com) are also welcome.
+> If you find the content here worthwhile, welcome to use [RSS](https://cgartlab.com/rss.xml) or [Email Subscription](https://cgartlab.com/weekly/). We summarize these notes into an email sent to you weekly. Of course, your [messages](mailto:hello@cgartlab.com) are also welcome.
 
 ## Free Benefits
 
@@ -70,4 +70,4 @@ After DeepSeek's official website stopped supporting API calls, this is currentl
 
 ---
 
-OK, that's it for this issue. If you find the content here worthwhile, welcome to use [RSS](https://weekly.cgartlab.com/feed/atom) or [Email Subscription](https://weekly.cgartlab.com/). We summarize these notes into an email sent to you weekly. Of course, your [messages](mailto:hello@cgartlab.com) are also welcome—we'll do our best to reply.
+OK, that's it for this issue. If you find the content here worthwhile, welcome to use [RSS](https://cgartlab.com/rss.xml) or [Email Subscription](https://cgartlab.com/weekly/). We summarize these notes into an email sent to you weekly. Of course, your [messages](mailto:hello@cgartlab.com) are also welcome—we'll do our best to reply.

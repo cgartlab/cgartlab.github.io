@@ -88,4 +88,3 @@ If you need a whole series of cards at once (e.g. a content series), write them 
 # Links
 
 - Live demo: [inkard.cgartlab.com](https://inkard.cgartlab.com)
-- GitHub: [github.com/cgartlab/inkard](https://github.com/cgartlab/inkard)

@@ -22,7 +22,7 @@ abbrlink: weekly-07
 >
 > 这是一份专注知识管理，涵盖数字艺术、视觉设计、前端开发领域的电子周刊，发布频率目前为每周 1 期，每期精选一个细分话题展开思考。其中会分享我写的关于创业、产品的笔记，包括我的所思所想、摘抄与批注、读书笔记、优质内容推荐。
 >
-> 如果你觉得这里的内容还不错，欢迎使用 [RSS](https://weekly.cgartlab.com/feed/atom) 或 [邮件订阅](https://weekly.cgartlab.com/) ，我们每周把这些笔记汇总为一封邮件发送给你。当然也欢迎你的 [来信](mailto:hello@cgartlab.com) 。
+> 如果你觉得这里的内容还不错，欢迎使用 [RSS](https://cgartlab.com/rss.xml) 或 [邮件订阅](https://cgartlab.com/weekly/) ，我们每周把这些笔记汇总为一封邮件发送给你。当然也欢迎你的 [来信](mailto:hello@cgartlab.com) 。
 
 ## 值得一看的新消息
 
@@ -51,7 +51,7 @@ PNG 3 对于设计师来说，可能需要关注以下几个新特性：
 
 ![双钻石设计模型示意图](../_images/07%20玄光周刊-双钻石设计模型：从用户需求到产品落地的黄金框架解析-1754597085815.webp)
 
-双钻石设计理念是一种广泛应用于产品开发、品牌设计等领域的创新方法。在《 [参与电影造梦的艺术》](https://cgartlab.com/05-the-art-of-dreammaking-behind-the-scenes-of-film-production-and-the-innovation-of-ai-tools/) 这期有提到过，我反复看了好几次这个视频，作者在创建品牌的整体思维框架就是基于这个理念延伸出来的，非常值得研究，再次推荐。这套理念非常清晰准确地将设计过程分为四个阶段：
+双钻石设计理念是一种广泛应用于产品开发、品牌设计等领域的创新方法。在《 [参与电影造梦的艺术》](https://cgartlab.com/posts/weekly-05/) 这期有提到过，我反复看了好几次这个视频，作者在创建品牌的整体思维框架就是基于这个理念延伸出来的，非常值得研究，再次推荐。这套理念非常清晰准确地将设计过程分为四个阶段：
 
 #### **一、发现阶段**
 
@@ -95,6 +95,6 @@ PNG 3 对于设计师来说，可能需要关注以下几个新特性：
 
 ---
 
-OK，本期就到这里。如果你觉得这里的内容还不错，欢迎使用 [RSS](https://weekly.cgartlab.com/feed/atom) 或 [邮件订阅](https://weekly.cgartlab.com/) ，我们每周把这些笔记汇总为一封邮件发送给你。当然也欢迎你的 [来信](mailto:hello@cgartlab.com) ，我们会尽全力回复的。
+OK，本期就到这里。如果你觉得这里的内容还不错，欢迎使用 [RSS](https://cgartlab.com/rss.xml) 或 [邮件订阅](https://cgartlab.com/weekly/) ，我们每周把这些笔记汇总为一封邮件发送给你。当然也欢迎你的 [来信](mailto:hello@cgartlab.com) ，我们会尽全力回复的。
 
-本文首发在 [玄光周刊](https://weekly.cgartlab.com/) 也会同时连载在 [CG 艺术实验室](https://cgartlab.com/)
+本文首发在 [玄光周刊](https://cgartlab.com/weekly/) 也会同时连载在 [CG 艺术实验室](https://cgartlab.com/)

@@ -22,7 +22,7 @@ This issue's cover was photographed at Universal Studios Singapore—it's quite 
 
 > About Black Light Weekly
 >
-> This is an electronic weekly focusing on knowledge management, covering digital art, visual design, and front-end development. The current publication frequency is ~~weekly~~ 1 issue per week, with each issue featuring a selected main topic for reflection. If you find the content here valuable, we recommend using a browser for the best reading experience on the main site. You are also welcome to subscribe via **RSS** (https://weekly.cgartlab.com/feed/atom) or **email** ([https://weekly.cgartlab.com](https://weekly.cgartlab.com)).
+> This is an electronic weekly focusing on knowledge management, covering digital art, visual design, and front-end development. The current publication frequency is ~~weekly~~ 1 issue per week, with each issue featuring a selected main topic for reflection. If you find the content here valuable, we recommend using a browser for the best reading experience on the main site. You are also welcome to subscribe via **RSS** (https://cgartlab.com/rss.xml) or **email** ([https://cgartlab.com/weekly/](https://cgartlab.com/weekly/)).
 
 ---
 
@@ -164,6 +164,6 @@ Preview: The next issue will add a "Meal Companion Videos" section, sharing some
 
 ---
 
-Weekly first published on [Black Light Weekly](https://weekly.cgartlab.com)
+Weekly first published on [Black Light Weekly](https://cgartlab.com/weekly/)
 
 Also serialized at [CG Art Lab](https://cgartlab.com/weekly)

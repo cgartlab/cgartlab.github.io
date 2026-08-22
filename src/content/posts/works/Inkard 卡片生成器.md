@@ -88,4 +88,3 @@ Inkard 是一个在线卡片生成器，将文字、引用、列表一键转换�
 # 相关链接
 
 - 在线使用：[inkard.cgartlab.com](https://inkard.cgartlab.com)
-- GitHub：[github.com/cgartlab/inkard](https://github.com/cgartlab/inkard)

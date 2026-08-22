@@ -23,7 +23,7 @@ lang: zh
 >
 > 如果你觉得这里的内容还不错，想获得更完善的阅读体验，更推荐使用浏览器来到官网阅读。
 >
-> 也欢迎使用 **RSS** (https://weekly.cgartlab.com/feed/atom) 或**邮件订阅**（[https://weekly.cgartlab.com](https://weekly.cgartlab.com)）进行订阅。
+> 也欢迎使用 **RSS** (https://cgartlab.com/rss.xml) 或**邮件订阅**（[https://cgartlab.com/weekly/](https://cgartlab.com/weekly/)）进行订阅。
 
 ---
 
@@ -242,6 +242,6 @@ Cloudflare 发布 Mesh 私有网络服务，面向 AI 代理、开发者和远�
 
 ---
 
-周刊首发在 [玄光周刊](https://weekly.cgartlab.com)
+周刊首发在 [玄光周刊](https://cgartlab.com/weekly/)
 
 同时连载在 [CG 艺术实验室](https://cgartlab.com/weekly)

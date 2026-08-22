@@ -87,7 +87,7 @@ CG 艺术实验室（以下简称"本站"）高度重视用户的隐私保护。
 **说明**：
 
 - Google Analytics 使用 Cookie 收集匿名化的访问数据
-- 您可以通过安装 [Google Analytics 停用浏览器插件](https://tools.google.com/dlpage/gaoptout) 阻止数据被收集
+- 您可以通过安装 [Google Analytics 停用浏览器插件](https://myaccount.google.com/data-and-privacy) 阻止数据被收集
 - Umami 为隐私友好的分析方案，不收集个人身份信息，不使用 Cookie 追踪
 
 ### 3.2 评论系统
@@ -161,7 +161,7 @@ Cookie 是网站存储在您浏览器中的小型文本文件，用于记录您�
 
 - **浏览器设置**：在浏览器偏好设置中清除、阻止或管理 Cookie
 - **分析工具退出**：
-    - [Google Analytics 退出](https://tools.google.com/dlpage/gaoptout)
+    - [Google Analytics 退出](https://myaccount.google.com/data-and-privacy)
 - **减少动画效果**：如您的系统偏好设置 `prefers-reduced-motion: reduce`，本站将自动禁用页面动画
 - **隐私浏览模式**：使用浏览器的隐私/无痕模式访问本站
 

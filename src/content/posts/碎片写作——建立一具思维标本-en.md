@@ -160,4 +160,4 @@ Since the dawn of creation, nature has been demonstrating what the best creative
 
 ---
 
-Article first published at: [CGARTLAB](https://cgartlab.com/)—welcome to [free email subscription](https://weelly.cgartlab.com).
+Article first published at: [CGARTLAB](https://cgartlab.com/)—welcome to [free email subscription](https://cgartlab.com/weekly/).
