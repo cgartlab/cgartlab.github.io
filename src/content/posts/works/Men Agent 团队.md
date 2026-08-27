@@ -13,7 +13,7 @@ toc: true
 lang: zh
 ---
 
-![](../_images/ScreenShot_2026-08-27_163611_874.png)
+![Men（门）Agent 团队站点截图，展示 6+1 角色协作界面](../_images/ScreenShot_2026-08-27_163611_874.png)
 
 ## 最近更新
 
