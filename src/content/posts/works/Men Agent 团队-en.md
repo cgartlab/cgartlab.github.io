@@ -13,7 +13,7 @@ toc: true
 lang: en
 ---
 
-![Screenshot of the Men (门) Agent team site showing the 6+1 role collaboration interface](../_images/ScreenShot_2026-08-27_163611_874.png)
+![Men (门) Agent team site cover](../_images/ScreenShot_2026-08-27_163611_874.png)
 
 ## Recent Updates
 
