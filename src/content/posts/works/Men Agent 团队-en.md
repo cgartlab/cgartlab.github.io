@@ -3,10 +3,10 @@ title: Men (门) Agent Team
 published: 2026-08-27
 description: "A 6+1 Agent team system for solo content creation and engineering collaboration. Debuts on OpenCode, mechanical verification first, no fake completions. Single-character names: men · si · ji · chi · yi · xun."
 tags:
-  - AI
-  - Open Source
-  - Agent Team
-  - Design Tool
+  - ai
+  - open-source
+  - agent-team
+  - design-tool
 draft: true
 abbrlink: men
 toc: true

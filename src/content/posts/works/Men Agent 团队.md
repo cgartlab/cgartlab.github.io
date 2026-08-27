@@ -3,9 +3,9 @@ title: Men（门）Agent 团队
 published: 2026-08-27
 description: 围绕一人内容创作与工程协作的 6+1 Agent 团队系统。OpenCode 首发，机械验证优先，假完成必识破。单字命名：门·思·记·持·艺·寻。
 tags:
-  - AI
+  - ai
   - 开源
-  - Agent 团队
+  - agent-团队
   - 设计工具
 draft: true
 abbrlink: men
