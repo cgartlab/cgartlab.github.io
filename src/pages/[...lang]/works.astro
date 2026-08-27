@@ -16,7 +16,7 @@ const currentLang = getLangFromLocale(Astro.currentLocale)
 // 根据语言选择正确的标签（作品集和数字绘画）
 const tags = currentLang === 'zh' || currentLang === 'zh-tw'
   ? ['作品集', '数字绘画', '设计工具']
-  : ['Portfolio', 'Digital Painting', 'Design Tool']
+  : ['Portfolio', 'Digital Painting', 'Design Tool', 'design-tool']
 const posts = await getPostsByTags(tags, currentLang)
 const supportedLangs = await getTagSupportedLangs(tags[0])
 ---
