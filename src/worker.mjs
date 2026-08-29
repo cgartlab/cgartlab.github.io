@@ -10,6 +10,44 @@ function timingSafeEqual(a, b) {
 	return diff === 0;
 }
 
+/**
+ * 注入安全响应头。
+ * - HSTS / X-Content-Type-Options / X-Frame-Options / Referrer-Policy /
+ *   Permissions-Policy 直接生效（对静态站零风险）。
+ * - CSP 先以 report-only 投放：站点使用内联脚本/样式（Astro View Transitions、
+ *   主题切换、Giscus、partytown）且启用 Google Analytics / Umami，严格 nonce-based
+ *   CSP 需重构。report-only 可在不破坏线上的情况下观测违规，待 pnpm preview 验证后
+ *   再改为强制 Content-Security-Policy。
+ */
+function applySecurityHeaders(resp) {
+	resp.headers.set(
+		'Strict-Transport-Security',
+		'max-age=63072000; includeSubDomains; preload',
+	)
+	resp.headers.set('X-Content-Type-Options', 'nosniff')
+	resp.headers.set('X-Frame-Options', 'SAMEORIGIN')
+	resp.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin')
+	resp.headers.set(
+		'Permissions-Policy',
+		'camera=(), microphone=(), geolocation=()',
+	)
+	resp.headers.set(
+		'Content-Security-Policy-Report-Only',
+		[
+			"default-src 'self'",
+			"script-src 'self' 'unsafe-inline' https://giscus.app https://*.giscus.app https://cdn.jsdelivr.net https://www.googletagmanager.com https://www.google-analytics.com https://analytics.google.com https://cloud.umami.is https://*.umami.is",
+			"style-src 'self' 'unsafe-inline'",
+			"img-src 'self' https: data:",
+			"font-src 'self' https:",
+			"connect-src 'self' https://giscus.app https://*.giscus.app https://www.google-analytics.com https://analytics.google.com https://cloud.umami.is https://*.umami.is",
+			"frame-src 'self' https://giscus.app https://*.giscus.app",
+			"base-uri 'self'",
+			"form-action 'self' https://api.web3forms.com https://giscus.app",
+		].join('; '),
+	)
+	return resp
+}
+
 export default {
 	async scheduled(_event, env, ctx) {
 		ctx.waitUntil(
@@ -102,12 +140,13 @@ export default {
 						headers: notFound.headers,
 					});
 					resp.headers.set("Cache-Control", "public, max-age=60");
-					return resp;
+					return applySecurityHeaders(resp);
 				} catch {
-					return new Response("Not Found", {
+					const errResp = new Response("Not Found", {
 						status: 404,
 						headers: { "Cache-Control": "public, max-age=60" },
 					});
+					return applySecurityHeaders(errResp);
 				}
 			}
 
@@ -171,7 +210,7 @@ export default {
 					response.headers.set("X-Robots-Tag", "noindex, follow");
 			}
 
-			return response;
+			return applySecurityHeaders(response);
 		} catch (err) {
 			console.error("[Worker] Unhandled error:", err);
 			return new Response("Not Found", {
