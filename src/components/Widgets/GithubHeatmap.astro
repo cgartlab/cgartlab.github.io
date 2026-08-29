@@ -213,15 +213,6 @@ const CELL_PITCH = 12
       wrapper.style.transform = `scale(${scale})`
       // Sync container height so subsequent content is not displaced
       container.style.height = `${naturalHeight * scale}px`
-
-      // One-shot diagnostic: verify offsetWidth matches the true layout width.
-      // scale < 1 means grid shrinks to fit (mobile). scale > 1 means grid
-      // expands to fill container (desktop, up to ~1.06×). scrollWidth vs
-      // offsetWidth shows the month-label-inflation gap if any.
-      if (!container.dataset.scaleDiagnosed) {
-        console.log('[Heatmap Scale] offsetWidth:', naturalWidth, '| scrollWidth:', wrapper.scrollWidth, '| container:', containerWidth, '| scale:', scale.toFixed(4), '| cell size:', `${(10 * scale).toFixed(1)}px`, '| gap:', scale > 0 ? `${(2 * scale).toFixed(1)}px` : '0px')
-        container.dataset.scaleDiagnosed = 'true'
-      }
     }
 
     updateScale()
@@ -244,7 +235,9 @@ const CELL_PITCH = 12
 
     // ResizeObserver does NOT fire on device orientation change (iPad rotate,
     // phone rotate) — supplement with orientationchange for full coverage.
-    _orientationHandler = function () { updateScale() }
+    _orientationHandler = function () {
+      updateScale()
+    }
     window.addEventListener('orientationchange', _orientationHandler)
   }
 

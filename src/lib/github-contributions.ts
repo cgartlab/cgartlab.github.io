@@ -13,6 +13,7 @@
 import { existsSync } from 'node:fs'
 import { mkdir, readFile, writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
+import process from 'node:process'
 
 export interface ContributionCell {
   color: string
@@ -229,7 +230,6 @@ export async function getContributions(): Promise<ContributionData> {
   const diskCache = await readDiskCache()
   if (diskCache && now - diskCache.ts < CACHE_TTL) {
     moduleCache = diskCache
-    console.log('[GithubHeatmap] Using disk cache')
     return diskCache.data
   }
 
@@ -239,7 +239,6 @@ export async function getContributions(): Promise<ContributionData> {
     if (fresh) {
       moduleCache = { data: fresh, ts: now }
       await writeDiskCache(fresh)
-      console.log('[GithubHeatmap] Fetched fresh data from GitHub API')
       return fresh
     }
   }
@@ -253,14 +252,12 @@ export async function getContributions(): Promise<ContributionData> {
   const tracked = await readTrackedDataFile()
   if (tracked) {
     moduleCache = tracked
-    console.log('[GithubHeatmap] Using tracked data file (src/data/github-contributions.json)')
     return tracked.data
   }
 
   // 5. Fall back to stale disk cache
   if (diskCache) {
     moduleCache = diskCache
-    console.log('[GithubHeatmap] Using stale disk cache (API unavailable)')
     return diskCache.data
   }
 
