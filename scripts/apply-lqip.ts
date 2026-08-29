@@ -177,7 +177,19 @@ function processImage(img: HTMLElement, lqipMap: LqipMap): boolean {
     return false
   }
 
-  const lqipValue = lqipMap[src]
+  // HTML 中中文文件名会被 URL 编码（如 /_astro/%E6%95%B0...webp），
+  // 而 lqip-map.json 的 key 是磁盘上的原始中文名。解码后查表兼容两种形式，
+  // decodeURIComponent 对非编码字符串为 no-op（中文/全角标点原样返回）。
+  let lqipValue = lqipMap[src]
+  if (lqipValue === undefined) {
+    try {
+      lqipValue = lqipMap[decodeURIComponent(src)]
+    }
+    catch {
+      // src 含非法 % 序列时保持 undefined，跳过该图
+    }
+  }
+
   if (lqipValue === undefined) {
     return false
   }
