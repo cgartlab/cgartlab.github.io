@@ -25,7 +25,6 @@ Closes #
 - [ ] **暗色模式**（如涉及样式/主题）— 亮色 + 暗色双切检查
 - [ ] **双语版本**（如涉及 i18n 内容）— `/`（中文）+ `/en/`（英文）都验证
 - [ ] **响应式**（如涉及布局）— 至少 2xl / lg / mobile 三个视口
-- [ ] **Playwright** `pnpm exec playwright test`（如涉及页面结构/路由/交互）
 - [ ] 内容类改动：frontmatter 字段完整、图片放入同名 `_images/`、abbrlink 合法
 
 ## 影响范围
