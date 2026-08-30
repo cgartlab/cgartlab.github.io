@@ -81,7 +81,6 @@ pnpm apply-lqip           # 生成 LQIP 占位图
 pnpm fix-internal-links   # 修复内部链接
 pnpm verify-feed          # 验证 RSS/Atom feed 输出
 pnpm audit-glossary       # 审计术语表引用完整性
-pnpm exec playwright test # Playwright 端到端测试
 ```
 
 ## 分支策略

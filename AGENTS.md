@@ -18,7 +18,6 @@ pnpm verify-feed           # 验证 RSS/Atom feed 输出 (CI 中使用)
 pnpm audit-glossary        # 审计术语表引用完整性
 pnpm sync-docs             # 同步核心文档自动生成数据块 (版本/统计/管线，勿手改)
 pnpm sync-docs:check       # 校验数据块是否最新 (CI 中使用，stale 则退出码 1)
-pnpm exec playwright test # 端到端测试 (Playwright)
 ```
 
 ## KEY QUIRKS
@@ -432,7 +431,6 @@ Codex 为主力开发工具。以下规则定义 Agent 行为边界和开发到�
   1. `pnpm dev`（HMR 热更新）— 确认无构建错误和运行时异常
   2. `pnpm build && pnpm preview`（生产构建产物预览）— 验证最终产物样式（CSS 变换、UnoCSS safelist 变量生成、Astro 编译优化等）与线上完全一致
 - **暗色模式** — 涉及 CSS/主题时，按 DEBUGGING 章节清单验证亮色和暗色模式均正常。
-- **端到端测试** — 涉及页面结构/路由/交互时，运行 `pnpm exec playwright test`。
 - **View Transitions 验证** — View Transitions 动画（主题切换、页面进入动效等，定义于 `transition.css`）仅在 `pnpm build && pnpm preview` 产线模式下触发，`pnpm dev` 的 HMR 热更新不会触发。修改过渡动画后，必须通过生产构建产物预览验证效果。
 
 ### 双模式样式验证的具体操作
@@ -480,7 +478,7 @@ Codex 为主力开发工具。以下规则定义 Agent 行为边界和开发到�
 ### 验证管道
 
 ```
-pnpm lint → pnpm build → pnpm build && pnpm preview（实测：暗色/双语/公式/OG/交互）→ pnpm exec playwright test
+pnpm lint → pnpm build → pnpm build && pnpm preview（实测：暗色/双语/公式/OG/交互）
 ```
 
 - 构建通过 ≠ 功能正确：公式渲染、OG 图片、View Transitions、Mermaid 等必须 preview 实测
