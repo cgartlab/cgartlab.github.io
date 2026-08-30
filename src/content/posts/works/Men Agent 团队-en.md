@@ -15,66 +15,48 @@ lang: en
 
 ![Men (门) Agent team site cover](../_images/ScreenShot_2026-08-27_163611_874.png)
 
-## Recent Updates
-
-### 2026-08-27: The six roles are better defined
-
-I re-sorted what each of the six Agents is responsible for, so they stop grabbing the same work and you always know who to talk to:
-
-- **men** is now the only dispatcher. You only talk to it; it hands work out and collects the results, and the other roles no longer assign tasks to each other.
-- **si** became the one who "thinks and manages knowledge" — it works out the plan and stores experience, and no longer writes code itself.
-- **ji** focuses on writing code and docs, and checks its own work once before handing it over.
-- **yi**'s core shifted to image-generation prompts, making "getting AI to produce good images" solid.
-- **chi** picked up data statistics on top of investment review.
-- **xun** set a hard rule: nothing goes out until it's verified.
-
-Along the way I synced the role descriptions and collaboration diagram on the site and docs to the new split, and corrected the skill count (removed one empty shell).
-
-### 2026-08-21: From a runnable repo to a team that improves itself
-
-This release upgraded men from "a runnable program" to "a team with rules, process, and retrospectives":
-
-- **The open-source basics are in place**: license, contribution guide, security policy, automated CI checks... others can now contribute by the book, and bad code can't reach the main branch.
-- **Added "self-learning"**: after each job, men writes the pitfalls it hit and the tricks that worked into `knowledge/`, so it won't repeat the same mistakes; it also computes 8 KPIs for itself (completion rate, first-pass rate, regression rate...), so you can see from the numbers whether the team is getting better.
-- **Tools grew from 3 to 7**: it can now fetch web pages, operate GitHub, keep long-term memory, and do complex reasoning — clearly able to do more.
-
 ## Overview
 
-Men (门) is an Agent team system I built on OpenCode. The situation it solves: one person wants to both write and ship projects, so it gives you six virtual assistants with different strengths, plus a "men" that handles coordination. You just throw your ideas at it; it splits the work, watches quality, and reports back when done.
+Men Agent is an Agent team collaboration system I built on OpenCode. The situation it solves: one person wants to both write and ship projects, so it gives you five specialized virtual assistants, plus a coordinating "men" (门). You just throw your ideas at it; it automatically recognizes the nature of the task, judges your intent, routes the professional work to the right assistant, and reports back when done.
 
 Using AI to get specific content done really just comes down to "finished, and finished right." So what Men cares about most is **mechanical verification first, no fake completions**: when the AI says "I'm done," that doesn't count — the program scans the evidence first, then a fresh sub-agent double-checks it. Trust the artifact, not the claim.
 
 ## 6+1 Roles
 
-Sounds like a small studio; it's really six Agents plus one dispatch core:
+It's really six Agents plus the user — when using Agents for creation, it's easy to forget the human's key role:
 
-- **men · front desk / project manager**: every instruction enters through it; it figures out what you want, who to assign it to, and finally hands the result back to you. It doesn't do the hands-on work itself.
-- **si · the team's brain**: deep thinking, working out the plan, and storing knowledge. It only produces plans, not code.
-- **ji · the doer**: writes front-end code, technical docs, and operates GitHub per the plan, and runs its own check before delivering.
-- **chi · finance + QA**: does your investment math on one side and acts as an independent judge on the other — since it didn't do the work, it can critique objectively.
-- **yi · designer**: turns a simple command into a professional prompt, generates images, and sets colors and layout.
-- **xun · researcher**: searches the web, reads RSS, checks facts; the rule is "no output until verified."
-- **men** is the only one who assigns work; nested assignment between roles is forbidden; all six share 7 red lines no one may cross.
+- **men (门) · orchestration & routing core**: the only role that receives user instructions. Intent triage (IntentGate), task routing, multi-Wave scheduling, result aggregation & de-confliction, event-audit writing — every instruction enters through this door and is routed to the most suitable role. It writes no code, no copy, and does no design itself.
+- **si (思) · thinking & knowledge management**: deep thinking produces multi-angle plans, delivered as a plan envelope — a plan document containing a dependency graph, parallel waves, and acceptance criteria; it curates the knowledge base; plans only, no execution, and its plans must pass chi's verification before being released.
+- **ji (记) · code & engineering**: implements front-end code per the plan, operates GitHub PR/Issue, writes technical docs/weekly reports, and audits directory structure; before delivering it runs a layer of L1 verification (typecheck/lint) to pass the local gate first.
+- **chi (持) · data/investment review + independent Judge**: dual identity — investment position analysis and profit math on one side, independent judge on the other; when judging it reviews with a fresh context, never reusing the reviewed agent's context — it trusts only the artifact.
+- **yi (艺) · image generation & aesthetics**: an image-prompt expert; it drafts multiple prompt sets during thinking and generates images via SenseNova; owns design decisions & token definition, color/layout, aesthetic analysis, and logo concepts. Image generation is mounted only on it.
+- **xun (寻) · search & research**: web search (Exa), RSS aggregation, knowledge-base retrieval, multi-source cross-checked fact verification; read-only — it never modifies source data, and search results must include source links.
+- **The user** is the "gatekeeper" (门神) and final decision-maker, responsible for the final quality of what ships.
 
 ## Core Mechanisms
 
-To make these assistants cooperate by the rules, I designed the following red-line rules:
+To make these assistants cooperate by the rules, I designed the following mechanisms:
 
-- **Double check**: after the work, run `verify.mjs` for five mechanical checks (correct exit code, file actually generated, no leaked secrets, no leftover TODO, correct structure); once all pass, chi re-checks independently with a fresh context. "Saying you're done yourself" doesn't count — "both the machine and an onlooker nod" does.
-- **Parallel when possible**: work that doesn't depend on each other starts together, up to four at once; each sub-task's requirements are written out clearly, so no need to ask back midway.
-- **Ask before acting**: for the four kinds of tasks — "research / produce / multi-role collaboration / big project planning" — when unsure, confirm with you first; never guess and barrel ahead.
-- **Safety rope**: `gate.mjs` whitelists what can be touched to prevent injection; if the same job fails 5 times in a row, it stops and calls for help instead of burning your machine.
-- **Full trace**: 14 key event types are logged in `events.jsonl`, append-only, so you can replay them one by one afterward and see who made what decision.
-- **Retrospective**: `learn.mjs` distills experience from the logs, and `eval-metrics.mjs` computes the team's KPIs — how it's doing, the numbers tell you.
+- **10-step orchestration protocol**: a task runs through CERTAINTY → TRIAGE → PLAN → DISPATCH → COLLECT → EVALUATE → VERIFY → REPORT → LOOP, each step with clear inputs and outputs, turning a sentence into a deliverable.
+- **Intent gate routing (IntentGate)**: the task is first classified into one of four intents — search (find info) / analyze (produce + review) / team (multi-role collaboration) / hyperplan (complex project planning); when confidence is low, it confirms with you first and never guesses.
+- **Wave parallel scheduling**: work with no dependencies starts at the same time (parallel cap ≤4); dependent work waits for the previous wave's output; each sub-task's requirements are written self-contained so sub-agents don't need to ask back midway.
+- **Double-layer mechanical verification**: after the work, run `verify.mjs` for five mechanical checks (exit code, file existence, secret leaks, leftover TODOs, structure); once all PASS, chi independently reviews as Judge with a fresh context. "Saying you're done yourself" doesn't count — "both the machine and an onlooker nod" does; fake completions are always caught.
+- **Event audit (14 kinds)**: `events.jsonl` records session.created/ended, boundary, workflow.phase, gate.passed/failed, blocker.raised, decision.made/missing, verify, judge, error, dispatch, handoff — 14 event types, append-only, replayable one by one afterward.
+- **Self-learning loop (M7)**: `learn.mjs` distills experience from the event stream into `knowledge/errors` and `knowledge/patterns` so the same mistakes aren't repeated; `eval-metrics.mjs` computes 8 KPIs (pass rate, regression rate, average time...), so the numbers tell you how it's doing.
+- **Safety gate**: `gate.mjs` whitelists what can be touched to prevent injection; if the same job fails 5 times in a row it stops and calls for help instead of burning your machine.
 - **Zero dependencies**: the verification, gate, and audit trio are all pure Node, no third-party libraries, so the environment bar is very low and it runs on any machine.
 
 ## Quick Start
 
-The laziest way — send the line below straight to any AI assistant (OpenCode / Claude / Cursor all work), and it'll install and launch for you:
+After install, run `opencode` in any directory; the default agent is men (门). Current version v0.3.3, requires Node ≥ 18.
 
-> Install and launch men for me: `git clone https://github.com/cgartlab/men.git && cd men && node scripts/install.mjs && npx astro dev --config site/astro.config.mjs`
+The laziest way — the official npm one-liner (automatically runs scaffolding, dependencies, environment check, and verification):
 
-If you'd rather type it yourself:
+```bash
+npx @cgartlab/men
+```
+
+If you'd rather type it yourself, use the pipe scripts:
 
 ```bash
 # Linux / macOS
@@ -84,9 +66,13 @@ bash <(curl -fsSL https://raw.githubusercontent.com/cgartlab/men/main/install.sh
 irm https://raw.githubusercontent.com/cgartlab/men/main/install.ps1 | iex
 ```
 
-After install, run `opencode` in the project directory; the default agent is men. The three most-used commands:
+Or send the line below to any AI assistant (OpenCode / Claude / Cursor all work) and it'll install and launch for you:
 
-- `/ultrawork <task>`: hand it a sentence and the 9-step protocol auto-dispatches the team to finish the job
+> Install and launch men for me: `npx @cgartlab/men && cd men && npx astro dev --config site/astro.config.mjs`
+
+The three most-used commands:
+
+- `/ultrawork <task>`: hand it a sentence and the 10-step protocol auto-dispatches the team to finish the job
 - `/verify <role>`: mechanical check + independent review to confirm the artifact is solid
 - `/hyperplan <project>`: for big projects, think it through first, then break it into executable steps
 
