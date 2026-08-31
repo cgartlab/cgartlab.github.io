@@ -5,7 +5,7 @@ updated: 2026-08-31
 description: 本期从「周刊」升级为「专栏」，整理了五个沉淀的定制化 Agent Skill——从日程管理到投资分析；提出利用 AI 放大效率的四步方法论；并推荐 Tolaria、Rime 等值得关注的工具。
 tags:
   - 周刊
-draft: true
+draft: false
 pin: 0
 toc: true
 lang: zh
