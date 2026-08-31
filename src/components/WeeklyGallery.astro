@@ -11,6 +11,13 @@ interface Props {
 
 const { posts, lang } = Astro.props
 
+// Column name placeholder for thumbnails without a cover image
+const placeholderText: Record<Language, string> = {
+  'zh': '专栏',
+  'zh-tw': '專欄',
+  'en': 'Column',
+}
+
 // Group posts by year
 const postsByYear = new Map<number, Post[]>()
 for (const post of posts) {
@@ -96,7 +103,7 @@ function getDescription(post: Post): string {
                     )
                     : (
                       <div class="thumbnail-placeholder">
-                        <span class="placeholder-text">{lang === 'zh' ? '周刊' : 'Weekly'}</span>
+                        <span class="placeholder-text">{placeholderText[lang]}</span>
                       </div>
                     )}
                 </div>
