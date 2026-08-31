@@ -4,6 +4,7 @@
 
 ## 近期文章
 
+- [《奥德赛》，客制化 Agent，以及那些真正解决麻烦的 Skill · No.19](https://cgartlab.com/zh/weekly/weekly-19): 本期从「周刊」升级为「专栏」，整理了五个沉淀的定制化 Agent Skill——从日程管理到投资分析；提出利用 AI 放大效率的四步方法论；并推荐 Tolaria、Rime 等值得关注的工具。
 - [你不知道的 AI 优雅食用指南（一）：慢一点比较快](https://cgartlab.com/zh/posts/ai-guide-slow-is-fast): 面对 AI，我们和长辈其实没什么两样——都习惯了执行规则，却从未学习设计规则。从「规则执行者」到「规则设计师」，慢一点，才能真正用好 AI。
 - [我的上帝模式，一名设计师创作环境的演变](https://cgartlab.com/zh/posts/designer-creative-environment-evolution): 从业十二年的动态视觉设计师，回顾从新手村到自由职业的创作环境演变历程。从最初的耳机刚需、Hi-Fi 探索，到音箱回归与桌面秩序重建，分享「什么更重要、什么最重要、是否具有长期价值」的三板斧方法论——分享给每一位正在打造自己创作角落的人。
 - [自动给文章术语加百科链接，这个方案一分钟搞定](https://cgartlab.com/zh/posts/auto-glossary-term-linking): 自动为技术文章内的术语生成百科链接，提升阅读体验。本文用小学生都能听懂的语言讲原理，记录基于 Astro 的 remark/rehype 插件实现过程。适合博客开发者和技术写作者。
@@ -33,10 +34,10 @@
 - [6月的设计师拔草记录和选荐](https://cgartlab.com/zh/posts/2025-06-good-things): 6月的设计师拔草记录和选荐，包含VGN蜻蜓A9 plus鼠标、3D打印腕托、日本UCC冻干咖啡、原道MX500平头塞等产品的使用体验和评价。
 - ["WordPress插件商店打不开，搞定回环错误排查与修复步骤](https://cgartlab.com/zh/posts/fix-wordpress-plugin-store): "WordPress插件商店打不开的回环错误排查与修复步骤，包含宝塔面板和终端命令两种解决方案。
 - [RSS 与现代阅读习惯（二）：重新获取信息收集的主动权](https://cgartlab.com/zh/posts/rss-2): 基于RSS构建个人碎片信息收集系统的实践经验分享，包含优质RSS源推荐和工具使用心得
-- [发刊词 - No.01 玄光周刊](https://cgartlab.com/zh/weekly/weekly-01): 周刊从这里出发
 
 ## English Articles
 
+- ["The Odyssey, Custom Agents, and the Skills That Actually Solve Problems · No.19](https://cgartlab.com/en/weekly/weekly-19): "This issue marks the upgrade from a weekly to a column: five hardened custom agent Skills — from calendar management to investment analysis; a four-step methodology for amplifying efficiency with AI; plus Tolaria, Rime, and other tools worth your attention.
 - ["The AI Graceful Dining Guide (Part 1): Slow Is Fast](https://cgartlab.com/en/posts/ai-guide-slow-is-fast): When it comes to AI, we're all beginners — whether you're 18 or 80. We've spent our lives executing rules, but never learned to design them. The shift from "rule executor" to "rule designer" is the one skill that makes AI truly useful.
 - ["My God Mode: The Evolution of a Designer's Creative Environment](https://cgartlab.com/en/posts/designer-creative-environment-evolution): "How a motion designer built his ideal creative workspace over twelve years — from survival-mode headphones through Hi-Fi exploration to speakers and a long-term-value methodology for any creator.
 - [Auto-generate Encyclopedia Links for Terms in Articles, Done in One Minute](https://cgartlab.com/en/posts/auto-glossary-term-linking): "Build an automated glossary link system for your blog in one minute. A plain-language walkthrough plus the full Astro remark/rehype plugin implementation for technical writers and developers.
@@ -66,4 +67,3 @@
 - ["Designer's Toolbox: Lightweight Mouse, 3D-Printed Wrist Rest, and Everyday Carry](https://cgartlab.com/en/posts/2025-06-good-things): "June product reviews from a designer's perspective: VGN Dragonfly A9 Plus mouse, 3D-printed wrist rest, UCC freeze-dried coffee, and the legendary MX500 earbuds.
 - ["WordPress Plugin Store Loop Error: Troubleshooting & Fix Guide](https://cgartlab.com/en/posts/fix-wordpress-plugin-store): "Fix WordPress plugin store loop errors via DNS troubleshooting using Baota Panel or terminal commands. Restore plugin installation and site health.
 - ["RSS and Modern Reading Habits (Part 2): Regain Control Over Information Collection](https://cgartlab.com/en/posts/rss-2): "Build an RSS-powered information collection system: find quality sources, configure keyword filters, and curate a focused reading workflow in Part 2.
-- ["Launch Statement - No.01 Black Light Weekly | CG Art Lab](https://cgartlab.com/en/weekly/weekly-01): "Launch issue of Black Light Weekly, a designer-led newsletter on digital art, visual design, and frontend development. Editorial vision explained.
