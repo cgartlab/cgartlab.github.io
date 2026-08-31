@@ -258,16 +258,13 @@ function getDescription(post: Post): string {
   display: flex;
   align-items: center;
   gap: 0.4rem;
+  color: color-mix(in srgb, oklch(var(--un-preset-theme-colors-secondary)) 60%, transparent);
 }
 
 .weekly-issue-num,
 .weekly-date {
   font-weight: 500;
   font-variant-numeric: tabular-nums;
-}
-
-.weekly-date-line {
-  color: color-mix(in srgb, oklch(var(--un-preset-theme-colors-secondary)) 60%, transparent);
 }
 
 /* Year group separator — matches the top decorative line style */
