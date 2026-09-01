@@ -32,7 +32,7 @@ function applySecurityHeaders(resp) {
 		'camera=(), microphone=(), geolocation=()',
 	)
 	resp.headers.set(
-		'Content-Security-Policy-Report-Only',
+		'Content-Security-Policy',
 		[
 			"default-src 'self'",
 			"script-src 'self' 'unsafe-inline' https://giscus.app https://*.giscus.app https://cdn.jsdelivr.net https://www.googletagmanager.com https://www.google-analytics.com https://analytics.google.com https://cloud.umami.is https://*.umami.is",
