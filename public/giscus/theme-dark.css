@@ -74,8 +74,8 @@
   --color-segmented-control-button-selected-border: #6e7681;
   --color-fg-muted: #7d8590;
   --color-fg-subtle: #6e7681;
-  --color-border-default: #30363d;
-  --color-border-muted: #21262d;
+  --color-border-default: oklch(77% 0.005 298 / 25%);
+  --color-border-muted: oklch(77% 0.005 298 / 15%);
   --color-neutral-muted: rgb(110 118 129 / 40%);
   --color-accent-muted: rgb(56 139 253 / 40%);
   --color-accent-subtle: rgb(56 139 253 / 10%);

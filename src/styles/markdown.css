@@ -213,7 +213,7 @@
 		oklch(var(--un-preset-theme-colors-secondary)) 5%,
 		transparent
 	);
-	border-radius: 0.25rem;
+	border-radius: 0.5rem;
 	padding: 0.75rem 1rem;
 	background-color: color-mix(
 		in srgb,
@@ -529,4 +529,10 @@ html.dark .heti :where(u) {
 /* Quotes */
 .heti :where(q:is(:lang(zh), :lang(ja), :lang(ko))) {
 	quotes: "「" "」" "『" "』";
+}
+
+/* Mermaid Diagrams */
+.heti .mermaid {
+	border-radius: 0.5rem;
+	overflow: hidden;
 }
