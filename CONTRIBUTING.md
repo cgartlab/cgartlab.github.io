@@ -84,6 +84,7 @@ PR title should mirror the commit message format (it becomes the squash commit m
   - `rgba()`/`hsl()` values in frosted-glass gradients and shadows are **intentional** and should not be converted to theme tokens
   - Fixed semantic function colors (e.g., validation error red) are **intentional**
   - Bare hex values that duplicate existing theme tokens **should** be fixed
+  - **Bot-generated issues** (Daily Inspection Bot) — evaluate actual risk before fixing: check for real bug history, current CI coverage, and ROI. Close non-actionable issues with explanation rather than creating unnecessary PRs
 - At least one human review approval is required before merge
 - CI checks must pass (lint, type check, build)
 

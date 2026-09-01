@@ -37,6 +37,8 @@ pnpm sync-docs:check       # 校验数据块是否最新 (CI 中使用，stale �
  - **Mermaid 排除 Shiki** — `syntaxHighlight.excludeLangs: ['mermaid']` 确保 Mermaid 代码块不被 Shiki 处理，交由 `rehype-mermaid` 构建时渲染
  - **remark/rehype 顺序敏感** — Astro markdown 管线中 6 个 Remark 插件 + 8 个 Rehype 插件，后者依赖上游 ID 生成，插入新插件必须确认顺序
  - **`color-mix()` 色彩空间差异** — 项目混用 `color-mix(in srgb, ...)` 和 `color-mix(in oklch, ...)`，不同浏览器渲染有细微色差
+- **Giscus 主题 CSS 加载链路** — 主题 CSS 通过 CDN (`cdn.jsdelivr.net`) 加载到父页面，但实际作用于 iframe 内部的 `main` 元素。修改本地 `public/giscus/theme-*.css` 不会影响线上（线上使用 CDN URL）。如需调整 Giscus 主题色，必须修改上游仓库 `radishzzz/astro-theme-retypeset` 的 CSS 文件，或在 `comment.css` 中用高优先级规则覆盖。历史教训：曾尝试将 CDN URL 改为本地 URL，因 CORS 问题导致评论区显示异常。
+- **Bot 生成 issue 评估** — Daily Inspection Bot 会自动生成"最佳实践"类 issue（如"无测试覆盖"、"硬编码值"、"缺少冒烟测试"）。合并前必须评估实际风险：检查是否有真实 bug 历史、当前 CI 是否已覆盖关键路径、ROI 是否值得投入。不值得修的 issue 应关闭并说明理由，而非盲目创建 PR。
 
 <!-- DOC-FACTS:START -->
 > 自动生成数据（由 `pnpm sync-docs` 更新，勿手改）
@@ -57,7 +59,7 @@ pnpm sync-docs:check       # 校验数据块是否最新 (CI 中使用，stale �
 | UnoCSS | `uno.config.ts` | Wind3 + Attributify + theme preset, 非 Tailwind |
 | 路由 | `src/pages/[...lang]/` | 多语言前缀动态路由 |
 | Telegram 推送 | `src/lib/tg.mjs` + Worker scheduled | RSS → 频道推送，KV 状态去重，Cron 每 15 分钟 + `/api/tg-notify` 手动触发 |
-| 评论 | Giscus（主用）+ Twikoo/Waline（需额外配置后启用） |
+| 评论 | Giscus（主用）+ Twikoo/Waline（需额外配置后启用）。主题 CSS 通过 CDN 加载，本地 `public/giscus/` 为备份副本 |
 | 表单 | `src/components/InquiryForm.astro` | Web3Forms，submit 监听器在 `astro:page-load` 内绑定 |
 | 搜索 | 客户端搜索索引 (`api/search-index/[lang].json.ts` + `api/search-index.json.ts`) |
 | OG 图片 | `astro-og-canvas` + `canvaskit-wasm` 构建时生成，过滤草稿 |
@@ -138,6 +140,8 @@ pnpm sync-docs:check       # 校验数据块是否最新 (CI 中使用，stale �
 - **用户提到"之前是好的"立即查 git 历史** — 不要在当前代码里反复重建
 - **PR 改了部分文件时立即审计同类文件** — 很可能遗漏了同类文件
  - **CSS 变量同时查 `:root` 和 `.dark` 两个选择器** — 单边有值不等于两边都生效
+- **线上显示异常时先查部署版本** — `curl -s https://cgartlab.com/ | grep "关键标识"` 对比本地代码，确认线上运行的是哪个版本。Cloudflare 有缓存（`CF-Cache-Status: HIT`），push main 后可能需要等待缓存过期（HTML 10min / 边缘 30min）
+- **跨域 iframe CSS 不可本地覆盖** — Giscus 评论区运行在 `giscus.app` 的 iframe 中，父页面的 CSS 无法影响 iframe 内部样式。修改 `public/giscus/theme-*.css` 只影响父页面的 `main` 元素，不影响 Giscus iframe。如需调整 Giscus 主题色，必须修改上游仓库的 CSS 文件
 
  ## 样式架构详解
 

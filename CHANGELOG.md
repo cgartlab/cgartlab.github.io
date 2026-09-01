@@ -9,6 +9,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+### Fixed — Issue Triage & Bug Fixes (2026-09-01)
+
+**Bug Fixes (PR #345-#352, #363-#367)**
+- `apply-lqip.ts`: URL-decoded `src` matching for CJK image filenames (#304)
+- `update-theme.ts`: Added 30s timeout to 7 `execSync` calls (#339)
+- `description.ts`: Changed `cleanText.slice()` to `Array.from().slice().join()` for CJK/codepoint safety (#329)
+- `github-contributions.ts` + `GithubHeatmap.astro`: Removed 5 `console.log` + fixed lint debt (#306)
+- `ci.yml`: Added `pnpm audit` dependency audit gate (#308)
+- `worker.mjs`: Added security headers (HSTS, nosniff, XFO, Referrer, Permissions) + CSP enforcement (#333, #358)
+- `update-contributions.yml`: Reduced cron from every 6 hours to weekly Sunday (#357)
+- `content.config.ts` + `Head.astro` + `Layout.astro`: Added per-article `katex` frontmatter for conditional CSS loading (#362)
+- `fetch-github-repos.ts` + `GithubCard.astro`: Build-time static GitHub repo data, zero runtime API calls (#353)
+- `update-contributions.yml`: Reduced cron frequency to weekly (#357)
+
+**Infrastructure**
+- Created `.github/PULL_REQUEST_TEMPLATE.md` (#351)
+
+**Issue Triage**
+- Closed 27 stale/invalid/bot-generated issues (#307, #309-#327, #328, #330-#332, #334-#338, #356, #359-#361)
+- Evaluated bot-generated issues for actual risk; closed non-actionable ones with explanations
+
 ### Fixed — PR #199 全面 Bug 修复与加固 (2026-06-29)
 
 **P0 构建 Bug**
