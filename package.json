@@ -6,7 +6,7 @@
   "repository": "https://github.com/cgartlab/cgartlab.github.io",
   "scripts": {
     "dev": "astro check && astro dev",
-    "build": "astro check && astro build && tsx scripts/generate-llms.ts && pnpm apply-lqip",
+    "build": "astro check && pnpm fetch-github-repos && astro build && tsx scripts/generate-llms.ts && pnpm apply-lqip",
     "preview": "astro preview --host",
     "astro": "astro",
     "lint": "eslint .",
@@ -19,7 +19,8 @@
     "audit-glossary": "tsx scripts/audit-glossary.ts",
     "sync-docs": "tsx scripts/sync-doc-facts.ts --write",
     "sync-docs:check": "tsx scripts/sync-doc-facts.ts --check",
-    "update-gh-contributions": "tsx scripts/update-gh-contributions.ts"
+    "update-gh-contributions": "tsx scripts/update-gh-contributions.ts",
+    "fetch-github-repos": "tsx scripts/fetch-github-repos.ts"
   },
   "dependencies": {
     "@astrojs/markdown-remark": "^7.2.4",
