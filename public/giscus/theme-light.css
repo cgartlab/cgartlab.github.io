@@ -7,7 +7,7 @@
   --secondary-color: oklch(40% 0.005 298);
   --secondary-color-25: oklch(40% 0.005 298 / 25%);
   --secondary-color-5: oklch(40% 0.005 298 / 5%);
-  --background-color: oklch(96% 0.005 298);
+  --background-color: oklch(98% 0.012 85);
   --color-fg-default: var(--secondary-color);
   --color-canvas-default: transparent;
   --color-canvas-overlay: var(--background-color);
