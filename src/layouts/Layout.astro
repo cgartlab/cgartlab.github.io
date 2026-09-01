@@ -30,10 +30,11 @@ interface Props {
   postSlug?: string
   postDate?: Date
   postUpdated?: Date
+  postKatex?: boolean
   supportedLangs?: Language[]
 }
 
-const { postTitle, postDescription, postSlug, postDate, postUpdated, supportedLangs = [] } = Astro.props
+const { postTitle, postDescription, postSlug, postDate, postUpdated, postKatex, supportedLangs = [] } = Astro.props
 const { isPost } = getPageInfo(Astro.url.pathname)
 const fontStyle = themeConfig.global.fontStyle === 'serif' ? 'font-serif' : 'font-sans'
 const MarginBottom = isPost && themeConfig.comment.enabled
@@ -48,7 +49,7 @@ const MarginBottom = isPost && themeConfig.comment.enabled
     isPost ? 'scroll-smooth' : '',
   ]}
 >
-  <Head {postTitle} {postDescription} {postSlug} {postDate} {postUpdated} />
+  <Head {postTitle} {postDescription} {postSlug} {postDate} {postUpdated} {postKatex} />
   <body>
     <div
       class="mx-auto max-w-205.848 min-h-vh w-full min-h-dvh"
