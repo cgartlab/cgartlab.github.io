@@ -36,7 +36,7 @@ function applySecurityHeaders(resp) {
 		[
 			"default-src 'self'",
 			"script-src 'self' 'unsafe-inline' https://giscus.app https://*.giscus.app https://cdn.jsdelivr.net https://www.googletagmanager.com https://www.google-analytics.com https://analytics.google.com https://cloud.umami.is https://*.umami.is",
-			"style-src 'self' 'unsafe-inline'",
+			"style-src 'self' 'unsafe-inline' https://giscus.app https://*.giscus.app https://cdn.jsdelivr.net",
 			"img-src 'self' https: data:",
 			"font-src 'self' https:",
 			"connect-src 'self' https://giscus.app https://*.giscus.app https://www.google-analytics.com https://analytics.google.com https://cloud.umami.is https://*.umami.is",
@@ -152,6 +152,11 @@ export default {
 
 			// 6. Create new response so we can override cache headers
 			const response = new Response(asset.body, asset);
+
+			// 6b. CORS: Allow giscus.app iframe to load CSS files
+			if (/\.css$/.test(assetPath)) {
+				response.headers.set('Access-Control-Allow-Origin', '*');
+			}
 
 			// 7. Set cache headers based on file type
 
