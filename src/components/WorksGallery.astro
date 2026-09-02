@@ -151,6 +151,9 @@ function getCategories(posts: Post[]): string[] {
       const albumItems = document.querySelectorAll<HTMLElement>('.album-item')
 
       categoryTags.forEach((tag) => {
+        // 幂等保护：避免同一 DOM 被重复 page-load 时多次绑定 click
+        if (tag.dataset.filterBound) return
+        tag.dataset.filterBound = 'true'
         tag.addEventListener('click', (event) => {
           // 使用 currentTarget 确保始终指向绑定事件的 <button> 元素，
           // 而非点击到内层 <span> 时返回的子元素

@@ -177,6 +177,11 @@ function handleClick(event: MouseEvent) {
 document.addEventListener('astro:page-load', setupOverlay)
 document.addEventListener('astro:before-swap', () => {
   cleanupZoom()
+  // 移除上次创建的 overlay DOM 节点，防止跨导航累积
+  if (overlay) {
+    overlay.remove()
+    overlay = null
+  }
   document.removeEventListener('click', handleClick)
   window.removeEventListener('resize', zoomOut)
 })
