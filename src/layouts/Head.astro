@@ -13,11 +13,12 @@ interface Props {
   postDate?: Date
   postUpdated?: Date
   postKatex?: boolean
+  ogImage?: string
   supportedLangs?: Language[]
 }
 
 // Props and Language
-const { postTitle, postDescription, postSlug, postDate, postUpdated, postKatex, supportedLangs = [] } = Astro.props
+const { postTitle, postDescription, postSlug, postDate, postUpdated, postKatex, ogImage, supportedLangs = [] } = Astro.props
 const { currentLang } = getPageInfo(Astro.url.pathname)
 const currentUI = ui[currentLang as keyof typeof ui] ?? {}
 
@@ -41,9 +42,11 @@ const seoSiteTitle = i18nTitle ? (currentUI.seoTitle || currentUI.title) : title
 // Page Metadata
 const pageTitle = postTitle ? `${postTitle} | ${seoSiteTitle}` : `${seoSiteTitle} - ${siteSubtitle}`
 const pageDescription = postDescription || siteDescription
-const pageImage = postSlug
-  ? new URL(`${base}/og/${postSlug}.png`, Astro.url.origin)
-  : new URL(`${base}/images/og-default.png`, Astro.url.origin)
+const pageImage = ogImage
+  ? new URL(`${base}${ogImage}`, Astro.url.origin)
+  : postSlug
+    ? new URL(`${base}/og/${postSlug}.png`, Astro.url.origin)
+    : new URL(`${base}/images/og-default.png`, Astro.url.origin)
 ---
 
 <head>
