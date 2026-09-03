@@ -126,20 +126,18 @@ function extractSlugFromUrl(url: string): string {
   return match ? match[1] : ''
 }
 
-async function verifyFeedConsistency(): Promise<{
+async function verifyFeedConsistency(feedPath: string): Promise<{
   feedItems: FeedItem[]
   postSlugs: Set<string>
   discrepancies: Discrepancy[]
 }> {
-  const distDir = 'dist'
   const contentDir = 'src/content/posts'
-  const feedPath = path.join(distDir, 'rss.xml')
 
   try {
     await fs.access(feedPath)
   }
   catch {
-    console.warn('⚠️  RSS Feed 文件不存在，跳过校验')
+    console.warn(`⚠️  RSS Feed 文件不存在，跳过校验: ${feedPath}`)
     return { feedItems: [], postSlugs: new Set(), discrepancies: [] }
   }
 
@@ -166,21 +164,21 @@ async function verifyFeedConsistency(): Promise<{
   return { feedItems, postSlugs, discrepancies }
 }
 
-function printReport(result: Awaited<ReturnType<typeof verifyFeedConsistency>>): void {
+function printReport(result: Awaited<ReturnType<typeof verifyFeedConsistency>>, label: string): void {
   const { feedItems, postSlugs, discrepancies } = result
 
-  console.log('\n📋 RSS Feed 校验报告')
+  console.log(`\n📋 ${label} 校验报告`)
   console.log('='.repeat(50))
   console.log(`📬 Feed 条目数: ${feedItems.length}`)
   console.log(`📝 已发布文章数: ${postSlugs.size}`)
   console.log(`📌 Feed 限制: 最多显示 25 篇最新文章`)
 
   if (discrepancies.length === 0) {
-    console.log('\n✅ Feed 内容与已发布文章完全一致！')
+    console.log(`\n✅ ${label} 内容与已发布文章完全一致！`)
     return
   }
 
-  console.log(`\n🔴 发现 ${discrepancies.length} 个问题:`)
+  console.log(`\n🔴 ${label} 发现 ${discrepancies.length} 个问题:`)
 
   for (const item of discrepancies) {
     console.log(`   ⚠️  ${item.slug}${item.title ? ` (${item.title})` : ''} — 已删除但仍在 Feed 中`)
@@ -190,12 +188,25 @@ function printReport(result: Awaited<ReturnType<typeof verifyFeedConsistency>>):
 async function main() {
   console.log('🔍 开始校验 RSS Feed...')
 
-  try {
-    const result = await verifyFeedConsistency()
-    printReport(result)
+  const feedChecks = [
+    { path: path.join('dist', 'rss.xml'), label: 'RSS Feed (zh)' },
+    { path: path.join('dist', 'en', 'rss.xml'), label: 'RSS Feed (en)' },
+  ]
 
-    if (result.discrepancies.length > 0) {
-      console.log('\n💡 提示: 重新构建网站以更新 Feed')
+  let hasDiscrepancy = false
+
+  try {
+    for (const { path: feedPath, label } of feedChecks) {
+      const result = await verifyFeedConsistency(feedPath)
+      printReport(result, label)
+
+      if (result.discrepancies.length > 0) {
+        console.log('\n💡 提示: 重新构建网站以更新 Feed')
+        hasDiscrepancy = true
+      }
+    }
+
+    if (hasDiscrepancy) {
       process.exit(1)
     }
   }
