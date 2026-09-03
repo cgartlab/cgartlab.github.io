@@ -33,7 +33,7 @@ jobs:
       - run: pnpm install --config.trustPolicy=off
 
       - name: Audit dependencies (fail on known vulnerabilities)
-        run: pnpm audit
+        run: pnpm audit --prod
         env:
           FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
