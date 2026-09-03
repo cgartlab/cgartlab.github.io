@@ -79,13 +79,13 @@ export const linksData: Record<string, Record<string, LinkItem[]>> = {
 				title: "Argus",
 				description: "项目监控与管理平台",
 				url: "https://argus.cgartlab.com",
-				icon: "https://argus.cgartlab.com/favicon.ico",
+				icon: "https://argus.cgartlab.com/argus-solid.png",
 			},
 			{
 				title: "Men",
 				description: "代码与开发助理",
 				url: "https://men.cgartlab.com",
-				icon: "https://men.cgartlab.com/favicon.ico",
+				icon: "https://men.cgartlab.com/favicon.svg",
 			},
 			{
 				title: "Cinema 4D",
@@ -244,13 +244,13 @@ export const linksData: Record<string, Record<string, LinkItem[]>> = {
 				title: "Argus",
 				description: "Project monitoring and management platform",
 				url: "https://argus.cgartlab.com",
-				icon: "https://argus.cgartlab.com/favicon.ico",
+				icon: "https://argus.cgartlab.com/argus-solid.png",
 			},
 			{
 				title: "Men",
 				description: "Code and development assistant",
 				url: "https://men.cgartlab.com",
-				icon: "https://men.cgartlab.com/favicon.ico",
+				icon: "https://men.cgartlab.com/favicon.svg",
 			},
 			{
 				title: "Cinema 4D",
@@ -408,13 +408,13 @@ export const linksData: Record<string, Record<string, LinkItem[]>> = {
 				title: "Argus",
 				description: "項目監控與管理平台",
 				url: "https://argus.cgartlab.com",
-				icon: "https://argus.cgartlab.com/favicon.ico",
+				icon: "https://argus.cgartlab.com/argus-solid.png",
 			},
 			{
 				title: "Men",
 				description: "程式碼與開發助理",
 				url: "https://men.cgartlab.com",
-				icon: "https://men.cgartlab.com/favicon.ico",
+				icon: "https://men.cgartlab.com/favicon.svg",
 			},
 			{
 				title: "Cinema 4D",
