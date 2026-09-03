@@ -1,7 +1,7 @@
 ---
 title: LayerRenamer Batch Layer Rename
 published: 2024-09-10
-description: Batch rename layers for Photoshop and After Effects. Custom naming rules, numbering formats, color labels, dry-run preview, and 3 conflict resolution strategies.
+description: Batch rename layers in Photoshop and After Effects. Custom naming, numbering, color labels, dry-run preview, and conflict resolution.
 tags:
   - Design Tool
   - Photoshop

@@ -79,6 +79,13 @@ const { post, supportedLangs } = Astro.props
 const currentLang = getLangFromLocale(Astro.currentLocale)
 const slug = post.data.abbrlink || post.id
 const description = getPostDescription(post, 'meta')
+// Tool/product posts get an extra structured-data block (SoftwareApplication / Product)
+const schemaType: 'SoftwareApplication' | 'Product' | undefined
+  = ['layerrenamer-1', 'layerrenamer', 'goto-github'].includes(slug)
+    ? 'SoftwareApplication'
+    : slug === 'build-a-macmini'
+      ? 'Product'
+      : undefined
 const { Content, headings, remarkPluginFrontmatter } = await render(post)
 ---
 
@@ -89,6 +96,7 @@ const { Content, headings, remarkPluginFrontmatter } = await render(post)
   postDate={post.data.published}
   postUpdated={post.data.updated}
   postKatex={post.data.katex}
+  postSchemaType={schemaType}
   supportedLangs={supportedLangs}
 >
   <article class="heti">

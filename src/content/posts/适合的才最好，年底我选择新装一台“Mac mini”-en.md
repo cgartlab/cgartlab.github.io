@@ -1,5 +1,5 @@
 ---
-title: "The Right Tool for the Right Job: Building a Hackintosh Mini PC That Works for Me"
+title: "Building a Beelink SER5 Max Hackintosh: Mini PC Setup Guide"
 published: 2024-12-01
 description: "A detailed guide on building a Beelink SER5 Max Hackintosh — hardware selection, dual-boot setup, BIOS tuning, and everything in between."
 updated: 2024-12-01

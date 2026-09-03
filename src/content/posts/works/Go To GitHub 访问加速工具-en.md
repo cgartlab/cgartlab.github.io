@@ -1,7 +1,7 @@
 ---
-title: Go To GitHub Access Accelerator
+title: Go To GitHub — Fast Access Tool for Developers
 published: 2026-06-02
-description: "GitHub access accelerator. Fetches community-maintained GitHub host mappings and writes to local hosts file. No local scanning. Cross-platform: macOS / Linux / Windows."
+description: "Speed up GitHub access by rewriting your hosts file with community-maintained mappings. One-command install, no local scanning — macOS, Linux, Windows."
 tags:
   - Network Tool
   - Dev Tool
