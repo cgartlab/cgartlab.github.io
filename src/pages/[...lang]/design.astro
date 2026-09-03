@@ -1,0 +1,45 @@
+---
+import PillarPage from '@/components/Widgets/PillarPage.astro'
+import { allLocales } from '@/config'
+import { getLangFromLocale, getLangRouteParam } from '@/i18n/lang'
+import Layout from '@/layouts/Layout.astro'
+
+export async function getStaticPaths() {
+  return allLocales.map(lang => ({
+    params: { lang: getLangRouteParam(lang) },
+  }))
+}
+
+const currentLang = getLangFromLocale(Astro.currentLocale)
+
+const pageTitle = currentLang === 'zh'
+  ? '设计理念与数字艺术'
+  : currentLang === 'zh-tw'
+    ? '設計理念與數位藝術'
+    : 'Design Philosophy & Digital Art'
+
+const pageIntro = currentLang === 'zh'
+  ? '从 Apple Watch 的工业设计，到编剧艺术中的编辑之道，再到数字绘画的基础练习——关于设计思维、审美判断与创作过程如何塑造一间数字工作室的思考与实践。适合设计师、数字艺术家与对设计美学感兴趣的读者。'
+  : currentLang === 'zh-tw'
+    ? '從 Apple Watch 的工業設計，到編劇藝術中的編輯之道，再到數位繪畫的基礎練習——關於設計思維、審美判斷與創作過程如何塑造一間數位工作室的思考與實踐。適合設計師、數位藝術家與對設計美學感興趣的讀者。'
+    : 'From Apple Watch\'s industrial design and the editorial craft of screenwriting to the fundamentals of digital painting — essays on how design thinking, aesthetic judgment, and creative process shape the work of a digital studio. For designers, digital artists, and readers curious about design aesthetics.'
+
+// 手选精选文章（slug 顺序即展示顺序）
+const featuredSlugs = ['apple-watch-design', '2024-elegant-use-mac', 'bianjudeyishu-1', 'digitalpainting1-confidence', 'digitalpainting2-shape-and-shadow']
+
+const tagLinks = currentLang === 'zh'
+  ? ['设计', '数字艺术', '读书笔记']
+  : currentLang === 'zh-tw'
+    ? ['設計', '數位藝術', '讀書筆記']
+    : ['Design', 'Digital Art', 'Industrial-Design']
+---
+
+<Layout postTitle={pageTitle} postDescription={pageIntro}>
+  <PillarPage
+    title={pageTitle}
+    intro={pageIntro}
+    featuredSlugs={featuredSlugs}
+    tagLinks={tagLinks}
+    lang={currentLang}
+  />
+</Layout>

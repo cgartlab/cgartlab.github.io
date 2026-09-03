@@ -1,0 +1,45 @@
+---
+import PillarPage from '@/components/Widgets/PillarPage.astro'
+import { allLocales } from '@/config'
+import { getLangFromLocale, getLangRouteParam } from '@/i18n/lang'
+import Layout from '@/layouts/Layout.astro'
+
+export async function getStaticPaths() {
+  return allLocales.map(lang => ({
+    params: { lang: getLangRouteParam(lang) },
+  }))
+}
+
+const currentLang = getLangFromLocale(Astro.currentLocale)
+
+const pageTitle = currentLang === 'zh'
+  ? 'AI 智能体与自动化工具'
+  : currentLang === 'zh-tw'
+    ? 'AI 智能體與自動化工具'
+    : 'AI Agents & Automation Tools'
+
+const pageIntro = currentLang === 'zh'
+  ? '围绕个人 AI 智能体生态的实践文章——从 Men（门）Agent 团队这样的定制化智能体，到 OpenClaw 工作流 Skill、代码审查 Agent，以及让独立创作者工作室运转起来的自动化工具。适合正在搭建个人 AI 工作流的创作者与开发者。'
+  : currentLang === 'zh-tw'
+    ? '圍繞個人 AI 智能體生態的實踐文章——從 Men（門）Agent 團隊這樣的客製化智能體，到 OpenClaw 工作流 Skill、程式碼審查 Agent，以及讓獨立創作者工作室運轉起來的自動化工具。適合正在搭建個人 AI 工作流的創作者與開發者。'
+    : 'Essays and guides on building a personal AI agent ecosystem — from custom agent teams like Men (门) to OpenClaw workflow Skills, code-review agents, and the automation tooling that keeps a solo creator\'s studio running. Built for creators and developers shaping their own AI workflows.'
+
+// 手选精选文章（slug 顺序即展示顺序）
+const featuredSlugs = ['men', 'weekly-19', 'argus', 'weekly-18', 'auto-glossary-term-linking']
+
+const tagLinks = currentLang === 'zh'
+  ? ['ai', 'agent-团队', '开源']
+  : currentLang === 'zh-tw'
+    ? ['ai', 'agent-團隊', '開源']
+    : ['ai', 'Agent', 'Open Source']
+---
+
+<Layout postTitle={pageTitle} postDescription={pageIntro}>
+  <PillarPage
+    title={pageTitle}
+    intro={pageIntro}
+    featuredSlugs={featuredSlugs}
+    tagLinks={tagLinks}
+    lang={currentLang}
+  />
+</Layout>
