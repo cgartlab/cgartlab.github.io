@@ -245,6 +245,7 @@ const softwareApp = postSchemaType === 'SoftwareApplication' ? softwareAppMeta[p
     'operatingSystem': softwareApp.operatingSystem,
     'applicationCategory': softwareApp.applicationCategory,
     'description': pageDescription,
+    'image': pageImage.toString(),
     'url': Astro.url.toString(),
     'author': {
       '@type': 'Person',
@@ -283,6 +284,11 @@ const softwareApp = postSchemaType === 'SoftwareApplication' ? softwareAppMeta[p
       'name': 'Beelink',
     },
     'datePublished': (postDate || new Date()).toISOString(),
+    'offers': {
+      '@type': 'Offer',
+      'price': '0',
+      'priceCurrency': 'USD',
+    },
   })}
   />
 )}

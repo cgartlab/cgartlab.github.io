@@ -194,7 +194,7 @@ Valid for 7 days, extraction password: 6633
 
 **Is LayerRenamer really free?**
 
-Yes. The script is free to download and use for personal projects — no plugin, license, or account required.
+Yes. The script is free to download and use — no plugin, license, or account required.
 
 **Which Photoshop version do I need?**
 
