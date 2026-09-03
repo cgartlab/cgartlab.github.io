@@ -36,6 +36,11 @@ export const ui = {
       'If you notice a missing term, feel free to <a href="mailto:hello@cgartlab.com" rel="nofollow">suggest adding it</a>.',
     glossaryIntro:
       'Precise definition and understanding of concepts form the foundation of all meaningful learning and discussion. This glossary is built from that belief — it also reflects my own cognitive boundaries, areas of expertise, and interests. I hope you find it enjoyable and useful.',
+    githubCard: {
+      failedToLoad: 'Failed to load data',
+      noDescription: 'No description',
+      noLicense: 'No License',
+    },
     consentTitle: 'Cookie Consent',
     consentDescription:
       'We use cookies to analyze site traffic and improve your experience. Your data is only collected with your explicit consent.',
