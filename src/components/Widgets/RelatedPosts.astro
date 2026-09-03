@@ -1,0 +1,112 @@
+---
+import type { CollectionEntry } from 'astro:content'
+import type { Language } from '@/i18n/config'
+import type { Post } from '@/types'
+import { getPostPath } from '@/i18n/path'
+import { ui } from '@/i18n/ui'
+import { getPostsByTags } from '@/utils/content'
+import { getPostDescription } from '@/utils/description'
+
+interface Props {
+  current: CollectionEntry<'posts'>
+  lang: Language
+}
+
+const { current, lang } = Astro.props
+const t = ui[lang]
+
+// 当前文章没有标签时不渲染相关文章模块
+const tags = current.data.tags ?? []
+const hasTags = tags.length > 0
+
+// getPostsByTags 基于 getPosts 构建，已排除草稿（生产模式），
+// 这里再过滤 draft 与当前文章，防御性兜底
+let related: Post[] = []
+if (hasTags) {
+  const candidates = await getPostsByTags(tags, lang)
+  related = candidates
+    .filter(post => post.id !== current.id && !post.data.draft)
+    .slice(0, 3)
+}
+---
+
+{
+  hasTags && related.length > 0 && (
+    <nav aria-label={t.relatedPosts} class="no-heti mt-12.6">
+      <div class="uno-decorative-line" />
+      <h2 class="related-title">{t.relatedPosts}</h2>
+      <ul class="related-list">
+        {related.map((post) => {
+          const slug = post.data.abbrlink || post.id
+
+          return (
+            <li class="border-b border-secondary/10 pt-6 pb-3 last:border-b-0">
+              <h3 class="related-item-title inline">
+                <a
+                  href={getPostPath(slug, lang)}
+                  class="cjk:tracking-wide transition-colors hover:c-primary"
+                >
+                  {post.data.title}
+                </a>
+              </h3>
+
+              {/* published date */}
+              <div class="mt-2 text-3.5 font-time c-secondary/60">
+                <time datetime={post.data.published.toISOString().split('T')[0]}>
+                  {post.data.published.toISOString().split('T')[0]}
+                </time>
+              </div>
+
+              {/* description */}
+              <p class="mt-3 text-3.5 c-secondary/60 leading-relaxed">
+                {getPostDescription(post, 'list')}
+              </p>
+            </li>
+          )
+        })}
+      </ul>
+    </nav>
+  )
+}
+
+<style>
+  /* heti 的 h2/h3 规则不排除 no-heti，需 scoped 样式覆盖其正文排版 */
+  .related-title {
+    margin-top: 0;
+    margin-bottom: 1.25rem;
+    font-family: var(--un-preset-theme-font-family-time);
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    font-weight: 400;
+    letter-spacing: 0.025em;
+    text-transform: uppercase;
+    color: color-mix(
+      in srgb,
+      oklch(var(--un-preset-theme-colors-secondary)) 60%,
+      transparent
+    );
+  }
+  .related-title::before {
+    content: none;
+  }
+  .related-item-title {
+    margin-top: 0;
+    margin-bottom: 0;
+    font-family: var(--un-preset-theme-font-family-serif);
+    font-size: 1.125rem;
+    line-height: 1.75rem;
+    font-weight: 400;
+  }
+  .related-item-title::before {
+    content: none;
+  }
+  .related-list {
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-left: 0;
+    list-style: none;
+  }
+  .related-list li {
+    margin-top: 0;
+  }
+</style>

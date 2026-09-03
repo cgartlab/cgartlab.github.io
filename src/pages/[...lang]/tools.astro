@@ -1,0 +1,45 @@
+---
+import PillarPage from '@/components/Widgets/PillarPage.astro'
+import { allLocales } from '@/config'
+import { getLangFromLocale, getLangRouteParam } from '@/i18n/lang'
+import Layout from '@/layouts/Layout.astro'
+
+export async function getStaticPaths() {
+  return allLocales.map(lang => ({
+    params: { lang: getLangRouteParam(lang) },
+  }))
+}
+
+const currentLang = getLangFromLocale(Astro.currentLocale)
+
+const pageTitle = currentLang === 'zh'
+  ? '创作者与开发者工具'
+  : currentLang === 'zh-tw'
+    ? '創作者與開發者工具'
+    : 'Tools for Creators & Developers'
+
+const pageIntro = currentLang === 'zh'
+  ? '面向创作与工程工作流的实用工具集：LayerRenamer 的 Photoshop 批量自动化、Go To GitHub 访问加速、专为社交媒体设计的卡片生成器，以及同时为人类与 Agent 打造的 EDIC 设计系统。适合设计师、独立开发者和内容创作者。'
+  : currentLang === 'zh-tw'
+    ? '面向創作與工程工作流的實用工具集：LayerRenamer 的 Photoshop 批次自動化、Go To GitHub 存取加速、專為社群媒體設計的卡片產生器，以及同時為人類與 Agent 打造的 EDIC 設計系統。適合設計師、獨立開發者和內容創作者。'
+    : 'Hands-on tooling for creative and engineering workflows: Photoshop batch automation with LayerRenamer, GitHub access acceleration, card generators built for social media, and the EDIC design system designed for humans and AI agents alike. For designers, indie developers, and content creators.'
+
+// 手选精选文章（slug 顺序即展示顺序）
+const featuredSlugs = ['layerrenamer-1', 'layerrenamer', 'goto-github', 'inkard', 'edic-design-system']
+
+const tagLinks = currentLang === 'zh'
+  ? ['设计工具', '网络工具', '开发工具']
+  : currentLang === 'zh-tw'
+    ? ['設計工具', '網路工具', '開發工具']
+    : ['Design Tool', 'Dev Tool', 'GitHub App']
+---
+
+<Layout postTitle={pageTitle} postDescription={pageIntro}>
+  <PillarPage
+    title={pageTitle}
+    intro={pageIntro}
+    featuredSlugs={featuredSlugs}
+    tagLinks={tagLinks}
+    lang={currentLang}
+  />
+</Layout>

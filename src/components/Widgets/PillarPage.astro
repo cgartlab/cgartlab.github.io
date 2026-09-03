@@ -1,0 +1,124 @@
+---
+import type { CollectionEntry } from 'astro:content'
+import type { Language } from '@/i18n/config'
+import { getCollection } from 'astro:content'
+import { getPostPath, getTagPath } from '@/i18n/path'
+import { ui } from '@/i18n/ui'
+import { getPostDescription } from '@/utils/description'
+
+interface Props {
+  /** 页面一级标题（已按语言本地化） */
+  title: string
+  /** 页面简介段落（已按语言本地化） */
+  intro: string
+  /** 手选精选文章 slug 列表（顺序即展示顺序） */
+  featuredSlugs: string[]
+  /** 主题标签导航（链接到对应语言的标签页） */
+  tagLinks: string[]
+  lang: Language
+}
+
+const { title, intro, featuredSlugs, tagLinks, lang } = Astro.props
+const t = ui[lang]
+
+// 生产模式排除草稿；按 slug + 语言匹配手选文章
+const allPosts = await getCollection('posts', ({ data }) => !data.draft)
+const featured = featuredSlugs
+  .map(slug => allPosts.find(
+    post => (post.data.abbrlink || post.id) === slug
+      && (post.data.lang === lang || post.data.lang === ''),
+  ))
+  .filter((post): post is CollectionEntry<'posts'> => Boolean(post))
+---
+
+<div class="uno-decorative-line" />
+<div class="heti mt-6 lg:mt-10.5">
+  <h1>{title}</h1>
+  <p>{intro}</p>
+
+  {featured.length > 0 && (
+    <section aria-labelledby="pillar-featured">
+      <h2 id="pillar-featured">{t.pillarFeatured}</h2>
+      <ul class="no-heti pillar-list">
+        {featured.map((post) => {
+          const slug = post.data.abbrlink || post.id
+
+          return (
+            <li class="border-b border-secondary/10 pt-6 pb-3 last:border-b-0">
+              <h3 class="pillar-item-title inline">
+                <a
+                  href={getPostPath(slug, lang)}
+                  class="cjk:tracking-wide transition-colors hover:c-primary"
+                >
+                  {post.data.title}
+                </a>
+              </h3>
+
+              <p class="mt-3 text-3.5 c-secondary/60 leading-relaxed">
+                {getPostDescription(post, 'list')}
+              </p>
+            </li>
+          )
+        })}
+      </ul>
+    </section>
+  )}
+
+  {tagLinks.length > 0 && (
+    <nav aria-label={t.pillarTags} class="mt-8">
+      <h2 class="pillar-tags-title">{t.pillarTags}</h2>
+      <div class="no-heti flex flex-wrap gap-x-3 gap-y-3.2">
+        {tagLinks.map(tag => (
+          <a
+            href={getTagPath(tag, lang)}
+            class="tag-item"
+          >
+            <span class="tag-text">{tag}</span>
+          </a>
+        ))}
+      </div>
+    </nav>
+  )}
+</div>
+
+<style>
+  /* heti 的 h2/h3 规则不排除 no-heti，需 scoped 样式覆盖其正文排版 */
+  .pillar-tags-title {
+    margin-top: 0;
+    margin-bottom: 1.25rem;
+    font-family: var(--un-preset-theme-font-family-time);
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    font-weight: 400;
+    letter-spacing: 0.025em;
+    text-transform: uppercase;
+    color: color-mix(
+      in srgb,
+      oklch(var(--un-preset-theme-colors-secondary)) 60%,
+      transparent
+    );
+  }
+  .pillar-tags-title::before {
+    content: none;
+  }
+  .pillar-item-title {
+    margin-top: 0;
+    margin-bottom: 0;
+    font-family: var(--un-preset-theme-font-family-serif);
+    font-size: 1.125rem;
+    line-height: 1.75rem;
+    font-weight: 400;
+  }
+  .pillar-item-title::before {
+    content: none;
+  }
+  .pillar-list {
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-left: 0;
+    list-style: none;
+  }
+  .pillar-list li {
+    margin-top: 0;
+  }
+</style>
