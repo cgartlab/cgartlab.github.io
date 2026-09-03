@@ -76,11 +76,11 @@ function getCategories(posts: Post[]): string[] {
   <!-- 分类标签 -->
   <div class="category-tags">
     <div class="no-heti flex flex-wrap gap-x-3 gap-y-3.2">
-      <button class="category-tag active" data-category="all">
+      <button class="category-tag active" data-category="all" aria-pressed="true">
         <span class="category-text">{lang === 'zh' ? '全部' : lang === 'zh-tw' ? '全部' : 'All'}</span>
       </button>
       {getCategories(posts).map(category => (
-        <button class="category-tag" data-category={category}>
+        <button class="category-tag" data-category={category} aria-pressed="false">
           <span class="category-text">{category}</span>
         </button>
       ))}
@@ -160,10 +160,14 @@ function getCategories(posts: Post[]): string[] {
           const btn = event.currentTarget as HTMLButtonElement
 
           // 移除所有标签的激活状态
-          categoryTags.forEach(t => t.classList.remove('active'))
+          categoryTags.forEach(t => {
+            t.classList.remove('active')
+            t.setAttribute('aria-pressed', 'false')
+          })
 
           // 添加当前按钮的激活状态
           btn.classList.add('active')
+          btn.setAttribute('aria-pressed', 'true')
 
           const selectedCategory = btn.dataset.category || 'all'
 
@@ -183,6 +187,10 @@ function getCategories(posts: Post[]): string[] {
 
     // astro:page-load 在首次加载和每次 View Transition 导航后均会触发
     document.addEventListener('astro:page-load', setupWorksFilter)
+    // 导航离开时移除 listener，防止累积
+    document.addEventListener('astro:before-swap', () => {
+      document.removeEventListener('astro:page-load', setupWorksFilter)
+    })
   </script>
 </div>
 

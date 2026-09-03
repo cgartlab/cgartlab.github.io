@@ -9,6 +9,9 @@ interface GithubRepoData {
 
 const compactNumberFormat = new Intl.NumberFormat('en', { notation: 'compact', maximumFractionDigits: 1 })
 
+// 常量
+const GITHUB_API_TIMEOUT = 10_000
+
 // 静态数据缓存（构建时生成，避免运行时 API 调用）
 let staticData: Record<string, GithubRepoData> | null = null
 
@@ -31,7 +34,7 @@ async function loadStaticData(): Promise<Record<string, GithubRepoData>> {
 async function fetchRepoData(repo: string): Promise<GithubRepoData | null> {
   try {
     const response = await fetch(`https://api.github.com/repos/${repo}`, {
-      signal: AbortSignal.timeout(10_000),
+      signal: AbortSignal.timeout(GITHUB_API_TIMEOUT),
     })
     if (!response.ok)
       return null
@@ -97,4 +100,7 @@ function setupGithubCards() {
 }
 
 document.addEventListener('astro:page-load', setupGithubCards)
+document.addEventListener('astro:before-swap', () => {
+  document.removeEventListener('astro:page-load', setupGithubCards)
+})
 </script>

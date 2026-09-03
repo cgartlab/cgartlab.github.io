@@ -4,6 +4,12 @@ let zoomedImg: HTMLImageElement | null = null
 let originalImg: HTMLImageElement | null = null
 let transitionFallbackTimer: number | null = null
 
+// 常量
+const ZOOM_TRANSITION_DURATION = 350
+const MOBILE_BREAKPOINT = 768
+const SCALE_FACTOR_MOBILE = 1
+const SCALE_FACTOR_DESKTOP = 0.8
+
 // Setup overlay element
 function setupOverlay() {
   overlay = document.createElement('div')
@@ -31,12 +37,15 @@ function unlockBodyScroll() {
   window.scrollTo(0, savedScrollY)
 }
 
-// Clean up zoom state
+// 统一清理：overlay、zoomedImg、timer、scroll-lock、引用
 function cleanupZoom() {
   if (transitionFallbackTimer !== null) {
     clearTimeout(transitionFallbackTimer)
     transitionFallbackTimer = null
   }
+  // 物理移除 DOM 节点（不等 transition 完成，避免导航中节点残留）
+  zoomedImg?.remove()
+  overlay?.remove()
   // 确保导航时 scroll-lock 被移除，防止下一页无法滚动
   if (document.body.classList.contains('scroll-lock')) {
     unlockBodyScroll()
@@ -76,7 +85,7 @@ function zoomIn(img: HTMLImageElement) {
   // Calculate scale and position
   const viewportWidth = window.innerWidth
   const viewportHeight = window.innerHeight
-  const scaleFactor = window.innerWidth < 768 ? 1 : 0.8
+  const scaleFactor = viewportWidth < MOBILE_BREAKPOINT ? SCALE_FACTOR_MOBILE : SCALE_FACTOR_DESKTOP
   const scale = Math.min(
     (viewportWidth * scaleFactor) / rect.width,
     (viewportHeight * scaleFactor) / rect.height,
@@ -150,7 +159,7 @@ function zoomOut() {
     // Remove the transitionend listener so it can't fire after cleanup
     imgToClean.removeEventListener('transitionend', onEnd)
     cleanup()
-  }, 350)
+  }, ZOOM_TRANSITION_DURATION)
 }
 
 // Handle click events
@@ -177,11 +186,6 @@ function handleClick(event: MouseEvent) {
 document.addEventListener('astro:page-load', setupOverlay)
 document.addEventListener('astro:before-swap', () => {
   cleanupZoom()
-  // 移除上次创建的 overlay DOM 节点，防止跨导航累积
-  if (overlay) {
-    overlay.remove()
-    overlay = null
-  }
   document.removeEventListener('click', handleClick)
   window.removeEventListener('resize', zoomOut)
 })
