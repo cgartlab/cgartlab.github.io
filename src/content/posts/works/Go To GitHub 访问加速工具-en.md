@@ -1,7 +1,7 @@
 ---
-title: Go To GitHub Access Accelerator
+title: Go To GitHub — Fast Access Tool for Developers
 published: 2026-06-02
-description: "GitHub access accelerator. Fetches community-maintained GitHub host mappings and writes to local hosts file. No local scanning. Cross-platform: macOS / Linux / Windows."
+description: "Speed up GitHub access by rewriting your hosts file with community-maintained mappings. One-command install, no local scanning — macOS, Linux, Windows."
 tags:
   - Network Tool
   - Dev Tool
@@ -15,11 +15,21 @@ lang: en
 
 ![](../_images/GoToGitHub访问加速工具-1787317123841.webp)
 
-## Overview
+## What Problem It Solves
 
-GoToGitHub is a GitHub access accelerator that fetches community-maintained GitHub host mappings in real time and writes them to your local `hosts` file, bypassing DNS resolution to speed up GitHub access. No local scanning required, one-command install.
+GitHub is painfully slow from many regions — cloning a repo takes minutes, raw files fail to load, and sometimes the homepage itself never loads. GoToGitHub fixes this in one command: it fetches the latest community-maintained GitHub IP mappings and writes them to your local `hosts` file, so your machine resolves GitHub directly to the fastest servers. No local scanning, no proxy setup, no DNS knowledge required.
 
-## Motivation
+## Requirements
+
+| Platform | Requirement |
+|----------|-------------|
+| macOS / Linux / Git Bash | Bash 3.2+, `curl`, `sudo` (to modify the hosts file) |
+| Windows | PowerShell 5.1+ (or pwsh), run as administrator |
+
+- **Network**: internet access to fetch host mappings from the community-maintained sources below
+- **No dependencies**: the script only reads and writes the system `hosts` file, then refreshes the DNS cache
+
+## Why I Built It
 
 Writing code from certain regions means dealing with one constant: GitHub is slow.
 
@@ -128,6 +138,28 @@ Three sources tried in priority order — no manual intervention needed.
 | Linux | Bash 3.2+ |
 | Windows | PowerShell 5.1+ / pwsh |
 | Git Bash | Bash 3.2+ |
+
+## FAQ
+
+**Which platforms are supported?**
+
+macOS, Linux, Windows (PowerShell 5.1+ / pwsh), and Git Bash on Windows. See the compatibility table above.
+
+**How do updates work?**
+
+Just run `fetch.sh` (macOS / Linux / Git Bash) or `goto-github.ps1` (Windows) again. The script always pulls the latest mappings from the community-maintained sources, so there's nothing to uninstall and reinstall — refresh the addresses and you're done.
+
+**Does it conflict with my existing proxy or VPN?**
+
+No. The tool only rewrites GitHub-related entries inside a clearly marked block of the `hosts` file and leaves everything else — including your proxy settings — untouched. If you already have a working proxy for GitHub, keep whichever works better; the two don't interfere.
+
+**Is it safe?**
+
+The script never scans your machine. It only touches the `hosts` file within its marked block, and the fetched content is validated (IP entry count and required domains are checked) before anything is written.
+
+**How do I uninstall?**
+
+Run `fetch.sh --restore` (macOS / Linux / Git Bash) or `goto-github.ps1 --pwsh restore` (Windows) to restore your original `hosts` file.
 
 ## Links
 

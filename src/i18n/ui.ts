@@ -2,9 +2,9 @@ export const ui = {
   'en': {
     title: 'CGArtLab',
     subtitle: 'Exploring the Edge of Digital Creation',
-    seoTitle: 'CGArtLab Studio',
+    seoTitle: 'CGArtLab — Digital Art & Design Studio',
     description:
-      'CGArtLab (cgartlab.com) is a website focused on digital art, visual design, technical sharing, and knowledge management. It aims to provide CG art information, tutorials, work showcases, and an exchange platform for digital art enthusiasts, professional designers, beginners, and commercial clients.',
+      'Independent digital art studio by CGArtLab. Interactive visuals, design philosophy, AI agents, and creative tools from a Kunming-based digital artist.',
     posts: 'Posts',
     tags: 'Tags',
     about: 'About',

@@ -1,7 +1,7 @@
 ---
-title: "Product Industrial Design Through the Apple Watch"
+title: "Apple Watch Design Analysis: Curves, NURBS & Surfaces"
 published: 2024-07-27
-description: "A deep dive into Apple Watch industrial design, from continuous curves and NURBS surfaces to the manufacturing precision that defines Apple's design philosophy."
+description: "How Apple Watch achieves its seamless form: curve continuity grades, NURBS surfaces, and Rhino modeling for product designers."
 updated: 2024-11-30
 tags:
     - Design

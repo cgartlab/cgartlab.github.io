@@ -13,11 +13,13 @@ interface Props {
   postDate?: Date
   postUpdated?: Date
   postKatex?: boolean
+  ogImage?: string
+  postSchemaType?: 'SoftwareApplication' | 'Product'
   supportedLangs?: Language[]
 }
 
 // Props and Language
-const { postTitle, postDescription, postSlug, postDate, postUpdated, postKatex, supportedLangs = [] } = Astro.props
+const { postTitle, postDescription, postSlug, postDate, postUpdated, postKatex, ogImage, postSchemaType, supportedLangs = [] } = Astro.props
 const { currentLang } = getPageInfo(Astro.url.pathname)
 const currentUI = ui[currentLang as keyof typeof ui] ?? {}
 
@@ -41,9 +43,20 @@ const seoSiteTitle = i18nTitle ? (currentUI.seoTitle || currentUI.title) : title
 // Page Metadata
 const pageTitle = postTitle ? `${postTitle} | ${seoSiteTitle}` : `${seoSiteTitle} - ${siteSubtitle}`
 const pageDescription = postDescription || siteDescription
-const pageImage = postSlug
-  ? new URL(`${base}/og/${postSlug}.png`, Astro.url.origin)
-  : new URL(`${base}/images/og-default.png`, Astro.url.origin)
+const pageImage = ogImage
+  ? new URL(`${base}${ogImage}`, Astro.url.origin)
+  : postSlug
+    ? new URL(`${base}/og/${postSlug}.png`, Astro.url.origin)
+    : new URL(`${base}/images/og-default.png`, Astro.url.origin)
+
+// Tool/product structured data details, keyed by abbrlink slug from the URL path
+const pathSlug = Astro.url.pathname.match(/\/posts\/([^/]+)\//)?.[1]
+const softwareAppMeta: Record<string, { operatingSystem: string; applicationCategory: string }> = {
+  'layerrenamer-1': { operatingSystem: 'macOS, Windows', applicationCategory: 'UtilitiesApplication' },
+  'layerrenamer': { operatingSystem: 'macOS, Windows', applicationCategory: 'UtilitiesApplication' },
+  'goto-github': { operatingSystem: 'macOS, Linux, Windows', applicationCategory: 'DeveloperApplication' },
+}
+const softwareApp = postSchemaType === 'SoftwareApplication' ? softwareAppMeta[pathSlug || ''] : undefined
 ---
 
 <head>
@@ -215,6 +228,66 @@ const pageImage = postSlug
         'urlTemplate': `${Astro.url.origin}${base}/search?q={search_term_string}`,
       },
       'query-input': 'required name=search_term_string',
+    },
+  })}
+  />
+)}
+
+{/* Tool/Product structured data — emitted alongside BlogPosting for relevant posts */}
+{softwareApp && (
+  <script
+    is:inline
+    type="application/ld+json"
+    set:html={JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'SoftwareApplication',
+    'name': postTitle,
+    'operatingSystem': softwareApp.operatingSystem,
+    'applicationCategory': softwareApp.applicationCategory,
+    'description': pageDescription,
+    'image': pageImage.toString(),
+    'url': Astro.url.toString(),
+    'author': {
+      '@type': 'Person',
+      'name': author,
+    },
+    'publisher': {
+      '@type': 'Organization',
+      'name': seoSiteTitle,
+      'logo': {
+        '@type': 'ImageObject',
+        'url': new URL(`${base}/icons/favicon.svg`, Astro.url.origin).toString(),
+      },
+    },
+    'datePublished': (postDate || new Date()).toISOString(),
+    'offers': {
+      '@type': 'Offer',
+      'price': '0',
+      'priceCurrency': 'USD',
+    },
+  })}
+  />
+)}
+{postSchemaType === 'Product' && (
+  <script
+    is:inline
+    type="application/ld+json"
+    set:html={JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    'name': 'Beelink SER5 Max',
+    'description': pageDescription,
+    'image': pageImage.toString(),
+    'url': Astro.url.toString(),
+    'brand': {
+      '@type': 'Brand',
+      'name': 'Beelink',
+    },
+    'datePublished': (postDate || new Date()).toISOString(),
+    'offers': {
+      '@type': 'Offer',
+      'price': '0',
+      'priceCurrency': 'USD',
     },
   })}
   />

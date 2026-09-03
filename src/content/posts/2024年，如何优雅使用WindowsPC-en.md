@@ -1,7 +1,7 @@
 ---
-title: "How to Use Windows PC Elegantly in 2024: Optimization & Setup Guide"
+title: "Elegant Windows (2024): Productivity Setup for Power Users"
 published: 2024-07-07
-description: "Optimize Windows 11 for productivity in 2024 with setup strategies, keyboard shortcuts, performance tweaks, and essential free tools for power users and creators."
+description: "Windows 11 setup and productivity workflow for power users — system settings, keyboard shortcuts, performance tweaks, and essential free tools."
 updated: 2024-12-15
 tags:
     - tech-sharing

@@ -26,6 +26,13 @@ async function initOGRouter() {
 		]),
 	);
 
+	// Homepage-specific OG image (non-post pages fall back to og-default.png)
+	pages.home = {
+		title: "CGArtLab — Digital Art & Design Studio",
+		description:
+			"Independent digital art studio by CGArtLab. Interactive visuals, design philosophy, AI agents, and creative tools from a Kunming-based digital artist.",
+	};
+
 	ogRouteResult = await OGImageRoute({
 		pages,
 		getImageOptions: (

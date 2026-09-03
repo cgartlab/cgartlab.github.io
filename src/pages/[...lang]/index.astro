@@ -16,7 +16,7 @@ const pinnedPosts = await getPinnedPosts(currentLang)
 const postsByYear = await getPostsByYear(currentLang)
 ---
 
-<Layout>
+<Layout ogImage={currentLang === 'en' ? '/og/home.png' : undefined}>
   <!-- Pinned Posts -->
   {pinnedPosts.length > 0 && (
     <section class="mb-6 w-full lg:mb-7.5">
