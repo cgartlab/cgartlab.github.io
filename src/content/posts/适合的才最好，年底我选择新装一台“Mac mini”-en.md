@@ -207,6 +207,10 @@ The right tool for the right job. The key value of choosing what you need and cu
 
 I hope my experience helps others navigate device selection and configuration with fewer detours, better meeting their work and usage needs.
 
+## If You Liked This, Also Try
+
+- [2024 Guide: How to Use Mac More Elegantly](/en/posts/2024-elegant-use-mac/) — a companion piece on macOS workflow, settings, and apps for creative professionals
+
 References:
 
 - <https://heipg.cn>
