@@ -34,8 +34,13 @@ const imageConfig = imageHostURL
   ? { image: { domains: [imageHostURL], remotePatterns: [{ protocol: 'https' }] } }
   : {}
 
-function buildLastmodMap(): Map<string, string> {
-  const map = new Map<string, string>()
+function buildLastmodMap(): {
+  lastmodMap: Map<string, string>
+  pairedAbbrlinks: Set<string>
+} {
+  const lastmodMap = new Map<string, string>()
+  // 收集每个 abbrlink 对应的语言集合，用于判断双语文章配对
+  const abbrlinkLangs = new Map<string, Set<string>>()
   const postsDir = fileURLToPath(new URL('./src/content/posts', import.meta.url))
 
   function walk(dir: string): void {
@@ -79,6 +84,17 @@ function buildLastmodMap(): Map<string, string> {
         if (isDraft)
           continue
 
+        // 收集 abbrlink 的语言分布，用于判断双语文章配对（zh ↔ en）
+        if (abbrlink) {
+          let langSet = abbrlinkLangs.get(abbrlink)
+          if (!langSet) {
+            langSet = new Set<string>()
+            abbrlinkLangs.set(abbrlink, langSet)
+          }
+          // lang 为空表示 universal（lang: '' 渲染所有语言）
+          langSet.add(lang || 'universal')
+        }
+
         const lastmod = updated || published
         if (!lastmod)
           continue
@@ -112,25 +128,33 @@ function buildLastmodMap(): Map<string, string> {
         // Determine which URL(s) this file serves based on its lang,
         // so zh/en files never overwrite each other regardless of readdirSync order
         if (lang === 'en') {
-          map.set(`/en/posts/${encodedSlug}/`, lastmodIso)
+          lastmodMap.set(`/en/posts/${encodedSlug}/`, lastmodIso)
         }
         else if (lang === 'zh') {
-          map.set(`/posts/${encodedSlug}/`, lastmodIso)
+          lastmodMap.set(`/posts/${encodedSlug}/`, lastmodIso)
         }
         else {
           // universal (lang '') renders in every locale
-          map.set(`/posts/${encodedSlug}/`, lastmodIso)
-          map.set(`/en/posts/${encodedSlug}/`, lastmodIso)
+          lastmodMap.set(`/posts/${encodedSlug}/`, lastmodIso)
+          lastmodMap.set(`/en/posts/${encodedSlug}/`, lastmodIso)
         }
       }
     }
   }
 
   walk(postsDir)
-  return map
+
+  // 双语配对：universal 文章（渲染所有语言）或同时存在 zh + en 版本
+  const pairedAbbrlinks = new Set<string>()
+  for (const [slug, langs] of abbrlinkLangs) {
+    if (langs.has('universal') || (langs.has('zh') && langs.has('en')))
+      pairedAbbrlinks.add(slug)
+  }
+
+  return { lastmodMap, pairedAbbrlinks }
 }
 
-const lastmodMap = buildLastmodMap()
+const { lastmodMap, pairedAbbrlinks } = buildLastmodMap()
 
 export default defineConfig({
   site,
@@ -160,8 +184,28 @@ export default defineConfig({
     }),
     sitemap({
       serialize(item: SitemapItem): SitemapItem | undefined {
-        const lm = lastmodMap.get(new URL(item.url).pathname)
-        return lm ? { ...item, lastmod: lm } : item
+        const url = new URL(item.url)
+        const pathname = url.pathname
+        const lm = lastmodMap.get(pathname)
+        const result: SitemapItem = lm ? { ...item, lastmod: lm } : { ...item }
+
+        // 双语文章（zh ↔ en 配对）添加 hreflang alternate
+        const slugMatch = pathname.match(/\/posts\/([^/]+)\/?$/)
+        if (slugMatch) {
+          const slug = decodeURIComponent(slugMatch[1])
+          if (pairedAbbrlinks.has(slug)) {
+            const encodedSlug = slugMatch[1]
+            const zhUrl = `${site}/posts/${encodedSlug}/`
+            const enUrl = `${site}/en/posts/${encodedSlug}/`
+            result.links = [
+              { lang: 'zh', hreflang: 'zh', url: zhUrl },
+              { lang: 'en', hreflang: 'en', url: enUrl },
+              { lang: 'x-default', hreflang: 'x-default', url: zhUrl },
+            ]
+          }
+        }
+
+        return result
       },
     }),
     Compress({

@@ -210,8 +210,8 @@ export default {
 					"Cloudflare-Cdn-Cache-Control",
 					"max-age=1800",
 				);
-				// 列表页 noindex，避免与正文页抢权重
-				if (/^\/(?:en\/)?(?:weekly|tags)\//.test(pathname))
+				// 列表/工具页 noindex，避免与正文页抢权重（glossary 保持可索引）
+				if (/^\/(?:en\/)?(?:weekly|tags|disclaimer|links)\//.test(pathname))
 					response.headers.set("X-Robots-Tag", "noindex, follow");
 			}
 

@@ -1,6 +1,7 @@
 ---
 import { ClientRouter } from 'astro:transitions'
 import katexCSS from 'katex/dist/katex.min.css?url'
+import type { Language } from '@/i18n/config'
 import { allLocales, base, defaultLocale, themeConfig } from '@/config'
 import { ui } from '@/i18n/ui'
 import { getPageInfo } from '@/utils/page'
@@ -12,10 +13,11 @@ interface Props {
   postDate?: Date
   postUpdated?: Date
   postKatex?: boolean
+  supportedLangs?: Language[]
 }
 
 // Props and Language
-const { postTitle, postDescription, postSlug, postDate, postUpdated, postKatex } = Astro.props
+const { postTitle, postDescription, postSlug, postDate, postUpdated, postKatex, supportedLangs = [] } = Astro.props
 const { currentLang } = getPageInfo(Astro.url.pathname)
 const currentUI = ui[currentLang as keyof typeof ui] ?? {}
 
@@ -97,12 +99,25 @@ const pageImage = postSlug
 <!-- Site Links -->
 <link rel="canonical" href={Astro.url} />
 <link rel="sitemap" href={`${base}/sitemap-index.xml`} />
-<link rel="alternate" href={`${base}/rss.xml`} type="application/rss+xml" title="RSS Feed" />
-<link rel="alternate" href={`${base}/atom.xml`} type="application/atom+xml" title="Atom Feed" />
+{(() => {
+  // en 页面指向 en feed，其他语言指向默认（zh）feed
+  const feedPrefix = currentLang === 'en' ? '/en' : ''
+  return (
+    <>
+      <link rel="alternate" href={`${base}${feedPrefix}/rss.xml`} type="application/rss+xml" title="RSS Feed" />
+      <link rel="alternate" href={`${base}${feedPrefix}/atom.xml`} type="application/atom+xml" title="Atom Feed" />
+    </>
+  )
+})()}
 {(() => {
   const currentPath = Astro.url.pathname
   const pathWithoutLang = currentPath.replace(/^\/(en|zh-tw)\//, '/')
-  const alternateUrls = allLocales.map(l => ({
+  // 页面声明了 supportedLangs（且与全站语言列表不同）时，仅输出这些语言的 alternate，
+  // 避免为不存在的语言版本（如 zh-only 标签页的 /en/tags/xxx/）生成 404 链接
+  const hasRestrictedLangs = supportedLangs.length > 0
+    && !(supportedLangs.length === allLocales.length && allLocales.every(l => supportedLangs.includes(l as Language)))
+  const langs = hasRestrictedLangs ? supportedLangs : allLocales
+  const alternateUrls = langs.map(l => ({
     lang: l === 'zh-tw' ? 'zh-TW' : l,
     href: new URL(
       l === defaultLocale ? pathWithoutLang : `/${l}${pathWithoutLang}`,
