@@ -76,6 +76,18 @@ export const linksData: Record<string, Record<string, LinkItem[]>> = {
 				icon: "https://www.fnnas.com/favicon.ico",
 			},
 			{
+				title: "Argus",
+				description: "项目监控与管理平台",
+				url: "https://argus.cgartlab.com",
+				icon: "https://argus.cgartlab.com/favicon.ico",
+			},
+			{
+				title: "Men",
+				description: "代码与开发助理",
+				url: "https://men.cgartlab.com",
+				icon: "https://men.cgartlab.com/favicon.ico",
+			},
+			{
 				title: "Cinema 4D",
 				description: "3D 建模与动画",
 				url: "https://www.maxon.net/cinema-4d",
@@ -229,6 +241,18 @@ export const linksData: Record<string, Record<string, LinkItem[]>> = {
 				icon: "https://www.fnnas.com/favicon.ico",
 			},
 			{
+				title: "Argus",
+				description: "Project monitoring and management platform",
+				url: "https://argus.cgartlab.com",
+				icon: "https://argus.cgartlab.com/favicon.ico",
+			},
+			{
+				title: "Men",
+				description: "Code and development assistant",
+				url: "https://men.cgartlab.com",
+				icon: "https://men.cgartlab.com/favicon.ico",
+			},
+			{
 				title: "Cinema 4D",
 				description: "3D modeling and animation",
 				url: "https://www.maxon.net/cinema-4d",
@@ -379,6 +403,18 @@ export const linksData: Record<string, Record<string, LinkItem[]>> = {
 				description: "飛牛科技推出的 NAS 作業系統",
 				url: "https://www.fnnas.com",
 				icon: "https://www.fnnas.com/favicon.ico",
+			},
+			{
+				title: "Argus",
+				description: "項目監控與管理平台",
+				url: "https://argus.cgartlab.com",
+				icon: "https://argus.cgartlab.com/favicon.ico",
+			},
+			{
+				title: "Men",
+				description: "程式碼與開發助理",
+				url: "https://men.cgartlab.com",
+				icon: "https://men.cgartlab.com/favicon.ico",
 			},
 			{
 				title: "Cinema 4D",
