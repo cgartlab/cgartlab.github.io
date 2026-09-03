@@ -1,4 +1,6 @@
 <script>
+import { ui } from '@/i18n/ui'
+
 interface GithubRepoData {
   owner: { avatar_url: string }
   description: string | null
@@ -11,6 +13,20 @@ const compactNumberFormat = new Intl.NumberFormat('en', { notation: 'compact', m
 
 // 常量
 const GITHUB_API_TIMEOUT = 10_000
+
+// 从 document.documentElement.lang 获取当前语言（Astro i18n 设置）
+function getCurrentLang(): 'en' | 'zh' | 'zh-tw' {
+  const htmlLang = document.documentElement.lang
+  if (htmlLang.startsWith('zh-tw') || htmlLang === 'zh-TW') return 'zh-tw'
+  if (htmlLang.startsWith('zh')) return 'zh'
+  return 'en'
+}
+
+// 获取当前语言的 githubCard 翻译
+function getGithubCardUI() {
+  const lang = getCurrentLang()
+  return ui[lang as keyof typeof ui]?.githubCard ?? ui.en.githubCard
+}
 
 // 静态数据缓存（构建时生成，避免运行时 API 调用）
 let staticData: Record<string, GithubRepoData> | null = null
@@ -53,6 +69,7 @@ async function fetchRepoData(repo: string): Promise<GithubRepoData | null> {
 }
 
 function updateCardUI(card: HTMLElement, data: GithubRepoData | null) {
+  const githubCardUI = getGithubCardUI()
   const setText = (selector: string, text: string) => {
     const el = card.querySelector<HTMLElement>(selector)
     if (el)
@@ -60,7 +77,7 @@ function updateCardUI(card: HTMLElement, data: GithubRepoData | null) {
   }
 
   if (!data) {
-    setText('.gc-repo-description', 'Failed to load data')
+    setText('.gc-repo-description', githubCardUI.failedToLoad)
     return
   }
 
@@ -69,10 +86,10 @@ function updateCardUI(card: HTMLElement, data: GithubRepoData | null) {
     avatar.style.backgroundImage = `url(${data.owner.avatar_url})`
   }
 
-  setText('.gc-repo-description', data.description ?? 'No description')
+  setText('.gc-repo-description', data.description ?? githubCardUI.noDescription)
   setText('.gc-stars-count', compactNumberFormat.format(data.stargazers_count ?? 0))
   setText('.gc-forks-count', compactNumberFormat.format(data.forks_count ?? 0))
-  setText('.gc-license-info', data.license?.spdx_id ?? 'No License')
+  setText('.gc-license-info', data.license?.spdx_id ?? githubCardUI.noLicense)
 }
 
 async function loadRepoData(card: HTMLElement) {
