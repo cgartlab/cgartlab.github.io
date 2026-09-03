@@ -47,6 +47,9 @@ export const ui = {
     consentReject: 'Reject All',
     consentFunctional: 'Functional Only',
     consentAccept: 'Accept All',
+    relatedPosts: 'Related Posts',
+    pillarFeatured: 'Featured Articles',
+    pillarTags: 'Explore by Tag',
   },
   'zh': {
     title: 'CGArtLab',
@@ -95,6 +98,9 @@ export const ui = {
     consentReject: '全部拒绝',
     consentFunctional: '仅功能必需',
     consentAccept: '全部接受',
+    relatedPosts: '相关文章',
+    pillarFeatured: '精选文章',
+    pillarTags: '主题标签',
   },
   'zh-tw': {
     title: 'CGArtLab',
@@ -143,5 +149,8 @@ export const ui = {
     consentReject: '全部拒絕',
     consentFunctional: '僅功能必需',
     consentAccept: '全部接受',
+    relatedPosts: '相關文章',
+    pillarFeatured: '精選文章',
+    pillarTags: '主題標籤',
   },
 }
