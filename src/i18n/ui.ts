@@ -36,6 +36,11 @@ export const ui = {
       'If you notice a missing term, feel free to <a href="mailto:hello@cgartlab.com" rel="nofollow">suggest adding it</a>.',
     glossaryIntro:
       'Precise definition and understanding of concepts form the foundation of all meaningful learning and discussion. This glossary is built from that belief — it also reflects my own cognitive boundaries, areas of expertise, and interests. I hope you find it enjoyable and useful.',
+    githubCard: {
+      failedToLoad: 'Failed to load data',
+      noDescription: 'No description',
+      noLicense: 'No License',
+    },
     consentTitle: 'Cookie Consent',
     consentDescription:
       'We use cookies to analyze site traffic and improve your experience. Your data is only collected with your explicit consent.',
@@ -79,6 +84,11 @@ export const ui = {
       '如果发现遗漏的术语，欢迎<a href="mailto:hello@cgartlab.com" rel="nofollow">反馈添加</a>。',
     glossaryIntro:
       '在一生的漫长学习和与他人讨论中，对概念的准确定义和理解无疑是建立一切的基本前提。此为制作这个页面和功能的出发点，另一方面它一定程度上也在反照出我自己的认知边界、擅长领域和兴趣爱好。愿你用的开心愉悦。',
+    githubCard: {
+      failedToLoad: '加载失败',
+      noDescription: '暂无描述',
+      noLicense: '无许可证',
+    },
     consentTitle: 'Cookie 许可',
     consentDescription:
       '我们使用 Cookie 分析网站流量并改善您的体验。您的数据仅在您明确同意后才会被收集。',
@@ -122,6 +132,11 @@ export const ui = {
       '如果發現遺漏的術語，歡迎<a href="mailto:hello@cgartlab.com" rel="nofollow">反饋添加</a>。',
     glossaryIntro:
       '在一生的漫長學習與他人討論中，對概念的準確定義和理解無疑是建立一切的基本前提。此為製作這個頁面和功能的出發點，另一方面它一定程度上也在反照出我自己的認知邊界、擅長領域和興趣愛好。願你用的開心愉悅。',
+    githubCard: {
+      failedToLoad: '載入失敗',
+      noDescription: '暫無描述',
+      noLicense: '無授權',
+    },
     consentTitle: 'Cookie 許可',
     consentDescription:
       '我們使用 Cookie 分析網站流量並改善您的體驗。您的資料僅在您明確同意後才會被收集。',
