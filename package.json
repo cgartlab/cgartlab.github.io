@@ -78,5 +78,8 @@
   },
   "lint-staged": {
     "*.{js,ts,astro}": "eslint --fix"
+  },
+  "resolutions": {
+    "fast-uri": "^3.1.6"
   }
 }
