@@ -35,10 +35,10 @@ function applySecurityHeaders(resp) {
 		'Content-Security-Policy',
 		[
 			"default-src 'self'",
-			"script-src 'self' 'unsafe-inline' https://giscus.app https://*.giscus.app https://cdn.jsdelivr.net https://www.googletagmanager.com https://www.google-analytics.com https://analytics.google.com https://cloud.umami.is https://*.umami.is",
+			"script-src 'self' 'unsafe-inline' https://giscus.app https://*.giscus.app https://cdn.jsdelivr.net https://www.googletagmanager.com https://www.google-analytics.com https://analytics.google.com https://cloud.umami.is https://*.umami.is https://static.cloudflareinsights.com",
 			"style-src 'self' 'unsafe-inline' https://giscus.app https://*.giscus.app https://cdn.jsdelivr.net",
 			"img-src 'self' https: data:",
-			"font-src 'self' https:",
+			"font-src 'self' https: data:",
 			"connect-src 'self' https://giscus.app https://*.giscus.app https://www.google-analytics.com https://analytics.google.com https://cloud.umami.is https://*.umami.is",
 			"frame-src 'self' https://giscus.app https://*.giscus.app",
 			"base-uri 'self'",
