@@ -186,6 +186,13 @@ export default defineConfig({
       serialize(item: SitemapItem): SitemapItem | undefined {
         const url = new URL(item.url)
         const pathname = url.pathname
+
+        // 与 src/worker.mjs 的 noindex 规则保持同步：noindex 页面不应出现在 sitemap 中，
+        // 否则 sitemap（收录信号）与 X-Robots-Tag（排除信号）相互冲突。
+        // 修改任一处必须同步另一处。glossary 有意保留可索引，不在清单内。
+        if (/^(?:en\/)?(?:weekly|tags|disclaimer)\//.test(pathname.slice(1)))
+          return undefined
+
         const lm = lastmodMap.get(pathname)
         const result: SitemapItem = lm ? { ...item, lastmod: lm } : { ...item }
 
