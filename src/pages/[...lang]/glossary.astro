@@ -121,6 +121,17 @@ document.addEventListener('astro:page-load', () => {
 
   let clickPending = false
 
+  // 布局耦合常量：数值来自样式表，集中命名避免裸数字散落、改动时遗漏
+  // SYNC: .letter-section { scroll-margin-top: 5rem } → 80px
+  const SECTION_SCROLL_MARGIN_PX = 80
+  // 命中判定容差：略早于 80px 触发，避免字母标题贴边时高亮滞后
+  const ACTIVE_OFFSET_TOLERANCE_PX = 4
+  const MOBILE_ACTIVE_OFFSET_PX = SECTION_SCROLL_MARGIN_PX + ACTIVE_OFFSET_TOLERANCE_PX
+  // 粘性导航下沿与视口顶部之间的间隙
+  const STICKY_NAV_GAP_PX = 8
+  // 移动端字母导航空闲后自动隐藏的延时
+  const NAV_IDLE_HIDE_MS = 3000
+
   function setActive(id = '') {
     if (!nav)
       return
@@ -138,8 +149,8 @@ document.addEventListener('astro:page-load', () => {
     const navStyle = window.getComputedStyle(nav)
     const isMobile = window.innerWidth < 1024
     const offset = navStyle.position === 'sticky'
-      ? Math.max(nav.getBoundingClientRect().height + 8, 84)
-      : 84
+      ? Math.max(nav.getBoundingClientRect().height + STICKY_NAV_GAP_PX, MOBILE_ACTIVE_OFFSET_PX)
+      : MOBILE_ACTIVE_OFFSET_PX
 
     // Reveal mobile nav on scroll, reset idle timer
     if (isMobile && !skipReveal)
@@ -219,7 +230,7 @@ document.addEventListener('astro:page-load', () => {
       nav.classList.remove('visible')
       nav.classList.add('hiding')
       isRevealed = false
-    }, 3000)
+    }, NAV_IDLE_HIDE_MS)
   }
 
   function dismissNav() {
@@ -447,15 +458,9 @@ document.addEventListener('astro:before-swap', () => {
     margin: 0 0 0.5rem;
   }
 
-  .letter-nav {
-    gap: 0;
-  }
-
-  .letter-jump {
-    width: 1.5rem;
-    height: 1.5rem;
-    font-size: 0.7rem;
-  }
+  /* 不再压缩 .letter-nav 的 gap / .letter-jump 尺寸：原 
+     gap:0 + 1.5rem(24px) 是为了把 25 个字母塞进单列，但实际仍超出小屏高度，
+     且相邻目标紧贴易误触；现由 ≤1023px 的折行方案统一处理。 */
 
   .term-item a {
     flex-direction: column;
@@ -478,12 +483,21 @@ document.addEventListener('astro:before-swap', () => {
     transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
                 opacity 0.35s ease;
     z-index: 10;
-    display: flex;
-    flex-direction: column;
+    /* 用「固定行数网格」而非单列 flex：
+       1) 25 个字母单列在手机上高达 616px（表格断点 28px 时约 800px），超出
+          iOS Safari 可视区，而 fixed + overflow:visible 会让溢出部分无法触达；
+       2) 行数显式 → 面板高度由内容决定（约 83×435px，2 列），不会出现
+          column-wrap + max-height 的高度循环（那会让面板高度顶到上限、
+          底部留出大片空白）。
+       短视口（横屏手机）由文件末尾的 max-height 媒体查询改成 8 行 3 列。 */
+    display: grid;
+    grid-auto-flow: column;
+    grid-template-rows: repeat(12, 2rem);
+    grid-auto-columns: 2rem;
+    place-items: center;
     gap: 0.2rem;
     padding: 0.5rem;
     width: auto;
-    height: fit-content;
     /* Fallback for browsers without color-mix */
     background-color: oklch(var(--un-preset-theme-colors-background) / 0.85);
     background: color-mix(in srgb, oklch(var(--un-preset-theme-colors-background)) 85%, transparent);
@@ -494,15 +508,16 @@ document.addEventListener('astro:before-swap', () => {
     box-shadow: 0 2px 12px color-mix(in srgb, oklch(var(--un-preset-theme-colors-primary)) 8%, transparent);
     overflow: visible;
     scrollbar-width: none;
-    flex-wrap: nowrap;
     border-bottom: none;
     margin-bottom: 0;
   }
 
   .letter-jump {
-    width: 1.75rem;
-    height: 1.75rem;
-    font-size: 0.7rem;
+    /* 2rem = 32px：与桌面端一致，满足 WCAG 2.5.8 的 24px 下限并留出余量
+       （原移动端 1.5rem = 24px、间距 0，仅为下限临界值） */
+    width: 2rem;
+    height: 2rem;
+    font-size: 0.75rem;
   }
 
   .letter-nav.visible {
@@ -515,6 +530,16 @@ document.addEventListener('astro:before-swap', () => {
     transform: translateY(-50%) translateX(calc(100% + 1.5rem));
     opacity: 0;
     pointer-events: none;
+  }
+}
+
+/* 极矮视口（横屏手机）：12 行约 435px 放不下 → 8 行 3 列（约 118×294px），
+   保证字母仍全部在可视区内 */
+@media (max-width: 1023px) and (max-height: 480px) {
+  .letter-nav {
+    /* SYNC: 与上面 (max-width: 1023px) 的 12 行网格配套——极矮视口改 8 行 3 列。
+       改行数时两处一起调，保持 24 个字母都在可视区内。 */
+    grid-template-rows: repeat(8, 2rem);
   }
 }
 

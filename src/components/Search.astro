@@ -45,6 +45,13 @@ const currentUI = ui[currentLang as keyof typeof ui] ?? {}
 (function () {
   const searchIndexCache = new Map()
   const CACHE_TTL = 60 * 60 * 1000
+  // 搜索行为参数：两边都是 is:inline 脚本，无法 import 共享模块，故在此显式命名。
+  // SYNC: 改动需同步 src/pages/[...lang]/search.astro 中的同名常量。
+  const DEBOUNCE_MS = 150
+  const MAX_RESULTS = 20
+  const EXCERPT_LENGTH = 150
+  const EXCERPT_CONTEXT_BEFORE = 50
+  const EXCERPT_CONTEXT_AFTER = 100
   let searchIndex = []
   let searchIndexLower = []
   let debounceTimer = null
@@ -194,18 +201,18 @@ const currentUI = ui[currentLang as keyof typeof ui] ?? {}
 
   function getExcerpt(lowerContent, cleanContent, query) {
     if (!query) {
-      return escapeHtml(cleanContent.slice(0, 150))
+      return escapeHtml(cleanContent.slice(0, EXCERPT_LENGTH))
     }
 
     const lowerQuery = query.toLowerCase()
     const index = lowerContent.indexOf(lowerQuery)
 
     if (index === -1) {
-      return escapeHtml(cleanContent.slice(0, 150))
+      return escapeHtml(cleanContent.slice(0, EXCERPT_LENGTH))
     }
 
-    const start = Math.max(0, index - 50)
-    const end = Math.min(cleanContent.length, index + query.length + 100)
+    const start = Math.max(0, index - EXCERPT_CONTEXT_BEFORE)
+    const end = Math.min(cleanContent.length, index + query.length + EXCERPT_CONTEXT_AFTER)
     let excerpt = cleanContent.slice(start, end)
 
     if (start > 0)
@@ -281,7 +288,7 @@ const currentUI = ui[currentLang as keyof typeof ui] ?? {}
     searchResults.sort((a, b) => {
       return b.score - a.score
     })
-    const topResults = searchResults.slice(0, 20)
+    const topResults = searchResults.slice(0, MAX_RESULTS)
 
     if (topResults.length === 0) {
       els.results.innerHTML = ''
@@ -393,7 +400,7 @@ const currentUI = ui[currentLang as keyof typeof ui] ?? {}
           const currentInput = document.getElementById('search-input')
           if (currentInput)
             search(currentInput.value)
-        }, 150)
+        }, DEBOUNCE_MS)
       }
       els.input.addEventListener('input', inputHandler)
     }
