@@ -121,6 +121,17 @@ document.addEventListener('astro:page-load', () => {
 
   let clickPending = false
 
+  // 布局耦合常量：数值来自样式表，集中命名避免裸数字散落、改动时遗漏
+  // SYNC: .letter-section { scroll-margin-top: 5rem } → 80px
+  const SECTION_SCROLL_MARGIN_PX = 80
+  // 命中判定容差：略早于 80px 触发，避免字母标题贴边时高亮滞后
+  const ACTIVE_OFFSET_TOLERANCE_PX = 4
+  const MOBILE_ACTIVE_OFFSET_PX = SECTION_SCROLL_MARGIN_PX + ACTIVE_OFFSET_TOLERANCE_PX
+  // 粘性导航下沿与视口顶部之间的间隙
+  const STICKY_NAV_GAP_PX = 8
+  // 移动端字母导航空闲后自动隐藏的延时
+  const NAV_IDLE_HIDE_MS = 3000
+
   function setActive(id = '') {
     if (!nav)
       return
@@ -138,8 +149,8 @@ document.addEventListener('astro:page-load', () => {
     const navStyle = window.getComputedStyle(nav)
     const isMobile = window.innerWidth < 1024
     const offset = navStyle.position === 'sticky'
-      ? Math.max(nav.getBoundingClientRect().height + 8, 84)
-      : 84
+      ? Math.max(nav.getBoundingClientRect().height + STICKY_NAV_GAP_PX, MOBILE_ACTIVE_OFFSET_PX)
+      : MOBILE_ACTIVE_OFFSET_PX
 
     // Reveal mobile nav on scroll, reset idle timer
     if (isMobile && !skipReveal)
@@ -219,7 +230,7 @@ document.addEventListener('astro:page-load', () => {
       nav.classList.remove('visible')
       nav.classList.add('hiding')
       isRevealed = false
-    }, 3000)
+    }, NAV_IDLE_HIDE_MS)
   }
 
   function dismissNav() {
@@ -526,6 +537,8 @@ document.addEventListener('astro:before-swap', () => {
    保证字母仍全部在可视区内 */
 @media (max-width: 1023px) and (max-height: 480px) {
   .letter-nav {
+    /* SYNC: 与上面 (max-width: 1023px) 的 12 行网格配套——极矮视口改 8 行 3 列。
+       改行数时两处一起调，保持 24 个字母都在可视区内。 */
     grid-template-rows: repeat(8, 2rem);
   }
 }
