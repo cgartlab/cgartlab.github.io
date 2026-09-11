@@ -91,8 +91,8 @@ const searchEmpty = currentUI.searchEmpty || 'No results found'
 (function () {
   const searchIndexCache = new Map()
   const CACHE_TTL = 60 * 60 * 1000
-  // 搜索行为参数：与 Search.astro 覆盖层脚本保持一致（两处都是 is:inline 脚本，
-  // 无法 import 共享模块，故在此显式命名并注明同步要求）
+  // 搜索行为参数：两边都是 is:inline 脚本，无法 import 共享模块，故在此显式命名。
+  // SYNC: 改动需同步 src/components/Search.astro 中的同名常量。
   const DEBOUNCE_MS = 150
   const MAX_RESULTS = 20
   const EXCERPT_LENGTH = 150
