@@ -30,9 +30,9 @@ overrides:
   deepmerge-ts: ^8.0.1
   dompurify@3: ^3.4.13
   esbuild: '>=0.28.1'
-  # 安全修复：fast-uri 主机混淆漏洞 (CVE-2026-18446 / GHSA-7p8r-x3mc-p8w7)
-  # ajv 仍锁定 ^3.0.1，3.1.5 为同 minor 补丁，向后兼容
-  fast-uri: ^3.1.5
+  # 安全修复：fast-uri SSRF/主机混淆漏洞 (GHSA-7p8r-x3mc-p8w7 等 4 项)
+  # ajv peerDeps fast-uri ^3.0.0，3.1.6 向后兼容
+  fast-uri: ^3.1.6
   js-yaml@4: ^4.3.1
   mermaid@10: ^10.9.8
   nanoid@3: ^3.3.17
