@@ -404,8 +404,11 @@ html.dark .search-box {
 	flex-shrink: 0;
 	display: grid;
 	place-items: center;
-	width: 2rem;
-	height: 2rem;
+	/* 2.75rem = 44px：图标按钮的可点按面积（iOS HIG 建议值）。
+	   背景透明，仅 hover/focus 可见，故放大尺寸不影响视觉，
+	   输入行本身约 72px 高，也不会撑高布局。 */
+	width: 2.75rem;
+	height: 2.75rem;
 	border: none;
 	background: transparent;
 	border-radius: 0.5rem;
