@@ -33,7 +33,16 @@ overrides:
   # 安全修复：fast-uri SSRF/主机混淆漏洞 (GHSA-7p8r-x3mc-p8w7 等 4 项)
   # ajv peerDeps fast-uri ^3.0.0，3.1.6 向后兼容
   fast-uri: ^3.1.6
-  js-yaml@4: ^4.3.1
+  # 安全修复：js-yaml maxTotalMergeKeys 未限制空 merge 源的 CPU 消耗
+  # (GHSA-2883-xcg3-v3hh)，4.3.2 为同 minor 补丁
+  js-yaml@4: ^4.3.2
   mermaid@10: ^10.9.8
   nanoid@3: ^3.3.17
+  # 安全修复：sharp 整数溢出 (GHSA-rgj7-g3m4-5g8c)
+  # astro-compress 依赖 sharp ^0.35，0.35.4 为同 minor 补丁
+  sharp: ^0.35.4
+  # 安全修复：SVGO removeScripts 可执行内容绕过
+  # (GHSA-w27v-7q3p-w38r / GHSA-4vpr-x523-8j87)，4.1.0 为同 major minor
+  # astro-compress 仅用 svgo 做构建期 SVG 压缩，4.1.0 无破坏性变更
+  svgo@4: ^4.1.0
   yaml: '>=2.8.3'
