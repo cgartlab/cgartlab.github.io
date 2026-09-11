@@ -107,6 +107,10 @@ for (const entry of sorted) {
 </Layout>
 
 <script>
+// View Transition 导航时清理页面级监听器，避免重复访问本页时累积
+// （必须声明在 script 内部：frontmatter 与 script 是相互独立的作用域）
+let teardown: (() => void) | null = null
+
 document.addEventListener('astro:page-load', () => {
   const sections = document.querySelectorAll('.letter-section')
   const links = document.querySelectorAll('.letter-jump')
@@ -160,7 +164,7 @@ document.addEventListener('astro:page-load', () => {
 
   // Update on scroll (throttled via rAF)
   let ticking = false
-  window.addEventListener('scroll', () => {
+  function onScroll() {
     if (!ticking) {
       requestAnimationFrame(() => {
         updateActiveLink()
@@ -168,7 +172,8 @@ document.addEventListener('astro:page-load', () => {
       })
       ticking = true
     }
-  }, { passive: true })
+  }
+  window.addEventListener('scroll', onScroll, { passive: true })
 
   // Click letter: instant visual feedback, then scroll event corrects
   links.forEach((link) => {
@@ -230,14 +235,27 @@ document.addEventListener('astro:page-load', () => {
   }
 
   // Clean up on resize from mobile → desktop
-  window.addEventListener('resize', () => {
+  function onResize() {
     dismissNav()
-  }, { passive: true })
+  }
+  window.addEventListener('resize', onResize, { passive: true })
 
   // Re-run scroll-spy on window load (catches race conditions in some browsers)
   window.addEventListener('load', () => {
     requestAnimationFrame(() => updateActiveLink(true))
   }, { once: true })
+
+  teardown = () => {
+    window.removeEventListener('scroll', onScroll)
+    window.removeEventListener('resize', onResize)
+    if (idleTimer)
+      clearTimeout(idleTimer)
+  }
+})
+
+document.addEventListener('astro:before-swap', () => {
+  teardown?.()
+  teardown = null
 })
 </script>
 

@@ -36,6 +36,8 @@ export function shouldIncludePostByLang(
 	postLang: string | null | undefined,
 	targetLang: string,
 ): boolean {
+	// 通用文章（无 lang 字段）应包含在所有语言的搜索索引中
+	if (!postLang) return true;
 	const normalizedTargetLang = normalizeSearchLang(targetLang);
 	const normalizedPostLang = normalizePostLang(postLang);
 	return normalizedPostLang === normalizedTargetLang;

@@ -35,7 +35,7 @@ const searchEmpty = currentUI.searchEmpty || 'No results found'
         />
       </div>
       <div id="search-page-results" class="search-results" aria-live="polite"></div>
-      <div id="search-page-empty" class="search-empty">
+      <div id="search-page-empty" class="search-empty" data-empty-text={searchEmpty}>
         <span>{searchEmpty}</span>
       </div>
       <div id="search-page-loading" class="search-loading">
@@ -85,7 +85,9 @@ const searchEmpty = currentUI.searchEmpty || 'No results found'
   }
 </style>
 
-<script is:inline define:vars={{ searchPlaceholder, searchEmpty }}>
+<script is:inline>
+// 脚本内容必须与语言无关：View Transition 下 Astro 按脚本文本去重，
+// 文本恒定才能保证整个会话只执行一次，doc 级监听器才不会重复注册。
 (function () {
   const searchIndexCache = new Map()
   const CACHE_TTL = 60 * 60 * 1000
@@ -95,6 +97,7 @@ const searchEmpty = currentUI.searchEmpty || 'No results found'
   let inputHandler = null
   let indexPromise = null
   let loadFailed = false
+  const base = document.querySelector('base')?.getAttribute('href') || '/'
 
   function normalizeLang(lang) {
     const normalized = (lang || 'zh').toLowerCase()
@@ -166,7 +169,7 @@ const searchEmpty = currentUI.searchEmpty || 'No results found'
     if (els.loading)
       els.loading.classList.add('visible')
     try {
-      const response = await fetch(`/api/search-index/${lang}.json`)
+      const response = await fetch(`${base}api/search-index/${lang}.json`)
       const indexData = await response.json()
       const lowerData = indexData.map((item) => {
         const cleanContent = item.content
@@ -277,7 +280,7 @@ const searchEmpty = currentUI.searchEmpty || 'No results found'
       els.results.innerHTML = ''
       const span = els.empty.querySelector('span')
       if (span)
-        span.textContent = searchEmpty
+        span.textContent = els.empty.dataset.emptyText || span.textContent
       els.empty.classList.add('visible')
       return
     }

@@ -26,7 +26,7 @@ const currentUI = ui[currentLang as keyof typeof ui] ?? {}
         </button>
       </div>
       <div id="search-results" class="search-results" aria-live="polite"></div>
-      <div id="search-empty" class="search-empty">
+      <div id="search-empty" class="search-empty" data-empty-text={currentUI.searchEmpty || 'No results found'}>
         <span>{currentUI.searchEmpty || 'No results found'}</span>
       </div>
       <div id="search-loading" class="search-loading">
@@ -39,6 +39,9 @@ const currentUI = ui[currentLang as keyof typeof ui] ?? {}
 
 
 <script is:inline>
+// 脚本内容必须与语言无关：View Transition 下 Astro 按脚本文本去重，
+// 文本恒定才能保证整个会话只执行一次，doc 级监听器才不会重复注册。
+// 本地化文案通过 #search-empty[data-empty-text] 在运行时读取。
 (function () {
   const searchIndexCache = new Map()
   const CACHE_TTL = 60 * 60 * 1000
@@ -284,7 +287,7 @@ const currentUI = ui[currentLang as keyof typeof ui] ?? {}
       els.results.innerHTML = ''
       const span = els.empty?.querySelector('span')
       if (span)
-        span.textContent = currentUI.searchEmpty || 'No results found'
+        span.textContent = els.empty.dataset.emptyText || span.textContent
       els.empty.classList.add('visible')
       return
     }
@@ -414,6 +417,22 @@ const currentUI = ui[currentLang as keyof typeof ui] ?? {}
     bindSearchTriggers()
   }
 
+  function cleanup() {
+    if (keydownHandler) {
+      document.removeEventListener('keydown', keydownHandler)
+      keydownHandler = null
+    }
+    if (inputHandler && document.getElementById('search-input')) {
+      document.getElementById('search-input').removeEventListener('input', inputHandler)
+      inputHandler = null
+    }
+    if (debounceTimer) {
+      clearTimeout(debounceTimer)
+      debounceTimer = null
+    }
+  }
+
   document.addEventListener('astro:page-load', init)
+  document.addEventListener('astro:before-swap', cleanup)
 })()
 </script>
