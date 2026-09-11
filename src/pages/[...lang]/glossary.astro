@@ -32,9 +32,6 @@ interface LetterGroup {
 const groups: LetterGroup[] = []
 let currentLetter = ''
 let currentGroup: LetterGroup | null = null
-
-// View Transition 导航时清理页面级监听器，避免重复访问本页时累积
-let teardown: (() => void) | null = null
 for (const entry of sorted) {
   const displayTerm = resolveTerm(entry, currentLang)
   const first = displayTerm.charAt(0).toUpperCase()
@@ -110,6 +107,10 @@ for (const entry of sorted) {
 </Layout>
 
 <script>
+// View Transition 导航时清理页面级监听器，避免重复访问本页时累积
+// （必须声明在 script 内部：frontmatter 与 script 是相互独立的作用域）
+let teardown: (() => void) | null = null
+
 document.addEventListener('astro:page-load', () => {
   const sections = document.querySelectorAll('.letter-section')
   const links = document.querySelectorAll('.letter-jump')
