@@ -1,24 +1,85 @@
 # AGENTS.md — cgartlab.github.io
 
-个人主站 (cgartlab.com)。Astro 6 + UnoCSS 66 + TypeScript 6 + pnpm 11 + Node 24，Cloudflare Worker + Static Assets 部署。Codex 为主要开发工具，所有开发流程、验证和交付均通过 Codex Agent 执行。
+个人主站 (cgartlab.com)。Astro 7 + UnoCSS 66 + TypeScript 6 + pnpm 11 + Node 24，Cloudflare Worker + Static Assets 部署。Codex 为主要开发工具，所有开发流程、验证和交付均通过 Codex Agent 执行。
+
+## 目录结构
+
+```
+cgartlab.github.io/
+├── astro.config.ts          # i18n、Markdown 管线（unified）、Vite、站点
+├── uno.config.ts            # Wind3 + Attributify + theme preset，非 Tailwind
+├── wrangler.jsonc           # Worker + Static Assets + Cron + KV 绑定
+├── pnpm-workspace.yaml      # nodeLinker / overrides / trustPolicy
+├── tsconfig.json · eslint.config.mjs
+├── package.json             # 脚本入口，packageManager 锁 pnpm@11.10.0
+├── AGENTS.md · README.md · CONTRIBUTING.md · CHANGELOG.md
+├── .github/                 # CI、PR/Issue 模板、Dependabot、labeler、release-drafter
+├── public/                  # 静态资源，直映射站点根，不经构建处理
+│   ├── fonts/ giscus/ images/ feeds/ icons/ sounds/ posts/
+│   ├── llms.txt · github-repos.json   # 构建生成
+│   └── robots.txt · favicon.ico · _headers
+├── scripts/                 # 构建与运维脚本（tsx 运行）
+├── patches/                 # pnpm patch（partytown）
+├── dist/                    # 构建产物（gitignore，Worker 静态资源目录）
+└── src/                     # 全部源码；本机同时是 Obsidian vault 根
+    ├── worker.mjs           # Worker 入口：重定向 / 缓存头 / 安全头 / TG 推送
+    ├── config.ts            # 站点元数据、导航、颜色、评论、SEO 单一声明源
+    ├── content.config.ts    # 内容集合定义（posts / about / privacy）
+    ├── content/             # 内容唯一来源
+    │   ├── posts/           # 文章（*.md）、周刊（weekly/）、作品（works/）
+    │   ├── posts/_images/   # 文章配图（395 张）
+    │   ├── posts/_files/    # 文章附件
+    │   ├── posts/0-文章数据库.base   # Obsidian Bases：草稿/周刊/已发布 四视图
+    │   └── about/ privacy/  # 独立集合
+    ├── assets/              # icons/ templates/ lqip/ lqip-map.json
+    ├── components/          # Astro 组件（含 Widgets/）
+    ├── layouts/             # Layout.astro · Head.astro
+    ├── pages/               # [...lang]/ 动态路由 · api/ · 404
+    ├── plugins/             # remark / rehype 插件（Markdown 管线）
+    ├── styles/              # 纯 CSS 层，不经 UnoCSS transform
+    ├── lib/                 # tg.mjs（Telegram）· github-contributions.ts
+    ├── utils/               # content / feed / glossary / page / description / cache
+    ├── i18n/                # config · lang · path · ui
+    ├── data/                # glossary.ts · links.ts · github-contributions.json
+    ├── config/              # tag-meta.json（标签页 SEO 定制）
+    ├── types/               # TS 类型声明
+    └── .obsidian/           # Obsidian vault 配置（gitignore，设备本地）
+```
+
+### 顶层模块职责
+
+| 目录 | 职责 | 改动影响 |
+|------|------|---------|
+| `src/content/` | 内容唯一来源（文章/周刊/作品/图） | 写作目标，构建时采集 |
+| `src/plugins/` | Markdown 管线插件（注册 6 remark + 8 rehype） | **顺序敏感**，插入须确认依赖 |
+| `src/styles/` | 纯 CSS 层，不经 UnoCSS transform | 必须用 CSS 变量引用颜色 |
+| `src/lib/` + `src/worker.mjs` | 服务端逻辑（RSS→TG 推送、缓存头、安全头） | 改动需 `wrangler` 部署验证 |
+| `public/` | 静态资源，直映射站点根 | 文件名 = 线上 URL |
+| `scripts/` | 构建/运维脚本 | 见 COMMANDS |
+| `.github/` | CI、模板、Dependabot | 私有仓无法开分支保护 |
 
 ## COMMANDS
 
 ```bash
 pnpm dev                  # astro check → astro dev (HMR 热更新，快速迭代，但不代表最终产物样式)
-pnpm build                # astro check → build → generate-llms → apply-lqip (顺序重要：generate-llms 需要构建后的文章列表，apply-lqip 需要处理构建后的资源)
+pnpm build                # astro check → fetch-github-repos → build → generate-llms → apply-lqip (顺序重要)
 pnpm preview              # astro preview --host (局域网可访问，使用 dist/ 生产构建产物，最接近线上效果)
 pnpm lint / lint:fix      # eslint (antfu config, 忽略 src/content/**)
 pnpm astro                # Astro CLI 透传
 pnpm new-post "标题"       # 创建 MD 文章 (src/content/posts/)，周刊自动放入 weekly/
 pnpm format-posts         # CJK 文本规范化 (autocorrect)
 pnpm apply-lqip           # 生成 LQIP 占位图 (写入 src/assets/)
-pnpm fix-internal-links   # 批量修复双语文章内部链接 (中→/en/ 版本)
-pnpm verify-feed           # 验证 RSS/Atom feed 输出 (CI 中使用)
-pnpm audit-glossary        # 审计术语表引用完整性
-pnpm sync-docs             # 同步核心文档自动生成数据块 (版本/统计/管线，勿手改)
-pnpm sync-docs:check       # 校验数据块是否最新 (CI 中使用，stale 则退出码 1)
+pnpm verify-feed          # 验证 RSS/Atom feed 输出 (CI 中使用)
+pnpm audit-glossary       # 审计术语表引用完整性
+pnpm sync-docs            # 同步核心文档自动生成数据块 (版本/统计/管线，勿手改)
+pnpm sync-docs:check      # 校验数据块是否最新 (CI 中使用，stale 则退出码 1)
+pnpm fetch-github-repos   # 拉取 GitHub 仓库列表 → public/github-repos.json (build 前置)
+pnpm update-gh-contributions  # 更新贡献热力图数据 → src/data/github-contributions.json
 ```
+
+> ⚠️ **`pnpm fix-internal-links` 已失效** — `scripts/fix-internal-links.ts` 已在 commit `183c767` 删除，但 `package.json` 仍保留该入口。执行会报 `MODULE_NOT_FOUND`。修复方式二选一：删除该脚本项，或从历史恢复文件。
+
+> ℹ️ 本机 shell 的全局 Node 为 v26，`pnpm` 经 corepack 调用时报 `Cannot find module ...\corepack\dist\pnpm.js`。绕行方式：`./node_modules/.bin/tsx scripts/<name>.ts`。
 
 ## KEY QUIRKS
 
@@ -43,10 +104,10 @@ pnpm sync-docs:check       # 校验数据块是否最新 (CI 中使用，stale �
 <!-- DOC-FACTS:START -->
 > 自动生成数据（由 `pnpm sync-docs` 更新，勿手改）
 
-> 技术栈：Astro 7.1.4 · TypeScript 6.0.3 · UnoCSS 66.6.8 · pnpm 11.10.0 · Node 24
-> 内容：148 个文章文件（74 中文 + 74 英文），周刊 19 期
+> 技术栈：Astro 7.3.1 · TypeScript 6.0.3 · UnoCSS 66.10.0 · pnpm 11.10.0 · Node 24
+> 内容：159 个文章文件（80 中文 + 79 英文），周刊 20 期
 > Markdown 管线：6 remark + 8 rehype 插件
-> 脚本：14 个（apply-lqip / astro / audit-glossary / build / dev / fix-internal-links / format-posts / lint / lint:fix / new-post / preview / sync-docs / sync-docs:check / verify-feed）
+> 脚本：16 个（apply-lqip / astro / audit-glossary / build / dev / fetch-github-repos / fix-internal-links / format-posts / lint / lint:fix / new-post / preview / sync-docs / sync-docs:check / update-gh-contributions / verify-feed）
 <!-- DOC-FACTS:END -->
 
 ## ARCHITECTURE
@@ -102,6 +163,109 @@ pnpm sync-docs:check       # 校验数据块是否最新 (CI 中使用，stale �
 
 - 英文版文件名加 `-en` 后缀，如 `文章.md` + `文章-en.md`
 - 双语文章的 URL slug 共用中文文件名（去掉 `-en` 后缀）
+
+## 写作环境（Obsidian）
+
+本机用 Obsidian 写文章。**vault 根设在 `src/`，不是仓库根** —— 仓库根包含 `node_modules`（43k 文件），会把启动从 ~1.7s 拖到 ~9.4s。
+
+### 关键配置
+
+| 项 | 值 |
+|---|---|
+| vault 根 | `D:\2-Area\github-repos\cgartlab.github.io\src`（672 文件）|
+| 配置目录 | `src/.obsidian/`（被 `.gitignore:63` 忽略 → **纯设备本地**）|
+| 新建文章 / 附件 | `content/posts` / `content/posts/_images` |
+| 链接格式 | `relative`（现有 802 个图片链接均为相对路径，**禁改 `absolute`**）|
+| 模板 | `assets/templates` |
+| 数据库 | `content/posts/0-文章数据库.base`（Obsidian Bases，4 视图：草稿/周刊/已发布文章/已发布周刊）|
+| git 插件 | `basePath: ".."`（上溯到仓库根）|
+| git 插件 | `refreshSourceControl: false`（关掉 7s 轮询 `git status`，ExFAT 上会卡死）|
+| 渲染 | `translucency: false`（关毛玻璃，Windows 上收益最大）|
+| 安全 | `file-recovery: true`（崩溃后可恢复未保存内容）|
+
+### ⚠️ `userIgnoreFilters` 不隐藏文件浏览器
+
+Obsidian 官方定义（从 `obsidian.asar` 提取原文）：
+
+> Excluded files will be hidden in **Search, Graph View, and Unlinked Mentions**, less noticeable in **Quick Switcher and link suggestions**.
+
+它**不影响 File Explorer**。隐藏侧栏目录必须用 **CSS 片段**：
+
+- 文件：`src/.obsidian/snippets/hide-dev-folders.css`
+- 启用：`appearance.json` → `enabledCssSnippets: ["hide-dev-folders"]`
+- 选择器：`.nav-folder[data-path="X"]` + `.nav-folder:has(> .nav-folder-title[data-path="X"])`（`data-path` 可能落在外层或标题层，两个都写）
+- 隐藏 `components/ pages/ layouts/ lib/ i18n/ styles/ plugins/ types/ utils/ data/ config/` + `_AGENTS_posts.md`，只留 `content/` + `assets/`
+
+### 两个机制的职责划分
+
+| 需求 | 用哪个 |
+|---|---|
+| 侧栏不显示开发目录 | **CSS 片段**（`data-path` 选择器）|
+| 搜索/图谱不出现开发文件 | `userIgnoreFilters` |
+| 加快启动 | vault 根不要包住 `node_modules` |
+
+### `.base` 过滤器约定
+
+`0-文章数据库.base` 是 **git 跟踪文件**（与配置目录不同），且被多设备共用，过滤器必须写成**两种 vault 根都命中**的形式：
+
+- ✅ `file.folder.contains("posts")` — repo-root vault（`src/content/posts/...`）与 `src/` vault（`content/posts/...`）都匹配
+- ✅ `file.folder.contains("weekly")` — 同上
+- ❌ `file.inFolder("src/content/posts/weekly")` — vault 相对路径，换 vault 根即失效
+
+### 插件约定
+
+保留：`global-proxy` · `obsidian-git` · `image-converter` · `obsidian-linter`
+
+- **linter** — `lintOnSave: true` + 18 条规则保留；`displayChanged: false` 减少保存时的弹窗开销；`foldersToIgnore` 必须是 **vault 相对路径**（`content/posts/_images`），裸名 `_images` 是失效项
+- **image-converter** — `image-converter-image-alignments.json` 的 key 是 vault 相对路径，**换 vault 根后必须同步改写 key**
+- **文件恢复** — `file-recovery` 必须在 `core-plugins.json` 中为 `true`
+
+## 设备与文件系统约束
+
+本机仓库位于 **ExFAT 卷（`D:`）**，这是为 macOS 读写刻意选择的格式。ExFAT 缺失的能力会直接影响工具链。
+
+### ExFAT 的硬限制（均已实测）
+
+| 能力 | 结果 |
+|---|---|
+| 目录 junction（`mklink /J`）| ✗ “需要 NTFS 驱动器” |
+| 目录符号链接（`mklink /D`）| ✗ “设备不支持符号链接” |
+| 硬链接（`mklink /H`）| ✗ “参数不正确” |
+| 簇大小 128 KB | 小文件放大 5–10 倍 |
+
+**因此「依赖放别处、仓库只引用」在本机不可实现** —— 三种链接机制全被文件系统拒绝，只能物理移入/移出。
+
+### pnpm 配置的由来
+
+`pnpm-workspace.yaml` 中的 `nodeLinker: hoisted` 不是优化，而是**兼容性必需**：
+
+```yaml
+nodeLinker: hoisted   # Windows exFAT 不支持 symlink
+```
+
+pnpm 默认 `isolated` linker 依赖符号链接，ExFAT 不可用，故退化为扁平复制 —— 代价就是 43k 文件 / 5.8 GB。**不要改回 `isolated`。**
+
+### 启动性能对照（实测）
+
+| vault 根 | 文件数 | 启动总时长 | Vault 段 |
+|---|---|---|---|
+| 仓库根 | 45,404 | 9,384 ms | 7,827 ms |
+| `src/` | 672 | ~1,700 ms | ~200 ms |
+
+瓶颈恒在 `Loading file metadata`。
+
+### Git 维护记录
+
+`.git` 曾被 macOS AppleDouble 与历史大文件撑大：
+
+- `.git/` 内囤积 **1004 个 `._*` AppleDouble 文件**（Syncthing/SMB 传输产生），每个占 128 KB 簇 ≈ **128 MB 纯垃圾**。清理：`find .git -name "*._*" -delete`
+- 历史中含有 `.copilot-index/copilot-index-*.json` 的 **4 个版本共 ~178 MB**（工作区已移除但历史未清），是剩余 139 MB pack 的主体 → 彻底清除需 `git filter-repo`（改写历史，需 force push）
+- 已启用：`core.untrackedCache=true`、`feature.manyFiles=true`
+- `git gc --prune=now` 后：`.git` 307 MB → **159 MB**，3 pack → 1 pack，`git status` 0.103s → 0.061s
+
+### 已弃用
+
+- **Syncthing** 已完全停用，`.stignore` / `.stignore-common` 仅作历史残留，新增文件不需考虑其规则
 
 ## CI/CD
 
@@ -335,8 +499,9 @@ pnpm sync-docs:check       # 校验数据块是否最新 (CI 中使用，stale �
 
 ## NOTE
 
-- 设备级配置 `.obsidian/` 通过 Syncthing 同步，不纳入 git 追踪
-- 如遇 Syncthing 冲突文件，运行 `scripts/syncthing-cleanup.ps1` (Windows) 或 `scripts/syncthing-cleanup.sh` (macOS/Linux)
+- 设备级配置现在是 **`src/.obsidian/`**（vault 根在 `src/`），由 `.gitignore:63` 忽略，**不纳入 git 追踪**，各设备独立维护
+- **Syncthing 已弃用** — `.stignore` / `.stignore-common` 与 `scripts/syncthing-cleanup.*` 均为历史残留。若旧冲突文件（`*.sync-conflict-*`）重新出现，直接删除即可
+- 本机 shell 环境两个坑：中文参数 / `grep` 模式容易被搅乱（改用 ASCII 通配或 `ls -b`，写文件后用 `cmp` 字节比对验证）；`pnpm` 经 corepack 调用失败（改用 `./node_modules/.bin/tsx`）
 
 ## UnoCSS Safelist Mechanism
 
@@ -391,11 +556,45 @@ Codex 为主力开发工具。以下规则定义 Agent 行为边界和开发到�
 
 ### Agent 行为规范
 
+**基础五条**
+
 - **任务边界** — 只做用户明确要求的修改。发现优化点或缺陷先报告，未经确认不得擅自执行。
 - **最小改动** — 优先局部修复、增量修改。禁止不必要的重构或依赖引入。
 - **先读再改** — 修改前必读相关文件、AGENTS.md、现有约定和配置。
 - **证据优先** — 不确定处明确标注，不猜测不存在的上下文。
 - **验证先行** — 每次变更后先跑最小相关检查（lint → typecheck → build），再扩大到完整验证。
+
+**机制先验证（本仓库高频踩坑点）**
+
+- **不要凭设置名或直觉推断行为。** 「Excluded files」听起来像「隐藏文件」，实际只管搜索/图谱；`nodeLinker: hoisted` 看起来像性能优化，实际是 ExFAT 兼容性必需。**先查实现或实测，再下手。**
+- 查证手段优先级：① 直接读实现（`obsidian.asar`、`node_modules/<pkg>`、`wrangler` 产物）② 最小可证伪实验（如 `mklink` 实测）③ 联网查证
+- 结论必须附**可复查的证据**（命令输出 / 文件行号 / 实测数字），不只给判断
+- 凡涉及外部工具行为（Obsidian / Git / pnpm / Cloudflare），先确认版本与实现，再写规则
+
+**可逆优先**
+
+- 优先选择**瞬时且可回滚**的操作。例：同卷 `mv` 移动 `node_modules`（瞬间、可还原）优于重跑 `pnpm install`（数十分钟）
+- 破坏性操作（`rm -rf`、`git filter-repo`、`force push`）前先备份到 `.temp/`，并**在交付时给出回滚命令**
+- 改设备级配置前先 `cp <file> .temp/<name>.bak`
+
+**环境红线（违反会直接中断会话）**
+
+- **禁止** `taskkill /F /IM node.exe` / `killall node` / `Stop-Process -Name node -Force` —— pi-web 自身就是 node 进程，全局杀 = 自杀
+- 只按 PID 精确杀：`netstat -ano | grep ":PORT.*LISTEN"` → `taskkill /F /PID <PID>`
+- 长驻服务（dev server）启动前先确认端口占用；kill 后等 2 秒再启动
+
+**Git 纪律**
+
+- **不要 `git add -A`** —— 只 add 自己新建/修改的明确文件（本工作区其他仓库混有未提交工作）
+- 破坏性远端操作（`push`、删分支、改 ruleset）先确认
+- 注意 `.gitignore` 与实际跟踪状态的差异：**已跟踪文件即使命中 ignore 规则仍会被跟踪**（如 `patches/*.patch`、`0-文章数据库.base`）
+- `git status` 干净 ≠ 无风险：`.obsidian/` 等设备本地文件根本不进版本控制，改动不会显现
+
+**本目录最高频的三类错误**
+
+1. **把设备本地配置当仓库内容改** — `src/.obsidian/` 各设备独立，改它不影响其他设备；但 `0-文章数据库.base` 是共用文件，改动必须向后兼容
+2. **改了 `app.json` 就以为生效** — vault 配置改动需重启 Obsidian；且 **`userIgnoreFilters` 不隐藏侧栏**（用 CSS 片段）
+3. **在仓库根跑 `pnpm`** — `node_modules` 在根，但写作时它会被移出 vault；开发前先移回
 
 ### 交付前自验清单
 
@@ -454,7 +653,10 @@ Codex 为主力开发工具。以下规则定义 Agent 行为边界和开发到�
 - 不得修改 `trailingSlash: 'always'` 配置
 - 不得手动编辑 `src/assets/` 下的 LQIP 图片或 `lqip-map.json`
 - 不得对 `src/content/**` 运行 ESLint
-- 不得删除或修改 `.obsidian/` 设备级配置
+- **不得把 vault 根改回仓库根**（包含 `node_modules`，启动会从 ~1.7s 涨到 ~9.4s）
+- **不得把 `newLinkFormat` 改成 `absolute`**（会生成 `/content/posts/_images/x.png` 形式的断链，破坏 Astro 解析）
+- 未经确认不得删除或改写 `src/.obsidian/` 设备级配置（改动前先备份到 `.temp/`）
+- 不得把 `pnpm-workspace.yaml` 的 `nodeLinker` 改回 `isolated`（ExFAT 不支持 symlink）
 
 ## DEPENDENCY UPGRADE
 
@@ -491,9 +693,13 @@ pnpm lint → pnpm build → pnpm build && pnpm preview（实测：暗色/双语
 
 ### 当前版本约束（决策记录）
 
-- **katex 锁定 `^0.16.47`** — rehype-katex@7.0.1 依赖 `katex: ^0.16.0`，升 0.17+/0.18 会产生双 katex 实例，且 0.18 起 CSS 类名加 `katex-` 前缀（`.base`→`.katex-base`），渲染 HTML 与加载 CSS 类名不匹配导致公式破版。待 rehype-katex 发布兼容版本后再升
-- **astro-og-canvas 升级要求 ≥ 0.13.0（当前仍为 `^0.11.1`）** — `param` 选项已移除（改由 endpoint 文件名自动推导）；`OGImageRoute()` 为异步必须 `await`。0.13.0 的 peer 范围才含 astro 7
-- **astro 7 升级（PR #264/#265 挂起）** — astro-og-canvas@0.11.1 peer 范围不含 astro 7，合并 astro 7 必须同步 og-canvas@0.13+；Astro 7 默认 Markdown 处理器切换为 Sätteri，`markdown.remarkPlugins`/`rehypePlugins` 顶层配置已弃用（建议迁移 `markdown.processor: unified({...})`），合并前必须验证 6 remark + 8 rehype 管线行为一致
+- **katex 锁定 `^0.16.47`（仍生效）** — rehype-katex@7.0.1 依赖 `katex: ^0.16.0`，升 0.17+/0.18 会产生双 katex 实例；且 0.18 起 CSS 类名加 `katex-` 前缀（`.base`→`.katex-base`），渲染 HTML 与加载 CSS 类名不匹配会导致公式破版。待 rehype-katex 发布兼容版本后再升
+- **Astro 7 + astro-og-canvas 0.13 升级已完成** — 当前 `astro@^7.3.1` + `astro-og-canvas@^0.13.1`。配套的三项改动均已落地：
+  1. `astro-og-canvas` 的 `param` 选项已移除（改由 endpoint 文件名自动推导），`OGImageRoute()` 已改 `await`
+  2. Astro 7 默认 Markdown 处理器切换，已迁移到 `markdown.processor: unified({...})`（commit `3d18638e`），`markdown.remarkPlugins` / `rehypePlugins` 顶层配置已弃用
+  3. 已验证 6 remark + 8 rehype 管线行为一致
+  - ⚠️ 后续再升 Astro 大版本时，**必须重新验证整套 Markdown 管线**（插件顺序敏感，详见 §ASTRO 开发注意事项）
+- **待办：`fix-internal-links` 入口失效** — `scripts/fix-internal-links.ts` 已删（commit `183c767`）但 `package.json` 仍保留入口，需删除或恢复文件
 
 ### 禁止事项
 

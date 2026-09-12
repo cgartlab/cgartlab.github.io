@@ -10,10 +10,10 @@
 <!-- DOC-FACTS:START -->
 > 自动生成数据（由 `pnpm sync-docs` 更新，勿手改）
 
-> 技术栈：Astro 7.1.4 · TypeScript 6.0.3 · UnoCSS 66.6.8 · pnpm 11.10.0 · Node 24
-> 内容：148 个文章文件（74 中文 + 74 英文），周刊 19 期
+> 技术栈：Astro 7.3.1 · TypeScript 6.0.3 · UnoCSS 66.10.0 · pnpm 11.10.0 · Node 24
+> 内容：159 个文章文件（80 中文 + 79 英文），周刊 20 期
 > Markdown 管线：6 remark + 8 rehype 插件
-> 脚本：14 个（apply-lqip / astro / audit-glossary / build / dev / fix-internal-links / format-posts / lint / lint:fix / new-post / preview / sync-docs / sync-docs:check / verify-feed）
+> 脚本：16 个（apply-lqip / astro / audit-glossary / build / dev / fetch-github-repos / fix-internal-links / format-posts / lint / lint:fix / new-post / preview / sync-docs / sync-docs:check / update-gh-contributions / verify-feed）
 <!-- DOC-FACTS:END -->
 
 ## 项目结构
