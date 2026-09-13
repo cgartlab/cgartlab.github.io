@@ -74,7 +74,7 @@ Argus, a frontend design code review agent: [project page](/en/posts/argus/).
 
 Inkard, a batch text card generator: [project page](/en/posts/inkard/).
 
-Go To Github: [project page](/en/posts/goto-github/), a cross-platform script to accelerate GitHub access.
+Go To GitHub: [project page](/en/posts/goto-github/), a cross-platform script to accelerate GitHub access.
 
 And the newest one below.
 

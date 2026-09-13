@@ -169,7 +169,7 @@ In Notion, I use two custom databases to manage published articles and artworks,
 
 ## Obsidian
 
-Obsidian's customization comes through its rich plugin ecosystem. The most useful ones for me are Git, Calendar, Projects, and Weread. Git syncs my vault, Calendar handles daily notes, Projects manages personal projects that don't need sharing, and Weread syncs highlights from WeRead (微信读书).
+Obsidian's customization comes through its rich plugin ecosystem. The most useful ones for me are Git, Calendar, Projects, and WeRead. Git syncs my vault, Calendar handles daily notes, Projects manages personal projects that don't need sharing, and WeRead syncs highlights from WeRead (微信读书).
 
 ![WeRead book notes](./_images/解析设计师的第二大脑：从理念到实践-1754579505734.webp)
 

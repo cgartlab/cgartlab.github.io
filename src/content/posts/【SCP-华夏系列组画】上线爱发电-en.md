@@ -18,7 +18,7 @@ As you can see, [this is a series of digital paintings created in the spirit of 
 
 Currently updated to the third piece: _The Drunken Servant_.
 
-If you really enjoy this series, you can [support me on Aifadian](https://afdian.com/a/cgartlab-scp) to accelerate my创作.
+If you really enjoy this series, you can [support me on Aifadian](https://afdian.com/a/cgartlab-scp) to accelerate my creative work.
 
 By supporting me, you can get early access to the following exclusive content:
 

@@ -83,7 +83,7 @@ Now we've finally arrived at the true stage of building a second brain. I actual
 - Don't worry about being comprehensive. You can't get it perfect in one go. Take it slow and trust the process.
 - Links should ideally be bidirectional — you can always come back.
 
-At this point, knowledge begins to collide with your thoughts in奇妙 ways, and valuable ideas are hidden in these collisions. Building connections between knowledge is like creating portals in my knowledge base. Only then does the second brain truly come to life.
+At this point, knowledge begins to collide with your thoughts in wonderful ways, and valuable ideas are hidden in these collisions. Building connections between knowledge is like creating portals in my knowledge base. Only then does the second brain truly come to life.
 
 > [!tip] Using Notion's "Linked View of Database" feature is a great way to accomplish both collection and organization in one step.
 
@@ -95,6 +95,6 @@ Why go through all this trouble to absorb knowledge and build a second brain? On
 
 The common difficulty is that there's no visible return in the short term, because value growth follows an exponential curve. This leads to another management system called GTD, which I'm also reading about and practicing. I'll discuss it in a future article.
 
-So, without using GTD, how do you make it easier to persist in building a second brain? My method is quite straightforward — I directly link the second brain to my commercial design projects, which are my livelihood. For example, when a client asks for a poster, I constrain myself to only use my own素材库 for composition, color, and font choices. If it's not in my素材库, I go online to collect it. This way, input and output are naturally connected through a relationship that yields tangible returns.
+So, without using GTD, how do you make it easier to persist in building a second brain? My method is quite straightforward — I directly link the second brain to my commercial design projects, which are my livelihood. For example, when a client asks for a poster, I constrain myself to only use my own asset library for composition, color, and font choices. If it's not in my asset library, I go online to collect it. This way, input and output are naturally connected through a relationship that yields tangible returns.
 
 At this point, while owning a second brain, a positive feedback loop forms within it.

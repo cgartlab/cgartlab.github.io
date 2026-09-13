@@ -36,7 +36,7 @@ The answer is simple: I want it all. 🙂
 
 ## Integrating AI into the Official Account
 
-This was a serendipitous discovery, using [Zhipu Qingyan (智谱清言)](https://chatglm.cn/).
+This was a serendipitous discovery, using [Zhipu Qingyan](https://chatglm.cn/).
 
 Here's how it happened: I enjoy using various AI tools to accelerate my creative work. A couple of days ago, I registered with Zhipu Qingyan and wanted to create an assistant to help me learn frontend development. To my surprise, it supports integration with WeChat Official Accounts via API.
 

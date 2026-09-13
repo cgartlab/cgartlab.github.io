@@ -44,7 +44,7 @@ The following are notes I compiled during reading — not a verbatim copy of the
 
 ## Jumping Conflict
 
-- The audience must be fully informed about the characters. But in jumping conflict, the audience only sees surface information. The author must create opportunities for the real character to reveal their inner self, and give the audience a chance to observe the significant changes happening to them. **The technique should not be刻意 or obvious. Trust the audience to discover it on their own.**
+- The audience must be fully informed about the characters. But in jumping conflict, the audience only sees surface information. The author must create opportunities for the real character to reveal their inner self, and give the audience a chance to observe the significant changes happening to them. **The technique should not be contrived or obvious. Trust the audience to discover it on their own.**
 - Whenever conflict slows down, jumps, or stalls, the author needs to revisit the premise. Is it clearly stated? Does it still hold? Correct any errors promptly, then return to studying the characters.
 - Drama is not an imitation of life, but a reflection of life's essence.
 - The protagonist is the most important force in conflict. They enable other characters to grow through conflict. Ensure the protagonist is unshakable — they cannot and will not compromise.
@@ -100,7 +100,7 @@ The following are notes I compiled during reading — not a verbatim copy of the
 
 ## Dialogue
 
-- Dialogue is the primary means of proving the premise, revealing character, and advancing conflict. It is the most直观 part of a scene for the audience.
+- Dialogue is the primary means of proving the premise, revealing character, and advancing conflict. It is the most direct part of a scene for the audience.
 - Dialogue is only crucial and effective when every line naturally and freely reveals the character's traits and the events happening to them.
 - Choose words carefully. Writing is about selection — unlike photography, if the author needs to convey a point, extraneous information must not interfere.
 - Dialogue must fit the character's identity. If necessary, the author should sacrifice their own "brilliance" for the character. No clever line is worth sacrificing a character you have created.
@@ -138,6 +138,6 @@ The following are notes I compiled during reading — not a verbatim copy of the
 
 ## How to Get Ideas and Inspiration
 
-- Even the most ordinary-looking person has had intense impulses. The author's task is to capture the character's most激烈 inner moment.
+- Even the most ordinary-looking person has had intense impulses. The author's task is to capture the character's most intense inner moment.
 - When the audience watches a story, they see reflections of their own cruelty, violence, abuse, and animalistic impulses — even if only for a brief moment.
 - Only characters who have reached a turning point in their lives are worth writing about. They can serve as warnings and inspiration.
