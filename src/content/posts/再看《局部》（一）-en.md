@@ -74,7 +74,7 @@ Applied to psychology, I've read online that this approach has its flaws. But ap
 
 > All deviation comes not from the artist's creation, but from discovery.
 
-There's probably no such thing as absolute originality in humanity. Is life itself original? The prevailing theory is that the earliest life forms emerged from capillary pores in ancient海底 volcanic rock formations, slowly forming single-cell structures. If true, then maybe.
+There's probably no such thing as absolute originality in humanity. Is life itself original? The prevailing theory is that the earliest life forms emerged from capillary pores in ancient submarine volcanic rock formations, slowly forming single-cell structures. If true, then maybe.
 
 Back to art — at its core, it's a benevolent deception. Discovering a new way to deceive is what we call creation.
 

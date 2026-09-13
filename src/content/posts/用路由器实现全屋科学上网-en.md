@@ -58,7 +58,7 @@ Wait for upgrade completion and restart, then reconnect to WiFi.
 
 Now the router's system actually has SSH functionality. We need to calculate the login password based on each router's unique SN number to obtain system highest-level permissions.
 
-Password calculation methods can use online websites or local html files. Common router models have methods shared by experts on Github or related forums. I'm using the local html method here. Can be used directly:
+Password calculation methods can use online websites or local html files. Common router models have methods shared by experts on GitHub or related forums. I'm using the local html method here. Can be used directly:
 
 [Xiaomi SN](./_files/小米 SN.zip)
 

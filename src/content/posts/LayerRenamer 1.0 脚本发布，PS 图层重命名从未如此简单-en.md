@@ -32,9 +32,9 @@ Here's the widely circulated version online for reference:
 
 ```json
 app.bringToFront();
-var YourName = prompt("请输入您需要重命名的图层名称",'请输入')
+var YourName = prompt("Enter the layer name:", "Enter")
 if (documents.length == 0) {
-    alert("没有图层");
+    alert("No layers found.");
 }
 else {
     var visibility = false;
@@ -93,7 +93,7 @@ Create a new text file using a text editor, paste the following code, and you ca
 app.bringToFront();
 
 if (app.documents.length === 0) {
-    alert("没有打开的文档。");
+    alert("No document open.");
     throw new Error("No document open.");
 }
 
@@ -101,16 +101,16 @@ var doc = app.activeDocument;
 
 var selectedLayers = getSelectedLayers();
 if (selectedLayers.length === 0) {
-    alert("没有选中的图层。");
+    alert("No layers selected.");
     throw new Error("No layers selected.");
 }
 
-var baseName = prompt("请输入基础图层名称：", "Layer");
-var startNumber = parseInt(prompt("请输入编号的起始值：", "1"), 10);
-var numberFormat = prompt("请输入编号格式（例如 001，保持编号位数）：", "001");
+var baseName = prompt("Enter the base layer name:", "Layer");
+var startNumber = parseInt(prompt("Enter the starting number:", "1"), 10);
+var numberFormat = prompt("Enter the number format, for example 001:", "001");
 
 if (isNaN(startNumber) || !baseName || !numberFormat) {
-    alert("输入无效，请重新运行脚本。");
+    alert("Invalid input. Please run the script again.");
     throw new Error("Invalid input.");
 }
 

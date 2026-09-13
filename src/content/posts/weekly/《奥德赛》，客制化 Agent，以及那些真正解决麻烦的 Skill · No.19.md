@@ -72,7 +72,7 @@ Argus 前端设计代码审查 Agent：[项目页](/posts/argus/)。
 
 Inkard 批量文字卡片生成器：[项目页](/posts/inkard/)。
 
-Go To Github：[项目页](/posts/goto-github/)，加速访问 GitHub 的跨平台脚本。
+Go To GitHub：[项目页](/posts/goto-github/)，加速访问 GitHub 的跨平台脚本。
 
 以及下面最新出炉的。
 

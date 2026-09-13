@@ -18,7 +18,7 @@ abbrlink: apple-watch-design
 
 # Introduction
 
-A friend recently asked me to train some undergraduate and graduate students in "Rhino3D Product Industrial Design." My own background is in animation, but the underlying technical principles overlap, so I agreed. Preparing teaching materials meant finding good case studies, and while working on the Apple Watch example, I found myself exploring a territory that felt both familiar and陌生的. The detailed lecture notes will be updated on my [backup site](https://cgartlab.super.site/). The cover image comes from publicly available Apple Watch design drawings.
+A friend recently asked me to train some undergraduate and graduate students in "Rhino3D Product Industrial Design." My own background is in animation, but the underlying technical principles overlap, so I agreed. Preparing teaching materials meant finding good case studies, and while working on the Apple Watch example, I found myself exploring a territory that felt both familiar and unfamiliar. The detailed lecture notes will be updated on my [backup site](https://cgartlab.super.site/). The cover image comes from publicly available Apple Watch design drawings.
 
 # Product Industrial Design
 

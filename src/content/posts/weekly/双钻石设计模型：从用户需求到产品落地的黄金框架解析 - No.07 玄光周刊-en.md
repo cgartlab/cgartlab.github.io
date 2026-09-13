@@ -86,7 +86,7 @@ The diagram below shows the core brand-building logic that the video author exte
 
 ![Example Stylescape — a multidimensional visual direction board embedding design into real scenarios](../_images/07%20玄光周刊-双钻石设计模型：从用户需求到产品落地的黄金框架解析-1754597111214.webp)
 
-In any visual design process, designers gather visual references and arrange them together by color, style, and other criteria—a collection called a moodboard. Today I came across a new concept from abroad: **Stylescapes**, which can be literally translated as "风格景观" (style landscapes).
+In any visual design process, designers gather visual references and arrange them together by color, style, and other criteria—a collection called a moodboard. Today I came across a new concept from abroad: **Stylescapes**, which can be literally translated as "style landscapes."
 
 Their shared purpose is to align the team's understanding of visual direction, serving as a source of inspiration and a decision-making tool in the early stages of design.
 
