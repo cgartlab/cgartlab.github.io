@@ -18,6 +18,7 @@ import UnoCSS from 'unocss/astro'
 
 import { base, defaultLocale, themeConfig } from './src/config'
 import { langMap } from './src/i18n/config'
+import { isNoindexPath } from './src/lib/noindex.mjs'
 import { rehypeCodeCopyButton } from './src/plugins/rehype-code-copy-button.mjs'
 import { rehypeExternalLinks } from './src/plugins/rehype-external-links.mjs'
 import { rehypeGlossary } from './src/plugins/rehype-glossary.ts'
@@ -189,8 +190,9 @@ export default defineConfig({
 
         // 与 src/worker.mjs 的 noindex 规则保持同步：noindex 页面不应出现在 sitemap 中，
         // 否则 sitemap（收录信号）与 X-Robots-Tag（排除信号）相互冲突。
-        // 修改任一处必须同步另一处。glossary 有意保留可索引，不在清单内。
-        if (/^(?:en\/)?(?:weekly|tags|disclaimer|search)\//.test(pathname.slice(1)))
+        // 两者共用 src/lib/noindex.mjs 的 isNoindexPath()，修改任一处必须同步另一处。
+        // glossary 有意保留可索引，不在清单内。
+        if (isNoindexPath(pathname))
           return undefined
 
         const lm = lastmodMap.get(pathname)

@@ -42,32 +42,54 @@ async function addMetaToPost(post: CollectionEntry<"posts">): Promise<Post> {
 export async function checkPostSlugDuplication(
 	posts: CollectionEntry<"posts">[],
 ): Promise<string[]> {
-	const slugMap = new Map<string, Set<string>>();
+	const slugMap = new Map<
+		string,
+		{ universal: boolean; langs: Map<string, number> }
+	>();
 	const duplicates: string[] = [];
 
 	posts.forEach((post) => {
 		const lang = post.data.lang;
 		const slug = post.data.abbrlink || post.id;
 
-		let slugSet = slugMap.get(lang);
-		if (!slugSet) {
-			slugSet = new Set();
-			slugMap.set(lang, slugSet);
-		}
-
-		if (!slugSet.has(slug)) {
-			slugSet.add(slug);
-			return;
+		let entry = slugMap.get(slug);
+		if (!entry) {
+			entry = { universal: false, langs: new Map() };
+			slugMap.set(slug, entry);
 		}
 
 		if (!lang) {
-			duplicates.push(
-				`在通用文章中发现重复的别名"${slug}"（适用于所有语言）`,
-			);
+			// 通用文章（lang: ''）渲染所有语言
+			if (entry.universal) {
+				duplicates.push(
+					`在通用文章中发现重复的别名"${slug}"（适用于所有语言）`,
+				);
+			}
+			entry.universal = true;
 		} else {
-			duplicates.push(`在"${lang}"语言文章中发现重复的别名"${slug}"`);
+			const count = entry.langs.get(lang) || 0;
+			if (count > 0) {
+				duplicates.push(`在"${lang}"语言文章中发现重复的别名"${slug}"`);
+			}
+			entry.langs.set(lang, count + 1);
 		}
 	});
+
+	// 跨语言碰撞：通用文章渲染所有语言，与任意语言专属文章同 slug 时会在该语言
+	// 路由下生成重复 URL（如 /en/posts/foo/ 由通用文章与 en 文章同时生成），
+	// 构建期 Astro 会抛 duplicate route，此检查需提前以可读信息捕获
+	for (const [slug, entry] of slugMap) {
+		if (!entry.universal)
+			continue;
+		for (const lang of entry.langs.keys()) {
+			const url = lang === defaultLocale
+				? `/posts/${slug}/`
+				: `/${lang}/posts/${slug}/`;
+			duplicates.push(
+				`别名"${slug}"同时被通用文章与"${lang}"语言文章使用，将在 ${url} 生成重复路由`,
+			);
+		}
+	}
 
 	return duplicates;
 }

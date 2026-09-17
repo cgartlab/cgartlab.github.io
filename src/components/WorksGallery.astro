@@ -185,12 +185,10 @@ function getCategories(posts: Post[]): string[] {
       })
     }
 
-    // astro:page-load 在首次加载和每次 View Transition 导航后均会触发
+    // astro:page-load 在首次加载和每次 View Transition 导航后均会触发。
+    // module script 只执行一次，page-load 监听器不会累积，切勿在 before-swap
+    // 中 removeEventListener —— 移除后没有任何重新注册的机会，筛选会永久失效。
     document.addEventListener('astro:page-load', setupWorksFilter)
-    // 导航离开时移除 listener，防止累积
-    document.addEventListener('astro:before-swap', () => {
-      document.removeEventListener('astro:page-load', setupWorksFilter)
-    })
   </script>
 </div>
 

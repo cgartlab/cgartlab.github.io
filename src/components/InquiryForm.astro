@@ -466,6 +466,8 @@ async function handleFormSubmit(e: SubmitEvent) {
     const res = await fetch(form.action, {
       method: 'POST',
       body: new FormData(form),
+      // 15s 超时：Web3Forms 无响应/网络卡死时恢复提交按钮，避免永久禁用
+      signal: AbortSignal.timeout(15_000),
     })
 
     const data = await res.json()

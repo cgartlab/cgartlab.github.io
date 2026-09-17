@@ -2,7 +2,7 @@ name: CI
 
 on:
   push:
-    branches: ['dev-*']
+    branches: ['dev-*', 'main']
   pull_request:
     types: [opened, reopened, synchronize]
 
@@ -40,7 +40,14 @@ jobs:
       - run: pnpm build
         env:
           FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+          # fetch-github-repos 构建时调用 GitHub API：注入只读 token 规避未认证 60 req/h 限流
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - run: pnpm verify-feed
+        env:
+          FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+      - name: Check docs are in sync
+        run: pnpm sync-docs:check
         env:
           FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true

@@ -16,6 +16,7 @@ jobs:
       contents: read
       pull-requests: write
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - uses: actions/labeler@v7
         with:
@@ -27,6 +28,7 @@ jobs:
     permissions:
       pull-requests: write
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - name: Assign author (skip bots)
         if: github.event.pull_request.user.type != 'Bot'

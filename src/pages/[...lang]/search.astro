@@ -86,9 +86,13 @@ const searchEmpty = currentUI.searchEmpty || 'No results found'
 </style>
 
 <script is:inline>
-// 脚本内容必须与语言无关：View Transition 下 Astro 按脚本文本去重，
-// 文本恒定才能保证整个会话只执行一次，doc 级监听器才不会重复注册。
+// 脚本内容必须与语言无关：本脚本为 is:inline（每次导航重新执行），
+// 用守卫标志保证 doc 级监听器只注册一次，避免累积。
 (function () {
+  if (window.__SEARCH_PAGE_SETUP)
+    return
+  window.__SEARCH_PAGE_SETUP = true
+
   const searchIndexCache = new Map()
   const CACHE_TTL = 60 * 60 * 1000
   // 搜索行为参数：两边都是 is:inline 脚本，无法 import 共享模块，故在此显式命名。
@@ -176,7 +180,9 @@ const searchEmpty = currentUI.searchEmpty || 'No results found'
     if (els.loading)
       els.loading.classList.add('visible')
     try {
-      const response = await fetch(`${base}api/search-index/${lang}.json`)
+      const response = await fetch(`${base}api/search-index/${lang}.json`, {
+        signal: AbortSignal.timeout(10_000),
+      })
       const indexData = await response.json()
       const lowerData = indexData.map((item) => {
         const cleanContent = item.content
@@ -241,15 +247,21 @@ const searchEmpty = currentUI.searchEmpty || 'No results found'
 
     await loadIndex()
 
-    if (loadFailed && searchIndex.length === 0) {
+    if (loadFailed) {
       const span = els.empty.querySelector('span')
       if (span) {
-        span.textContent = document.documentElement.lang.startsWith('zh')
-          ? '搜索索引加载失败，请刷新页面'
-          : 'Search index failed to load, please refresh'
+        span.textContent = searchIndex.length === 0
+          ? (document.documentElement.lang.startsWith('zh')
+              ? '搜索索引加载失败，请刷新页面'
+              : 'Search index failed to load, please refresh')
+          : (document.documentElement.lang.startsWith('zh')
+              ? '索引更新失败，当前显示缓存结果'
+              : 'Index update failed, showing cached results')
       }
-      els.empty.classList.add('visible')
-      return
+      if (searchIndex.length === 0) {
+        els.empty.classList.add('visible')
+        return
+      }
     }
 
     const lowerQuery = query.toLowerCase().trim()

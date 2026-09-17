@@ -25,6 +25,10 @@ async function setupMermaidEmbeds() {
       startOnLoad: false,
       theme: document.documentElement.classList.contains('dark') ? 'dark' : 'default',
     })
+    // 标记已由本组件渲染，避免 MermaidLazy 的 IntersectionObserver 再次渲染同一块
+    mermaids.forEach((element) => {
+      ;(element as HTMLElement).dataset.mermaidLoaded = 'true'
+    })
     mermaid.run()
   }
   catch (error) {
