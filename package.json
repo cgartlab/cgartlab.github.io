@@ -71,7 +71,7 @@
     "typescript": "~6.0.3",
     "unocss": "66.10.2",
     "unocss-preset-theme": "^0.14.1",
-    "wrangler": "^4.129.1"
+    "wrangler": "^4.131.2"
   },
   "simple-git-hooks": {
     "pre-commit": "pnpm lint-staged"
