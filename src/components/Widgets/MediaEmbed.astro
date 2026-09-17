@@ -10,6 +10,12 @@ async function setupMermaidEmbeds() {
     return
   }
 
+  // 先同步标记，避免 MermaidLazy 的 IntersectionObserver 在本组件异步
+  // import 完成前对同一块再次渲染（双重渲染/竞态）
+  mermaids.forEach((element) => {
+    ;(element as HTMLElement).dataset.mermaidLoaded = 'true'
+  })
+
   // Store original code for re-rendering
   mermaids.forEach((element) => {
     const mermaid = element as HTMLElement
@@ -24,10 +30,6 @@ async function setupMermaidEmbeds() {
     mermaid.initialize({
       startOnLoad: false,
       theme: document.documentElement.classList.contains('dark') ? 'dark' : 'default',
-    })
-    // 标记已由本组件渲染，避免 MermaidLazy 的 IntersectionObserver 再次渲染同一块
-    mermaids.forEach((element) => {
-      ;(element as HTMLElement).dataset.mermaidLoaded = 'true'
     })
     mermaid.run()
   }

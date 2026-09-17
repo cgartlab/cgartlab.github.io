@@ -15,10 +15,10 @@ function timingSafeEqual(a, b) {
  * 注入安全响应头。
  * - HSTS / X-Content-Type-Options / X-Frame-Options / Referrer-Policy /
  *   Permissions-Policy 直接生效（对静态站零风险）。
- * - CSP 先以 report-only 投放：站点使用内联脚本/样式（Astro View Transitions、
- *   主题切换、Giscus、partytown）且启用 Google Analytics / Umami，严格 nonce-based
- *   CSP 需重构。report-only 可在不破坏线上的情况下观测违规，待 pnpm preview 验证后
- *   再改为强制 Content-Security-Policy。
+ * - CSP 为强制模式（Content-Security-Policy）。站点使用内联脚本/样式
+ *   （Astro View Transitions、主题切换、Giscus、partytown），严格
+ *   nonce-based CSP 需重构，故维持 'unsafe-inline'；connect-src 必须
+ *   覆盖所有运行时 fetch 目标（giscus / GA / Umami / Web3Forms / GitHub API）。
  */
 function applySecurityHeaders(resp) {
 	resp.headers.set(
@@ -40,7 +40,7 @@ function applySecurityHeaders(resp) {
 			"style-src 'self' 'unsafe-inline' https://giscus.app https://*.giscus.app https://cdn.jsdelivr.net",
 			"img-src 'self' https: data:",
 			"font-src 'self' https: data:",
-			"connect-src 'self' https://giscus.app https://*.giscus.app https://www.google-analytics.com https://analytics.google.com https://cloud.umami.is https://*.umami.is",
+			"connect-src 'self' https://giscus.app https://*.giscus.app https://www.google-analytics.com https://analytics.google.com https://cloud.umami.is https://*.umami.is https://api.web3forms.com https://api.github.com",
 			"frame-src 'self' https://giscus.app https://*.giscus.app",
 			"base-uri 'self'",
 			"form-action 'self' https://api.web3forms.com https://giscus.app",
@@ -190,13 +190,22 @@ export default {
 					"public, max-age=31536000, immutable",
 				);
 			}
-			// 图片 + 音效 → 30 天
+			// 图片 + 音效 + 视频 → 30 天
 			else if (
-				/\.(?:png|jpg|jpeg|webp|avif|gif|svg|ico|wav)$/.test(assetPath)
+				/\.(?:png|jpg|jpeg|webp|avif|gif|svg|ico|wav|mp4|webm|mov)$/.test(
+					assetPath,
+				)
 			) {
 				response.headers.set(
 					"Cache-Control",
 					"public, max-age=2592000",
+				);
+			}
+			// 纯文本（robots.txt / llms.txt / 站点验证文件）→ 24 小时
+			else if (/\.txt$/.test(assetPath)) {
+				response.headers.set(
+					"Cache-Control",
+					"public, max-age=86400",
 				);
 			}
 			// 搜索索引 JSON → 24 小时，1 小时 stale-while-revalidate（保证新文章尽快可搜索）

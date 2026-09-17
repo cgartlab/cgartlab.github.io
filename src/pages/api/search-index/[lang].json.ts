@@ -59,7 +59,9 @@ export const GET: APIRoute = async ({ params }) => {
 				tags: post.data.tags || [],
 				content,
 				slug,
-				lang: normalizePostLang(post.data.lang),
+				// universal 文章（lang: ''）在当前索引语言下应标记为该语言，
+				// 否则 en 索引中的 universal 文章被标成 'zh'，前端结果链接会指向中文 URL
+				lang: post.data.lang ? normalizePostLang(post.data.lang) : lang,
 				published: post.data.published.toISOString(),
 			};
 		});

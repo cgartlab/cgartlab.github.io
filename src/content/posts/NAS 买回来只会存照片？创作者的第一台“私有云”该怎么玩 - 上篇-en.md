@@ -18,7 +18,7 @@ lang: en
 
 This series skips complex technologies and focuses on establishing the most basic storage and workflow logic for creators. For better reading experience, it's divided into two parts. This part is for beginners, if you already have a NAS, you can check out the next part.
 
-![NAS setup in home study room showing personal data center configuration for creative professionals](_images/解析设计师的第二大脑：从理念到实践-1754577343145%201.webp)
+![NAS setup in home study room showing personal data center configuration for creative professionals](_images/解析设计师的第二大脑：从理念到实践-1754577343145.webp)
 
 More and more people are using NAS these days. However, many people first hear about NAS through advertisements that emphasize storing large amounts of movies, files, photos, and videos - essentially a networked "hard drive box."
 
@@ -36,7 +36,7 @@ Oh, so it's still just a hard drive box.
 
 ## What is NAS Really?
 
-![Custom-assembled NAS unit shown alongside the case used to build the creator's DIY home server](_images/11月的拔草记录和选荐-1754916668923%201.webp)
+![Custom-assembled NAS unit shown alongside the case used to build the creator's DIY home server](_images/11月的拔草记录和选荐-1754916668923.webp)
 
 Physically, NAS is essentially still a computer, fundamentally no different from the desktops and laptops we use daily.
 
@@ -46,7 +46,7 @@ Here's a side note: I use NAS, but I also have an annual subscription to a certa
 
 Okay, back to the main topic.
 
-![Infographic comparing cloud storage subscription versus owning a private NAS for data sovereignty](_images/07%20玄光周刊-双钻石设计模型：从用户需求到产品落地的黄金框架解析-1754596998369%201.webp)
+![Infographic comparing cloud storage subscription versus owning a private NAS for data sovereignty](_images/07%20玄光周刊-双钻石设计模型：从用户需求到产品落地的黄金框架解析-1754596998369.webp)
 
 If cloud storage is like renting an apartment, NAS can be understood as buying a private villa outright.
 
@@ -64,7 +64,7 @@ From my experience so far, the more your work involves your own data flow, the m
 
 ## What Do You Really Need NAS to Solve?
 
-![Double Diamond design framework diagram illustrating the discover and define phases of identifying user needs](_images/07%20玄光周刊-双钻石设计模型：从用户需求到产品落地的黄金框架解析-1754597099879%201.webp)
+![Double Diamond design framework diagram illustrating the discover and define phases of identifying user needs](_images/07%20玄光周刊-双钻石设计模型：从用户需求到产品落地的黄金框架解析-1754597099879.webp)
 
 As a designer, clarifying needs is something I think about almost daily for my clients. Yes, many people seek help, even paying for it, without actually knowing their real needs.
 
