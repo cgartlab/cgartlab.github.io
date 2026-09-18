@@ -342,11 +342,23 @@ const d = t[lang as keyof typeof t] || t.zh
 }
 
 .form-select {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='oklch(var(--un-preset-theme-colors-primary) / 0.6)' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 0.75rem center;
-  padding-right: 2rem;
+  position: relative;
+  padding-right: 2.5rem;
   cursor: pointer;
+}
+
+.form-select::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  right: 0.75rem;
+  width: 12px;
+  height: 12px;
+  transform: translateY(-50%);
+  background-color: oklch(var(--un-preset-theme-colors-secondary) / 0.6);
+  -webkit-mask: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>") no-repeat center / contain;
+  mask: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>") no-repeat center / contain;
+  pointer-events: none;
 }
 
 .form-input:focus,
@@ -462,12 +474,15 @@ async function handleFormSubmit(e: SubmitEvent) {
       submitLoading.hidden = false
   }
 
+  const submitTimeout = 15_000 // 15s 超时：Web3Forms 无响应/网络卡死时恢复提交按钮，避免永久禁用
+  const submitController = new AbortController()
+  const submitTimer = setTimeout(() => submitController.abort(), submitTimeout)
+
   try {
     const res = await fetch(form.action, {
       method: 'POST',
       body: new FormData(form),
-      // 15s 超时：Web3Forms 无响应/网络卡死时恢复提交按钮，避免永久禁用
-      signal: AbortSignal.timeout(15_000),
+      signal: submitController.signal,
     })
 
     const data = await res.json()
@@ -497,6 +512,7 @@ async function handleFormSubmit(e: SubmitEvent) {
     }
   }
   finally {
+    clearTimeout(submitTimer)
     if (submitBtn) {
       submitBtn.disabled = false
       const submitText = submitBtn.querySelector('.submit-text') as HTMLElement
