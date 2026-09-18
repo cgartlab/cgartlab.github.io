@@ -60,6 +60,8 @@ const softwareApp = postSchemaType === 'SoftwareApplication' ? softwareAppMeta[p
 ---
 
 <head>
+<!-- Base URL：必须在所有 URL 引用（link/script）之前声明，供运行时脚本读取 -->
+<base href={base} />
 <!-- Preconnect to third-party domains -->
 <link rel="preconnect" href="https://www.googletagmanager.com" crossorigin />
 {postSlug && <link rel="preconnect" href="https://giscus.app" crossorigin />}
@@ -374,7 +376,10 @@ const softwareApp = postSchemaType === 'SoftwareApplication' ? softwareAppMeta[p
 })()}
 
 <!-- Global View Transition -->
-<ClientRouter fallback="none" />
+<!-- fallback="animate"：不支持 View Transitions API 的浏览器仍跑渐进增强动画，
+     否则 astro:page-load 永不派发，全站挂在该事件上的交互（主题切换、评论、
+     图片缩放、TOC、搜索等 44 处）会整体失效。 -->
+<ClientRouter fallback="animate" />
 
 <!-- Theme Toggle -->
 <script

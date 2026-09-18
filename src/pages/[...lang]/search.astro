@@ -108,7 +108,10 @@ const searchEmpty = currentUI.searchEmpty || 'No results found'
   let inputHandler = null
   let indexPromise = null
   let loadFailed = false
-  const base = import.meta.env.BASE_URL || '/'
+  // is:inline 脚本不经过 Vite 编译，import.meta.env 不会被替换、且在 classic
+  // script 中直接使用会抛 SyntaxError（导致整个脚本不执行）。改为运行时从
+  // <base> 标签读取 base URL（由 Head.astro 输出），fallback 到 '/'。
+  const base = document.querySelector('base')?.getAttribute('href') || '/'
 
   function normalizeLang(lang) {
     const normalized = (lang || 'zh').toLowerCase()
@@ -187,16 +190,27 @@ const searchEmpty = currentUI.searchEmpty || 'No results found'
       })
       const indexData = await response.json()
       const lowerData = indexData.map((item) => {
+        // 清理 Markdown 语法，避免摘录残留 (_images/xxx.webp)、裸 URL 等噪声。
+        // 顺序敏感：图片必须在链接之前替换（图片本身也是 [x](y) 形式）。
         const cleanContent = item.content
           .replace(/^---[\s\S]*?---/, '')
-          .replace(/[#*`[\]!]/g, '')
+          // 图片 ![alt](url) → alt
+          .replace(/!\[([^\]]*)\]\([^)]*\)/g, '$1')
+          // 链接 [text](url) → text
+          .replace(/\[([^\]]*)\]\([^)]*\)/g, '$1')
+          // 行内代码 `code` → code
+          .replace(/`([^`]*)`/g, '$1')
+          // 裸 URL
+          .replace(/https?:\/\/[^\s)]+/g, '')
+          // 残留 Markdown 标记（标题井号、加粗星号、引用符、分隔线等）
+          .replace(/[#*`[\]!>_|~]/g, '')
           .replace(/\n+/g, ' ')
           .trim()
         return {
           title: item.title.toLowerCase(),
           desc: item.description.toLowerCase(),
           tags: item.tags.map(t => t.toLowerCase()),
-          content: item.content.toLowerCase(),
+          content: cleanContent.toLowerCase(),
           cleanContent,
           lowerContent: cleanContent.toLowerCase(),
         }
@@ -407,5 +421,9 @@ const searchEmpty = currentUI.searchEmpty || 'No results found'
 
   document.addEventListener('astro:page-load', setup)
   document.addEventListener('astro:before-swap', cleanup)
+  // 立即初始化，不等待 astro:page-load：该事件由 window.load 派发，会被
+  // GA / Giscus / Umami / Cloudflare Insights 等第三方脚本阻塞 2-8s。
+  // setup() 内的监听器绑定前先清理旧引用，故与 astro:page-load 的重复调用幂等。
+  setup()
 })()
 </script>
