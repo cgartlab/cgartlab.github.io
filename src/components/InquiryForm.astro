@@ -163,7 +163,7 @@ const d = t[lang as keyof typeof t] || t.zh
       </label>
       <select id="project-type" name="project_type" required class="form-select">
         {d.projectTypeOptions.map(opt => (
-          <option value={opt.value} disabled={opt.value === ''} selected={opt.value === ''}>
+          <option value={opt.value} hidden={opt.value === ''} selected={opt.value === ''}>
             {opt.label}
           </option>
         ))}
@@ -178,7 +178,7 @@ const d = t[lang as keyof typeof t] || t.zh
         </label>
         <select id="budget" name="budget" required class="form-select">
           {d.budgetOptions.map(opt => (
-            <option value={opt.value} disabled={opt.value === ''} selected={opt.value === ''}>
+            <option value={opt.value} hidden={opt.value === ''} selected={opt.value === ''}>
               {opt.label}
             </option>
           ))}
@@ -192,7 +192,7 @@ const d = t[lang as keyof typeof t] || t.zh
         </label>
         <select id="timeline" name="timeline" required class="form-select">
           {d.timelineOptions.map(opt => (
-            <option value={opt.value} disabled={opt.value === ''} selected={opt.value === ''}>
+            <option value={opt.value} hidden={opt.value === ''} selected={opt.value === ''}>
               {opt.label}
             </option>
           ))}
@@ -320,7 +320,7 @@ const d = t[lang as keyof typeof t] || t.zh
 }
 
 .form-required {
-  color: oklch(55% 0.2 25);
+  color: oklch(var(--un-preset-theme-colors-caution));
   margin-left: 0.2rem;
 }
 
@@ -415,14 +415,14 @@ const d = t[lang as keyof typeof t] || t.zh
 
 .form-message-success {
   background-color: oklch(var(--un-preset-theme-colors-background));
-  color: oklch(55% 0.15 145);
-  border: 1px solid oklch(55% 0.15 145 / 0.4);
+  color: oklch(var(--un-preset-theme-colors-tip));
+  border: 1px solid oklch(var(--un-preset-theme-colors-tip) / 0.4);
 }
 
 .form-message-error {
   background-color: oklch(var(--un-preset-theme-colors-background));
-  color: oklch(55% 0.15 25);
-  border: 1px solid oklch(55% 0.15 25 / 0.4);
+  color: oklch(var(--un-preset-theme-colors-caution));
+  border: 1px solid oklch(var(--un-preset-theme-colors-caution) / 0.4);
 }
 </style>
 
@@ -441,7 +441,7 @@ async function handleFormSubmit(e: SubmitEvent) {
   required.forEach((field) => {
     const el = field as HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
     if (!el.value.trim()) {
-      el.style.borderColor = 'oklch(55% 0.2 25)' // 红色表示验证错误
+      el.style.borderColor = 'oklch(var(--un-preset-theme-colors-caution))'
       valid = false
     }
     else {
