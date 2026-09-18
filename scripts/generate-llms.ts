@@ -5,11 +5,13 @@
  */
 
 import { readdir, readFile, writeFile } from 'node:fs/promises'
+import { existsSync } from 'node:fs'
 import path from 'node:path'
 import process from 'node:process'
 
 const SITE_URL = 'https://cgartlab.com'
-const OUTPUT_PATH = 'public/llms.txt'
+// public/ 供 git 展示；dist/ 是部署产物（astro build 后运行，public 不会再被拷进 dist）
+const OUTPUT_PATHS = ['public/llms.txt', 'dist/llms.txt']
 
 interface Frontmatter {
   title: string
@@ -112,10 +114,10 @@ async function scanDir(dir: string, isWeekly: boolean): Promise<Post[]> {
 }
 
 function generateUrl(post: Post): string {
-  const langPrefix = post.isEnglish ? '/en' : '/zh'
-  const type = post.isWeekly ? 'weekly' : 'posts'
+  // zh 是默认语言，无 URL 前缀（不能用 /zh/）；weekly 文章走 /posts/weekly-XX/ 路由（无 /weekly/ 单篇路由）
+  const langPrefix = post.isEnglish ? '/en' : ''
   const slug = post.frontmatter.abbrlink || post.slug
-  return `${SITE_URL}${langPrefix}/${type}/${slug}`
+  return `${SITE_URL}${langPrefix}/posts/${slug}/`
 }
 
 async function main() {
@@ -168,8 +170,14 @@ async function main() {
     }
   }
 
-  await writeFile(OUTPUT_PATH, output, 'utf-8')
-  console.log(`✅ 已生成 ${OUTPUT_PATH}`)
+  for (const outputPath of OUTPUT_PATHS) {
+    // dist/ 只在 astro build 后存在；单独运行本脚本时跳过 dist 写入
+    const dir = path.dirname(outputPath)
+    if (dir === 'dist' && !existsSync(dir))
+      continue
+    await writeFile(outputPath, output, 'utf-8')
+    console.log(`✅ 已生成 ${outputPath}`)
+  }
 }
 
 main().catch(console.error)

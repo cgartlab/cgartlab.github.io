@@ -102,13 +102,10 @@ Allow: /
 User-agent: Bingbot
 Allow: /
 Disallow: /api/
-Disallow: /admin/
-Disallow: /private/
 
 User-agent: msnbot
 Allow: /
 Disallow: /api/
-Disallow: /admin/
 
 User-agent: BingPreview
 Allow: /
@@ -116,7 +113,6 @@ Allow: /
 User-agent: YandexBot
 Allow: /
 Disallow: /api/
-Disallow: /admin/
 
 User-agent: YandexImages
 Allow: /images/
@@ -127,7 +123,6 @@ Allow: /
 User-agent: Baiduspider
 Allow: /
 Disallow: /api/
-Disallow: /admin/
 
 User-agent: Baiduspider-image
 Allow: /
@@ -153,7 +148,9 @@ Allow: /
 # Generic crawler rules (placed last to ensure specific rules take precedence)
 User-agent: *
 Allow: /
-Disallow: /search?q=
+# /search/ 页面本身 noindex（Worker X-Robots-Tag）；此处 Disallow 双重保险。
+# 注意站点 trailingSlash: 'always'，规则必须带尾斜杠
+Disallow: /search/
 Crawl-delay: 1
 
 # Content Protection

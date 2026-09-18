@@ -77,7 +77,7 @@ pnpm fetch-github-repos   # 拉取 GitHub 仓库列表 → public/github-repos.j
 pnpm update-gh-contributions  # 更新贡献热力图数据 → src/data/github-contributions.json
 ```
 
-> ⚠️ **`pnpm fix-internal-links` 已失效** — `scripts/fix-internal-links.ts` 已在 commit `183c767` 删除，但 `package.json` 仍保留该入口。执行会报 `MODULE_NOT_FOUND`。修复方式二选一：删除该脚本项，或从历史恢复文件。
+> ✅ **`fix-internal-links` 已移除** — `scripts/fix-internal-links.ts` 在 commit `183c767` 删除后，`package.json` 的失效入口已在审计修复中一并清理。
 
 > ℹ️ 本机 shell 的全局 Node 为 v26，`pnpm` 经 corepack 调用时报 `Cannot find module ...\corepack\dist\pnpm.js`。绕行方式：`./node_modules/.bin/tsx scripts/<name>.ts`。
 
@@ -104,10 +104,10 @@ pnpm update-gh-contributions  # 更新贡献热力图数据 → src/data/github-
 <!-- DOC-FACTS:START -->
 > 自动生成数据（由 `pnpm sync-docs` 更新，勿手改）
 
-> 技术栈：Astro 7.3.1 · TypeScript 6.0.3 · UnoCSS 66.10.0 · pnpm 11.10.0 · Node 24
-> 内容：159 个文章文件（80 中文 + 79 英文），周刊 20 期
+> 技术栈：Astro 7.3.2 · TypeScript 6.0.3 · UnoCSS 66.10.2 · pnpm 11.10.0 · Node 24
+> 内容：160 个文章文件（80 中文 + 80 英文），周刊 20 期
 > Markdown 管线：6 remark + 8 rehype 插件
-> 脚本：16 个（apply-lqip / astro / audit-glossary / build / dev / fetch-github-repos / fix-internal-links / format-posts / lint / lint:fix / new-post / preview / sync-docs / sync-docs:check / update-gh-contributions / verify-feed）
+> 脚本：15 个（apply-lqip / astro / audit-glossary / build / dev / fetch-github-repos / format-posts / lint / lint:fix / new-post / preview / sync-docs / sync-docs:check / update-gh-contributions / verify-feed）
 <!-- DOC-FACTS:END -->
 
 ## ARCHITECTURE
@@ -115,14 +115,14 @@ pnpm update-gh-contributions  # 更新贡献热力图数据 → src/data/github-
 | Area | Path | Notes |
 |------|------|-------|
 | 内容集合 | `src/content.config.ts` | `posts`, `about`, `privacy` 三个集合 |
-| i18n | `src/i18n/config.ts` | zh 默认, /en/ 路由前缀（zh-tw 基础设施就绪但未启用） |
+| i18n | `src/i18n/config.ts` | zh 默认, /en/ 路由前缀；zh-tw 基础设施（locale/UI/数据/文案）存在但**未启用**——`config.ts` 的 `moreLocales` 仅含 `en`，内容 schema 的 `lang` 字段不接受 `zh-tw` |
 | 主题配置 | `src/config.ts` | 站点元数据、导航、颜色、评论、SEO |
 | UnoCSS | `uno.config.ts` | Wind3 + Attributify + theme preset, 非 Tailwind |
 | 路由 | `src/pages/[...lang]/` | 多语言前缀动态路由 |
 | Telegram 推送 | `src/lib/tg.mjs` + Worker scheduled | RSS → 频道推送，KV 状态去重，Cron 每 15 分钟 + `/api/tg-notify` 手动触发 |
 | 评论 | Giscus（主用）+ Twikoo/Waline（需额外配置后启用）。主题 CSS 本地托管于 `public/giscus/`，通过绝对路径加载 |
 | 表单 | `src/components/InquiryForm.astro` | Web3Forms，submit 监听器在 `astro:page-load` 内绑定 |
-| 搜索 | 客户端搜索索引 (`api/search-index/[lang].json.ts` + `api/search-index.json.ts`) |
+| 搜索 | 客户端搜索索引 (`api/search-index/[lang].json.ts`) |
 | OG 图片 | `astro-og-canvas` + `canvaskit-wasm` 构建时生成，过滤草稿 |
 | Wrangler | `wrangler.jsonc` | Workers + Static Assets (dist 目录)，含无尾斜杠 301 重定向 |
 | TOC 高亮 | `Widgets/TOC.astro` | IntersectionObserver 驱动 `.toc-active` class，按 DOM 顺序排序 |
@@ -158,7 +158,7 @@ pnpm update-gh-contributions  # 更新贡献热力图数据 → src/data/github-
 | `published` | date | 是 |
 | `tags` | string[] | 否 (周刊必须含 `周刊` tag) |
 | `draft` | boolean | 否 (默认 false) |
-| `lang` | `''` / `'en'` / `'zh-tw'` | 否 |
+| `lang` | `''` / `'en'` | 否（zh-tw 未启用，schema 不接受） |
 | `abbrlink` | string | 否 (小写字母+数字+连字符) |
 
 - 英文版文件名加 `-en` 后缀，如 `文章.md` + `文章-en.md`
@@ -395,7 +395,7 @@ pnpm 默认 `isolated` linker 依赖符号链接，ExFAT 不可用，故退化�
  }
  ```
 
- 路由文件位于 `src/pages/[...lang]/` 动态目录下。`zh` 为默认语言无 URL 前缀，`/en/` 和 `/zh-tw/` 带语言前缀。通过 `Astro.currentLocale` 获取当前页语言。
+ 路由文件位于 `src/pages/[...lang]/` 动态目录下。`zh` 为默认语言无 URL 前缀，`/en/` 带语言前缀。zh-tw 的 locale/UI/数据/文案基础设施存在但**未启用**：`src/config.ts` 的 `moreLocales` 仅含 `en`（`allLocales = ['zh','en']`），内容 schema 的 `lang` 字段不接受 `zh-tw`，因此**不要**给文章写 `lang: 'zh-tw'`（会 Zod 校验失败导致构建中断）。若日后启用：改 `config.ts` 的 `moreLocales`，并同步 `src/lib/noindex.mjs` 的 `LANG_PREFIXES`（noindex 正则依赖它）。通过 `Astro.currentLocale` 获取当前页语言。
 
  ### dev 与 build 的关键差异
 
@@ -699,7 +699,7 @@ pnpm lint → pnpm build → pnpm build && pnpm preview（实测：暗色/双语
   2. Astro 7 默认 Markdown 处理器切换，已迁移到 `markdown.processor: unified({...})`（commit `3d18638e`），`markdown.remarkPlugins` / `rehypePlugins` 顶层配置已弃用
   3. 已验证 6 remark + 8 rehype 管线行为一致
   - ⚠️ 后续再升 Astro 大版本时，**必须重新验证整套 Markdown 管线**（插件顺序敏感，详见 §ASTRO 开发注意事项）
-- **待办：`fix-internal-links` 入口失效** — `scripts/fix-internal-links.ts` 已删（commit `183c767`）但 `package.json` 仍保留入口，需删除或恢复文件
+- **待办：`fix-internal-links` 入口失效** — 已修复：`package.json` 失效入口在 `dev-fix-audit` 中删除，`scripts/fix-internal-links.ts` 维持删除状态（commit `183c767`）
 
 ### 禁止事项
 
@@ -724,7 +724,7 @@ pnpm lint → pnpm build → pnpm build && pnpm preview（实测：暗色/双语
 | KV 绑定 | `TG_STATE` (Telegram 推送去重状态) ※ |
 | 创建 | 2026-07-12 | 最后修改 2026-07-13 |
 
-※ Cron 与 KV 定义于 `wrangler.jsonc`，随 `feat/telegram-channel-sync` 分支部署后生效；上线前需创建 KV namespace 并替换占位符 id（当前为 `<KV_ID_FROM_wrangler-kv-namespace-create>`）且配置 Secret（见下方 Telegram 推送）。
+※ Cron 与 KV 定义于 `wrangler.jsonc`：KV namespace `TG_STATE` 已创建并填入真实 id（`5826fda6e7d94b64afd31d73cbff6c65`），随分支部署生效；Worker Secret（`TG_BOT_TOKEN` / `TG_CHANNEL_ID` / `TG_NOTIFY_SECRET`）需通过 `wrangler secret put` 配置（见下方 Telegram 推送）。
 
 ### Worker 行为
 

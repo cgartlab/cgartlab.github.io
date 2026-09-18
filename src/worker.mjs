@@ -1,4 +1,5 @@
 import { pushNewPosts } from "./lib/tg.mjs";
+import { isNoindexPath } from "./lib/noindex.mjs";
 
 /** 恒时字符串比较：长度不匹配直接返回，等长时逐字符 XOR，避免 timing side-channel */
 function timingSafeEqual(a, b) {
@@ -14,10 +15,10 @@ function timingSafeEqual(a, b) {
  * 注入安全响应头。
  * - HSTS / X-Content-Type-Options / X-Frame-Options / Referrer-Policy /
  *   Permissions-Policy 直接生效（对静态站零风险）。
- * - CSP 先以 report-only 投放：站点使用内联脚本/样式（Astro View Transitions、
- *   主题切换、Giscus、partytown）且启用 Google Analytics / Umami，严格 nonce-based
- *   CSP 需重构。report-only 可在不破坏线上的情况下观测违规，待 pnpm preview 验证后
- *   再改为强制 Content-Security-Policy。
+ * - CSP 为强制模式（Content-Security-Policy）。站点使用内联脚本/样式
+ *   （Astro View Transitions、主题切换、Giscus、partytown），严格
+ *   nonce-based CSP 需重构，故维持 'unsafe-inline'；connect-src 必须
+ *   覆盖所有运行时 fetch 目标（giscus / GA / Umami / Web3Forms / GitHub API）。
  */
 function applySecurityHeaders(resp) {
 	resp.headers.set(
@@ -39,7 +40,7 @@ function applySecurityHeaders(resp) {
 			"style-src 'self' 'unsafe-inline' https://giscus.app https://*.giscus.app https://cdn.jsdelivr.net",
 			"img-src 'self' https: data:",
 			"font-src 'self' https: data:",
-			"connect-src 'self' https://giscus.app https://*.giscus.app https://www.google-analytics.com https://analytics.google.com https://cloud.umami.is https://*.umami.is",
+			"connect-src 'self' https://giscus.app https://*.giscus.app https://www.google-analytics.com https://analytics.google.com https://cloud.umami.is https://*.umami.is https://api.web3forms.com https://api.github.com",
 			"frame-src 'self' https://giscus.app https://*.giscus.app",
 			"base-uri 'self'",
 			"form-action 'self' https://api.web3forms.com https://giscus.app",
@@ -81,17 +82,21 @@ export default {
 						env.TG_NOTIFY_SECRET,
 					)
 				) {
-					return new Response("Unauthorized", { status: 401 });
+					return applySecurityHeaders(
+						new Response("Unauthorized", { status: 401 }),
+					);
 				}
 				try {
 					const result = await pushNewPosts(env);
-					return Response.json(result);
+					return applySecurityHeaders(Response.json(result));
 				} catch (err) {
 					// 推送失败返回 500 而非被外层 catch 吞成 404，便于运维发现
 					console.error("[TG] manual push failed:", err);
-					return Response.json(
-						{ error: String(err.message || err) },
-						{ status: 500 },
+					return applySecurityHeaders(
+						Response.json(
+							{ error: String(err.message || err) },
+							{ status: 500 },
+						),
 					);
 				}
 			}
@@ -99,12 +104,14 @@ export default {
 			// 1. Force www → non-www canonical redirect (301 permanent)
 			if (url.hostname === "www.cgartlab.com") {
 				url.hostname = "cgartlab.com";
-				return Response.redirect(url.toString(), 301);
+				return applySecurityHeaders(Response.redirect(url.toString(), 301));
 			}
 
 			// 1b. Feed shortcut: /feed and /feed/ → RSS feed
 			if (pathname === "/feed" || pathname === "/feed/") {
-				return Response.redirect("https://cgartlab.com/rss.xml", 301);
+				return applySecurityHeaders(
+					Response.redirect("https://cgartlab.com/rss.xml", 301),
+				);
 			}
 
 			// 2. Trailing slash enforcement: redirect paths without trailing slash (301)
@@ -114,7 +121,7 @@ export default {
 				!pathname.split("/").pop()?.includes(".")
 			) {
 				url.pathname = `${pathname}/`;
-				return Response.redirect(url.toString(), 301);
+				return applySecurityHeaders(Response.redirect(url.toString(), 301));
 			}
 
 			// 3. Serve the path directly. Cloudflare Static Assets resolves the
@@ -140,12 +147,14 @@ export default {
 						headers: notFound.headers,
 					});
 					resp.headers.set("Cache-Control", "public, max-age=60");
+					resp.headers.set("X-Robots-Tag", "noindex, follow");
 					return applySecurityHeaders(resp);
 				} catch {
 					const errResp = new Response("Not Found", {
 						status: 404,
 						headers: { "Cache-Control": "public, max-age=60" },
 					});
+					errResp.headers.set("X-Robots-Tag", "noindex, follow");
 					return applySecurityHeaders(errResp);
 				}
 			}
@@ -181,19 +190,26 @@ export default {
 					"public, max-age=31536000, immutable",
 				);
 			}
-			// 图片 + 音效 → 30 天
+			// 图片 + 音效 + 视频 → 30 天
 			else if (
-				/\.(?:png|jpg|jpeg|webp|avif|gif|svg|ico|wav)$/.test(assetPath)
+				/\.(?:png|jpg|jpeg|webp|avif|gif|svg|ico|wav|mp4|webm|mov)$/.test(
+					assetPath,
+				)
 			) {
 				response.headers.set(
 					"Cache-Control",
 					"public, max-age=2592000",
 				);
 			}
+			// 纯文本（robots.txt / llms.txt / 站点验证文件）→ 24 小时
+			else if (/\.txt$/.test(assetPath)) {
+				response.headers.set(
+					"Cache-Control",
+					"public, max-age=86400",
+				);
+			}
 			// 搜索索引 JSON → 24 小时，1 小时 stale-while-revalidate（保证新文章尽快可搜索）
-			else if (
-				/^\/api\/search-index(?:\/[\w-]+)?\.json$/.test(assetPath)
-			) {
+			else if (/^\/api\/search-index\/[\w-]+\.json$/.test(assetPath)) {
 				response.headers.set(
 					"Cache-Control",
 					"public, max-age=86400, stale-while-revalidate=3600",
@@ -210,18 +226,21 @@ export default {
 					"Cloudflare-Cdn-Cache-Control",
 					"max-age=1800",
 				);
-				// 列表/工具页 noindex，避免与正文页抢权重（glossary 保持可索引）
-				if (/^\/(?:en\/)?(?:weekly|tags|disclaimer|search)\//.test(pathname))
+				// 列表/工具页 noindex，避免与正文页抢权重（glossary 保持可索引）。
+				// 清单来自 src/lib/noindex.mjs 单一声明源，与 astro.config.ts sitemap 排除同步
+				if (isNoindexPath(pathname))
 					response.headers.set("X-Robots-Tag", "noindex, follow");
 			}
 
 			return applySecurityHeaders(response);
 		} catch (err) {
 			console.error("[Worker] Unhandled error:", err);
-			return new Response("Not Found", {
+			const errResp = new Response("Not Found", {
 				status: 404,
 				headers: { "Cache-Control": "public, max-age=60" },
 			});
+			errResp.headers.set("X-Robots-Tag", "noindex, follow");
+			return applySecurityHeaders(errResp);
 		}
 	},
 };

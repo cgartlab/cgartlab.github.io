@@ -3,17 +3,17 @@
 [![CI](https://github.com/cgartlab/cgartlab.github.io/actions/workflows/ci.yml/badge.svg)](https://github.com/cgartlab/cgartlab.github.io/actions/workflows/ci.yml)
 [![Argus-Flash Review](https://github.com/cgartlab/cgartlab.github.io/actions/workflows/pr-review.yml/badge.svg)](https://github.com/cgartlab/cgartlab.github.io/actions/workflows/pr-review.yml)
 
-基于 Astro 6 + UnoCSS 66 构建的个人品牌网站，专注于数字艺术、动态视觉设计、技术分享与知识管理。部署于 Cloudflare Worker + Static Assets（非 Cloudflare Pages）。
+基于 Astro 7 + UnoCSS 66 构建的个人品牌网站，专注于数字艺术、动态视觉设计、技术分享与知识管理。部署于 Cloudflare Worker + Static Assets（非 Cloudflare Pages）。
 
 ## 技术栈
 
 <!-- DOC-FACTS:START -->
 > 自动生成数据（由 `pnpm sync-docs` 更新，勿手改）
 
-> 技术栈：Astro 7.3.1 · TypeScript 6.0.3 · UnoCSS 66.10.0 · pnpm 11.10.0 · Node 24
-> 内容：159 个文章文件（80 中文 + 79 英文），周刊 20 期
+> 技术栈：Astro 7.3.2 · TypeScript 6.0.3 · UnoCSS 66.10.2 · pnpm 11.10.0 · Node 24
+> 内容：160 个文章文件（80 中文 + 80 英文），周刊 20 期
 > Markdown 管线：6 remark + 8 rehype 插件
-> 脚本：16 个（apply-lqip / astro / audit-glossary / build / dev / fetch-github-repos / fix-internal-links / format-posts / lint / lint:fix / new-post / preview / sync-docs / sync-docs:check / update-gh-contributions / verify-feed）
+> 脚本：15 个（apply-lqip / astro / audit-glossary / build / dev / fetch-github-repos / format-posts / lint / lint:fix / new-post / preview / sync-docs / sync-docs:check / update-gh-contributions / verify-feed）
 <!-- DOC-FACTS:END -->
 
 ## 项目结构
@@ -72,13 +72,12 @@ public/
 
 ```bash
 pnpm dev                  # astro check → astro dev
-pnpm build                # astro check → build → generate-llms → apply-lqip（顺序敏感）
+pnpm build                # astro check → fetch-github-repos → build → generate-llms → apply-lqip（顺序敏感）
 pnpm preview              # astro preview --host（局域网可访问）
 pnpm lint / lint:fix      # eslint（antfu config，忽略 src/content/**）
 pnpm new-post "标题"       # 创建 MD 文章（周刊自动放入 weekly/）
 pnpm format-posts         # CJK 文本规范化 (autocorrect)
 pnpm apply-lqip           # 生成 LQIP 占位图
-pnpm fix-internal-links   # 修复内部链接
 pnpm verify-feed          # 验证 RSS/Atom feed 输出
 pnpm audit-glossary       # 审计术语表引用完整性
 ```
@@ -94,7 +93,7 @@ pnpm audit-glossary       # 审计术语表引用完整性
 ## CI/CD
 
  - `main` push → **Cloudflare Worker + Static Assets** 自动部署
- - GitHub Actions（`ci.yml`）在每次 push `main`/`dev-*` 和 PR 时运行构建验证
+ - GitHub Actions（`ci.yml`）在 `dev-*`/`main` push 和 PR 时运行构建验证（含 `sync-docs:check`）
  - 其他 workflow：PR 审查（`pr-review.yml`）、PR 分类（`pr-triage.yml`）、定时维护（`maintenance.yml`）
 - 构建命令: `pnpm install --config.trustPolicy=off && pnpm build`
 - 域名: [cgartlab.com](https://cgartlab.com)

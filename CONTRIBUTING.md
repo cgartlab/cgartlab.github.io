@@ -141,15 +141,7 @@ The project uses `@ts-expect-error` in exactly **1 place** (AGENTS.md-enforced):
 
 ## Syncthing Conflict Files
 
-If you use Syncthing to sync `.obsidian/` across devices, conflict files (`*.conflict*`) may appear. Use the cleanup scripts:
-
-```bash
-# macOS/Linux
-bash scripts/syncthing-cleanup.sh
-
-# Windows
-pwsh scripts/syncthing-cleanup.ps1
-```
+Syncthing 已停用（见 AGENTS.md）。如历史遗留的冲突文件（`*.sync-conflict-*`）重新出现，直接删除即可；`scripts/syncthing-cleanup.*` 为历史残留脚本，不再需要。
 
 ## Deployment
 
@@ -162,7 +154,6 @@ No manual deployment steps needed. The `dist/` directory is not committed.
 
 ## Getting Help
 
-- **AGENTS.md** — Full project conventions and architecture reference
-- **DEVELOPMENT_GUIDE.md** — Detailed development documentation (1422 lines)
-- **docs/ARCHITECTURE.md** — System architecture overview
-- **docs/PLUGINS.md** — Custom remark/rehype plugin reference
+- **AGENTS.md** — Full project conventions and architecture reference（架构、约定、命令的唯一权威文档）
+- **README.md** — 项目概览、技术栈、常用命令
+- **.github/ISSUE_TEMPLATE / PULL_REQUEST_TEMPLATE** — 提 issue / PR 模板

@@ -71,6 +71,19 @@ const CONTRIBUTIONS_QUERY = `
 let moduleCache: { data: ContributionData, ts: number } | null = null
 
 /**
+ * 结构校验：contributions 必须是数组。
+ * 防止磁盘缓存因写入中断/磁盘满留下半截内容且 JSON 恰可解析时
+ * （如 {"data":null}）被当成有效数据，导致下游 weeks.map 抛错、构建中断。
+ */
+function isValidContributionData(data: unknown): data is ContributionData {
+  return Boolean(
+    data
+    && typeof data === 'object'
+    && Array.isArray((data as { contributions?: unknown }).contributions),
+  )
+}
+
+/**
  * Read cached data from disk
  */
 async function readDiskCache(): Promise<{
@@ -83,6 +96,10 @@ async function readDiskCache(): Promise<{
     const cached = JSON.parse(raw) as {
       data: ContributionData
       ts: number
+    }
+    if (!isValidContributionData(cached.data)) {
+      console.warn('[GithubHeatmap] Disk cache: invalid structure, ignoring')
+      return null
     }
     return cached
   }
@@ -192,7 +209,7 @@ async function readTrackedDataFile(): Promise<{
       data: ContributionData
       ts?: number
     }
-    if (!parsed.data || !Array.isArray(parsed.data.contributions)) {
+    if (!isValidContributionData(parsed.data)) {
       console.warn('[GithubHeatmap] Tracked file: invalid structure')
       return null
     }

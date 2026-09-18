@@ -17,6 +17,13 @@ import GoBackIcon from '@/assets/icons/go-back.svg';
 
 <script is:inline>
 (function () {
+  // is:inline 脚本在每次 View Transition 导航后重新执行；守卫标志确保
+  // click/page-load 监听器只注册一次，避免 N 次导航累积 N 个 click handler
+  // （否则点返回按钮会同时触发 N 次 history.back()）。
+  if (window.__BACK_BUTTON_SETUP)
+    return
+  window.__BACK_BUTTON_SETUP = true
+
   function handleBackButtonClick(e) {
     if (!(e.target instanceof Element)) {
       return

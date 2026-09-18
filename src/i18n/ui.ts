@@ -9,7 +9,6 @@ export const ui = {
     tags: 'Tags',
     about: 'About',
     works: 'Portfolio',
-    digitalPainting: 'Digital Painting',
     weekly: 'Column',
     links: 'Resources',
     toc: 'Table of Contents',

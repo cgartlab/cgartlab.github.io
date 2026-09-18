@@ -16,9 +16,8 @@ const currentLang = getLangFromLocale(Astro.currentLocale)
 const weeklyTag = currentLang === 'zh' || currentLang === 'zh-tw' ? '周刊' : 'Weekly'
 const posts = await getPostsByTag(weeklyTag, currentLang)
 const supportedLangs = await getTagSupportedLangs(weeklyTag)
-
-// 周刊页面内容较薄，添加 noindex 避免稀释整体内容质量评分
-Astro.response.headers.set('X-Robots-Tag', 'noindex, follow');
+// 周刊页面内容较薄，noindex 由 src/worker.mjs 按 src/lib/noindex.mjs 清单统一设置
+// （output: 'static' 下 Astro.response.headers.set 不产出任何响应头，此前为静默失效代码）
 ---
 
 <Layout supportedLangs={supportedLangs}>

@@ -31,7 +31,13 @@ async function fetchRepoData(repo: string): Promise<GithubRepoData | null> {
 
     const response = await fetch(`${GITHUB_API}/repos/${repo}`, {
       signal: controller.signal,
-      headers: { Accept: 'application/vnd.github.v3+json' },
+      headers: {
+        Accept: 'application/vnd.github.v3+json',
+        // CI / Cloudflare 构建环境配置 GITHUB_TOKEN 后可规避未认证 60 req/h 限流
+        ...(process.env.GITHUB_TOKEN
+          ? { Authorization: `Bearer ${process.env.GITHUB_TOKEN}` }
+          : {}),
+      },
     })
     clearTimeout(timeout)
 

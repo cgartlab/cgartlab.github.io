@@ -13,6 +13,7 @@ jobs:
   review:
     if: github.event.pull_request.user.type != 'Bot'
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v7
         with:
@@ -25,6 +26,7 @@ jobs:
           app-id: ${{ secrets.ARGUS_FLASH_APP_ID }}
           private-key: ${{ secrets.ARGUS_FLASH_PRIVATE_KEY }}
 
-      - uses: cgartlab/argus/.github/actions/argus-review@main
+      # 固定 commit SHA 保证行为可重现；升级时更新为 cgartlab/argus main 最新 SHA
+      - uses: cgartlab/argus/.github/actions/argus-review@8aea6f5726e04bae368093a53dfc8e3e97f16366
         with:
           github-token: ${{ steps.app-token.outputs.token }}

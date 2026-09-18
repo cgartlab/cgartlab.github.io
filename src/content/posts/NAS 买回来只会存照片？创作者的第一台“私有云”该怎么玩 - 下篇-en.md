@@ -14,7 +14,7 @@ toc: true
 lang: en
 ---
 
-![Personal data center with all drive bays filled showing NAS storage setup for creative professionals](_images/11月的拔草记录和选荐-1754916668923%201.webp)
+![Personal data center with all drive bays filled showing NAS storage setup for creative professionals](_images/11月的拔草记录和选荐-1754916668923.webp)
 
 ## Before We Begin
 

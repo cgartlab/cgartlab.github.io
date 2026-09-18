@@ -1,7 +1,7 @@
 ---
+import type { Language } from '@/i18n/config'
 import { ClientRouter } from 'astro:transitions'
 import katexCSS from 'katex/dist/katex.min.css?url'
-import type { Language } from '@/i18n/config'
 import { allLocales, base, defaultLocale, themeConfig } from '@/config'
 import { ui } from '@/i18n/ui'
 import { getPageInfo } from '@/utils/page'
@@ -51,7 +51,7 @@ const pageImage = ogImage
 
 // Tool/product structured data details, keyed by abbrlink slug from the URL path
 const pathSlug = Astro.url.pathname.match(/\/posts\/([^/]+)\//)?.[1]
-const softwareAppMeta: Record<string, { operatingSystem: string; applicationCategory: string }> = {
+const softwareAppMeta: Record<string, { operatingSystem: string, applicationCategory: string }> = {
   'layerrenamer-1': { operatingSystem: 'macOS, Windows', applicationCategory: 'UtilitiesApplication' },
   'layerrenamer': { operatingSystem: 'macOS, Windows', applicationCategory: 'UtilitiesApplication' },
   'goto-github': { operatingSystem: 'macOS, Linux, Windows', applicationCategory: 'DeveloperApplication' },
@@ -144,10 +144,31 @@ const softwareApp = postSchemaType === 'SoftwareApplication' ? softwareAppMeta[p
 {(() => {
   const currentPath = Astro.url.pathname
   const pathWithoutLang = currentPath.replace(/^\/(en|zh-tw)\//, '/')
+  // 与 alternate 块共用同一守卫：受限语言页面（如 en-only 标签页）时，
+  // x-default 不能指向不存在的 zh 版本（404），应指向真实存在的语言版本。
+  const hasRestrictedLangs = supportedLangs.length > 0
+    && !(supportedLangs.length === allLocales.length && allLocales.every(l => supportedLangs.includes(l as Language)))
+  if (!hasRestrictedLangs) {
+    return (
+      <link
+        rel="alternate"
+        href={new URL(pathWithoutLang, Astro.url.origin).href}
+        hreflang="x-default"
+      />
+    )
+  }
+  // 受限语言：x-default 指向 supportedLangs 中按 allLocales 优先级最靠前的真实版本
+  const priority = new Map(allLocales.map((l, i) => [l, i]))
+  const preferred = [...supportedLangs].sort(
+    (a, b) => (priority.get(a) ?? Number.MAX_SAFE_INTEGER) - (priority.get(b) ?? Number.MAX_SAFE_INTEGER),
+  )[0]
+  if (!preferred)
+    return null
+  const href = preferred === defaultLocale ? pathWithoutLang : `/${preferred}${pathWithoutLang}`
   return (
     <link
       rel="alternate"
-      href={new URL(pathWithoutLang, Astro.url.origin).href}
+      href={new URL(href, Astro.url.origin).href}
       hreflang="x-default"
     />
   )

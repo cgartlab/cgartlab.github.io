@@ -19,6 +19,8 @@ const { supportedLangs } = Astro.props
 const currentPath = Astro.url.pathname
 
 const showLanguageSwitcher = moreLocales.length > 0
+  // 当前页只支持一种语言时（如 en-only 标签页），切换按钮会解析为自我链接，隐藏之
+  && supportedLangs.length !== 1
 const nextUrl = supportedLangs.length > 0
   ? getNextSupportedLangPath(currentPath, supportedLangs)
   : getNextGlobalLangPath(currentPath)
@@ -151,9 +153,15 @@ function handleThemeToggle(e: MouseEvent) {
   })
 
   // Remove temporary marker after view transition
-  transition.finished.then(() => {
-    document.documentElement.removeAttribute('data-theme-changing')
-  })
+  // .catch：导航取消时 transition.finished 会 reject，必须清理标记，
+  // 否则 data-theme-changing 残留会让后续主题切换动画行为异常
+  transition.finished
+    .then(() => {
+      document.documentElement.removeAttribute('data-theme-changing')
+    })
+    .catch(() => {
+      document.documentElement.removeAttribute('data-theme-changing')
+    })
 }
 
 // Listen to system theme changes in real time

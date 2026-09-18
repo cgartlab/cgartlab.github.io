@@ -18,9 +18,7 @@
 
 /* Customized Post Title */
 .heti .post-title {
-	font-family:
-		"STIX", "EarlySummer", "ui-serif", "Georgia", "Cambria",
-		"Times New Roman", "Times", serif;
+	font-family: var(--un-preset-theme-font-family-serif);
 	width: 100%;
 	margin-bottom: 0.5rem;
 	margin-top: 0;
@@ -37,9 +35,7 @@
 
 /* Headings */
 .heti :where(h1, h2, h3, h4, h5, h6) {
-	font-family:
-		"STIX", "EarlySummer", "ui-serif", "Georgia", "Cambria",
-		"Times New Roman", "Times", serif;
+	font-family: var(--un-preset-theme-font-family-serif);
 	margin-bottom: 1.875rem;
 	margin-top: 3.75em;
 	scroll-margin-top: 5rem;
@@ -90,7 +86,8 @@
 }
 .heti :where(h1, h2, h3) {
 	text-wrap: balance;
-	line-height: 1.33;
+	/* 各 heading 已有显式 line-height（h1/h2/h3 分别 2.5/2.25/2rem），
+	   此处只补 text-wrap，不设 line-height 以免覆盖（:where 零特异度按源序后者胜） */
 }
 @media (min-width: 1024px) {
 	.heti :where(h1, h2, h3):is(:lang(zh), :lang(ja), :lang(ko)) {

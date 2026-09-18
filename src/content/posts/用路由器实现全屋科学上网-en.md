@@ -60,7 +60,7 @@ Now the router's system actually has SSH functionality. We need to calculate the
 
 Password calculation methods can use online websites or local html files. Common router models have methods shared by experts on GitHub or related forums. I'm using the local html method here. Can be used directly:
 
-[Xiaomi SN](./_files/小米 SN.zip)
+[Xiaomi SN](./_files/小米SN.zip)
 
 Open html file, enter SN to calculate password
 
