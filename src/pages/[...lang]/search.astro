@@ -24,7 +24,7 @@ const searchEmpty = currentUI.searchEmpty || 'No results found'
     <h1 class="search-page-title">{searchTitle}</h1>
 
     <div class="search-page-box">
-      <div class="search-input-wrapper">
+      <div class="search-input-wrapper" role="search">
         <input
           type="text"
           id="search-page-input"
@@ -328,9 +328,10 @@ const searchEmpty = currentUI.searchEmpty || 'No results found'
       const { item, lower } = topResults[i]
       const prefix = item.lang === 'zh' ? '' : `/${item.lang}`
       const href = `${prefix}/posts/${item.slug}/`
+      const fullHref = base.replace(/\/$/, '') + href
 
       const wrapper = document.createElement('a')
-      wrapper.href = href
+      wrapper.href = fullHref
       wrapper.className = 'search-result-item'
 
       const titleDiv = document.createElement('div')
@@ -369,19 +370,26 @@ const searchEmpty = currentUI.searchEmpty || 'No results found'
     els.results.appendChild(fragment)
   }
 
+  let firstSearch = true
   function updateUrl(query) {
     const url = new URL(window.location.href)
     if (query)
       url.searchParams.set('q', query)
     else
       url.searchParams.delete('q')
-    history.replaceState(null, '', url.toString())
+    if (firstSearch) {
+      history.pushState(null, '', url.toString())
+      firstSearch = false
+    } else {
+      history.replaceState(null, '', url.toString())
+    }
   }
 
   function setup() {
     const els = getElements()
     if (!els.input)
       return
+    firstSearch = true
 
     // 清理旧监听器，避免重复注册
     if (inputHandler) {

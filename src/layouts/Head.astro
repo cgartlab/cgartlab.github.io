@@ -61,7 +61,7 @@ const softwareApp = postSchemaType === 'SoftwareApplication' ? softwareAppMeta[p
 
 <head>
 <!-- Base URL：必须在所有 URL 引用（link/script）之前声明，供运行时脚本读取 -->
-<base href={base} />
+<base href={base || '/'} />
 <!-- Preconnect to third-party domains -->
 <link rel="preconnect" href="https://www.googletagmanager.com" crossorigin />
 {postSlug && <link rel="preconnect" href="https://giscus.app" crossorigin />}
