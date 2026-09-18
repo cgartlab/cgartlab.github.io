@@ -65,7 +65,7 @@ const currentUI = ui[currentLang as keyof typeof ui] ?? {}
   let lastFocused = null
   let scrollY = 0
   let loadFailed = false
-  const base = document.querySelector('base')?.getAttribute('href') || '/'
+  const base = import.meta.env.BASE_URL || '/'
 
   function getElements() {
     return {
@@ -134,9 +134,11 @@ const currentUI = ui[currentLang as keyof typeof ui] ?? {}
     const els = getElements()
     if (els.loading)
       els.loading.classList.add('visible')
+    const controller = new AbortController()
+    const timer = setTimeout(() => controller.abort(), 10_000)
     try {
       const response = await fetch(`${base}api/search-index/${currentLang}.json`, {
-        signal: AbortSignal.timeout(10_000),
+        signal: controller.signal,
       })
       const indexData = await response.json()
       const lowerData = indexData.map((item) => {
@@ -164,6 +166,7 @@ const currentUI = ui[currentLang as keyof typeof ui] ?? {}
       loadFailed = true
     }
     finally {
+      clearTimeout(timer)
       const els = getElements()
       if (els.loading)
         els.loading.classList.remove('visible')
