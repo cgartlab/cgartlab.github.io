@@ -60,8 +60,11 @@ const softwareApp = postSchemaType === 'SoftwareApplication' ? softwareAppMeta[p
 ---
 
 <head>
-<!-- Base URL：必须在所有 URL 引用（link/script）之前声明，供运行时脚本读取 -->
-<base href={base || '/'} />
+<!-- 不输出 <base> 标签：站点为根路径部署（base='/'），输出 <base href="/">
+     会把页内片段链接（TOC 目录锚点 #slug、术语表字母跳转 #letter-X）的解析
+     基准改为站点根，点击后跳转回首页而非当前页。搜索脚本用
+     document.querySelector('base')?.getAttribute('href') || '/' 读取 base，
+     无 <base> 时回退 '/' 与根部署一致。 -->
 <!-- Preconnect to third-party domains -->
 <link rel="preconnect" href="https://www.googletagmanager.com" crossorigin />
 {postSlug && <link rel="preconnect" href="https://giscus.app" crossorigin />}
