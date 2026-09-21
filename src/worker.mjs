@@ -215,16 +215,16 @@ export default {
 					"public, max-age=86400, stale-while-revalidate=3600",
 				);
 			}
-			// HTML → 浏览器 10 分钟 SWR，边缘 30 分钟
+			// HTML → 浏览器 1 小时 SWR，边缘 1 小时
 			// 目录页（/、/en/、/about/ 等）的 assetPath 以 / 结尾，需同时匹配 .html 和 /
 			else if (assetPath.endsWith(".html") || assetPath.endsWith("/")) {
 				response.headers.set(
 					"Cache-Control",
-					"public, max-age=600, stale-while-revalidate=120",
+					"public, max-age=3600, stale-while-revalidate=600",
 				);
 				response.headers.set(
 					"Cloudflare-Cdn-Cache-Control",
-					"max-age=1800",
+					"max-age=3600",
 				);
 				// 列表/工具页 noindex，避免与正文页抢权重（glossary 保持可索引）。
 				// 清单来自 src/lib/noindex.mjs 单一声明源，与 astro.config.ts sitemap 排除同步
