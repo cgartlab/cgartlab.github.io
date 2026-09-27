@@ -1,185 +1,180 @@
 # Changelog
 
-All notable project changes are documented here.
+本项目所有值得记录的变更。格式参考 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)，
+版本号遵循 [Semantic Versioning](https://semver.org/spec/v2.0.0.html)。
 
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
-and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+站点从 `main` 持续交付（Cloudflare Worker + Static Assets），1.0.0 之后不再单独切版本号，
+因此下面的条目按合并日期归档，每条附对应的 PR 号。
 
 ---
 
 ## Unreleased
 
-### Fixed — Issue Triage & Bug Fixes (2026-09-01)
+### 2026-09-27 — 专栏 No.21 中英双语 (#422)
 
-**Bug Fixes (PR #345-#352, #363-#367)**
-- `apply-lqip.ts`: URL-decoded `src` matching for CJK image filenames (#304)
-- `update-theme.ts`: Added 30s timeout to 7 `execSync` calls (#339)
-- `description.ts`: Changed `cleanText.slice()` to `Array.from().slice().join()` for CJK/codepoint safety (#329)
-- `github-contributions.ts` + `GithubHeatmap.astro`: Removed 5 `console.log` + fixed lint debt (#306)
-- `ci.yml`: Added `pnpm audit` dependency audit gate (#308)
-- `worker.mjs`: Added security headers (HSTS, nosniff, XFO, Referrer, Permissions) + CSP enforcement (#333, #358)
-- `update-contributions.yml`: Reduced cron from every 6 hours to weekly Sunday (#357)
-- `content.config.ts` + `Head.astro` + `Layout.astro`: Added per-article `katex` frontmatter for conditional CSS loading (#362)
-- `fetch-github-repos.ts` + `GithubCard.astro`: Build-time static GitHub repo data, zero runtime API calls (#353)
-- `update-contributions.yml`: Reduced cron frequency to weekly (#357)
+**Added**
 
-**Infrastructure**
-- Created `.github/PULL_REQUEST_TEMPLATE.md` (#351)
+- 玄光专栏 No.21《为什么没感觉到 AI 让你变快？》中英双语，`abbrlink: weekly-21`，含 7 张配图
+- 英文版按 Google SEO 与 GEO 优化：问题式标题与小节、可引用的事实与数字、内链话题簇、描述性 alt 文本
+- `public/llms.txt` 收录本期中英条目
 
-**Issue Triage**
-- Closed 27 stale/invalid/bot-generated issues (#307, #309-#327, #328, #330-#332, #334-#338, #356, #359-#361)
-- Evaluated bot-generated issues for actual risk; closed non-actionable ones with explanations
+**Fixed**
 
-### Fixed — PR #199 全面 Bug 修复与加固 (2026-06-29)
+- `public/llms.txt`：修正此前错误的 URL 形态（`/zh/weekly/weekly-20` → `/posts/weekly-20/`），与 `trailingSlash: 'always'` 一致
+- 本机 pnpm 工具链：store 位于 ExFAT 卷，pnpm 无法创建项目注册符号链接，`pnpm install` 长期失败，`node_modules` 停留在旧版本（astro 7.3.1 / vite 8.2.2）。store 迁至 NTFS 后 `astro check` 与 `pnpm build` 恢复。属设备级配置，不入库
 
-**P0 构建 Bug**
-- `rehype-image-processor`: 画廊 `splice` 后返回 `[SKIP, index + figures.length]` 修复遍历索引偏移；多图段落（非画廊）改用 `createFigure()` 保留 alt 文本和 `<figure>` 包裹；无 alt 的画廊图片现在也正确包裹 `gallery-item` class
+### 2026-09-21 — 缓存、导航与搜索修复 (#416 #417 #418)
 
-**P1 功能 Bug**
-- `WorksGallery`: `DOMContentLoaded` → `astro:page-load`；`event.target` → `event.currentTarget`，修复 View Transition 导航后筛选失效及子元素点击问题
-- View Transition 事件监听器泄漏（6 组件）：`SoundEffect`、`Button`、`ImageZoom`、`CodeCopyButton`、`GithubHeatmap`、`Layout` 统一采用 `astro:page-load`/`astro:before-swap` 配对
-- `Button`: `matchMedia` 提取为模块级常量，确保 `removeEventListener` 有效
-- `InquiryForm`: submit 监听器移入 `astro:page-load`；验证错误边框改为红色
-- `extension.css`: 移除非标准 `scroll-target-group: auto` 和 `a:target-current` 伪类
-- `TOC`: 改用 IntersectionObserver 驱动 `.toc-active` class 高亮；`scrollIntoView` 在 `reduce-motion` 下降级为 `instant`；按 DOM 顺序而非字典序确定最靠前可见标题
-- 6 个交互元素补充 `:focus-visible` + outline（`tag-item`、`code-copy-button`、`category-tag`、`search-close`、`search-result-item`、`form-submit`）
-- Waline: 移除 `--waline-bg-color-hover` 同色覆盖
-- `ConsentBanner`: 补充 `html.reduce-motion` 类选择器
-- `ImageZoom`: iOS Safari 滚动锁定改用 `position:fixed+width:100%`；`cleanupZoom` 补充 `scroll-lock` 移除，防止导航后下一页 body 固定
+- **perf(worker)**：HTML 边缘缓存延长到 1 小时，并补 SWR 窗口 (#418)
+- **fix(toc)**：移除 `<base>` 标签，修复片段锚点导航跳回首页 (#417)
+- **fix(search)**：修复搜索完全失效——`import.meta` 在 `is:inline` 脚本中抛 `SyntaxError` (#416)
+
+### 2026-09-18 — 四路排查修复 30 项 (#414)
+
+- **fix(audit)**：修复交互、样式、CI、SEO 四路排查发现的问题
+
+### 2026-09-12 — 专栏 No.20 与文章模板精简 (#409 #410 #411)
+
+- **feat(posts)**：发布专栏 No.20《文字内容创作的形式》中英双语 (#409)
+- **docs(templates)**：精简 Obsidian 文章模板 (#410)
+- **fix(posts)**：修正文章页面的中英文翻译问题 (#411)
+
+### 2026-09-11 — 无障碍、搜索与依赖安全 (#402 #404 #405 #406 #407 #408)
+
+- **fix(a11y)**：字母导航可达性与点按尺寸修复，含 CDP 实测证据 (#408)
+- **fix(deps)**：修复阻断 CI 的 3 个传递依赖漏洞（sharp / svgo / js-yaml）(#406)
+- **fix(deps)**：fast-uri 3.1.5 → 3.1.6，修补 4 项 SSRF / 主机混淆 CVE (#402)
+- **fix(search)**：修复搜索空态 `ReferenceError`、监听器泄漏与 search 页 noindex 缺失 (#405)
+
+### 2026-09-01 — Issue 清理与 Bug 修复 (#345–#352, #363–#367)
+
+**Fixed**
+
+- `apply-lqip.ts`：CJK 图片文件名的 `src` 匹配改为 URL 解码 (#304)
+- `update-theme.ts`：7 处 `execSync` 补 30 秒超时 (#339)
+- `description.ts`：`cleanText.slice()` 改为 `Array.from().slice().join()`，避免 CJK 与代理对截断破字 (#329)
+- `github-contributions.ts` + `GithubHeatmap.astro`：移除 5 处 `console.log`，清理 lint 债 (#306)
+- `ci.yml`：新增 `pnpm audit` 依赖审计门禁 (#308)
+- `worker.mjs`：补安全响应头（HSTS / nosniff / X-Frame-Options / Referrer-Policy / Permissions-Policy）并启用 CSP (#333, #358)
+- `update-contributions.yml`：cron 由每 6 小时降为每周日 (#357)
+- `content.config.ts` + `Head.astro` + `Layout.astro`：新增文章级 `katex` frontmatter，按需加载公式样式 (#362)
+- `fetch-github-repos.ts` + `GithubCard.astro`：GitHub 仓库数据改为构建期静态生成，运行时零 API 调用 (#353)
+
+**Added**
+
+- `.github/PULL_REQUEST_TEMPLATE.md` (#351)
+
+**Chore**
+
+- 清理 27 个过期、无效或 Bot 生成的 issue (#307, #309–#327, #328, #330–#332, #334–#338, #356, #359–#361)
+- 逐条评估 Bot 生成 issue 的实际风险，不可执行的关闭并说明理由
+
+### 2026-08-02 — 全部文章英译，双语覆盖 100% (#268)
+
+- **feat(posts)**：翻译其余 29 篇中文文章，达成 100% 双语覆盖（里程碑）
+
+### 2026-08-01 — AI 优雅食用指南（一）(#267)
+
+- **feat(posts)**：新增《你不知道的 AI 优雅食用指南（一）：慢一点比较快》中英双语
+
+### 2026-07-30 — 热力图迁移 GitHub GraphQL API (#266)
+
+- **feat(heatmap)**：迁移到官方 GraphQL API，加入文件缓存与构建期容错
+
+### 2026-07-29 — sharp 升级与友链 (#263)
+
+- **feat(links)**：新增 Bo.Ke 友链
+- **fix(deps)**：sharp 0.34.5 → 0.35.3，修复 libvips CVE
+- **fix**：`Head.astro` lint 清理
+
+### 2026-07-27 — 跨平台 pnpm 兼容与 CI 升级 (#255 #260)
+
+- **fix**：跨平台 `pnpm install` 兼容（Windows / macOS / Linux）与死代码清理 (#260)
+- **chore(deps)**：`actions/labeler` 6 → 7 (#255)
+
+### 2026-07-22 — /feed 重定向与英文版审查 (#257 #258)
+
+- **fix(worker)**：新增 `/feed` 快捷重定向到 RSS (#258)
+- **fix(posts)**：全面修正英文版翻译质量、图片链接与 SEO (#257)
+
+### 2026-07-21 — 「我的上帝模式」中英版与工作流自动化 (#251 #252 #253 #254)
+
+- **feat(posts)**：发布《我的上帝模式，一名设计师创作环境的演变》中文版 (#251) 与英文版 (#254)
+- **chore**：更新模板默认元数据，修订周刊描述 (#252)
+- **ci**：`actions/add-to-project` 升级到 v2.0.0 (#253)
+
+### 2026-07-17 — SEO 标题优化与 PR 自动化 (#237 #238 #247 #248)
+
+- **feat(seo)**：新增 `seoTitle` frontmatter 优化页面标题，修正页脚英文 i18n (#247)
+- **chore(ci)**：新 PR 自动指派作者并加入 Project 3 (#248)
+- **chore(deps)**：补丁批量更新 (#238)，`actions/setup-node` 6 → 7 (#237)
+
+### 2026-07-16 — About 页面法律文档更新 (#246)
+
+- **docs(about)**：法务内容更新
+
+### 2026-07-15 — glossary / Cookie / 视频文章系列 (#240–#245)
+
+- **feat**：glossary 完整 i18n 支持 (#240)
+- **feat(article)**：视频文章居中样式与可靠的自动播放 (#241)
+- **style**：Cookie 弹窗样式优化 (#242)
+- **fix(glossary)**：scroll-spy 与分隔符渲染 (#243)，移动端侧边导航与 scroll-spy 偏移 (#244)
+- **feat(glossary)**：移动端导航自动隐藏，滚动显露，3 秒无操作后收起 (#245)
+
+### 2026-07-13 — Mermaid 构建时渲染与暗色模式 (#235)
+
+- **fix(mermaid)**：恢复构建时渲染，并准备暗色模式支持
+
+### 2026-06-29 — 全面 Bug 修复与加固 (#199)
+
+**P0 构建**
+
+- `rehype-image-processor`：画廊 `splice` 后返回 `[SKIP, index + figures.length]`，修复遍历索引偏移；多图段落（非画廊）改用 `createFigure()` 保留 alt 与 `<figure>` 包裹；无 alt 的画廊图片也正确包裹 `gallery-item` class
+
+**P1 功能**
+
+- `WorksGallery`：`DOMContentLoaded` → `astro:page-load`，`event.target` → `event.currentTarget`，修复 View Transition 导航后筛选失效与子元素点击问题
+- View Transition 监听器泄漏（6 个组件）：`SoundEffect`、`Button`、`ImageZoom`、`CodeCopyButton`、`GithubHeatmap`、`Layout` 统一改为 `astro:page-load` / `astro:before-swap` 配对
+- `Button`：`matchMedia` 提取为模块级常量，`removeEventListener` 才真正生效
+- `InquiryForm`：submit 监听器移入 `astro:page-load`，验证错误边框改为红色
+- `extension.css`：移除非标准的 `scroll-target-group: auto` 与 `a:target-current` 伪类
+- `TOC`：改用 IntersectionObserver 驱动 `.toc-active` 高亮，`scrollIntoView` 在 `reduce-motion` 下降级为 `instant`，按 DOM 顺序而非字典序确定最靠前的可见标题
+- 6 个交互元素补 `:focus-visible` 与 outline（`tag-item`、`code-copy-button`、`category-tag`、`search-close`、`search-result-item`、`form-submit`）
+- `Waline`：移除 `--waline-bg-color-hover` 同色覆盖
+- `ConsentBanner`：补 `html.reduce-motion` 类选择器
+- `ImageZoom`：iOS Safari 滚动锁定改用 `position:fixed + width:100%`，`cleanupZoom` 补 `scroll-lock` 移除，防止导航后下一页 body 被固定
 
 **P2 功能与质量**
-- `TOC`: 容器加 `bottom-0`；`extension.css` 桌面端 `grid-template-rows:1fr` 移入 `@media(min-width:1536px)` 修复移动端始终展开
-- `content.ts`: `getPosts` 用默认参数值归一化 `undefined→defaultLocale`，消除双缓存键问题
+
+- `TOC`：容器加 `bottom-0`，`extension.css` 桌面端 `grid-template-rows:1fr` 移入 `@media(min-width:1536px)`，修复移动端始终展开
+- `content.ts`：`getPosts` 用默认参数值归一化 `undefined → defaultLocale`，消除双缓存键
 - OG 生成过滤 `draft:true` 文章
-- `search-index` API（`[lang]` 和全局版）均加 try-catch，返回 JSON 格式错误
-- `worker.mjs`: 无尾斜杠 301 重定向 + 全局 try-catch + 404.html fallback 容错
-- `rehype-glossary`: CJK 术语添加 Unicode 边界检查，防止复合词内子串误匹配
-- `description.ts`: 所有场景截断 frontmatter description；`htmlEntityMap` 修正 `&amp;` 解码顺序；frontmatter description 先经 Markdown 渲染再截断
-- `remark-container-directives`: 空 admonition 清理空 `<p>` 节点
-- `rehype-external-links`: 用 `URL.hostname` 判断同源，跳过同源链接的外链标记
-- `transition.css`: `reduce-motion` 块补充热图/链接卡片/画廊 hover 覆盖
+- `search-index` API（`[lang]` 版与全局版）均加 try-catch，返回 JSON 格式错误
+- `worker.mjs`：无尾斜杠 301 重定向、全局 try-catch、404.html fallback
+- `rehype-glossary`：CJK 术语补 Unicode 边界检查，防止复合词内子串误匹配
+- `description.ts`：所有场景都截断 frontmatter description，修正 `htmlEntityMap` 的 `&amp;` 解码顺序，frontmatter description 先经 Markdown 渲染再截断
+- `remark-container-directives`：清理空 admonition 产生的空 `<p>` 节点
+- `rehype-external-links`：用 `URL.hostname` 判断同源，跳过同源链接的外链标记
+- `transition.css`：`reduce-motion` 块补热图、链接卡片、画廊 hover 覆盖
 
-**样式优化**
+**样式**
+
 - 导航高亮：`::after` 改为 `height:2px` 下划线，移除 `z-index:-1`
-- 资源页：移除 `.links-section` `border-radius`/`overflow:hidden` 及展开时标题分隔线
+- 资源页：移除 `.links-section` 的 `border-radius` / `overflow:hidden` 及展开时的标题分隔线
 
-**颜色 Token 修复**（argus follow-up）
-- `skip-to-content` 背景/outline `#007bff` → `primary` token
-- `code-copy-button.copied` 成功绿 `#059669`/`#10b981` → `tip` token（合并为单条，暗色自动跟随）
+**颜色 Token**（Argus 评审跟进）
+
+- `skip-to-content` 背景与 outline 的 `#007bff` → `primary` token
+- `code-copy-button.copied` 成功绿 `#059669` / `#10b981` → `tip` token（合并为单条，暗色自动跟随）
 - `subtitle-cursor-block` 红色 `#b91c1c` → `caution` token
 
-### Added
+### 2026-06 至 2026-07 — 文档与贡献基础设施
 
-- **docs/PLUGINS.md** — Complete reference for all 7 custom remark/rehype plugins (`remarkContainerDirectives`, `remarkLeafDirectives`, `remarkReadingTime`, `rehypeHeadingAnchor`, `rehypeImageProcessor`, `rehypeExternalLinks`, `rehypeCodeCopyButton`)
-- **docs/COMMANDS.md** — Consolidated commands reference for all npm scripts and build tools
-- **CONTRIBUTING.md** — PR workflow, commit conventions, branch strategy, and contribution guidelines
-- **CHANGELOG.md** — This file
-
-### Changed
-
-- **docs/ARCHITECTURE.md** — Complete rewrite: removed outdated `blog/` content reference, updated project structure to reflect actual `posts/works/weekly/_images/` organization, added tech architecture sections (SSG, Markdown pipeline, theme system, i18n routing, LQIP pipeline), documented the 5 key architectural decisions (trailing slash, LQIP auto-management, language filtering, triple comments, Worker scope)
-
-### Added — PR #268 全部文章英译、100% 双语覆盖 (2026-08-02)
-
-- **feat(posts)**: translate all 29 remaining Chinese articles to English, achieving 100% bilingual coverage (里程碑)
-
-### Added — PR #267 AI Graceful Dining Guide (2026-08-01)
-
-- **feat(posts)**: add AI Graceful Dining Guide (Part 1: Slow Is Fast) — Chinese & English versions
-
-### Added — PR #266 GitHub 热力图迁移至 GraphQL API (2026-07-30)
-
-- **feat(heatmap)**: migrate to official GitHub GraphQL API with file-based caching and build-time error tolerance
-
-### Added / Changed — PR #263 sharp 升级 + 友链 (2026-07-29)
-
-- **feat(links)**: add Bo.Ke friend link
-- **fix(deps)**: upgrade sharp 0.34.5 → 0.35.3 to fix libvips CVE
-- **fix**: Head.astro lint cleanup
-
-### Fixed — PR #260 跨平台 pnpm 兼容性 (2026-07-27)
-
-- **fix**: cross-platform `pnpm install` compatibility (Windows/macOS/Linux) and dead code cleanup
-
-### Chore — PR #255 dependabot actions/labeler 升级 (2026-07-27)
-
-- **chore(deps)**: bump actions/labeler from 6 to 7
-
-### Fixed — PR #258 /feed 快捷重定向 (2026-07-22)
-
-- **fix(worker)**: add `/feed` shortcut redirect to RSS feed
-
-### Fixed — PR #257 英文版翻译质量全面审查 (2026-07-22)
-
-- **fix(posts)**: 全面修正英文版翻译质量、图片链接与 SEO 优化
-
-### Added — PR #254 英文版「我的上帝模式」 (2026-07-21)
-
-- **feat(posts)**: 发布英文版「我的上帝模式，一名设计师创作环境的演变」
-
-### CI — PR #253 PR triage action 修复 (2026-07-21)
-
-- **ci**: 升级 `actions/add-to-project` 到 v2.0.0
-
-### Chore — PR #252 模板与周刊描述更新 (2026-07-21)
-
-- **chore**: 更新模板默认元数据与修订周刊描述
-
-### Added — PR #251 「我的上帝模式」中文版 (2026-07-21)
-
-- **feat(posts)**: 发布「我的上帝模式，一名设计师创作环境的演变」
-
-### CI — PR #248 自动分配 assignee + Project (2026-07-17)
-
-- **chore(ci)**: auto-assign author and add PRs to Project 3 on open
-
-### Added — PR #247 SEO 标题优化 (2026-07-17)
-
-- **feat(seo)**: optimize page titles with `seoTitle` frontmatter field, fix footer EN i18n
-
-### Docs — PR #246 About 页面法律文档更新 (2026-07-16)
-
-- **docs/about**: legal update
-
-### Added — PR #245 glossary 移动端导航自动隐藏 (2026-07-15)
-
-- **feat(glossary)**: mobile nav auto-hide, reveal on scroll, hide after 3s idle
-
-### Fixed — PR #244 glossary 移动端侧边导航 + scroll-spy 偏移 (2026-07-15)
-
-- **fix(glossary)**: vertical nav on mobile, fix scroll-spy offset for click navigation
-
-### Fixed — PR #243 glossary scroll-spy + 分隔符渲染 (2026-07-15)
-
-- **fix(glossary)**: scroll-spy and divider rendering
-
-### Style — PR #242 Cookie 弹窗样式优化 (2026-07-15)
-
-- **style**: 优化 cookie 弹窗样式
-
-### Added — PR #241 视频文章居中样式 + autoplay (2026-07-15)
-
-- **feat(article)**: optimize video display with centered styling and reliable autoplay
-
-### Added — PR #240 glossary 完整 i18n 支持 (2026-07-15)
-
-- **feat**: optimize glossary with full i18n support
-
-### Fixed — PR #236 TOC 手风琴折叠 + 侧边栏加宽 (2026-07-14)
-
-- **fix(toc)**: add accordion collapse/expand with animation, widen sidebar to fit longest title
-
-### Fixed — PR #235 Mermaid 暗色模式 + 构建时渲染恢复 (2026-07-13)
-
-- **fix(mermaid)**: restore build-time rendering and prepare dark mode support
-
-### Chore — PR #238 dependabot 补丁更新（批量） (2026-07-17)
-
-- **chore(deps)**: bump the patch-updates group with 2 updates
-
-### Chore — PR #237 dependabot setup-node 升级 (2026-07-17)
-
-- **chore(deps)**: bump actions/setup-node from 6 to 7
+- **docs/PLUGINS.md** — 7 个自定义 remark / rehype 插件完整参考
+- **docs/COMMANDS.md** — 所有 npm 脚本与构建工具汇总
+- **CONTRIBUTING.md** — PR 流程、提交规范、分支策略
+- **CHANGELOG.md** — 本文件
+- **docs/ARCHITECTURE.md** — 全量重写：移除过时的 `blog/` 引用，结构对齐实际的 `posts/` `works/` `weekly/` `_images/`，补充 SSG、Markdown 管线、主题系统、i18n 路由、LQIP 管线，并记录 5 项关键架构决策
 
 ---
 
@@ -187,48 +182,45 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Trilingual support (zh/en/zh-tw) with dynamic `[...lang]` routing
-- 玄光周刊 (Weekly Newsletter) system with 19 issues and gallery component
-- Works portfolio section
-- Three comment systems: Giscus, Twikoo, Waline (all bundled, configurable)
-- Dual theme system (light/dark) with OKLCH color space
-- LQIP (Low Quality Image Placeholder) system — sharp 3×3px → CSS radial gradient
-- 7 custom remark/rehype plugins for enhanced Markdown
-- UnoCSS with presetWind3 + presetAttributify + presetTheme
-- KaTeX math rendering
-- Mermaid diagram support
-- View Transitions for theme switching and page navigation
-- OG image generation via `astro-og-canvas` + `canvaskit-wasm`
-- Partytown integration for offloading analytics to Web Workers
-
-- Client-side search with language-specific JSON indexes
-- RSS + Atom feed generation with XSLT styling
-- llms.txt auto-generation for LLM consumption
-- Web3Forms contact inquiry form
-- Typing sound effects (Web Audio API, 5 variants)
-- Image zoom on click (fullscreen lightbox)
-- Table of Contents with active heading tracking
-- Code block copy button
+- 三语言支持（zh / en / zh-tw）与 `[...lang]` 动态路由
+- 玄光周刊系统与画廊组件
+- 作品集（Works）板块
+- 三套评论系统：Giscus / Twikoo / Waline（全部内置，可配置）
+- 明暗双主题，基于 OKLCH 色彩空间
+- LQIP 低质量占位图：sharp 3×3px → CSS 径向渐变
+- 7 个自定义 remark / rehype 插件
+- UnoCSS（presetWind3 + presetAttributify + presetTheme）
+- KaTeX 数学公式
+- Mermaid 图表
+- View Transitions 主题切换与页面导航
+- OG 图片生成（`astro-og-canvas` + `canvaskit-wasm`）
+- Partytown 把分析脚本移入 Web Worker
+- 客户端搜索，按语言分 JSON 索引
+- RSS + Atom feed，含 XSLT 样式
+- llms.txt 自动生成
+- Web3Forms 联系表单
+- 打字音效（Web Audio API，5 种）
+- 图片点击缩放（全屏灯箱）
+- 目录（TOC）与当前标题高亮
+- 代码块复制按钮
 
 ### Security
 
-- www → non-www redirect (301) via Cloudflare Worker (SEO canonical unity)
-- robots.txt blocks AI training crawlers (CC0 waiver)
-- Umami Analytics external link tracking
-- CSP-ready header structure
+- www → non-www 301 重定向，统一 canonical
+- robots.txt 阻止 AI 训练爬虫
+- Umami 外链跟踪
+- CSP 就绪的响应头结构
 
 ### Performance
 
-- Static site generation (SSG) — all pages pre-rendered at build time
-- Cloudflare Pages deployment (global CDN)
-- Font subsetting and unicode-range splitting for EarlySummer
-- astro-compress for HTML/CSS/JS (excludes images/SVG)
-- Prefetch on viewport enter (`prefetchAll: true, strategy: 'viewport'`)
+- 全站静态生成（SSG），所有页面构建期预渲染
+- Cloudflare Worker + Static Assets 部署（全球 CDN）
+- EarlySummer 字体子集化与 unicode-range 拆分
+- astro-compress 压缩 HTML / CSS / JS（排除图片与 SVG）
+- 视口进入时预取（`prefetchAll: true, strategy: 'viewport'`）
 
 ---
 
 ## 0.1.0 — 2021
 
-Initial release. Single-language (zh) Astro site with basic blog functionality.
-
-
+首个版本。单语言（zh）Astro 站点，基础博客功能。
