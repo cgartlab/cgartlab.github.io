@@ -8,9 +8,12 @@
  *
  * 设计约束：
  * - 纯正则解析 RSS（feed 库生成的结构固定，避免引入 XML 依赖）
- * - 消息用纯文本 + 链接预览（Telegram 自动抓取封面图），不设 parse_mode，
- *   规避 Markdown 转义坑
+ * - 消息用 HTML 模式（parse_mode="HTML"）加粗标题，文本只转义 & < > 三个实体；
+ *   TG 返回 400 时自动退回纯文本重发一次，避免一次转义疏漏就丢掉整篇文章
  * - 首次运行只建立 baseline（记录最新 GUID），不推存量文章，避免轰炸订阅者
+ * - 解析必须先剥 CDATA 包装：feed 库把 title/description/content:encoded
+ *   一律写成 <![CDATA[…]]>，漏剥会把标记当正文带进频道文案，且整段摘要会被
+ *   「剥 HTML 标签」的正则整段吃掉
  */
 
 const RSS_PATH = "/rss.xml";
@@ -26,6 +29,8 @@ const THROTTLE_MS = 300; // 频道消息限速余量
 const ERROR_TRUNCATE_LEN = 200; // 错误详情截断长度
 const RETRY_BACKOFF_MS = 500; // KV 重试退避基数
 const MAX_RETRY_AFTER = 5; // 429 Retry-After 上限（秒）
+const HEADLINE = "📮 文章推送";
+const ELLIPSIS = "…";
 
 /** 解析 RSS XML 为文章列表（按 pubDate 升序返回） */
 export function parseRSS(xml) {
@@ -39,8 +44,12 @@ export function parseRSS(xml) {
 	) {
 		const block = match[1];
 		const pick = (tag) => {
-			const m = block.match(new RegExp(`<${tag}>([\\s\\S]*?)</${tag}>`));
-			return m ? unescapeXML(m[1]).trim() : "";
+			// 部分标签带属性（<guid isPermaLink="false">），属性通配必须带上，
+			// 否则 guid 永远匹配不到、只能退化到 link
+			const m = block.match(
+				new RegExp(`<${tag}(?:\\s[^>]*)?>([\\s\\S]*?)</${tag}>`),
+			);
+			return m ? decodeXML(m[1]) : "";
 		};
 		const guid = pick("guid") || pick("link");
 		if (!guid) continue;
@@ -56,33 +65,93 @@ export function parseRSS(xml) {
 	return items.sort((a, b) => new Date(a.pubDate) - new Date(b.pubDate));
 }
 
-/** XML 实体反转义 */
+/**
+ * 元素文本解码：先剥 CDATA 包装，再反转义实体。
+ * 顺序不能反——CDATA 内的内容是字面量，直接当普通文本反转义没有意义。
+ */
+function decodeXML(inner) {
+	return unescapeXML(stripCDATA(inner)).trim();
+}
+
+/**
+ * 剥离 CDATA 包装（feed 库 + xml-js 对 title/description/content:encoded 一律输出）。
+ *
+ * 只切首尾标记、不用 `<!\[CDATA\[…\]\]>` 整段正则：xml-js 会把正文里内嵌的
+ * "]]>" 拆成 `]]]]><![CDATA[>`，整段正则会在那个位置提前截断。
+ */
+function stripCDATA(str) {
+	const trimmed = str.trim();
+	if (!trimmed.startsWith("<![CDATA[") || !trimmed.endsWith("]]>"))
+		return str;
+	return trimmed
+		.slice(9, -3) // "<![CDATA[" 9 字符，"]]>" 3 字符
+		.replace(/\]\]\]><!\[CDATA\[>/g, "]]>");
+}
+
+/** XML 实体反转义（&amp; 必须最后，避免二次转义被提前吃掉） */
 function unescapeXML(str) {
 	return str
 		.replace(/&lt;/g, "<")
 		.replace(/&gt;/g, ">")
 		.replace(/&quot;/g, '"')
 		.replace(/&apos;/g, "'")
+		.replace(/&nbsp;/g, " ")
 		.replace(/&amp;/g, "&");
 }
 
-/** 摘要：剥 HTML 标签 + 截断 */
+/**
+ * 摘要：剥 HTML 标签 + 截断。
+ *
+ * 只匹配「像标签」的片段（`</?[a-z]…>` + i 标志），不用粗暴的 `<[^>]+>`——
+ * 后者会把正文里的「速度 < 阈值 > 5」整段当标签吃掉。
+ */
 function makeExcerpt(html) {
 	const text = html
-		.replace(/<[^>]+>/g, " ")
+		.replace(/<\/?[a-z][^>]*>/gi, " ")
 		.replace(/\s+/g, " ")
 		.trim();
-	return text.length > EXCERPT_MAX_LEN
-		? `${text.slice(0, EXCERPT_MAX_LEN)}…`
-		: text;
+	if (!text)
+		return "";
+
+	// 按码点（而非 UTF-16 码元）截断，避免把 emoji / 生僻字切成半个代理对
+	const chars = Array.from(text);
+	if (chars.length <= EXCERPT_MAX_LEN)
+		return text;
+	const cut = chars.slice(0, EXCERPT_MAX_LEN).join("");
+	// 省略号前不留悬空标点或空白
+	return `${cut.replace(/[\s\p{P}]+$/u, "")}${ELLIPSIS}`;
 }
 
-/** 组装 TG 消息文本 */
-function buildMessage(post) {
+/** 标题归一化：压掉换行与多余空白（TG 里裸换行会让标题断成两行） */
+function cleanInline(str) {
+	return str.replace(/\s+/g, " ").trim();
+}
+
+/** HTML 模式转义（Telegram 的 HTML parse_mode 只认 & < > 三个实体，且 & 必须最先替换） */
+function escapeHTML(str) {
+	return str
+		.replace(/&/g, "&amp;")
+		.replace(/</g, "&lt;")
+		.replace(/>/g, "&gt;");
+}
+
+/**
+ * 组装 TG 消息文本。
+ *
+ * @param post  parseRSS 解析出的文章条目
+ * @param html  是否输出 HTML 标签（配合 parse_mode="HTML" 给标题加粗）。
+ *              传 false 得到纯文本版本，供 pushNewPosts 发送循环在 TG 返回
+ *              400 时降级重发。
+ */
+export function buildMessage(post, html = false) {
+	const title = cleanInline(post.title);
 	const excerpt = makeExcerpt(post.description);
-	const lines = [`📮 新文章：${post.title}`];
-	if (excerpt) lines.push("", excerpt);
-	lines.push("", post.link);
+	const lines = [HEADLINE];
+	if (title)
+		lines[0] = `${HEADLINE}：${html ? `<b>${escapeHTML(title)}</b>` : title}`;
+	if (excerpt)
+		lines.push("", html ? escapeHTML(excerpt) : excerpt);
+	lines.push("", html ? escapeHTML(post.link) : post.link);
 	return lines.join("\n");
 }
 
@@ -194,12 +263,18 @@ export async function pushNewPosts(env) {
 		for (const post of toPush) {
 			// 发送 + 429 限流重试（最多 MAX_TG_ATTEMPTS 次）
 			let sent = false;
+			// 标题加粗走 parse_mode="HTML"。TG 的 400 不区分「HTML 解析失败」与
+			// 「chat 不可用」，故首次 400 先退回纯文本重发一次再判定永久错误，
+			// 否则一次转义疏漏就会把整篇文章永久丢弃。
+			let htmlMode = true;
+			let fallbackUsed = false;
 			for (let attempt = 1; attempt <= MAX_TG_ATTEMPTS; attempt++) {
 				const payload = {
 					chat_id: channel,
-					text: buildMessage(post),
+					text: buildMessage(post, htmlMode),
 					link_preview_options: { is_disabled: false },
 				};
+				if (htmlMode) payload.parse_mode = "HTML";
 				const r = await fetch(`${TG_API}/bot${botToken}/sendMessage`, {
 					method: "POST",
 					headers: { "Content-Type": "application/json" },
@@ -213,6 +288,15 @@ export async function pushNewPosts(env) {
 				}
 
 				const errText = await r.text();
+				// 降级重发：纯文本不吃 parse_mode，若本次 400 是 HTML 标签问题就能救回来
+				if (r.status === 400 && htmlMode && !fallbackUsed) {
+					fallbackUsed = true;
+					htmlMode = false;
+					console.warn(
+						`[TG] parse_mode=HTML rejected, retrying as plain text (${post.guid}): ${errText.slice(0, ERROR_TRUNCATE_LEN)}`,
+					);
+					continue;
+				}
 				// 永久性错误（400/403/404）：跳过该条，推进 cursor，不阻塞后续文章。
 				// 计入 skippedPermanent（不混入 pushed，避免日志/响应误导）。
 				if (r.status === 400 || r.status === 403 || r.status === 404) {
