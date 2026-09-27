@@ -23,15 +23,36 @@ const imagesGlob = import.meta.glob<{ default: ImageMetadata }>(
 );
 
 /**
+ * 百分号解码，解码失败时原样返回。
+ *
+ * markdown-it 在渲染时用 mdurl.encode 归一化链接目标（中文 → %E4%B8%BA、
+ * 空格 → %20），而 import.meta.glob 的键是磁盘上的原始文件名。两者不先对齐
+ * 就查表必然 miss——表现为 RSS content:encoded 里的 <img> 静默停留在
+ * `../_images/...` 相对路径，第三方阅读器直接裂图。
+ *
+ * decodeURIComponent 遇到残缺转义序列（如裸 `%`）会抛 URIError，必须兜住。
+ */
+function decodePathSafe(src: string) {
+	try {
+		return decodeURIComponent(src);
+	}
+	catch {
+		return src;
+	}
+}
+
+/**
  * 将相对图像路径转换为绝对URL
  *
- * @param srcPath - 来自markdown内容的相对图像路径
+ * @param srcPath - 来自markdown内容的相对图像路径（已过 markdown-it 归一化）
  * @param baseUrl - 站点基础URL
  * @returns 优化后的图像URL，如果处理失败则返回null
  */
 async function _getAbsoluteImageUrl(srcPath: string, baseUrl: string) {
+	// 先解码再剥前缀：前缀本身不会被编码，但文件名会，两者顺序不能颠倒
+	const decoded = decodePathSafe(srcPath);
 	// 从图像源路径中移除相对路径前缀 (../ 和 ./)
-	const prefixRemoved = srcPath.replace(/^(?:\.\.\/)+|^\.\//, "");
+	const prefixRemoved = decoded.replace(/^(?:\.\.\/)+|^\.\//, "");
 	const absolutePath = `/src/content/posts/${prefixRemoved}`;
 	const imageImporter = imagesGlob[absolutePath];
 
