@@ -34,6 +34,34 @@ interface PostMeta {
   title: string
 }
 
+/**
+ * 剥 CDATA 包装并反转义实体。
+ *
+ * feed 库（xml-js）把 title/description 一律写成 <![CDATA[…]]>。原先的正则
+ * /<!\[CDATA\[([^\]]*)\]\]>/ 遇到标题里含 "]" 就会匹配失败，退化到非 CDATA 分支
+ * 后同样匹配不上，最终报出空标题。这里改为先取内层文本再剥包装。
+ *
+ * 与 src/lib/tg.mjs 的 stripCDATA 同源：两边运行在不同的运行时（构建脚本 vs
+ * Worker），不互相 import，各自维护一份。
+ */
+function unwrapTagText(raw: string): string {
+  const trimmed = raw.trim()
+
+  // xml-js 遇正文内嵌的 "]]>" 会拆成 ]]]]><![CDATA[>，先还原再剥
+  const inner = trimmed.startsWith('<![CDATA[') && trimmed.endsWith(']]>')
+    ? trimmed.slice(9, -3).replace(/\]\]\]><!\[CDATA\[>/g, ']]>')
+    : trimmed
+
+  return inner
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"')
+    .replace(/&apos;/g, '\'')
+    .replace(/&nbsp;/g, ' ')
+    .replace(/&amp;/g, '&')
+    .trim()
+}
+
 async function parseRssFeed(xmlPath: string): Promise<FeedItem[]> {
   const content = await fs.readFile(xmlPath, 'utf-8')
   const items: FeedItem[] = []
@@ -47,13 +75,12 @@ async function parseRssFeed(xmlPath: string): Promise<FeedItem[]> {
       break
     const itemContent = match[1]
     const linkMatch = itemContent.match(/<link>([^<]*)<\/link>/)
-    const titleMatch = itemContent.match(/<title><!\[CDATA\[([^\]]*)\]\]><\/title>/)
-      || itemContent.match(/<title>([^<]*)<\/title>/)
+    const titleRaw = itemContent.match(/<title(?:\s[^>]*)?>([\s\S]*?)<\/title>/)
 
     if (linkMatch) {
       items.push({
         link: linkMatch[1].trim().replace(/\/$/, ''),
-        title: titleMatch ? titleMatch[1].trim() : '',
+        title: titleRaw ? unwrapTagText(titleRaw[1]) : '',
       })
     }
   }
