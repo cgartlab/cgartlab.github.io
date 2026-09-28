@@ -46,12 +46,6 @@ yarn.lock
 coverage/
 test-results/
 
-# Syncthing
-.stfolder/
-.stfolder*
-.stversions/
-.syncthing-*
-
 # Copilot / AI 插件
 .copilot-index/
 .copilot/
@@ -73,8 +67,6 @@ src/content/posts/*.base
 
 # Debug scripts with API tokens
 .omo/
-# Syncthing运行时文件
-.stignore-common
 
 # Codex 工作目录
 /.claude/
