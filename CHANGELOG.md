@@ -10,7 +10,7 @@
 
 ## Unreleased
 
-### 2026-09-28 — 清理 Syncthing / GitHub Pages 时代残留
+### 2026-09-28 — 清理 Syncthing / GitHub Pages 时代残留 (#427)
 
 **Removed**
 
