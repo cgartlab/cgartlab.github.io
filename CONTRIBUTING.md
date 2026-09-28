@@ -51,21 +51,39 @@ git checkout -b write-weekly-38
 
 All `.js`, `.ts`, and `.astro` files are auto-linted on pre-commit via `simple-git-hooks` + `lint-staged`. ESLint runs with `--fix` automatically.
 
+> ⚠️ **Known baseline issue**: commit `54febc7` ran prettier across the repo, which conflicts with the
+> antfu eslint style (2-space indent / single quotes / no semicolons). A single unscoped `eslint --fix`
+> therefore reformats the whole file (+hundreds of lines) and drowns a small fix. For minimal-diff
+> bug fixes, keep the surrounding formatting as-is and skip the hook with `git commit --no-verify`
+> — then say so in the PR description. Repo-wide formatting belongs in its own dedicated PR.
+
 ### 3. Run Checks Locally
 
 ```bash
-pnpm lint        # ESLint check (antfu config)
 pnpm build       # Full build pipeline (type check → build → generate-llms → apply-lqip)
+pnpm verify-feed # RSS / Atom output validation (what CI runs)
+pnpm sync-docs:check  # Generated doc-fact blocks are up to date
+pnpm lint        # ESLint check (antfu config) — currently red on main, see the note above
 ```
+
+These mirror CI except `pnpm lint`: **CI does not run lint** (`ci.yml` = install → `pnpm audit --prod`
+→ `pnpm build` → `pnpm verify-feed` → `pnpm sync-docs:check`). `pnpm build` already runs `astro check`,
+so type errors do fail CI.
 
 ### 4. Commit
 
 ```bash
-git add .
+git add src/components/NewWidget.astro   # add explicit paths
 git commit -m "feat(component): add new widget"
 ```
 
-Commit message is validated by a pre-commit hook. Invalid messages are rejected.
+> **Never `git add -A` / `git add .`** — this workspace shares the repository root with other
+> uncommitted work. Add only the files you actually changed.
+
+> There is **no commit-message validation** in this repo (verified 2026-09-28): `simple-git-hooks`
+> only registers `pre-commit` = `pnpm lint-staged`, and that task only matches `*.{js,ts,astro}`.
+> No `commit-msg` hook, no commitlint, no CI check on commit or PR titles — the format above is
+> enforced by review convention only.
 
 ### 5. Push and Create PR
 
@@ -85,8 +103,11 @@ PR title should mirror the commit message format (it becomes the squash commit m
   - Fixed semantic function colors (e.g., validation error red) are **intentional**
   - Bare hex values that duplicate existing theme tokens **should** be fixed
   - **Bot-generated issues** (Daily Inspection Bot) — evaluate actual risk before fixing: check for real bug history, current CI coverage, and ROI. Close non-actionable issues with explanation rather than creating unnecessary PRs
-- At least one human review approval is required before merge
-- CI checks must pass (lint, type check, build)
+- CI checks must pass (`pnpm build`, `pnpm verify-feed`, `pnpm sync-docs:check`, `pnpm audit --prod`)
+- ⚠️ **No automated gate on `main`** — the `protect-main` ruleset exists but
+  `gh api repos/cgartlab/cgartlab.github.io/rules/branches/main` returns `[]` (it matches no branch),
+  and the repo allows merge / rebase / squash merges. Human review is **convention, not enforcement**:
+  confirm CI is green and every bot finding has been assessed before merging
 
 ### 7. Merge
 
@@ -125,7 +146,7 @@ PR title should mirror the commit message format (it becomes the squash commit m
 | `draft` | boolean | No | `false` | Hidden from production |
 | `pin` | number (0-99) | No | `0` | Higher = higher priority |
 | `toc` | boolean | No | follows config | |
-| `lang` | `''` \| `'en'` \| `'zh-tw'` | No | `''` | |
+| `lang` | `''` \| `'en'` | No | `''` | Only enabled locales. `'zh-tw'` is **rejected** by the schema (build-breaking) |
 | `abbrlink` | string | No | `''` | Lowercase letters, digits, hyphens only |
 
 ## TypeScript Type Safety
@@ -148,9 +169,11 @@ Syncthing 已停用（见 AGENTS.md）。如历史遗留的冲突文件（`*.syn
 | Environment | How |
 |-------------|-----|
 | Production | Push to `main` → Cloudflare Worker + Static Assets auto-deploys |
-| Preview | PR → Cloudflare Worker + Static Assets creates preview URL |
+| Preview | Local `pnpm build && pnpm preview` (production-equivalent `dist/`); no PR preview URL is configured (`wrangler.jsonc` has no `preview_urls`) |
 
-No manual deployment steps needed. The `dist/` directory is not committed.
+No manual deployment steps needed. The `dist/` directory is not committed. After a `main` merge you can
+confirm the rollout with `pnpm exec wrangler deployments list` and by checking the live output
+(`curl -s https://cgartlab.com/rss.xml`, etc.) — Cloudflare caches HTML for 10 min / 30 min at the edge.
 
 ## Getting Help
 

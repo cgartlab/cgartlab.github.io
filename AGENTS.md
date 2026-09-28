@@ -21,7 +21,7 @@ cgartlab.github.io/
 ├── public/                  # 静态资源，直映射站点根，不经构建处理
 │   ├── fonts/ giscus/ images/ feeds/ icons/ sounds/ posts/
 │   ├── llms.txt · github-repos.json   # 构建生成
-│   └── robots.txt · favicon.ico · _headers
+│   └── robots.txt · favicon.ico · 站点验证 txt（Google / 微信）
 ├── scripts/                 # 构建与运维脚本（tsx 运行）
 ├── patches/                 # pnpm patch（partytown）
 ├── dist/                    # 构建产物（gitignore，Worker 静态资源目录）
@@ -55,12 +55,12 @@ cgartlab.github.io/
 | 目录 | 职责 | 改动影响 |
 |------|------|---------|
 | `src/content/` | 内容唯一来源（文章/周刊/作品/图） | 写作目标，构建时采集 |
-| `src/plugins/` | Markdown 管线插件（6 remark + 8 rehype） | **顺序敏感**，插入须确认依赖 |
+| `src/plugins/` | Markdown 管线插件（管线共 6 remark + 8 rehype，其中本地 9 个：4 remark + 5 rehype，其余为 npm 包） | **顺序敏感**，插入须确认依赖 |
 | `src/styles/` | 纯 CSS 层，不经 UnoCSS transform | 必须用 CSS 变量引用颜色 |
 | `src/lib/` + `src/worker.mjs` | 服务端逻辑（RSS→TG 推送、缓存头、安全头） | 改动需 `wrangler` 部署验证 |
 | `public/` | 静态资源，直映射站点根 | 文件名 = 线上 URL |
 | `scripts/` | 构建/运维脚本 | 见 COMMANDS |
-| `.github/` | CI、模板、Dependabot | 私有仓无法开分支保护 |
+| `.github/` | CI、模板、Dependabot | 仓库已转 **public**；`protect-main` ruleset 虽存在，但 `rules/branches/main` 返回 `[]` → main **实际无强制保护**，合并前须自行确认 CI 全绿与评审结论 |
 
 ## COMMANDS
 
@@ -111,6 +111,17 @@ pnpm update-gh-contributions  # 更新贡献热力图数据 → src/data/github-
 - **remark/rehype 顺序敏感** — 6 个 Remark + 8 个 Rehype 插件，后者依赖上游 ID 生成，插入新插件必须确认顺序
 - **`color-mix()` 色彩空间差异** — 项目混用 `color-mix(in srgb, ...)` 和 `color-mix(in oklch, ...)`，不同浏览器渲染有细微色差
 - **Giscus 主题 CSS 加载链路** — 主题 CSS 托管在本地 `public/giscus/`，通过绝对路径 `https://cgartlab.com/giscus/theme-*.css` 加载。必须用绝对路径，因为 Giscus iframe 的 origin 是 `giscus.app`，相对路径会解析为 `https://giscus.app/giscus/theme-*.css` → 404。改完重新部署即可生效，无需动上游仓库
+- **`public/_headers` 不存在** — 已于 `25bb537`（#414）删除，缓存头/安全头全部由 `src/worker.mjs` 负责，不要在 `public/` 下重建
+- **RSS/Atom 图片必须绝对化** — `src/utils/feed.ts` 的 `getAbsoluteImageUrl` 用 `import.meta.glob` 的键查表，
+  而 markdown-it 会用 `mdurl.encode` 把链接目标里的中文/空格编码成 `%E4%B8%BA`/`%20`，两者不先对齐就必然查不到，
+  `<img>` 会静默停留在 `../_images/...` 相对路径（第三方阅读器裂图）。查表前必须先 `decodeURIComponent`
+  再剥 `../`/`./` 前缀，**顺序不能反**（前缀本身不被编码）
+- **`pnpm lint` 当前不是绿的，且 CI 不跑它** — `54febc7` 对仓库跑过 prettier，与 antfu eslint config 的
+  风格（2 空格 / 单引号 / 无分号）冲突，全仓约 1 万个 `style/*` error（formatting 类，`--fix` 可自动修）。
+  因此：**不要在 bugfix PR 里跑 `eslint --fix`**（会把文件整体重排、淹没 diff），改完只跑 `pnpm build`
+  + 相关脚本；统一格式化另开独立 PR
+- **提交信息 hook 可被 `--no-verify` 绕过** — 上述格式基线冲突下，最小 diff 的修复需要用 `--no-verify`
+  跳过 pre-commit 的 `eslint --fix`（PR #425 即如此），但必须在 PR 描述里说明理由
 - **Bot 生成 issue 评估** — Daily Inspection Bot 会自动生成「最佳实践」类 issue（如「无测试覆盖」「硬编码值」「缺少冒烟测试」）。合并前必须评估实际风险：有没有真实 bug 历史、CI 是否已覆盖关键路径、ROI 值不值得。不值得修的应关闭并说明理由，而非盲目开 PR
 
 ## ARCHITECTURE
@@ -123,6 +134,7 @@ pnpm update-gh-contributions  # 更新贡献热力图数据 → src/data/github-
 | UnoCSS | `uno.config.ts` | Wind3 + Attributify + theme preset, 非 Tailwind |
 | 路由 | `src/pages/[...lang]/` | 多语言前缀动态路由 |
 | Telegram 推送 | `src/lib/tg.mjs` + Worker scheduled | RSS → 频道推送，KV 状态去重，Cron 每 15 分钟 + `/api/tg-notify` 手动触发 |
+| Feed 生成 | `src/utils/feed.ts` + `pages/[...lang]/rss.xml.ts` / `atom.xml.ts` | `content:encoded` 图片绝对化（见 KEY QUIRKS）；zh/en 各一份 RSS + Atom |
 | 评论 | Giscus（主用）+ Twikoo/Waline（需额外配置后启用），主题 CSS 本地托管于 `public/giscus/` |
 | 表单 | `src/components/InquiryForm.astro` | Web3Forms，submit 监听器在 `astro:page-load` 内绑定 |
 | 搜索 | 客户端搜索索引 (`api/search-index/[lang].json.ts`) |
@@ -161,14 +173,21 @@ pnpm update-gh-contributions  # 更新贡献热力图数据 → src/data/github-
 
 - **`dev-{kebab}`** — 代码/功能/样式开发
 - **`write-{kebab}`** — 文章/周刊创作
-- `main` 受保护，必须通过 PR → squash merge 合并，合并后删除分支
+- `main` 必须通过 PR 合并，合并后删除分支。⚠️ **不要假设有服务端强制保护**：仓库已转 public，
+  ruleset `protect-main` 名为 active，但 `gh api repos/cgartlab/cgartlab.github.io/rules/branches/main`
+  实测返回 `[]`（条件未命中任何分支），且 `allow_merge_commit / allow_rebase_merge` 均为 true——
+  合并前必须人工确认 CI 全绿与评审结论（2026-09-28 实测）
 
 ## COMMIT MESSAGE
 
-必须符合 Conventional Commits 格式（hook 校验）：
+必须符合 Conventional Commits 格式：
 `<type>(<scope>): <描述>` — type 限 `feat|fix|docs|style|refactor|perf|test|chore|ci`
 
 豁免前缀：`Merge ...`、`Revert ...` / `This reverts commit ...`、`vault backup: ...`
+
+> ⚠️ **格式靠约定，没有强制校验**（2026-09-28 核实）：`simple-git-hooks` 只注册了 `pre-commit`
+> （= `pnpm lint-staged`，仅作用于 `*.{js,ts,astro}`）。仓库内**没有** `commit-msg` hook，
+> 也没有 commitlint 或 CI 侧校验 —— 格式写错不会自动报错，靠 reviewer 把关
 
 ## 写作环境（Obsidian）
 
@@ -292,13 +311,18 @@ Vite 加载 `astro.config.ts` 时会把配置导入图里的依赖全部内联�
 
 ### 已弃用
 
-- **Syncthing** 已完全停用，`.stignore` / `.stignore-common` 仅作历史残留，新增文件不需考虑其规则
+- **Syncthing** 已完全停用，`.stignore` / `.stignore-common` 仅作历史残留，新增文件不需考虑其规则。
+  `scripts/syncthing-cleanup.{sh,ps1}` 与 `scripts/SYNCTHING-SETUP.md` 同属历史残留（未挂到 `package.json`）
+- `scripts/` 下另有 3 个未挂 `package.json` 的脚本：`clean-sync-conflicts.sh`、`search-lang-check.ts`
+  （历史残留）、`update-theme.ts`（**仍在用**，主题上游同步，见 ARCHITECTURE）。所以「脚本：15 个」
+  指的是 `package.json` 的入口数，不等于目录内文件数（15 个文件）
 
 ## CI/CD
 
 - push `main` → Cloudflare Worker + Static Assets 自动部署（Cloudflare Git 集成，非 GitHub Actions 部署）
-- `ci.yml` 依次执行：`pnpm install --config.trustPolicy=off` → `pnpm build` → `pnpm verify-feed` → `pnpm sync-docs:check`
-- 其他 workflow：PR 审查（`pr-review.yml`）、PR 分类（`pr-triage.yml`）、定时维护（`maintenance.yml`）
+- `ci.yml` 依次执行：`pnpm install --config.trustPolicy=off` → `pnpm audit --prod`（依赖漏洞门禁）→ `pnpm build` → `pnpm verify-feed` → `pnpm sync-docs:check`
+  （**注意：CI 不跑 `pnpm lint`**，见 KEY QUIRKS 的 lint 基线条目）
+- 其他 workflow：PR 审查（`pr-review.yml`）、PR 分类（`pr-triage.yml`）、定时维护（`maintenance.yml`）、贡献数据更新（`update-contributions.yml`，每周日 cron）
 - 域名：cgartlab.com
 
 > **发文章会让 `sync-docs:check` 失败**：文章数/周刊数变了，`README.md` 与 `AGENTS.md` 的 DOC-FACTS
@@ -338,11 +362,18 @@ Worker Secret（`TG_BOT_TOKEN` / `TG_CHANNEL_ID` / `TG_NOTIFY_SECRET`）需 `wra
 
 ### Telegram 推送（`src/lib/tg.mjs`）
 
-- 抓取 `https://cgartlab.com/rss.xml`（默认语言）→ 与 KV `TG_STATE` 中最后 GUID 对比 → 推送新文章
-- 纯正则解析 RSS（不引入 XML 依赖）；纯文本 + 链接预览，不设 `parse_mode`（规避 Markdown 转义坑）
+- 抓取 `https://cgartlab.com/rss.xml`（默认语言）→ 与 KV `TG_STATE` 中最后 GUID 对比 → 推送新文章。
+  取 feed 走 `env.ASSETS.fetch()` 本地绑定，而非请求自身公开 URL（避免 Worker 自请求超时 522）
+- 纯正则解析 RSS（不引入 XML 依赖）。**解析必须先剥 CDATA 包装再反转义**：feed 库把
+  `title` / `description` / `content:encoded` 一律写成 `<![CDATA[…]]>`，漏剥会把标记当正文带进频道文案，
+  且整段摘要会被「剥 HTML 标签」的正则整段吃掉（#424 修复）。剥法只切首尾标记，不用整段正则
+  （`xml-js` 会把正文里的 `]]>` 拆成 `]]]]><![CDATA[>`）
+- 消息用 **`parse_mode="HTML"`** 加粗标题，只转义 `& < >` 三个实体；TG 返回 400 时自动退回
+  纯文本重发一次，避免一次转义疏漏就丢掉整篇文章
 - **首次运行只建立 baseline**（记录最新 GUID），不推存量文章
 - **只推默认语言（zh）**，英文版不进推送
-- 并发保护：KV `push_lock` 防止 Cron 与手动触发重叠
+- 并发保护：KV `push_lock`（get → put → 回读校验，带 TTL 自愈）防止 Cron 与手动触发重叠；
+  长批次会续期锁，避免 429 重试期间锁过期造成重复推送
 
 ### DNS
 
@@ -602,6 +633,12 @@ CJK 文本间距和断词优化。
 - **UnoCSS 变量生成** — dev 下动态注入，可能覆盖缺失；build 下仅 safelist + 源码扫描
 - **astro-compress**（CSS/HTML/JS）只在 `astro build` 阶段运行，dev 无压缩
 - **LQIP 占位图** — `apply-lqip.ts` 只在 `pnpm build` 运行，dev 下图片没有 `--lqip:` 渐变背景，属正常现象
+- **本机 Node 与 CI 不一致** — 本机 `node -v` = **v26.7.0**，CI 用 **Node 24**（`actions/setup-node`）。
+  2026-09-28 实测两者都能跑通 `astro check`（0 errors）与 `pnpm build`（308 页）
+- **受限文件沙箱会制造「假构建失败」** — 在受限沙箱下运行验证命令时，`tsx` 的 esbuild 子进程会
+  `spawn EPERM`，Astro 加载 `astro.config.ts` 会报 `module is not defined`
+  （`node_modules/extend/index.js`）。**两者都不是仓库问题**：同一条命令换到完整文件权限下即 exit 0。
+  排查时先确认权限模式，再去查代码（见 `DEPENDENCY UPGRADE` 末条同名症状的真正成因）
 
 ### 双模式验证顺序
 
