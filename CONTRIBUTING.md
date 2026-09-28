@@ -162,7 +162,9 @@ The project uses `@ts-expect-error` in exactly **1 place** (AGENTS.md-enforced):
 
 ## Syncthing Conflict Files
 
-Syncthing 已停用（见 AGENTS.md）。如历史遗留的冲突文件（`*.sync-conflict-*`）重新出现，直接删除即可；`scripts/syncthing-cleanup.*` 为历史残留脚本，不再需要。
+Syncthing 已停用（见 AGENTS.md），相关残留已于 2026-09-28 全部清理（`.stignore`、`.stignore-common`、
+`scripts/syncthing-cleanup.*`、`scripts/SYNCTHING-SETUP.md`、`scripts/clean-sync-conflicts.sh`）。
+如历史遗留的 `*.sync-conflict-*` 文件再次出现，直接删除即可。
 
 ## Deployment
 

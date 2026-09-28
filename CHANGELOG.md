@@ -10,6 +10,22 @@
 
 ## Unreleased
 
+### 2026-09-28 — 清理 Syncthing / GitHub Pages 时代残留
+
+**Removed**
+
+- Syncthing 已于早前停用，本次删除其全部残留：`.stignore`、`.stignore-common`、
+  `scripts/syncthing-cleanup.{sh,ps1}`、`scripts/SYNCTHING-SETUP.md`、`scripts/clean-sync-conflicts.sh`
+- `.nojekyll`（0 字节）—— GitHub Pages 时代残留；站点现由 Cloudflare Worker + Static Assets 托管，该文件无作用
+- `scripts/search-lang-check.ts` —— 未挂 `package.json`、无任何引用的历史脚本
+- `.gitignore` 移除已失效的 Syncthing 规则（`.stignore-common`、`.stfolder*`、`.stversions/`、`.syncthing-*`）；
+  实测仓库内已不存在这些文件/目录（`Test-Path .stfolder` / `.stversions` 均为 False）
+
+**Changed**
+
+- `AGENTS.md` / `CONTRIBUTING.md` 同步更新「已弃用」与 Syncthing 段落，改为记录清理结果与时间；
+  `scripts/` 下唯一未挂 `package.json` 的脚本现为仍在使用的 `update-theme.ts`
+
 ### 2026-09-28 — RSS 图片绝对化 (#425)
 
 **Fixed**

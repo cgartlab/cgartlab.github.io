@@ -311,11 +311,13 @@ Vite 加载 `astro.config.ts` 时会把配置导入图里的依赖全部内联�
 
 ### 已弃用
 
-- **Syncthing** 已完全停用，`.stignore` / `.stignore-common` 仅作历史残留，新增文件不需考虑其规则。
-  `scripts/syncthing-cleanup.{sh,ps1}` 与 `scripts/SYNCTHING-SETUP.md` 同属历史残留（未挂到 `package.json`）
-- `scripts/` 下另有 3 个未挂 `package.json` 的脚本：`clean-sync-conflicts.sh`、`search-lang-check.ts`
-  （历史残留）、`update-theme.ts`（**仍在用**，主题上游同步，见 ARCHITECTURE）。所以「脚本：15 个」
-  指的是 `package.json` 的入口数，不等于目录内文件数（15 个文件）
+- **Syncthing** 已完全停用，残留文件于 **2026-09-28 全部清理**（`.stignore`、`.stignore-common`、
+  `scripts/syncthing-cleanup.{sh,ps1}`、`scripts/SYNCTHING-SETUP.md`、`scripts/clean-sync-conflicts.sh`），
+  新增文件不需再考虑其规则。若历史遗留的 `*.sync-conflict-*` 文件再次出现，直接删除即可
+- **`.nojekyll` 已删除** — GitHub Pages 时代残留；站点由 Cloudflare Worker + Static Assets 托管，
+  该文件无任何作用
+- `scripts/` 下唯一未挂 `package.json` 的脚本是 `update-theme.ts`（**仍在用**，主题上游同步，
+  见 ARCHITECTURE）。DOC-FACTS 的「脚本：N 个」指 `package.json` 的入口数，不等于目录内文件数
 
 ## CI/CD
 
