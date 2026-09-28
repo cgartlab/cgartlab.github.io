@@ -10,6 +10,36 @@
 
 ## Unreleased
 
+### 2026-09-28 — RSS 图片绝对化 (#425)
+
+**Fixed**
+
+- `src/utils/feed.ts`：`getAbsoluteImageUrl` 查表前先 `decodeURIComponent` 再剥 `../` / `./` 前缀，
+  修复 markdown-it 经 `mdurl.encode` 归一化后的链接目标（`%E4%B8%BA` / `%20`）与
+  `import.meta.glob` 磁盘原始键对不上、查表恒 miss 的问题。此前 `dist/rss.xml` 149 张图中
+  **148 张停留在 `../_images/...` 相对路径**，第三方阅读器正文全部裂图（纯 ASCII 文件名的那 1 张
+  侥幸命中，问题因此长期静默）
+- 修复后 zh/en 的 RSS + Atom **四个 feed 全部 149/149 图片为绝对 URL**；146 个去重 URL 在本地
+  `dist/` 中逐个可解析（`pnpm build` 308 页通过，`pnpm verify-feed` 双 feed 全绿）
+- 顺带记录（未处理）：glob 扩展名列表不含 `avif` / `svg`，当前 `_images/` 下无这两类文件
+
+### 2026-09-27 — Telegram 推送修复与文档重写 (#423 #424)
+
+**Fixed**
+
+- `src/lib/tg.mjs`：解析 RSS 时先剥 `<![CDATA[…]]>` 包装再反转义，修复频道文案带上 CDATA 标记、
+  且整段摘要被「剥 HTML 标签」正则吃掉的问题 (#424)
+- 推送改用 `parse_mode="HTML"` 加粗标题，TG 返回 400 时自动降级为纯文本重发一次，
+  避免一次转义疏漏就永久丢弃整篇文章 (#424)
+
+**Changed**
+
+- `CHANGELOG.md` / `README.md` / `AGENTS.md` 三份文档按「事实准确、信噪比优先」重写，
+  消除重复段落并修正与现状不符的表述；删除 0 字节空壳文章 `src/posts/ai-guide-slow-is-fast.md` (#423)
+- `pnpm lint` 的格式基线冲突（`54febc7` 的 prettier 结果 vs antfu eslint 风格，全仓约 1 万个
+  formatting error）在 #425 的提交说明中披露；本次文档更新将其正式写入 AGENTS.md 的 KEY QUIRKS，
+  统一格式化仍留待独立 PR
+
 ### 2026-09-27 — 专栏 No.21 中英双语 (#422)
 
 **Added**

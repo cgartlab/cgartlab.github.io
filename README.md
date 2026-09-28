@@ -42,8 +42,9 @@ src/
 scripts/             # 构建与内容工具脚本（tsx 运行）
 public/              # 静态资源，直接映射站点根
 ├── fonts/ giscus/ feeds/ icons/ images/ sounds/ posts/
-├── llms.txt         # 构建期生成
-└── robots.txt · favicon.ico · _headers
+├── llms.txt           # 构建期生成
+├── github-repos.json  # 构建期生成（fetch-github-repos）
+└── robots.txt · favicon.ico · 站点验证 txt
 ```
 
 ## 主要功能
@@ -52,7 +53,7 @@ public/              # 静态资源，直接映射站点根
 - 玄光周刊与专栏：画廊式总览（WeeklyGallery），中英双语
 - 评论系统：Giscus（主用）+ Twikoo / Waline（需额外配置）
 - 搜索：客户端搜索索引（`api/search-index/[lang].json.ts`）
-- 自动术语内链：`remark-glossary` + `rehype-glossary` + 1034 条术语表
+- 自动术语内链：`remark-glossary` + `rehype-glossary` + 110 条术语表
 - OG 图片：`astro-og-canvas` + `canvaskit-wasm` 构建期生成，过滤草稿
 - SEO：per-page 标题与描述、`tag-meta.json` 标签页定制、hreflang 双语互指
 - `llms.txt`：面向 LLM 的站点索引，构建期生成
@@ -63,6 +64,7 @@ public/              # 静态资源，直接映射站点根
 - 联系表单（Web3Forms），View Transition 导航后仍可用
 - 无障碍：Skip-to-content 链接、完整 `:focus-visible` 键盘焦点指示
 - Telegram 自动推送：Worker Cron 每 15 分钟 + `/api/tg-notify` 手动触发，KV 去重
+- RSS / Atom：`content:encoded` 图片转绝对 URL（第三方阅读器不再裂图），中英各一份
 - GitHub 热力图：官方 GraphQL API + 文件缓存（2h TTL），构建期容错
 - Cloudflare Worker：无尾斜杠 301、`/feed` 快捷重定向、缓存头、安全头、404 兜底
 
@@ -87,13 +89,16 @@ pnpm astro                    # Astro CLI 透传
 
 > `pnpm build` 的步骤顺序敏感：`fetch-github-repos` 必须在 build 之前，`apply-lqip` 必须在之后。
 
+> ⚠️ `pnpm lint` 目前不是绿的（prettier 格式基线 vs antfu eslint 风格冲突，全仓约 1 万个
+> formatting 类 error），CI 也不跑它。细节与处理策略见 AGENTS.md 的 KEY QUIRKS。
+
 ## 分支策略
 
 | 分支 | 用途 |
 |------|------|
 | `dev-{kebab}` | 代码、功能、样式开发 |
 | `write-{kebab}` | 文章与周刊创作 |
-| `main`（受保护） | 必须通过 PR → squash merge 合并，合并后删除分支 |
+| `main` | 生产分支；必须经 PR 合并，合并后删除分支。⚠️ 服务端 ruleset 实际未对 `main` 生效，合并前须自行确认 CI 全绿 |
 
 提交信息遵循 [Conventional Commits](https://www.conventionalcommits.org/)：`<type>(<scope>): <描述>`。
 
@@ -101,8 +106,9 @@ pnpm astro                    # Astro CLI 透传
 
 - 推送到 `main` → **Cloudflare Worker + Static Assets** 自动部署（Cloudflare Git 集成，非 GitHub Actions 部署）
 - `ci.yml` 在 `dev-*` / `main` 推送和 PR 时运行，依次执行：
-  `pnpm install --config.trustPolicy=off` → `pnpm build` → `pnpm verify-feed` → `pnpm sync-docs:check`
-- 其他 workflow：PR 审查（`pr-review.yml`）、PR 分类（`pr-triage.yml`）、定时维护（`maintenance.yml`）
+  `pnpm install --config.trustPolicy=off` → `pnpm audit --prod` → `pnpm build` → `pnpm verify-feed` → `pnpm sync-docs:check`
+  （`pnpm lint` **不在 CI 内**，见下）
+- 其他 workflow：PR 审查（`pr-review.yml`）、PR 分类（`pr-triage.yml`）、定时维护（`maintenance.yml`）、贡献数据更新（`update-contributions.yml`）
 - 部署配置：`wrangler.jsonc`
 - 域名：[cgartlab.com](https://cgartlab.com)
 
