@@ -16,13 +16,13 @@ abbrlink: weekly-17
 
 ![Hackintosh mini PC cover image showing custom-built compact desktop computer running macOS on Windows hardware components](../_images/从黑苹果到独立博客，这是我的开源旅程%20-%20No.17玄光周刊-1777653407966.webp)
 
-This issue's cover comes from a Hackintosh mini PC I configured the year before last. This cover was [used once before](https://cgartlab.com/posts/build-a-macmini/), and it's placed here because my open source journey is connected to it.
+This issue's cover comes from a Hackintosh mini PC I configured the year before last. This cover was [used once before](https://cgartlab.com/en/posts/build-a-macmini/), and it's placed here because my open source journey is connected to it.
 
 ---
 
 ## About Black Light Weekly
 
-> This is an electronic weekly focusing on knowledge management, covering digital art, visual design, and frontend development. Currently published once a week, each issue selects a specific topic for in-depth reflection. If you find the content here worthwhile and want a better reading experience, we recommend using a browser to visit the official website. You're also welcome to use **RSS** (https://cgartlab.com/rss.xml) or **Email Subscription** ([https://cgartlab.com/weekly/](https://cgartlab.com/weekly/)) to subscribe.
+> This is an electronic weekly focusing on knowledge management, covering digital art, visual design, and frontend development. Currently published once a week, each issue selects a specific topic for in-depth reflection. If you find the content here worthwhile and want a better reading experience, we recommend using a browser to visit the official website. You're also welcome to use **RSS** (https://cgartlab.com/en/rss.xml) or **Email Subscription** ([https://cgartlab.com/en/weekly/](https://cgartlab.com/en/weekly/)) to subscribe.
 
 ---
 
@@ -105,4 +105,4 @@ Happy holidays everyone~
 
 ---
 
-Weekly first published on [CGArtLab](https://cgartlab.com/weekly)
+Weekly first published on [CGArtLab](https://cgartlab.com/en/weekly/)

@@ -1,5 +1,5 @@
 ---
-title: "The Left Foot Stepping on Right Foot Creative Method - No.12 Weekly | Knowledge Management"
+title: "The Left Foot Stepping on Right Foot Creative Method - No.12 Black Light Weekly | Knowledge Management"
 published: 2026-02-03
 description: "Discover the 'left foot on right foot' creative method linking knowledge management to writing. Build self-propelling systems through interconnected notes."
 updated: 2026-02-03
@@ -24,7 +24,7 @@ This week's cover comes from my supervisor—it doesn't love work but enjoys wat
 
 Have you ever had this experience: organizing notes to write an article, but during the note organization process, new article ideas emerge? Like "left foot stepping on right foot" in martial arts novels—seemingly impossible but able to gain leverage in mid-air, achieving new ascension. Recently, while improving my knowledge base and writing, I frequently experienced this "self-propelling" cycle.
 
-This might sound mystical, but the core lies in deeply coupling the two processes of **creative output** and **knowledge management**. It's not creating from nothing but actively applying and feeding back into your existing system—like the "thought specimen" library I mentioned in [Fragment Writing - Building a Thought Specimen](https://cgartlab.com/posts/fragmented-writing/), and the "style landscapes (Stylescapes)" discussed in [07 Xuan Guang Weekly - Double Diamond Design Model: Golden Framework Analysis from User Needs to Product Implementation](https://cgartlab.com/posts/weekly-07/).
+This might sound mystical, but the core lies in deeply coupling the two processes of **creative output** and **knowledge management**. It's not creating from nothing but actively applying and feeding back into your existing system—like the "thought specimen" library I mentioned in [Fragment Writing - Building a Thought Specimen](https://cgartlab.com/en/posts/fragmented-writing/), and the "style landscapes (Stylescapes)" discussed in [07 Black Light Weekly - Double Diamond Design Model: Golden Framework Analysis from User Needs to Product Implementation](https://cgartlab.com/en/posts/weekly-07/).
 
 Specifically, this cycle contains two interlocking "feet":
 
@@ -60,7 +60,7 @@ The phenomenon is shown above—enabling denoising creates uneven blocks, more p
 
 ![International 3D rendering community discussion thread about Centileo Renderer bug investigation and fix timeline](../_images/12%20玄光周刊-「左脚踩右脚」的创作方法-1769847291817.webp)
 
-Still strongly recommend Max and C4D users try this renderer ASAP—it's incredibly fast compared to RS and OC, currently completely free. Previous introduction can be seen at 👉[04 Black Light Weekly - Refurbished Graphics Card and New Renderer | CGArtLab](https://cgartlab.com/posts/weekly-04/). I've been using it as my main renderer for over a year, definitely rendering thousands of hours. Of course, beta products inevitably have minor issues—looking forward to the official release.
+Still strongly recommend Max and C4D users try this renderer ASAP—it's incredibly fast compared to RS and OC, currently completely free. Previous introduction can be seen at 👉[04 Black Light Weekly - Refurbished Graphics Card and New Renderer | CGArtLab](https://cgartlab.com/en/posts/weekly-04/). I've been using it as my main renderer for over a year, definitely rendering thousands of hours. Of course, beta products inevitably have minor issues—looking forward to the official release.
 
 ### OpenClaw 🦞
 
@@ -98,10 +98,10 @@ I'm considering whether to merge the "Good Stuff" series into the weekly. Digita
 
 ---
 
-This article first published on [Black Light Weekly](https://cgartlab.com/weekly/) simultaneously serialized on [CG Art Lab](https://cgartlab.com)
+This article first published on [Black Light Weekly](https://cgartlab.com/en/weekly/) simultaneously serialized on [CG Art Lab](https://cgartlab.com/en/)
 
 > About Black Light Weekly
 >
 > This is an electronic weekly focusing on knowledge management, covering digital art, visual design, and frontend development. Currently published weekly, each issue selects a specific topic for in-depth reflection. It shares my notes about entrepreneurship and products, including my thoughts, excerpts and annotations, reading notes, and quality content recommendations.
 >
-> If you find the content here worthwhile and want a better reading experience, more recommended to use browser to visit the official website. Also welcome to use **RSS** (<https://cgartlab.com/rss.xml>) or **Email Subscription** (<https://cgartlab.com/weekly/>), we summarize these notes into an email sent to you weekly. Of course, your [letters](mailto:hello@cgartlab.com) are also welcome.
+> If you find the content here worthwhile and want a better reading experience, more recommended to use browser to visit the official website. Also welcome to use **RSS** (<https://cgartlab.com/en/rss.xml>) or **Email Subscription** (<https://cgartlab.com/en/weekly/>), we summarize these notes into an email sent to you weekly. Of course, your [letters](mailto:hello@cgartlab.com) are also welcome.

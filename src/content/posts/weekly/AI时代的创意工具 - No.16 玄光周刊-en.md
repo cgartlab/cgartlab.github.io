@@ -25,7 +25,7 @@ This issue's cover was taken on my commute to work in Changsha many years ago—
 >
 > If you find the content here worthwhile and want a better reading experience, more recommended to use browser to visit the official website.
 >
-> Also welcome to use **RSS** (https://cgartlab.com/rss.xml) or **Email Subscription** (https://cgartlab.com/weekly/), we summarize these notes into an email sent to you weekly.
+> Also welcome to use **RSS** (https://cgartlab.com/en/rss.xml) or **Email Subscription** (https://cgartlab.com/en/weekly/), we summarize these notes into an email sent to you weekly.
 
 ---
 
@@ -226,7 +226,7 @@ For creator teams with private deployment needs, this service is worth following
 
 ## Videos for Your Meal
 
-【Deconstructing "Zima Blue" Art Style and Audiovisual Language】https://www.bilibili.com/video/BV1n3411s7Ze/?share_source=copy_web&vd_source=700cd77b5ffc2570c23ad5d112c9a3d8
+Deconstructing "Zima Blue" Art Style and Audiovisual Language https://www.bilibili.com/video/BV1n3411s7Ze/?share_source=copy_web&vd_source=700cd77b5ffc2570c23ad5d112c9a3d8
 
 ---
 
@@ -244,10 +244,4 @@ Next issue's theme: My Open Source Journey.
 
 ---
 
-This article first published on [Black Light Weekly](https://cgartlab.com/weekly/) simultaneously serialized on [CG Art Lab](https://cgartlab.com/weekly)
-
-> About Black Light Weekly
->
-> This is an electronic weekly focusing on knowledge management, covering digital art, visual design, and frontend development. Currently published weekly, each issue selects a specific topic for in-depth reflection. It shares my notes about entrepreneurship and products, including my thoughts, excerpts and annotations, reading notes, and quality content recommendations.
->
-> If you find the content here worthwhile and want a better reading experience, more recommended to use browser to visit the official website. Also welcome to use **RSS** (https://cgartlab.com/rss.xml) or **Email Subscription** (https://cgartlab.com/weekly/), we summarize these notes into an email sent to you weekly. Of course, your [letters](mailto:hello@cgartlab.com) are also welcome.
+This article first published on [Black Light Weekly](https://cgartlab.com/en/weekly/) simultaneously serialized on [CG Art Lab](https://cgartlab.com/en/weekly/)

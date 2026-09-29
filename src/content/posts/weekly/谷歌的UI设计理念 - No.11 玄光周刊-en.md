@@ -18,7 +18,7 @@ This issue's cover, sponsored by the boss.
 
 Speaking of which, as the weather gets colder, 👆 this one eats more (and poops more too). Has grown from 2.25 kg when first brought home last year to over 3.5 kg now—definitely feels heavier when picked up. It's been a year and a half since bringing her home. Even if she becomes a "gas tank," it's fine as long as she's safe and healthy.
 
-Whether writing or drawing, creative people seem to like keeping cats. I previously wrote [some thoughts about pets](https://cgartlab.com/posts/cat-dog-confidence/)—interested readers can check it out.
+Whether writing or drawing, creative people seem to like keeping cats. I previously wrote [some thoughts about pets](https://cgartlab.com/en/posts/cat-dog-confidence/)—interested readers can check it out.
 
 ## [Google Design - Discover the people and stories behind the products](https://design.google/?home=)
 
@@ -68,10 +68,10 @@ Finally, there's unity of design logic: modern UI design pursues clear, neutral,
 
 ---
 
-This article was first published on [Black Light Weekly](https://cgartlab.com/weekly/) and simultaneously serialized on [CG Art Lab](https://cgartlab.com)
+This article was first published on [Black Light Weekly](https://cgartlab.com/en/weekly/) and simultaneously serialized on [CG Art Lab](https://cgartlab.com/en/)
 
 > About Black Light Weekly
 >
 > This is an electronic weekly focused on knowledge management, covering digital art, visual design, and frontend development. Currently published at a frequency of one issue per week, with each issue selecting a niche topic for in-depth thinking. It shares my notes on entrepreneurship and products, including my thoughts, excerpts and annotations, reading notes, and quality content recommendations.
 >
-> If you find the content here good, for a more complete reading experience, we recommend visiting the official website via browser. You are also welcome to subscribe via [RSS](https://cgartlab.com/rss.xml) or [email subscription](https://cgartlab.com/weekly/)—we compile these notes into an email and send it to you every week. Of course, your [letters](mailto:hello@cgartlab.com) are also welcome.
+> If you find the content here good, for a more complete reading experience, we recommend visiting the official website via browser. You are also welcome to subscribe via [RSS](https://cgartlab.com/en/rss.xml) or [email subscription](https://cgartlab.com/en/weekly/)—we compile these notes into an email and send it to you every week. Of course, your [letters](mailto:hello@cgartlab.com) are also welcome.

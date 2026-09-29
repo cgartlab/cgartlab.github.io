@@ -4,7 +4,7 @@ title: "My God Mode: The Evolution of a Designer's Creative Environment"
 abbrlink: designer-creative-environment-evolution
 published: 2026-07-21
 tags:
-    - 随笔
+    - Essay
 description: "How a motion designer built his ideal creative workspace over twelve years — from survival-mode headphones through Hi-Fi exploration to speakers and a long-term-value methodology for any creator."
 updated: 2026-07-21
 pin: 0

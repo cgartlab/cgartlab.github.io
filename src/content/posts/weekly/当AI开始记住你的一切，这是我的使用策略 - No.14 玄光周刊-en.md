@@ -1,5 +1,5 @@
 ---
-title: "AI Long-Term Memory Strategy: When AI Remembers Everything - No.14 Weekly"
+title: "AI Long-Term Memory Strategy: When AI Remembers Everything - No.14 Black Light Weekly"
 published: 2026-03-20
 description: "Master AI long-term memory with ChatGPT and Claude strategies. Organize AI projects, manage conversation context, and protect data privacy."
 updated: 2026-03-20
@@ -107,12 +107,12 @@ Re-reading this article over the weekend, I have to sigh that within 3 months, t
 
 ---
 
-This article was first published in [Black Light Weekly](https://cgartlab.com/weekly/)
+This article was first published in [Black Light Weekly](https://cgartlab.com/en/weekly/)
 
-Also serialized at [CGArtLab](https://cgartlab.com/weekly)
+Also serialized at [CGArtLab](https://cgartlab.com/en/weekly/)
 
 ## About Black Light Weekly
 
 This is an electronic weekly focused on knowledge management, covering digital art, visual design, and frontend development fields. The publication frequency is currently weekly, with each issue selecting a specific sub-topic for discussion.
 
-If you think the content here is good and want a more complete reading experience, it's more recommended to use a browser to visit the official website. You're also welcome to subscribe via **RSS** (https://cgartlab.com/rss.xml) or **Newsletter** (https://cgartlab.com/weekly/).
+If you think the content here is good and want a more complete reading experience, it's more recommended to use a browser to visit the official website. You're also welcome to subscribe via **RSS** (https://cgartlab.com/en/rss.xml) or **Newsletter** (https://cgartlab.com/en/weekly/).

@@ -25,7 +25,7 @@ This issue's cover was photographed at Kunming University of Science and Technol
 >
 > If you find the content here worthwhile and want a better reading experience, we recommend using a browser to visit the official website.
 >
-> You're also welcome to use **RSS** (https://cgartlab.com/rss.xml) or **Email Subscription** ([https://cgartlab.com/weekly/](https://cgartlab.com/weekly/)) to subscribe.
+> You're also welcome to use **RSS** (https://cgartlab.com/en/rss.xml) or **Email Subscription** ([https://cgartlab.com/en/weekly/](https://cgartlab.com/en/weekly/)) to subscribe.
 
 ---
 
@@ -145,4 +145,4 @@ Next issue: introducing the second category, those Skills that truly carry the w
 
 ---
 
-Weekly first published on [CG Art Lab](https://cgartlab.com/weekly)
+Weekly first published on [CG Art Lab](https://cgartlab.com/en/weekly/)

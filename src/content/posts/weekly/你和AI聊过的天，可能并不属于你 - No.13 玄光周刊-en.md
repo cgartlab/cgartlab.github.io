@@ -1,5 +1,5 @@
 ---
-title: "AI Data Privacy: Your Conversations Might Not Belong to You - No.13 Weekly"
+title: "AI Data Privacy: Your Conversations Might Not Belong to You - No.13 Black Light Weekly"
 published: 2026-02-05
 description: "Explore AI data sovereignty: why your ChatGPT and Claude conversations may not belong to you. Compare data export features across AI platforms."
 updated: 2026-06-26
@@ -98,10 +98,10 @@ A black hole effect implemented with Three.js. It can run smoothly even on an iP
 
 ---
 
-This article was first published in [Xuanguang Weekly](https://cgartlab.com/weekly/) and is also serialized in [CG Art Lab](https://cgartlab.com)
+This article was first published in [Black Light Weekly](https://cgartlab.com/en/weekly/) and is also serialized in [CG Art Lab](https://cgartlab.com/en/)
 
-> About Xuanguang Weekly
+> About Black Light Weekly
 >
 > This is an electronic weekly focusing on knowledge management, covering digital art, visual design, and front-end development. It is currently published once a week, with each issue selecting a niche topic for in-depth discussion. It will share my notes on entrepreneurship and products, including my thoughts, excerpts and annotations, book notes, and recommendations of high-quality content.
 >
-> If you think the content here is good and want a better reading experience, I recommend visiting the official website using a browser. You are also welcome to use **RSS** (<https://cgartlab.com/rss.xml>) or **email subscription** (<https://cgartlab.com/weekly/>), and we will send you a weekly email summarizing these notes. Of course, you are also welcome to [send us a letter](mailto:hello@cgartlab.com).
+> If you think the content here is good and want a better reading experience, I recommend visiting the official website using a browser. You are also welcome to use **RSS** (<https://cgartlab.com/en/rss.xml>) or **email subscription** (<https://cgartlab.com/en/weekly/>), and we will send you a weekly email summarizing these notes. Of course, you are also welcome to [send us a letter](mailto:hello@cgartlab.com).
