@@ -20,7 +20,7 @@ abbrlink: weekly-20
 
 > **Black Light Column · No.20 · 2026-09-12**
 > This is an electronic column focused on accelerating digital productivity, covering knowledge management, dynamic visual design, and frontend development. Published twice a month, each issue centers on one topic for deeper reflection.
-> If you enjoy the column and want a more complete reading experience, we recommend visiting the official website ([https://cgartlab.com](https://cgartlab.com/)) in your browser.
+> If you enjoy the column and want a more complete reading experience, we recommend visiting the official website ([https://cgartlab.com/en/](https://cgartlab.com/en/)) in your browser.
 
 ---
 
@@ -176,4 +176,4 @@ Related reading:
 - [A Beginner-Friendly Guide to Using AI Gracefully (Part 1): Slow Down to Go Faster](https://cgartlab.com/en/posts/ai-guide-slow-is-fast/)
 - [Great Tools That Stayed in My 2025 Productivity Setup](https://cgartlab.com/en/posts/good-tools-for-production-in-my-2025/)
 
-> First published on 🔗[cgartlab.com](https://cgartlab.com) | 📮 Contact/Collaboration: hello@cgartlab.com
+> First published on 🔗[cgartlab.com](https://cgartlab.com/en/) | 📮 Contact/Collaboration: hello@cgartlab.com

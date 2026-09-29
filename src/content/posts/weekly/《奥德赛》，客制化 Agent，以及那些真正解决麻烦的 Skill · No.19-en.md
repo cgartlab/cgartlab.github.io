@@ -1,8 +1,8 @@
 ---
-title: "The Odyssey, Custom Agents, and the Skills That Actually Solve Problems · No.19"
+title: The Odyssey, Custom Agents, and the Skills That Actually Solve Problems · No.19
 published: 2026-08-31
 updated: 2026-08-31
-description: "This issue marks the upgrade from a weekly to a column: five hardened custom agent Skills — from calendar management to investment analysis; a four-step methodology for amplifying efficiency with AI; plus Tolaria, Rime, and other tools worth your attention."
+description: "This issue marks the upgrade from a weekly to a column: five hardened custom agent Skills, a four-step method for amplifying efficiency with AI, plus Tolaria, Rime, and other tools worth a look."
 tags:
   - Weekly
   - Agent
@@ -18,7 +18,7 @@ abbrlink: weekly-19
 
 > **Black Light Column · No.19 · 2026-08-30**
 > This is an electronic column focused on accelerating digital productivity, covering knowledge management, dynamic visual design, and frontend development. Published twice a month, each issue centers on one topic for deeper reflection.
-> If you enjoy the column and want a more complete reading experience, we recommend visiting the official website ([https://cgartlab.com](https://cgartlab.com/)) in your browser.
+> If you enjoy the column and want a more complete reading experience, we recommend visiting the official website ([https://cgartlab.com/en/](https://cgartlab.com/en/)) in your browser.
 
 ---
 
@@ -38,7 +38,7 @@ Three months have passed since the last issue, and quite a few things happened i
 
 **Saw Nolan's *The Odyssey* last week**
 
-![](../_images/《奥德赛》，客制化%20Agent，以及那些真正解决麻烦的%20Skill%20·%20No.19-1788179691931.webp)
+![A blue IMAX cinema sign lit by a single spotlight against a quilted wall at night](../_images/《奥德赛》，客制化%20Agent，以及那些真正解决麻烦的%20Skill%20·%20No.19-1788179691931.webp)
 
 On the IMAX production level, Nolan still delivers — ticket money well spent. Directors and crews who take filmmaking this seriously are a shrinking breed; every one of their films is one fewer we'll get to see.
 
@@ -111,7 +111,7 @@ If you don't know what a Skill is, no worries — there's plenty of explainer co
 
 The interesting part is that the processing is fully integrated: it has its own internal scoring mechanism that classifies every piece of information — news, group chat opinions, or email — into tiers: milestone, urgent, attention, routine. AI treats them all equally regardless of source. Finally, for market-relevant information, it gives a "trend assessment". See below:
 
-![](../_images/《奥德赛》，客制化%20Agent，以及那些真正解决麻烦的%20Skill%20·%20No.19-1788113124668.webp)
+![Screenshot of the news-report skill's daily trend assessment, showing a landmark-events section and a list of trend signals in Chinese](../_images/《奥德赛》，客制化%20Agent，以及那些真正解决麻烦的%20Skill%20·%20No.19-1788113124668.webp)
 
 The skill also has another trigger: if I send a command like "interpret, https://example.com/xxx", it automatically compares it with today's report.
 
@@ -135,7 +135,7 @@ Ultimately, in my view, using AI to amplify strengths and efficiency can be summ
 
 1. **Discover what AI can do in ways humans absolutely cannot.** For example, instant multitasking — searching dozens of files and web pages simultaneously, quickly turning messy text/recordings into readable content, editing different parts of a document at once...
 2. **Integrate these capabilities into your workflow, and keep debugging until the output is stable and reliable.** It's all text, images, and video — and text is the foundation of everything.
-3. **Use internet infrastructure as tools to solidify carriers of new data and information.** On why these particular infrastructures, I wrote a fuller discussion in [《Programs Come and Go, But Data Stays Forever》](/en/posts/flow-program-iron-data/). Infrastructure rarely changes: email, Git, IP addresses, blockchains, websites, markdown syntax.
+3. **Use internet infrastructure as tools to solidify carriers of new data and information.** On why these particular infrastructures, I wrote a fuller discussion in [Programs Come and Go, But Data Stays Forever](/en/posts/flow-program-iron-data/). Infrastructure rarely changes: email, Git, IP addresses, blockchains, websites, markdown syntax.
 4. **Create in unprecedented ways.** New tools, stories, experiences — anything of value to others.
 
 ---
@@ -144,7 +144,7 @@ Ultimately, in my view, using AI to amplify strengths and efficiency can be summ
 
 ### Tolaria
 
-![](../_images/《奥德赛》，客制化%20Agent，以及那些真正解决麻烦的%20Skill%20·%20No.19-1788110130829.webp)
+![Tolaria app interface showing an essay titled "The State of Product Development" alongside a note list and properties panel](../_images/《奥德赛》，客制化%20Agent，以及那些真正解决麻烦的%20Skill%20·%20No.19-1788110130829.webp)
 
 🔗 https://tolaria.md/ · GitHub: [refactoringhq/tolaria](https://github.com/refactoringhq/tolaria)
 
@@ -173,7 +173,7 @@ The author also shared **model selection experience** — "aesthetics: Gemini > 
 
 ### Rime — Zhongzhou input engine
 
-![](../_images/《奥德赛》，客制化%20Agent，以及那些真正解决麻烦的%20Skill%20·%20No.19-1788108972116.webp)
+![RIME input engine splash screen with the RIME wordmark over a faded background of Chinese input-method terminology](../_images/《奥德赛》，客制化%20Agent，以及那些真正解决麻烦的%20Skill%20·%20No.19-1788108972116.webp)
 
 🔗 https://rime.im/
 
@@ -183,13 +183,13 @@ You might think voice input is already nearly 99% accurate — why recommend an 
 
 As for freedom: for the many personal terms I type constantly — mixed Chinese and English terms like "CGArtLab", "GitHub", "OpenAI ChatGPT" — these can be fully customized into your own dictionary file, and supplemented by downloading third-party open-source dictionaries. All of it stays local. And if you write scripts with dozens of fictional character or place names, AI can help you configure them in too.
 
-With AI these days, you don't actually need to learn how to use it specifically — just a little bit of thought is enough. For instance, I briefly introduced it in [《2025 Productivity Tools That Stayed in My Workflow》](https://cgartlab.com/en/posts/good-tools-for-production-in-my-2025/), but I'm bringing it up again because AI can unlock nearly all of its usage methods and configuration tricks.
+With AI these days, you don't actually need to learn how to use it specifically — just a little bit of thought is enough. For instance, I briefly introduced it in [2025 Productivity Tools That Stayed in My Workflow](https://cgartlab.com/en/posts/good-tools-for-production-in-my-2025/), but I'm bringing it up again because AI can unlock nearly all of its usage methods and configuration tricks.
 
 ---
 
 ## Video to go with dinner
 
-【*Attack on Titan*'s terrifying narrative power — textbook-level storytelling】 https://www.bilibili.com/video/BV1jh6HYYEBG/?share_source=copy_web&vd_source=700cd77b5ffc2570c23ad5d112c9a3d8
+*Attack on Titan*'s terrifying narrative power — textbook-level storytelling https://www.bilibili.com/video/BV1jh6HYYEBG/?share_source=copy_web&vd_source=700cd77b5ffc2570c23ad5d112c9a3d8
 
 I re-watched "The Retreat from the Titans" from the start, this time switching to the creator's perspective per the video's interpretation.
 
@@ -203,4 +203,4 @@ The theme will be "thoughts and attempts on the forms of text creation" — writ
 
 ---
 
-> This column is first published on [cgartlab.com](https://cgartlab.com) | 📮 Letters/partnerships: hello@cgartlab.com
+> First published on 🔗[cgartlab.com](https://cgartlab.com/en/) | 📮 Contact/Collaboration: hello@cgartlab.com

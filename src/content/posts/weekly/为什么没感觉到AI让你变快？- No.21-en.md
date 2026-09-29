@@ -22,7 +22,7 @@ This issue's cover was shot at Dianchi Lake.
 
 > **Black Light Column · No.21 · 2026-09-27**
 > This is an electronic column focused on accelerating digital productivity, covering knowledge management, dynamic visual design, and frontend development. Published twice a month, each issue centers on one topic for deeper reflection.
-> If you enjoy the column and want a more complete reading experience, we recommend visiting the official website ([https://cgartlab.com](https://cgartlab.com/)) in your browser.
+> If you enjoy the column and want a more complete reading experience, we recommend visiting the official website ([https://cgartlab.com/en/](https://cgartlab.com/en/)) in your browser.
 
 ---
 
@@ -182,7 +182,7 @@ The downside, stated plainly, is that it is still a developer preview. It update
 
 ## Videos to watch while eating
 
-【Design industry dispute: the Studio Naeo contract incident, and the hidden conflict one contract tore open】
+Design industry dispute: the Studio Naeo contract incident, and the hidden conflict one contract tore open
 
 🔗 https://www.bilibili.com/video/BV1ZceB6REmM/
 
@@ -207,4 +207,4 @@ Related reading:
 - [The Odyssey, Custom Agents, and the Skills That Actually Solve Problems · No.19](https://cgartlab.com/en/posts/weekly-19/)
 - [Fragmented Writing: Building a Specimen of Thought](https://cgartlab.com/en/posts/fragmented-writing/)
 
-> First published on 🔗[cgartlab.com](https://cgartlab.com) | 📮 Contact/Collaboration: hello@cgartlab.com
+> First published on 🔗[cgartlab.com](https://cgartlab.com/en/) | 📮 Contact/Collaboration: hello@cgartlab.com
