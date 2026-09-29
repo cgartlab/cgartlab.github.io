@@ -33,7 +33,7 @@ cgartlab.github.io/
     │   ├── posts/           # 文章（*.md）、周刊（weekly/）、作品（works/）
     │   ├── posts/_images/   # 文章配图（403 张）
     │   ├── posts/_files/    # 文章附件
-    │   ├── posts/0-文章数据库.base   # Obsidian Bases：草稿/周刊/已发布 四视图
+    │   ├── posts/0-文章数据库.base   # Obsidian Bases：草稿/专栏/已发布文章/已发布专栏 四视图
     │   └── about/ privacy/  # 独立集合
     ├── assets/              # icons/ templates/ lqip/ lqip-map.json
     ├── components/          # Astro 组件（含 Widgets/）
@@ -203,7 +203,7 @@ pnpm update-gh-contributions  # 更新贡献热力图数据 → src/data/github-
 | 新建文章 / 附件 | `content/posts` / `content/posts/_images` |
 | 链接格式 | `relative`（现有 800+ 图片链接均为相对路径，**禁改 `absolute`**）|
 | 模板 | `assets/templates` |
-| 数据库 | `content/posts/0-文章数据库.base`（Obsidian Bases，4 视图：草稿/周刊/已发布文章/已发布周刊）|
+| 数据库 | `content/posts/0-文章数据库.base`（Obsidian Bases，4 视图：草稿/专栏/已发布文章/已发布专栏）|
 | git 插件 | `basePath: ".."`（上溯到仓库根）|
 | git 插件 | `refreshSourceControl: false`（关掉 7s 轮询 `git status`，ExFAT 上会卡死）|
 | 渲染 | `translucency: false`（关毛玻璃，Windows 上收益最大）|

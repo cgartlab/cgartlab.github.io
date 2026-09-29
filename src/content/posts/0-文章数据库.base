@@ -28,7 +28,7 @@ views:
       note.published: 117
       note.tags: 407
   - type: table
-    name: 周刊
+    name: 专栏
     filters:
       or:
         - file.folder.contains("weekly")
@@ -50,17 +50,16 @@ views:
     filters:
       and:
         - file.folder.contains("posts")
-        - '!file.tags.contains("周刊")'
+        - '!file.folder.contains("weekly")'
         - draft == false
     sort:
       - property: published
         direction: DESC
   - type: table
-    name: 已发布周刊
+    name: 已发布专栏
     filters:
       and:
         - file.folder.contains("posts")
-        - lang == "zh"
         - file.tags.contains("周刊")
         - draft == false
     sort:
