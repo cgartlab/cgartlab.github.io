@@ -4,6 +4,7 @@
 
 ## 近期文章
 
+- [人人可用的互联网基础设施 - No.22](https://cgartlab.com/posts/weekly-22/): 从消费到创造，普通人也能用一堆免费服务搭起自己的网站。聊聊为什么现在正是入场的好时机。
 - [为什么没感觉到 AI 让你变快？- No.21](https://cgartlab.com/posts/weekly-21/): 用了几年 AI 并没感觉效率提升？本期从知识储备、耐心和任务拆解三处说清这件事，另附 EDIC 新版本、八个新仓库和三个值得一试的小工具。
 - [文字内容创作的形式 - No.20](https://cgartlab.com/posts/weekly-20/): 本期聊聊文字内容创作的三种形式：纸笔、键盘、语音输入分别适合记录什么、输出什么；也分享一套“口述 + AI 整理”的写作工作流。
 - [《奥德赛》，客制化 Agent，以及那些真正解决麻烦的 Skill · No.19](https://cgartlab.com/posts/weekly-19/): 本期从「周刊」升级为「专栏」，整理了五个沉淀的定制化 Agent Skill——从日程管理到投资分析；提出利用 AI 放大效率的四步方法论；并推荐 Tolaria、Rime 等值得关注的工具。
@@ -33,10 +34,10 @@
 - [返修显卡和新渲染器 - No.04 玄光周刊](https://cgartlab.com/posts/weekly-04/): 分享显卡返修经历和使用体验，介绍新发现的GPU渲染器Centileo Render的性能特点，以及近期Obsidian和Windows商店的更新内容。
 - [白给的福利 - No.03 玄光周刊](https://cgartlab.com/posts/weekly-03/): 分享作为自由职业者调整作息的经验，探讨早睡早起带来的效率提升和时间管理优势，以及如何在多种作息模式间灵活切换。
 - [表上的数字很神奇 - No.02 玄光周刊](https://cgartlab.com/posts/weekly-02/): 探讨时间知觉的奇妙现象，分析不同时间段的主观感受差异，并分享从物理老师处获得的关于时间管理的启发。
-- [6月的设计师拔草记录和选荐](https://cgartlab.com/posts/2025-06-good-things/): 6月的设计师拔草记录和选荐，包含VGN蜻蜓A9 plus鼠标、3D打印腕托、日本UCC冻干咖啡、原道MX500平头塞等产品的使用体验和评价。
 
 ## English Articles
 
+- ["Internet Infrastructure for Everyone · No.22](https://cgartlab.com/en/posts/weekly-22/): "From consuming to creating: ordinary people can now assemble a website of their own from free services. Why the timing has never been better.
 - ["Why AI Doesn't Feel Faster: Steps Speed Up, Results Don't · No.21](https://cgartlab.com/en/posts/weekly-21/): "A few years into AI and no obvious speedup? Three reasons why: domain knowledge, patience, and task decomposition. Plus EDIC 2.8.0, eight new repositories, and three tools worth trying.
 - ["The Three Forms of Text Creation: Pen, Keyboard, and Voice · No.20](https://cgartlab.com/en/posts/weekly-20/): "How to write better with AI: pen-and-paper for incubation, keyboard for polished output, and voice input for capturing ideas — plus a dictation + AI editing workflow that separates writing from editing.
 - [The Odyssey, Custom Agents, and the Skills That Actually Solve Problems · No.19](https://cgartlab.com/en/posts/weekly-19/): "This issue marks the upgrade from a weekly to a column: five hardened custom agent Skills, a four-step method for amplifying efficiency with AI, plus Tolaria, Rime, and other tools worth a look.
@@ -66,4 +67,3 @@
 - [Refurbished Graphics Card and New Renderer - No.04 Black Light Weekly](https://cgartlab.com/en/posts/weekly-04/): "Hands-on with Centileo Render, a free GPU renderer for 3ds Max and Cinema 4D. Plus a Colorful RTX 3070 repair, Microsoft Store Android emulator, Obsidian plugins.
 - ["Free Benefits - No.03 Black Light Weekly | Freelancer Sleep Schedule & Productivity Tips](https://cgartlab.com/en/posts/weekly-03/): "How early rising gives freelancers 'free benefits' through reclaimed focus. Plus Dropbox's rebrand, Severance S2, indie dev lessons, DeepSeek on SiliconFlow.
 - ["The Magic Numbers on the Clock - No.02 Black Light Weekly | Time Perception & Productivity](https://cgartlab.com/en/posts/weekly-02/): "Explore the psychology of time perception — why time accelerates with age. Plus productivity strategies, logo design trends, and beginner drawing fundamentals.
-- ["Designer's Toolbox: Lightweight Mouse, 3D-Printed Wrist Rest, and Everyday Carry](https://cgartlab.com/en/posts/2025-06-good-things/): "June product reviews from a designer's perspective: VGN Dragonfly A9 Plus mouse, 3D-printed wrist rest, UCC freeze-dried coffee, and the legendary MX500 earbuds.
