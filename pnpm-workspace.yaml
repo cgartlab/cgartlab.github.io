@@ -36,6 +36,10 @@ overrides:
   # 安全修复：fast-uri authority 注入 (GHSA-qw65-cvwx-89v3) + 未闭合括号主机混淆 (GHSA-58mr-gqgx-xq4g)
   # ajv 依赖 fast-uri ^3.0.1，3.1.8 为同 minor 补丁；前两项告警均在 3.1.7 起修复
   fast-uri: ^3.1.7
+  # 安全修复：http-cache-semantics max-stale 处理不当可跨用户泄露缓存响应
+  # (GHSA-ch52-4w7c-c8xp)，由 astro 链经 @astrojs/mdx / astro-compress 引入
+  # 4.2.1 起修复，^4.2.1 当前解析到 4.3.0（同 major）
+  http-cache-semantics: ^4.2.1
   # 安全修复：js-yaml maxTotalMergeKeys 未限制空 merge 源的 CPU 消耗
   # (GHSA-2883-xcg3-v3hh)，4.3.2 为同 minor 补丁
   js-yaml@4: ^4.3.2
@@ -52,3 +56,20 @@ overrides:
   # 仅约束 7.x（miniflare 精确钉 7.29.0）；astro 链上的 undici 8.x 不受影响
   undici@7: ^7.29.1
   yaml: '>=2.8.3'
+
+minimumReleaseAgeExclude:
+  - http-cache-semantics@4.3.0
+
+# ⚠️ 临时忽略，有移除条件，勿当常设配置
+#
+# GHSA-vfj7-8cjw-p6xm —— braces 深层嵌套模式栈耗尽 DoS（high）
+#   引入路径（仅此一条）：astro-compress>fast-glob>micromatch>braces
+#   为何现在不修：
+#     1. 修复版 3.0.4 截至 2026-10-04 仍未发布（npm latest 仍为 3.0.3），
+#        无可钉版本，overrides 写 ^3.0.4 会让 pnpm install 直接失败
+#     2. astro-compress 仅在 astro.config.ts 构建期使用，依赖链不进构建产物；
+#        触发该漏洞需攻击者可控的 glob 模式，站点运行期不可达
+#   移除条件：braces 3.0.4 一经发布，改用 overrides 钉版并删除本段
+auditConfig:
+  ignoreGhsas:
+    - GHSA-vfj7-8cjw-p6xm
