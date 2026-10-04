@@ -61,6 +61,57 @@ function applySecurityHeaders(resp) {
 	});
 }
 
+/**
+ * 404 页面在 `dist/` 中的别名。
+ *
+ * assets 层（`html_handling: "auto-trailing-slash"`）把 `/404.html` 规范化成
+ * 307 → `/404`，Worker 自己的尾斜杠规则（步骤 2）又把 `/404` 301 成 `/404/`，
+ * assets 再把 `/404/` 307 回 `/404` —— 三者叠加成死循环，浏览器直接
+ * ERR_TOO_MANY_REDIRECTS。故在进 assets 之前统一拦截，直接返回 404 正文。
+ */
+const NOT_FOUND_ALIASES = new Set(["/404", "/404/", "/404.html"]);
+
+/**
+ * 以 404 状态返回 404 页面正文。
+ *
+ * 同样受上述规范化影响：直接 fetch `/404.html` 拿到的是**空 body 的 307**
+ * （还带一个 Location 头）—— 这正是「404 页面全白」与「404 响应里混进
+ * Location 头」的成因。故跟随一次同源重定向取回正文，并显式剥掉 Location，
+ * 避免 404 响应携带重定向语义。
+ */
+async function serveNotFound(env, request) {
+	const origin = new URL(request.url).origin;
+	// 读不到正文时的兜底，保证始终有可读内容而非空白页
+	const headers = new Headers({ "Content-Type": "text/plain;charset=UTF-8" });
+	let body = "Not Found";
+
+	try {
+		let res = await env.ASSETS.fetch(
+			new Request(new URL("/404.html", request.url), request),
+		);
+		const loc = res.headers.get("Location");
+		if (res.status >= 300 && res.status < 400 && loc) {
+			const next = new URL(loc, origin);
+			if (next.origin === origin) {
+				res = await env.ASSETS.fetch(
+					new Request(new URL(next.pathname, request.url), request),
+				);
+			}
+		}
+		if (res.status === 200) {
+			body = res.body;
+			res.headers.forEach((value, key) => headers.set(key, value));
+		}
+	} catch (err) {
+		console.error("[Worker] 404 页面读取失败:", err);
+	}
+
+	headers.delete("Location");
+	headers.set("Cache-Control", "public, max-age=60");
+	headers.set("X-Robots-Tag", "noindex, follow");
+	return applySecurityHeaders(new Response(body, { status: 404, headers }));
+}
+
 export default {
 	async scheduled(_event, env, ctx) {
 		ctx.waitUntil(
@@ -126,6 +177,13 @@ export default {
 				);
 			}
 
+			// 1c. 404 页面别名：直接返回 404 正文。
+			//     必须早于步骤 2，否则 /404 会被尾斜杠规则改成 /404/ 再与
+			//     assets 的规范化互跳，形成死循环。
+			if (NOT_FOUND_ALIASES.has(pathname)) {
+				return serveNotFound(env, request);
+			}
+
 			// 2. Trailing slash enforcement: redirect paths without trailing slash (301)
 			//    Skip file-like paths (containing a dot in the last segment)
 			if (
@@ -148,27 +206,9 @@ export default {
 				new Request(new URL(assetPath, request.url), request),
 			);
 
-			// 5. If asset not found, serve 404.html
+			// 5. If asset not found, serve the 404 page
 			if (asset.status === 404) {
-				try {
-					const notFound = await env.ASSETS.fetch(
-						new Request(new URL("/404.html", request.url), request),
-					);
-					const resp = new Response(notFound.body, {
-						status: 404,
-						headers: notFound.headers,
-					});
-					resp.headers.set("Cache-Control", "public, max-age=60");
-					resp.headers.set("X-Robots-Tag", "noindex, follow");
-					return applySecurityHeaders(resp);
-				} catch {
-					const errResp = new Response("Not Found", {
-						status: 404,
-						headers: { "Cache-Control": "public, max-age=60" },
-					});
-					errResp.headers.set("X-Robots-Tag", "noindex, follow");
-					return applySecurityHeaders(errResp);
-				}
+				return serveNotFound(env, request);
 			}
 
 			// 6. Create new response so we can override cache headers

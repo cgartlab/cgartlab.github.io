@@ -356,11 +356,28 @@ Worker Secret（`TG_BOT_TOKEN` / `TG_CHANNEL_ID` / `TG_NOTIFY_SECRET`）需 `wra
 0. **`/api/tg-notify` POST 手动触发** — 校验 `x-tg-secret` 头后推送，401 未授权
 1. www → non-www 301
 2. `/feed` 与 `/feed/` → `https://cgartlab.com/rss.xml` 301
-3. 尾斜杠强制 301（跳过含 `.` 的文件路径）
-4. 目录 → index.html
-5. 404 → 404.html 兜底（`Cache-Control: public, max-age=60`）
-6. 缓存头按文件类型：指纹资源 / CSS / JS / 字体 → 1 年 immutable；图片 → 30 天；HTML → `max-age=600, s-maxage=1800`（浏览器 10min / 边缘 30min）
-7. 兜底 catch → 404 `max-age=60`
+3. **404 页面别名拦截** — `/404`、`/404/`、`/404.html` 直接返回 404 正文
+4. 尾斜杠强制 301（跳过含 `.` 的文件路径）
+5. 目录 → index.html
+6. asset 未命中 → 404 页面兜底（跟随资源层规范化重定向取正文，`Cache-Control: public, max-age=60`）
+7. 缓存头按文件类型：指纹资源 / CSS / JS / 字体 → 1 年 immutable；图片 → 30 天；HTML → `max-age=3600, stale-while-revalidate=600`（同时下发 `Cloudflare-Cdn-Cache-Control`）
+8. 兜底 catch → 404 `max-age=60`
+
+> ⚠️ 下面两处**看起来多余、实际必需**的处理，均由真实故障倒逼，改动时勿简化：
+>
+> 1. **`applySecurityHeaders()` 必须重建 Response**，不能就地 `resp.headers.set()`。
+>    `Response.redirect()` 按 Fetch 规范产出的 headers guard 是 `immutable`，就地改会抛
+>    `TypeError: immutable`，该异常被 `fetch()` 最外层 catch 吞成 404「Not Found」。
+>    表现为 www→apex 301、`/feed`→rss 301、尾斜杠 301 **三条规则同时失效**，
+>    即全站无尾斜杠 URL 全部 404。
+> 2. **404 页面必须跟随资源层的规范化重定向取正文**。
+>    `html_handling: "auto-trailing-slash"` 会把 `/404.html` 规范化成 307 → `/404`
+>    （空 body），直接取会得到**全白的 404 页面**，且 404 响应里混进 `Location` 头；
+>    而 `/404` 又被尾斜杠规则改成 `/404/`、资源层再改回 `/404`，三者叠加成**死循环**
+>    （浏览器 ERR_TOO_MANY_REDIRECTS）。故必须在进资源层之前拦截三个别名。
+>
+> 验证方式：`wrangler dev --local` 起真实 workerd，直接 curl `/404.html`、`/404`、`/404/`
+> 与一个不存在的路径，确认均返回 404 + 完整 HTML 且无 `Location` 头。
 
 ### Telegram 推送（`src/lib/tg.mjs`）
 
