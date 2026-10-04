@@ -19,20 +19,27 @@ function timingSafeEqual(a, b) {
  *   （Astro View Transitions、主题切换、Giscus、partytown），严格
  *   nonce-based CSP 需重构，故维持 'unsafe-inline'；connect-src 必须
  *   覆盖所有运行时 fetch 目标（giscus / GA / Umami / Web3Forms / GitHub API）。
+ *
+ * ⚠️ 必须**重建** Response，不能就地改 `resp.headers`：`Response.redirect()`
+ * 与 `Response.error()` 产出的 headers guard 是 "immutable"，就地 set 会抛
+ * `TypeError: immutable`。该异常被 fetch() 最外层 catch 吞成 404 "Not Found"，
+ * 表现为 www→apex 301、/feed→rss 301、尾斜杠 301 三条重定向规则同时失效
+ * （`https://www.cgartlab.com/` 直接 404）。
  */
 function applySecurityHeaders(resp) {
-	resp.headers.set(
+	const headers = new Headers(resp.headers);
+	headers.set(
 		'Strict-Transport-Security',
 		'max-age=63072000; includeSubDomains; preload',
 	)
-	resp.headers.set('X-Content-Type-Options', 'nosniff')
-	resp.headers.set('X-Frame-Options', 'SAMEORIGIN')
-	resp.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin')
-	resp.headers.set(
+	headers.set('X-Content-Type-Options', 'nosniff')
+	headers.set('X-Frame-Options', 'SAMEORIGIN')
+	headers.set('Referrer-Policy', 'strict-origin-when-cross-origin')
+	headers.set(
 		'Permissions-Policy',
 		'camera=(), microphone=(), geolocation=()',
 	)
-	resp.headers.set(
+	headers.set(
 		'Content-Security-Policy',
 		[
 			"default-src 'self'",
@@ -46,7 +53,12 @@ function applySecurityHeaders(resp) {
 			"form-action 'self' https://api.web3forms.com https://giscus.app",
 		].join('; '),
 	)
-	return resp
+	// 保留原状态码/状态行与全部既有头（含 Location、Cache-Control、X-Robots-Tag）
+	return new Response(resp.body, {
+		status: resp.status,
+		statusText: resp.statusText,
+		headers,
+	});
 }
 
 export default {
