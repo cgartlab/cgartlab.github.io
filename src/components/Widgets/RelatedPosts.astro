@@ -75,8 +75,9 @@ if (hasTags) {
     margin-top: 0;
     margin-bottom: 1.25rem;
     font-family: var(--un-preset-theme-font-family-time);
-    font-size: 0.875rem;
-    line-height: 1.25rem;
+    /* 保持「区块标签 < 正文」的层级：随正文 17px→14px 等比缩小（原 0.875rem = 正文大小） */
+    font-size: 0.75rem;
+    line-height: 1.4;
     font-weight: 400;
     letter-spacing: 0.025em;
     text-transform: uppercase;
