@@ -99,6 +99,7 @@ pnpm update-gh-contributions  # 更新贡献热力图数据 → src/data/github-
 - **pnpm only** — `package.json` 中 `packageManager` 强制 `pnpm@11.10.0`
 - **LQIP 自动生成** — `src/assets/` 下图片由 `apply-lqip.ts` 管理，禁止手动编辑
 - **文章图片** — 必须放在 `src/content/posts/_images/` 下
+- **图片尺寸语法** — alt 支持 Obsidian 风格 `![描述|宽x高]`（也兼容仅 `|宽`）：`|` 后的纯数字段会解析为 `<img>` 的 `width`/`height`，且不会进入图注；feed 走独立的 markdown-it 渲染（不经 rehype），在 `src/utils/feed.ts` 中同步剥离
 - **ESLint 跳过** — `src/content/**` 完全忽略
 - **pre-commit hook** — `simple-git-hooks` + `lint-staged` 自动 eslint --fix `.js/.ts/.astro`
 - **Type suppressions** — 仅 1 处 (`@ts-expect-error` in MediaEmbed.astro)

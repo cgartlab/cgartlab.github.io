@@ -10,6 +10,21 @@
 
 ## Unreleased
 
+### 2026-10-06 — 图片尺寸语法不再污染图注 (#442)
+
+**Fixed**
+
+- `src/plugins/rehype-image-processor.mjs`：`createFigure()` 现将 Obsidian 风格的
+  `![描述|宽x高]` 尺寸段从 `alt` 中剥离，不再原样写进 `<figcaption>`；并把尺寸解析为
+  `<img>` 的 `width` / `height`，让该语法真正生效（此前全仓无任何解析代码，
+  尺寸段唯一的效果就是污染图注、显示给读者）
+- `src/utils/feed.ts`：feed 走独立的 markdown-it 渲染、不经过 rehype 管线，在
+  `fixRelativeImagePaths()` 中同步剥离 `alt` 的尺寸段，避免污染 `content:encoded`
+- 仅在 `|` 之后为纯数字（或 `宽x高`）形态时才切分，正常 alt 与含 `|` 的文本不受影响；
+  剥离后描述为空时回退到「无图注」分支
+- 修复后 `weekly-18` / `weekly-21` / `weekly-22` 的图注（如「……标注 46 个核心发布」）
+  不再带 `|549x648`、`|319`、`|415` 等尺寸段；zh/en 页面与四个 feed 全部无残留
+
 ### 2026-09-28 — 清理 Syncthing / GitHub Pages 时代残留 (#427)
 
 **Removed**

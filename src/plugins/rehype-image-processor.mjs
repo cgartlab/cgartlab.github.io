@@ -1,10 +1,40 @@
 import { SKIP, visit } from "unist-util-visit";
 
+// Obsidian 风格的图片尺寸语法：alt 末尾的 |宽 或 |宽x高，如 ![描述|319](img) / ![描述|693x452](img)
+const ALT_SIZE_PATTERN = /\|\s*(\d+)(?:x(\d+))?\s*$/;
+
+// 从 alt 文本中剥离尺寸后缀。仅当 | 之后为纯数字（或 宽x高）形态时才切分，避免误伤正常的 | 文本
+function parseAltSize(altText) {
+	if (typeof altText !== "string") {
+		return { caption: altText };
+	}
+	const match = altText.match(ALT_SIZE_PATTERN);
+	if (!match) {
+		return { caption: altText };
+	}
+	return {
+		caption: altText.slice(0, match.index).trim(),
+		width: Number(match[1]),
+		height: match[2] ? Number(match[2]) : undefined,
+	};
+}
+
 function createFigure(imgNode, isInGallery = false) {
-	// 获取替代文本
-	const altText = imgNode.properties?.alt;
+	// 获取替代文本，并剥离 |宽x高 尺寸语法（该后缀不应进入图注，也不应留在 alt 中）
+	const { caption, width, height } = parseAltSize(imgNode.properties?.alt);
+	if (typeof imgNode.properties?.alt === "string") {
+		imgNode.properties.alt = caption;
+	}
+	// 让尺寸语法真正生效：落到 img 的 width/height 属性
+	if (width) {
+		imgNode.properties.width = width;
+	}
+	if (height) {
+		imgNode.properties.height = height;
+	}
+
 	// 如果没有替代文本或者以_开头则跳过说明
-	const shouldSkipCaption = !altText || altText.startsWith("_");
+	const shouldSkipCaption = !caption || caption.startsWith("_");
 
 	// 非画廊的单图无 alt：直接返回裸 imgNode（不包裹 figure）
 	if (shouldSkipCaption && !isInGallery) {
@@ -19,7 +49,7 @@ function createFigure(imgNode, isInGallery = false) {
 			type: "element",
 			tagName: "figcaption",
 			properties: {},
-			children: [{ type: "text", value: altText }],
+			children: [{ type: "text", value: caption }],
 		});
 	}
 
