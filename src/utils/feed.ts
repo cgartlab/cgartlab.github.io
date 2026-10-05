@@ -19,7 +19,7 @@ const { folo } = themeConfig.seo ?? {};
 // Obsidian 风格的图片尺寸语法：alt 末尾的 |宽 或 |宽x高。
 // 与 src/plugins/rehype-image-processor.mjs 保持同一规则——feed 走独立的 markdown-it 渲染，
 // 不经过 rehype 管线，需在此单独剥离，避免尺寸段污染 content:encoded 的 alt 文本。
-const ALT_SIZE_PATTERN = /\|\s*\d+(?:x\d+)?\s*$/;
+const ALT_SIZE_PATTERN = /\|\s*(\d+)(?:x(\d+))?\s*$/;
 
 function stripAltSize(alt: string): string {
 	return alt.replace(ALT_SIZE_PATTERN, "").trim();
