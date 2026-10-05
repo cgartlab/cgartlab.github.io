@@ -25,6 +25,28 @@
   并写明移除条件 —— 修复版 0.18.2 起 KaTeX 的 CSS 类名统一加 `katex-` 前缀，与 rehype-katex@7
   硬钉的 `katex ^0.16.0` 及现有渲染 HTML 不匹配，升级会破公式版式（见 AGENTS.md DEPENDENCY UPGRADE）
 
+### 2026-10-06 — 正文字号降至 14px 并等比缩小标题
+
+**Changed**
+
+- `src/styles/markdown.css`：`.heti` 正文字号 `1.0625rem`（17px）→ `0.875rem`（14px）；
+  标题按同一比例（14/17 ≈ 0.824）等比缩小，标题/正文比例维持约 1.65× ——
+  文章标题 36→30px（<1024 时 34→28px）、h1 32→26px、h2 28→23px、h3 24→20px、h4 20→16px、
+  h5 18→15px、h6 16→13px；标题 `line-height` 由固定 `rem` 改为无单位比例，日后改字号不再错位
+- `src/styles/markdown.css`：图注 `0.875rem` → `0.85em`（约 11.9px），保持「图注 < 正文」层级
+- `src/components/Widgets/RelatedPosts.astro`：「相关文章」区块标签 `0.875rem` → `0.75rem`，
+  避免与 14px 正文同号后层级消失
+
+**Fixed**
+
+- `src/plugins/rehype-image-processor.mjs`：新增兜底遍历 —— 不在独立 `<p>` 内的图片
+  （列表项内、与文字同行）此前完全跳过插件，`alt` 仍残留 `|434` 尺寸段；现统一剥离，
+  全站 `alt` 不再有 `|尺寸` 残留（仍仅对独立 `<p>` 的图包 `<figure>` 并落 `width`/`height`）
+- `src/styles/markdown.css`：`overflow-wrap: break-all` 是非法值（`break-all` 属 `word-break`），
+  浏览器忽略后静默回退；改为 `overflow-wrap: anywhere`，让 CJK 长链接/内联代码的断词意图生效
+- `src/styles/markdown.css`：删除未使用的代码行号样式（`counter-reset: line`、
+  `code span.line`、`span.line::before`）—— 构建产物中不存在对应 DOM，属死代码
+
 ### 2026-10-06 — 图片尺寸语法不再污染图注 (#442)
 
 **Fixed**

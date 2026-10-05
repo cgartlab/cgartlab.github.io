@@ -99,7 +99,8 @@ pnpm update-gh-contributions  # 更新贡献热力图数据 → src/data/github-
 - **pnpm only** — `package.json` 中 `packageManager` 强制 `pnpm@11.10.0`
 - **LQIP 自动生成** — `src/assets/` 下图片由 `apply-lqip.ts` 管理，禁止手动编辑
 - **文章图片** — 必须放在 `src/content/posts/_images/` 下
-- **图片尺寸语法** — alt 支持 Obsidian 风格 `![描述|宽x高]`（也兼容仅 `|宽`）：`|` 后的纯数字段会解析为 `<img>` 的 `width`/`height`，且不会进入图注；feed 走独立的 markdown-it 渲染（不经 rehype），在 `src/utils/feed.ts` 中同步剥离
+- **图片尺寸语法** — alt 支持 Obsidian 风格 `![描述|宽x高]`（也兼容仅 `|宽`）：`|` 后的纯数字段会解析为 `<img>` 的 `width`/`height`，且不会进入图注；`rehype-image-processor.mjs` 对**所有** `<img>` 剥离该尺寸段（含列表项内、与文字同行的图——这些不包 `<figure>`、不落 `width`），feed 走独立的 markdown-it 渲染（不经 rehype），在 `src/utils/feed.ts` 中同步剥离
+- **正文字号 14px + 标题等比** — `.heti` 正文 `0.875rem`（14px），文章内标题按 14/17 ≈ 0.824 等比缩小（h1 26 / h2 23 / h3 20 / h4 16 / h5 15 / h6 13px，文章标题 30px），标题/正文比例约 1.65×；**改正文字号时必须同步缩放标题**，标题 `line-height` 已改为无单位比例。图注 `0.85em`、相关文章标签 `0.75rem` 同理
 - **ESLint 跳过** — `src/content/**` 完全忽略
 - **pre-commit hook** — `simple-git-hooks` + `lint-staged` 自动 eslint --fix `.js/.ts/.astro`
 - **Type suppressions** — 仅 1 处 (`@ts-expect-error` in MediaEmbed.astro)
