@@ -16,6 +16,15 @@ const markdownParser = new MarkdownIt();
 const { title, description, i18nTitle, url, author } = themeConfig.site;
 const { folo } = themeConfig.seo ?? {};
 
+// Obsidian 风格的图片尺寸语法：alt 末尾的 |宽 或 |宽x高。
+// 与 src/plugins/rehype-image-processor.mjs 保持同一规则——feed 走独立的 markdown-it 渲染，
+// 不经过 rehype 管线，需在此单独剥离，避免尺寸段污染 content:encoded 的 alt 文本。
+const ALT_SIZE_PATTERN = /\|\s*\d+(?:x\d+)?\s*$/;
+
+function stripAltSize(alt: string): string {
+	return alt.replace(ALT_SIZE_PATTERN, "").trim();
+}
+
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 // 动态导入 /src/content/posts/_images 下的所有图像
 const imagesGlob = import.meta.glob<{ default: ImageMetadata }>(
@@ -98,6 +107,15 @@ async function fixRelativeImagePaths(
 	const imagePromises = [];
 
 	for (const img of images) {
+		// 剥离 alt 中的尺寸语法，避免污染 feed 输出
+		const alt = img.getAttribute("alt");
+		if (alt) {
+			const cleanedAlt = stripAltSize(alt);
+			if (cleanedAlt !== alt) {
+				img.setAttribute("alt", cleanedAlt);
+			}
+		}
+
 		const src = img.getAttribute("src");
 		if (!src) {
 			continue;
