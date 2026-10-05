@@ -122,5 +122,19 @@ export function rehypeImageProcessor() {
 			// splice 后更新游标
 			return [SKIP, index + figures.length];
 		});
+
+		// 兜底：不在独立 <p> 中的图片（如列表项内、与文字同行）不包 figure，
+		// 但同样剥离 alt 末尾的尺寸段，避免 |尺寸 残留在 alt 中（读屏 / 裂图 / RSS 可见）
+		visit(tree, "element", (node) => {
+			if (node.tagName !== "img") {
+				return;
+			}
+			if (typeof node.properties?.alt === "string") {
+				const { caption } = parseAltSize(node.properties.alt);
+				if (caption !== node.properties.alt) {
+					node.properties.alt = caption;
+				}
+			}
+		});
 	};
 }
