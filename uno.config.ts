@@ -11,6 +11,15 @@ import { themeConfig } from './src/config.ts'
 
 const { light, dark } = themeConfig.color
 
+// 字体族：主题的单一来源。font.css 里以 @font-face 定义各字体
+const fontFamily = {
+  title: ['Snell-Black', 'EarlySummer-Subset', 'EarlySummer', 'ui-serif', 'Georgia', 'Cambria', 'Times New Roman', 'Times', 'serif'],
+  navbar: ['STIX-Italic', 'EarlySummer-Subset', 'EarlySummer', 'ui-serif', 'Georgia', 'Cambria', 'Times New Roman', 'Times', 'serif'],
+  time: ['Snell-Bold', 'ui-serif', 'Georgia', 'Cambria', 'Times New Roman', 'Times', 'serif'],
+  serif: ['STIX', 'EarlySummer', 'ui-serif', 'Georgia', 'Cambria', 'Times New Roman', 'Times', 'serif'],
+  sans: ['OPPOSans', 'ui-sans-serif', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial', 'Noto Sans', 'sans-serif'],
+}
+
 export default defineConfig({
   presets: [
     presetWind3(),
@@ -39,14 +48,20 @@ export default defineConfig({
       warning: 'oklch(55.5% 0.163 48.998 / 0.8)', // amber-700
       caution: 'oklch(50.5% 0.213 27.518 / 0.8)', // red-700
     },
-    fontFamily: {
-      title: ['Snell-Black', 'EarlySummer-Subset', 'EarlySummer', 'ui-serif', 'Georgia', 'Cambria', 'Times New Roman', 'Times', 'serif'],
-      navbar: ['STIX-Italic', 'EarlySummer-Subset', 'EarlySummer', 'ui-serif', 'Georgia', 'Cambria', 'Times New Roman', 'Times', 'serif'],
-      time: ['Snell-Bold', 'ui-serif', 'Georgia', 'Cambria', 'Times New Roman', 'Times', 'serif'],
-      serif: ['STIX', 'EarlySummer', 'ui-serif', 'Georgia', 'Cambria', 'Times New Roman', 'Times', 'serif'],
-      sans: ['OPPOSans', 'ui-sans-serif', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial', 'Noto Sans', 'sans-serif'],
-    },
+    fontFamily,
   },
+  // unocss-preset-theme 只为 colors 下发 CSS 变量（其实现只遍历 preset 传入的 theme
+  // 选项，且数组值会按索引拆成多个变量），font-family 从不生成变量 —— 于是 markdown.css
+  // 与组件里 var(--un-preset-theme-font-family-*) 整条声明被浏览器丢弃，标题退回继承的
+  // font-sans（OPPOSans）、与列表标题的 serif 不统一。这里按同一命名自行下发，保持单一来源。
+  preflights: [
+    {
+      getCSS: () =>
+        `:root{${Object.entries(fontFamily)
+          .map(([k, v]) => `--un-preset-theme-font-family-${k}:${v.join(', ')}`)
+          .join(';')}}`,
+    },
+  ],
   rules: [
     ['scrollbar-hidden', {
       'scrollbar-width': 'none',

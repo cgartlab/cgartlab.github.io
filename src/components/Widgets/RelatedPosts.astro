@@ -74,7 +74,9 @@ if (hasTags) {
   .related-title {
     margin-top: 0;
     margin-bottom: 1.25rem;
-    font-family: var(--un-preset-theme-font-family-time);
+    /* 用正文同款衬线字体，与文章/列表标题统一（原 font-time 为装饰性西文脚本体，
+       对中文「相关文章」无效，会落到系统衬线） */
+    font-family: var(--un-preset-theme-font-family-serif);
     /* 保持「区块标签 < 正文」的层级：随正文 17px→14px 等比缩小（原 0.875rem = 正文大小） */
     font-size: 0.75rem;
     line-height: 1.4;
