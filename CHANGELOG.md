@@ -25,6 +25,51 @@
   并写明移除条件 —— 修复版 0.18.2 起 KaTeX 的 CSS 类名统一加 `katex-` 前缀，与 rehype-katex@7
   硬钉的 `katex ^0.16.0` 及现有渲染 HTML 不匹配，升级会破公式版式（见 AGENTS.md DEPENDENCY UPGRADE）
 
+### 2026-10-06 — 标题统一使用衬线字体（字体变量此前从未生成）
+
+**Fixed**
+
+- `uno.config.ts`：新增 `preflights` 下发 `--un-preset-theme-font-family-*`。
+  `unocss-preset-theme` 只为 `colors` 生成变量（其实现只遍历 preset 传入的 theme，
+  且数组值会按索引拆成多个变量），**不处理 `fontFamily`** —— 于是 `markdown.css` 与组件里
+  `font-family: var(--un-preset-theme-font-family-serif)` 整条声明被浏览器丢弃，文章标题
+  （`h1`–`h6`、`.post-title`、关于页标题）一直退回继承的 `font-sans`（OPPOSans），
+  与列表标题（走 `font-serif` 工具类、编译为字面量栈）的衬线不统一。现按同一命名下发变量，
+  单一来源仍是 `theme.fontFamily`
+- `RelatedPosts.astro` / `PillarPage.astro`：区块标签（「相关文章」「标签」）由装饰性西文
+  脚本体 `font-time` 改为 `font-serif`，避免对中文无效的字体栈落到系统衬线
+
+### 2026-10-06 — 正文字号降至 14px、标题统一衬线
+
+**Changed**
+
+- `src/styles/markdown.css`：`.heti` 正文字号 `1.0625rem`（17px）→ `0.875rem`（14px）；
+  标题按同一比例（14/17 ≈ 0.824）等比缩小，标题/正文比例维持约 1.65× ——
+  文章标题 36→30px（<1024 时 34→28px）、h1 32→26px、h2 28→23px、h3 24→20px、h4 20→16px、
+  h5 18→15px、h6 16→13px；标题 `line-height` 由固定 `rem` 改为无单位比例，日后改字号不再错位
+- `src/styles/markdown.css`：图注 `0.875rem` → `0.85em`（约 11.9px），保持「图注 < 正文」层级
+- `src/components/Widgets/RelatedPosts.astro`：「相关文章」区块标签 `0.875rem` → `0.75rem`，
+  避免与 14px 正文同号后层级消失
+- `src/components/Widgets/RelatedPosts.astro` / `PillarPage.astro`：区块标签（「相关文章」/「标签」）
+  由装饰性 `font-time` 改为 `font-family-serif`，与其余标题统一
+- `src/styles/markdown.css`：标题装饰条尺寸 `4px` / `8px` / `1px` / `-3px` 统一为
+  `0.25rem` / `0.5rem` / `0.0625rem` / `-0.1875rem`（默认 root 下像素等价，与 `uno-decorative-line` 等 rem 用法一致）
+
+**Fixed**
+
+- `uno.config.ts`：`unocss-preset-theme` 只为 colors 下发 `--un-preset-theme-*` 变量、**不处理
+  fontFamily**（其实现只遍历 preset 传入的 theme，数组值还会被按索引拆成多个变量），导致
+  `markdown.css` 与组件里 `var(--un-preset-theme-font-family-serif)` 整条声明被浏览器丢弃 ——
+  文章标题实际一直退回继承的 `font-sans`（OPPOSans），与列表标题的 serif 不统一。
+  改用 `preflights` 按同一命名下发 5 个字体变量，单一来源仍是 `theme.fontFamily`
+- `src/plugins/rehype-image-processor.mjs`：新增兜底遍历 —— 不在独立 `<p>` 内的图片
+  （列表项内、与文字同行）此前完全跳过插件，`alt` 仍残留 `|434` 尺寸段；现统一剥离，
+  全站 `alt` 不再有 `|尺寸` 残留（仍仅对独立 `<p>` 的图包 `<figure>` 并落 `width`/`height`）
+- `src/styles/markdown.css`：`overflow-wrap: break-all` 是非法值（`break-all` 属 `word-break`），
+  浏览器忽略后静默回退；改为 `overflow-wrap: anywhere`，让 CJK 长链接/内联代码的断词意图生效
+- `src/styles/markdown.css`：删除未使用的代码行号样式（`counter-reset: line`、
+  `code span.line`、`span.line::before`）—— 构建产物中不存在对应 DOM，属死代码
+
 ### 2026-10-06 — 图片尺寸语法不再污染图注 (#442)
 
 **Fixed**

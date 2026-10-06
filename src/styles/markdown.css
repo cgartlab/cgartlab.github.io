@@ -9,7 +9,8 @@
 	overflow-wrap: break-word;
 	line-height: 1.5;
 	hyphens: auto;
-	font-size: 1.0625rem;
+	/* 正文字号：14px（原 17px）。标题按同一比例等比缩小，见下方 Headings */
+	font-size: 0.875rem;
 	line-height: 1.75;
 }
 .heti:is(:lang(zh), :lang(ja), :lang(ko)) {
@@ -22,14 +23,14 @@
 	width: 100%;
 	margin-bottom: 0.5rem;
 	margin-top: 0;
-	font-size: 2.125rem;
-	line-height: 2.5rem;
+	font-size: 1.75rem;
+	line-height: 1.15;
 	font-weight: 700;
 }
 @media (min-width: 1024px) {
 	.heti .post-title {
-		font-size: 2.25rem;
-		line-height: 2.5rem;
+		font-size: 1.875rem;
+		line-height: 1.15;
 	}
 }
 
@@ -44,49 +45,50 @@
 .heti :where(h2, h3, h4, h5, h6)::before {
 	content: "";
 	display: inline-block;
-	width: 4px;
+	/* 装饰条尺寸统一用 rem，与 uno-decorative-line 等保持一致（默认 root 下与 px 等价） */
+	width: 0.25rem;
 	height: 1em;
-	margin-right: 8px;
+	margin-right: 0.5rem;
 	background-color: color-mix(
 		in srgb,
 		oklch(var(--un-preset-theme-colors-highlight)) 60%,
 		transparent
 	);
 	vertical-align: middle;
-	border-radius: 1px;
+	border-radius: 0.0625rem;
 	flex-shrink: 0;
-	transform: translateY(-3px);
+	transform: translateY(-0.1875rem);
 }
 .heti :where(h1) {
-	font-size: 2rem;
-	line-height: 2.5rem;
+	font-size: 1.625rem;
+	line-height: 1.25;
 	color: oklch(var(--un-preset-theme-colors-primary));
 }
 .heti :where(h2) {
-	font-size: 1.75rem;
-	line-height: 2.25rem;
+	font-size: 1.4375rem;
+	line-height: 1.3;
 	color: oklch(var(--un-preset-theme-colors-primary));
 }
 .heti :where(h3) {
-	font-size: 1.5rem;
-	line-height: 2rem;
+	font-size: 1.25rem;
+	line-height: 1.35;
 }
 .heti :where(h4) {
-	font-size: 1.25rem;
-	line-height: 1.75rem;
+	font-size: 1rem;
+	line-height: 1.4;
 }
 .heti :where(h5) {
-	font-size: 1.125rem;
-	line-height: 1.5rem;
+	font-size: 0.9375rem;
+	line-height: 1.35;
 }
 .heti :where(h6) {
 	font-weight: 400;
-	font-size: 1rem;
-	line-height: 1.375rem;
+	font-size: 0.8125rem;
+	line-height: 1.4;
 }
 .heti :where(h1, h2, h3) {
 	text-wrap: balance;
-	/* 各 heading 已有显式 line-height（h1/h2/h3 分别 2.5/2.25/2rem），
+	/* 各 heading 已有显式 line-height（h1/h2/h3 分别为 1.25/1.3/1.35），
 	   此处只补 text-wrap，不设 line-height 以免覆盖（:where 零特异度按源序后者胜） */
 }
 @media (min-width: 1024px) {
@@ -136,7 +138,7 @@
 		:lang(ja),
 		:lang(ko)
 	) {
-	overflow-wrap: break-all;
+	overflow-wrap: anywhere;
 }
 @media (min-width: 1024px) {
 	.heti :where(a:not(.no-heti):not(.no-heti *)) {
@@ -172,8 +174,9 @@
 .heti :where(figcaption) {
 	margin-top: 0.625rem;
 	text-align: center;
-	font-size: 0.875rem;
-	line-height: 1.25rem;
+	/* 与行内代码同比例，保持「图注 < 正文」的层级（14px 正文 → 约 11.9px） */
+	font-size: 0.85em;
+	line-height: 1.4;
 	color: color-mix(
 		in srgb,
 		oklch(var(--un-preset-theme-colors-secondary)) 80%,
@@ -263,28 +266,9 @@ html.dark .heti pre span {
 	padding: 0.15em 0.4em;
 	font-size: 0.85em;
 	letter-spacing: 0em;
-	counter-reset: line;
 }
 .heti :where(code):is(:lang(zh), :lang(ja), :lang(ko)) {
-	overflow-wrap: break-all;
-}
-.heti code span.line {
-	position: relative;
-	padding-left: 2rem;
-}
-.heti code span.line::before {
-	position: absolute;
-	left: 0;
-	width: 1rem;
-	color: color-mix(
-		in srgb,
-		oklch(var(--un-preset-theme-colors-secondary)) 40%,
-		transparent
-	);
-	line-height: 1.9em;
-	content: counter(line);
-	counter-increment: line;
-	direction: rtl;
+	overflow-wrap: anywhere;
 }
 
 /* Blockquotes */
