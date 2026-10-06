@@ -26,7 +26,7 @@
     "@astrojs/mdx": "^7.0.8",
     "@astrojs/partytown": "^2.1.8",
     "@astrojs/sitemap": "^3.7.4",
-    "@waline/client": "^3.15.2",
+    "@waline/client": "^3.16.0",
     "astro": "^7.3.5",
     "astro-compress": "^2.4.3",
     "astro-og-canvas": "^0.13.2",
@@ -44,7 +44,7 @@
     "rehype-slug": "^6.0.0",
     "remark-directive": "^4.0.0",
     "remark-math": "^6.0.0",
-    "sanitize-html": "^2.17.7",
+    "sanitize-html": "^2.18.0",
     "sharp": "^0.35.4",
     "twikoo": "^1.7.24",
     "unist-util-visit": "^5.1.0"
@@ -54,14 +54,14 @@
     "@astrojs/check": "^0.9.9",
     "@types/markdown-it": "^14.2.0",
     "@types/node": "^25.9.9",
-    "@types/sanitize-html": "^2.16.1",
+    "@types/sanitize-html": "^2.16.2",
     "@unocss/astro": "66.10.5",
     "@unocss/eslint-plugin": "66.10.5",
     "@unocss/preset-attributify": "66.10.5",
     "@unocss/reset": "66.10.5",
     "astro-eslint-parser": "^1.4.0",
     "autocorrect-node": "^2.14.0",
-    "eslint": "^10.11.0",
+    "eslint": "^10.12.0",
     "eslint-plugin-astro": "^1.7.0",
     "fast-glob": "^3.3.3",
     "lint-staged": "^16.4.0",
@@ -70,7 +70,7 @@
     "typescript": "~6.0.3",
     "unocss": "66.10.5",
     "unocss-preset-theme": "^0.14.1",
-    "wrangler": "^4.141.0"
+    "wrangler": "^4.147.0"
   },
   "simple-git-hooks": {
     "pre-commit": "pnpm lint-staged"
