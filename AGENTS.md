@@ -101,6 +101,7 @@ pnpm update-gh-contributions  # 更新贡献热力图数据 → src/data/github-
 - **文章图片** — 必须放在 `src/content/posts/_images/` 下
 - **图片尺寸语法** — alt 支持 Obsidian 风格 `![描述|宽x高]`（也兼容仅 `|宽`）：`|` 后的纯数字段会解析为 `<img>` 的 `width`/`height`，且不会进入图注；`rehype-image-processor.mjs` 对**所有** `<img>` 剥离该尺寸段（含列表项内、与文字同行的图——这些不包 `<figure>`、不落 `width`），feed 走独立的 markdown-it 渲染（不经 rehype），在 `src/utils/feed.ts` 中同步剥离
 - **正文字号 14px + 标题等比** — `.heti` 正文 `0.875rem`（14px），文章内标题按 14/17 ≈ 0.824 等比缩小（h1 26 / h2 23 / h3 20 / h4 16 / h5 15 / h6 13px，文章标题 30px），标题/正文比例约 1.65×；**改正文字号时必须同步缩放标题**，标题 `line-height` 已改为无单位比例。图注 `0.85em`、相关文章标签 `0.75rem` 同理
+- **字体变量由 `preflights` 下发** — `unocss-preset-theme` 只为 `colors` 生成 `--un-preset-theme-colors-*`，**不处理 `fontFamily`**（其实现只遍历 preset 传入的 theme，数组值还会被按索引拆成多个变量）。`uno.config.ts` 因此用 `preflights` 自行下发 `--un-preset-theme-font-family-*`，供 `markdown.css` 与组件里的 `var(--un-preset-theme-font-family-serif)` 使用——**删掉该 preflight 会让文章标题全部退回 `font-sans`（OPPOSans）**；`font-serif` / `font-title` 等工具类编译为字面量栈，不受影响
 - **ESLint 跳过** — `src/content/**` 完全忽略
 - **pre-commit hook** — `simple-git-hooks` + `lint-staged` 自动 eslint --fix `.js/.ts/.astro`
 - **Type suppressions** — 仅 1 处 (`@ts-expect-error` in MediaEmbed.astro)
