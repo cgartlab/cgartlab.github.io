@@ -53,7 +53,7 @@
     "@antfu/eslint-config": "^7.7.3",
     "@astrojs/check": "^0.9.9",
     "@types/markdown-it": "^14.2.0",
-    "@types/node": "^25.9.8",
+    "@types/node": "^25.9.9",
     "@types/sanitize-html": "^2.16.1",
     "@unocss/astro": "66.10.5",
     "@unocss/eslint-plugin": "66.10.5",
