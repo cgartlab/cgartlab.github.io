@@ -814,6 +814,10 @@ pnpm lint → pnpm build → pnpm build && pnpm preview（实测：暗色/双语
 - **katex 锁定 `^0.16.47`** — rehype-katex@7.0.1 依赖 `katex: ^0.16.0`，升 0.17+/0.18 会产生双 katex
   实例；且 0.18 起 CSS 类名加 `katex-` 前缀（`.base` → `.katex-base`），渲染 HTML 与加载 CSS 类名
   不匹配会导致公式破版。待 rehype-katex 发布兼容版本后再升
+  - 因此 `katex` 的 low 通告 GHSA-238p-pmpm-9mq7 已加入 `pnpm-workspace.yaml` 的
+    `auditConfig.ignoreGhsas`（临时忽略，附移除条件）；CI 的 `pnpm audit --prod` 门禁会因未忽略的
+    新通告直接失败，升级依赖后需用 `pnpm --config.registry=https://registry.npmjs.org/ audit --prod`
+    本地复现（本机 registry 是 npmmirror，缺 audit 端点）
 - **Astro 7 + astro-og-canvas 升级已完成** — 当前 `astro@^7.3.3` + `astro-og-canvas@^0.13.2`。配套改动：
   1. `astro-og-canvas` 的 `param` 选项已移除（改由 endpoint 文件名自动推导），`OGImageRoute()` 改为 `await`
   2. Astro 7 默认 Markdown 处理器切换，已迁移到 `markdown.processor: unified({...})`（commit `3d18638e`），`markdown.remarkPlugins` / `rehypePlugins` 顶层配置已弃用

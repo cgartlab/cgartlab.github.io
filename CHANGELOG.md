@@ -10,6 +10,21 @@
 
 ## Unreleased
 
+### 2026-10-07 — 修复依赖审计门禁（5 项安全通告）
+
+**Fixed**
+
+- `pnpm-workspace.yaml`：新增 / 提升 4 条 `overrides`，清掉 CI `pnpm audit --prod` 门禁报出的
+  高危 / 中危通告（均为同 major·minor 补丁，无破坏性变更）：
+  - `sharp` `^0.35.4` → `^0.35.5`（librsvg 依赖漏洞 CVE-2026-96889 / GHSA-wq5f-xc86-pv6w，high）
+  - `smol-toml` → `>=1.8.1`（parseKey 二次复杂度 DoS GHSA-r4xh-jqrq-34v2，moderate；实际解析到 1.9.0）
+  - `source-map-js` → `^1.2.2`（索引 section offset 事件循环 DoS GHSA-68fv-2mgg-jv7q，high）
+  - `vue` → `^3.5.42`（@vue/server-renderer 属性名黑名单缺 CR 导致 XSS GHSA-g2v6-rqmx-r4w6，high；
+    实际解析到 3.5.43）
+- `pnpm-workspace.yaml`：`katex` 的 low 通告（GHSA-238p-pmpm-9mq7）加入 `auditConfig.ignoreGhsas`
+  并写明移除条件 —— 修复版 0.18.2 起 KaTeX 的 CSS 类名统一加 `katex-` 前缀，与 rehype-katex@7
+  硬钉的 `katex ^0.16.0` 及现有渲染 HTML 不匹配，升级会破公式版式（见 AGENTS.md DEPENDENCY UPGRADE）
+
 ### 2026-10-06 — 图片尺寸语法不再污染图注 (#442)
 
 **Fixed**

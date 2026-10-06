@@ -47,7 +47,17 @@ overrides:
   nanoid@3: ^3.3.17
   # 安全修复：sharp 整数溢出 (GHSA-rgj7-g3m4-5g8c)
   # astro-compress 依赖 sharp ^0.35，0.35.4 为同 minor 补丁
-  sharp: ^0.35.4
+  # 安全修复：sharp 的 librsvg 依赖漏洞 (CVE-2026-96889 / GHSA-wq5f-xc86-pv6w)
+  # 受影响 <0.35.5，0.35.5 为同 minor 补丁
+  sharp: ^0.35.5
+  # 安全修复：smol-toml parseKey 逐行重扫导致二次复杂度 DoS (GHSA-r4xh-jqrq-34v2)
+  # 受影响 <=1.8.0；npm 上无 1.8.1，修复随 1.9.0 发布（同 major minor）
+  # 由 astro > @astrojs/internal-helpers 引入
+  smol-toml: '>=1.8.1'
+  # 安全修复：source-map-js 索引 section offset 触发事件循环 DoS (GHSA-68fv-2mgg-jv7q)
+  # 受影响 >=1.0.0 <1.2.2，1.2.2 为同 minor 补丁
+  # 由 vue > @vueuse/core > @waline/client 引入（dev 侧另经 @antfu/eslint-config）
+  source-map-js: ^1.2.2
   # 安全修复：SVGO removeScripts 可执行内容绕过
   # (GHSA-w27v-7q3p-w38r / GHSA-4vpr-x523-8j87)，4.1.0 为同 major minor
   # astro-compress 仅用 svgo 做构建期 SVG 压缩，4.1.0 无破坏性变更
@@ -55,6 +65,11 @@ overrides:
   # 安全修复：undici WebSocket permessage-deflate 解压 DoS (GHSA-3wwx-pv8p-q78v)
   # 仅约束 7.x（miniflare 精确钉 7.29.0）；astro 链上的 undici 8.x 不受影响
   undici@7: ^7.29.1
+  # 安全修复：@vue/server-renderer 属性名黑名单缺 CR 导致 XSS (GHSA-g2v6-rqmx-r4w6)
+  # 受影响 <3.5.42（或 3.6.0-rc.0 ~ 3.6.0-rc.6）；@vue/server-renderer 与 vue 同版本发布，
+  # 故整体钉 vue 到同 minor 补丁 3.5.42，避免子包与 vue 核心版本错位
+  # 由 @waline/client > @vueuse/core > vue 引入
+  vue: ^3.5.42
   yaml: '>=2.8.3'
 
 minimumReleaseAgeExclude:
@@ -70,6 +85,16 @@ minimumReleaseAgeExclude:
 #     2. astro-compress 仅在 astro.config.ts 构建期使用，依赖链不进构建产物；
 #        触发该漏洞需攻击者可控的 glob 模式，站点运行期不可达
 #   移除条件：braces 3.0.4 一经发布，改用 overrides 钉版并删除本段
+#
+# GHSA-238p-pmpm-9mq7 —— KaTeX 原型污染可绕过 trust 限制（low）
+#   引入路径：直接依赖 katex（另经 mermaid / rehype-katex 间接依赖）
+#   为何现在不修：
+#     1. 修复版 0.18.2 起 KaTeX 的 CSS 类名统一加 `katex-` 前缀（`.base` → `.katex-base`），
+#        与 rehype-katex@7 硬钉的 katex `^0.16.0` 及现有渲染 HTML 不匹配，升级会破公式版式
+#        （见 AGENTS.md DEPENDENCY UPGRADE 的 katex 决策记录）
+#     2. KaTeX 仅在构建期以仓库内可信内容渲染，站点运行期不可达
+#   移除条件：rehype-katex 发布兼容 katex 0.18.x 的版本后，升级 katex 并删除本段
 auditConfig:
   ignoreGhsas:
     - GHSA-vfj7-8cjw-p6xm
+    - GHSA-238p-pmpm-9mq7
