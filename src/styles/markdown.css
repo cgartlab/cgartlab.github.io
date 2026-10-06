@@ -45,18 +45,19 @@
 .heti :where(h2, h3, h4, h5, h6)::before {
 	content: "";
 	display: inline-block;
-	width: 4px;
+	/* 装饰条尺寸统一用 rem，与 uno-decorative-line 等保持一致（默认 root 下与 px 等价） */
+	width: 0.25rem;
 	height: 1em;
-	margin-right: 8px;
+	margin-right: 0.5rem;
 	background-color: color-mix(
 		in srgb,
 		oklch(var(--un-preset-theme-colors-highlight)) 60%,
 		transparent
 	);
 	vertical-align: middle;
-	border-radius: 1px;
+	border-radius: 0.0625rem;
 	flex-shrink: 0;
-	transform: translateY(-3px);
+	transform: translateY(-0.1875rem);
 }
 .heti :where(h1) {
 	font-size: 1.625rem;

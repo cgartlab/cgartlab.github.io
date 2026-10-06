@@ -52,6 +52,8 @@
   避免与 14px 正文同号后层级消失
 - `src/components/Widgets/RelatedPosts.astro` / `PillarPage.astro`：区块标签（「相关文章」/「标签」）
   由装饰性 `font-time` 改为 `font-family-serif`，与其余标题统一
+- `src/styles/markdown.css`：标题装饰条尺寸 `4px` / `8px` / `1px` / `-3px` 统一为
+  `0.25rem` / `0.5rem` / `0.0625rem` / `-0.1875rem`（默认 root 下像素等价，与 `uno-decorative-line` 等 rem 用法一致）
 
 **Fixed**
 
