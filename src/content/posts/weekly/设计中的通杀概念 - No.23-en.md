@@ -4,9 +4,7 @@ published: 2026-10-07
 description: "Some design concepts work across every discipline. Photoshop's Add mode is just RGB values added up — grasp the mechanism once, and the rest fall into place."
 updated: 2026-10-07
 tags:
-    - 周刊
-    - 项目/玄光专栏
-    - 领域/内容创作
+    - Weekly
 draft: false
 pin: 0
 toc: true
