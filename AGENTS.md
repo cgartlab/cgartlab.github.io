@@ -88,7 +88,7 @@ pnpm update-gh-contributions  # 更新贡献热力图数据 → src/data/github-
 > 自动生成数据（由 `pnpm sync-docs` 更新，勿手改）
 
 > 技术栈：Astro 7.3.5 · TypeScript 6.0.3 · UnoCSS 66.10.5 · pnpm 11.10.0 · Node 24
-> 内容：164 个文章文件（82 中文 + 82 英文），周刊 22 期
+> 内容：166 个文章文件（83 中文 + 83 英文），周刊 23 期
 > Markdown 管线：6 remark + 8 rehype 插件
 > 脚本：15 个（apply-lqip / astro / audit-glossary / build / dev / fetch-github-repos / format-posts / lint / lint:fix / new-post / preview / sync-docs / sync-docs:check / update-gh-contributions / verify-feed）
 <!-- DOC-FACTS:END -->
