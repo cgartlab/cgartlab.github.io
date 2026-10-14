@@ -5,7 +5,7 @@
 | Branch Pattern | Purpose | Merge Method |
 |---------------|---------|--------------|
 | `dev-{kebab-case}` | Code, feature, or style development | PR → squash merge → delete |
-| `write-{kebab-case}` | Article or weekly newsletter writing | PR → squash merge → delete |
+| `write-{kebab-case}` | Article or column writing | PR → squash merge → delete |
 | `main` (protected) | Production-ready state | PR only, squash merge |
 
 Branches are deleted after squash merge. Create a fresh branch for each change.
@@ -30,7 +30,7 @@ All commits must follow [Conventional Commits](https://www.conventionalcommits.o
 ```
 feat(search): add client-side search index caching
 fix(toc): correct active heading detection on scroll
-docs(weekly): add 玄光周刊 No.37
+docs(column): add 玄光专栏 No.37
 chore(deps): update astro to 6.4.0
 ci(opencode): sync Argus workflow config
 ```
@@ -44,7 +44,7 @@ git checkout main
 git pull origin main
 git checkout -b dev-feature-name
 # or
-git checkout -b write-weekly-38
+git checkout -b write-column-38
 ```
 
 ### 2. Make Changes
@@ -129,7 +129,7 @@ PR title should mirror the commit message format (it becomes the squash commit m
 ### Content Changes (→ `write-*` branch)
 
 - Blog posts (`src/content/posts/*.md`)
-- Weekly newsletters (`src/content/posts/weekly/*.md`)
+- Column posts (`src/content/posts/column/*.md`)
 - Works entries (`src/content/posts/works/*.md`)
 
 **Bilingual articles**: Create both `title.md` (Chinese, `lang: ''`) and `title-en.md` (English, `lang: 'en'`). Both share the same URL slug (Chinese filename without `-en`).
@@ -142,7 +142,7 @@ PR title should mirror the commit message format (it becomes the squash commit m
 | `published` | date | Yes | — | Format: `YYYY-MM-DD` |
 | `description` | string | No | `''` | Used for cards and SEO |
 | `updated` | date | No | — | Empty string is ignored |
-| `tags` | string[] | No | `[]` | Weekly must include `周刊` |
+| `tags` | string[] | No | `[]` | Column posts must include `专栏` |
 | `draft` | boolean | No | `false` | Hidden from production |
 | `pin` | number (0-99) | No | `0` | Higher = higher priority |
 | `toc` | boolean | No | follows config | |

@@ -4,7 +4,7 @@ published: 2026-09-12
 updated: 2026-09-12
 description: （这里写描述，140 字以内）
 tags:
-  - 周刊
+  - 专栏
 draft: true
 pin: 0
 toc: true
@@ -15,7 +15,7 @@ lang: zh
 
 > **玄光专栏 · No.{{期号}}**
 > 这是一份专注加速数字化生产力，覆盖知识管理、动态视觉设计、前端开发领域的电子专栏，发布频率目前为每月不少于 2 期，每期精选一个主题展开思考。
-> 如果你觉得周刊内容还不错，想获得更完善的阅读体验，更推荐使用浏览器来到官网 ([https://cgartlab.com](https://cgartlab.com/weekly)) 阅读。
+> 如果你觉得专栏内容还不错，想获得更完善的阅读体验，更推荐使用浏览器来到官网 ([https://cgartlab.com](https://cgartlab.com/column)) 阅读。
 
 ---
 

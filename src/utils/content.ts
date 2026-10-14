@@ -140,7 +140,7 @@ async function _getRegularPosts(lang?: Language) {
 		const tags = post.data.tags || [];
 		return !tags.some(
 			(tag) =>
-				tag.toLowerCase() === "周刊" || tag.toLowerCase() === "weekly",
+				tag.toLowerCase() === "专栏" || tag.toLowerCase() === "journal",
 		);
 	});
 }
@@ -161,8 +161,8 @@ async function _getPinnedPosts(lang?: Language) {
 			const tags = post.data.tags || [];
 			return !tags.some(
 				(tag) =>
-					tag.toLowerCase() === "周刊" ||
-					tag.toLowerCase() === "weekly",
+					tag.toLowerCase() === "专栏" ||
+					tag.toLowerCase() === "journal",
 			);
 		})
 		.sort((a, b) => (b.data.pin ?? 0) - (a.data.pin ?? 0));
@@ -314,8 +314,8 @@ async function _getTagSupportedLangs(tag: string): Promise<Language[]> {
 		Portfolio: ["作品集", "Portfolio"],
 		数字绘画: ["数字绘画", "Digital Painting"],
 		"Digital Painting": ["数字绘画", "Digital Painting"],
-		周刊: ["周刊", "Weekly"],
-		Weekly: ["周刊", "Weekly"],
+		专栏: ["专栏", "Journal"],
+		Journal: ["专栏", "Journal"],
 	};
 	const equivalentTags = equivalentTagMap[tag] || [tag];
 

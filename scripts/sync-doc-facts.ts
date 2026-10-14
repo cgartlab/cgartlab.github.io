@@ -7,7 +7,7 @@
  * 数据源（单一事实源）：
  * - package.json     → 版本号、脚本列表
  * - astro.config.ts  → remark/rehype 插件管线
- * - 文件系统         → 文章/周刊统计
+ * - 文件系统         → 文章/专栏统计
  *
  * 支持目标文档（marker 区块）：
  * - README.md
@@ -54,7 +54,7 @@ interface Facts {
   total: number
   cn: number
   en: number
-  weeklyIssues: number
+  columnIssues: number
   scripts: string[]
 }
 
@@ -101,7 +101,7 @@ async function collectFacts(): Promise<Facts> {
 
   const postsDir = path.join(ROOT, 'src/content/posts')
   const files = await walk(postsDir, '.md')
-  const weeklyFiles = await walk(path.join(postsDir, 'weekly'), '.md')
+  const columnFiles = await walk(path.join(postsDir, 'column'), '.md')
 
   return {
     astro: pick('astro') || '?',
@@ -114,7 +114,7 @@ async function collectFacts(): Promise<Facts> {
     total: files.length,
     cn: files.filter(f => !f.endsWith('-en.md')).length,
     en: files.filter(f => f.endsWith('-en.md')).length,
-    weeklyIssues: weeklyFiles.filter(f => !f.endsWith('-en.md')).length,
+    columnIssues: columnFiles.filter(f => !f.endsWith('-en.md')).length,
     scripts: Object.keys(pkg.scripts ?? {}).sort(),
   }
 }
@@ -126,7 +126,7 @@ function renderBlock(f: Facts): string {
     '> 自动生成数据（由 `pnpm sync-docs` 更新，勿手改）',
     '',
     `> 技术栈：Astro ${f.astro} · TypeScript ${f.typescript} · UnoCSS ${f.unocss} · pnpm ${f.pnpm} · Node ${f.node}`,
-    `> 内容：${f.total} 个文章文件（${f.cn} 中文 + ${f.en} 英文），周刊 ${f.weeklyIssues} 期`,
+    `> 内容：${f.total} 个文章文件（${f.cn} 中文 + ${f.en} 英文），专栏 ${f.columnIssues} 期`,
     `> Markdown 管线：${f.remarkCount} remark + ${f.rehypeCount} rehype 插件`,
     `> 脚本：${f.scripts.length} 个（${f.scripts.join(' / ')}）`,
     MARKER_END,

@@ -177,7 +177,20 @@ export default {
 				);
 			}
 
-			// 1c. 404 页面别名：直接返回 404 正文。
+			// 1c. 旧列表页路径：/weekly → /column（2026-10 周刊改名专栏，保留旧链接）
+			if (
+				pathname === "/weekly" ||
+				pathname === "/weekly/" ||
+				pathname === "/en/weekly" ||
+				pathname === "/en/weekly/"
+			) {
+				const target = pathname.startsWith("/en/")
+					? "https://cgartlab.com/en/column/"
+					: "https://cgartlab.com/column/";
+				return applySecurityHeaders(Response.redirect(target, 301));
+			}
+
+			// 1d. 404 页面别名：直接返回 404 正文。
 			//     必须早于步骤 2，否则 /404 会被尾斜杠规则改成 /404/ 再与
 			//     assets 的规范化互跳，形成死循环。
 			if (NOT_FOUND_ALIASES.has(pathname)) {

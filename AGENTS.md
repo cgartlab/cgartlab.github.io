@@ -30,7 +30,7 @@ cgartlab.github.io/
     ├── config.ts            # 站点元数据、导航、颜色、评论、SEO 单一声明源
     ├── content.config.ts    # 内容集合定义（posts / about / privacy）
     ├── content/             # 内容唯一来源
-    │   ├── posts/           # 文章（*.md）、周刊（weekly/）、作品（works/）
+    │   ├── posts/           # 文章（*.md）、专栏（column/）、作品（works/）
     │   ├── posts/_images/   # 文章配图（403 张）
     │   ├── posts/_files/    # 文章附件
     │   ├── posts/0-文章数据库.base   # Obsidian Bases：草稿/专栏/已发布文章/已发布专栏 四视图
@@ -54,7 +54,7 @@ cgartlab.github.io/
 
 | 目录 | 职责 | 改动影响 |
 |------|------|---------|
-| `src/content/` | 内容唯一来源（文章/周刊/作品/图） | 写作目标，构建时采集 |
+| `src/content/` | 内容唯一来源（文章/专栏/作品/图） | 写作目标，构建时采集 |
 | `src/plugins/` | Markdown 管线插件（管线共 6 remark + 8 rehype，其中本地 9 个：4 remark + 5 rehype，其余为 npm 包） | **顺序敏感**，插入须确认依赖 |
 | `src/styles/` | 纯 CSS 层，不经 UnoCSS transform | 必须用 CSS 变量引用颜色 |
 | `src/lib/` + `src/worker.mjs` | 服务端逻辑（RSS→TG 推送、缓存头、安全头） | 改动需 `wrangler` 部署验证 |
@@ -70,7 +70,7 @@ pnpm build                # astro check → fetch-github-repos → build → gen
 pnpm preview              # astro preview --host (局域网可访问，使用 dist/ 生产构建产物，最接近线上效果)
 pnpm lint / lint:fix      # eslint (antfu config, 忽略 src/content/**)
 pnpm astro                # Astro CLI 透传
-pnpm new-post "标题"       # 创建 MD 文章 (src/content/posts/)，周刊自动放入 weekly/
+pnpm new-post "标题"       # 创建 MD 文章 (src/content/posts/)，专栏自动放入 column/
 pnpm format-posts         # CJK 文本规范化 (autocorrect)
 pnpm apply-lqip           # 生成 LQIP 占位图 (写入 src/assets/)
 pnpm verify-feed          # 验证 RSS/Atom feed 输出 (CI 中使用)
@@ -88,7 +88,7 @@ pnpm update-gh-contributions  # 更新贡献热力图数据 → src/data/github-
 > 自动生成数据（由 `pnpm sync-docs` 更新，勿手改）
 
 > 技术栈：Astro 7.3.5 · TypeScript 6.0.3 · UnoCSS 66.10.5 · pnpm 11.10.0 · Node 24
-> 内容：168 个文章文件（84 中文 + 84 英文），周刊 24 期
+> 内容：168 个文章文件（84 中文 + 84 英文），专栏 24 期
 > Markdown 管线：6 remark + 8 rehype 插件
 > 脚本：15 个（apply-lqip / astro / audit-glossary / build / dev / fetch-github-repos / format-posts / lint / lint:fix / new-post / preview / sync-docs / sync-docs:check / update-gh-contributions / verify-feed）
 <!-- DOC-FACTS:END -->
@@ -160,7 +160,7 @@ pnpm update-gh-contributions  # 更新贡献热力图数据 → src/data/github-
 |------|------|------|
 | `title` | string | 是 |
 | `published` | date | 是 |
-| `tags` | string[] | 否 (周刊必须含 `周刊` tag) |
+| `tags` | string[] | 否 (专栏必须含 `专栏` tag) |
 | `draft` | boolean | 否 (默认 false) |
 | `lang` | `''` / `'en'` | 否（zh-tw 未启用，schema 不接受） |
 | `abbrlink` | string | 否 (小写字母+数字+连字符) |
@@ -168,14 +168,14 @@ pnpm update-gh-contributions  # 更新贡献热力图数据 → src/data/github-
 - 英文版文件名加 `-en` 后缀，如 `文章.md` + `文章-en.md`
 - 双语文章的 URL slug 共用中文文件名（去掉 `-en` 后缀）
 - **`abbrlink` 是双语的粘合剂，不是可选项**：`src/pages/[...lang]/posts/[slug].astro` 靠它把中英版本
-  配对生成 hreflang 互指，`WeeklyGallery` 靠它提取期号（`weekly-16` → `16`）。中英两版必须写同一个值
+  配对生成 hreflang 互指，`ColumnGallery` 靠它提取期号（`weekly-16` → `16`）。中英两版必须写同一个值
 - 中英结构应保持对应（`##` / `###` 层级与数量一致），便于对照维护
-- 周刊/专栏放 `src/content/posts/weekly/`，正文标题里的 `No.xx` 与 `abbrlink` 的期号要一致
+- 专栏/专栏放 `src/content/posts/column/`，正文标题里的 `No.xx` 与 `abbrlink` 的期号要一致
 
 ## BRANCH STRATEGY
 
 - **`dev-{kebab}`** — 代码/功能/样式开发
-- **`write-{kebab}`** — 文章/周刊创作
+- **`write-{kebab}`** — 文章/专栏创作
 - `main` 必须通过 PR 合并，合并后删除分支。⚠️ **不要假设有服务端强制保护**：仓库已转 public，
   ruleset `protect-main` 名为 active，但 `gh api repos/cgartlab/cgartlab.github.io/rules/branches/main`
   实测返回 `[]`（条件未命中任何分支），且 `allow_merge_commit / allow_rebase_merge` 均为 true——
@@ -239,8 +239,8 @@ Obsidian 官方定义（从 `obsidian.asar` 提取原文）：
 **两种 vault 根都命中**的形式：
 
 - ✅ `file.folder.contains("posts")` — repo-root vault（`src/content/posts/...`）与 `src/` vault（`content/posts/...`）都匹配
-- ✅ `file.folder.contains("weekly")` — 同上
-- ❌ `file.inFolder("src/content/posts/weekly")` — vault 相对路径，换 vault 根即失效
+- ✅ `file.folder.contains("column")` — 同上
+- ❌ `file.inFolder("src/content/posts/column")` — vault 相对路径，换 vault 根即失效
 
 ### 插件约定
 
@@ -330,7 +330,7 @@ Vite 加载 `astro.config.ts` 时会把配置导入图里的依赖全部内联�
 - 其他 workflow：PR 审查（`pr-review.yml`）、PR 分类（`pr-triage.yml`）、定时维护（`maintenance.yml`）、贡献数据更新（`update-contributions.yml`，每周日 cron）
 - 域名：cgartlab.com
 
-> **发文章会让 `sync-docs:check` 失败**：文章数/周刊数变了，`README.md` 与 `AGENTS.md` 的 DOC-FACTS
+> **发文章会让 `sync-docs:check` 失败**：文章数/专栏数变了，`README.md` 与 `AGENTS.md` 的 DOC-FACTS
 > 数据块就过时了。发布内容后在同一个 PR 里跑一次 `pnpm sync-docs` 并提交。
 
 ## CLOUDFLARE CONFIGURATION
@@ -511,7 +511,7 @@ safelist 通过列出源码中并不存在的 utility（如 `bg-background` 从�
 
 定义于 `src/content.config.ts`，三个集合：
 
-- `posts` — 文章/周刊/作品 MDX/MD 内容
+- `posts` — 文章/专栏/作品 MDX/MD 内容
 - `about` — 关于页面
 - `privacy` — 隐私政策
 
