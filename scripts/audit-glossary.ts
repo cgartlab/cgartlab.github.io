@@ -294,10 +294,10 @@ function extractCandidates(body: string): Map<string, number> {
 interface ArticleInfo {
   title: string
   slug: string
-  isWeekly: boolean
+  isColumn: boolean
 }
 
-async function scanDir(dir: string, isWeekly: boolean): Promise<Map<string, ArticleInfo[]>> {
+async function scanDir(dir: string, isColumn: boolean): Promise<Map<string, ArticleInfo[]>> {
   const termArticles = new Map<string, ArticleInfo[]>()
 
   try {
@@ -318,7 +318,7 @@ async function scanDir(dir: string, isWeekly: boolean): Promise<Map<string, Arti
       for (const [term] of candidates) {
         if (!termArticles.has(term))
           termArticles.set(term, [])
-        termArticles.get(term)!.push({ title: fm.title, slug, isWeekly })
+        termArticles.get(term)!.push({ title: fm.title, slug, isColumn })
       }
     }
   }
@@ -330,9 +330,9 @@ async function scanDir(dir: string, isWeekly: boolean): Promise<Map<string, Arti
 async function main() {
   console.log('正在扫描文章...')
 
-  const [mainArticles, weeklyArticles] = await Promise.all([
+  const [mainArticles, columnArticles] = await Promise.all([
     scanDir(POSTS_DIR, false),
-    scanDir(path.join(POSTS_DIR, 'weekly'), true),
+    scanDir(path.join(POSTS_DIR, 'column'), true),
   ])
 
   // 合并
@@ -340,7 +340,7 @@ async function main() {
   for (const [term, articles] of mainArticles) {
     allTermArticles.set(term, articles)
   }
-  for (const [term, articles] of weeklyArticles) {
+  for (const [term, articles] of columnArticles) {
     if (allTermArticles.has(term)) {
       allTermArticles.get(term)!.push(...articles)
     }

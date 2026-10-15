@@ -25,7 +25,7 @@ interface Frontmatter {
 
 interface Post {
   frontmatter: Frontmatter
-  isWeekly: boolean
+  isColumn: boolean
   isEnglish: boolean
   slug: string
 }
@@ -79,7 +79,7 @@ function parseFrontmatter(content: string): Frontmatter {
   return fm
 }
 
-async function scanDir(dir: string, isWeekly: boolean): Promise<Post[]> {
+async function scanDir(dir: string, isColumn: boolean): Promise<Post[]> {
   const posts: Post[] = []
 
   try {
@@ -100,7 +100,7 @@ async function scanDir(dir: string, isWeekly: boolean): Promise<Post[]> {
 
       posts.push({
         frontmatter: fm,
-        isWeekly,
+        isColumn,
         isEnglish,
         slug,
       })
@@ -114,7 +114,7 @@ async function scanDir(dir: string, isWeekly: boolean): Promise<Post[]> {
 }
 
 function generateUrl(post: Post): string {
-  // zh 是默认语言，无 URL 前缀（不能用 /zh/）；weekly 文章走 /posts/weekly-XX/ 路由（无 /weekly/ 单篇路由）
+  // zh 是默认语言，无 URL 前缀（不能用 /zh/）；专栏文章走 /posts/weekly-XX/ 路由（无 /column/ 单篇路由）
   const langPrefix = post.isEnglish ? '/en' : ''
   const slug = post.frontmatter.abbrlink || post.slug
   return `${SITE_URL}${langPrefix}/posts/${slug}/`
@@ -125,11 +125,11 @@ async function main() {
 
   const cwd = process.cwd()
   const postsDir = path.join(cwd, 'src/content/posts')
-  const weeklyDir = path.join(cwd, 'src/content/posts/weekly')
+  const columnDir = path.join(cwd, 'src/content/posts/column')
 
   const allPosts = [
     ...await scanDir(postsDir, false),
-    ...await scanDir(weeklyDir, true),
+    ...await scanDir(columnDir, true),
   ]
 
   allPosts.sort((a, b) => {

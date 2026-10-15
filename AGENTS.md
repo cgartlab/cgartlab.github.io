@@ -13,7 +13,7 @@ cgartlab.github.io/
 ├── astro.config.ts          # i18n、Markdown 管线（unified）、Vite、站点
 ├── uno.config.ts            # Wind3 + Attributify + theme preset，非 Tailwind
 ├── wrangler.jsonc           # Worker + Static Assets + Cron + KV 绑定
-├── pnpm-workspace.yaml      # nodeLinker / overrides / trustPolicy
+├── pnpm-workspace.yaml      # nodeLinker / allowBuilds / trustPolicy / overrides（安全钉版）
 ├── tsconfig.json · eslint.config.mjs
 ├── package.json             # 脚本入口，packageManager 锁 pnpm@11.10.0
 ├── AGENTS.md · README.md · CONTRIBUTING.md · CHANGELOG.md
@@ -30,7 +30,7 @@ cgartlab.github.io/
     ├── config.ts            # 站点元数据、导航、颜色、评论、SEO 单一声明源
     ├── content.config.ts    # 内容集合定义（posts / about / privacy）
     ├── content/             # 内容唯一来源
-    │   ├── posts/           # 文章（*.md）、周刊（weekly/）、作品（works/）
+    │   ├── posts/           # 文章（*.md）、专栏（column/）、作品（works/）
     │   ├── posts/_images/   # 文章配图（403 张）
     │   ├── posts/_files/    # 文章附件
     │   ├── posts/0-文章数据库.base   # Obsidian Bases：草稿/专栏/已发布文章/已发布专栏 四视图
@@ -54,7 +54,7 @@ cgartlab.github.io/
 
 | 目录 | 职责 | 改动影响 |
 |------|------|---------|
-| `src/content/` | 内容唯一来源（文章/周刊/作品/图） | 写作目标，构建时采集 |
+| `src/content/` | 内容唯一来源（文章/专栏/作品/图） | 写作目标，构建时采集 |
 | `src/plugins/` | Markdown 管线插件（管线共 6 remark + 8 rehype，其中本地 9 个：4 remark + 5 rehype，其余为 npm 包） | **顺序敏感**，插入须确认依赖 |
 | `src/styles/` | 纯 CSS 层，不经 UnoCSS transform | 必须用 CSS 变量引用颜色 |
 | `src/lib/` + `src/worker.mjs` | 服务端逻辑（RSS→TG 推送、缓存头、安全头） | 改动需 `wrangler` 部署验证 |
@@ -70,7 +70,7 @@ pnpm build                # astro check → fetch-github-repos → build → gen
 pnpm preview              # astro preview --host (局域网可访问，使用 dist/ 生产构建产物，最接近线上效果)
 pnpm lint / lint:fix      # eslint (antfu config, 忽略 src/content/**)
 pnpm astro                # Astro CLI 透传
-pnpm new-post "标题"       # 创建 MD 文章 (src/content/posts/)，周刊自动放入 weekly/
+pnpm new-post "标题"       # 创建 MD 文章 (src/content/posts/)，专栏自动放入 column/
 pnpm format-posts         # CJK 文本规范化 (autocorrect)
 pnpm apply-lqip           # 生成 LQIP 占位图 (写入 src/assets/)
 pnpm verify-feed          # 验证 RSS/Atom feed 输出 (CI 中使用)
@@ -88,7 +88,7 @@ pnpm update-gh-contributions  # 更新贡献热力图数据 → src/data/github-
 > 自动生成数据（由 `pnpm sync-docs` 更新，勿手改）
 
 > 技术栈：Astro 7.3.8 · TypeScript 6.0.3 · UnoCSS 66.10.5 · pnpm 11.10.0 · Node 24
-> 内容：168 个文章文件（84 中文 + 84 英文），周刊 24 期
+> 内容：168 个文章文件（84 中文 + 84 英文），专栏 24 期
 > Markdown 管线：6 remark + 8 rehype 插件
 > 脚本：15 个（apply-lqip / astro / audit-glossary / build / dev / fetch-github-repos / format-posts / lint / lint:fix / new-post / preview / sync-docs / sync-docs:check / update-gh-contributions / verify-feed）
 <!-- DOC-FACTS:END -->
@@ -160,7 +160,7 @@ pnpm update-gh-contributions  # 更新贡献热力图数据 → src/data/github-
 |------|------|------|
 | `title` | string | 是 |
 | `published` | date | 是 |
-| `tags` | string[] | 否 (周刊必须含 `周刊` tag) |
+| `tags` | string[] | 否 (专栏必须含 `专栏` tag) |
 | `draft` | boolean | 否 (默认 false) |
 | `lang` | `''` / `'en'` | 否（zh-tw 未启用，schema 不接受） |
 | `abbrlink` | string | 否 (小写字母+数字+连字符) |
@@ -168,14 +168,14 @@ pnpm update-gh-contributions  # 更新贡献热力图数据 → src/data/github-
 - 英文版文件名加 `-en` 后缀，如 `文章.md` + `文章-en.md`
 - 双语文章的 URL slug 共用中文文件名（去掉 `-en` 后缀）
 - **`abbrlink` 是双语的粘合剂，不是可选项**：`src/pages/[...lang]/posts/[slug].astro` 靠它把中英版本
-  配对生成 hreflang 互指，`WeeklyGallery` 靠它提取期号（`weekly-16` → `16`）。中英两版必须写同一个值
+  配对生成 hreflang 互指，`ColumnGallery` 靠它提取期号（`weekly-16` → `16`）。中英两版必须写同一个值
 - 中英结构应保持对应（`##` / `###` 层级与数量一致），便于对照维护
-- 周刊/专栏放 `src/content/posts/weekly/`，正文标题里的 `No.xx` 与 `abbrlink` 的期号要一致
+- 专栏/专栏放 `src/content/posts/column/`，正文标题里的 `No.xx` 与 `abbrlink` 的期号要一致
 
 ## BRANCH STRATEGY
 
 - **`dev-{kebab}`** — 代码/功能/样式开发
-- **`write-{kebab}`** — 文章/周刊创作
+- **`write-{kebab}`** — 文章/专栏创作
 - `main` 必须通过 PR 合并，合并后删除分支。⚠️ **不要假设有服务端强制保护**：仓库已转 public，
   ruleset `protect-main` 名为 active，但 `gh api repos/cgartlab/cgartlab.github.io/rules/branches/main`
   实测返回 `[]`（条件未命中任何分支），且 `allow_merge_commit / allow_rebase_merge` 均为 true——
@@ -239,8 +239,19 @@ Obsidian 官方定义（从 `obsidian.asar` 提取原文）：
 **两种 vault 根都命中**的形式：
 
 - ✅ `file.folder.contains("posts")` — repo-root vault（`src/content/posts/...`）与 `src/` vault（`content/posts/...`）都匹配
-- ✅ `file.folder.contains("weekly")` — 同上
-- ❌ `file.inFolder("src/content/posts/weekly")` — vault 相对路径，换 vault 根即失效
+- ✅ `file.folder.contains("column")` — 同上
+- ✅ `'!file.folder.contains("column")'` — 取反同样可移植，「已发布文章」视图靠它排除专栏
+- ✅ `file.hasTag("专栏", "Journal")` — 按 tag 判定，不依赖目录位置，可与 folder 条件取 `or`
+- ❌ `file.inFolder("src/content/posts/column")` — vault 相对路径，换 vault 根即失效
+
+当前 4 个视图的过滤条件（commit `6fe6456` 做过可移植化，勿退回 `inFolder`）：
+
+| 视图 | 条件 |
+|------|------|
+| 草稿 | `draft == true` |
+| 专栏 | `folder.contains("column")` **或** `hasTag("专栏","Journal")` —— 目录与 tag 双判据 |
+| 已发布文章 | `folder.contains("posts")` 且 `!folder.contains("column")` 且 `draft == false` |
+| 已发布专栏 | `folder.contains("posts")` 且 `tags.contains("专栏")` 且 `draft == false` |
 
 ### 插件约定
 
@@ -291,6 +302,35 @@ store 位置的优先级是 **全局 config.yaml > 用户级 `.npmrc`**，只改
 Vite 加载 `astro.config.ts` 时会把配置导入图里的依赖全部内联，任何 CJS 依赖都会炸。
 真正常见的原因是 `node_modules` 与 lockfile 不一致，而对齐版本的前提是 `pnpm install` 能跑通。
 
+### `pnpm-workspace.yaml` 的三块非直觉配置
+
+该文件早已不只是 `nodeLinker`。下列配置同样**不是可选项**，改动前先确认影响：
+
+| 配置 | 当前值 | 说明 |
+|------|--------|------|
+| `allowBuilds` | `esbuild` / `sharp` / `simple-git-hooks` / `workerd` 均 `false` | 显式禁用这 4 个包的安装期构建脚本（引入自 commit `195059c`「配置 pnpm 禁用部分包的自动构建」）。**不要顺手删**，删掉等于恢复构建脚本执行 |
+| `trustPolicy` | `no-downgrade`；`trustPolicyExclude` 与 `onlyTrustedDependencies` 同为 rollup 插件 / chokidar / semver | 这 3 个包必须执行构建脚本，故在例外名单里成对出现。其余包走 pnpm 默认信任策略 |
+| `overrides` | 14 条安全与兼容钉版 | 见下节 |
+
+### `overrides` 是漏洞处理的主战场
+
+`pnpm audit --prod` 是 **CI 硬门禁**，而告警绝大多数来自**传递依赖**，上游直接依赖短期内不会发新版：
+
+| 传递依赖 | 引入方 | 钉版 |
+|----------|--------|------|
+| `dompurify@3` | `mermaid`（依赖 `^3.3.3`）| `^3.4.16`（GHSA-p98j-92pf-mc4p DOM XSS）|
+| `undici@7` | `miniflare`（精确钉 `7.29.0`）| `^7.29.1`（GHSA-3wwx-pv8p-q78v 解压 DoS），**只约束 7.x**，astro 链上的 8.x 不受影响 |
+| `svgo@4` / `sharp` | `astro-compress` | `^4.1.0` / `^0.35.4` |
+| `js-yaml@4` | `@astrojs/internal-helpers`（astro 链）| `^4.3.2`（maxTotalMergeKeys 空 merge 源 CPU DoS）|
+| `fast-uri` | `ajv`（`^3.0.1`）| `^3.1.7`（authority 注入 + 主机混淆）|
+
+**处理流程：`pnpm audit --prod` 报错 → 确认引入方与受影响版本区间 → 在 `overrides` 钉同 minor 补丁 →
+每条 override 必须带注释写明「谁引入 / 哪个版本修 / 是否同 minor」**（现有 14 条中，安全类均已按此格式）。
+优先钉补丁版本而不是升级直接依赖，可避免把不相关的大版本一起拖进来。
+
+历史上因此反复红过 CI：#402、#406、#431、#438 —— 每次修复都只动 `pnpm-lock.yaml` +
+`pnpm-workspace.yaml`，不动 `package.json` 的直接依赖。
+
 ### 启动性能对照（实测）
 
 | vault 根 | 文件数 | 启动总时长 | Vault 段 |
@@ -327,10 +367,13 @@ Vite 加载 `astro.config.ts` 时会把配置导入图里的依赖全部内联�
 - push `main` → Cloudflare Worker + Static Assets 自动部署（Cloudflare Git 集成，非 GitHub Actions 部署）
 - `ci.yml` 依次执行：`pnpm install --config.trustPolicy=off` → `pnpm audit --prod`（依赖漏洞门禁）→ `pnpm build` → `pnpm verify-feed` → `pnpm sync-docs:check`
   （**注意：CI 不跑 `pnpm lint`**，见 KEY QUIRKS 的 lint 基线条目）
+- **`pnpm audit --prod` 是硬门禁**：报出的多为传递依赖漏洞，修复路径是在 `pnpm-workspace.yaml` 的
+  `overrides` 里钉补丁版本（只动 lockfile + workspace 文件），而不是升级直接依赖。
+  完整处理流程与现有 14 条钉版见「设备与文件系统约束 → `overrides` 是漏洞处理的主战场」
 - 其他 workflow：PR 审查（`pr-review.yml`）、PR 分类（`pr-triage.yml`）、定时维护（`maintenance.yml`）、贡献数据更新（`update-contributions.yml`，每周日 cron）
 - 域名：cgartlab.com
 
-> **发文章会让 `sync-docs:check` 失败**：文章数/周刊数变了，`README.md` 与 `AGENTS.md` 的 DOC-FACTS
+> **发文章会让 `sync-docs:check` 失败**：文章数/专栏数变了，`README.md` 与 `AGENTS.md` 的 DOC-FACTS
 > 数据块就过时了。发布内容后在同一个 PR 里跑一次 `pnpm sync-docs` 并提交。
 
 ## CLOUDFLARE CONFIGURATION
@@ -511,7 +554,7 @@ safelist 通过列出源码中并不存在的 utility（如 `bg-background` 从�
 
 定义于 `src/content.config.ts`，三个集合：
 
-- `posts` — 文章/周刊/作品 MDX/MD 内容
+- `posts` — 文章/专栏/作品 MDX/MD 内容
 - `about` — 关于页面
 - `privacy` — 隐私政策
 

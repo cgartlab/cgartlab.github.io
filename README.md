@@ -12,7 +12,7 @@
 > 自动生成数据（由 `pnpm sync-docs` 更新，勿手改）
 
 > 技术栈：Astro 7.3.8 · TypeScript 6.0.3 · UnoCSS 66.10.5 · pnpm 11.10.0 · Node 24
-> 内容：168 个文章文件（84 中文 + 84 英文），周刊 24 期
+> 内容：168 个文章文件（84 中文 + 84 英文），专栏 24 期
 > Markdown 管线：6 remark + 8 rehype 插件
 > 脚本：15 个（apply-lqip / astro / audit-glossary / build / dev / fetch-github-repos / format-posts / lint / lint:fix / new-post / preview / sync-docs / sync-docs:check / update-gh-contributions / verify-feed）
 <!-- DOC-FACTS:END -->
@@ -27,7 +27,7 @@ src/
 │   └── Widgets/     # TOC、ImageZoom、MediaEmbed、CodeCopyButton、GithubHeatmap 等
 ├── config/          # tag-meta.json（标签页 SEO 定制）
 ├── content/         # 内容唯一来源
-│   ├── posts/       # 文章，含 works/、weekly/、_images/、_files/
+│   ├── posts/       # 文章，含 works/、column/、_images/、_files/
 │   ├── about/       # 关于页集合
 │   └── privacy/     # 隐私政策集合
 ├── data/            # 站点数据：links.ts 友链、glossary.ts 术语表、github-contributions.json
@@ -50,7 +50,7 @@ public/              # 静态资源，直接映射站点根
 ## 主要功能
 
 - 明暗主题、响应式布局、多语言（zh / en，zh-tw 架构就绪未启用）
-- 玄光周刊与专栏：画廊式总览（WeeklyGallery），中英双语
+- 玄光专栏与专栏：画廊式总览（ColumnGallery），中英双语
 - 评论系统：Giscus（主用）+ Twikoo / Waline（需额外配置）
 - 搜索：客户端搜索索引（`api/search-index/[lang].json.ts`）
 - 自动术语内链：`remark-glossary` + `rehype-glossary` + 110 条术语表
@@ -75,7 +75,7 @@ pnpm dev                      # astro check → astro dev（HMR，快速迭代�
 pnpm build                    # astro check → fetch-github-repos → build → generate-llms → apply-lqip
 pnpm preview                  # astro preview --host（使用 dist/ 生产产物，最接近线上）
 pnpm lint / lint:fix          # eslint（antfu config，忽略 src/content/**）
-pnpm new-post "标题"           # 新建文章；周刊自动放进 weekly/
+pnpm new-post "标题"           # 新建文章；专栏自动放进 column/
 pnpm format-posts             # CJK 文本规范化（autocorrect）
 pnpm apply-lqip               # 生成 LQIP 占位图
 pnpm verify-feed              # 验证 RSS / Atom 输出
@@ -97,7 +97,7 @@ pnpm astro                    # Astro CLI 透传
 | 分支 | 用途 |
 |------|------|
 | `dev-{kebab}` | 代码、功能、样式开发 |
-| `write-{kebab}` | 文章与周刊创作 |
+| `write-{kebab}` | 文章与专栏创作 |
 | `main` | 生产分支；必须经 PR 合并，合并后删除分支。⚠️ 服务端 ruleset 实际未对 `main` 生效，合并前须自行确认 CI 全绿 |
 
 提交信息遵循 [Conventional Commits](https://www.conventionalcommits.org/)：`<type>(<scope>): <描述>`。

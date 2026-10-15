@@ -185,6 +185,6 @@ So, keep writing. For no other reason than to curiously see what you can ultimat
 
 A couple more words:
 
-The first section of this article came from a short graphic post I shared on my public account a few days ago. Originally planned for the weekly newsletter, but it kept getting longer. The next issue of the newsletter is almost ready too :)
+The first section of this article came from a short graphic post I shared on my public account a few days ago. Originally planned for the column, but it kept getting longer. The next issue of the newsletter is almost ready too :)
 
 This article was first published on [CGArtLab](https://cgartlab.com)
