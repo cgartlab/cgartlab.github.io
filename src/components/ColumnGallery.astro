@@ -102,7 +102,7 @@ function getDescription(post: Post): string {
                       />
                     )
                     : (
-                      <div class="thumbnail-placeholder">
+                      <div class="thumbnail-placeholder" role="img" aria-label={placeholderText[lang]}>
                         <span class="placeholder-text">{placeholderText[lang]}</span>
                       </div>
                     )}
@@ -168,6 +168,11 @@ function getDescription(post: Post): string {
 .column-link:hover {
   transform: translateY(-4px);
   border-color: color-mix(in srgb, oklch(var(--un-preset-theme-colors-primary)) 30%, transparent);
+}
+
+.column-link:focus-visible {
+  outline: 2px solid oklch(var(--un-preset-theme-colors-highlight));
+  outline-offset: 2px;
 }
 
 /* Cover image area */
