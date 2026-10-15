@@ -13,7 +13,7 @@ cgartlab.github.io/
 ├── astro.config.ts          # i18n、Markdown 管线（unified）、Vite、站点
 ├── uno.config.ts            # Wind3 + Attributify + theme preset，非 Tailwind
 ├── wrangler.jsonc           # Worker + Static Assets + Cron + KV 绑定
-├── pnpm-workspace.yaml      # nodeLinker / overrides / trustPolicy
+├── pnpm-workspace.yaml      # nodeLinker / allowBuilds / trustPolicy / overrides（安全钉版）
 ├── tsconfig.json · eslint.config.mjs
 ├── package.json             # 脚本入口，packageManager 锁 pnpm@11.10.0
 ├── AGENTS.md · README.md · CONTRIBUTING.md · CHANGELOG.md
@@ -240,7 +240,18 @@ Obsidian 官方定义（从 `obsidian.asar` 提取原文）：
 
 - ✅ `file.folder.contains("posts")` — repo-root vault（`src/content/posts/...`）与 `src/` vault（`content/posts/...`）都匹配
 - ✅ `file.folder.contains("column")` — 同上
+- ✅ `'!file.folder.contains("column")'` — 取反同样可移植，「已发布文章」视图靠它排除专栏
+- ✅ `file.hasTag("专栏", "Journal")` — 按 tag 判定，不依赖目录位置，可与 folder 条件取 `or`
 - ❌ `file.inFolder("src/content/posts/column")` — vault 相对路径，换 vault 根即失效
+
+当前 4 个视图的过滤条件（commit `6fe6456` 做过可移植化，勿退回 `inFolder`）：
+
+| 视图 | 条件 |
+|------|------|
+| 草稿 | `draft == true` |
+| 专栏 | `folder.contains("column")` **或** `hasTag("专栏","Journal")` —— 目录与 tag 双判据 |
+| 已发布文章 | `folder.contains("posts")` 且 `!folder.contains("column")` 且 `draft == false` |
+| 已发布专栏 | `folder.contains("posts")` 且 `tags.contains("专栏")` 且 `draft == false` |
 
 ### 插件约定
 
@@ -291,6 +302,35 @@ store 位置的优先级是 **全局 config.yaml > 用户级 `.npmrc`**，只改
 Vite 加载 `astro.config.ts` 时会把配置导入图里的依赖全部内联，任何 CJS 依赖都会炸。
 真正常见的原因是 `node_modules` 与 lockfile 不一致，而对齐版本的前提是 `pnpm install` 能跑通。
 
+### `pnpm-workspace.yaml` 的三块非直觉配置
+
+该文件早已不只是 `nodeLinker`。下列配置同样**不是可选项**，改动前先确认影响：
+
+| 配置 | 当前值 | 说明 |
+|------|--------|------|
+| `allowBuilds` | `esbuild` / `sharp` / `simple-git-hooks` / `workerd` 均 `false` | 显式禁用这 4 个包的安装期构建脚本（引入自 commit `195059c`「配置 pnpm 禁用部分包的自动构建」）。**不要顺手删**，删掉等于恢复构建脚本执行 |
+| `trustPolicy` | `no-downgrade`；`trustPolicyExclude` 与 `onlyTrustedDependencies` 同为 rollup 插件 / chokidar / semver | 这 3 个包必须执行构建脚本，故在例外名单里成对出现。其余包走 pnpm 默认信任策略 |
+| `overrides` | 14 条安全与兼容钉版 | 见下节 |
+
+### `overrides` 是漏洞处理的主战场
+
+`pnpm audit --prod` 是 **CI 硬门禁**，而告警绝大多数来自**传递依赖**，上游直接依赖短期内不会发新版：
+
+| 传递依赖 | 引入方 | 钉版 |
+|----------|--------|------|
+| `dompurify@3` | `mermaid`（依赖 `^3.3.3`）| `^3.4.16`（GHSA-p98j-92pf-mc4p DOM XSS）|
+| `undici@7` | `miniflare`（精确钉 `7.29.0`）| `^7.29.1`（GHSA-3wwx-pv8p-q78v 解压 DoS），**只约束 7.x**，astro 链上的 8.x 不受影响 |
+| `svgo@4` / `sharp` | `astro-compress` | `^4.1.0` / `^0.35.4` |
+| `js-yaml@4` | `@astrojs/internal-helpers`（astro 链）| `^4.3.2`（maxTotalMergeKeys 空 merge 源 CPU DoS）|
+| `fast-uri` | `ajv`（`^3.0.1`）| `^3.1.7`（authority 注入 + 主机混淆）|
+
+**处理流程：`pnpm audit --prod` 报错 → 确认引入方与受影响版本区间 → 在 `overrides` 钉同 minor 补丁 →
+每条 override 必须带注释写明「谁引入 / 哪个版本修 / 是否同 minor」**（现有 14 条中，安全类均已按此格式）。
+优先钉补丁版本而不是升级直接依赖，可避免把不相关的大版本一起拖进来。
+
+历史上因此反复红过 CI：#402、#406、#431、#438 —— 每次修复都只动 `pnpm-lock.yaml` +
+`pnpm-workspace.yaml`，不动 `package.json` 的直接依赖。
+
 ### 启动性能对照（实测）
 
 | vault 根 | 文件数 | 启动总时长 | Vault 段 |
@@ -327,6 +367,9 @@ Vite 加载 `astro.config.ts` 时会把配置导入图里的依赖全部内联�
 - push `main` → Cloudflare Worker + Static Assets 自动部署（Cloudflare Git 集成，非 GitHub Actions 部署）
 - `ci.yml` 依次执行：`pnpm install --config.trustPolicy=off` → `pnpm audit --prod`（依赖漏洞门禁）→ `pnpm build` → `pnpm verify-feed` → `pnpm sync-docs:check`
   （**注意：CI 不跑 `pnpm lint`**，见 KEY QUIRKS 的 lint 基线条目）
+- **`pnpm audit --prod` 是硬门禁**：报出的多为传递依赖漏洞，修复路径是在 `pnpm-workspace.yaml` 的
+  `overrides` 里钉补丁版本（只动 lockfile + workspace 文件），而不是升级直接依赖。
+  完整处理流程与现有 14 条钉版见「设备与文件系统约束 → `overrides` 是漏洞处理的主战场」
 - 其他 workflow：PR 审查（`pr-review.yml`）、PR 分类（`pr-triage.yml`）、定时维护（`maintenance.yml`）、贡献数据更新（`update-contributions.yml`，每周日 cron）
 - 域名：cgartlab.com
 
