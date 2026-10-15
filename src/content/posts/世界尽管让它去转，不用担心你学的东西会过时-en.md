@@ -128,17 +128,17 @@ This brings us to Lobster [OpenClaw](https://openclaw.ai). Before it appeared, I
 
 Currently, the scheduled tasks I give it are relatively simple, such as maintaining its own memory core files, regularly checking updates for the main renderer every day, version monitoring, and configuration file backups.
 
-For other relatively complex tasks, I discussed and developed specialized [Skills](https://www.runoob.com/ai-agent/skills-agent.html) with it, covering aggregated search, weekly material organization, investment analysis, blog repository maintenance, to-do lists, PARA file management, bar chart generator, PDF generator. Many functions are not yet stable and perfect.
+For other relatively complex tasks, I discussed and developed specialized [Skills](https://www.runoob.com/ai-agent/skills-agent.html) with it, covering aggregated search, column material organization, investment analysis, blog repository maintenance, to-do lists, PARA file management, bar chart generator, PDF generator. Many functions are not yet stable and perfect.
 
-What was surprisingly impressive was the first time testing its development ability. One day before going to bed, I asked it to develop a global search function + weekly page for my website. I didn't expect it to succeed, but the next morning it delivered results that completely exceeded expectations. You can [go experience it](https://cgartlab.com).
+What was surprisingly impressive was the first time testing its development ability. One day before going to bed, I asked it to develop a global search function + column page for my website. I didn't expect it to succeed, but the next morning it delivered results that completely exceeded expectations. You can [go experience it](https://cgartlab.com).
 
-![Screenshot of the author new global search function and weekly archive page, delivered overnight by the local AI agent OpenClaw](./_images/世界尽管让它去转，不用担心你学的东西会过时-1772959608287.webp)
+![Screenshot of the author new global search function and column archive page, delivered overnight by the local AI agent OpenClaw](./_images/世界尽管让它去转，不用担心你学的东西会过时-1772959608287.webp)
 
 After using it for nearly a month, my overall feeling about Lobster is that training AI using natural language is very interesting, especially for creators like me in visual creative fields. Because you can really create characters in your own stories. This character thinks, lives with you, and has its own memories and stories.
 
 What's worth thinking about is that its self-learning method is also very similar to humans: practice, gain experience, summarize laws, then practice again. Learning any skill cannot avoid such a most basic cycle. Even machines cannot avoid it. Humans naturally want to escape.
 
-For example, in the development of the "Investment Analysis" Skill: the first time, it simply summarized news (practice); found the accuracy rate was not high, so added instructions to "compare historical data" (experience); summarized the law that "a single source is unreliable, must cross-verify" (law); finally solidified this logic into a Prompt template or code logic, applied to "weekly material organization" (practice again). Here I can recommend a "[self-improving-agent](https://clawhub.ai/pskoett/self-improving-agent)" Skill, which is very useful for strengthening Lobster.
+For example, in the development of the "Investment Analysis" Skill: the first time, it simply summarized news (practice); found the accuracy rate was not high, so added instructions to "compare historical data" (experience); summarized the law that "a single source is unreliable, must cross-verify" (law); finally solidified this logic into a Prompt template or code logic, applied to "column material organization" (practice again). Here I can recommend a "[self-improving-agent](https://clawhub.ai/pskoett/self-improving-agent)" Skill, which is very useful for strengthening Lobster.
 
 ## Trends Worth Noting
 

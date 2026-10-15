@@ -9,7 +9,7 @@
  * - <pre><code>、<code>（代码块）
  * - 已有 <a> 内的文本
  * - <h1>-<h6>（标题）
- * - 周刊文章（tags 含 '周刊' 或 'Weekly'）
+ * - 专栏文章（tags 含 '专栏' 或 'Journal'）
  *
  * 样式继承普通链接（无 .wiki-link 专属 CSS）
  */
@@ -41,14 +41,14 @@ interface FragmentElement {
 type Fragment = FragmentText | FragmentElement;
 
 /**
- * 检测文章是否周刊
+ * 检测文章是否专栏
  */
-function isWeeklyPost(frontmatter: any): boolean {
+function isColumnPost(frontmatter: any): boolean {
 	const tags = Array.isArray(frontmatter?.tags) ? frontmatter.tags : [];
 	return tags.some((t: any) => {
 		if (typeof t !== "string") return false;
 		const lower = t.toLowerCase();
-		return lower === "周刊" || lower === "weekly";
+		return lower === "专栏" || lower === "journal";
 	});
 }
 
@@ -168,8 +168,8 @@ function splitIntoFragments(text: string, matches: Match[]): Fragment[] {
 export function rehypeGlossary(): any {
 	return (tree: any, vfile: any) => {
 		const frontmatter = vfile?.data?.astro?.frontmatter ?? {};
-		// 跳过周刊
-		if (isWeeklyPost(frontmatter)) return;
+		// 跳过专栏
+		if (isColumnPost(frontmatter)) return;
 		const lang = vfile?.data?.glossaryLang ?? "zh";
 
 		// 一篇文章一个 Set 记录已链接术语（first-per-article）

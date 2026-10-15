@@ -31,8 +31,8 @@ views:
     name: 专栏
     filters:
       or:
-        - file.folder.contains("weekly")
-        - file.hasTag("周刊", "Weekly")
+        - file.folder.contains("column")
+        - file.hasTag("专栏", "Journal")
     groupBy:
       property: file.folder
       direction: ASC
@@ -50,7 +50,7 @@ views:
     filters:
       and:
         - file.folder.contains("posts")
-        - '!file.folder.contains("weekly")'
+        - '!file.folder.contains("column")'
         - draft == false
     sort:
       - property: published
@@ -60,7 +60,7 @@ views:
     filters:
       and:
         - file.folder.contains("posts")
-        - file.tags.contains("周刊")
+        - file.tags.contains("专栏")
         - draft == false
     sort:
       - property: published

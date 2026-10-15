@@ -78,7 +78,7 @@ Here's the full flow chart👇:
 flowchart TD
     A["Your Article"]
     B["Check article language"]
-    C{"Is it a weekly?"}
+    C{"Is it a column?"}
     D["Skip, no processing"]
     E["Get term dictionary"]
     F{"Found in<br>dictionary?"}
@@ -118,7 +118,7 @@ Why a separate plugin for this? Because in Astro's Markdown pipeline, the remark
 `rehype-glossary` is the core engine, running during the rehype stage (when Markdown has already been converted to an HTML AST). It does the following:
 
 1. **Reads the language** — gets the current article's language from `vfile.data.glossaryLang`
-2. **Checks tags** — if the article's tags include "周刊" or "Weekly", skip the entire article (weekly content is time-sensitive and often uses terms casually, making links inappropriate)
+2. **Checks tags** — if the article's tags include "专栏" or "Journal", skip the entire article (column content is time-sensitive and often uses terms casually, making links inappropriate)
 3. **Traverses all text nodes** — uses `unist-util-visit` to walk the HTML AST and find every text node
 4. **Matches terms** — uses the `findTermMatches` function to scan text for all glossary hits
 5. **Replaces nodes** — splits text nodes into a sequence of "text fragments + `<a>` link fragments" and replaces the original node

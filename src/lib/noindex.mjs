@@ -7,14 +7,14 @@
  * 语言前缀：默认语言（zh）无 URL 前缀，en 带 /en/ 前缀；若未来启用更多带前缀的
  * 语言（如 zh-tw），需同步扩展 LANG_PREFIXES。
  */
-export const NOINDEX_PATH_FAMILIES = ['weekly', 'tags', 'disclaimer', 'search']
+export const NOINDEX_PATH_FAMILIES = ['column', 'tags', 'disclaimer', 'search']
 
 // 带 URL 前缀的语言；defaultLocale（zh）无前缀，不在其中
 const LANG_PREFIXES = ['en']
 
 /**
  * 判断 pathname（以 / 开头）是否属于 noindex 页面族。
- * 语义等价于旧正则 /^\/(?:en\/)?(?:weekly|tags|disclaimer|search)\//。
+ * 语义等价于旧正则 /^\/(?:en\/)?(?:column|tags|disclaimer|search)\//。
  */
 export function isNoindexPath(pathname) {
   const prefix = LANG_PREFIXES.length > 0 ? `(?:${LANG_PREFIXES.join('|')}/)?` : ''

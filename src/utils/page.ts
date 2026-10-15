@@ -52,8 +52,8 @@ export function isWorksPage(path: string) {
 	return matchPageType(path, "works");
 }
 
-export function isWeeklyPage(path: string) {
-	return matchPageType(path, "weekly");
+export function isColumnPage(path: string) {
+	return matchPageType(path, "column");
 }
 
 export function isResourcePage(path: string) {
@@ -80,7 +80,7 @@ export function getPageInfo(path: string) {
 	const isTag = isTagPage(path);
 	const isAbout = isAboutPage(path);
 	const isWorks = isWorksPage(path);
-	const isWeekly = isWeeklyPage(path);
+	const isColumn = isColumnPage(path);
 	const isResource = isResourcePage(path);
 	const isPrivacy = isPrivacyPage(path);
 	const isTerms = isTermsPage(path);
@@ -93,7 +93,7 @@ export function getPageInfo(path: string) {
 		isTag,
 		isAbout,
 		isWorks,
-		isWeekly,
+		isColumn,
 		isResource,
 		isPrivacy,
 		isTerms,
