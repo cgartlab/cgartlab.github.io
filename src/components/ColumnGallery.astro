@@ -28,7 +28,8 @@ postsByYear.set(year, [])
 }
 const sortedYears = [...postsByYear.keys()].sort((a, b) => b - a)
 
-// Extract issue number from abbrlink (e.g. "weekly-16" → "16")
+// 从 abbrlink 提取期号。abbrlink 保留历史前缀 weekly-XX 以维持文章 URL 稳定
+// （栏目已改名 column，但 abbrlink/URL 不变），如 "weekly-16" → "16"
 function getIssueNumber(post: Post): string {
   const abbr = post.data.abbrlink || ''
   const m = abbr.match(/weekly-(\d+)/)
