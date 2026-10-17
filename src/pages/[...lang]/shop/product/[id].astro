@@ -1,0 +1,233 @@
+---
+import type { Product } from '@/types/shop'
+import BackButton from '@/components/Widgets/BackButton.astro'
+import { allLocales, themeConfig } from '@/config'
+import productsData from '@/data/products.json'
+import { getLangFromLocale, getLangRouteParam } from '@/i18n/lang'
+import { ui } from '@/i18n/ui'
+import Layout from '@/layouts/Layout.astro'
+
+export async function getStaticPaths() {
+  const products = productsData as Product[]
+  return allLocales.flatMap(lang =>
+    products.map(product => ({
+      params: { lang: getLangRouteParam(lang), id: String(product.id) },
+      props: { product },
+    })),
+  )
+}
+
+interface Props {
+  product: Product
+}
+
+const { product } = Astro.props
+const currentLang = getLangFromLocale(Astro.currentLocale)
+const currentUI = ui[currentLang as keyof typeof ui] ?? {}
+const title = product.name
+const langPath = currentLang === 'zh' ? '' : `/${currentLang}`
+const apiBase = import.meta.env.DEV ? 'http://127.0.0.1:3000' : 'https://pay.cgartlab.com'
+const price = (product.price / 100).toFixed(2)
+const description = product.description || (currentLang === 'zh' ? '数字商品' : 'Digital product')
+
+const productSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Product',
+  'name': product.name,
+  'description': description,
+  'image': product.cover_image || undefined,
+  'url': new URL(Astro.url.pathname, Astro.url.origin).toString(),
+  'brand': {
+    '@type': 'Brand',
+    'name': themeConfig.site.title,
+  },
+  'offers': {
+    '@type': 'Offer',
+    'price': price,
+    'priceCurrency': 'CNY',
+    'availability': 'https://schema.org/InStock',
+    'seller': {
+      '@type': 'Organization',
+      'name': themeConfig.site.title,
+    },
+  },
+}
+---
+
+<Layout
+  postTitle={`${title} - CG艺术实验室`}
+  postDescription={description}
+>
+  <div class="mx-auto max-w-3xl px-4 py-8">
+    <BackButton />
+    <a
+      href={`${langPath}/shop/`}
+      class="mb-4 inline-block text-sm"
+      style="color: oklch(var(--un-preset-theme-colors-secondary))"
+      transition:name="shop-back"
+    >
+      &larr; {currentUI.shopBackToStore || (currentLang === 'zh' ? '返回商店' : 'Back to Store')}
+    </a>
+
+    <div class="shop-detail" transition:name={`product-${product.id}`}>
+      {product.cover_image && (
+        <img src={product.cover_image} alt={product.name} class="shop-detail-cover" loading="lazy" />
+      )}
+
+      <h1 class="shop-detail-title">{product.name}</h1>
+
+      {product.category && (
+        <span class="shop-card-category">{product.category}</span>
+      )}
+
+      <div class="shop-detail-meta">
+        {product.file_size && (
+          <span class="shop-detail-meta-item">
+            {currentUI.shopFiledSize || 'Size'}: {product.file_size}
+          </span>
+        )}
+        {product.file_format && (
+          <span class="shop-detail-meta-item">
+            {currentLang === 'zh' ? '格式' : 'Format'}: {product.file_format}
+          </span>
+        )}
+        {product.version && (
+          <span class="shop-detail-meta-item">
+            {currentUI.shopVersion || 'Version'}: {product.version}
+          </span>
+        )}
+        {product.updated_at && (
+          <span class="shop-detail-meta-item">
+            {currentUI.shopUpdated || 'Updated'}: {product.updated_at}
+          </span>
+        )}
+      </div>
+
+      {product.description && (
+        <p class="shop-detail-desc">{product.description}</p>
+      )}
+
+      <div class="shop-detail-buy">
+        <div class="mb-4 flex items-center justify-between">
+          <span class="shop-detail-price">&yen;{price}</span>
+        </div>
+
+        <div class="mb-4">
+          <label class="shop-detail-email-label" for="buyer-email">
+            {currentUI.shopEmail || 'Email'}
+            <span style="color: oklch(var(--un-preset-theme-colors-secondary))">
+              ({currentUI.shopEmailHint || 'Used to receive your download link'})
+            </span>
+          </label>
+          <input
+            type="email"
+            id="buyer-email"
+            class="shop-detail-email-input"
+            placeholder={currentUI.shopEmailPlaceholder || 'your@email.com'}
+            required
+          />
+        </div>
+
+        <div id="shop-error" class="shop-error" style="display:none"></div>
+
+        <button id="buy-btn" class="shop-detail-buy-btn">
+          {currentUI.shopBuyNow || (currentLang === 'zh' ? '立即购买' : 'Buy Now')}
+        </button>
+      </div>
+
+      <div class="shop-detail-trust">
+        <div class="shop-detail-trust-item">
+          <span class="shop-detail-trust-item-title">
+            {currentUI.shopSecurePayment || 'Secure Payment'}
+          </span>
+          <span class="shop-detail-trust-item-desc">
+            {currentUI.shopSecurePaymentDesc || ''}
+          </span>
+        </div>
+        <div class="shop-detail-trust-item">
+          <span class="shop-detail-trust-item-title">
+            {currentUI.shopInstantDownload || 'Instant Download'}
+          </span>
+          <span class="shop-detail-trust-item-desc">
+            {currentUI.shopInstantDownloadDesc || ''}
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script is:inline type="application/ld+json" set:html={JSON.stringify(productSchema)} />
+
+  <script is:inline define:vars={{ apiBase, langPath }}>
+(function () {
+  const buyBtn = document.getElementById('buy-btn')
+  const emailInput = document.getElementById('buyer-email')
+  const errorBox = document.getElementById('shop-error')
+  const isZh = document.documentElement.lang.startsWith('zh')
+
+  function showError(msg) {
+    if (errorBox) {
+      errorBox.textContent = msg
+      errorBox.style.display = 'block'
+    }
+  }
+
+  function hideError() {
+    if (errorBox)
+      errorBox.style.display = 'none'
+  }
+
+  async function handleBuy() {
+    hideError()
+    const email = emailInput.value.trim()
+    if (!email || !/^[^\s@]+@[^\s@][^\s.@]*\.[^\s@]+$/.test(email)) {
+      showError(isZh ? '请输入有效的邮箱地址' : 'Please enter a valid email address')
+      return
+    }
+
+    const match = location.pathname.match(/\/shop\/product\/(\d+)/)
+    if (!match)
+      return
+    const productId = Number.parseInt(match[1])
+
+    const originalText = buyBtn.textContent
+    buyBtn.disabled = true
+    buyBtn.textContent = isZh ? '创建订单中...' : 'Creating order...'
+
+    try {
+      const res = await fetch(`${apiBase}/api/orders`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ product_id: productId, email }),
+      })
+      const data = await res.json()
+      if (data.error) {
+        showError(data.error)
+        buyBtn.disabled = false
+        buyBtn.textContent = originalText
+      }
+      else {
+        location.href = `${langPath}/shop/checkout/?order=${data.order_no}`
+      }
+    }
+    catch {
+      showError(isZh ? '创建订单失败' : 'Failed to create order')
+      buyBtn.disabled = false
+      buyBtn.textContent = originalText
+    }
+  }
+
+  if (buyBtn) {
+    buyBtn.addEventListener('click', handleBuy)
+  }
+
+  document.addEventListener('astro:page-load', () => {
+    const btn = document.getElementById('buy-btn')
+    if (btn)
+      btn.addEventListener('click', handleBuy)
+  })
+})()
+</script>
+</Layout>
+
+

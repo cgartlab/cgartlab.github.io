@@ -1,0 +1,30 @@
+---
+import type { Language } from '@/i18n/config'
+import type { Product } from '@/types/shop'
+
+interface Props {
+  product: Product
+  lang: Language
+}
+
+const { product, lang } = Astro.props
+const langPath = lang === 'zh' ? '' : `/${lang}`
+const price = (product.price / 100).toFixed(2)
+const href = `${langPath}/shop/product/${product.id}/`
+---
+
+<a href={href} class="shop-card block">
+  {product.cover_image && (
+    <img src={product.cover_image} alt={product.name} class="shop-card-cover" loading="lazy" />
+  )}
+  <div class="shop-card-body">
+    <h3 class="shop-card-title">{product.name}</h3>
+    {product.category && <span class="shop-card-category">{product.category}</span>}
+    {product.description && <p class="shop-card-desc">{product.description}</p>}
+    <div class="shop-card-footer">
+      <span class="shop-card-price">&yen;{price}</span>
+      <span class="shop-card-btn">{lang === 'zh' ? '查看' : lang === 'zh-tw' ? '查看' : 'View'}</span>
+    </div>
+  </div>
+</a>
+
