@@ -24,3 +24,6 @@ jobs:
           config-name: release-drafter.yml
           # 只维护草稿，不自动发布；发布由维护者手动点 Publish
           publish: false
+        env:
+          # release-drafter@v6 (probot) 需要显式传入 token，否则草稿不会被更新
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
