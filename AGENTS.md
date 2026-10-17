@@ -1,5 +1,7 @@
 # AGENTS.md — cgartlab.github.io
 
+> **会话约定**：开始任何工作前，先读根目录 `LESSONS.md`（本仓库从真实失误沉淀的「教训→规则」清单）并遵循其中所有规则；遇到新失误按其 §维护 追加。依据：Anthropic Claude Code memory/best practices + 社区 lessons.md 惯例。
+
 个人主站 (cgartlab.com)。Astro 7 + UnoCSS 66 + TypeScript 6 + pnpm 11 + Node 24，
 Cloudflare Worker + Static Assets 部署。
 
