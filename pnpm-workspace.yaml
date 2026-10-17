@@ -23,7 +23,9 @@ onlyTrustedDependencies:
 
 overrides:
   brace-expansion@2: ^2.1.4
-  brace-expansion@5: ^5.0.9
+  # 安全修复：brace-expansion 的 `{a},b}` 重写导致二次复杂度 CPU DoS (GHSA-q2hr-2g5m-vwhr)
+  # 受影响 >=4.0.0 <5.0.12，5.0.12 为同 major 补丁
+  brace-expansion@5: ^5.0.12
   chokidar: 5.0.0
   # 安全修复：deepmerge-ts 递归对象图栈溢出 DoS (CVE-2026-40345 / GHSA-ggr8-5vv4-36mx)
   # astro-compress 仅用 deepmergeCustom({mergeArrays:false})，v8 保留该 API
@@ -70,6 +72,9 @@ overrides:
   # 故整体钉 vue 到同 minor 补丁 3.5.42，避免子包与 vue 核心版本错位
   # 由 @waline/client > @vueuse/core > vue 引入
   vue: ^3.5.42
+  # 安全修复：postcss-selector-parser 扁平选择器解析二次复杂度 CPU DoS (GHSA-rj75-hqrm-r3gf)
+  # 受影响 <7.1.6，7.1.6 为同 minor 补丁
+  postcss-selector-parser: ^7.1.6
   yaml: '>=2.8.3'
 
 minimumReleaseAgeExclude:
