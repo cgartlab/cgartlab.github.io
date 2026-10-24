@@ -15,8 +15,8 @@ const BASE_Z = TOP
 const BASE = { x: -85, y: -43, w: 170, d: 86, r: 10 }
 const DECK_TOP = BASE_Z + 8
 
-const PLATEN = { y: -24, z: 132, r: 9, half: 64 }
-const PAPER_BOTTOM = { y: -26, z: 140 }
+const PLATEN = { y: -24, z: 131, r: 10, half: 64 }
+const PAPER_BOTTOM = { y: -30, z: 141 }
 const PAPER_TOP = { y: -48, z: 178 }
 const PAPER_HALF = 66
 
@@ -64,9 +64,14 @@ export function buildTypewriter(P, options = {}) {
   // body
   out.push(k.solidSvg(k.slabOf(BASE, BASE_Z, 8, P, 12, 3), { tone: 'mid' }))
   out.push(k.lineSvg(k.sideSeam(BASE, BASE_Z + 8, P, 12), { tone: 'faint' }))
+  // bright trim along the base's top edge
+  out.push(k.lineSvg(k.planOutline(k.insetPlan(BASE, 1.2), BASE_Z + 8, P, 12), { tone: 'hi' }))
   out.push(k.solidSvg(k.slabOf({ x: -85, y: -39, w: 13, d: 74, r: 3 }, DECK_TOP, 22, P, 5, 1.4), { tone: 'mid' }))
   out.push(k.solidSvg(k.slabOf({ x: 72, y: -39, w: 13, d: 74, r: 3 }, DECK_TOP, 22, P, 5, 1.4), { tone: 'mid' }))
   out.push(k.solidSvg(k.slabOf({ x: -72, y: -39, w: 144, d: 43, r: 6 }, DECK_TOP, 16, P, 6, 1.2), { tone: 'mid' }))
+  // raised rear housing behind the platen
+  out.push(k.solidSvg(k.slabOf({ x: -72, y: -43, w: 144, d: 8, r: 2 }, DECK_TOP, 25, P, 4, 2), { tone: 'mid' }))
+  out.push(k.lineSvg(k.planOutline(k.insetPlan({ x: -72, y: -43, w: 144, d: 8, r: 2 }, 2), DECK_TOP + 25, P, 4), { tone: 'faint' }))
 
   // keyboard decks, far row first so the near row paints over it
   for (const row of [...ROWS].reverse()) {
@@ -143,16 +148,34 @@ export function buildTypewriter(P, options = {}) {
   // platen, turning between the cheeks
   const platenFrame = G.frameAlong([0, PLATEN.y, PLATEN.z], [1, 0, 0])
   out.push(k.solidSvg(G.disc(-PLATEN.half, PLATEN.half, PLATEN.r, platenFrame, P, { smooth: true }), { tone: 'hi' }))
+  // lengthwise seam, before the knobs so it can never paint over them
+  out.push(k.lineSvg(k.segment([-PLATEN.half + 2, PLATEN.y - PLATEN.r, PLATEN.z + 2], [PLATEN.half - 2, PLATEN.y - PLATEN.r, PLATEN.z + 2], P), { tone: 'faint' }))
   out.push(k.lineSvg(
     Array.from({ length: 2 }, (_, i) => G.arcOf(platenFrame, i ? PLATEN.half : -PLATEN.half, PLATEN.r, P, { steps: 28 })).join(''),
     { tone: 'faint' },
   ))
-  out.push(k.solidSvg(G.disc(PLATEN.half, PLATEN.half + 7, PLATEN.r + 2.4, platenFrame, P), { tone: 'mid' }))
-  out.push(k.solidSvg(G.disc(-PLATEN.half - 7, -PLATEN.half, PLATEN.r + 2.4, platenFrame, P), { tone: 'mid' }))
+  // carriage return lever, drawn before the knobs so they hide its root
+  out.push(k.lineSvg(k.segment([69, -30, BASE_Z + 46], [102, -18, BASE_Z + 60], P), { tone: 'mid' }))
+  out.push(k.dotsSvg([k.iso([102, -18, BASE_Z + 60], P)], { size: 2.6, tone: 'mid' }))
 
-  // carriage return lever, rooted on the platen's right end
-  out.push(k.lineSvg(k.segment([70, -22, BASE_Z + 42], [92, -14, BASE_Z + 52], P), { tone: 'mid' }))
-  out.push(k.dotsSvg([k.iso([92, -14, BASE_Z + 52], P)], { size: 2.2, tone: 'mid' }))
+  // knobs: a short knurled collar plus a cap, seated on the roller ends
+  for (const side of [-1, 1]) {
+    const s0 = side > 0 ? PLATEN.half : -PLATEN.half - 5
+    const s1 = side > 0 ? PLATEN.half + 5 : -PLATEN.half
+    out.push(k.solidSvg(G.disc(s0, s1, PLATEN.r + 1.4, platenFrame, P, { bevel: 1 }), { tone: 'mid' }))
+    out.push(k.lineSvg(G.circleOf(platenFrame, s1, PLATEN.r - 1.5, P), { tone: 'faint' }))
+    out.push(k.lineSvg(
+      Array.from({ length: 9 }, (_, i) => {
+        const a = (i / 9) * Math.PI * 2
+        return G.arcOf(platenFrame, s1, PLATEN.r + 1.6, P, { from: a, to: a + 0.16, steps: 2 })
+      }).join(''),
+      { tone: 'faint' },
+    ))
+  }
+
+  // paper guide rod in front of the platen
+  out.push(k.lineSvg(k.segment([-58, -13, BASE_Z + 38], [58, -13, BASE_Z + 38], P), { tone: 'hi' }))
+  out.push(k.dotsSvg([k.iso([-58, -13, BASE_Z + 38], P), k.iso([58, -13, BASE_Z + 38], P)], { size: 0.7, tone: 'mid' }))
 
   // paper bail, across the sheet just above the platen
   out.push(k.lineSvg(k.segment([-PAPER_HALF + 4, PAPER_TOP.y + 8, PAPER_TOP.z - 8], [PAPER_HALF - 4, PAPER_TOP.y + 8, PAPER_TOP.z - 8], P), { tone: 'mid' }))
@@ -161,8 +184,8 @@ export function buildTypewriter(P, options = {}) {
   const plate = { x: -38, y: 43, w: 76, d: 3, r: 1.2 }
   out.push(k.solidSvg(k.slabOf(plate, BASE_Z + 1.5, 5, P, 3, 0.3), { tone: 'lo' }))
   out.push(k.faceTextSvg(k.sideMatrix([0, plate.y + plate.d], BASE_Z + 4.2, P, 'left'), 'No.01 · TYPE', {
-    size: 2.8,
-    tone: 'faint',
+    size: 3.8,
+    tone: 'mid',
     anchor: 'middle',
   }))
 
@@ -181,6 +204,6 @@ export function typewriterBounds() {
     [PAPER_HALF, PAPER_TOP.y, PAPER_TOP.z],
     [-PAPER_HALF, PAPER_BOTTOM.y, PAPER_BOTTOM.z],
     [PAPER_HALF, PAPER_BOTTOM.y, PAPER_BOTTOM.z],
-    [92, -14, BASE_Z + 52],
+    [102, -18, BASE_Z + 60],
   ]
 }

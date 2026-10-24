@@ -28,6 +28,7 @@
   --anatomy-halo: rgb(0 0 0);
   --anatomy-halo-opacity: 0.10;
   --home-paper: oklch(var(--un-preset-theme-colors-background));
+  --home-ink: oklch(var(--un-preset-theme-colors-highlight));
 
   /* machine-specific ------------------------------------------------------ */
   --home-cavity: color-mix(in oklch, oklch(var(--un-preset-theme-colors-primary)) 56%, oklch(var(--un-preset-theme-colors-background)) 44%);
@@ -48,6 +49,7 @@
   --anatomy-shade-2: color-mix(in oklch, oklch(var(--un-preset-theme-colors-background)) 88%, oklch(var(--un-preset-theme-colors-primary)) 12%);
   --anatomy-shade-3: color-mix(in oklch, oklch(var(--un-preset-theme-colors-background)) 84%, oklch(var(--un-preset-theme-colors-primary)) 16%);
   --home-paper: color-mix(in oklch, oklch(var(--un-preset-theme-colors-primary)) 62%, oklch(var(--un-preset-theme-colors-background)) 38%);
+  --home-ink: color-mix(in oklch, oklch(var(--un-preset-theme-colors-highlight)) 48%, oklch(var(--un-preset-theme-colors-background)) 52%);
 
   --anatomy-lit-top: color-mix(in oklch, oklch(var(--un-preset-theme-colors-highlight)) 70%, oklch(var(--un-preset-theme-colors-background)) 30%);
   --anatomy-lit-shade: color-mix(in oklch, oklch(var(--un-preset-theme-colors-highlight)) 52%, oklch(var(--un-preset-theme-colors-primary)) 48%);
@@ -107,7 +109,7 @@
 .home-stage .iso-face-text[data-tone="hi"] { fill: var(--anatomy-hi); }
 .home-stage .iso-face-text[data-tone="lo"] { fill: var(--anatomy-lo); }
 .home-stage .iso-face-text[data-tone="faint"] { fill: var(--anatomy-faint); }
-.home-stage .iso-face-text[data-tone="lit"] { fill: var(--anatomy-lit); }
+.home-stage .iso-face-text[data-tone="lit"] { fill: var(--home-ink); }
 
 /* tubes */
 .home-stage .tb-body { fill: var(--anatomy-shade-2); stroke: none; }

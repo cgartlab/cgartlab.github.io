@@ -76,8 +76,8 @@ await send('Emulation.setDeviceMetricsOverride', {
   deviceScaleFactor: 2,
   mobile: width < 700,
 })
-if (dark)
-  await send('Emulation.setEmulatedMedia', { features: [{ name: 'prefers-color-scheme', value: 'dark' }] })
+await send('Emulation.setEmulatedMedia', { features: [{ name: 'prefers-color-scheme', value: dark ? 'dark' : 'light' }] })
+await send('Runtime.evaluate', { expression: 'localStorage.removeItem("theme-mode")' })
 
 await send('Page.enable')
 await send('Page.reload')

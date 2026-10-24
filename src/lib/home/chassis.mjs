@@ -128,8 +128,10 @@ export function buildChassis(P, options = {}) {
         { size: labelSize, tone: 'hi', anchor: 'middle' },
       ))
     }
-    // lamp bezel on the panel face
-    out.push(k.solidSvg(k.cylinder(cx, FRONT + 1.4, 2.4, plate.z + 19, 1.6, P, 16), { tone: 'lo' }))
+    // lamp lens set into the panel face
+    const lampFrame = G.frameAlong([cx, FRONT + 2, plate.z + 19], [0, 1, 0])
+    out.push(k.solidSvg(G.ringBand(0, 1.4, 2, 3, lampFrame, P), { tone: 'lo' }))
+    out.push(k.solidSvg(G.disc(0, 1.5, 2, lampFrame, P), { tone: 'mid' }))
   }
 
   return out.join('')
@@ -141,7 +143,7 @@ export function buildChannelOverlay(P, { active = 0 } = {}) {
   for (const plate of PLATES) {
     const cx = plate.x + plate.w / 2
     const lit = plate.index === active
-    out.push(k.dotsSvg([k.iso([cx, FRONT + 2.2, plate.z + 20.6], P)], {
+    out.push(k.dotsSvg([k.iso([cx, FRONT + 3.6, plate.z + 19], P)], {
       size: lit ? 1.7 : 1.2,
       tone: lit ? 'hi' : 'lo',
     }))
