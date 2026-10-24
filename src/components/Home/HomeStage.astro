@@ -39,11 +39,11 @@ const H = 620
 const bounds = [...k.boxCorners(CABINET, -22, TOP), ...typewriterBounds()]
 const P = k.fitProjection(bounds, W, H, { pad: 28, azimuth: 40, elevation: 34 })
 
-const moduleSvg = `<g class="home-module" data-module="posts">${buildTypewriter(P, {
+const moduleSvg = `<g class="home-lift"><g class="home-module" data-module="posts">${buildTypewriter(P, {
   title: latest,
   paperHref: posts[0] ? getPostPath(posts[0].data.abbrlink || posts[0].id, currentLang) : getLocalizedPath('/posts/', currentLang),
   paperLabel: currentLang === 'zh' ? `阅读最新一篇：${latest}` : `Read the latest: ${latest}`,
-})}</g>`
+})}</g></g>`
 
 const svg = `<svg class="iso-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" role="group" aria-label="CGArtLab：一台铸铁控制台，升降台上是一台复古打字机，纸上打着最新的文章标题。">
 ${chassisDefs(P)}

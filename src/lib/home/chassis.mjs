@@ -77,6 +77,10 @@ export function buildChassis(P, options = {}) {
   }
   out.push('</g>')
 
+  // the lift platform the module stands on
+  out.push(k.solidSvg(k.slabOf(PLATFORM, TOP - 5, 5, P, 8, 0.8), { tone: 'hi' }))
+  out.push(k.lineSvg(k.planOutline(k.insetPlan(PLATFORM, 3), TOP, P, 8), { tone: 'faint' }))
+
   // ruler strip along the top's front edge
   const strip = { x: -140, y: 62, w: 280, d: 7, r: 1 }
   out.push(k.solidSvg(k.slabOf(strip, TOP, 0.8, P, 3), { tone: 'lo', crease: 'none' }))

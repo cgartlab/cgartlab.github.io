@@ -7,12 +7,12 @@
 .home-stage {
   /* paper / four-tone shading -------------------------------------------- */
   --anatomy-paper: oklch(var(--un-preset-theme-colors-background));
-  --anatomy-face: color-mix(in oklch, oklch(var(--un-preset-theme-colors-background)) 97%, oklch(var(--un-preset-theme-colors-primary)) 3%);
+  --anatomy-face: color-mix(in oklch, oklch(var(--un-preset-theme-colors-background)) 93%, oklch(var(--un-preset-theme-colors-primary)) 7%);
   --anatomy-top: oklch(var(--un-preset-theme-colors-background));
-  --anatomy-shade-0: color-mix(in oklch, oklch(var(--un-preset-theme-colors-background)) 86%, oklch(var(--un-preset-theme-colors-primary)) 14%);
-  --anatomy-shade-1: color-mix(in oklch, oklch(var(--un-preset-theme-colors-background)) 89%, oklch(var(--un-preset-theme-colors-primary)) 11%);
-  --anatomy-shade-2: color-mix(in oklch, oklch(var(--un-preset-theme-colors-background)) 92%, oklch(var(--un-preset-theme-colors-primary)) 8%);
-  --anatomy-shade-3: color-mix(in oklch, oklch(var(--un-preset-theme-colors-background)) 95%, oklch(var(--un-preset-theme-colors-primary)) 5%);
+  --anatomy-shade-0: color-mix(in oklch, oklch(var(--un-preset-theme-colors-background)) 76%, oklch(var(--un-preset-theme-colors-primary)) 24%);
+  --anatomy-shade-1: color-mix(in oklch, oklch(var(--un-preset-theme-colors-background)) 82%, oklch(var(--un-preset-theme-colors-primary)) 18%);
+  --anatomy-shade-2: color-mix(in oklch, oklch(var(--un-preset-theme-colors-background)) 88%, oklch(var(--un-preset-theme-colors-primary)) 12%);
+  --anatomy-shade-3: color-mix(in oklch, oklch(var(--un-preset-theme-colors-background)) 94%, oklch(var(--un-preset-theme-colors-primary)) 6%);
 
   /* the one lit part ------------------------------------------------------ */
   --anatomy-lit: oklch(var(--un-preset-theme-colors-highlight));
@@ -30,7 +30,7 @@
   --home-paper: oklch(var(--un-preset-theme-colors-background));
 
   /* machine-specific ------------------------------------------------------ */
-  --home-cavity: color-mix(in oklch, oklch(var(--un-preset-theme-colors-primary)) 72%, oklch(var(--un-preset-theme-colors-background)) 28%);
+  --home-cavity: color-mix(in oklch, oklch(var(--un-preset-theme-colors-primary)) 56%, oklch(var(--un-preset-theme-colors-background)) 44%);
   --home-brass: color-mix(in oklch, oklch(var(--un-preset-theme-colors-highlight)) 42%, oklch(var(--un-preset-theme-colors-background)) 58%);
   --home-brass-deep: color-mix(in oklch, oklch(var(--un-preset-theme-colors-highlight)) 62%, oklch(var(--un-preset-theme-colors-primary)) 38%);
 
@@ -215,6 +215,7 @@
   height: 100%;
   min-width: 0;
   min-height: 0;
+  perspective: 1250px;
 }
 
 .home-stage .iso-svg {
@@ -224,6 +225,10 @@
   height: 100%;
   max-width: 100%;
   max-height: 100%;
+  transform: rotateY(calc(var(--tilt-y, 0) * 1deg)) rotateX(calc(var(--tilt-x, 0) * 1deg));
+  transform-origin: 50% 62%;
+  transition: transform 90ms linear;
+  will-change: transform;
 }
 
 .home-module {
@@ -328,4 +333,33 @@ html.reduce-motion .home-key { animation: none; transition: none; }
 .home-latest a:focus-visible {
   color: oklch(var(--un-preset-theme-colors-highlight));
   border-bottom-color: oklch(var(--un-preset-theme-colors-highlight));
+}
+
+.home-paper-shadow {
+  fill: var(--anatomy-halo);
+  opacity: calc(var(--anatomy-halo-opacity) * 1.6);
+  filter: blur(4px);
+}
+
+.home-lift {
+  transform: translate(calc(var(--tilt-y, 0) * -1px), calc(var(--tilt-x, 0) * 1px));
+  transition: transform 90ms linear;
+}
+
+.home-paper-group {
+  transform: translate(calc(var(--tilt-y, 0) * 0.55px), calc(var(--tilt-x, 0) * -0.55px));
+  transition: transform 90ms linear;
+}
+
+html.reduce-motion .home-stage .iso-svg,
+html.reduce-motion .home-lift,
+html.reduce-motion .home-paper-group {
+  transform: none;
+  transition: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-stage .iso-svg,
+  .home-lift,
+  .home-paper-group { transform: none; transition: none; }
 }

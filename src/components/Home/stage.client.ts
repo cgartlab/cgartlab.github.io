@@ -2,7 +2,9 @@
  * Home stage runtime.
  *
  * The machine is static SVG; this file only drives what moves: the typewriter
- * striking keys, the paper filling with the latest headline, and the idle tour.
+ * striking keys, the paper filling with the latest headline, the idle tour, and
+ * the small camera tilt that follows the pointer.
+ *
  * Everything degrades to the server-rendered state when motion is reduced.
  */
 
@@ -10,6 +12,9 @@ const STAGE = '[data-home-stage]'
 const TOUR_DELAY = 600
 const TOUR_INTERVAL = 55
 const RESUME_DELAY = 6000
+const TILT_Y = 6.2
+const TILT_X = 3.2
+const EASE = 0.14
 
 interface State {
   stage: HTMLElement
@@ -22,6 +27,11 @@ interface State {
   timer: number
   resume: number
   raf: number
+  tiltRaf: number
+  tx: number
+  ty: number
+  cx: number
+  cy: number
   cleanup: () => void
 }
 
@@ -84,6 +94,40 @@ function stopTour(s: State): void {
   }
 }
 
+function scheduleResume(s: State): void {
+  if (s.resume)
+    window.clearTimeout(s.resume)
+  s.resume = window.setTimeout(() => {
+    if (s.shown >= s.total) {
+      s.shown = 0
+      paint(s, 0)
+    }
+    startTour(s)
+  }, RESUME_DELAY)
+}
+
+function tiltLoop(s: State): void {
+  s.cx += (s.tx - s.cx) * EASE
+  s.cy += (s.ty - s.cy) * EASE
+  s.stage.style.setProperty('--tilt-y', s.cx.toFixed(3))
+  s.stage.style.setProperty('--tilt-x', s.cy.toFixed(3))
+  const settled = Math.abs(s.tx - s.cx) < 0.01 && Math.abs(s.ty - s.cy) < 0.01
+  if (settled) {
+    s.cx = s.tx
+    s.cy = s.ty
+    s.stage.style.setProperty('--tilt-y', s.cx.toFixed(3))
+    s.stage.style.setProperty('--tilt-x', s.cy.toFixed(3))
+    s.tiltRaf = 0
+    return
+  }
+  s.tiltRaf = window.requestAnimationFrame(() => tiltLoop(s))
+}
+
+function nudgeTilt(s: State): void {
+  if (!s.tiltRaf)
+    s.tiltRaf = window.requestAnimationFrame(() => tiltLoop(s))
+}
+
 function mount(): void {
   const stage = document.querySelector<HTMLElement>(STAGE)
   if (!stage)
@@ -119,6 +163,11 @@ function mount(): void {
     timer: 0,
     resume: 0,
     raf: 0,
+    tiltRaf: 0,
+    tx: 0,
+    ty: 0,
+    cx: 0,
+    cy: 0,
     cleanup: () => {},
   }
 
@@ -145,9 +194,25 @@ function mount(): void {
     scheduleResume(s)
   }
 
-  const onPointer = () => {
+  const onPointerMove = (event: PointerEvent) => {
+    if (event.pointerType !== 'mouse' && event.pointerType !== 'pen')
+      return
+    const rect = stage.getBoundingClientRect()
+    if (!rect.width || !rect.height)
+      return
+    const nx = (event.clientX - rect.left) / rect.width - 0.5
+    const ny = (event.clientY - rect.top) / rect.height - 0.5
+    s.tx = -nx * 2 * TILT_Y
+    s.ty = ny * 2 * TILT_X
+    nudgeTilt(s)
     stopTour(s)
     scheduleResume(s)
+  }
+
+  const onPointerLeave = () => {
+    s.tx = 0
+    s.ty = 0
+    nudgeTilt(s)
   }
 
   const onVisibility = () => {
@@ -160,31 +225,23 @@ function mount(): void {
   }
 
   window.addEventListener('keydown', onKey)
-  stage.addEventListener('pointerenter', onPointer, { passive: true })
-  stage.addEventListener('pointerdown', onPointer, { passive: true })
+  stage.addEventListener('pointermove', onPointerMove, { passive: true })
+  stage.addEventListener('pointerleave', onPointerLeave, { passive: true })
   document.addEventListener('visibilitychange', onVisibility)
 
   s.cleanup = () => {
     window.removeEventListener('keydown', onKey)
-    stage.removeEventListener('pointerenter', onPointer)
-    stage.removeEventListener('pointerdown', onPointer)
+    stage.removeEventListener('pointermove', onPointerMove)
+    stage.removeEventListener('pointerleave', onPointerLeave)
     document.removeEventListener('visibilitychange', onVisibility)
+    if (s.tiltRaf)
+      window.cancelAnimationFrame(s.tiltRaf)
+    stage.style.removeProperty('--tilt-y')
+    stage.style.removeProperty('--tilt-x')
   }
 
   state = s
   s.resume = window.setTimeout(() => startTour(s), TOUR_DELAY)
-}
-
-function scheduleResume(s: State): void {
-  if (s.resume)
-    window.clearTimeout(s.resume)
-  s.resume = window.setTimeout(() => {
-    if (s.shown >= s.total) {
-      s.shown = 0
-      paint(s, 0)
-    }
-    startTour(s)
-  }, RESUME_DELAY)
 }
 
 function unmount(): void {
