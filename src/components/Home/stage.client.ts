@@ -1,9 +1,9 @@
 /**
  * Home stage runtime.
  *
- * The machine is static SVG; this file only drives what moves: the typewriter
- * striking keys, the paper filling with the latest headline, the idle tour, and
- * the small camera tilt that follows the pointer.
+ * The machine is static SVG; this file drives what moves: the typewriter
+ * striking keys, the paper filling with the latest headline, a slow camera
+ * breath while nobody is touching it, and the pointer-driven tilt.
  *
  * Everything degrades to the server-rendered state when motion is reduced.
  */
@@ -11,10 +11,13 @@
 const STAGE = '[data-home-stage]'
 const TOUR_DELAY = 600
 const TOUR_INTERVAL = 55
-const RESUME_DELAY = 6000
+const RESUME_DELAY = 5200
 const TILT_Y = 6.2
 const TILT_X = 3.2
 const EASE = 0.14
+const BREATH_Y = 1.5
+const BREATH_X = 0.8
+const BREATH_PERIOD = 3.4
 
 interface State {
   stage: HTMLElement
@@ -26,12 +29,13 @@ interface State {
   total: number
   timer: number
   resume: number
-  raf: number
   tiltRaf: number
   tx: number
   ty: number
   cx: number
   cy: number
+  idle: boolean
+  idleSince: number
   cleanup: () => void
 }
 
@@ -67,17 +71,22 @@ function strike(s: State, char: string): void {
   window.setTimeout(() => key.classList.remove('is-down'), 90)
 }
 
+function typeOne(s: State): void {
+  if (s.shown >= s.total)
+    return
+  const char = s.lines.join('')[s.shown] ?? ''
+  s.shown += 1
+  paint(s, s.shown)
+  if (char.trim())
+    strike(s, char)
+}
+
 function step(s: State): void {
   if (s.shown >= s.total) {
     s.timer = 0
     return
   }
-  const all = s.lines.join('')
-  const char = all[s.shown] ?? ''
-  s.shown += 1
-  paint(s, s.shown)
-  if (char.trim())
-    strike(s, char)
+  typeOne(s)
   s.timer = window.setTimeout(() => step(s), TOUR_INTERVAL)
 }
 
@@ -107,12 +116,17 @@ function scheduleResume(s: State): void {
 }
 
 function tiltLoop(s: State): void {
+  if (s.idle) {
+    const t = (performance.now() - s.idleSince) / 1000
+    s.tx = Math.sin(t / BREATH_PERIOD) * BREATH_Y
+    s.ty = Math.sin(t / (BREATH_PERIOD * 1.45)) * BREATH_X
+  }
   s.cx += (s.tx - s.cx) * EASE
   s.cy += (s.ty - s.cy) * EASE
   s.stage.style.setProperty('--tilt-y', s.cx.toFixed(3))
   s.stage.style.setProperty('--tilt-x', s.cy.toFixed(3))
   const settled = Math.abs(s.tx - s.cx) < 0.01 && Math.abs(s.ty - s.cy) < 0.01
-  if (settled) {
+  if (settled && !s.idle) {
     s.cx = s.tx
     s.cy = s.ty
     s.stage.style.setProperty('--tilt-y', s.cx.toFixed(3))
@@ -126,6 +140,12 @@ function tiltLoop(s: State): void {
 function nudgeTilt(s: State): void {
   if (!s.tiltRaf)
     s.tiltRaf = window.requestAnimationFrame(() => tiltLoop(s))
+}
+
+function goIdle(s: State): void {
+  s.idle = true
+  s.idleSince = performance.now()
+  nudgeTilt(s)
 }
 
 function mount(): void {
@@ -162,12 +182,13 @@ function mount(): void {
     total: totalChars(lines),
     timer: 0,
     resume: 0,
-    raf: 0,
     tiltRaf: 0,
     tx: 0,
     ty: 0,
     cx: 0,
     cy: 0,
+    idle: false,
+    idleSince: 0,
     cleanup: () => {},
   }
 
@@ -184,13 +205,7 @@ function mount(): void {
     if (event.key === 'Tab')
       return
     stopTour(s)
-    if (s.shown < s.total) {
-      const char = s.lines.join('')[s.shown] ?? ''
-      s.shown += 1
-      paint(s, s.shown)
-      if (char.trim())
-        strike(s, char)
-    }
+    typeOne(s)
     scheduleResume(s)
   }
 
@@ -202,6 +217,7 @@ function mount(): void {
       return
     const nx = (event.clientX - rect.left) / rect.width - 0.5
     const ny = (event.clientY - rect.top) / rect.height - 0.5
+    s.idle = false
     s.tx = -nx * 2 * TILT_Y
     s.ty = ny * 2 * TILT_X
     nudgeTilt(s)
@@ -210,29 +226,41 @@ function mount(): void {
   }
 
   const onPointerLeave = () => {
-    s.tx = 0
-    s.ty = 0
-    nudgeTilt(s)
+    goIdle(s)
+  }
+
+  // tapping the machine types the next character; tapping a link just follows it
+  const onPointerDown = (event: PointerEvent) => {
+    const target = event.target instanceof Element ? event.target : null
+    if (target?.closest('a'))
+      return
+    stopTour(s)
+    typeOne(s)
+    scheduleResume(s)
   }
 
   const onVisibility = () => {
     if (document.hidden) {
       stopTour(s)
     }
-    else if (!s.timer) {
-      startTour(s)
+    else {
+      goIdle(s)
+      if (!s.timer)
+        startTour(s)
     }
   }
 
   window.addEventListener('keydown', onKey)
   stage.addEventListener('pointermove', onPointerMove, { passive: true })
   stage.addEventListener('pointerleave', onPointerLeave, { passive: true })
+  stage.addEventListener('pointerdown', onPointerDown, { passive: true })
   document.addEventListener('visibilitychange', onVisibility)
 
   s.cleanup = () => {
     window.removeEventListener('keydown', onKey)
     stage.removeEventListener('pointermove', onPointerMove)
     stage.removeEventListener('pointerleave', onPointerLeave)
+    stage.removeEventListener('pointerdown', onPointerDown)
     document.removeEventListener('visibilitychange', onVisibility)
     if (s.tiltRaf)
       window.cancelAnimationFrame(s.tiltRaf)
@@ -242,6 +270,10 @@ function mount(): void {
 
   state = s
   s.resume = window.setTimeout(() => startTour(s), TOUR_DELAY)
+  window.setTimeout(() => {
+    if (!s.idle && !s.timer)
+      goIdle(s)
+  }, 2600)
 }
 
 function unmount(): void {

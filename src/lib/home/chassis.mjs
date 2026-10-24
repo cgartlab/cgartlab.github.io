@@ -143,10 +143,15 @@ export function buildChannelOverlay(P, { active = 0 } = {}) {
   for (const plate of PLATES) {
     const cx = plate.x + plate.w / 2
     const lit = plate.index === active
-    out.push(k.dotsSvg([k.iso([cx, FRONT + 3.6, plate.z + 19], P)], {
-      size: lit ? 1.7 : 1.2,
-      tone: lit ? 'hi' : 'lo',
-    }))
+    const [sx, sy] = k.iso([cx, FRONT + 3.6, plate.z + 19], P)
+    const x = sx.toFixed(1)
+    const y = sy.toFixed(1)
+    out.push(
+      `<g class="home-lamp" style="--i:${plate.index}">`
+      + `<circle class="home-lamp-glow" cx="${x}" cy="${y}" r="${lit ? 6.4 : 5.4}"/>`
+      + `<circle class="home-lamp-dot" cx="${x}" cy="${y}" r="${lit ? 1.9 : 1.5}"/>`
+      + '</g>',
+    )
   }
   return out.join('')
 }
@@ -172,6 +177,6 @@ export function buildChannelLinks(P, options = {}) {
     const label = labels[plate.index] ?? ''
     const href = hrefs[plate.index] ?? '#'
     const current = plate.index === active ? ' aria-current="page"' : ''
-    return `<a class="home-channel" href="${href}" aria-label="${label}"${current}><path class="home-channel-hit" d="${d}"/></a>`
+    return `<a class="home-channel" href="${href}" aria-label="${label}"${current}><title>${label}</title><path class="home-channel-hit" d="${d}"/></a>`
   }).join('')
 }

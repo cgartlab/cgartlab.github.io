@@ -365,3 +365,31 @@ html.reduce-motion .home-paper-group {
   .home-lift,
   .home-paper-group { transform: none; transition: none; }
 }
+
+/* idle behaviour --------------------------------------------------------- */
+
+@keyframes home-lamp-scan {
+  0% { opacity: 1; }
+  20% { opacity: 0.15; }
+  100% { opacity: 0.15; }
+}
+
+.home-lamp {
+  animation: home-lamp-scan 2.8s linear infinite;
+  animation-delay: calc(var(--i, 0) * 0.3s);
+}
+
+html.reduce-motion .home-lamp { animation: none; opacity: 0.85; }
+
+@media (prefers-reduced-motion: reduce) {
+  .home-lamp { animation: none; opacity: 0.85; }
+}
+
+.home-lamp-glow {
+  fill: oklch(var(--un-preset-theme-colors-highlight));
+  opacity: 0.2;
+}
+.home-lamp-dot {
+  fill: oklch(var(--un-preset-theme-colors-highlight));
+  stroke: none;
+}

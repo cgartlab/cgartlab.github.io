@@ -68,8 +68,8 @@ export function buildTypewriter(P, options = {}) {
   out.push(k.lineSvg(k.planOutline(k.insetPlan(BASE, 1.2), BASE_Z + 8, P, 12), { tone: 'hi' }))
   out.push(k.solidSvg(k.slabOf({ x: -85, y: -39, w: 13, d: 74, r: 3 }, DECK_TOP, 22, P, 5, 1.4), { tone: 'mid' }))
   out.push(k.solidSvg(k.slabOf({ x: 72, y: -39, w: 13, d: 74, r: 3 }, DECK_TOP, 22, P, 5, 1.4), { tone: 'mid' }))
-  out.push(k.solidSvg(k.slabOf({ x: -72, y: -39, w: 144, d: 43, r: 6 }, DECK_TOP, 16, P, 6, 1.2), { tone: 'mid' }))
-  // raised rear housing behind the platen
+  out.push(k.solidSvg(k.slabOf({ x: -72, y: -35, w: 144, d: 39, r: 6 }, DECK_TOP, 16, P, 6, 1.2), { tone: 'mid' }))
+  // raised rear housing behind the platen, butted against the deck
   out.push(k.solidSvg(k.slabOf({ x: -72, y: -43, w: 144, d: 8, r: 2 }, DECK_TOP, 25, P, 4, 2), { tone: 'mid' }))
   out.push(k.lineSvg(k.planOutline(k.insetPlan({ x: -72, y: -43, w: 144, d: 8, r: 2 }, 2), DECK_TOP + 25, P, 4), { tone: 'faint' }))
 
@@ -97,8 +97,8 @@ export function buildTypewriter(P, options = {}) {
   out.push(k.solidSvg(k.slabOf({ x: -68, y: 36, w: 12, d: 7, r: 2 }, DECK_TOP, 3, P, 4, 0.5), { tone: 'lo' }))
   out.push(k.solidSvg(k.slabOf({ x: 56, y: 36, w: 12, d: 7, r: 2 }, DECK_TOP, 3, P, 4, 0.5), { tone: 'lo' }))
 
-  // type basket guard
-  out.push(k.solidSvg(k.slabOf({ x: -52, y: -8, w: 104, d: 10, r: 5 }, BASE_Z + 22, 6, P, 5, 1), { tone: 'mid' }))
+  // type basket guard, seated on the deck
+  out.push(k.solidSvg(k.slabOf({ x: -52, y: -8, w: 104, d: 10, r: 5 }, DECK_TOP + 16, 6, P, 5, 1), { tone: 'mid' }))
 
   // typebars, fanning up from the basket to the platen
   for (let i = 0; i < 9; i++) {
@@ -116,9 +116,9 @@ export function buildTypewriter(P, options = {}) {
   out.push(k.lineSvg(k.segment([-50, -6, DECK_TOP + 22.2], [-6, -10, DECK_TOP + 22.2], P), { tone: 'mid' }))
   out.push(k.lineSvg(k.segment([6, -10, DECK_TOP + 22.2], [50, -6, DECK_TOP + 22.2], P), { tone: 'mid' }))
 
-  // carriage rails
-  out.push(k.lineSvg(k.segment([-70, -32, DECK_TOP + 18], [70, -32, DECK_TOP + 18], P), { tone: 'mid' }))
-  out.push(k.lineSvg(k.segment([-70, -16, DECK_TOP + 18], [70, -16, DECK_TOP + 18], P), { tone: 'mid' }))
+  // carriage rails, lying on the deck
+  out.push(k.lineSvg(k.segment([-70, -32, DECK_TOP + 16.3], [70, -32, DECK_TOP + 16.3], P), { tone: 'mid' }))
+  out.push(k.lineSvg(k.segment([-70, -16, DECK_TOP + 16.3], [70, -16, DECK_TOP + 16.3], P), { tone: 'mid' }))
 
   // paper plane — drawn before the platen so the platen reads in front of it
   const u = [1, 0, 0]
@@ -158,10 +158,10 @@ export function buildTypewriter(P, options = {}) {
   out.push(k.lineSvg(k.segment([69, -30, BASE_Z + 46], [102, -18, BASE_Z + 60], P), { tone: 'mid' }))
   out.push(k.dotsSvg([k.iso([102, -18, BASE_Z + 60], P)], { size: 2.6, tone: 'mid' }))
 
-  // knobs: a short knurled collar plus a cap, seated on the roller ends
+  // knobs: a collar and a cap, running out to the case sides so the roller is held
   for (const side of [-1, 1]) {
-    const s0 = side > 0 ? PLATEN.half : -PLATEN.half - 5
-    const s1 = side > 0 ? PLATEN.half + 5 : -PLATEN.half
+    const s0 = side > 0 ? PLATEN.half : -PLATEN.half - 8
+    const s1 = side > 0 ? PLATEN.half + 8 : -PLATEN.half
     out.push(k.solidSvg(G.disc(s0, s1, PLATEN.r + 1.4, platenFrame, P, { bevel: 1 }), { tone: 'mid' }))
     out.push(k.lineSvg(G.circleOf(platenFrame, s1, PLATEN.r - 1.5, P), { tone: 'faint' }))
     out.push(k.lineSvg(
@@ -173,9 +173,9 @@ export function buildTypewriter(P, options = {}) {
     ))
   }
 
-  // paper guide rod in front of the platen
-  out.push(k.lineSvg(k.segment([-58, -13, BASE_Z + 38], [58, -13, BASE_Z + 38], P), { tone: 'hi' }))
-  out.push(k.dotsSvg([k.iso([-58, -13, BASE_Z + 38], P), k.iso([58, -13, BASE_Z + 38], P)], { size: 0.7, tone: 'mid' }))
+  // paper guide rod, riding the roller's front face and held at both ends
+  out.push(k.lineSvg(k.segment([-60, -14.2, BASE_Z + 39], [60, -14.2, BASE_Z + 39], P), { tone: 'hi' }))
+  out.push(k.dotsSvg([k.iso([-60, -14.2, BASE_Z + 39], P), k.iso([60, -14.2, BASE_Z + 39], P)], { size: 0.9, tone: 'mid' }))
 
   // paper bail, across the sheet just above the platen
   out.push(k.lineSvg(k.segment([-PAPER_HALF + 4, PAPER_TOP.y + 8, PAPER_TOP.z - 8], [PAPER_HALF - 4, PAPER_TOP.y + 8, PAPER_TOP.z - 8], P), { tone: 'mid' }))
