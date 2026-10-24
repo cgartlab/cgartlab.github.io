@@ -37,7 +37,7 @@ const W = 760
 const H = 620
 
 const bounds = [...k.boxCorners(CABINET, -22, TOP), ...typewriterBounds()]
-const P = k.fitProjection(bounds, W, H, { pad: 28, azimuth: 40, elevation: 34 })
+const P = k.fitProjection(bounds, W, H, { pad: 30, azimuth: 88, elevation: 18 })
 
 const moduleSvg = `<g class="home-lift"><g class="home-module" data-module="posts">${buildTypewriter(P, {
   title: latest,

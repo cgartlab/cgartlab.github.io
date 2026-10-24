@@ -24,7 +24,7 @@ const bounds = [
   ...k.boxCorners(CABINET, -22, TOP),
   ...typewriterBounds(),
 ]
-const P = k.fitProjection(bounds, W, H, { pad: 28, azimuth: 40, elevation: 34 })
+const P = k.fitProjection(bounds, W, H, { pad: 30, azimuth: 88, elevation: 18 })
 
 const moduleGroup = `<g class="home-module" data-module="posts">${buildTypewriter(P, { title: '慢一点比较快：当执行变得廉价，判断力才是稀缺物' })}</g>`
 

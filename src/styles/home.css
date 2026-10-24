@@ -393,3 +393,23 @@ html.reduce-motion .home-lamp { animation: none; opacity: 0.85; }
   fill: oklch(var(--un-preset-theme-colors-highlight));
   stroke: none;
 }
+
+/* panel hierarchy: in a head-on view every front face shares one shade, so
+   the parts have to be told apart by class */
+.home-stage .home-panel-plate .iso-fill { fill: var(--anatomy-shade-2); }
+.home-stage .home-panel-plate .iso-shade { fill: var(--anatomy-shade-1); }
+.home-stage .home-key-cap .iso-fill { fill: var(--anatomy-top); }
+.home-stage .home-key-cap .iso-shade { fill: var(--anatomy-shade-3); }
+.home-stage .home-top-plate .iso-fill { fill: var(--anatomy-shade-3); }
+.home-stage .home-plinth .iso-fill { fill: var(--anatomy-shade-1); }
+.home-stage .home-plinth .iso-shade { fill: var(--anatomy-shade-0); }
+.home-stage .home-shadow {
+  fill: var(--anatomy-halo);
+  opacity: 0.16;
+  filter: blur(5px);
+}
+
+.home-stage .home-table {
+  fill: var(--anatomy-shade-3);
+  stroke: none;
+}

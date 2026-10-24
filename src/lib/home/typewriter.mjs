@@ -120,6 +120,12 @@ export function buildTypewriter(P, options = {}) {
   out.push(k.lineSvg(k.segment([-70, -32, DECK_TOP + 16.3], [70, -32, DECK_TOP + 16.3], P), { tone: 'mid' }))
   out.push(k.lineSvg(k.segment([-70, -16, DECK_TOP + 16.3], [70, -16, DECK_TOP + 16.3], P), { tone: 'mid' }))
 
+  // paper table, sloping up behind the roller and carrying the sheet
+  const table = [k.iso([-66, -35, BASE_Z + 33], P), k.iso([66, -35, BASE_Z + 33], P), k.iso([66, -46, BASE_Z + 65], P), k.iso([-66, -46, BASE_Z + 65], P)]
+  out.push(`<path class="home-table" d="${k.pathOf(table, true)}"/>`)
+  out.push(k.lineSvg(k.pathOf(table, true), { tone: 'lo' }))
+  out.push(k.lineSvg(k.segment([-60, -44.5, BASE_Z + 63], [60, -44.5, BASE_Z + 63], P), { tone: 'faint' }))
+
   // paper plane — drawn before the platen so the platen reads in front of it
   const u = [1, 0, 0]
   const vRaw = [0, PAPER_BOTTOM.y - PAPER_TOP.y, PAPER_BOTTOM.z - PAPER_TOP.z]

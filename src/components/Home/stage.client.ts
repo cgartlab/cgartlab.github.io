@@ -12,11 +12,11 @@ const STAGE = '[data-home-stage]'
 const TOUR_DELAY = 600
 const TOUR_INTERVAL = 55
 const RESUME_DELAY = 5200
-const TILT_Y = 6.2
-const TILT_X = 3.2
+const TILT_Y = 3.4
+const TILT_X = 1.8
 const EASE = 0.14
-const BREATH_Y = 1.5
-const BREATH_X = 0.8
+const BREATH_Y = 1.1
+const BREATH_X = 0.55
 const BREATH_PERIOD = 3.4
 
 interface State {
