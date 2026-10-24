@@ -1,0 +1,46 @@
+---
+import type { Language } from '@/i18n/config'
+import Button from '@/components/Button.astro'
+import { themeConfig } from '@/config'
+import Head from '@/layouts/Head.astro'
+import { ui } from '@/i18n/ui'
+import { getPageInfo } from '@/utils/page'
+import '@unocss/reset/tailwind.css'
+import '@/styles/font.css'
+import '@/styles/global.css'
+import '@/styles/home.css'
+import '@/styles/transition.css'
+
+interface Props {
+  postTitle?: string
+  postDescription?: string
+  ogImage?: string
+  supportedLangs?: Language[]
+}
+
+const { postTitle, postDescription, ogImage, supportedLangs = [] } = Astro.props
+const { currentLang, getLocalizedPath } = getPageInfo(Astro.url.pathname)
+const t = ui[currentLang as keyof typeof ui] ?? ui.zh
+const siteTitle = themeConfig.site.i18nTitle ? t.title : themeConfig.site.title
+---
+
+<html lang={Astro.currentLocale}>
+  <Head {postTitle} {postDescription} {ogImage} {supportedLangs} />
+  <body>
+    <a class="skip-to-content" href="#home-main">跳到主内容</a>
+    <div class="home-shell">
+      <header class="home-bar">
+        <a
+          class="home-mark"
+          href={getLocalizedPath('/')}
+          transition:name={`site-title-${currentLang}`}
+          data-disable-theme-toggle-transition
+        >
+          {siteTitle}
+        </a>
+        <Button {supportedLangs} variant="home" />
+      </header>
+      <slot />
+    </div>
+  </body>
+</html>

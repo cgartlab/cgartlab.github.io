@@ -1,0 +1,331 @@
+/* ==========================================================================
+   Home stage — isometric instrument
+   Tokens are derived from the site palette; no literal colours except the
+   physical shadow alpha allowed by AGENTS.md.
+   ========================================================================== */
+
+.home-stage {
+  /* paper / four-tone shading -------------------------------------------- */
+  --anatomy-paper: oklch(var(--un-preset-theme-colors-background));
+  --anatomy-face: color-mix(in oklch, oklch(var(--un-preset-theme-colors-background)) 97%, oklch(var(--un-preset-theme-colors-primary)) 3%);
+  --anatomy-top: oklch(var(--un-preset-theme-colors-background));
+  --anatomy-shade-0: color-mix(in oklch, oklch(var(--un-preset-theme-colors-background)) 86%, oklch(var(--un-preset-theme-colors-primary)) 14%);
+  --anatomy-shade-1: color-mix(in oklch, oklch(var(--un-preset-theme-colors-background)) 89%, oklch(var(--un-preset-theme-colors-primary)) 11%);
+  --anatomy-shade-2: color-mix(in oklch, oklch(var(--un-preset-theme-colors-background)) 92%, oklch(var(--un-preset-theme-colors-primary)) 8%);
+  --anatomy-shade-3: color-mix(in oklch, oklch(var(--un-preset-theme-colors-background)) 95%, oklch(var(--un-preset-theme-colors-primary)) 5%);
+
+  /* the one lit part ------------------------------------------------------ */
+  --anatomy-lit: oklch(var(--un-preset-theme-colors-highlight));
+  --anatomy-lit-top: color-mix(in oklch, oklch(var(--un-preset-theme-colors-highlight)) 82%, oklch(var(--un-preset-theme-colors-background)) 18%);
+  --anatomy-lit-shade: color-mix(in oklch, oklch(var(--un-preset-theme-colors-highlight)) 70%, oklch(var(--un-preset-theme-colors-primary)) 30%);
+
+  /* line tones ------------------------------------------------------------ */
+  --anatomy-hi: oklch(var(--un-preset-theme-colors-primary));
+  --anatomy-mid: color-mix(in oklch, oklch(var(--un-preset-theme-colors-primary)) 55%, oklch(var(--un-preset-theme-colors-background)) 45%);
+  --anatomy-lo: color-mix(in oklch, oklch(var(--un-preset-theme-colors-primary)) 35%, oklch(var(--un-preset-theme-colors-background)) 65%);
+  --anatomy-faint: color-mix(in oklch, oklch(var(--un-preset-theme-colors-primary)) 18%, oklch(var(--un-preset-theme-colors-background)) 82%);
+  --anatomy-dot: oklch(var(--un-preset-theme-colors-primary));
+  --anatomy-halo: rgb(0 0 0);
+  --anatomy-halo-opacity: 0.10;
+  --home-paper: oklch(var(--un-preset-theme-colors-background));
+
+  /* machine-specific ------------------------------------------------------ */
+  --home-cavity: color-mix(in oklch, oklch(var(--un-preset-theme-colors-primary)) 72%, oklch(var(--un-preset-theme-colors-background)) 28%);
+  --home-brass: color-mix(in oklch, oklch(var(--un-preset-theme-colors-highlight)) 42%, oklch(var(--un-preset-theme-colors-background)) 58%);
+  --home-brass-deep: color-mix(in oklch, oklch(var(--un-preset-theme-colors-highlight)) 62%, oklch(var(--un-preset-theme-colors-primary)) 38%);
+
+  --anatomy-weight: 0.6px;
+  --anatomy-ease: cubic-bezier(0.32, 0.72, 0, 1);
+  --anatomy-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+}
+
+.dark .home-stage {
+  --anatomy-paper: oklch(var(--un-preset-theme-colors-background));
+  --anatomy-face: color-mix(in oklch, oklch(var(--un-preset-theme-colors-background)) 88%, oklch(var(--un-preset-theme-colors-primary)) 12%);
+  --anatomy-top: color-mix(in oklch, oklch(var(--un-preset-theme-colors-background)) 78%, oklch(var(--un-preset-theme-colors-primary)) 22%);
+  --anatomy-shade-0: color-mix(in oklch, oklch(var(--un-preset-theme-colors-background)) 96%, oklch(var(--un-preset-theme-colors-primary)) 4%);
+  --anatomy-shade-1: color-mix(in oklch, oklch(var(--un-preset-theme-colors-background)) 92%, oklch(var(--un-preset-theme-colors-primary)) 8%);
+  --anatomy-shade-2: color-mix(in oklch, oklch(var(--un-preset-theme-colors-background)) 88%, oklch(var(--un-preset-theme-colors-primary)) 12%);
+  --anatomy-shade-3: color-mix(in oklch, oklch(var(--un-preset-theme-colors-background)) 84%, oklch(var(--un-preset-theme-colors-primary)) 16%);
+  --home-paper: color-mix(in oklch, oklch(var(--un-preset-theme-colors-primary)) 62%, oklch(var(--un-preset-theme-colors-background)) 38%);
+
+  --anatomy-lit-top: color-mix(in oklch, oklch(var(--un-preset-theme-colors-highlight)) 70%, oklch(var(--un-preset-theme-colors-background)) 30%);
+  --anatomy-lit-shade: color-mix(in oklch, oklch(var(--un-preset-theme-colors-highlight)) 52%, oklch(var(--un-preset-theme-colors-primary)) 48%);
+
+  --anatomy-halo-opacity: 0.62;
+  --home-cavity: oklch(var(--un-preset-theme-colors-background));
+  --home-brass: color-mix(in oklch, oklch(var(--un-preset-theme-colors-highlight)) 55%, oklch(var(--un-preset-theme-colors-background)) 45%);
+  --home-brass-deep: color-mix(in oklch, oklch(var(--un-preset-theme-colors-highlight)) 75%, oklch(var(--un-preset-theme-colors-primary)) 25%);
+}
+
+/* --------------------------------------------------------------------------
+   Structural rules adapted from the anatomy kit (MIT). Only the selectors the
+   figure actually emits are kept.
+   -------------------------------------------------------------------------- */
+
+.home-stage .iso-svg { display: block; width: 100%; height: auto; overflow: visible; }
+.home-stage .iso-svg path,
+.home-stage .iso-svg circle { vector-effect: non-scaling-stroke; }
+
+.home-stage .iso-fill { fill: var(--anatomy-paper); stroke: none; }
+.home-stage .iso-solid[data-lit] > .iso-fill { fill: var(--anatomy-face); }
+.home-stage .iso-shade,
+.home-stage .iso-top { stroke: none; }
+.home-stage .iso-shade[data-shade="0"] { fill: var(--anatomy-shade-0); }
+.home-stage .iso-shade[data-shade="1"] { fill: var(--anatomy-shade-1); }
+.home-stage .iso-shade[data-shade="2"] { fill: var(--anatomy-shade-2); }
+.home-stage .iso-shade[data-shade="3"] { fill: var(--anatomy-shade-3); }
+.home-stage .iso-top { fill: var(--anatomy-top); }
+.home-stage .iso-solid[data-lit] > .iso-top { fill: var(--anatomy-lit-top); }
+.home-stage .iso-solid[data-lit] > .iso-shade { fill: var(--anatomy-lit-shade); }
+.home-stage .iso-solid[data-lit] > .iso-edge { stroke: var(--anatomy-lit); }
+
+.home-stage .iso-solid[data-seamless] > .iso-shade,
+.home-stage .iso-solid[data-seamless] > .iso-top { stroke-width: 0.4; stroke-linejoin: round; }
+.home-stage .iso-solid[data-seamless] > .iso-shade[data-shade="0"] { stroke: var(--anatomy-shade-0); }
+.home-stage .iso-solid[data-seamless] > .iso-shade[data-shade="1"] { stroke: var(--anatomy-shade-1); }
+.home-stage .iso-solid[data-seamless] > .iso-shade[data-shade="2"] { stroke: var(--anatomy-shade-2); }
+.home-stage .iso-solid[data-seamless] > .iso-shade[data-shade="3"] { stroke: var(--anatomy-shade-3); }
+.home-stage .iso-solid[data-seamless] > .iso-top { stroke: var(--anatomy-top); }
+
+.home-stage .iso-halo { fill: var(--anatomy-halo); stroke: none; filter: blur(9px); opacity: var(--anatomy-halo-opacity); transform: translateY(3px); }
+
+.home-stage .iso-line { fill: none; stroke: var(--anatomy-lo); stroke-width: var(--anatomy-weight); stroke-linecap: round; stroke-linejoin: round; }
+.home-stage .iso-line[data-tone="hi"] { stroke: var(--anatomy-hi); }
+.home-stage .iso-line[data-tone="mid"] { stroke: var(--anatomy-mid); }
+.home-stage .iso-line[data-tone="lo"] { stroke: var(--anatomy-lo); }
+.home-stage .iso-line[data-tone="faint"] { stroke: var(--anatomy-faint); }
+.home-stage .iso-line[data-tone="lit"] { stroke: var(--anatomy-lit); }
+
+.home-stage .iso-dots circle { fill: var(--anatomy-dot); stroke: none; opacity: 0.32; }
+.home-stage .iso-dots[data-tone="hi"] circle { opacity: 0.85; }
+.home-stage .iso-dots[data-tone="mid"] circle { opacity: 0.45; }
+.home-stage .iso-dots[data-tone="lo"] circle { opacity: 0.22; }
+.home-stage .iso-dots[data-tone="faint"] circle { opacity: 0.12; }
+
+.home-stage .iso-face-text { fill: var(--anatomy-mid); font-family: var(--anatomy-mono); letter-spacing: 0.04em; }
+.home-stage .iso-face-text[data-tone="hi"] { fill: var(--anatomy-hi); }
+.home-stage .iso-face-text[data-tone="lo"] { fill: var(--anatomy-lo); }
+.home-stage .iso-face-text[data-tone="faint"] { fill: var(--anatomy-faint); }
+.home-stage .iso-face-text[data-tone="lit"] { fill: var(--anatomy-lit); }
+
+/* tubes */
+.home-stage .tb-body { fill: var(--anatomy-shade-2); stroke: none; }
+.home-stage .tb-shine { fill: var(--anatomy-top); stroke: none; }
+.home-stage .tb-shade { fill: var(--anatomy-shade-0); stroke: none; }
+.home-stage .tb-ring { fill: none; stroke: var(--anatomy-lo); stroke-width: 0.45; stroke-linecap: butt; stroke-linejoin: round; }
+.home-stage .tb-ring[data-tone="mid"] { stroke: var(--anatomy-mid); }
+.home-stage .tb-ring[data-tone="faint"] { stroke: var(--anatomy-faint); }
+.home-stage .tb-ring[data-tone="hi"] { stroke: var(--anatomy-hi); }
+
+/* machine-specific */
+.home-stage .home-cavity { fill: var(--home-cavity); stroke: var(--anatomy-lo); stroke-width: var(--anatomy-weight); }
+.home-stage .home-brass { fill: var(--home-brass); stroke: none; }
+.home-stage .home-brass-edge { fill: none; stroke: var(--home-brass-deep); stroke-width: var(--anatomy-weight); }
+
+/* --------------------------------------------------------------------------
+   Home shell
+   -------------------------------------------------------------------------- */
+
+.home-shell {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  gap: clamp(0.75rem, 2vh, 1.75rem);
+  min-height: 100dvh;
+  max-width: 1560px;
+  margin: 0 auto;
+  padding: clamp(1.1rem, 3vh, 2.25rem) clamp(1.25rem, 4vw, 3.5rem);
+}
+
+.home-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.home-mark {
+  font-family: var(--un-preset-theme-font-family-title);
+  font-size: clamp(1.2rem, 2.1vw, 1.7rem);
+  line-height: 1;
+  color: oklch(var(--un-preset-theme-colors-primary));
+  text-decoration: none;
+}
+
+.home-main {
+  display: grid;
+  grid-template-columns: minmax(0, 0.82fr) minmax(0, 1.18fr);
+  align-items: center;
+  gap: clamp(0.75rem, 2.6vw, 3rem);
+  min-height: 0;
+}
+
+.home-copy { max-width: 34rem; }
+
+.home-eyebrow {
+  margin: 0 0 0.75rem;
+  font-family: var(--un-preset-theme-font-family-sans);
+  font-size: 0.7rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: oklch(var(--un-preset-theme-colors-secondary));
+}
+
+.home-title {
+  margin: 0;
+  font-family: var(--un-preset-theme-font-family-title);
+  font-size: clamp(1.7rem, 3.3vw, 2.9rem);
+  font-weight: 700;
+  line-height: 1.08;
+  color: oklch(var(--un-preset-theme-colors-primary));
+  text-wrap: balance;
+}
+
+.home-sub {
+  margin: 0.9rem 0 0;
+  font-family: var(--un-preset-theme-font-family-sans);
+  font-size: clamp(0.8rem, 1.05vw, 0.95rem);
+  letter-spacing: 0.06em;
+  color: oklch(var(--un-preset-theme-colors-secondary));
+}
+
+.home-foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem 1.5rem;
+  font-family: var(--un-preset-theme-font-family-sans);
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  color: color-mix(in oklch, oklch(var(--un-preset-theme-colors-secondary)) 78%, transparent);
+}
+
+.home-foot .home-readout {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* the machine ------------------------------------------------------------- */
+
+.home-stage {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+}
+
+.home-stage .iso-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.home-module {
+  animation: home-rise 760ms cubic-bezier(0.32, 0.72, 0, 1) both;
+}
+
+@keyframes home-rise {
+  from { opacity: 0; transform: translateY(26px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.home-key {
+  transition: transform 90ms cubic-bezier(0.32, 0.72, 0, 1);
+}
+.home-key.is-down { transform: translateY(2.4px); }
+
+.home-channel-hit { fill: transparent; stroke: none; }
+.home-channel { outline: none; }
+.home-channel:hover .home-channel-hit,
+.home-channel:focus-visible .home-channel-hit {
+  fill: oklch(var(--un-preset-theme-colors-highlight));
+  fill-opacity: 0.14;
+  stroke: oklch(var(--un-preset-theme-colors-highlight));
+  stroke-width: 1.4px;
+  stroke-opacity: 0.55;
+}
+
+html.reduce-motion .home-module,
+html.reduce-motion .home-key { animation: none; transition: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .home-module { animation: none; }
+  .home-key { transition: none; }
+}
+
+@media (max-width: 899px) {
+  .home-shell { grid-template-rows: auto auto auto; }
+  .home-main { grid-template-columns: minmax(0, 1fr); gap: 0.5rem; }
+  .home-copy { max-width: none; }
+  .home-stage { min-height: 44dvh; height: 44dvh; }
+}
+
+.home-stage .iso-svg { max-width: 100%; }
+.home-paper { fill: var(--home-paper); stroke: none; }
+.home-main > * { min-width: 0; }
+
+.home-paper-link { outline: none; }
+.home-paper-link .home-paper { transition: fill 220ms ease; }
+.home-paper-link:hover .home-paper,
+.home-paper-link:focus-visible .home-paper {
+  fill: color-mix(in oklch, var(--home-paper) 82%, oklch(var(--un-preset-theme-colors-highlight)) 18%);
+}
+
+.home-nav { display: none; }
+
+@media (max-width: 899px) {
+  .home-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem 1.1rem;
+    font-family: var(--un-preset-theme-font-family-sans);
+    font-size: 0.78rem;
+    letter-spacing: 0.04em;
+  }
+  .home-nav a {
+    color: oklch(var(--un-preset-theme-colors-secondary));
+    text-decoration: none;
+    border-bottom: 1px solid color-mix(in oklch, oklch(var(--un-preset-theme-colors-secondary)) 30%, transparent);
+    padding-bottom: 0.1rem;
+  }
+  .home-nav a:hover,
+  .home-nav a:focus-visible {
+    color: oklch(var(--un-preset-theme-colors-highlight));
+    border-bottom-color: oklch(var(--un-preset-theme-colors-highlight));
+  }
+}
+
+.home-latest {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.35rem 0.6rem;
+  margin: 1.6rem 0 0;
+  max-width: 30rem;
+  font-family: var(--un-preset-theme-font-family-sans);
+  font-size: 0.82rem;
+  line-height: 1.5;
+}
+.home-latest-label {
+  font-size: 0.68rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: color-mix(in oklch, oklch(var(--un-preset-theme-colors-secondary)) 72%, transparent);
+}
+.home-latest a {
+  color: oklch(var(--un-preset-theme-colors-primary));
+  text-decoration: none;
+  border-bottom: 1px solid color-mix(in oklch, oklch(var(--un-preset-theme-colors-highlight)) 45%, transparent);
+  transition: color 180ms ease, border-color 180ms ease;
+}
+.home-latest a:hover,
+.home-latest a:focus-visible {
+  color: oklch(var(--un-preset-theme-colors-highlight));
+  border-bottom-color: oklch(var(--un-preset-theme-colors-highlight));
+}

@@ -1,0 +1,85 @@
+---
+import type { Language } from '@/i18n/config'
+import { defaultLocale } from '@/config'
+import { getLangFromLocale } from '@/i18n/lang'
+import { getLocalizedPath, getPostPath } from '@/i18n/path'
+import { ui } from '@/i18n/ui'
+import * as k from '@/lib/anatomy/iso-kit.mjs'
+import {
+  buildChassis,
+  buildChannelLinks,
+  buildChannelOverlay,
+  CABINET,
+  chassisDefs,
+  TOP,
+} from '@/lib/home/chassis.mjs'
+import { buildTypewriter, typewriterBounds } from '@/lib/home/typewriter.mjs'
+import { getRegularPosts } from '@/utils/content'
+
+interface Props {
+  lang?: Language
+  latestTitle?: string
+}
+
+const currentLang = Astro.props.lang ?? getLangFromLocale(Astro.currentLocale)
+const t = ui[currentLang]
+
+const posts = await getRegularPosts(currentLang)
+const latest = Astro.props.latestTitle ?? posts[0]?.data.title ?? t.subtitle
+
+const labels = currentLang === 'zh'
+  ? [t.posts, t.works, t.column, t.links, t.tags, t.about, t.search]
+  : ['Posts', 'Works', 'Column', 'Links', 'Tags', 'About', 'Search']
+const hrefs = ['/posts/', '/works/', '/column/', '/resource/', '/tags/', '/about/', '/search/']
+  .map(path => getLocalizedPath(path, currentLang))
+
+const W = 760
+const H = 620
+
+const bounds = [...k.boxCorners(CABINET, -22, TOP), ...typewriterBounds()]
+const P = k.fitProjection(bounds, W, H, { pad: 28, azimuth: 40, elevation: 34 })
+
+const moduleSvg = `<g class="home-module" data-module="posts">${buildTypewriter(P, {
+  title: latest,
+  paperHref: posts[0] ? getPostPath(posts[0].data.abbrlink || posts[0].id, currentLang) : getLocalizedPath('/posts/', currentLang),
+  paperLabel: currentLang === 'zh' ? `阅读最新一篇：${latest}` : `Read the latest: ${latest}`,
+})}</g>`
+
+const svg = `<svg class="iso-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" role="group" aria-label="CGArtLab：一台铸铁控制台，升降台上是一台复古打字机，纸上打着最新的文章标题。">
+${chassisDefs(P)}
+${buildChassis(P, { labels, labelSize: currentLang === 'zh' ? 9 : 7 })}
+${moduleSvg}
+${buildChannelOverlay(P, { active: 0 })}
+${buildChannelLinks(P, { labels, hrefs, active: 0 })}
+</svg>`
+
+const typedLines = (() => {
+  const chars = [...latest]
+  const perLine = 15
+  const lines: string[] = []
+  for (let i = 0; i < chars.length && lines.length < 3; i += perLine) {
+    lines.push(chars.slice(i, i + perLine).join(''))
+  }
+  if (chars.length > perLine * 3) {
+    const last = lines[2]
+    lines[2] = `${[...last].slice(0, perLine - 1).join('')}…`
+  }
+  return lines
+})()
+
+const isDefault = currentLang === defaultLocale
+---
+
+<div
+  class="home-stage"
+  data-home-stage
+  data-typed={JSON.stringify(typedLines)}
+  data-lang={currentLang}
+  data-is-default={isDefault ? '' : undefined}
+>
+  <Fragment set:html={svg} />
+</div>
+
+<script>
+  import '@/components/Home/stage.client'
+</script>

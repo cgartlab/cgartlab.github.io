@@ -1,9 +1,11 @@
 ---
-import PostList from '@/components/PostList.astro'
+import HomeStage from '@/components/Home/HomeStage.astro'
 import { allLocales } from '@/config'
 import { getLangFromLocale, getLangRouteParam } from '@/i18n/lang'
-import Layout from '@/layouts/Layout.astro'
-import { getPinnedPosts, getPostsByYear } from '@/utils/content'
+import { getLocalizedPath, getPostPath } from '@/i18n/path'
+import { ui } from '@/i18n/ui'
+import HomeLayout from '@/layouts/HomeLayout.astro'
+import { getRegularPosts, getTotalWordCount } from '@/utils/content'
 
 export async function getStaticPaths() {
   return allLocales.map(lang => ({
@@ -12,24 +14,63 @@ export async function getStaticPaths() {
 }
 
 const currentLang = getLangFromLocale(Astro.currentLocale)
-const pinnedPosts = await getPinnedPosts(currentLang)
-const postsByYear = await getPostsByYear(currentLang)
+const t = ui[currentLang as keyof typeof ui] ?? ui.zh
+
+const posts = await getRegularPosts(currentLang)
+const words = await getTotalWordCount(currentLang)
+
+const positioning = currentLang === 'zh'
+  ? '动态视觉设计 · 数字艺术 · 技术分享'
+  : 'Motion design · Digital art · Writing'
+
+const hint = currentLang === 'zh'
+  ? '敲击键盘，纸上会打出最新一篇；点击纸张阅读它。'
+  : 'Type on the keyboard to print the latest headline; click the sheet to read it.'
+
+const readout = currentLang === 'zh'
+  ? `${posts.length} 篇 · ${words.toLocaleString('zh-CN')} 字`
+  : `${posts.length} posts · ${words.toLocaleString('en-US')} words`
+
+const navLinks = [
+  { path: '/posts/', label: t.posts },
+  { path: '/works/', label: t.works },
+  { path: '/column/', label: t.column },
+  { path: '/resource/', label: t.links },
+  { path: '/tags/', label: t.tags },
+  { path: '/about/', label: t.about },
+  { path: '/search/', label: t.search },
+].map(item => ({ ...item, href: getLocalizedPath(item.path, currentLang) }))
+
+const latest = posts[0]
+const latestHref = latest
+  ? getPostPath(latest.data.abbrlink || latest.id, currentLang)
+  : getLocalizedPath('/posts/', currentLang)
 ---
 
-<Layout ogImage={currentLang === 'en' ? '/og/home.png' : undefined}>
-  <!-- Pinned Posts -->
-  {pinnedPosts.length > 0 && (
-    <section class="mb-6 w-full lg:mb-7.5">
-      <div class="uno-decorative-line" />
-      <PostList posts={pinnedPosts} lang={currentLang} pinned={true} />
-    </section>
-  )}
+<HomeLayout>
+  <main class="home-main" id="home-main">
+    <div class="home-copy">
+      <p class="home-eyebrow">{t.title}</p>
+      <h1 class="home-title">{t.subtitle}</h1>
+      <p class="home-sub">{positioning}</p>
+      {latest && (
+        <p class="home-latest">
+          <span class="home-latest-label">{currentLang === 'zh' ? '最新' : 'Latest'}</span>
+          <a href={latestHref}>{latest.data.title}</a>
+        </p>
+      )}
+    </div>
+    <HomeStage lang={currentLang} />
+  </main>
 
-  <!-- Regular Posts -->
-  {Array.from(postsByYear.entries(), ([_year, posts]) => (
-    <section class="mb-7.5 w-full">
-      <div class="uno-decorative-line" />
-      <PostList posts={posts} lang={currentLang} />
-    </section>
-  ))}
-</Layout>
+  <nav class="home-nav" aria-label={currentLang === 'zh' ? '站内导航' : 'Site sections'}>
+    {navLinks.map(item => (
+      <a href={item.href}>{item.label}</a>
+    ))}
+  </nav>
+
+  <footer class="home-foot">
+    <span>{hint}</span>
+    <span class="home-readout">{readout}</span>
+  </footer>
+</HomeLayout>
