@@ -21,12 +21,12 @@ const PANEL_Z1 = 65
 const KEY_Z0 = 28
 const KEY_Z1 = 47
 
-/** Seven keys, centred on the panel. */
+/** Five keys, centred on the panel: one per section that still has a device. */
 export const PLATES = (() => {
-  const w = 35
-  const gap = 3
-  const total = 7 * w + 6 * gap
-  return Array.from({ length: 7 }, (_, index) => ({
+  const w = 45
+  const gap = 4
+  const total = 5 * w + 4 * gap
+  return Array.from({ length: 5 }, (_, index) => ({
     index,
     x: -total / 2 + index * (w + gap),
     w,

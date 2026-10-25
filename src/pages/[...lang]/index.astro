@@ -24,8 +24,8 @@ const positioning = currentLang === 'zh'
   : 'Motion design · Digital art · Writing'
 
 const hint = currentLang === 'zh'
-  ? '敲击键盘，纸上会打出最新一篇；点击纸张阅读它。'
-  : 'Type on the keyboard to print the latest headline; click the sheet to read it.'
+  ? '敲击键盘，纸上会一行行打出最新一篇的摘要；点击纸张阅读全文。'
+  : 'Type and the sheet prints the latest excerpt line by line; click it to read the whole piece.'
 
 const readout = currentLang === 'zh'
   ? `${posts.length} 篇 · ${words.toLocaleString('zh-CN')} 字`
@@ -37,8 +37,6 @@ const navLinks = [
   { path: '/column/', label: t.column },
   { path: '/resource/', label: t.links },
   { path: '/tags/', label: t.tags },
-  { path: '/about/', label: t.about },
-  { path: '/search/', label: t.search },
 ].map(item => ({ ...item, href: getLocalizedPath(item.path, currentLang) }))
 
 const latest = posts[0]

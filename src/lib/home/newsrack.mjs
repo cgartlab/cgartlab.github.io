@@ -1,133 +1,155 @@
 import * as k from '../anatomy/iso-kit.mjs'
+import * as G from '../anatomy/lathe.mjs'
 import { TOP } from './chassis.mjs'
+import { boxSvg, faceMatrix, facePath, frameOf } from './frame.mjs'
 
 /**
  * Module 03 — the newsstand that carries the column.
  *
- * Three shelves, six issues. Each issue is a leaning sheet with its masthead
- * number, a real cover photograph and a few headline rules. The cover is grey
- * until the pointer is on it; the whole sheet lifts a little as it colours.
+ * The rack stands turned off the camera so its right-hand end comes into view:
+ * the post faces, the rail ends and the four clipped sheets all lean the same
+ * way, so the issues read as depth rather than a flat wall.
+ *
+ * Painter order follows the frame's own depth (k.depthOf: +v comes toward the
+ * reader, +w toward the camera's raised eye): backboard, plinth, posts, rails,
+ * then the sheets far to near, each one finishing with its own clips, and the
+ * front lip last because the papers hang down behind it.
  */
 
-const RACK = { x: -88, y: -30, w: 176, d: 60 }
-const SIDE = 7
-const BACK_Y = RACK.y
-const SHELF_Z = [TOP + 9, TOP + 43, TOP + 77]
-const PAPER_W = 72
-const PAPER_H = 30
-const LEAN_FRONT = 14
-const LEAN_BACK = -10
+const YAW = 16
+const F = frameOf({ yaw: YAW, origin: [-76.1, -39.5, TOP] })
 
-const COVER = { u0: 4, u1: PAPER_W - 4, v0: 8, v1: 22 }
-const MAST = { v0: 23, v1: PAPER_H }
+const W = 168, D = 34, H = 96
+const POST = 7
+const RAILS = [76, 38] // upper, lower — a sheet hangs from each rail's mid height
+const PLINTH = 6, LIP = { v0: 26, vd: 8, wh: 2.5 }
 
-function sheetPoint(x0, z0, u, v) {
-  return [
-    x0 + u,
-    LEAN_FRONT + (LEAN_BACK - LEAN_FRONT) * (v / PAPER_H),
-    z0 + v,
-  ]
+const SHEET = { w: 68, h: 34, lean: 8 }
+const RAD = Math.PI / 180
+const SIN = Math.sin(SHEET.lean * RAD)
+const COS = Math.cos(SHEET.lean * RAD)
+const DOWN = [0, SIN, -COS] // one sheet unit, downward on the page
+const COLUMNS = [12, 88]
+const V_TOP = 26.6 // the sheet's top edge, just in front of the rail face
+const MAST = 8
+const COVER = { su0: 4, su1: 64, sv0: 11, sv1: 27.5 }
+const RULES = [29.3, 31.5]
+const CLIPS = [22, 48]
+
+const esc = (text) => String(text ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;')
+
+/** A point on a sheet: su across, sv down from the rail. */
+const sheetAt = (u0, w0, su, sv) => [u0 + su, V_TOP + sv * SIN, w0 - sv * COS]
+
+/** A straight line in the frame, e.g. a headline rule. */
+function rule(a, b, P) {
+  return k.lineSvg(k.pathOf([k.iso(F.at(...a), P), k.iso(F.at(...b), P)]), { tone: 'faint' })
 }
 
-/** A matrix that lays a w×h rectangle on the leaning sheet, top-left at (u,v). */
-function sheetMatrix(at, u, v, P) {
-  const o = at(u, v)
-  const a = at(u + 1, v)
-  const b = at(u, v - 1)
-  const f = (n) => Number(n.toFixed(4))
-  return `matrix(${f(a[0] - o[0])},${f(a[1] - o[1])},${f(b[0] - o[0])},${f(b[1] - o[1])},${f(o[0])},${f(o[1])})`
+/** A slotted screw on the lip's front face. */
+function screw(u, P) {
+  const w = PLINTH + LIP.wh / 2
+  const face = LIP.v0 + LIP.vd
+  const head = G.frameAlong(F.at(u, face, w), F.dir(0, 1, 0))
+  return k.solidSvg(G.disc(0, 0.8, 1.1, head, P), { tone: 'mid' })
+    + k.lineSvg(k.pathOf([k.iso(F.at(u - 0.8, face + 0.85, w), P), k.iso(F.at(u + 0.8, face + 0.85, w), P)]), { tone: 'faint' })
+}
+
+/** A knurled cap seated on a post. */
+function cap(u, P) {
+  const [cx, cy] = F.at(u, D / 2, H)
+  return k.solidSvg(k.cylinder(cx, cy, 4.4, TOP + H, 3, P, 20), { tone: 'mid' })
+    + k.lineSvg(k.ring(cx, cy, 4.4, TOP + H + 0.4, P, 20), { tone: 'faint' })
+    + k.lineSvg(k.knurl(cx, cy, 4.4, TOP + H, TOP + H + 3, 16, P, 0.3), { tone: 'faint' })
+}
+
+/** One hung issue: paper, cover block, photo, masthead, number, rules, clips. */
+function sheetSvg(issue, index, u0, w0, P) {
+  const at = (su, sv) => sheetAt(u0, w0, su, sv)
+  const quad = (su0, sv0, su1, sv1) => facePath(F, [at(su0, sv0), at(su1, sv0), at(su1, sv1), at(su0, sv1)], P)
+  const paper = quad(0, 0, SHEET.w, SHEET.h)
+  const out = [`<g class="home-issue-sheet-group" data-index="${index}">`]
+
+  out.push(`<path class="home-issue-sheet" d="${paper}"/>`)
+  out.push(k.lineSvg(paper, { tone: 'hi' }))
+
+  // the block sits behind the photo: a grey page until the pointer lands
+  out.push(`<path class="home-issue-cover" d="${quad(COVER.su0, COVER.sv0, COVER.su1, COVER.sv1)}"/>`)
+  if (issue.cover) {
+    out.push(`<image class="home-issue-photo" href="${esc(issue.cover)}" width="${COVER.su1 - COVER.su0}" height="${COVER.sv1 - COVER.sv0}" preserveAspectRatio="xMidYMid slice" transform="${faceMatrix(F, at(COVER.su0, COVER.sv0), [1, 0, 0], DOWN, P)}"/>`)
+  }
+
+  // masthead along the top edge, clear of the cover
+  out.push(`<path class="home-issue-mast" d="${quad(0, 0, SHEET.w, MAST)}"/>`)
+  out.push(`<g class="home-issue-number">${k.faceTextSvg(faceMatrix(F, at(3.5, 6.4), [1, 0, 0], DOWN, P), issue.number || '', { size: 4.4, tone: 'hi' })}</g>`)
+
+  // two headline rules under the cover
+  RULES.forEach((sv, i) => {
+    out.push(rule(at(4, sv), at(SHEET.w - 10 - i * 12, sv), P))
+  })
+
+  // clips straddle the rail and hold the paper's top edge
+  for (const cu of CLIPS) {
+    out.push(boxSvg(F, { u: u0 + cu - 2.5, v: 21, w: w0 - 5, uw: 5, vd: 7, wh: 8.5 }, P, { tone: 'mid' }))
+  }
+
+  out.push('</g>')
+  return out.join('')
 }
 
 export function buildNewsrack(P, options = {}) {
   const issues = options.issues || []
   const out = []
 
-  // frame
-  out.push(k.solidSvg(k.slabOf(RACK, TOP, 6, P, 6, 1), { tone: 'mid' }))
-  out.push(k.solidSvg(k.slabOf({ x: RACK.x, y: BACK_Y, w: RACK.w, d: 5, r: 1 }, TOP + 6, 96, P, 4, 0.8), { tone: 'mid' }))
-  for (const side of [-1, 1]) {
-    out.push(k.solidSvg(k.slabOf({ x: side * (RACK.w / 2 - SIDE), y: RACK.y, w: SIDE, d: RACK.d, r: 1 }, TOP + 6, 96, P, 4, 0.8), { tone: 'mid' }))
-    // knurled cap on each post
-    out.push(k.solidSvg(k.cylinder(side * (RACK.w / 2 - SIDE / 2), BACK_Y + RACK.d / 2, 4.6, TOP + 102, 3, P, 20), { tone: 'mid' }))
-    out.push(k.lineSvg(k.knurl(side * (RACK.w / 2 - SIDE / 2), BACK_Y + RACK.d / 2, 4.6, TOP + 102, TOP + 105, 18, P, 0.3), { tone: 'faint' }))
+  // backboard, the farthest thing in the frame
+  const panel = facePath(F, [[POST, 4.5, PLINTH], [W - POST, 4.5, PLINTH], [W - POST, 4.5, 90], [POST, 4.5, 90]], P)
+  out.push(`<path class="iso-shade" data-shade="1" d="${panel}"/>`)
+  out.push(k.lineSvg(panel, { tone: 'faint' }))
+
+  // the plinth everything stands on
+  out.push(boxSvg(F, { u: 0, v: 0, w: 0, uw: W, vd: D, wh: PLINTH }, P, { tone: 'lo' }))
+
+  // two posts, each capped with a knurled knob
+  for (const u of [0, W - POST]) {
+    out.push(boxSvg(F, { u, v: 2, w: PLINTH, uw: POST, vd: D - 4, wh: H - PLINTH }, P, { tone: 'mid' }))
+    out.push(cap(u + POST / 2, P))
   }
 
-  // shelves, each with a front lip and a label plate
-  SHELF_Z.forEach((z, shelf) => {
-    const plan = { x: RACK.x + SIDE, y: RACK.y + 4, w: RACK.w - SIDE * 2, d: RACK.d - 8, r: 1 }
-    out.push(k.solidSvg(k.slabOf(plan, z, 3, P, 4, 0.6), { tone: 'hi' }))
-    out.push(k.solidSvg(k.slabOf({ x: plan.x, y: plan.y + plan.d - 4, w: plan.w, d: 4, r: 1 }, z + 3, 2.4, P, 3, 0.4), { tone: 'mid' }))
-    out.push(k.faceTextSvg(
-      k.sideMatrix([0, plan.y + plan.d], z + 4, P, 'left'),
-      `0${shelf + 1}`,
-      { size: 2.6, tone: 'faint', anchor: 'middle' },
-    ))
-    // screws at the lip ends
-    for (const sx of [plan.x + 6, plan.x + plan.w - 6])
-      out.push(k.dotsSvg([k.iso([sx, plan.y + plan.d - 2, z + 5.4], P)], { size: 0.6, tone: 'mid' }))
-  })
+  // the two rails, spanning the posts
+  for (const w of RAILS) {
+    out.push(boxSvg(F, { u: POST, v: 20, w, uw: W - POST * 2, vd: 6, wh: 4 }, P, { tone: 'mid' }))
+  }
 
-  // six issues, two per shelf
+  // four issues, two per rail, painted far to near
   const slots = []
-  SHELF_Z.forEach((z) => {
-    for (const side of [-1, 1])
-      slots.push({ x: side * 44, z: z + 3 })
-  })
+  RAILS.forEach((w, rail) => COLUMNS.forEach((u0, column) => slots.push({ u0, w0: w + 2, index: rail * 2 + column })))
+  slots
+    .map((slot) => ({ ...slot, depth: k.depthOf(F.at(slot.u0 + SHEET.w / 2, V_TOP + 17 * SIN, slot.w0 - 17 * COS), P) }))
+    .sort((a, b) => a.depth - b.depth)
+    .forEach((slot) => {
+      const issue = issues[slot.index] || {}
+      const label = issue.label || issue.number || ''
+      out.push(`<a class="home-issue" data-index="${slot.index}" href="${esc(issue.href || '#')}" aria-label="${esc(label)}"><title>${esc(label)}</title>`)
+      out.push(sheetSvg(issue, slot.index, slot.u0, slot.w0, P))
+      out.push('</a>')
+    })
 
-  slots.forEach((slot, index) => {
-    const issue = issues[index] || {}
-    const x0 = slot.x - PAPER_W / 2
-    const z0 = slot.z
-    const at = (u, v) => k.iso(sheetPoint(x0, z0, u, v), P)
-
-    const sheet = k.pathOf([at(0, 0), at(PAPER_W, 0), at(PAPER_W, PAPER_H), at(0, PAPER_H)], true)
-    const href = issue.href || '#'
-    const label = issue.label || ''
-
-    out.push(`<a class="home-issue" data-index="${index}" href="${href}" aria-label="${label}"><title>${label}</title>`)
-    out.push(`<path class="home-issue-sheet" d="${sheet}"/>`)
-    out.push(k.lineSvg(sheet, { tone: 'lo' }))
-
-    // cover photograph
-    const cw = COVER.u1 - COVER.u0
-    const ch = COVER.v1 - COVER.v0
-    const coverPath = k.pathOf([
-      at(COVER.u0, COVER.v0), at(COVER.u1, COVER.v0), at(COVER.u1, COVER.v1), at(COVER.u0, COVER.v1),
-    ], true)
-    if (issue.cover) {
-      out.push(`<image class="home-issue-photo" href="${issue.cover}" width="${cw}" height="${ch}" preserveAspectRatio="xMidYMid slice" transform="${sheetMatrix(at, COVER.u0, COVER.v1, P)}"/>`)
-    }
-    out.push(`<path class="home-issue-cover" d="${coverPath}"/>`)
-    out.push(k.lineSvg(coverPath, { tone: 'faint' }))
-
-    // masthead band and the number on it
-    const mast = k.pathOf([at(0, MAST.v0), at(PAPER_W, MAST.v0), at(PAPER_W, MAST.v1), at(0, MAST.v1)], true)
-    out.push(`<path class="home-issue-mast" d="${mast}"/>`)
-    out.push('<g class="home-issue-number">')
-    out.push(k.faceTextSvg(sheetMatrix(at, 4.5, MAST.v0 + 2.2, P), issue.number || '', { size: 4.2, tone: 'hi' }))
-    out.push('</g>')
-
-    // two headline rules under the cover
-    for (let i = 0; i < 2; i++) {
-      const v = 5.4 - i * 1.7
-      out.push(k.lineSvg(k.pathOf([at(4, v), at(PAPER_W - 12 - i * 10, v)], false), { tone: 'faint' }))
-    }
-
-    // two clips holding the sheet
-    for (const cx of [10, PAPER_W - 10]) {
-      out.push(k.lineSvg(k.pathOf([at(cx - 3, PAPER_H - 1), at(cx + 3, PAPER_H - 1)], false), { tone: 'mid' }))
-    }
-
-    out.push('</a>')
-  })
+  // front lip last: the papers hang down behind it
+  out.push(boxSvg(F, { u: POST, v: LIP.v0, w: PLINTH, uw: W - POST * 2, vd: LIP.vd, wh: LIP.wh }, P, { tone: 'mid' }))
+  for (const u of [10, W - 10]) out.push(screw(u, P))
 
   return out.join('')
 }
 
 export function newsrackBounds() {
-  return [
-    ...k.boxCorners(RACK, TOP, TOP + 106),
-    [-PAPER_W / 2, LEAN_FRONT, TOP + 77 + PAPER_H],
-    [PAPER_W / 2, LEAN_FRONT, TOP + 77 + PAPER_H],
-  ]
+  const out = []
+  for (const u of [0, W])
+    for (const v of [0, D])
+      for (const w of [0, H + 3])
+        out.push(F.at(u, v, w))
+  for (const u of [POST / 2, W - POST / 2]) {
+    const [cx, cy, cz] = F.at(u, D / 2, H)
+    out.push([cx - 4.4, cy - 4.4, cz], [cx + 4.4, cy + 4.4, cz])
+  }
+  return out
 }

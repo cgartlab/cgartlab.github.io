@@ -2,28 +2,38 @@
  * Home stage runtime.
  *
  * The machine is static SVG; this file drives what moves: the typewriter
- * striking keys, the paper filling with the latest headline, a slow camera
- * breath while nobody is touching it, and the pointer-driven tilt.
+ * striking keys and feeding its sheet, a slow camera breath while nobody is
+ * touching it, and the pointer-driven orbit.
+ *
+ * The orbit is a real spring, not a lerp: the camera keeps a little momentum
+ * after the pointer stops and settles back. It turns around the centre of mass
+ * of the cabinet, which the server passes in viewBox units, so the model does
+ * not slide sideways as it swings.
  *
  * Everything degrades to the server-rendered state when motion is reduced.
  */
 
 const STAGE = '[data-home-stage]'
 const TOUR_DELAY = 600
-const TOUR_INTERVAL = 55
+const TOUR_INTERVAL = 34
 const RESUME_DELAY = 5200
-const CAM_Y = 4.2
-const CAM_X = 1.9
-const EASE = 0.14
-const BREATH_Y = 0.7
-const BREATH_X = 0.35
-const BREATH_PERIOD = 3.4
+
+/** degrees of orbit at the edge of the stage */
+const MAX_TILT = 10
+/** spring: how hard it pulls, and how much momentum it keeps */
+const STIFF = 0.085
+const DAMP = 0.80
+/** idle breathing, small enough to read as a live camera */
+const BREATH_Y = 1.15
+const BREATH_X = 0.6
+const BREATH_PERIOD = 3.6
 
 interface State {
   stage: HTMLElement
   svg: SVGSVGElement
   lines: string[]
   textEls: SVGTextElement[]
+  block: SVGGElement | null
   keys: Map<string, SVGGElement>
   shown: number
   total: number
@@ -34,8 +44,12 @@ interface State {
   ty: number
   cx: number
   cy: number
+  vx: number
+  vy: number
   idle: boolean
   idleSince: number
+  pivot: [number, number]
+  viewBox: [number, number]
   modules: SVGGElement[]
   caps: SVGGElement[]
   channels: SVGAElement[]
@@ -64,10 +78,28 @@ function paint(s: State, count: number): void {
     if (el)
       el.textContent = line.slice(0, Math.max(0, take))
   }
+  feed(s, count)
+}
+
+/** The line being struck stays at the roller; the sheet has fed up to it. */
+function feed(s: State, count: number): void {
+  if (!s.block)
+    return
+  const bottom = Number(s.block.dataset.bottom || 48)
+  let line = 0
+  let left = count
+  for (let i = 0; i < s.lines.length && left > 0; i++) {
+    left -= s.lines[i].length
+    line = i
+  }
+  const el = s.textEls[line]
+  const y = Number(el?.getAttribute('y') || 8)
+  s.block.setAttribute('transform', `translate(0 ${(bottom - y).toFixed(2)})`)
 }
 
 function strike(s: State, char: string): void {
-  const key = s.keys.get(char.toLowerCase())
+  const id = char === ' ' ? ' ' : char.toLowerCase()
+  const key = s.keys.get(id)
     ?? s.keys.get([...s.keys.keys()][s.shown % s.keys.size])
   if (!key)
     return
@@ -119,20 +151,42 @@ function scheduleResume(s: State): void {
   }, RESUME_DELAY)
 }
 
+/** Place the orbit's axis on the cabinet's centre of mass. */
+function setPivot(s: State): void {
+  const rect = s.stage.getBoundingClientRect()
+  if (!rect.width || !rect.height)
+    return
+  const [vw, vh] = s.viewBox
+  const scale = Math.min(rect.width / vw, rect.height / vh)
+  const ox = (rect.width - vw * scale) / 2
+  const oy = (rect.height - vh * scale) / 2
+  const x = ((ox + s.pivot[0] * scale) / rect.width) * 100
+  const y = ((oy + s.pivot[1] * scale) / rect.height) * 100
+  s.svg.style.transformOrigin = `${x.toFixed(2)}% ${y.toFixed(2)}%`
+}
+
 function tiltLoop(s: State): void {
   if (s.idle) {
     const t = (performance.now() - s.idleSince) / 1000
     s.tx = Math.sin(t / BREATH_PERIOD) * BREATH_Y
     s.ty = Math.sin(t / (BREATH_PERIOD * 1.45)) * BREATH_X
   }
-  s.cx += (s.tx - s.cx) * EASE
-  s.cy += (s.ty - s.cy) * EASE
+  s.vx = (s.vx + (s.tx - s.cx) * STIFF) * DAMP
+  s.vy = (s.vy + (s.ty - s.cy) * STIFF) * DAMP
+  s.cx += s.vx
+  s.cy += s.vy
   s.stage.style.setProperty('--cam-y', s.cx.toFixed(3))
   s.stage.style.setProperty('--cam-x', s.cy.toFixed(3))
-  const settled = Math.abs(s.tx - s.cx) < 0.01 && Math.abs(s.ty - s.cy) < 0.01
-  if (settled && !s.idle) {
+  const settled = !s.idle
+    && Math.abs(s.tx - s.cx) < 0.01
+    && Math.abs(s.ty - s.cy) < 0.01
+    && Math.abs(s.vx) < 0.005
+    && Math.abs(s.vy) < 0.005
+  if (settled) {
     s.cx = s.tx
     s.cy = s.ty
+    s.vx = 0
+    s.vy = 0
     s.stage.style.setProperty('--cam-y', s.cx.toFixed(3))
     s.stage.style.setProperty('--cam-x', s.cy.toFixed(3))
     s.tiltRaf = 0
@@ -151,7 +205,6 @@ function goIdle(s: State): void {
   s.idleSince = performance.now()
   nudgeTilt(s)
 }
-
 
 /** Which machine is on the platform. Hovering a key swaps it. */
 function setModule(s: State, index: number): void {
@@ -193,6 +246,7 @@ function mount(): void {
   const caps = [...svg.querySelectorAll<SVGGElement>('.home-keycap')]
   const channels = [...svg.querySelectorAll<SVGAElement>('.home-channel')]
   const textEls = [...svg.querySelectorAll<SVGTextElement>('.home-typed-line')]
+  const block = svg.querySelector<SVGGElement>('.home-typed-block')
   const keys = new Map<string, SVGGElement>()
   for (const key of svg.querySelectorAll<SVGGElement>('.home-key')) {
     const id = key.getAttribute('data-key')
@@ -200,11 +254,15 @@ function mount(): void {
       keys.set(id, key)
   }
 
+  const viewBox = (stage.dataset.viewbox || '760 620').split(' ').map(Number) as [number, number]
+  const pivot = (stage.dataset.pivot || '0 0').split(' ').map(Number) as [number, number]
+
   const s: State = {
     stage,
     svg,
     lines,
     textEls,
+    block,
     keys,
     shown: totalChars(lines),
     total: totalChars(lines),
@@ -215,8 +273,12 @@ function mount(): void {
     ty: 0,
     cx: 0,
     cy: 0,
+    vx: 0,
+    vy: 0,
     idle: false,
     idleSince: 0,
+    pivot,
+    viewBox,
     modules,
     caps,
     channels,
@@ -225,6 +287,7 @@ function mount(): void {
   }
 
   setModule(s, 0)
+  setPivot(s)
 
   if (prefersReducedMotion())
     return
@@ -252,8 +315,8 @@ function mount(): void {
     const nx = (event.clientX - rect.left) / rect.width - 0.5
     const ny = (event.clientY - rect.top) / rect.height - 0.5
     s.idle = false
-    s.tx = -nx * 2 * CAM_Y
-    s.ty = ny * 2 * CAM_X
+    s.tx = -nx * 2 * MAX_TILT
+    s.ty = ny * 2 * MAX_TILT
     nudgeTilt(s)
     stopTour(s)
     scheduleResume(s)
@@ -301,7 +364,18 @@ function mount(): void {
     }
   }
 
+  let resizeRaf = 0
+  const onResize = () => {
+    if (resizeRaf)
+      return
+    resizeRaf = window.requestAnimationFrame(() => {
+      resizeRaf = 0
+      setPivot(s)
+    })
+  }
+
   window.addEventListener('keydown', onKey)
+  window.addEventListener('resize', onResize)
   stage.addEventListener('pointermove', onPointerMove, { passive: true })
   stage.addEventListener('pointerleave', onPointerLeave, { passive: true })
   stage.addEventListener('pointerdown', onPointerDown, { passive: true })
@@ -312,6 +386,7 @@ function mount(): void {
 
   s.cleanup = () => {
     window.removeEventListener('keydown', onKey)
+    window.removeEventListener('resize', onResize)
     stage.removeEventListener('pointermove', onPointerMove)
     stage.removeEventListener('pointerleave', onPointerLeave)
     stage.removeEventListener('pointerdown', onPointerDown)
@@ -321,8 +396,11 @@ function mount(): void {
     document.removeEventListener('visibilitychange', onVisibility)
     if (s.tiltRaf)
       window.cancelAnimationFrame(s.tiltRaf)
+    if (resizeRaf)
+      window.cancelAnimationFrame(resizeRaf)
     stage.style.removeProperty('--cam-y')
     stage.style.removeProperty('--cam-x')
+    svg.style.removeProperty('transform-origin')
   }
 
   state = s

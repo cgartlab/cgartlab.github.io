@@ -12,15 +12,12 @@ import {
   chassisDefs,
   TOP,
 } from '@/lib/home/chassis.mjs'
-import { buildPlaceholder, placeholderBounds } from '@/lib/home/placeholder.mjs'
-import { buildGallery, galleryBounds } from '@/lib/home/gallery.mjs'
+import { buildCinema, cinemaBounds } from '@/lib/home/cinema.mjs'
+import { buildLabels, labelsBounds } from '@/lib/home/labels.mjs'
 import { buildNewsrack, newsrackBounds } from '@/lib/home/newsrack.mjs'
-import { buildServer, serverBounds } from '@/lib/home/server.mjs'
-import { buildSorter, sorterBounds } from '@/lib/home/sorter.mjs'
-import { buildTelescope, telescopeBounds } from '@/lib/home/telescope.mjs'
-import { buildPrinter, printerBounds } from '@/lib/home/printer.mjs'
+import { buildToolbox, toolboxBounds } from '@/lib/home/toolbox.mjs'
 import { buildTypewriter, typewriterBounds } from '@/lib/home/typewriter.mjs'
-import { getPostsByTag, getRegularPosts } from '@/utils/content'
+import { getAllTags, getPostsByTag, getRegularPosts } from '@/utils/content'
 
 interface Props {
   lang?: Language
@@ -31,18 +28,14 @@ const currentLang = Astro.props.lang ?? getLangFromLocale(Astro.currentLocale)
 const t = ui[currentLang as keyof typeof ui] ?? ui.zh
 
 const posts = await getRegularPosts(currentLang)
-const latest = Astro.props.latestTitle ?? posts[0]?.data.title ?? t.subtitle
+const latest = posts[0]
 
 const labels = currentLang === 'zh'
-  ? [t.posts, t.works, t.column, t.links, t.tags, t.about, t.search]
-  : ['Posts', 'Works', 'Column', 'Links', 'Tags', 'About', 'Search']
+  ? [t.posts, t.works, t.column, t.links, t.tags]
+  : ['Posts', 'Works', 'Column', 'Links', 'Tags']
 
-const letters = currentLang === 'zh'
-  ? ['文', '作', '专', '资', '标', '关', '搜']
-  : ['P', 'W', 'C', 'R', 'T', 'A', 'S']
-
-const ids = ['posts', 'works', 'column', 'resource', 'tags', 'about', 'search']
-const hrefs = ['/posts/', '/works/', '/column/', '/resource/', '/tags/', '/about/', '/search/']
+const ids = ['posts', 'works', 'column', 'resource', 'tags']
+const hrefs = ['/posts/', '/works/', '/column/', '/resource/', '/tags/']
   .map(path => getLocalizedPath(path, currentLang))
 
 const W = 760
@@ -51,13 +44,10 @@ const H = 620
 const bounds = [
   ...k.boxCorners(CABINET, -18, TOP),
   ...typewriterBounds(),
-  ...placeholderBounds(),
+  ...cinemaBounds(),
   ...newsrackBounds(),
-  ...printerBounds(),
-  ...galleryBounds(),
-  ...serverBounds(),
-  ...sorterBounds(),
-  ...telescopeBounds(),
+  ...toolboxBounds(),
+  ...labelsBounds(),
 ]
 const P = k.fitProjection(bounds, W, H, {
   pad: 30,
@@ -66,6 +56,9 @@ const P = k.fitProjection(bounds, W, H, {
   focal: 1200,
   center: [0, 0, 55],
 })
+
+// the pivot the camera turns around: the centre of mass of the cabinet
+const [pivotX, pivotY] = k.iso([0, 0, TOP / 2], P)
 
 const coverGlob = import.meta.glob<{ default: ImageMetadata }>(
   '/src/content/posts/_images/**/*.{jpeg,jpg,png,gif,webp}',
@@ -88,7 +81,7 @@ function coverOf(post: { body?: string }): string {
 }
 
 const columnTag = currentLang === 'zh' || currentLang === 'zh-tw' ? '专栏' : 'Journal'
-const columns = (await getPostsByTag(columnTag, currentLang)).slice(0, 6)
+const columns = (await getPostsByTag(columnTag, currentLang)).slice(0, 4)
 const issues = columns.map((post) => {
   const abbr = post.data.abbrlink || ''
   const m = abbr.match(/weekly-(\d+)/)
@@ -101,52 +94,81 @@ const issues = columns.map((post) => {
   }
 })
 
-const paperHref = posts[0]
-  ? getPostPath(posts[0].data.abbrlink || posts[0].id, currentLang)
+// the tags page already has these; the machine prints them back out
+const tags = (await getAllTags(currentLang))
+  .filter(tag => tag !== '专栏' && tag !== 'Journal')
+  .slice(0, 8)
+
+const perLine = currentLang === 'zh' ? 18 : 26
+const maxLines = 6
+
+/** A plain-text excerpt of the latest post, wrapped to the sheet. */
+function excerptLines(body: string, width: number, rows: number): string[] {
+  const text = body
+    .replace(/```[\s\S]*?```/g, ' ')
+    .replace(/!\[[^\]]*\]\([^)]*\)/g, ' ')
+    .replace(/\[([^\]]*)\]\([^)]*\)/g, '$1')
+    .replace(/<[^>]+>/g, ' ')
+    .replace(/^#{1,6}\s+/gm, '')
+    .replace(/[>*_`~]/g, '')
+    .replace(/\s+/g, ' ')
+    .trim()
+  const chars = [...text]
+  const lines: string[] = []
+  let cursor = 0
+  while (cursor < chars.length && lines.length < rows) {
+    let take = Math.min(width, chars.length - cursor)
+    if (chars[cursor + take] && /\S/.test(chars[cursor + take - 1] ?? ' ') && /\S/.test(chars[cursor + take])) {
+      let back = take
+      while (back > width * 0.5 && chars[cursor + back - 1] !== ' ') back--
+      if (chars[cursor + back - 1] === ' ') take = back - 1
+    }
+    if (take <= 0) take = Math.min(width, chars.length - cursor)
+    lines.push(chars.slice(cursor, cursor + take).join('').trim())
+    cursor += take
+    while (chars[cursor] === ' ') cursor++
+  }
+  if (cursor < chars.length && lines.length) {
+    const last = lines[lines.length - 1]
+    lines[lines.length - 1] = `${[...last].slice(0, width - 1).join('')}…`
+  }
+  return lines.filter(Boolean)
+}
+
+const typedLines = excerptLines(latest?.body ?? '', perLine, maxLines)
+
+const paperHref = latest
+  ? getPostPath(latest.data.abbrlink || latest.id, currentLang)
   : getLocalizedPath('/posts/', currentLang)
+
+const toolboxLabels = currentLang === 'zh'
+  ? ['工具', '学习', '作者']
+  : ['TOOLS', 'LEARN', 'PEOPLE']
 
 const modules = ids.map((id, index) => {
   const caption = labels[index]
   const body = index === 0
     ? buildTypewriter(P, {
-        title: latest,
+        lines: typedLines,
         paperHref,
-        paperLabel: currentLang === 'zh' ? `阅读最新一篇：${latest}` : `Read the latest: ${latest}`,
+        paperLabel: currentLang === 'zh' ? `阅读最新一篇：${latest?.data.title ?? ''}` : `Read the latest: ${latest?.data.title ?? ''}`,
       })
     : index === 1
-      ? buildGallery(P, { caption })
+      ? buildCinema(P, { caption })
       : index === 2
         ? buildNewsrack(P, { issues })
         : index === 3
-          ? buildServer(P, { caption })
-          : index === 4
-            ? buildSorter(P, { caption })
-            : index === 5
-              ? buildPrinter(P, { caption })
-              : buildTelescope(P, { caption })
+          ? buildToolbox(P, { labels: toolboxLabels })
+          : buildLabels(P, { tags, caption })
   return `<g class="home-module${index === 0 ? ' is-active' : ''}" data-index="${index}" data-module="${id}">${body}</g>`
 }).join('')
 
-const svg = `<svg class="iso-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" role="group" aria-label="CGArtLab：一台控制台，面板上有七个栏目按键，当前展示的装置立在升降台上。">
+const svg = `<svg class="iso-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" role="group" aria-label="CGArtLab：一台控制台，面板上有五个栏目按键，当前展示的装置立在升降台上。">
 ${chassisDefs(P)}
-${buildChassis(P, { labels, labelSize: currentLang === 'zh' ? 9 : 7 })}
+${buildChassis(P, { labels, labelSize: currentLang === 'zh' ? 9 : 8 })}
 ${modules}
 ${buildChannelLinks(P, { labels, hrefs, active: 0 })}
 </svg>`
-
-const typedLines = (() => {
-  const chars = [...latest]
-  const perLine = 15
-  const lines: string[] = []
-  for (let i = 0; i < chars.length && lines.length < 3; i += perLine) {
-    lines.push(chars.slice(i, i + perLine).join(''))
-  }
-  if (chars.length > perLine * 3) {
-    const last = lines[2]
-    lines[2] = `${[...last].slice(0, perLine - 1).join('')}…`
-  }
-  return lines
-})()
 
 const isDefault = currentLang === defaultLocale
 ---
@@ -156,6 +178,8 @@ const isDefault = currentLang === defaultLocale
   data-home-stage
   data-typed={JSON.stringify(typedLines)}
   data-lang={currentLang}
+  data-viewbox={`${W} ${H}`}
+  data-pivot={`${pivotX.toFixed(2)} ${pivotY.toFixed(2)}`}
   data-is-default={isDefault ? '' : undefined}
 >
   <Fragment set:html={svg} />
