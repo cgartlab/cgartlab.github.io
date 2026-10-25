@@ -396,7 +396,12 @@ html.reduce-motion .home-stage .iso-svg {
 /* the key of the machine that is on the platform breathes */
 @keyframes key-breathe {
   0%, 100% { fill: var(--anatomy-top); }
-  50% { fill: color-mix(in oklch, var(--anatomy-top) 42%, oklch(var(--un-preset-theme-colors-highlight)) 58%); }
+  50% { fill: color-mix(in oklch, var(--anatomy-top) 34%, oklch(var(--un-preset-theme-colors-highlight)) 66%); }
+}
+
+@keyframes key-edge-breathe {
+  0%, 100% { stroke-width: 0.7px; stroke-opacity: 0.3; }
+  50% { stroke-width: 2.4px; stroke-opacity: 1; }
 }
 
 .home-stage .home-keycap.is-active .iso-fill {
@@ -404,6 +409,7 @@ html.reduce-motion .home-stage .iso-svg {
 }
 .home-stage .home-keycap.is-active .iso-edge {
   stroke: var(--anatomy-lit);
+  animation: key-edge-breathe 2s ease-in-out infinite;
 }
 .home-stage .home-card .iso-fill { fill: var(--anatomy-top); }
 
@@ -422,3 +428,17 @@ html.reduce-motion .home-keycap.is-active .iso-fill { animation: none; }
 .home-stage .home-proj-body .iso-fill { fill: var(--anatomy-shade-1); }
 .home-stage .home-proj-body .iso-shade { fill: var(--anatomy-shade-1); }
 .home-stage .home-proj-body .iso-top { fill: var(--anatomy-shade-2); }
+
+.home-stage .home-issue-sheet { fill: var(--home-paper); stroke: none; }
+.home-stage .home-issue-mast { fill: var(--anatomy-shade-0); }
+.home-stage .home-issue-cover {
+  fill: var(--anatomy-shade-2);
+  transition: fill 220ms ease;
+}
+.home-stage .home-issue:hover .home-issue-cover,
+.home-stage .home-issue:focus-visible .home-issue-cover {
+  fill: color-mix(in oklch, oklch(var(--un-preset-theme-colors-highlight)) 58%, oklch(var(--un-preset-theme-colors-background)) 42%);
+}
+.home-stage .home-issue { outline: none; }
+
+.home-stage .home-issue-number text { fill: var(--anatomy-top); }

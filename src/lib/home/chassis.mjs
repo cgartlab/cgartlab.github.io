@@ -8,7 +8,7 @@ import { tubePieces, tubeSvg } from '../anatomy/tube.mjs'
  */
 
 export const TOP = 74
-export const CABINET = { x: -155, y: -90, w: 310, d: 180, r: 6 }
+export const CABINET = { x: -155, y: -90, w: 310, d: 180, r: 7 }
 export const HATCH = { x: -96, y: -44, w: 192, d: 88, r: 4 }
 export const PLATFORM = k.insetPlan(HATCH, 4)
 export const PLATFORM_Z = TOP - 5
@@ -78,7 +78,7 @@ export function buildChassis(P, options = {}) {
 
   // power cable, leaving the back so it never crosses the panel
   const route = G.fillet(
-    [[96, -86, 30], [96, -110, 10], [124, -126, -12], [156, -112, -16]],
+    [[-60, -84, 34], [-72, -108, 12], [-92, -124, -12], [-118, -110, -18]],
     14,
     { P, tube: 3 },
   )
@@ -87,11 +87,10 @@ export function buildChassis(P, options = {}) {
   }
 
   // body: a shallow chamfer at the bottom, then the main shell
-  out.push(k.solidSvg(k.slabOf(BODY, 0, 6, P, 10, 1.4), { tone: 'lo', className: 'home-plinth' }))
-  out.push(k.solidSvg(k.slabOf(BODY, 6, TOP - 12, P, 10, 1), { tone: 'hi' }))
-  out.push(k.solidSvg(k.slabOf(CABINET, TOP - 6, 6, P, 12, 1.4), { tone: 'hi', className: 'home-top-plate' }))
-  // seam between the shell and the top plate
-  out.push(k.lineSvg(k.sideSeam(BODY, TOP - 6, P, 10), { tone: 'faint' }))
+  // one silhouette: a single body with a chamfered bottom edge and a seam
+  // where the lid would part. Stacking plinth + body + lid drew three
+  // outlines that crossed at the corners.
+  out.push(k.solidSvg(k.slabOf(BODY, 0, TOP, P, 12, 1.2), { tone: 'lo' }))
 
   // the well, seen edge-on from this camera
   const ring = k.ringOf(HATCH, 12).map(([x, y]) => k.iso([x, y, TOP], P))
@@ -106,7 +105,6 @@ export function buildChassis(P, options = {}) {
   out.push(k.solidSvg(k.slabOf(PLATFORM, TOP - 4, 4, P, 8, 0.6), { tone: 'hi' }))
 
   // deck detailing
-  out.push(k.lineSvg(k.planOutline(k.insetPlan(CABINET, 7), TOP, P, 12), { tone: 'faint' }))
   for (const [x, y] of k.corners(k.insetPlan(CABINET, 14))) {
     out.push(k.dotsSvg([k.iso([x, y, TOP], P)], { size: 1.1, tone: 'mid' }))
     out.push(k.lineSvg(k.ring(x, y, 2.1, TOP, P, 16), { tone: 'faint' }))
@@ -119,18 +117,18 @@ export function buildChassis(P, options = {}) {
 
   // ---- front panel ------------------------------------------------------
   // recessed plate
-  out.push(k.solidSvg(k.slabOf({ x: -143, y: FRONT - 1.6, w: 286, d: 2.4, r: 2 }, PANEL_Z0, PANEL_Z1 - PANEL_Z0, P, 4, 0.6), { tone: 'mid', className: 'home-panel-plate' }))
-  out.push(k.lineSvg(k.planOutline(k.insetPlan({ x: -143, y: FRONT - 1.6, w: 286, d: 2.4, r: 2 }, 3), PANEL_Z1, P, 4), { tone: 'faint' }))
-  out.push(k.lineSvg(k.planOutline(k.insetPlan({ x: -143, y: FRONT - 1.6, w: 286, d: 2.4, r: 2 }, 3), PANEL_Z0, P, 4), { tone: 'faint' }))
+  out.push(k.solidSvg(k.slabOf({ x: -134, y: FRONT - 1.6, w: 268, d: 2.4, r: 2 }, PANEL_Z0, PANEL_Z1 - PANEL_Z0, P, 4, 0.6), { tone: 'mid', className: 'home-panel-plate' }))
+  out.push(k.lineSvg(k.planOutline(k.insetPlan({ x: -134, y: FRONT - 1.6, w: 268, d: 2.4, r: 2 }, 3), PANEL_Z1, P, 4), { tone: 'faint' }))
+  out.push(k.lineSvg(k.planOutline(k.insetPlan({ x: -134, y: FRONT - 1.6, w: 268, d: 2.4, r: 2 }, 3), PANEL_Z0, P, 4), { tone: 'faint' }))
 
   // title block, engraved straight into the plate
   out.push(k.faceTextSvg(
-    k.sideMatrix([-132, FRONT], 57, P, 'left'),
+    k.sideMatrix([-124, FRONT], 57, P, 'left'),
     'CGARTLAB',
     { size: 5.6, tone: 'hi' },
   ))
   out.push(k.faceTextSvg(
-    k.sideMatrix([-132, FRONT], 50.5, P, 'left'),
+    k.sideMatrix([-124, FRONT], 50.5, P, 'left'),
     'FLOW BENCH · No.1',
     { size: 3.2, tone: 'faint' },
   ))
@@ -154,7 +152,7 @@ export function buildChassis(P, options = {}) {
   // vent grille under the keys
   for (let i = 0; i < 9; i++) {
     const z = 13 + i * 1.6
-    out.push(k.lineSvg(k.segment([-132, FRONT + 0.3, z], [132, FRONT + 0.3, z], P), { tone: 'lo' }))
+    out.push(k.lineSvg(k.segment([-124, FRONT + 0.3, z], [124, FRONT + 0.3, z], P), { tone: 'lo' }))
   }
 
   // power switch and fuse holder, right of the title block
@@ -165,7 +163,7 @@ export function buildChassis(P, options = {}) {
   out.push(k.lineSvg(G.circleOf(fuse, 1.6, 1.6, P), { tone: 'faint' }))
 
   // corner screws
-  for (const [x, z] of [[-136, 12], [136, 12], [-136, 62], [136, 62]]) {
+  for (const [x, z] of [[-127, 12], [127, 12], [-127, 62], [127, 62]]) {
     out.push(faceScrew(x, z, P))
   }
 

@@ -4,7 +4,7 @@ import { fileURLToPath } from 'node:url'
 import * as k from '../../src/lib/anatomy/iso-kit.mjs'
 import { buildChassis, CABINET, chassisDefs, PLATFORM_Z, TOP } from '../../src/lib/home/chassis.mjs'
 import { buildPlaceholder, placeholderBounds } from '../../src/lib/home/placeholder.mjs'
-import { buildProjector, projectorBounds } from '../../src/lib/home/projector.mjs'
+import { buildNewsrack, newsrackBounds } from '../../src/lib/home/newsrack.mjs'
 import { buildTypewriter, typewriterBounds } from '../../src/lib/home/typewriter.mjs'
 
 const HERE = dirname(fileURLToPath(import.meta.url))
@@ -20,9 +20,15 @@ const bounds = [
   ...k.boxCorners(CABINET, -22, TOP),
   ...typewriterBounds(),
   ...placeholderBounds(),
-  ...projectorBounds(),
+  ...newsrackBounds(),
 ]
 const P = k.fitProjection(bounds, W, H, { pad: 30, azimuth: 88, elevation: 18, focal: 1200, center: [0, 0, 55] })
+
+const ISSUES = ['16', '15', '14', '13', '12', '11'].map((n, i) => ({
+  number: `No.${n}`,
+  label: `No.${n}`,
+  href: '#',
+}))
 
 const activeArg = process.argv.find((a) => a.startsWith('--module='))
 const active = activeArg ? Number(activeArg.slice(9)) : 0
@@ -31,7 +37,7 @@ const modules = LABELS.map((label, index) => {
   const body = index === 0
     ? buildTypewriter(P, { title: '慢一点比较快：当执行变得廉价，判断力才是稀缺物' })
     : index === 2
-      ? buildProjector(P, { caption: label, issue: 'No.16' })
+      ? buildNewsrack(P, { issues: ISSUES })
       : buildPlaceholder(P, { letter: LETTERS[index], caption: label, index })
   return `<g class="home-module${index === active ? ' is-active' : ''}" data-index="${index}">${body}</g>`
 }).join('')
