@@ -1,5 +1,7 @@
 // @ts-nocheck
-// Vendored from the "anatomy" skill kit (MIT, see LICENSE). Do not edit; regenerate from the skill.
+// Vendored from the anatomy skill kit (MIT, see LICENSE).
+// Local patch: iso() and fitProjection() take `focal` + `center` and apply a
+// true perspective divide, so the figure can be drawn with a real lens.
 export const AZIMUTH = 45;
 export const ELEVATION = 30;
 export const SHADES = 4;
@@ -13,7 +15,22 @@ export function cameraOf({ scale, azimuth = AZIMUTH, elevation = ELEVATION }) {
 export function iso([x, y, z], projection) {
     const { origin } = projection;
     const { sinA, cosA, sinE, cosE, k } = cameraOf(projection);
-    return [origin[0] + (x * sinA - y * cosA) * k, origin[1] + ((x * cosA + y * sinA) * sinE - z * cosE) * k];
+    const px = x * sinA - y * cosA;
+    const py = (x * cosA + y * sinA) * sinE - z * cosE;
+    const focal = projection.focal || 0;
+    if (!focal)
+        return [origin[0] + px * k, origin[1] + py * k];
+    // true perspective: divide the view-space offsets by the distance to the
+    // camera. The centre is the point the camera looks at, so it stays fixed.
+    const c = projection.center || [0, 0, 0];
+    const vx = cosA * cosE;
+    const vy = sinA * cosE;
+    const vz = sinE;
+    const depth = (x - c[0]) * vx + (y - c[1]) * vy + (z - c[2]) * vz;
+    const f = focal / (focal - depth);
+    const ox = c[0] * sinA - c[1] * cosA;
+    const oy = (c[0] * cosA + c[1] * sinA) * sinE - c[2] * cosE;
+    return [origin[0] + (ox + (px - ox) * f) * k, origin[1] + (oy + (py - oy) * f) * k];
 }
 export function towardViewer(projection) {
     const { sinA, cosA } = cameraOf(projection);
@@ -392,8 +409,8 @@ export function screenRise(height, projection) {
     const { cosE, k } = cameraOf(projection);
     return height * cosE * k;
 }
-export function fitProjection(points, width, height, { pad = 24, headroom = 0, azimuth = AZIMUTH, elevation = ELEVATION } = {}) {
-    const unit = { origin: [0, 0], scale: 1, azimuth, elevation };
+export function fitProjection(points, width, height, { pad = 24, headroom = 0, azimuth = AZIMUTH, elevation = ELEVATION, focal = 0, center = /** @type {number[]} */ ([0, 0, 0]) } = {}) {
+    const unit = { origin: [0, 0], scale: 1, azimuth, elevation, focal, center };
     const flat = points.map((point) => iso(point, unit));
     const xs = flat.map(([x]) => x);
     const ys = flat.map(([, y]) => y);
@@ -407,6 +424,8 @@ export function fitProjection(points, width, height, { pad = 24, headroom = 0, a
         scale,
         azimuth,
         elevation,
+        focal,
+        center,
     };
 }
 const escape = (text) => text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");

@@ -36,6 +36,10 @@ interface State {
   cy: number
   idle: boolean
   idleSince: number
+  modules: SVGGElement[]
+  caps: SVGGElement[]
+  channels: SVGAElement[]
+  active: number
   cleanup: () => void
 }
 
@@ -148,6 +152,24 @@ function goIdle(s: State): void {
   nudgeTilt(s)
 }
 
+
+/** Which machine is on the platform. Hovering a key swaps it. */
+function setModule(s: State, index: number): void {
+  if (index === s.active)
+    return
+  s.active = index
+  for (const m of s.modules)
+    m.classList.toggle('is-active', Number(m.dataset.index) === index)
+  for (const c of s.caps)
+    c.classList.toggle('is-active', Number(c.dataset.index) === index)
+  for (const a of s.channels) {
+    if (Number(a.dataset.index) === index)
+      a.setAttribute('aria-current', 'page')
+    else
+      a.removeAttribute('aria-current')
+  }
+}
+
 function mount(): void {
   const stage = document.querySelector<HTMLElement>(STAGE)
   if (!stage)
@@ -167,6 +189,9 @@ function mount(): void {
     lines = []
   }
 
+  const modules = [...svg.querySelectorAll<SVGGElement>('.home-module')]
+  const caps = [...svg.querySelectorAll<SVGGElement>('.home-keycap')]
+  const channels = [...svg.querySelectorAll<SVGAElement>('.home-channel')]
   const textEls = [...svg.querySelectorAll<SVGTextElement>('.home-typed-line')]
   const keys = new Map<string, SVGGElement>()
   for (const key of svg.querySelectorAll<SVGGElement>('.home-key')) {
@@ -192,8 +217,14 @@ function mount(): void {
     cy: 0,
     idle: false,
     idleSince: 0,
+    modules,
+    caps,
+    channels,
+    active: -1,
     cleanup: () => {},
   }
+
+  setModule(s, 0)
 
   if (prefersReducedMotion())
     return
@@ -242,6 +273,23 @@ function mount(): void {
     scheduleResume(s)
   }
 
+  const onOver = (event: Event) => {
+    const target = event.target instanceof Element ? event.target : null
+    const link = target?.closest('.home-channel')
+    if (!link)
+      return
+    setModule(s, Number(link.getAttribute('data-index')))
+  }
+
+  const onOut = () => setModule(s, 0)
+
+  const onFocus = (event: Event) => {
+    const target = event.target instanceof Element ? event.target : null
+    const link = target?.closest('.home-channel')
+    if (link)
+      setModule(s, Number(link.getAttribute('data-index')))
+  }
+
   const onVisibility = () => {
     if (document.hidden) {
       stopTour(s)
@@ -257,6 +305,9 @@ function mount(): void {
   stage.addEventListener('pointermove', onPointerMove, { passive: true })
   stage.addEventListener('pointerleave', onPointerLeave, { passive: true })
   stage.addEventListener('pointerdown', onPointerDown, { passive: true })
+  stage.addEventListener('pointerover', onOver, { passive: true })
+  stage.addEventListener('pointerleave', onOut, { passive: true })
+  stage.addEventListener('focusin', onFocus)
   document.addEventListener('visibilitychange', onVisibility)
 
   s.cleanup = () => {
@@ -264,6 +315,9 @@ function mount(): void {
     stage.removeEventListener('pointermove', onPointerMove)
     stage.removeEventListener('pointerleave', onPointerLeave)
     stage.removeEventListener('pointerdown', onPointerDown)
+    stage.removeEventListener('pointerover', onOver)
+    stage.removeEventListener('pointerleave', onOut)
+    stage.removeEventListener('focusin', onFocus)
     document.removeEventListener('visibilitychange', onVisibility)
     if (s.tiltRaf)
       window.cancelAnimationFrame(s.tiltRaf)

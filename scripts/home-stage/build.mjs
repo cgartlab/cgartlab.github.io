@@ -11,6 +11,7 @@ import {
   TOP,
 } from '../../src/lib/home/chassis.mjs'
 import { buildTypewriter, typewriterBounds } from '../../src/lib/home/typewriter.mjs'
+import { buildPlaceholder, placeholderBounds } from '../../src/lib/home/placeholder.mjs'
 
 const HERE = dirname(fileURLToPath(import.meta.url))
 const ROOT = join(HERE, '..', '..')
@@ -23,8 +24,9 @@ const LABELS = ['文章', '作品', '专栏', '资源', '标签', '关于', '搜
 const bounds = [
   ...k.boxCorners(CABINET, -22, TOP),
   ...typewriterBounds(),
+  ...placeholderBounds(),
 ]
-const P = k.fitProjection(bounds, W, H, { pad: 30, azimuth: 88, elevation: 18 })
+const P = k.fitProjection(bounds, W, H, { pad: 30, azimuth: 88, elevation: 18, focal: 1200, center: [0, 0, 55] })
 
 const moduleGroup = `<g class="home-module" data-module="posts">${buildTypewriter(P, { title: '慢一点比较快：当执行变得廉价，判断力才是稀缺物' })}</g>`
 

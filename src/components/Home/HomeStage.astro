@@ -8,11 +8,11 @@ import * as k from '@/lib/anatomy/iso-kit.mjs'
 import {
   buildChassis,
   buildChannelLinks,
-  buildChannelOverlay,
   CABINET,
   chassisDefs,
   TOP,
 } from '@/lib/home/chassis.mjs'
+import { buildPlaceholder, placeholderBounds } from '@/lib/home/placeholder.mjs'
 import { buildTypewriter, typewriterBounds } from '@/lib/home/typewriter.mjs'
 import { getRegularPosts } from '@/utils/content'
 
@@ -22,7 +22,7 @@ interface Props {
 }
 
 const currentLang = Astro.props.lang ?? getLangFromLocale(Astro.currentLocale)
-const t = ui[currentLang]
+const t = ui[currentLang as keyof typeof ui] ?? ui.zh
 
 const posts = await getRegularPosts(currentLang)
 const latest = Astro.props.latestTitle ?? posts[0]?.data.title ?? t.subtitle
@@ -30,26 +30,50 @@ const latest = Astro.props.latestTitle ?? posts[0]?.data.title ?? t.subtitle
 const labels = currentLang === 'zh'
   ? [t.posts, t.works, t.column, t.links, t.tags, t.about, t.search]
   : ['Posts', 'Works', 'Column', 'Links', 'Tags', 'About', 'Search']
+
+const letters = currentLang === 'zh'
+  ? ['文', '作', '专', '资', '标', '关', '搜']
+  : ['P', 'W', 'C', 'R', 'T', 'A', 'S']
+
+const ids = ['posts', 'works', 'column', 'resource', 'tags', 'about', 'search']
 const hrefs = ['/posts/', '/works/', '/column/', '/resource/', '/tags/', '/about/', '/search/']
   .map(path => getLocalizedPath(path, currentLang))
 
 const W = 760
 const H = 620
 
-const bounds = [...k.boxCorners(CABINET, -22, TOP), ...typewriterBounds()]
-const P = k.fitProjection(bounds, W, H, { pad: 30, azimuth: 88, elevation: 18 })
+const bounds = [
+  ...k.boxCorners(CABINET, -18, TOP),
+  ...typewriterBounds(),
+  ...placeholderBounds(),
+]
+const P = k.fitProjection(bounds, W, H, {
+  pad: 30,
+  azimuth: 88,
+  elevation: 18,
+  focal: 1200,
+  center: [0, 0, 55],
+})
 
-const moduleSvg = `<g class="home-lift"><g class="home-module" data-module="posts">${buildTypewriter(P, {
-  title: latest,
-  paperHref: posts[0] ? getPostPath(posts[0].data.abbrlink || posts[0].id, currentLang) : getLocalizedPath('/posts/', currentLang),
-  paperLabel: currentLang === 'zh' ? `阅读最新一篇：${latest}` : `Read the latest: ${latest}`,
-})}</g></g>`
+const paperHref = posts[0]
+  ? getPostPath(posts[0].data.abbrlink || posts[0].id, currentLang)
+  : getLocalizedPath('/posts/', currentLang)
 
-const svg = `<svg class="iso-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" role="group" aria-label="CGArtLab：一台铸铁控制台，升降台上是一台复古打字机，纸上打着最新的文章标题。">
+const modules = ids.map((id, index) => {
+  const body = index === 0
+    ? buildTypewriter(P, {
+        title: latest,
+        paperHref,
+        paperLabel: currentLang === 'zh' ? `阅读最新一篇：${latest}` : `Read the latest: ${latest}`,
+      })
+    : buildPlaceholder(P, { letter: letters[index], caption: labels[index], index })
+  return `<g class="home-module${index === 0 ? ' is-active' : ''}" data-index="${index}" data-module="${id}">${body}</g>`
+}).join('')
+
+const svg = `<svg class="iso-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" role="group" aria-label="CGArtLab：一台控制台，面板上有七个栏目按键，当前展示的装置立在升降台上。">
 ${chassisDefs(P)}
 ${buildChassis(P, { labels, labelSize: currentLang === 'zh' ? 9 : 7 })}
-${moduleSvg}
-${buildChannelOverlay(P, { active: 0 })}
+${modules}
 ${buildChannelLinks(P, { labels, hrefs, active: 0 })}
 </svg>`
 

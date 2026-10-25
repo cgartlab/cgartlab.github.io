@@ -141,7 +141,7 @@ export function buildChassis(P, options = {}) {
   for (const plate of PLATES) {
     const cx = plate.x + plate.w / 2
     const plan = { x: plate.x, y: FRONT - 0.6, w: plate.w, d: 1.6, r: 1 }
-    out.push(k.solidSvg(k.slabOf(plan, plate.z, plate.h, P, 4, 0.5), { tone: 'mid', className: 'home-key-cap' }))
+    out.push(`<g class="home-keycap" data-index="${plate.index}">${k.solidSvg(k.slabOf(plan, plate.z, plate.h, P, 4, 0.5), { tone: 'mid', className: 'home-key-cap' })}</g>`)
     out.push(k.lineSvg(k.planOutline(k.insetPlan(plan, 2.4), plate.z + plate.h, P, 4), { tone: 'faint' }))
     const label = labels[plate.index] ?? ''
     if (label) {
@@ -174,25 +174,6 @@ export function buildChassis(P, options = {}) {
   return out.join('')
 }
 
-/** Lamps are emitted after the module so they stay readable. */
-export function buildChannelOverlay(P, { active = 0 } = {}) {
-  const out = []
-  for (const plate of PLATES) {
-    const cx = plate.x + plate.w / 2
-    const lit = plate.index === active
-    const [sx, sy] = k.iso([cx, FRONT + 1.2, plate.z + 15], P)
-    const x = sx.toFixed(1)
-    const y = sy.toFixed(1)
-    out.push(
-      `<g class="home-lamp" style="--i:${plate.index}">`
-      + `<circle class="home-lamp-glow" cx="${x}" cy="${y}" r="${lit ? 5.2 : 4.4}"/>`
-      + `<circle class="home-lamp-dot" cx="${x}" cy="${y}" r="${lit ? 1.7 : 1.3}"/>`
-      + '</g>',
-    )
-  }
-  return out.join('')
-}
-
 /**
  * Real anchors over the channel keys: crawlable, focusable, big enough to hit.
  */
@@ -213,6 +194,6 @@ export function buildChannelLinks(P, options = {}) {
     const label = labels[plate.index] ?? ''
     const href = hrefs[plate.index] ?? '#'
     const current = plate.index === active ? ' aria-current="page"' : ''
-    return `<a class="home-channel" href="${href}" aria-label="${label}"${current}><title>${label}</title><path class="home-channel-hit" d="${d}"/></a>`
+    return `<a class="home-channel" data-index="${plate.index}" href="${href}" aria-label="${label}"${current}><title>${label}</title><path class="home-channel-hit" d="${d}"/></a>`
   }).join('')
 }
