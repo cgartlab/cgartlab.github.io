@@ -13,6 +13,7 @@ import {
   TOP,
 } from '@/lib/home/chassis.mjs'
 import { buildPlaceholder, placeholderBounds } from '@/lib/home/placeholder.mjs'
+import { buildProjector, projectorBounds } from '@/lib/home/projector.mjs'
 import { buildTypewriter, typewriterBounds } from '@/lib/home/typewriter.mjs'
 import { getRegularPosts } from '@/utils/content'
 
@@ -46,6 +47,7 @@ const bounds = [
   ...k.boxCorners(CABINET, -18, TOP),
   ...typewriterBounds(),
   ...placeholderBounds(),
+  ...projectorBounds(),
 ]
 const P = k.fitProjection(bounds, W, H, {
   pad: 30,
@@ -66,7 +68,9 @@ const modules = ids.map((id, index) => {
         paperHref,
         paperLabel: currentLang === 'zh' ? `阅读最新一篇：${latest}` : `Read the latest: ${latest}`,
       })
-    : buildPlaceholder(P, { letter: letters[index], caption: labels[index], index })
+    : index === 2
+      ? buildProjector(P, { caption: labels[index], issue: 'No.16' })
+      : buildPlaceholder(P, { letter: letters[index], caption: labels[index], index })
   return `<g class="home-module${index === 0 ? ' is-active' : ''}" data-index="${index}" data-module="${id}">${body}</g>`
 }).join('')
 

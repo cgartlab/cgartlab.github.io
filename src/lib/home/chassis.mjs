@@ -116,8 +116,6 @@ export function buildChassis(P, options = {}) {
   // model plate, right of the well
   out.push(k.solidSvg(k.slabOf({ x: 100, y: -10, w: 44, d: 20, r: 2 }, TOP, 1, P, 3), { tone: 'mid' }))
   out.push(k.faceTextSvg(k.topMatrix([122, 0], TOP + 1.1, P, 'x'), 'FLOW BENCH No.1', { size: 3.4, tone: 'lo', anchor: 'middle' }))
-  // bright rim around the well
-  out.push(k.lineSvg(k.planOutline(k.insetPlan(HATCH, 1.2), TOP + 0.3, P, 12), { tone: 'hi' }))
 
   // ---- front panel ------------------------------------------------------
   // recessed plate

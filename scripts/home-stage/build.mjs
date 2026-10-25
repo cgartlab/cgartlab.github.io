@@ -2,16 +2,10 @@ import { mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import * as k from '../../src/lib/anatomy/iso-kit.mjs'
-import {
-  buildChassis,
-  buildChannelOverlay,
-  CABINET,
-  chassisDefs,
-  PLATFORM_Z,
-  TOP,
-} from '../../src/lib/home/chassis.mjs'
-import { buildTypewriter, typewriterBounds } from '../../src/lib/home/typewriter.mjs'
+import { buildChassis, CABINET, chassisDefs, PLATFORM_Z, TOP } from '../../src/lib/home/chassis.mjs'
 import { buildPlaceholder, placeholderBounds } from '../../src/lib/home/placeholder.mjs'
+import { buildProjector, projectorBounds } from '../../src/lib/home/projector.mjs'
+import { buildTypewriter, typewriterBounds } from '../../src/lib/home/typewriter.mjs'
 
 const HERE = dirname(fileURLToPath(import.meta.url))
 const ROOT = join(HERE, '..', '..')
@@ -20,26 +14,33 @@ const OUT = join(ROOT, '.temp', 'home-stage')
 const W = 760
 const H = 620
 const LABELS = ['文章', '作品', '专栏', '资源', '标签', '关于', '搜索']
+const LETTERS = ['文', '作', '专', '资', '标', '关', '搜']
 
 const bounds = [
   ...k.boxCorners(CABINET, -22, TOP),
   ...typewriterBounds(),
   ...placeholderBounds(),
+  ...projectorBounds(),
 ]
 const P = k.fitProjection(bounds, W, H, { pad: 30, azimuth: 88, elevation: 18, focal: 1200, center: [0, 0, 55] })
 
-const moduleGroup = `<g class="home-module" data-module="posts">${buildTypewriter(P, { title: '慢一点比较快：当执行变得廉价，判断力才是稀缺物' })}</g>`
+const activeArg = process.argv.find((a) => a.startsWith('--module='))
+const active = activeArg ? Number(activeArg.slice(9)) : 0
+
+const modules = LABELS.map((label, index) => {
+  const body = index === 0
+    ? buildTypewriter(P, { title: '慢一点比较快：当执行变得廉价，判断力才是稀缺物' })
+    : index === 2
+      ? buildProjector(P, { caption: label, issue: 'No.16' })
+      : buildPlaceholder(P, { letter: LETTERS[index], caption: label, index })
+  return `<g class="home-module${index === active ? ' is-active' : ''}" data-index="${index}">${body}</g>`
+}).join('')
 
 const svg = k.figureSvg({
   width: W,
   height: H,
-  label: 'CGArtLab 首页：一台铸铁控制台，升降台上是一台复古打字机，纸上打着最新的文章标题。',
-  body: [
-    chassisDefs(P),
-    buildChassis(P, { labels: LABELS }),
-    moduleGroup,
-    buildChannelOverlay(P, { active: 0 }),
-  ],
+  label: 'CGArtLab 首页机座与装置',
+  body: [chassisDefs(P), buildChassis(P, { labels: LABELS }), modules],
 })
 
 const css = readFileSync(join(ROOT, 'src', 'styles', 'home.css'), 'utf8')
@@ -75,12 +76,13 @@ main.home-stage { position: relative; width: min(760px, 96vw); height: auto; asp
 const theme = process.argv.includes('--light') ? 'light' : 'dark'
 const boxArg = process.argv.find((a) => a.startsWith('--box='))
 const box = boxArg ? boxArg.slice(6).split(',').map(Number) : null
-const tiltArg = process.argv.find((a) => a.startsWith('--tilt='))
-const tilt = tiltArg ? tiltArg.slice(7).split(',').map(Number) : null
-const tiltStyle = tilt ? ` style="--cam-y:${tilt[0]};--cam-x:${tilt[1]}"` : ''
+const camArg = process.argv.find((a) => a.startsWith('--cam='))
+const cam = camArg ? camArg.slice(6).split(',').map(Number) : null
+const camStyle = cam ? ` style="--cam-y:${cam[0]};--cam-x:${cam[1]}"` : ''
 const fitted = box
   ? svg.replace(`viewBox="0 0 ${W} ${H}"`, `viewBox="${box[0]} ${box[1]} ${box[2]} ${box[3]}"`)
   : svg
+
 const html = `<!doctype html>
 <html lang="zh" class="${theme === 'dark' ? 'dark' : ''}">
 <head>
@@ -89,14 +91,9 @@ const html = `<!doctype html>
 <title>home stage — ${theme}</title>
 <style>${SITE_TOKENS}${css}</style>
 </head>
-<body><main class="home-stage"${tiltStyle}>${fitted}</main></body>
+<body><main class="home-stage"${camStyle}>${fitted}</main></body>
 </html>`
-
-const tb = typewriterBounds().map((p) => k.iso(p, P))
-const xs = tb.map((p) => p[0]); const ys = tb.map((p) => p[1])
-const typewriterBox = [Math.floor(Math.min(...xs)) - 14, Math.floor(Math.min(...ys)) - 14, Math.ceil(Math.max(...xs) - Math.min(...xs)) + 28, Math.ceil(Math.max(...ys) - Math.min(...ys)) + 28]
-console.log('typewriterBox', typewriterBox.join(','))
 
 mkdirSync(OUT, { recursive: true })
 writeFileSync(join(OUT, `index-${theme}.html`), html)
-console.log(`wrote index-${theme}.html  (platform z=${PLATFORM_Z})`)
+console.log(`wrote index-${theme}.html  module=${active}  platform z=${PLATFORM_Z}`)

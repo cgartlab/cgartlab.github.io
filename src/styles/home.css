@@ -29,6 +29,7 @@
   --anatomy-halo-opacity: 0.10;
   --home-paper: oklch(var(--un-preset-theme-colors-background));
   --home-ink: oklch(var(--un-preset-theme-colors-highlight));
+  --home-metal: color-mix(in oklch, oklch(var(--un-preset-theme-colors-primary)) 52%, oklch(var(--un-preset-theme-colors-background)) 48%);
 
   /* machine-specific ------------------------------------------------------ */
   --home-cavity: color-mix(in oklch, oklch(var(--un-preset-theme-colors-primary)) 56%, oklch(var(--un-preset-theme-colors-background)) 44%);
@@ -50,6 +51,7 @@
   --anatomy-shade-3: color-mix(in oklch, oklch(var(--un-preset-theme-colors-background)) 84%, oklch(var(--un-preset-theme-colors-primary)) 16%);
   --home-paper: color-mix(in oklch, oklch(var(--un-preset-theme-colors-primary)) 62%, oklch(var(--un-preset-theme-colors-background)) 38%);
   --home-ink: color-mix(in oklch, oklch(var(--un-preset-theme-colors-highlight)) 48%, oklch(var(--un-preset-theme-colors-background)) 52%);
+  --home-metal: color-mix(in oklch, oklch(var(--un-preset-theme-colors-primary)) 26%, oklch(var(--un-preset-theme-colors-background)) 74%);
 
   --anatomy-lit-top: color-mix(in oklch, oklch(var(--un-preset-theme-colors-highlight)) 70%, oklch(var(--un-preset-theme-colors-background)) 30%);
   --anatomy-lit-shade: color-mix(in oklch, oklch(var(--un-preset-theme-colors-highlight)) 52%, oklch(var(--un-preset-theme-colors-primary)) 48%);
@@ -372,6 +374,7 @@ html.reduce-motion .home-stage .iso-svg {
 @media (prefers-reduced-motion: reduce) {
 }
 
+.home-stage .home-panel-plate .iso-fill { fill: var(--anatomy-shade-2); }
 .home-stage .home-panel-plate .iso-shade { fill: var(--anatomy-shade-1); }
 .home-stage .home-key-cap .iso-fill { fill: var(--anatomy-top); }
 .home-stage .home-key-cap .iso-shade { fill: var(--anatomy-shade-3); }
@@ -393,11 +396,11 @@ html.reduce-motion .home-stage .iso-svg {
 /* the key of the machine that is on the platform breathes */
 @keyframes key-breathe {
   0%, 100% { fill: var(--anatomy-top); }
-  50% { fill: color-mix(in oklch, var(--anatomy-top) 70%, oklch(var(--un-preset-theme-colors-highlight)) 30%); }
+  50% { fill: color-mix(in oklch, var(--anatomy-top) 42%, oklch(var(--un-preset-theme-colors-highlight)) 58%); }
 }
 
 .home-stage .home-keycap.is-active .iso-fill {
-  animation: key-breathe 3.8s ease-in-out infinite;
+  animation: key-breathe 2s ease-in-out infinite;
 }
 .home-stage .home-keycap.is-active .iso-edge {
   stroke: var(--anatomy-lit);
@@ -409,3 +412,13 @@ html.reduce-motion .home-keycap.is-active .iso-fill { animation: none; }
 @media (prefers-reduced-motion: reduce) {
   .home-keycap.is-active .iso-fill { animation: none; }
 }
+
+
+/* projector: a lathe disc seen face-on paints its cap with the paper tone,
+   so the reels need their own ink or they disappear */
+.home-stage .home-reel .iso-fill { fill: var(--home-metal); }
+.home-stage .home-reel .iso-shade { fill: var(--home-metal); }
+.home-stage .home-reel .iso-top { fill: var(--home-metal); }
+.home-stage .home-proj-body .iso-fill { fill: var(--anatomy-shade-1); }
+.home-stage .home-proj-body .iso-shade { fill: var(--anatomy-shade-1); }
+.home-stage .home-proj-body .iso-top { fill: var(--anatomy-shade-2); }

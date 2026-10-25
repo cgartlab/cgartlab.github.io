@@ -100,22 +100,6 @@ export function buildTypewriter(P, options = {}) {
   // type basket guard, seated on the deck
   out.push(k.solidSvg(k.slabOf({ x: -52, y: -8, w: 104, d: 10, r: 5 }, DECK_TOP + 16, 6, P, 5, 1), { tone: 'mid' }))
 
-  // typebars, fanning up from the basket to the platen
-  for (let i = 0; i < 9; i++) {
-    const t = (i / 8) * 2 - 1
-    out.push(k.lineSvg(k.segment([t * 34, -2, BASE_Z + 26], [t * 16, -13, BASE_Z + 33], P), { tone: 'mid' }))
-    out.push(k.dotsSvg([k.iso([t * 16, -13, BASE_Z + 33], P)], { size: 0.6, tone: 'hi' }))
-  }
-
-  // ribbon spools, standing on the deck, with the ribbon riding their tops
-  for (const sx of [-54, 54]) {
-    out.push(k.solidSvg(k.cylinder(sx, -4, 7, DECK_TOP + 16, 5, P, 22), { tone: 'mid' }))
-    out.push(k.solidSvg(k.cylinder(sx, -4, 9, DECK_TOP + 15, 1.6, P, 24), { tone: 'lo' }))
-    out.push(k.solidSvg(k.cylinder(sx, -4, 4, DECK_TOP + 21, 1.4, P, 16), { tone: 'lo' }))
-  }
-  out.push(k.lineSvg(k.segment([-50, -6, DECK_TOP + 22.2], [-6, -10, DECK_TOP + 22.2], P), { tone: 'mid' }))
-  out.push(k.lineSvg(k.segment([6, -10, DECK_TOP + 22.2], [50, -6, DECK_TOP + 22.2], P), { tone: 'mid' }))
-
   // carriage rails, lying on the deck
   out.push(k.lineSvg(k.segment([-70, -32, DECK_TOP + 16.3], [70, -32, DECK_TOP + 16.3], P), { tone: 'mid' }))
   out.push(k.lineSvg(k.segment([-70, -16, DECK_TOP + 16.3], [70, -16, DECK_TOP + 16.3], P), { tone: 'mid' }))
@@ -160,6 +144,22 @@ export function buildTypewriter(P, options = {}) {
     Array.from({ length: 2 }, (_, i) => G.arcOf(platenFrame, i ? PLATEN.half : -PLATEN.half, PLATEN.r, P, { steps: 28 })).join(''),
     { tone: 'faint' },
   ))
+  // ribbon spools, standing on the deck, with the ribbon riding their tops
+  for (const sx of [-54, 54]) {
+    out.push(k.solidSvg(k.cylinder(sx, -4, 7, DECK_TOP + 16, 5, P, 22), { tone: 'mid' }))
+    out.push(k.solidSvg(k.cylinder(sx, -4, 9, DECK_TOP + 15, 1.6, P, 24), { tone: 'lo' }))
+    out.push(k.solidSvg(k.cylinder(sx, -4, 4, DECK_TOP + 21, 1.4, P, 16), { tone: 'lo' }))
+  }
+
+  // typebars and ribbon sit in front of the roller, so they paint over it
+  for (let i = 0; i < 9; i++) {
+    const t = (i / 8) * 2 - 1
+    out.push(k.lineSvg(k.segment([t * 34, -2, BASE_Z + 26], [t * 16, -12, BASE_Z + 33], P), { tone: 'mid' }))
+    out.push(k.dotsSvg([k.iso([t * 16, -12, BASE_Z + 33], P)], { size: 0.6, tone: 'hi' }))
+  }
+  out.push(k.lineSvg(k.segment([-50, -6, DECK_TOP + 22.2], [-6, -10, DECK_TOP + 22.2], P), { tone: 'mid' }))
+  out.push(k.lineSvg(k.segment([6, -10, DECK_TOP + 22.2], [50, -6, DECK_TOP + 22.2], P), { tone: 'mid' }))
+
   // carriage return lever, drawn before the knobs so they hide its root
   out.push(k.lineSvg(k.segment([69, -30, BASE_Z + 46], [102, -18, BASE_Z + 60], P), { tone: 'mid' }))
   out.push(k.dotsSvg([k.iso([102, -18, BASE_Z + 60], P)], { size: 2.6, tone: 'mid' }))
