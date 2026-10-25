@@ -6,20 +6,22 @@ import { boxSvg, faceMatrix, facePath, frameOf } from './frame.mjs'
 /**
  * Module 04 — the machined tool case that carries "资源".
  *
- * A thick case lies open on the deck, its lid standing up behind it, tipped
- * fifteen degrees past vertical so the inner face turns toward the camera.
- * Three fitted trays — tools / learning / people — sit in the well, and the
- * tools strapped to the lid face are the ones the trays talk about.
+ * The case is shut when the reader meets it: a latched slab lying on the rim.
+ * Opening it is the whole point — the lid is a real hinged group standing up
+ * behind the body, tipped fifteen degrees past vertical so the inner face
+ * turns toward the camera, with a folding stay holding it there. Three fitted
+ * trays — tools / learning / people — sit in the well, and the tools strapped
+ * to the lid face are the ones the trays talk about.
  *
  * Painter order is the case's own depth: lid and its tools first (furthest),
- * then the hinge, the body, the far wall, the well floor, the trays, and the
- * near wall last — so it hides the near half of the interior as it would in a
- * photograph, and the trays are read over its rim.
+ * then the hinge, the body, the far wall, the well floor, the trays, the near
+ * wall, the stay — and the shut lid last of all, so it covers the whole
+ * interior while the case is closed.
  */
 
 const SHELL = { x: -84, y: -37, w: 168, d: 74, r: 6 }
-const WALL = 5, BASE_H = 23, LID_H = 70
-const FLOOR_Z = TOP + BASE_H, RIM_Z = TOP + 30, HINGE_Z = TOP + 27
+const WALL = 5, BASE_H = 23, LID_H = 70, LID_TH = 7
+const FLOOR_Z = TOP + BASE_H, RIM_Z = TOP + 30, HINGE_Z = TOP + 27, LID_TOP = RIM_Z + LID_TH
 const BACK = SHELL.y, FRONT = SHELL.y + SHELL.d
 const LID = frameOf({ pitch: 105, origin: [0, BACK, HINGE_Z] })
 const IN = { x0: -79, y0: -32, x1: 79, y1: 32 }
@@ -35,6 +37,8 @@ const paint = (d, shade, tone = 'faint') => `<path class="iso-shade" data-shade=
 const faceQuad = (pts, P, shade, tone) => paint(k.pathOf(pts.map((p) => k.iso(p, P)), true), shade, tone)
 const topRect = (x0, y0, x1, y1, z, P, shade, tone) => faceQuad([[x0, y0, z], [x1, y0, z], [x1, y1, z], [x0, y1, z]], P, shade, tone)
 const frontRect = (x0, z0, x1, z1, y, P, shade, tone) => faceQuad([[x0, y, z0], [x1, y, z0], [x1, y, z1], [x0, y, z1]], P, shade, tone)
+/** A rounded plan filled in one shade, lying at height z. */
+const topPlan = (plan, z, P, shade, tone) => paint(k.pathOf(k.ringOf(plan, 5).map(([x, y]) => k.iso([x, y, z], P)), true), shade, tone)
 
 // ---- the lid ------------------------------------------------------------
 
@@ -80,6 +84,89 @@ function lidSvg(P) {
   // stencil in the empty corner of the panel
   out.push(k.faceTextSvg(faceMatrix(LID, [8, 13, -2.9], [1, 0, 0], [0, -1, 0], P), 'FIELD KIT · 04', { size: 3.6, tone: 'lo' }))
   out.push('</g></g>')
+  return out.join('')
+}
+
+// ---- the shut lid -------------------------------------------------------
+//
+// The case the reader first meets is shut. This is the lid as it reads then:
+// 168 × 74 lying flat on the rim, a seam down its length, two hasps clasping
+// the shell's latch plate and a carry handle folded onto the top. It hands
+// over to the hinged lid in the first 90 ms of the reveal, so the case really
+// does open instead of fading in.
+
+const HASPS = [-8.8, 3.4]
+const HASP_W = 5.4
+
+/** One hasp: a tongue off the lid's front edge, dropping over the latch plate. */
+function haspSvg(x, P) {
+  const plan = { x, y: FRONT - 0.2, w: HASP_W, d: 2.4, r: 0.8 }
+  const out = [solid(plan, RIM_Z - 3.4, LID_TH + 3.6, P, 'mid', 4, 0.5)]
+  out.push(k.lineSvg(k.planOutline(k.insetPlan(plan, 0.9), LID_TOP + 0.35, P, 4), { tone: 'faint' }))
+  // the rivet that holds the tongue to the lid
+  out.push(k.lineSvg(G.circleOf(G.frameAlong([x + HASP_W / 2, FRONT + 2.25, RIM_Z + 3.4], [0, 1, 0]), 0, 1.1, P), { tone: 'faint' }))
+  return out.join('')
+}
+
+function closedLidSvg(P) {
+  const out = ['<g class="home-case-closed">']
+  // the slab: full footprint of the case, sitting exactly on the rim
+  out.push(solid(SHELL, RIM_Z, LID_TH, P, 'mid', 6, 1.2))
+  // a pressed panel across the back of the top, so it is not a blank face
+  out.push(topPlan({ x: -75, y: -31, w: 150, d: 40, r: 5 }, LID_TOP + 0.05, P, 2, 'faint'))
+  // the seam, down the length of the lid: a groove with a lit lip behind it
+  out.push(topRect(-82.5, 19.4, 82.5, 24.2, LID_TOP + 0.06, P, 0, 'faint'))
+  out.push(k.lineSvg(k.lineOnTop([-82.5, 19.1], [82.5, 19.1], LID_TOP + 0.1, P), { tone: 'hi' }))
+  // the carry handle, folded down onto the top: two posts, a grip between them
+  for (const x of [-27, 21.4]) out.push(solid({ x, y: 2.8, w: 5.6, d: 4.2, r: 1.2 }, LID_TOP, 4.2, P, 'mid', 4, 0.4))
+  out.push(solid({ x: -23.6, y: 3.4, w: 47.2, d: 3, r: 1.5 }, LID_TOP + 4.2, 3.8, P, 'hi', 6, 0.8))
+  // two screws at the front corners of the lid
+  for (const x of [-76, 76]) out.push(k.lineSvg(k.ring(x, 28, 1.6, LID_TOP + 0.1, P, 16), { tone: 'faint' }))
+  // the hasps last, so they read as clasping over the lid's front edge
+  for (const x of HASPS) out.push(haspSvg(x, P))
+  out.push('</g>')
+  return out.join('')
+}
+
+// ---- the stay ------------------------------------------------------------
+//
+// A folding arm from the back rim up to a bracket on the lid's inner face, so
+// the lid reads as held open rather than floating. Two things decide its
+// geometry. It has to stand proud of the face, because the lid leans fifteen
+// degrees back and anything bolted flush to it would be swallowed by it. And
+// it has to fold in x, because the camera looks straight down the y axis, so a
+// knee in the y–z plane would project to a straight vertical line.
+
+const STAY_U = 79.5
+const STAY_FOOT = [76.5, -33, RIM_Z + 2.4]
+const STAY_ELBOW = [82.2, -33.4, RIM_Z + 16.5]
+const STAY_HEAD = [STAY_U, -42.8, RIM_Z + 32.3]
+
+/** A thin bar between two points, as a prism with a flat rectangular section. */
+function stayBar(from, to, P) {
+  const axis = [to[0] - from[0], to[1] - from[1], to[2] - from[2]]
+  const [halfW, halfT] = [1.7, 0.75]
+  const section = [[-halfT, -halfW], [halfT, -halfW], [halfT, halfW], [-halfT, halfW]]
+  return k.solidSvg(G.prismOf(G.frameAlong(from, axis), section, 0, Math.hypot(...axis), P), { tone: 'mid' })
+}
+
+/** A pivot pin: a short barrel along `axis`, protruding toward the camera. */
+function pinSvg(at, r, len, axis, P) {
+  return k.solidSvg(G.disc(0, len, r, G.frameAlong(at, axis), P), { tone: 'lo' })
+}
+
+function staySvg(P) {
+  const out = ['<g class="home-case-prop">']
+  // the foot: a bracket bolted to the back rim, with its hinge barrel
+  out.push(solid({ x: STAY_FOOT[0] - 3.1, y: BACK + 0.6, w: 6.2, d: 4.2, r: 1.2 }, RIM_Z, 2.6, P, 'mid', 4, 0.4))
+  out.push(pinSvg([STAY_FOOT[0] - 2.6, STAY_FOOT[1], STAY_FOOT[2]], 1.5, 5.2, [1, 0, 0], P))
+  out.push(stayBar(STAY_FOOT, STAY_ELBOW, P))
+  out.push(stayBar(STAY_ELBOW, STAY_HEAD, P))
+  // the fold: a rivet through the elbow, facing the reader
+  out.push(pinSvg([STAY_ELBOW[0], STAY_ELBOW[1] + 0.4, STAY_ELBOW[2]], 1.8, 2, [0, 1, 0], P))
+  // the head bracket, bolted to the lid's inner face
+  out.push(boxSvg(LID, { u: 76.2, v: 32, w: -3.8, uw: 6.6, vd: 7.2, wh: 1.5 }, P, { tone: 'mid' }))
+  out.push('</g>')
   return out.join('')
 }
 
@@ -176,6 +263,11 @@ export function buildToolbox(P, options = {}) {
   // three engraved nameplates, one per tray, each with its label
   TRAY_X.forEach(([a, b]) => out.push(k.lineSvg(k.pathOf([[a + 3, FRONT + 0.2, TOP + 11], [b - 3, FRONT + 0.2, TOP + 11], [b - 3, FRONT + 0.2, TOP + 19], [a + 3, FRONT + 0.2, TOP + 19]].map((p) => k.iso(p, P)), true), { tone: 'faint' })))
   TRAY_MID.forEach((x, i) => labels[i] && out.push(k.faceTextSvg(k.sideMatrix([x, FRONT], TOP + 15, P, 'left'), labels[i], { size: 2.6, tone: 'faint', anchor: 'middle' })))
+
+  // the stay sits in front of the lid's face and on the rim, so it comes after
+  // the body; the shut lid comes last of all and covers the whole interior
+  out.push(staySvg(P))
+  out.push(closedLidSvg(P))
 
   return out.join('')
 }

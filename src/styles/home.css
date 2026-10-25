@@ -1,3 +1,7 @@
+@import './home-devices/cinema.css';
+@import './home-devices/toolbox.css';
+@import './home-devices/labels.css';
+
 /* ==========================================================================
    Home stage — isometric instrument
    Tokens are derived from the site palette; no literal colours except the
@@ -33,8 +37,8 @@
 
   /* machine-specific ------------------------------------------------------ */
   --home-cavity: color-mix(in oklch, oklch(var(--un-preset-theme-colors-primary)) 56%, oklch(var(--un-preset-theme-colors-background)) 44%);
-  --home-brass: color-mix(in oklch, oklch(var(--un-preset-theme-colors-highlight)) 42%, oklch(var(--un-preset-theme-colors-background)) 58%);
-  --home-brass-deep: color-mix(in oklch, oklch(var(--un-preset-theme-colors-highlight)) 62%, oklch(var(--un-preset-theme-colors-primary)) 38%);
+  --home-brass: color-mix(in oklab, oklch(var(--un-preset-theme-colors-highlight)) 42%, oklch(var(--un-preset-theme-colors-background)) 58%);
+  --home-brass-deep: color-mix(in oklab, oklch(var(--un-preset-theme-colors-highlight)) 62%, oklch(var(--un-preset-theme-colors-primary)) 38%);
 
   --anatomy-weight: 0.6px;
   --anatomy-ease: cubic-bezier(0.32, 0.72, 0, 1);
@@ -50,7 +54,7 @@
   --anatomy-shade-2: color-mix(in oklch, oklch(var(--un-preset-theme-colors-background)) 88%, oklch(var(--un-preset-theme-colors-primary)) 12%);
   --anatomy-shade-3: color-mix(in oklch, oklch(var(--un-preset-theme-colors-background)) 84%, oklch(var(--un-preset-theme-colors-primary)) 16%);
   --home-paper: color-mix(in oklch, oklch(var(--un-preset-theme-colors-primary)) 62%, oklch(var(--un-preset-theme-colors-background)) 38%);
-  --home-ink: color-mix(in oklch, oklch(var(--un-preset-theme-colors-highlight)) 48%, oklch(var(--un-preset-theme-colors-background)) 52%);
+  --home-ink: oklch(var(--un-preset-theme-colors-highlight));
   --home-metal: color-mix(in oklch, oklch(var(--un-preset-theme-colors-primary)) 26%, oklch(var(--un-preset-theme-colors-background)) 74%);
 
   --anatomy-lit-top: color-mix(in oklch, oklch(var(--un-preset-theme-colors-highlight)) 70%, oklch(var(--un-preset-theme-colors-background)) 30%);
@@ -58,8 +62,8 @@
 
   --anatomy-halo-opacity: 0.62;
   --home-cavity: oklch(var(--un-preset-theme-colors-background));
-  --home-brass: color-mix(in oklch, oklch(var(--un-preset-theme-colors-highlight)) 55%, oklch(var(--un-preset-theme-colors-background)) 45%);
-  --home-brass-deep: color-mix(in oklch, oklch(var(--un-preset-theme-colors-highlight)) 75%, oklch(var(--un-preset-theme-colors-primary)) 25%);
+  --home-brass: color-mix(in oklab, oklch(var(--un-preset-theme-colors-highlight)) 55%, oklch(var(--un-preset-theme-colors-background)) 45%);
+  --home-brass-deep: color-mix(in oklab, oklch(var(--un-preset-theme-colors-highlight)) 75%, oklch(var(--un-preset-theme-colors-primary)) 25%);
 }
 
 /* --------------------------------------------------------------------------
@@ -253,8 +257,6 @@
   height: 100%;
   min-width: 0;
   min-height: 0;
-  perspective: 2600px;
-  perspective-origin: 50% 56%;
 }
 
 .home-stage .iso-svg {
@@ -264,9 +266,6 @@
   height: 100%;
   max-width: 100%;
   max-height: 100%;
-  transform: rotateY(calc(var(--cam-y, 0) * 1deg)) rotateX(calc(var(--cam-x, 0) * 1deg));
-  transform-origin: 50% 56%;
-  will-change: transform;
 }
 
 .home-module {
@@ -318,6 +317,8 @@ html.reduce-motion .home-key { animation: none; transition: none; }
 
 .home-stage .iso-svg { max-width: 100%; }
 .home-paper { fill: var(--home-paper); stroke: none; }
+/* at night the sheet is dark stock so the accent ink carries the page */
+.dark .home-stage .home-paper { fill: color-mix(in oklch, oklch(var(--un-preset-theme-colors-primary)) 24%, oklch(var(--un-preset-theme-colors-background)) 76%); }
 .home-main > * { min-width: 0; }
 
 .home-paper-link { outline: none; }
@@ -391,13 +392,16 @@ html.reduce-motion .home-key { animation: none; transition: none; }
   transition: none;
 }
 
-html.reduce-motion .home-stage .iso-svg {
-  transform: none;
-  transition: none;
+/* the sheet feeds up one line at a time — this is what makes it a feed */
+.home-stage .home-typed-block {
+  transition: transform 460ms cubic-bezier(0.33, 0.9, 0.24, 1);
+  will-change: transform;
 }
 
+html.reduce-motion .home-stage .home-typed-block { transition: none; }
+
 @media (prefers-reduced-motion: reduce) {
-  .home-stage .iso-svg { transform: none; transition: none; }
+  .home-stage .home-typed-block { transition: none; }
 }
 
 /* idle behaviour --------------------------------------------------------- */
@@ -491,62 +495,6 @@ html.reduce-motion .home-keycap.is-active .iso-fill { animation: none; }
 
 .home-stage .home-issue-number text { fill: var(--anatomy-top); }
 
-/* ==========================================================================
-   Device details that need paint or motion
-   ========================================================================== */
-
-/* 02 — the film projector ------------------------------------------------ */
-
-.home-stage .home-cine-screen {
-  fill: color-mix(in oklch, oklch(var(--un-preset-theme-colors-background)) 84%, oklch(var(--un-preset-theme-colors-highlight)) 16%);
-  stroke: none;
-}
-.home-stage .home-cine-ink-1 { fill: color-mix(in oklch, oklch(var(--un-preset-theme-colors-primary)) 70%, oklch(var(--un-preset-theme-colors-background)) 30%); stroke: none; }
-.home-stage .home-cine-ink-2 { fill: oklch(var(--un-preset-theme-colors-highlight)); stroke: none; }
-.home-stage .home-cine-ink-3 { fill: color-mix(in oklch, oklch(var(--un-preset-theme-colors-primary)) 50%, oklch(var(--un-preset-theme-colors-background)) 50%); stroke: none; }
-.home-stage .home-cine-beam { fill: oklch(var(--un-preset-theme-colors-highlight)); fill-opacity: 0.24; stroke: none; }
-.home-stage .home-cine-body .iso-fill { fill: color-mix(in oklch, oklch(var(--un-preset-theme-colors-primary)) 38%, oklch(var(--un-preset-theme-colors-background)) 62%); }
-.home-stage .home-cine-body .iso-shade { fill: color-mix(in oklch, oklch(var(--un-preset-theme-colors-primary)) 34%, oklch(var(--un-preset-theme-colors-background)) 66%); }
-.home-stage .home-cine-body .iso-top { fill: color-mix(in oklch, oklch(var(--un-preset-theme-colors-primary)) 28%, oklch(var(--un-preset-theme-colors-background)) 72%); }
-.home-stage .home-cine-reel .iso-fill { fill: color-mix(in oklch, oklch(var(--un-preset-theme-colors-primary)) 50%, oklch(var(--un-preset-theme-colors-background)) 50%); }
-.home-stage .home-cine-reel .iso-shade { fill: color-mix(in oklch, oklch(var(--un-preset-theme-colors-primary)) 44%, oklch(var(--un-preset-theme-colors-background)) 56%); }
-.home-stage .home-cine-reel .iso-top { fill: color-mix(in oklch, oklch(var(--un-preset-theme-colors-primary)) 56%, oklch(var(--un-preset-theme-colors-background)) 44%); }
-
-/* the lens breathes, the picture drifts, the shutter flickers */
-.home-stage .home-cine-glow {
-  transform-box: fill-box;
-  transform-origin: 50% 50%;
-  animation: home-cine-glow 3.4s ease-in-out infinite;
-}
-
-@keyframes home-cine-glow {
-  0%, 100% { opacity: 0.5; transform: scale(1); }
-  50% { opacity: 0.95; transform: scale(1.14); }
-}
-
-.home-stage .home-cine-footage {
-  transform-box: fill-box;
-  transform-origin: 50% 50%;
-  animation:
-    home-cine-drift 15s ease-in-out infinite alternate,
-    home-cine-flicker 7s steps(1, end) infinite;
-}
-
-@keyframes home-cine-drift {
-  from { transform: translate(-1.2px, 0.6px) scale(1.012); }
-  to { transform: translate(1.2px, -0.6px) scale(1.022); }
-}
-
-@keyframes home-cine-flicker {
-  0%, 100% { opacity: 1; }
-  23% { opacity: 0.93; }
-  24% { opacity: 1; }
-  57% { opacity: 0.96; }
-  58% { opacity: 1; }
-  71% { opacity: 0.91; }
-  72% { opacity: 1; }
-}
-
 /* 03 — the newspaper rack: a hanging sheet swings on its clips ------------ */
 
 .home-stage .home-issue-sheet-group {
@@ -559,75 +507,72 @@ html.reduce-motion .home-keycap.is-active .iso-fill { animation: none; }
   transform: rotate(-3.4deg);
 }
 
-/* 04 — the tool case opens when its key is chosen ------------------------ */
-
-.home-stage .home-case-lid {
-  transform-box: fill-box;
-  transform-origin: 50% 100%;
-  transform: scaleY(0.22);
-  transition: transform 760ms cubic-bezier(0.22, 1, 0.36, 1) 60ms;
-}
-.home-stage .home-module.is-active .home-case-lid {
-  transform: scaleY(1);
-}
-.home-stage .home-module.is-active .home-case-tools {
-  animation: home-case-tools 520ms ease-out 520ms both;
-}
-
-@keyframes home-case-tools {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-/* 05 — the label printer spits tags out one at a time --------------------- */
-
-.home-stage .home-ticket {
-  opacity: 0;
-  transform-box: fill-box;
-}
-.home-stage .home-ticket-paper { fill: var(--home-paper); }
-
-.home-stage .home-module.is-active .home-ticket {
-  animation:
-    home-ticket-fly 820ms cubic-bezier(0.22, 1, 0.36, 1) var(--fly-delay, 0ms) both,
-    home-ticket-bob 4.6s ease-in-out calc(var(--fly-delay, 0ms) + 900ms) infinite;
-}
-
-@keyframes home-ticket-fly {
-  from {
-    opacity: 0;
-    transform: translate(var(--fly-x, 0px), var(--fly-y, 0px)) scale(0.9);
-  }
-  55% { opacity: 1; }
-  to {
-    opacity: 1;
-    transform: translate(0px, 0px) scale(1);
-  }
-}
-
-@keyframes home-ticket-bob {
-  0%, 100% { translate: 0 0; }
-  50% { translate: 0 -3.4px; }
-}
-
-/* reduced motion: hold every device in its readable resting state -------- */
-
-html.reduce-motion .home-stage .home-cine-footage,
-html.reduce-motion .home-stage .home-module.is-active .home-ticket,
-html.reduce-motion .home-stage .home-module.is-active .home-case-tools {
-  animation: none;
-}
-html.reduce-motion .home-stage .home-case-lid { transform: none; transition: none; }
-html.reduce-motion .home-stage .home-ticket { opacity: 1; }
 html.reduce-motion .home-stage .home-issue-sheet-group { transition: none; }
-
 @media (prefers-reduced-motion: reduce) {
-  .home-stage .home-cine-footage,
-  .home-stage .home-module.is-active .home-ticket,
-  .home-stage .home-module.is-active .home-case-tools {
-    animation: none;
-  }
-  .home-stage .home-case-lid { transform: none; transition: none; }
-  .home-stage .home-ticket { opacity: 1; }
   .home-stage .home-issue-sheet-group { transition: none; }
+}
+
+/* --------------------------------------------------------------------------
+   The projected reel (02 作品)
+   A fixed layer behind the whole page: the machine throws its picture at the
+   room, not at a screen of its own. It sits outside .home-stage on purpose —
+   .home-stage is a transformed/perspective candidate, which would capture a
+   position:fixed descendant; keeping the layer outside it is the safe choice.
+   -------------------------------------------------------------------------- */
+
+.home-projection {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  overflow: hidden;
+  opacity: 0;
+  transition: opacity 680ms ease;
+  background: oklch(var(--un-preset-theme-colors-background));
+}
+
+html[data-home-section='works'] .home-projection { opacity: 1; }
+
+.home-projection-frame {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: min(76vw, 1180px);
+  aspect-ratio: 16 / 9;
+  transform: translate(-50%, -50%);
+  overflow: hidden;
+  filter: blur(1.2px) saturate(0.92) contrast(1.06);
+  -webkit-mask-image: radial-gradient(closest-side, #000 60%, rgba(0, 0, 0, 0.85) 82%, transparent 100%);
+  mask-image: radial-gradient(closest-side, #000 60%, rgba(0, 0, 0, 0.85) 82%, transparent 100%);
+  opacity: 0.6;
+}
+
+.dark .home-projection-frame { opacity: 0.55; }
+
+.home-projection-frame video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* the throw: a wash of light from the machine's side, and a vignette that
+   makes the picture sit on the page like light on a wall */
+.home-projection-wash {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(58% 62% at 82% 44%, color-mix(in oklch, oklch(var(--un-preset-theme-colors-highlight)) 16%, transparent) 0%, transparent 72%),
+    radial-gradient(120% 100% at 50% 50%, transparent 46%, color-mix(in oklch, oklch(var(--un-preset-theme-colors-background)) 82%, transparent) 100%);
+}
+
+.dark .home-projection-wash {
+  background:
+    radial-gradient(58% 62% at 82% 44%, color-mix(in oklch, oklch(var(--un-preset-theme-colors-highlight)) 26%, transparent) 0%, transparent 72%),
+    radial-gradient(120% 100% at 50% 50%, transparent 40%, oklch(var(--un-preset-theme-colors-background)) 100%);
+}
+
+html.reduce-motion .home-projection { transition: none; }
+@media (prefers-reduced-motion: reduce) {
+  .home-projection { transition: none; }
 }

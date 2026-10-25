@@ -2,31 +2,20 @@
  * Home stage runtime.
  *
  * The machine is static SVG; this file drives what moves: the typewriter
- * striking keys and feeding its sheet, a slow camera breath while nobody is
- * touching it, and the pointer-driven orbit.
+ * striking keys and feeding its sheet, the device swap, and the page-level
+ * projection behind the 作品 section.
  *
- * The orbit is a real spring, not a lerp: the camera keeps a little momentum
- * after the pointer stops and settles back. It turns around the centre of mass
- * of the cabinet, which the server passes in viewBox units, so the model does
- * not slide sideways as it swings.
+ * There is no camera tilt. A rotation of the drawing plane only ever reads as
+ * a sheet of paper turning, so the stage stays square to the reader.
  *
  * Everything degrades to the server-rendered state when motion is reduced.
  */
 
 const STAGE = '[data-home-stage]'
+const PROJECTION = '.home-projection'
 const TOUR_DELAY = 600
 const TOUR_INTERVAL = 34
 const RESUME_DELAY = 5200
-
-/** degrees of orbit at the edge of the stage */
-const MAX_TILT = 10
-/** spring: how hard it pulls, and how much momentum it keeps */
-const STIFF = 0.085
-const DAMP = 0.80
-/** idle breathing, small enough to read as a live camera */
-const BREATH_Y = 1.15
-const BREATH_X = 0.6
-const BREATH_PERIOD = 3.6
 
 interface State {
   stage: HTMLElement
@@ -39,17 +28,6 @@ interface State {
   total: number
   timer: number
   resume: number
-  tiltRaf: number
-  tx: number
-  ty: number
-  cx: number
-  cy: number
-  vx: number
-  vy: number
-  idle: boolean
-  idleSince: number
-  pivot: [number, number]
-  viewBox: [number, number]
   modules: SVGGElement[]
   caps: SVGGElement[]
   channels: SVGAElement[]
@@ -81,7 +59,11 @@ function paint(s: State, count: number): void {
   feed(s, count)
 }
 
-/** The line being struck stays at the roller; the sheet has fed up to it. */
+/**
+ * The sheet feeds up one line at a time: the line being struck always sits at
+ * the roller, and everything already typed rides up out of frame. The CSS
+ * transition on `.home-typed-block` is what makes it a feed rather than a jump.
+ */
 function feed(s: State, count: number): void {
   if (!s.block)
     return
@@ -94,7 +76,7 @@ function feed(s: State, count: number): void {
   }
   const el = s.textEls[line]
   const y = Number(el?.getAttribute('y') || 8)
-  s.block.setAttribute('transform', `translate(0 ${(bottom - y).toFixed(2)})`)
+  s.block.style.transform = `translateY(${(bottom - y).toFixed(2)}px)`
 }
 
 function strike(s: State, char: string): void {
@@ -151,68 +133,36 @@ function scheduleResume(s: State): void {
   }, RESUME_DELAY)
 }
 
-/** Place the orbit's axis on the cabinet's centre of mass. */
-function setPivot(s: State): void {
-  const rect = s.stage.getBoundingClientRect()
-  if (!rect.width || !rect.height)
+/** Only the 作品 section projects; everything else keeps the page quiet. */
+function projectSection(section: string): void {
+  const video = document.querySelector<HTMLVideoElement>(`${PROJECTION} video`)
+  if (!video)
     return
-  const [vw, vh] = s.viewBox
-  const scale = Math.min(rect.width / vw, rect.height / vh)
-  const ox = (rect.width - vw * scale) / 2
-  const oy = (rect.height - vh * scale) / 2
-  const x = ((ox + s.pivot[0] * scale) / rect.width) * 100
-  const y = ((oy + s.pivot[1] * scale) / rect.height) * 100
-  s.svg.style.transformOrigin = `${x.toFixed(2)}% ${y.toFixed(2)}%`
-}
-
-function tiltLoop(s: State): void {
-  if (s.idle) {
-    const t = (performance.now() - s.idleSince) / 1000
-    s.tx = Math.sin(t / BREATH_PERIOD) * BREATH_Y
-    s.ty = Math.sin(t / (BREATH_PERIOD * 1.45)) * BREATH_X
+  if (section === 'works') {
+    // autoplay may be refused; the frame then simply keeps its poster
+    video.play().catch(() => {})
   }
-  s.vx = (s.vx + (s.tx - s.cx) * STIFF) * DAMP
-  s.vy = (s.vy + (s.ty - s.cy) * STIFF) * DAMP
-  s.cx += s.vx
-  s.cy += s.vy
-  s.stage.style.setProperty('--cam-y', s.cx.toFixed(3))
-  s.stage.style.setProperty('--cam-x', s.cy.toFixed(3))
-  const settled = !s.idle
-    && Math.abs(s.tx - s.cx) < 0.01
-    && Math.abs(s.ty - s.cy) < 0.01
-    && Math.abs(s.vx) < 0.005
-    && Math.abs(s.vy) < 0.005
-  if (settled) {
-    s.cx = s.tx
-    s.cy = s.ty
-    s.vx = 0
-    s.vy = 0
-    s.stage.style.setProperty('--cam-y', s.cx.toFixed(3))
-    s.stage.style.setProperty('--cam-x', s.cy.toFixed(3))
-    s.tiltRaf = 0
-    return
+  else {
+    video.pause()
   }
-  s.tiltRaf = window.requestAnimationFrame(() => tiltLoop(s))
 }
 
-function nudgeTilt(s: State): void {
-  if (!s.tiltRaf)
-    s.tiltRaf = window.requestAnimationFrame(() => tiltLoop(s))
-}
-
-function goIdle(s: State): void {
-  s.idle = true
-  s.idleSince = performance.now()
-  nudgeTilt(s)
-}
-
-/** Which machine is on the platform. Hovering a key swaps it. */
+/**
+ * Which machine is on the platform. Hovering a key swaps it, and it stays
+ * swapped until another key is chosen — the reader's selection is not undone
+ * by moving the pointer away.
+ */
 function setModule(s: State, index: number): void {
   if (index === s.active)
     return
   s.active = index
-  for (const m of s.modules)
-    m.classList.toggle('is-active', Number(m.dataset.index) === index)
+  let section = ''
+  for (const m of s.modules) {
+    const on = Number(m.dataset.index) === index
+    m.classList.toggle('is-active', on)
+    if (on)
+      section = m.dataset.module || ''
+  }
   for (const c of s.caps)
     c.classList.toggle('is-active', Number(c.dataset.index) === index)
   for (const a of s.channels) {
@@ -221,6 +171,8 @@ function setModule(s: State, index: number): void {
     else
       a.removeAttribute('aria-current')
   }
+  document.documentElement.dataset.homeSection = section
+  projectSection(section)
 }
 
 function mount(): void {
@@ -254,9 +206,6 @@ function mount(): void {
       keys.set(id, key)
   }
 
-  const viewBox = (stage.dataset.viewbox || '760 620').split(' ').map(Number) as [number, number]
-  const pivot = (stage.dataset.pivot || '0 0').split(' ').map(Number) as [number, number]
-
   const s: State = {
     stage,
     svg,
@@ -268,17 +217,6 @@ function mount(): void {
     total: totalChars(lines),
     timer: 0,
     resume: 0,
-    tiltRaf: 0,
-    tx: 0,
-    ty: 0,
-    cx: 0,
-    cy: 0,
-    vx: 0,
-    vy: 0,
-    idle: false,
-    idleSince: 0,
-    pivot,
-    viewBox,
     modules,
     caps,
     channels,
@@ -287,7 +225,6 @@ function mount(): void {
   }
 
   setModule(s, 0)
-  setPivot(s)
 
   if (prefersReducedMotion())
     return
@@ -306,24 +243,12 @@ function mount(): void {
     scheduleResume(s)
   }
 
+  // moving over the machine only pauses the tour; it no longer tilts anything
   const onPointerMove = (event: PointerEvent) => {
     if (event.pointerType !== 'mouse' && event.pointerType !== 'pen')
       return
-    const rect = stage.getBoundingClientRect()
-    if (!rect.width || !rect.height)
-      return
-    const nx = (event.clientX - rect.left) / rect.width - 0.5
-    const ny = (event.clientY - rect.top) / rect.height - 0.5
-    s.idle = false
-    s.tx = -nx * 2 * MAX_TILT
-    s.ty = ny * 2 * MAX_TILT
-    nudgeTilt(s)
     stopTour(s)
     scheduleResume(s)
-  }
-
-  const onPointerLeave = () => {
-    goIdle(s)
   }
 
   // tapping the machine types the next character; tapping a link just follows it
@@ -344,8 +269,6 @@ function mount(): void {
     setModule(s, Number(link.getAttribute('data-index')))
   }
 
-  const onOut = () => setModule(s, 0)
-
   const onFocus = (event: Event) => {
     const target = event.target instanceof Element ? event.target : null
     const link = target?.closest('.home-channel')
@@ -357,61 +280,36 @@ function mount(): void {
     if (document.hidden) {
       stopTour(s)
     }
-    else {
-      goIdle(s)
-      if (!s.timer)
-        startTour(s)
+    else if (!s.timer) {
+      startTour(s)
     }
   }
 
-  let resizeRaf = 0
-  const onResize = () => {
-    if (resizeRaf)
-      return
-    resizeRaf = window.requestAnimationFrame(() => {
-      resizeRaf = 0
-      setPivot(s)
-    })
-  }
-
   window.addEventListener('keydown', onKey)
-  window.addEventListener('resize', onResize)
   stage.addEventListener('pointermove', onPointerMove, { passive: true })
-  stage.addEventListener('pointerleave', onPointerLeave, { passive: true })
   stage.addEventListener('pointerdown', onPointerDown, { passive: true })
   stage.addEventListener('pointerover', onOver, { passive: true })
-  stage.addEventListener('pointerleave', onOut, { passive: true })
   stage.addEventListener('focusin', onFocus)
   document.addEventListener('visibilitychange', onVisibility)
 
   s.cleanup = () => {
     window.removeEventListener('keydown', onKey)
-    window.removeEventListener('resize', onResize)
     stage.removeEventListener('pointermove', onPointerMove)
-    stage.removeEventListener('pointerleave', onPointerLeave)
     stage.removeEventListener('pointerdown', onPointerDown)
     stage.removeEventListener('pointerover', onOver)
-    stage.removeEventListener('pointerleave', onOut)
     stage.removeEventListener('focusin', onFocus)
     document.removeEventListener('visibilitychange', onVisibility)
-    if (s.tiltRaf)
-      window.cancelAnimationFrame(s.tiltRaf)
-    if (resizeRaf)
-      window.cancelAnimationFrame(resizeRaf)
-    stage.style.removeProperty('--cam-y')
-    stage.style.removeProperty('--cam-x')
-    svg.style.removeProperty('transform-origin')
   }
 
   state = s
   s.resume = window.setTimeout(() => startTour(s), TOUR_DELAY)
-  window.setTimeout(() => {
-    if (!s.idle && !s.timer)
-      goIdle(s)
-  }, 2600)
 }
 
 function unmount(): void {
+  // the projection is page-level, so it must stop even when the reduced-motion
+  // bail-out left no state behind
+  projectSection('')
+  document.documentElement.removeAttribute('data-home-section')
   if (!state)
     return
   stopTour(state)

@@ -1,197 +1,266 @@
 import * as k from '../anatomy/iso-kit.mjs'
 import * as G from '../anatomy/lathe.mjs'
 import { TOP } from './chassis.mjs'
-import { boxSvg, facePath, frameOf } from './frame.mjs'
 
 /**
  * Module 02 — the film projector that carries "作品".
  *
- * The machine stands at the left of the deck and throws its light across to a
- * screen at the right, so nothing stands in front of the picture. The screen is
- * tipped back six degrees; its image is a masked group with soft edges, so it
- * reads as light on a surface rather than a printed panel.
+ * The picture is no longer a screen of its own: it is a page-level video layer
+ * behind everything, centred on the viewport. So the machine throws to the
+ * LEFT — the lens sits at the left end of the body, the beam crosses the empty
+ * half of the deck and leaves the drawing entirely.
  *
- * Far to near: legs, screen, picture, frame bars, beam, machine, strip, reels.
+ * Far to near: beam, feet, body, front panel, lamphouse, barrel, transport, reels.
  */
 
-const SW = 134
-const SH = 76
-const INSET = 6
+const TAU = Math.PI * 2
+const DEG = Math.PI / 180
 
-const S = frameOf({ pitch: -6, origin: [-32, -34, TOP + 14] })
-
-const BODY = { x: -100, y: 6, w: 56, d: 36, r: 6 }
-const FOOT = 4
+// ---- the body -------------------------------------------------------------
+const BODY = { x: 6, y: -28, w: 82, d: 58, r: 7 }
+const FOOT = 5
 const BZ = TOP + FOOT
-const LID = BZ + 32
+const BODY_H = 31
+const BODY_TOP = BZ + BODY_H
+const LID = BODY_TOP + 2
 const FRONT = BODY.y + BODY.d
-const HUMP = { x: -96, y: 8, w: 40, d: 15, r: 5 }
-const HUMP_FACE = HUMP.y + HUMP.d
-const HUMP_TOP = LID + 11
-const REEL_Y = 13
-const REEL_R = 9
-const REEL_Z = HUMP_TOP + REEL_R
-const GATE = { x: -62, y: 24.4, w: 10, d: 3.6, r: 1 }
-const MOUNT = { x: -58, y: 12, w: 12, d: 12, r: 2 }
 
-// the lens points at the middle of the picture: right, back, and a little up
-const PICTURE = S.at(SW / 2, 0, SH / 2)
-const MOUTH = [-44, 16, LID + 10]
-const AIM = (() => {
-  const d = [PICTURE[0] - MOUTH[0], PICTURE[1] - MOUTH[1], PICTURE[2] - MOUTH[2]]
-  const len = Math.hypot(...d)
-  return [d[0] / len, d[1] / len, d[2] / len]
-})()
-const BARREL = G.frameAlong(MOUTH, AIM)
+// ---- lamphouse ------------------------------------------------------------
+const HUMP = { x: 6, y: -18, w: 30, d: 34, r: 6 }
+const HUMP_FRONT = HUMP.y + HUMP.d
+const HUMP_TOP = LID + 12
+
+// ---- reels: on arms, so the film can hang off them ------------------------
+const REEL_Y = -4
+const REEL_R = 11
+const REEL_Z = LID + REEL_R + 6
+const REELS = [50, 76]
+
+// ---- lens: left, slightly back, slightly up -------------------------------
+const MOUNT = { x: -1, y: -6, w: 9, d: 20, r: 3 }
+const MOUNT_Z0 = LID + 2
+const MOUNT_Z1 = MOUNT_Z0 + 9
+const BARREL = G.frameAlong([-1, 4, LID + 6.5], [-1, -0.12, 0.03])
+const PROFILE = [
+  [0, 4.4],
+  [1.4, 4.4],
+  [1.4, 5.6],
+  [3.6, 5.6],
+  [3.6, 4.6],
+  [7.4, 4.6],
+  [7.4, 5.2],
+  [10.8, 5.2],
+  [10.8, 4.7],
+  [13, 4.7],
+  [13, 6.2],
+  [16, 6.2],
+]
+const MOUTH_S = 16
+const MOUTH_R = 6.2
+
+// ---- front panel ----------------------------------------------------------
+const PANEL = { x: 8, y: FRONT - 1.6, w: 46, d: 2.6, r: 1.6 }
+const PANEL_Z0 = BZ + 7
+const PANEL_Z1 = LID - 8
+const PANEL_MID = (PANEL_Z0 + PANEL_Z1) / 2
+
+// ---- film transport: gate, two guide rollers, one strip ------------------
+const GATE = { x: 22, y: 14, w: 9, d: 4.6, r: 1 }
+const GATE_SLOT = GATE.x + GATE.w / 2
+const CARRIER = { x: 29, y: 15, w: 18, d: 9, r: 1.5, h: 3.4 }
+const ROLLER = { r: 2.4, gap: 6, y: 16.4, z: LID + 3.4 }
+const ROLLER_X = [CARRIER.x + CARRIER.w / 2 + ROLLER.gap / 2, CARRIER.x + CARRIER.w / 2 - ROLLER.gap / 2]
+
+// the throw: one cone that leaves the frame, so the picture stays centred
+const BEAM_FAR_X = -430
+const BEAM_FAR_HALF = 124
 
 const solid = (plan, z, h, P, tone = 'mid', steps = 4, bevel = 0.5) =>
   k.solidSvg(k.slabOf(plan, z, h, P, steps, bevel), { tone })
 
-/** Andrew's monotone hull over projected points. */
-function hull(points) {
-  const p = [...points].sort((a, b) => a[0] - b[0] || a[1] - b[1])
-  const cross = (o, a, b) => (a[0] - o[0]) * (b[1] - o[1]) - (a[1] - o[1]) * (b[0] - o[0])
-  const chain = (list) => {
-    const out = []
-    for (const q of list) {
-      while (out.length > 1 && cross(out[out.length - 2], out[out.length - 1], q) <= 0) out.pop()
-      out.push(q)
-    }
-    return out
-  }
-  const lo = chain(p)
-  const hi = chain([...p].reverse())
-  return [...lo.slice(0, -1), ...hi.slice(0, -1)]
+/** A constant-width strip through already-projected points. */
+function ribbon(points, width) {
+  const half = width / 2
+  const left = []
+  const right = []
+  points.forEach((p, index) => {
+    const a = points[Math.max(0, index - 1)]
+    const b = points[Math.min(points.length - 1, index + 1)]
+    const dx = b[0] - a[0]
+    const dy = b[1] - a[1]
+    const len = Math.hypot(dx, dy) || 1
+    left.push([p[0] - (dy / len) * half, p[1] + (dx / len) * half])
+    right.push([p[0] + (dy / len) * half, p[1] - (dx / len) * half])
+  })
+  return k.pathOf([...left, ...right.reverse()], true)
+}
+
+/** A rocker switch sitting proud of the front face. */
+function rocker(x, z, P, w = 10, h = 6.4) {
+  return solid({ x: x - w / 2 - 1, y: FRONT - 1.4, w: w + 2, d: 2.6, r: 1 }, z - h / 2 - 1, h + 2, P, 'lo', 4, 0.5)
+    + solid({ x: x - w / 2, y: FRONT - 0.2, w, d: 1.4, r: 0.8 }, z - h / 2, h * 0.55, P, 'hi', 3, 0.4)
+    + solid({ x: x - w / 2, y: FRONT - 0.2, w, d: 1.4, r: 0.8 }, z - h * 0.05, h * 0.55, P, 'mid', 3, 0.4)
+}
+
+/** A knurled knob standing off the front face. */
+function knob(x, z, P, r = 4.8) {
+  const F = G.frameAlong([x, FRONT + 0.8, z], [0, 1, 0])
+  return k.solidSvg(G.disc(0, 4.2, r, F, P), { tone: 'hi' })
+    + k.lineSvg(G.circleOf(F, 4.3, r - 1.6, P), { tone: 'faint' })
+    + k.lineSvg(k.segment([x, FRONT + 5.2, z], [x, FRONT + 5.2, z + r * 0.66], P), { tone: 'hi' })
+}
+
+/** The throw: mouth rim at one end, a wide soft edge far off the left. */
+function beamSvg(P) {
+  const axis = (s) => G.pointOf(BARREL, s, 0, 0)
+  const [ox, oy] = k.iso(axis(0), P)
+  const [ux, uy] = k.iso(axis(1), P)
+  const span = Math.hypot(ux - ox, uy - oy) || 1
+  const dx = (ux - ox) / span
+  const dy = (uy - oy) / span
+
+  const rim = Array.from({ length: 32 }, (_, i) => k.iso(G.pointOf(BARREL, MOUTH_S, MOUTH_R, (i / 32) * TAU), P))
+  const top = Math.min(...rim.map((p) => p[1]))
+  const bottom = Math.max(...rim.map((p) => p[1]))
+  const near = [rim.reduce((sum, p) => sum + p[0], 0) / rim.length, (top + bottom) / 2]
+  const nearHalf = (bottom - top) / 2
+
+  const reach = (BEAM_FAR_X - near[0]) / dx
+  const far = [near[0] + dx * reach, near[1] + dy * reach]
+  const px = -dy
+  const py = dx
+  const quad = [
+    [near[0] + px * nearHalf, near[1] + py * nearHalf],
+    [far[0] + px * BEAM_FAR_HALF, far[1] + py * BEAM_FAR_HALF],
+    [far[0] - px * BEAM_FAR_HALF, far[1] - py * BEAM_FAR_HALF],
+    [near[0] - px * nearHalf, near[1] - py * nearHalf],
+  ]
+
+  const paint = 'oklch(var(--un-preset-theme-colors-highlight))'
+  const stop = (offset, alpha) => `<stop offset="${offset}" style="stop-color:${paint};stop-opacity:${alpha}"/>`
+  const defs = `<defs>`
+    + `<filter id="home-cine-soften" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="5"/></filter>`
+    + `<linearGradient id="home-cine-throw" gradientUnits="userSpaceOnUse" x1="${near[0].toFixed(1)}" y1="${near[1].toFixed(1)}" x2="${far[0].toFixed(1)}" y2="${far[1].toFixed(1)}">`
+    + stop(0, '.58')
+    + stop('.18', '.3')
+    + stop('.36', '.1')
+    + stop('.52', '0')
+    + stop(1, '0')
+    + `</linearGradient>`
+    + `<radialGradient id="home-cine-flare">`
+    + stop(0, '.62')
+    + stop('.48', '.18')
+    + stop(1, '0')
+    + `</radialGradient>`
+    + `</defs>`
+
+  // cinema.css paints this class flat, so the gradient rides on an inline style:
+  // it has to win over the stylesheet rather than lose to it.
+  const path = `<path class="home-cine-beam" filter="url(#home-cine-soften)" style="fill:url(#home-cine-throw);fill-opacity:.82" d="${k.pathOf(quad, true)}"/>`
+  return { defs, path, mouth: near }
 }
 
 export function buildCinema(P, options = {}) {
   const caption = options.caption || ''
   const out = []
-  const face = (points) => facePath(S, points, P)
-  const rect = (u0, w0, u1, w1) => face([[u0, 0, w0], [u1, 0, w0], [u1, 0, w1], [u0, 0, w1]])
-  const disc = (cu, cw, r, n = 26) => face(Array.from({ length: n }, (_, i) => {
-    const a = (i / n) * Math.PI * 2
-    return [cu + r * Math.cos(a), 0, cw + r * Math.sin(a)]
-  }))
 
-  // ---- screen -----------------------------------------------------------
-  for (const x of [-24, 94]) {
-    const leg = { x, y: -37, w: 8, d: 6, r: 1 }
-    out.push(solid(leg, TOP, 14, P), k.lineSvg(k.planOutline(leg, TOP + 14, P, 3), { tone: 'faint' }))
-  }
-  out.push(boxSvg(S, { u: 0, v: -3, w: 0, uw: SW, vd: 3, wh: SH }, P, { tone: 'mid' }))
-  out.push(`<path class="home-cine-screen" d="${rect(0, 0, SW, SH)}"/>`)
+  const beam = beamSvg(P)
+  out.push(beam.defs)
+  out.push(beam.path)
 
-  // ---- the beam: hull of the lens mouth and the four picture corners -----
-  const rim = Array.from({ length: 16 }, (_, i) =>
-    k.iso(G.pointOf(BARREL, 0, 6, (i / 16) * Math.PI * 2), P))
-  const corners = [[INSET, INSET], [SW - INSET, INSET], [SW - INSET, SH - INSET], [INSET, SH - INSET]]
-    .map(([u, w]) => k.iso(S.at(u, 0, w), P))
-  out.push(`<path class="home-cine-beam" d="${k.pathOf(hull([...rim, ...corners]), true)}"/>`)
-
-  // ---- the projected picture -------------------------------------------
-  // The picture is masked by a blurred copy of its own quad, so its edges fall
-  // off the way light does instead of stopping at a hard line.
-  const ground = 30
-  const picture = rect(INSET, INSET, SW - INSET, SH - INSET)
-  out.push(`<defs><filter id="home-cine-soft" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="2.6"/></filter><mask id="home-cine-mask" maskUnits="userSpaceOnUse" x="-4000" y="-4000" width="8000" height="8000"><path d="${picture}" fill="#fff" filter="url(#home-cine-soft)"/></mask></defs>`)
-  out.push('<g class="home-cine-footage" mask="url(#home-cine-mask)">')
-  out.push(`<path class="home-cine-screen" d="${rect(INSET, INSET, SW - INSET, ground)}"/>`)
-  out.push(`<path class="home-cine-ink-3" d="${rect(INSET, ground, SW - INSET, SH - INSET)}"/>`)
-  out.push(`<path class="home-cine-ink-2" d="${disc(104, 21, 9)}"/>`)
-  out.push(`<path class="home-cine-ink-1" d="${rect(INSET, ground - 4, SW - INSET, ground + 2)}"/>`)
-  out.push(`<path class="home-cine-ink-3" d="${rect(70, ground + 2, 75, 60)}"/>`)
-  out.push(`<path class="home-cine-ink-3" d="${rect(78, ground + 2, 82, 52)}"/>`)
-  out.push(`<path class="home-cine-ink-3" d="${rect(118, ground + 2, 123, 56)}"/>`)
-  out.push(`<path class="home-cine-ink-1" d="${rect(56, ground + 2, 61, 50)}"/>`)
-  out.push(`<path class="home-cine-ink-1" d="${disc(58.5, 48, 2.6)}"/>`)
-  out.push('</g>')
-
-  // ---- frame bars -------------------------------------------------------
-  for (const bar of [
-    { u: 0, v: 0, w: 0, uw: SW, vd: 2, wh: 4 },
-    { u: 0, v: 0, w: SH - 4, uw: SW, vd: 2, wh: 4 },
-    { u: 0, v: 0, w: 4, uw: 4, vd: 2, wh: SH - 8 },
-    { u: SW - 4, v: 0, w: 4, uw: 4, vd: 2, wh: SH - 8 },
-  ]) out.push(boxSvg(S, bar, P, { tone: 'hi' }))
-
-  // ---- machine: feet, body, front plate ---------------------------------
-  const feet = k.corners(BODY, 9).map(([x, y]) => ({ x, y, d: k.depthOf([x, y, 0], P) })).sort((a, b) => a.d - b.d)
+  // ---- feet -------------------------------------------------------------
+  const feet = k.corners(BODY, 9)
+    .map(([x, y]) => ({ x, y, d: k.depthOf([x, y, 0], P) }))
+    .sort((a, b) => a.d - b.d)
   for (const { x, y } of feet) {
-    out.push(k.solidSvg(k.cylinder(x, y, 4.2, TOP, FOOT + 1, P, 14), { tone: 'lo' }))
-    out.push(k.lineSvg(k.sideArc(x, y, 4.2, TOP + 1.6, P, 12), { tone: 'faint' }))
+    out.push(k.solidSvg(k.cylinder(x, y, 4, TOP, FOOT + 1, P, 14), { tone: 'lo' }))
+    out.push(k.lineSvg(k.sideArc(x, y, 4, TOP + 1.6, P, 12), { tone: 'faint' }))
   }
-  out.push(k.solidSvg(k.slabOf(BODY, BZ, 32, P, 6, 1.4), { tone: 'mid', className: 'home-cine-body' }))
-  out.push(k.lineSvg(k.sideSeam(BODY, BZ + 25, P, 6), { tone: 'faint' }))
-  out.push(k.solidSvg(k.slabOf(k.insetPlan(BODY, 4), LID, 2, P, 6, 0.6), { tone: 'hi', className: 'home-cine-body' }))
 
-  const plate = { x: -96, y: FRONT - 1.4, w: 50, d: 2.2, r: 1.4 }
-  out.push(solid(plate, BZ + 6, 19, P, 'mid'))
-  out.push(k.lineSvg(k.planOutline(plate, BZ + 25, P, 3), { tone: 'mid' }))
-  for (const x of [-89, -78]) {
-    const F = G.frameAlong([x, FRONT + 0.8, BZ + 19], [0, 1, 0])
-    out.push(k.solidSvg(G.disc(0, 4.2, 4.8, F, P), { tone: 'hi' }))
-    out.push(k.lineSvg(G.circleOf(F, 4.3, 3.2, P), { tone: 'faint' }))
-    out.push(k.lineSvg(k.segment([x, FRONT + 5, BZ + 19], [x, FRONT + 5, BZ + 22.2], P), { tone: 'hi' }))
+  // ---- body -------------------------------------------------------------
+  out.push(k.solidSvg(k.slabOf(BODY, BZ, BODY_H, P, 6, 1.4), { tone: 'mid', className: 'home-cine-body' }))
+  out.push(k.lineSvg(k.sideSeam(BODY, BZ + BODY_H - 8, P, 6), { tone: 'faint' }))
+  out.push(k.solidSvg(k.slabOf(k.insetPlan(BODY, 3), BODY_TOP, 2, P, 6, 0.6), { tone: 'hi', className: 'home-cine-body' }))
+  out.push(k.lineSvg(k.planOutline(k.insetPlan(BODY, 6), LID, P, 6), { tone: 'faint' }))
+
+  // ---- front face: control panel, knobs, rocker, engraved caption -------
+  out.push(solid(PANEL, PANEL_Z0, PANEL_Z1 - PANEL_Z0, P, 'mid', 4, 0.6))
+  out.push(k.lineSvg(k.planOutline(PANEL, PANEL_Z1, P, 4), { tone: 'faint' }))
+  out.push(k.lineSvg(k.planOutline(PANEL, PANEL_Z0, P, 4), { tone: 'faint' }))
+  out.push(knob(19, PANEL_MID, P))
+  out.push(knob(33, PANEL_MID, P))
+  out.push(rocker(46, PANEL_MID, P, 9, 6))
+  if (caption) {
+    const cx = PANEL.x + PANEL.w + 17
+    out.push(k.faceTextSvg(k.sideMatrix([cx, FRONT + 0.9], LID - 15, P, 'left'), caption, { size: 6.4, tone: 'hi', anchor: 'middle' }))
+    out.push(k.lineSvg(k.segment([cx - 11, FRONT + 0.6, LID - 20.5], [cx + 11, FRONT + 0.6, LID - 20.5], P), { tone: 'faint' }))
+    out.push(k.faceTextSvg(k.sideMatrix([cx, FRONT + 0.9], LID - 25, P, 'left'), 'No.02 · 35MM', { size: 2.8, tone: 'faint', anchor: 'middle' }))
   }
-  out.push(solid({ x: -70, y: FRONT - 1.4, w: 11, d: 2.4, r: 1 }, BZ + 13, 7.6, P, 'lo'))
-  out.push(solid({ x: -69, y: FRONT - 0.2, w: 9, d: 1.4, r: 0.8 }, BZ + 13.7, 3.2, P, 'hi', 3, 0.3))
-  out.push(solid({ x: -69, y: FRONT - 0.2, w: 9, d: 1.4, r: 0.8 }, BZ + 17, 3.2, P, 'mid', 3, 0.3))
-  if (caption)
-    out.push(k.faceTextSvg(k.sideMatrix([-70, FRONT + 0.8], BZ + 9, P, 'left'), caption, { size: 5.2, tone: 'hi', anchor: 'middle' }))
 
-  // ---- lamphouse hump and its five vent lines ---------------------------
-  out.push(k.solidSvg(k.slabOf(HUMP, LID, 11, P, 6, 1.2), { tone: 'mid', className: 'home-cine-body' }))
-  for (let i = 0; i < 5; i++)
-    out.push(k.lineSvg(k.segment([-91, HUMP_FACE + 0.3, LID + 3 + i * 1.7], [-78, HUMP_FACE + 0.3, LID + 3 + i * 1.7], P), { tone: 'hi' }))
+  // ---- lamphouse hump ----------------------------------------------------
+  out.push(k.solidSvg(k.slabOf(HUMP, LID, HUMP_TOP - LID, P, 6, 1.6), { tone: 'mid', className: 'home-cine-body' }))
+  out.push(k.lineSvg(k.planOutline(k.insetPlan(HUMP, 2.6), HUMP_TOP, P, 6), { tone: 'faint' }))
+  for (let i = 0; i < 5; i++) {
+    const z = LID + 3.4 + i * 2
+    out.push(k.lineSvg(k.segment([HUMP.x + 2.5, HUMP_FRONT + 0.3, z], [HUMP.x + 14, HUMP_FRONT + 0.3, z], P), { tone: 'hi' }))
+  }
 
   // ---- lens mount, stepped barrel, brass mouth --------------------------
-  out.push(solid(MOUNT, LID, 8, P))
-  out.push(k.solidSvg(G.solidOf([[0, 4.4], [1.6, 4.4], [1.6, 5.6], [7, 5.6], [7, 4.6], [11.5, 4.6], [11.5, 6.2], [17, 6.2]], BARREL, P), { tone: 'hi' }))
-  const brass = G.ringBand(-1.2, 2.2, 4.4, 6, BARREL, P)
+  out.push(solid(MOUNT, MOUNT_Z0, MOUNT_Z1 - MOUNT_Z0, P, 'mid', 5, 1))
+  out.push(k.solidSvg(G.solidOf(PROFILE, BARREL, P), { tone: 'hi' }))
+  const brass = G.ringBand(MOUTH_S - 0.5, MOUTH_S + 2.4, MOUTH_R - 0.6, MOUTH_R + 0.8, BARREL, P)
   out.push(`<path class="home-brass" d="${[...brass.shades, brass.top].join('')}"/>`)
-  out.push(k.lineSvg(G.arcOf(BARREL, 2.2, 6, P), { tone: 'lo' }))
+  out.push(k.lineSvg(G.arcOf(BARREL, MOUTH_S + 2.4, MOUTH_R + 0.8, P), { tone: 'lo' }))
 
-  // ---- gate, two guide rollers, then the strip --------------------------
-  out.push(solid(GATE, LID, 4.4, P))
-  out.push(k.lineSvg(k.segment([GATE.x + 1.4, 26.2, LID + 4.6], [GATE.x + 8.6, 26.2, LID + 4.6], P), { tone: 'lo' }))
-  for (const z of [LID + 8, LID + 4.8]) {
-    const F = G.frameAlong([-52, HUMP_FACE + 0.7, z], [0, 1, 0])
-    out.push(k.solidSvg(G.disc(0, 2.2, 2.6, F, P), { tone: 'lo' }))
-    out.push(k.lineSvg(G.circleOf(F, 2.3, 1.4, P), { tone: 'faint' }))
+  // ---- gate, carrier, guide rollers, the strip --------------------------
+  out.push(solid(GATE, LID, 7, P, 'lo', 4, 0.5))
+  out.push(k.lineSvg(k.segment([GATE_SLOT, GATE.y + GATE.d, LID + 1.4], [GATE_SLOT, GATE.y + GATE.d, LID + 5.4], P), { tone: 'hi' }))
+  out.push(solid(CARRIER, LID, CARRIER.h, P, 'mid', 4, 0.5))
+  for (const x of ROLLER_X) {
+    const F = G.frameAlong([x, ROLLER.y, ROLLER.z], [0, 1, 0])
+    out.push(k.solidSvg(G.disc(0, 3.2, ROLLER.r, F, P), { tone: 'lo' }))
+    out.push(k.lineSvg(G.circleOf(F, 3.2, ROLLER.r - 0.9, P), { tone: 'faint' }))
   }
-  const thread = [[-80, 11, REEL_Z - 4], [-80, 22.4, HUMP_TOP - 1], [-52, 23.7, LID + 8], [-52, 23.7, LID + 4.8], [-56.5, 26.2, LID + 4.4]]
-  for (const dx of [0, 1.4])
-    out.push(k.lineSvg(k.pathOf(thread.map(([x, y, z]) => k.iso([x + dx, y, z], P))), { tone: 'hi' }))
+  // off the feed reel, down over both rollers, into the gate
+  const thread = [
+    [REELS[0] + REEL_R * Math.cos(190 * DEG), REEL_Y, REEL_Z + REEL_R * Math.sin(190 * DEG)],
+    [ROLLER_X[0], ROLLER.y + 1.6, ROLLER.z + ROLLER.r],
+    [ROLLER_X[1], ROLLER.y + 1.6, ROLLER.z + ROLLER.r],
+    [GATE_SLOT, GATE.y + GATE.d - 0.4, LID + 6.2],
+  ]
+  const strip = ribbon(thread.map((p) => k.iso(p, P)), 3.2)
+  out.push(`<path class="iso-shade" data-shade="1" d="${strip}"/>`)
+  out.push(k.lineSvg(strip, { tone: 'hi' }))
 
   // ---- reels last -------------------------------------------------------
-  for (const x of [-86, -66]) {
+  for (const x of REELS) {
+    out.push(solid({ x: x - 4, y: REEL_Y - 3.5, w: 8, d: 7, r: 1.5 }, LID, REEL_Z - REEL_R - LID, P, 'lo', 4, 0.4))
     const F = G.frameAlong([x, REEL_Y, REEL_Z], [0, 1, 0])
-    out.push(k.solidSvg(G.disc(0, 3.2, 8.6, F, P), { tone: 'mid', className: 'home-cine-reel' }))
-    out.push(k.solidSvg(G.ringBand(2.4, 4.2, 7, REEL_R, F, P), { tone: 'hi' }))
-    out.push(k.solidSvg(G.disc(3.4, 5.8, 3.8, F, P), { tone: 'hi' }))
-    out.push(k.lineSvg(G.spokesOf(F, 4.2, 4.2, 6.8, 4, P, { phase: 0.6 }), { tone: 'hi' }))
+    out.push(k.solidSvg(G.disc(0, 3.2, REEL_R + 0.4, F, P), { tone: 'mid', className: 'home-cine-reel' }))
+    out.push(k.solidSvg(G.ringBand(2.4, 4.2, REEL_R * 0.78, REEL_R, F, P), { tone: 'hi' }))
+    out.push(k.solidSvg(G.disc(3.4, 5.8, REEL_R * 0.4, F, P), { tone: 'hi' }))
+    out.push(k.lineSvg(G.spokesOf(F, 4.2, REEL_R * 0.4, REEL_R * 0.78, 4, P, { phase: 0.6 }), { tone: 'hi' }))
+    out.push(k.lineSvg(G.arcOf(F, 3.2, REEL_R + 0.4, P), { tone: 'lo' }))
   }
 
-  const [gx, gy] = k.iso(MOUTH, P)
-  out.push('<defs><radialGradient id="home-cine-glow"><stop offset="0" style="stop-color:oklch(var(--un-preset-theme-colors-highlight));stop-opacity:.55"/><stop offset=".55" style="stop-color:oklch(var(--un-preset-theme-colors-highlight));stop-opacity:.18"/><stop offset="1" style="stop-color:oklch(var(--un-preset-theme-colors-highlight));stop-opacity:0"/></radialGradient></defs>')
-  out.push(`<circle class="home-cine-glow" cx="${gx.toFixed(1)}" cy="${gy.toFixed(1)}" r="15" fill="url(#home-cine-glow)"/>`)
+  // ---- flare at the mouth ----------------------------------------------
+  out.push(`<circle class="home-cine-glow" cx="${beam.mouth[0].toFixed(1)}" cy="${beam.mouth[1].toFixed(1)}" r="18" fill="url(#home-cine-flare)"/>`)
 
   return out.join('')
 }
 
+/** The machine only — the beam must never pull the stage's framing left. */
 export function cinemaBounds() {
-  const panel = []
-  for (const u of [0, SW])
-    for (const v of [-3, 0])
-      for (const w of [0, SH]) panel.push(S.at(u, v, w))
-  return [
-    ...panel,
-    ...k.boxCorners({ x: -24, y: -37, w: 8, d: 6 }, TOP, TOP + 14),
-    ...k.boxCorners({ x: 94, y: -37, w: 8, d: 6 }, TOP, TOP + 14),
-    ...k.boxCorners(BODY, BZ, LID + 11),
-    [-86, REEL_Y + 5, REEL_Z + REEL_R],
-    [-66, REEL_Y, REEL_Z - REEL_R],
-    [MOUTH[0] + 14, MOUTH[1], MOUTH[2] + 8],
+  const out = [
+    ...k.boxCorners(BODY, BZ, LID),
+    ...k.boxCorners(HUMP, LID, HUMP_TOP),
+    ...k.boxCorners(MOUNT, MOUNT_Z0, MOUNT_Z1),
   ]
+  for (const x of REELS) {
+    out.push([x, REEL_Y, REEL_Z + REEL_R], [x, REEL_Y, REEL_Z - REEL_R])
+    out.push([x - REEL_R, REEL_Y, REEL_Z], [x + REEL_R, REEL_Y, REEL_Z])
+  }
+  const mouth = G.pointOf(BARREL, MOUTH_S, 0, 0)
+  out.push([mouth[0], mouth[1], mouth[2] + MOUTH_R], [mouth[0], mouth[1], mouth[2] - MOUTH_R])
+  return out
 }

@@ -59,6 +59,7 @@ const ISSUES = ['20', '19', '18', '17'].map((n) => ({
 
 const TAGS = ['设计', '动效', 'Astro', 'AI', 'Obsidian', 'Three.js', '排版', '工具链']
 
+const closed = process.argv.includes('--closed')
 const activeArg = process.argv.find((a) => a.startsWith('--module='))
 const active = activeArg ? Number(activeArg.slice(9)) : 0
 
@@ -76,7 +77,7 @@ const modules = LABELS.map((label, index) => {
     body = fn(P, { tags: TAGS })
   else
     body = fn(P, { caption: label })
-  return `<g class="home-module${index === active ? ' is-active' : ''}" data-index="${index}">${body}</g>`
+  return `<g class="home-module${index === active ? ' is-shown' : ''}${!closed && index === active ? ' is-active' : ''}" data-index="${index}">${body}</g>`
 }).join('')
 
 const svg = k.figureSvg({
@@ -87,6 +88,8 @@ const svg = k.figureSvg({
 })
 
 const css = readFileSync(join(ROOT, 'src', 'styles', 'home.css'), 'utf8')
+  .replace(/@import '\.\/home-devices\/([\w-]+)\.css';\n?/g, (_, name) =>
+    readFileSync(join(ROOT, 'src', 'styles', 'home-devices', `${name}.css`), 'utf8'))
 
 const SITE_TOKENS = `
 :root {
@@ -115,8 +118,8 @@ body {
 }
 main.home-stage { position: relative; width: min(760px, 96vw); height: auto; aspect-ratio: 760 / 620; }
 main.home-stage .home-module { animation: none !important; }
-main.home-stage .home-module.is-active { opacity: 1 !important; }
-main.home-stage .home-module:not(.is-active) { display: none; }
+main.home-stage .home-module.is-shown { opacity: 1 !important; display: block; }
+main.home-stage .home-module:not(.is-shown) { display: none; }
 `
 
 const theme = process.argv.includes('--light') ? 'light' : 'dark'
@@ -137,7 +140,7 @@ const html = `<!doctype html>
 <title>home stage — ${theme}</title>
 <style>${SITE_TOKENS}${css}</style>
 </head>
-<body><main class="home-stage"${camStyle}>${fitted}</main></body>
+<body><main class="home-stage${closed ? ' closed' : ''}"${camStyle}>${fitted}</main></body>
 </html>`
 
 mkdirSync(OUT, { recursive: true })

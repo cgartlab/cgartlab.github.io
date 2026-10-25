@@ -1,0 +1,45 @@
+/* ==========================================================================
+   02 — 作品: the film projector
+   Only the machine lives in the SVG; the picture it throws is a page-level
+   layer (see `.home-projection` in home.css).
+   ========================================================================== */
+
+.home-stage .home-cine-body .iso-fill { fill: color-mix(in oklch, oklch(var(--un-preset-theme-colors-primary)) 38%, oklch(var(--un-preset-theme-colors-background)) 62%); }
+.home-stage .home-cine-body .iso-shade { fill: color-mix(in oklch, oklch(var(--un-preset-theme-colors-primary)) 34%, oklch(var(--un-preset-theme-colors-background)) 66%); }
+.home-stage .home-cine-body .iso-top { fill: color-mix(in oklch, oklch(var(--un-preset-theme-colors-primary)) 28%, oklch(var(--un-preset-theme-colors-background)) 72%); }
+.home-stage .home-cine-reel .iso-fill { fill: color-mix(in oklch, oklch(var(--un-preset-theme-colors-primary)) 50%, oklch(var(--un-preset-theme-colors-background)) 50%); }
+.home-stage .home-cine-reel .iso-shade { fill: color-mix(in oklch, oklch(var(--un-preset-theme-colors-primary)) 44%, oklch(var(--un-preset-theme-colors-background)) 56%); }
+.home-stage .home-cine-reel .iso-top { fill: color-mix(in oklch, oklch(var(--un-preset-theme-colors-primary)) 56%, oklch(var(--un-preset-theme-colors-background)) 44%); }
+
+/* the beam leaves the lens and washes the page */
+.home-stage .home-cine-beam {
+  fill: oklch(var(--un-preset-theme-colors-highlight));
+  fill-opacity: 0.2;
+  stroke: none;
+  animation: home-cine-beam 5.2s ease-in-out infinite;
+}
+
+@keyframes home-cine-beam {
+  0%, 100% { opacity: 0.7; }
+  50% { opacity: 1; }
+}
+
+/* the lens breathes */
+.home-stage .home-cine-glow {
+  transform-box: fill-box;
+  transform-origin: 50% 50%;
+  animation: home-cine-glow 3.4s ease-in-out infinite;
+}
+
+@keyframes home-cine-glow {
+  0%, 100% { opacity: 0.5; transform: scale(1); }
+  50% { opacity: 0.95; transform: scale(1.14); }
+}
+
+html.reduce-motion .home-stage .home-cine-beam,
+html.reduce-motion .home-stage .home-cine-glow { animation: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .home-stage .home-cine-beam,
+  .home-stage .home-cine-glow { animation: none; }
+}

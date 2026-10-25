@@ -57,9 +57,6 @@ const P = k.fitProjection(bounds, W, H, {
   center: [0, 0, 55],
 })
 
-// the pivot the camera turns around: the centre of mass of the cabinet
-const [pivotX, pivotY] = k.iso([0, 0, TOP / 2], P)
-
 const coverGlob = import.meta.glob<{ default: ImageMetadata }>(
   '/src/content/posts/_images/**/*.{jpeg,jpg,png,gif,webp}',
   { eager: true },
@@ -178,8 +175,6 @@ const isDefault = currentLang === defaultLocale
   data-home-stage
   data-typed={JSON.stringify(typedLines)}
   data-lang={currentLang}
-  data-viewbox={`${W} ${H}`}
-  data-pivot={`${pivotX.toFixed(2)} ${pivotY.toFixed(2)}`}
   data-is-default={isDefault ? '' : undefined}
 >
   <Fragment set:html={svg} />

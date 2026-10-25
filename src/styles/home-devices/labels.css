@@ -1,0 +1,119 @@
+/* ==========================================================================
+   05 — 标签: the ticket printer
+   Each ticket is drawn at its floating position and carries two screen-space
+   deltas: --fly-x / --fly-y back to the slot mouth, where it appears, and
+   --out-x / --out-y to a point just clear of the front face at slot height.
+   The keyframes run the mechanism: emerge at the slot, slide out, get cut, then
+   rise and settle into the float.
+   ========================================================================== */
+
+.home-stage .home-ticket {
+  opacity: 0;
+  transform-box: fill-box;
+}
+
+.home-stage .home-ticket-paper { fill: var(--home-paper); }
+
+/* the mechanism only moves while the machine is running */
+.home-stage .home-module.is-active .home-ticket {
+  animation:
+    home-ticket-emerge 1500ms cubic-bezier(0.34, 0.9, 0.28, 1) var(--fly-delay, 0ms) both,
+    home-ticket-bob 5.2s ease-in-out calc(var(--fly-delay, 0ms) + 1600ms) infinite;
+}
+
+@keyframes home-ticket-emerge {
+  0% {
+    opacity: 0;
+    transform: translate(var(--fly-x, 0px), var(--fly-y, 0px)) scale(0.72);
+  }
+  8% {
+    opacity: 1;
+    transform: translate(var(--fly-x, 0px), var(--fly-y, 0px)) scale(0.74);
+  }
+  26% {
+    opacity: 1;
+    transform: translate(var(--out-x, 0px), var(--out-y, 0px)) scale(0.88);
+  }
+  40% {
+    opacity: 1;
+    transform: translate(var(--out-x, 0px), var(--out-y, 0px)) scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(0px, 0px) scale(1);
+  }
+}
+
+@keyframes home-ticket-bob {
+  0%, 100% { translate: 0 0; rotate: 0deg; }
+  50% { translate: 0 -4px; rotate: -0.5deg; }
+}
+
+/* the carriage shuttles, the roller turns, the cutter strikes, the lamp blinks */
+.home-stage .home-module.is-active .home-print-head {
+  animation: home-print-head 1500ms cubic-bezier(0.34, 0.9, 0.28, 1) infinite;
+}
+.home-stage .home-module.is-active .home-feed-roller {
+  animation: home-feed-roller 900ms linear infinite;
+}
+.home-stage .home-module.is-active .home-cutter {
+  animation: home-cutter 1500ms cubic-bezier(0.34, 0.9, 0.28, 1) infinite;
+}
+.home-stage .home-module.is-active .home-label-led {
+  animation: home-label-led 1500ms steps(1, end) infinite;
+}
+
+/* the roller spins about its own centre, given in page px on the group */
+.home-stage .home-feed-roller {
+  transform-box: view-box;
+  will-change: transform;
+}
+
+/* the transport wheel is machined metal, so its knurl reads against the panel */
+.home-stage .home-wheel .iso-fill,
+.home-stage .home-wheel .iso-top,
+.home-stage .home-wheel .iso-shade,
+.home-stage .home-platen .iso-fill,
+.home-stage .home-platen .iso-top,
+.home-stage .home-platen .iso-shade { fill: var(--home-metal); }
+.home-stage .home-wheel .iso-edge { stroke: var(--anatomy-mid); }
+
+@keyframes home-print-head {
+  0%, 100% { transform: translateX(-2.4px); }
+  25% { transform: translateX(2.4px); }
+  50% { transform: translateX(-2.4px); }
+  75% { transform: translateX(2.4px); }
+}
+
+@keyframes home-feed-roller {
+  to { transform: rotate(360deg); }
+}
+
+/* the blade strikes as the ticket leaves the slot, then withdraws */
+@keyframes home-cutter {
+  0%, 34%, 100% { transform: translateY(0); }
+  39% { transform: translateY(1.6px); }
+  44% { transform: translateY(1.6px); }
+  50% { transform: translateY(0); }
+}
+
+@keyframes home-label-led {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.25; }
+}
+
+html.reduce-motion .home-stage .home-module.is-active .home-ticket,
+html.reduce-motion .home-stage .home-print-head,
+html.reduce-motion .home-stage .home-feed-roller,
+html.reduce-motion .home-stage .home-cutter,
+html.reduce-motion .home-stage .home-label-led { animation: none; }
+html.reduce-motion .home-stage .home-ticket { opacity: 1; }
+
+@media (prefers-reduced-motion: reduce) {
+  .home-stage .home-module.is-active .home-ticket,
+  .home-stage .home-print-head,
+  .home-stage .home-feed-roller,
+  .home-stage .home-cutter,
+  .home-stage .home-label-led { animation: none; }
+  .home-stage .home-ticket { opacity: 1; }
+}
