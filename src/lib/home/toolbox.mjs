@@ -91,9 +91,9 @@ function lidSvg(P) {
 //
 // The case the reader first meets is shut. This is the lid as it reads then:
 // 168 × 74 lying flat on the rim, a seam down its length, two hasps clasping
-// the shell's latch plate and a carry handle folded onto the top. It hands
-// over to the hinged lid in the first 90 ms of the reveal, so the case really
-// does open instead of fading in.
+// the shell's latch plate and a carry handle folded onto the top. It stays
+// shut while the case assembles and only then hands over to the hinged lid, so
+// the case really does open instead of fading in.
 
 const HASPS = [-8.8, 3.4]
 const HASP_W = 5.4
@@ -228,48 +228,78 @@ function rightTray(P) {
 }
 
 // ---- the case -----------------------------------------------------------
+//
+// The case assembles itself in four beats. `--step` carries the order for the
+// shared settle contract in home.css; toolbox.css replaces that generic settle
+// with the real mechanism (the shell rises off the deck, the three trays drop
+// into their seats one after another, the front wall and its latch close the
+// case up last, while the shut slab rides the rim until it hands over to the
+// hinged lid).
+//
+// The groups are contiguous runs of what already painted together, so the
+// split changes no painter's order — only which assembly a path belongs to.
+// The lid, its tools, the stay and the shut lid keep their own animations and
+// are wrapped around, never marked.
+
+const STEPS = { shell: 0, trays: 1, front: 2, closed: 3 }
+
+const part = (name, inner) =>
+  `<g class="home-part" data-part="${name}" style="--step:${STEPS[name]}">${inner.join('')}</g>`
 
 export function buildToolbox(P, options = {}) {
   const labels = options.labels || ['TOOLS', 'LEARN', 'PEOPLE']
-  const out = [lidSvg(P)]
+  const shell = []
+  const trays = []
+  const front = []
+  const closed = []
 
   // a thick machined base, so the trays sit in a shallow well
-  out.push(solid(SHELL, TOP, BASE_H, P, 'mid', 6, 1.2))
+  shell.push(solid(SHELL, TOP, BASE_H, P, 'mid', 6, 1.2))
   // far wall with its shaded inner face, and the two side walls
-  out.push(solid({ x: SHELL.x, y: BACK, w: SHELL.w, d: WALL, r: 1 }, FLOOR_Z, RIM_Z - FLOOR_Z, P, 'mid'))
-  out.push(faceQuad([[-79, BACK + WALL - 0.2, FLOOR_Z], [79, BACK + WALL - 0.2, FLOOR_Z], [79, BACK + WALL - 0.2, RIM_Z], [-79, BACK + WALL - 0.2, RIM_Z]], P, 1))
-  for (const z of [99.5, 101.8]) out.push(k.lineSvg(k.segment([-78, BACK + WALL - 0.1, z], [78, BACK + WALL - 0.1, z], P), { tone: 'faint' }))
-  for (const x of [SHELL.x, SHELL.x + SHELL.w - WALL]) out.push(solid({ x, y: BACK, w: WALL, d: SHELL.d, r: 1 }, FLOOR_Z, RIM_Z - FLOOR_Z, P, 'mid'))
+  shell.push(solid({ x: SHELL.x, y: BACK, w: SHELL.w, d: WALL, r: 1 }, FLOOR_Z, RIM_Z - FLOOR_Z, P, 'mid'))
+  shell.push(faceQuad([[-79, BACK + WALL - 0.2, FLOOR_Z], [79, BACK + WALL - 0.2, FLOOR_Z], [79, BACK + WALL - 0.2, RIM_Z], [-79, BACK + WALL - 0.2, RIM_Z]], P, 1))
+  for (const z of [99.5, 101.8]) shell.push(k.lineSvg(k.segment([-78, BACK + WALL - 0.1, z], [78, BACK + WALL - 0.1, z], P), { tone: 'faint' }))
+  for (const x of [SHELL.x, SHELL.x + SHELL.w - WALL]) shell.push(solid({ x, y: BACK, w: WALL, d: SHELL.d, r: 1 }, FLOOR_Z, RIM_Z - FLOOR_Z, P, 'mid'))
   // hinge knuckles: two machined blocks on the back rim, at the lid's foot
   for (const x of [-64, 50]) {
-    out.push(solid({ x, y: BACK + 0.6, w: 14, d: 4.6, r: 1.4 }, RIM_Z, 2.6, P, 'mid', 4, 0.4))
-    out.push(k.lineSvg(k.segment([x + 4.4, BACK + 0.6, RIM_Z + 2.65], [x + 4.4, BACK + 5.1, RIM_Z + 2.65], P), { tone: 'lo' }))
+    shell.push(solid({ x, y: BACK + 0.6, w: 14, d: 4.6, r: 1.4 }, RIM_Z, 2.6, P, 'mid', 4, 0.4))
+    shell.push(k.lineSvg(k.segment([x + 4.4, BACK + 0.6, RIM_Z + 2.65], [x + 4.4, BACK + 5.1, RIM_Z + 2.65], P), { tone: 'lo' }))
   }
   // the well floor, then the two dividers that make the three trays
-  out.push(topRect(IN.x0, IN.y0, IN.x1, IN.y1, FLOOR_Z + 0.06, P, 0))
-  for (const x of DIVIDERS) out.push(solid({ x, y: IN.y0, w: 2, d: IN.y1 - IN.y0, r: 0.5 }, FLOOR_Z, RIM_Z - FLOOR_Z, P, 'mid'))
+  shell.push(topRect(IN.x0, IN.y0, IN.x1, IN.y1, FLOOR_Z + 0.06, P, 0))
+  for (const x of DIVIDERS) shell.push(solid({ x, y: IN.y0, w: 2, d: IN.y1 - IN.y0, r: 0.5 }, FLOOR_Z, RIM_Z - FLOOR_Z, P, 'mid'))
+
+  // the three trays, each its own group so each can be seated separately
   for (const [i, tray] of [leftTray, middleTray, rightTray].entries())
-    out.push(`<g class="home-case-tray" data-index="${i}">${tray(P)}</g>`)
+    trays.push(`<g class="home-case-tray" data-index="${i}">${tray(P)}</g>`)
+
   // the near wall last: it closes the case and hides the near half of the trays
-  out.push(solid({ x: SHELL.x, y: IN.y1, w: SHELL.w, d: WALL, r: 1 }, TOP, RIM_Z - TOP, P, 'mid', 4, 1))
-  out.push(k.lineSvg(k.planOutline(k.insetPlan(SHELL, 3.6), RIM_Z + 0.5, P, 6), { tone: 'faint' }))
-  out.push(k.lineSvg(k.planOutline({ x: IN.x0, y: IN.y0, w: IN.x1 - IN.x0, d: IN.y1 - IN.y0, r: 2 }, RIM_Z + 0.4, P, 4), { tone: 'faint' }))
+  front.push(solid({ x: SHELL.x, y: IN.y1, w: SHELL.w, d: WALL, r: 1 }, TOP, RIM_Z - TOP, P, 'mid', 4, 1))
+  front.push(k.lineSvg(k.planOutline(k.insetPlan(SHELL, 3.6), RIM_Z + 0.5, P, 6), { tone: 'faint' }))
+  front.push(k.lineSvg(k.planOutline({ x: IN.x0, y: IN.y0, w: IN.x1 - IN.x0, d: IN.y1 - IN.y0, r: 2 }, RIM_Z + 0.4, P, 4), { tone: 'faint' }))
 
   // front latch with its slot, and the carry handle on two mounts
-  out.push(solid({ x: -10, y: FRONT - 2.2, w: 20, d: 2.4, r: 1 }, TOP + 22, 7, P, 'mid', 4, 0.5))
-  out.push(frontRect(-4.5, TOP + 24.5, 4.5, TOP + 26.5, FRONT + 0.3, P, 0, 'lo'))
-  for (const x of [-25, 19]) out.push(solid({ x, y: FRONT - 0.6, w: 6, d: 4.6, r: 1 }, TOP + 1, 8, P, 'mid'))
-  out.push(solid({ x: -21, y: FRONT + 1.2, w: 42, d: 3.4, r: 1.6 }, TOP + 3.5, 6, P, 'hi', 6, 0.8))
+  front.push(solid({ x: -10, y: FRONT - 2.2, w: 20, d: 2.4, r: 1 }, TOP + 22, 7, P, 'mid', 4, 0.5))
+  front.push(frontRect(-4.5, TOP + 24.5, 4.5, TOP + 26.5, FRONT + 0.3, P, 0, 'lo'))
+  for (const x of [-25, 19]) front.push(solid({ x, y: FRONT - 0.6, w: 6, d: 4.6, r: 1 }, TOP + 1, 8, P, 'mid'))
+  front.push(solid({ x: -21, y: FRONT + 1.2, w: 42, d: 3.4, r: 1.6 }, TOP + 3.5, 6, P, 'hi', 6, 0.8))
   // three engraved nameplates, one per tray, each with its label
-  TRAY_X.forEach(([a, b]) => out.push(k.lineSvg(k.pathOf([[a + 3, FRONT + 0.2, TOP + 11], [b - 3, FRONT + 0.2, TOP + 11], [b - 3, FRONT + 0.2, TOP + 19], [a + 3, FRONT + 0.2, TOP + 19]].map((p) => k.iso(p, P)), true), { tone: 'faint' })))
-  TRAY_MID.forEach((x, i) => labels[i] && out.push(k.faceTextSvg(k.sideMatrix([x, FRONT], TOP + 15, P, 'left'), labels[i], { size: 2.6, tone: 'faint', anchor: 'middle' })))
+  TRAY_X.forEach(([a, b]) => front.push(k.lineSvg(k.pathOf([[a + 3, FRONT + 0.2, TOP + 11], [b - 3, FRONT + 0.2, TOP + 11], [b - 3, FRONT + 0.2, TOP + 19], [a + 3, FRONT + 0.2, TOP + 19]].map((p) => k.iso(p, P)), true), { tone: 'faint' })))
+  TRAY_MID.forEach((x, i) => labels[i] && front.push(k.faceTextSvg(k.sideMatrix([x, FRONT], TOP + 15, P, 'left'), labels[i], { size: 2.6, tone: 'faint', anchor: 'middle' })))
+
+  // the shut slab: the only thing in its run, and the last thing painted
+  closed.push(closedLidSvg(P))
 
   // the stay sits in front of the lid's face and on the rim, so it comes after
   // the body; the shut lid comes last of all and covers the whole interior
-  out.push(staySvg(P))
-  out.push(closedLidSvg(P))
-
-  return out.join('')
+  return [
+    lidSvg(P),
+    part('shell', shell),
+    part('trays', trays),
+    part('front', front),
+    staySvg(P),
+    part('closed', closed),
+  ].join('')
 }
 
 export function toolboxBounds() {

@@ -22,12 +22,13 @@ interface State {
   svg: SVGSVGElement
   lines: string[]
   textEls: SVGTextElement[]
-  block: SVGGElement | null
+  paper: SVGGElement | null
   keys: Map<string, SVGGElement>
   shown: number
   total: number
   timer: number
   resume: number
+  swapTimer: number
   modules: SVGGElement[]
   caps: SVGGElement[]
   channels: SVGAElement[]
@@ -60,23 +61,22 @@ function paint(s: State, count: number): void {
 }
 
 /**
- * The sheet feeds up one line at a time: the line being struck always sits at
- * the roller, and everything already typed rides up out of frame. The CSS
- * transition on `.home-typed-block` is what makes it a feed rather than a jump.
+ * The sheet feeds up one line at a time: the strip, the typing and the paper's
+ * own top edge all travel together, and the line being struck always sits at
+ * the roller. The CSS transition on .home-paper-group makes it a feed.
  */
 function feed(s: State, count: number): void {
-  if (!s.block)
+  const group = s.paper
+  if (!group)
     return
-  const bottom = Number(s.block.dataset.bottom || 48)
+  const leading = Number(group.dataset.leading || 7.8)
   let line = 0
   let left = count
   for (let i = 0; i < s.lines.length && left > 0; i++) {
     left -= s.lines[i].length
     line = i
   }
-  const el = s.textEls[line]
-  const y = Number(el?.getAttribute('y') || 8)
-  s.block.style.transform = `translateY(${(bottom - y).toFixed(2)}px)`
+  group.style.transform = `translateY(${(-line * leading).toFixed(2)}px)`
 }
 
 function strike(s: State, char: string): void {
@@ -152,13 +152,11 @@ function projectSection(section: string): void {
  * swapped until another key is chosen — the reader's selection is not undone
  * by moving the pointer away.
  */
-function setModule(s: State, index: number): void {
-  if (index === s.active)
-    return
-  s.active = index
+function applyModule(s: State, index: number): void {
   let section = ''
   for (const m of s.modules) {
     const on = Number(m.dataset.index) === index
+    m.classList.remove('is-leaving')
     m.classList.toggle('is-active', on)
     if (on)
       section = m.dataset.module || ''
@@ -173,6 +171,31 @@ function setModule(s: State, index: number): void {
   }
   document.documentElement.dataset.homeSection = section
   projectSection(section)
+}
+
+/**
+ * Swap choreography: the outgoing machine drops through the deck while the
+ * lift dips, then the incoming one rides up on the platform and its
+ * sub-assemblies settle in sequence (see .home-part in home.css).
+ */
+function setModule(s: State, index: number): void {
+  if (index === s.active)
+    return
+  const prev = s.modules.find(m => Number(m.dataset.index) === s.active)
+  s.active = index
+  window.clearTimeout(s.swapTimer)
+  if (!prev || prefersReducedMotion()) {
+    applyModule(s, index)
+    return
+  }
+  prev.classList.add('is-leaving')
+  s.stage.classList.remove('is-swapping')
+  void s.stage.offsetWidth
+  s.stage.classList.add('is-swapping')
+  s.swapTimer = window.setTimeout(() => {
+    s.swapTimer = 0
+    applyModule(s, index)
+  }, 180)
 }
 
 function mount(): void {
@@ -198,7 +221,7 @@ function mount(): void {
   const caps = [...svg.querySelectorAll<SVGGElement>('.home-keycap')]
   const channels = [...svg.querySelectorAll<SVGAElement>('.home-channel')]
   const textEls = [...svg.querySelectorAll<SVGTextElement>('.home-typed-line')]
-  const block = svg.querySelector<SVGGElement>('.home-typed-block')
+  const paper = svg.querySelector<SVGGElement>('.home-paper-group')
   const keys = new Map<string, SVGGElement>()
   for (const key of svg.querySelectorAll<SVGGElement>('.home-key')) {
     const id = key.getAttribute('data-key')
@@ -211,12 +234,13 @@ function mount(): void {
     svg,
     lines,
     textEls,
-    block,
+    paper,
     keys,
     shown: totalChars(lines),
     total: totalChars(lines),
     timer: 0,
     resume: 0,
+    swapTimer: 0,
     modules,
     caps,
     channels,
@@ -315,6 +339,9 @@ function unmount(): void {
   stopTour(state)
   if (state.resume)
     window.clearTimeout(state.resume)
+  if (state.swapTimer)
+    window.clearTimeout(state.swapTimer)
+  state.stage.classList.remove('is-swapping')
   state.cleanup()
   state = null
 }

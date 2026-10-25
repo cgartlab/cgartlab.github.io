@@ -3,7 +3,12 @@
    The lid is a real hinged group in the SVG. A rotation about a horizontal
    hinge parallel to the picture plane projects to a vertical squash about the
    hinge line, so the opening is animated as scaleY on the lid group, with the
-   closed lid slab underneath handing over in the first 90ms.
+   closed lid slab underneath handing over once the case has assembled.
+
+   Two phases, and the second one only starts after the first is done:
+     0 – 390 ms   the case assembles itself shut (see the assembly below)
+     390 ms       the slab hands over to the hinged lid
+     390 – 1100   the lid lifts, the tools on its face resolve, the stay swings
    ========================================================================== */
 
 /* the closed lid: a flat slab lying on the case, visible only while shut */
@@ -11,7 +16,6 @@
   opacity: 1;
   transition: opacity 260ms ease;
 }
-.home-stage .home-module.is-active .home-case-closed { opacity: 0; }
 
 /* the hinged lid: shut (nearly edge-on) to open */
 .home-stage .home-case-lid {
@@ -20,16 +24,12 @@
   transform: scaleY(0.04);
   transition: transform 700ms cubic-bezier(0.45, 0.05, 0.25, 1);
 }
-.home-stage .home-module.is-active .home-case-lid {
-  transform: scaleY(1);
-}
 
 /* the tools ride the lid, so they only resolve once it is nearly up */
 .home-stage .home-case-tools {
   opacity: 0.35;
-  transition: opacity 260ms ease 380ms;
+  transition: opacity 260ms ease;
 }
-.home-stage .home-module.is-active .home-case-tools { opacity: 1; }
 
 /* the prop arm that holds the lid up swings out last. Its origin is the foot
    pivot on the back rim, which sits a hair above the group's bounding box
@@ -38,18 +38,160 @@
   transform-box: fill-box;
   transform-origin: 50% 95%;
   transform: scaleY(0.1);
-  transition: transform 240ms ease 470ms;
+  transition: transform 240ms ease;
 }
-.home-stage .home-module.is-active .home-case-prop { transform: scaleY(1); }
+
+/* The handover. The delays sit on the active state only, so the way out — the
+   module leaving the stage — still closes and drops immediately instead of
+   waiting 390 ms first. The relative offsets of the tools and the stay are the
+   ones the case has always had (380 / 470 ms after the lid starts). */
+.home-stage .home-module.is-active .home-case-closed {
+  opacity: 0;
+  transition-delay: 390ms;
+}
+.home-stage .home-module.is-active .home-case-lid {
+  transform: scaleY(1);
+  transition-delay: 390ms;
+}
+.home-stage .home-module.is-active .home-case-tools {
+  opacity: 1;
+  transition-delay: 770ms;
+}
+.home-stage .home-module.is-active .home-case-prop {
+  transform: scaleY(1);
+  transition-delay: 860ms;
+}
+
+/* --------------------------------------------------------------------------
+   The assembly. Every rule here overrides the generic `.home-part` settle in
+   home.css (higher specificity: the extra `[data-part]` attribute) and states
+   both `animation` and `animation-delay`, so the four beats stay legible:
+
+     shell  0   80 → 340   the whole body rises off the deck and settles back
+     trays  1  110 → 350   three trays drop into their seats, one after another
+     front  2   80 → 380   the near wall holds proud, then snaps home last
+     closed 3   80 → 340   the shut slab rides the rim, welded to the shell
+
+   The shut slab covers the well, so the trays seat underneath it and the case
+   opens onto a finished interior rather than a filling one.
+
+   Fill mode is `backwards`, not `both`: every keyframe ends on
+   `transform: none; opacity: 1`, which is exactly the resting style, so the
+   backwards fill hides a part during its delay and then lets go once it lands.
+   Holding the fill instead would keep the group composited for the rest of the
+   page's life, and the engraved nameplates would re-rasterise without subpixel
+   AA (the same trade measured on 02 in cinema.css).
+   -------------------------------------------------------------------------- */
+
+.home-module.is-active .home-part[data-part='shell'] {
+  animation: home-tb-shell 260ms cubic-bezier(0.2, 0.86, 0.24, 1) backwards;
+  animation-delay: 80ms;
+}
+
+/* the shut slab shares the shell's transform curve to the millisecond, so the
+   two never separate at the rim while the case is being lowered onto the deck */
+.home-module.is-active .home-part[data-part='closed'] {
+  animation: home-tb-closed 260ms cubic-bezier(0.2, 0.86, 0.24, 1) backwards;
+  animation-delay: 80ms;
+}
+
+.home-module.is-active .home-part[data-part='trays'] {
+  animation: home-tb-trays 120ms linear backwards;
+  animation-delay: 110ms;
+}
+
+.home-module.is-active .home-part[data-part='front'] {
+  animation: home-tb-front 300ms cubic-bezier(0.2, 0.86, 0.24, 1) backwards;
+  animation-delay: 80ms;
+}
+
+/* each tray is its own group, so each can be dropped onto its own seat */
+.home-module.is-active .home-part[data-part='trays'] .home-case-tray {
+  transform-box: fill-box;
+  transform-origin: 50% 50%;
+}
+
+.home-module.is-active .home-part[data-part='trays'] .home-case-tray[data-index='0'] {
+  animation: home-tb-tray 110ms cubic-bezier(0.24, 0.86, 0.26, 1) backwards;
+  animation-delay: 130ms;
+}
+
+.home-module.is-active .home-part[data-part='trays'] .home-case-tray[data-index='1'] {
+  animation: home-tb-tray 110ms cubic-bezier(0.24, 0.86, 0.26, 1) backwards;
+  animation-delay: 185ms;
+}
+
+.home-module.is-active .home-part[data-part='trays'] .home-case-tray[data-index='2'] {
+  animation: home-tb-tray 110ms cubic-bezier(0.24, 0.86, 0.26, 1) backwards;
+  animation-delay: 240ms;
+}
+
+/* the body comes up off the deck and takes the weight */
+@keyframes home-tb-shell {
+  from { opacity: 0; transform: translateY(6px); }
+  18% { opacity: 1; }
+  70% { transform: translateY(-0.7px); }
+  to { opacity: 1; transform: none; }
+}
+
+/* the shut slab: there from the first frame — the case arrives closed — and
+   riding the shell's exact curve, so the rim never opens up under it */
+@keyframes home-tb-closed {
+  from { opacity: 0; transform: translateY(6px); }
+  8% { opacity: 1; }
+  70% { transform: translateY(-0.7px); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes home-tb-trays {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* a tray drops from a little above its seat and takes one small bounce */
+@keyframes home-tb-tray {
+  from { opacity: 0; transform: translateY(-7px); }
+  45% { opacity: 1; }
+  78% { transform: translateY(0.9px); }
+  to { opacity: 1; transform: none; }
+}
+
+/* the near wall rides up with the body, then holds a hair proud of the base
+   until the trays are home, and snaps shut over them — the last thing to land */
+@keyframes home-tb-front {
+  from { opacity: 0; transform: translateY(9px); }
+  14% { opacity: 1; }
+  55% { transform: translateY(2px); }
+  82% { transform: translateY(2px); }
+  to { opacity: 1; transform: none; }
+}
+
+/* reduced motion: the case is simply open, in place, with nothing to settle -- */
 
 html.reduce-motion .home-stage .home-case-lid,
 html.reduce-motion .home-stage .home-case-prop { transform: none; transition: none; }
 html.reduce-motion .home-stage .home-case-tools { opacity: 1; transition: none; }
 html.reduce-motion .home-stage .home-case-closed { display: none; }
 
+html.reduce-motion .home-module.is-active .home-part[data-part],
+html.reduce-motion .home-module.is-active .home-case-tray {
+  animation: none !important;
+  animation-delay: 0ms !important;
+  opacity: 1;
+  transform: none;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .home-stage .home-case-lid,
   .home-stage .home-case-prop { transform: none; transition: none; }
   .home-stage .home-case-tools { opacity: 1; transition: none; }
   .home-stage .home-case-closed { display: none; }
+
+  .home-module.is-active .home-part[data-part],
+  .home-module.is-active .home-case-tray {
+    animation: none !important;
+    animation-delay: 0ms !important;
+    opacity: 1;
+    transform: none;
+  }
 }

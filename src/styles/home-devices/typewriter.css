@@ -1,0 +1,128 @@
+/* ==========================================================================
+   01 — 文章: the typewriter
+   The machine is drawn as seven sub-assemblies, in paint order: the case, the
+   four stepped decks, the four rows of keys, the carriage that travels on the
+   rails, the platen with its knobs, the typebars and ribbon, and the paper with
+   the table it rests on.
+
+   home.css gives every `.home-part` the same generic settle. Here each one gets
+   the motion its own mechanism would have, and they arrive in the order the
+   machine would be assembled: the case comes up from under the deck, the key
+   rows snap up one after another, the carriage slides in from the right and
+   drops onto its rails, the platen and knobs twist down onto the carriage, the
+   typebars flick into the basket, and the paper is fed up through the roller
+   last. The whole assembly is over in ~860ms.
+
+   Every animation ends on `transform: none; opacity: 1`, so the assembled
+   machine is exactly the static drawing.
+   ========================================================================== */
+
+/* the case: up from below, a touch too far, then back onto the deck --------- */
+.home-module.is-active .home-part[data-part='base'] {
+  animation: tw-base-seat 460ms cubic-bezier(0.22, 0.9, 0.24, 1) both;
+  animation-delay: 60ms;
+}
+
+/* the four stepped decks: each rises out of the deck plane under it --------- */
+.home-module.is-active .home-part[data-part='deck'] {
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+  animation: tw-deck-pop 250ms cubic-bezier(0.22, 0.9, 0.24, 1) both;
+  /* --step is the row: front row first, then one row after another */
+  animation-delay: calc(120ms + var(--step) * 44ms);
+}
+
+/* the keys: the same row wave, a beat behind their own deck ----------------- */
+.home-module.is-active .home-part[data-part='keys'] {
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+  animation: tw-key-pop 300ms cubic-bezier(0.22, 0.9, 0.24, 1) both;
+  animation-delay: calc(150ms + var(--step) * 44ms);
+}
+
+/* the carriage: in from the right, a clunk past the rails, then seated ------ */
+.home-module.is-active .home-part[data-part='carriage'] {
+  animation: tw-carriage-seat 380ms cubic-bezier(0.22, 0.9, 0.24, 1) both;
+  animation-delay: 300ms;
+}
+
+/* the platen and each knob: down onto the carriage with a small twist ------- */
+.home-module.is-active .home-part[data-part='platen'] {
+  transform-box: fill-box;
+  transform-origin: 50% 50%;
+  animation: tw-platen-seat 340ms cubic-bezier(0.22, 0.9, 0.24, 1) both;
+  animation-delay: 420ms;
+}
+
+/* the typebars: they flick up out of the basket and fall back into rest ------ */
+.home-module.is-active .home-part[data-part='mechanism'] {
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+  animation: tw-mechanism-seat 280ms cubic-bezier(0.22, 0.9, 0.24, 1) both;
+  animation-delay: 500ms;
+}
+
+/* the paper: last, fed up through the roller ------------------------------- */
+.home-module.is-active .home-part[data-part='paper'] {
+  animation: tw-paper-feed 320ms cubic-bezier(0.22, 0.9, 0.24, 1) both;
+  animation-delay: 540ms;
+}
+
+@keyframes tw-base-seat {
+  0% { opacity: 0; transform: translateY(17px); }
+  58% { opacity: 1; transform: translateY(-2.6px); }
+  80% { transform: translateY(0.9px); }
+  100% { transform: none; }
+}
+
+@keyframes tw-deck-pop {
+  0% { opacity: 0; transform: translateY(9px) scaleY(0.55); }
+  55% { opacity: 1; transform: translateY(-1.4px) scaleY(1.04); }
+  100% { transform: none; }
+}
+
+@keyframes tw-key-pop {
+  0% { opacity: 0; transform: translateY(11px) scale(0.9); }
+  52% { opacity: 1; transform: translateY(-2.2px) scale(1.02); }
+  76% { transform: translateY(0.6px) scale(0.997); }
+  100% { transform: none; }
+}
+
+@keyframes tw-carriage-seat {
+  0% { opacity: 0; transform: translate(20px, -8px); }
+  56% { opacity: 1; transform: translate(-2px, 2.2px); }
+  78% { transform: translate(0.7px, -0.7px); }
+  100% { transform: none; }
+}
+
+@keyframes tw-platen-seat {
+  0% { opacity: 0; transform: translateY(10px) rotate(-3.4deg); }
+  58% { opacity: 1; transform: translateY(-1.8px) rotate(0.8deg); }
+  100% { transform: none; }
+}
+
+@keyframes tw-mechanism-seat {
+  0% { opacity: 0; transform: translateY(7px) scaleY(0.8); }
+  55% { opacity: 1; transform: translateY(-1.2px) scaleY(1.05); }
+  100% { transform: none; }
+}
+
+@keyframes tw-paper-feed {
+  0% { opacity: 0; transform: translateY(20px); }
+  62% { opacity: 1; transform: translateY(-2px); }
+  100% { transform: none; }
+}
+
+/* reduced motion: the machine is simply there ------------------------------ */
+
+html.reduce-motion .home-module.is-active .home-part[data-part] {
+  animation: none !important;
+  animation-delay: 0ms !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-module.is-active .home-part[data-part] {
+    animation: none !important;
+    animation-delay: 0ms !important;
+  }
+}

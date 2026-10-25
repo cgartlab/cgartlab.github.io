@@ -27,6 +27,14 @@ import { faceMatrix, facePath, frameOf } from './frame.mjs'
  * Painter order is far to near: feet, body, lid, the frame's back and side bars,
  * the roll and its clear cover, the frame's front bar (which hides the roll's
  * underside), the front face and its mechanism, then the tickets.
+ *
+ * Those runs are also the sub-assemblies: feet / body / window / roll / cradle /
+ * face / tickets, each a contiguous `<g class="home-part">` carrying a --step.
+ * Wrapping them changes no painter's order, only which assembly a path belongs
+ * to; labels.css turns the shared settle into the real build — feet land, the
+ * body settles on them, the frame swings down, the roll drops into it and rocks
+ * once, the front bar closes, the face plate comes on last, and only then does
+ * the printing start.
  */
 
 const BODY = { x: -62, y: -35, w: 124, d: 70, r: 9 }
@@ -72,6 +80,24 @@ const FLY = [
   [-94, 38, 103], [-47, 38, 115], [0, 38, 121], [47, 38, 115], [94, 38, 103],
   [-68, 14, 132], [0, 14, 138], [68, 14, 132],
 ]
+
+/**
+ * How long the case takes to build. The tickets wait for it: the first one
+ * leaves the slot just after the last panel closes, and each follows 700ms
+ * apart, so printing starts on a finished machine.
+ */
+const BUILD = 1000
+const PRINT_GAP = 700
+
+/**
+ * One sub-assembly. Each run is a contiguous stretch of what already painted
+ * together, so wrapping it changes no painter's order — only which assembly a
+ * path belongs to. `--step` is the shared settle contract in home.css;
+ * labels.css replaces it with the real assembly.
+ */
+function part(name, step, ...items) {
+  return `<g class="home-part" data-part="${name}" style="--step:${step}">${items.join('')}</g>`
+}
 
 const HAN = /[\u3000-\u9fff\uff00-\uffef]/
 /** Rough advance in em, so a nine-character tag still fits the paper. */
@@ -124,88 +150,106 @@ export function buildLabels(P, options = {}) {
   const caption = options.caption || '标签'
   const out = []
 
-  // feet, far to near
+  // feet, far to near: they land first, and the body settles onto them
+  const feet = []
   for (const { x, y } of k.corners(BODY, 7).map(([x, y]) => ({ x, y, d: k.depthOf([x, y, 0], P) })).sort((a, b) => a.d - b.d)) {
-    out.push(k.solidSvg(k.cylinder(x, y, 7, TOP, FOOT, P, 20), { tone: 'lo' }))
-    out.push(k.lineSvg(k.sideArc(x, y, 7, TOP + FOOT - 1.6, P, 14), { tone: 'faint' }))
+    feet.push(k.solidSvg(k.cylinder(x, y, 7, TOP, FOOT, P, 20), { tone: 'lo' }))
+    feet.push(k.lineSvg(k.sideArc(x, y, 7, TOP + FOOT - 1.6, P, 14), { tone: 'faint' }))
   }
+  out.push(part('feet', 0, ...feet))
 
   // body, its lid seam, then the lid: one slab with a heavy bevel, so it domes
-  out.push(k.solidSvg(k.slabOf(BODY, BZ, BODY_H, P, 8, 3), { tone: 'mid' }))
-  out.push(k.lineSvg(k.sideSeam(BODY, LID_Z, P, 8), { tone: 'faint' }))
-  out.push(k.solidSvg(k.slabOf(k.insetPlan(BODY, 5), LID_Z, LID_TOP - LID_Z, P, 8, 3.4), { tone: 'hi' }))
+  out.push(part('body', 1,
+    k.solidSvg(k.slabOf(BODY, BZ, BODY_H, P, 8, 3), { tone: 'mid' }),
+    k.lineSvg(k.sideSeam(BODY, LID_Z, P, 8), { tone: 'faint' }),
+    k.solidSvg(k.slabOf(k.insetPlan(BODY, 5), LID_Z, LID_TOP - LID_Z, P, 8, 3.4), { tone: 'hi' }),
+  ))
 
   // window frame: back and side bars first, so the roll sits inside them
+  const bars = []
   for (const bar of [
     { x: TRAY.x, y: TRAY.y, w: TRAY.w, d: BAR, r: 2.5 },
     { x: TRAY.x, y: TRAY.y + BAR, w: BAR, d: TRAY.d - BAR * 2, r: 2.5 },
     { x: TRAY.x + TRAY.w - BAR, y: TRAY.y + BAR, w: BAR, d: TRAY.d - BAR * 2, r: 2.5 },
   ]) {
-    out.push(k.solidSvg(k.slabOf(bar, LID_TOP, TRAY_H, P, 4, 0.6), { tone: 'mid' }))
-    out.push(k.lineSvg(k.planOutline(k.insetPlan(bar, 1.8), LID_TOP + TRAY_H, P, 4), { tone: 'faint' }))
+    bars.push(k.solidSvg(k.slabOf(bar, LID_TOP, TRAY_H, P, 4, 0.6), { tone: 'mid' }))
+    bars.push(k.lineSvg(k.planOutline(k.insetPlan(bar, 1.8), LID_TOP + TRAY_H, P, 4), { tone: 'faint' }))
   }
+  out.push(part('window', 2, ...bars))
 
-  out.push(stock(P))
+  // the stock roll: it drops into the cradle the bars have just made
+  out.push(part('roll', 3, stock(P)))
 
   // the frame's front bar closes over the roll: it hides the underside
-  out.push(k.solidSvg(k.slabOf({ x: TRAY.x, y: TRAY.y + TRAY.d - BAR, w: TRAY.w, d: BAR, r: 2.5 }, LID_TOP, TRAY_H, P, 4, 0.6), { tone: 'mid' }))
+  out.push(part('cradle', 4,
+    k.solidSvg(k.slabOf({ x: TRAY.x, y: TRAY.y + TRAY.d - BAR, w: TRAY.w, d: BAR, r: 2.5 }, LID_TOP, TRAY_H, P, 4, 0.6), { tone: 'mid' }),
+  ))
 
   // ---- front face -------------------------------------------------------
+  // The plate carries the whole mechanism, so it closes on last and brings the
+  // slot, the transport pair, the cutter, the carriage, the rocker and the lamp
+  // with it. The face's own children keep their own animations untouched.
+  const face = []
   // the slot: a dark recess with the transport pair just inside it
   const slot = k.pathOf([
     k.iso([SLOT.x, FRONT + 0.06, SLOT.z - SLOT.h / 2], P), k.iso([SLOT.x + SLOT.w, FRONT + 0.06, SLOT.z - SLOT.h / 2], P),
     k.iso([SLOT.x + SLOT.w, FRONT + 0.06, SLOT.z + SLOT.h / 2], P), k.iso([SLOT.x, FRONT + 0.06, SLOT.z + SLOT.h / 2], P),
   ], true)
-  out.push(`<path class="home-cavity" d="${slot}"/>`)
-  out.push(k.solidSvg(G.solidOf([[0, INNER.r], [SLOT.w - 14, INNER.r]], G.frameAlong([SLOT.x + 7, INNER.y, INNER.z], [1, 0, 0]), P), { tone: 'mid', className: 'home-platen' }))
+  face.push(`<path class="home-cavity" d="${slot}"/>`)
+  face.push(k.solidSvg(G.solidOf([[0, INNER.r], [SLOT.w - 14, INNER.r]], G.frameAlong([SLOT.x + 7, INNER.y, INNER.z], [1, 0, 0]), P), { tone: 'mid', className: 'home-platen' }))
 
   // the knurled transport wheel, seated on the face at the mouth's right
   const [wx, wy] = k.iso(WHEEL_AT, P)
-  out.push(k.lineSvg(G.circleOf(WHEEL_F, 0.2, WHEEL.r + 2.2, P), { tone: 'faint' }))
-  out.push(`<g class="home-feed-roller" style="transform-origin:${wx.toFixed(1)}px ${wy.toFixed(1)}px"><g class="home-wheel">`)
-  out.push(k.solidSvg(G.solidOf([[0, WHEEL.r], [WHEEL.face, WHEEL.r]], WHEEL_F, P), { tone: 'mid' }))
-  out.push(k.lineSvg(G.spokesOf(WHEEL_F, WHEEL.face, WHEEL.r * 0.68, WHEEL.r * 0.98, 20, P), { tone: 'hi' }))
-  out.push(k.lineSvg(G.circleOf(WHEEL_F, WHEEL.face, WHEEL.r * 0.68, P), { tone: 'faint' }))
-  out.push(k.solidSvg(G.ringBand(WHEEL.face, WHEEL.face + 1.2, WHEEL.r * 0.28, WHEEL.r * 0.68, WHEEL_F, P), { tone: 'mid' }))
-  out.push(k.lineSvg(G.circleOf(WHEEL_F, WHEEL.face + 1.2, WHEEL.r * 0.28, P), { tone: 'lo' }))
-  out.push('</g></g>')
+  face.push(k.lineSvg(G.circleOf(WHEEL_F, 0.2, WHEEL.r + 2.2, P), { tone: 'faint' }))
+  face.push(`<g class="home-feed-roller" style="transform-origin:${wx.toFixed(1)}px ${wy.toFixed(1)}px"><g class="home-wheel">`)
+  face.push(k.solidSvg(G.solidOf([[0, WHEEL.r], [WHEEL.face, WHEEL.r]], WHEEL_F, P), { tone: 'mid' }))
+  face.push(k.lineSvg(G.spokesOf(WHEEL_F, WHEEL.face, WHEEL.r * 0.68, WHEEL.r * 0.98, 20, P), { tone: 'hi' }))
+  face.push(k.lineSvg(G.circleOf(WHEEL_F, WHEEL.face, WHEEL.r * 0.68, P), { tone: 'faint' }))
+  face.push(k.solidSvg(G.ringBand(WHEEL.face, WHEEL.face + 1.2, WHEEL.r * 0.28, WHEEL.r * 0.68, WHEEL_F, P), { tone: 'mid' }))
+  face.push(k.lineSvg(G.circleOf(WHEEL_F, WHEEL.face + 1.2, WHEEL.r * 0.28, P), { tone: 'lo' }))
+  face.push('</g></g>')
 
   // cutter bar over the slot, with its blade line
-  out.push('<g class="home-cutter">')
-  out.push(k.solidSvg(k.slabOf({ x: SLOT.x - 2, y: FRONT - 1, w: SLOT.w + 4, d: 2.6, r: 1 }, CUTTER, 2.4, P, 4, 0.6), { tone: 'hi' }))
-  out.push(k.lineSvg(k.segment([SLOT.x - 1, FRONT + 1.7, CUTTER - 0.2], [SLOT.x + SLOT.w + 1, FRONT + 1.7, CUTTER - 0.2], P), { tone: 'lo' }))
-  out.push('</g>')
+  face.push('<g class="home-cutter">')
+  face.push(k.solidSvg(k.slabOf({ x: SLOT.x - 2, y: FRONT - 1, w: SLOT.w + 4, d: 2.6, r: 1 }, CUTTER, 2.4, P, 4, 0.6), { tone: 'hi' }))
+  face.push(k.lineSvg(k.segment([SLOT.x - 1, FRONT + 1.7, CUTTER - 0.2], [SLOT.x + SLOT.w + 1, FRONT + 1.7, CUTTER - 0.2], P), { tone: 'lo' }))
+  face.push('</g>')
 
   // print carriage: the rail is fixed, the carriage and its dark bar shuttle
-  out.push(k.solidSvg(k.slabOf({ x: RAIL.x, y: FRONT - 1.6, w: RAIL.w, d: 3.4, r: 1.2 }, RAIL.z, RAIL.h, P, 4, 0.6), { tone: 'mid' }))
+  face.push(k.solidSvg(k.slabOf({ x: RAIL.x, y: FRONT - 1.6, w: RAIL.w, d: 3.4, r: 1.2 }, RAIL.z, RAIL.h, P, 4, 0.6), { tone: 'mid' }))
   for (const x of [RAIL.x + 1, RAIL.x + RAIL.w - 6]) {
-    out.push(k.solidSvg(k.slabOf({ x, y: FRONT - 1.9, w: 5, d: 4, r: 1 }, RAIL.z - 3.4, 3.4, P, 4, 0.5), { tone: 'lo' }))
+    face.push(k.solidSvg(k.slabOf({ x, y: FRONT - 1.9, w: 5, d: 4, r: 1 }, RAIL.z - 3.4, 3.4, P, 4, 0.5), { tone: 'lo' }))
   }
-  out.push('<g class="home-print-head">')
-  out.push(k.solidSvg(k.slabOf({ x: CARRIAGE.x, y: FRONT - 2.4, w: CARRIAGE.w, d: 5, r: 1.6 }, CARRIAGE.z, CARRIAGE.h, P, 4, 0.9), { tone: 'hi' }))
-  out.push(k.lineSvg(k.segment([CARRIAGE.x + 3, FRONT + 2.7, CARRIAGE.z + 2.7], [CARRIAGE.x + CARRIAGE.w - 3, FRONT + 2.7, CARRIAGE.z + 2.7], P), { tone: 'lo' }))
+  face.push('<g class="home-print-head">')
+  face.push(k.solidSvg(k.slabOf({ x: CARRIAGE.x, y: FRONT - 2.4, w: CARRIAGE.w, d: 5, r: 1.6 }, CARRIAGE.z, CARRIAGE.h, P, 4, 0.9), { tone: 'hi' }))
+  face.push(k.lineSvg(k.segment([CARRIAGE.x + 3, FRONT + 2.7, CARRIAGE.z + 2.7], [CARRIAGE.x + CARRIAGE.w - 3, FRONT + 2.7, CARRIAGE.z + 2.7], P), { tone: 'lo' }))
   const bar = k.pathOf([
     k.iso([PRINT_BAR.x, FRONT + 2.5, PRINT_BAR.z], P), k.iso([PRINT_BAR.x + PRINT_BAR.w, FRONT + 2.5, PRINT_BAR.z], P),
     k.iso([PRINT_BAR.x + PRINT_BAR.w, FRONT + 2.5, PRINT_BAR.z + PRINT_BAR.h], P), k.iso([PRINT_BAR.x, FRONT + 2.5, PRINT_BAR.z + PRINT_BAR.h], P),
   ], true)
-  out.push(`<path class="home-cavity" d="${bar}"/>${k.lineSvg(bar, { tone: 'mid' })}`)
-  out.push('</g>')
+  face.push(`<path class="home-cavity" d="${bar}"/>${k.lineSvg(bar, { tone: 'mid' })}`)
+  face.push('</g>')
 
   // rocker, LED, vent grille, engraved caption
-  out.push(rocker(-45, TOP + 19, P))
+  face.push(rocker(-45, TOP + 19, P))
   const led = G.frameAlong([-20, FRONT, TOP + 19], [0, 1, 0])
-  out.push('<g class="home-label-led">')
-  out.push(k.solidSvg(G.ringBand(0, 1.5, 2.4, 3.4, led, P), { tone: 'mid' }))
-  out.push(k.solidSvg(G.disc(1, 2.5, 2.2, led, P), { tone: 'hi' }))
-  out.push(k.lineSvg(G.circleOf(led, 2.6, 2.2, P), { tone: 'faint' }))
-  out.push('</g>')
-  for (let i = 0; i < 5; i++) out.push(k.lineSvg(k.segment([10, FRONT + 0.3, TOP + 13 + i * 2.6], [50, FRONT + 0.3, TOP + 13 + i * 2.6], P), { tone: 'lo' }))
-  out.push(k.faceTextSvg(k.sideMatrix([0, FRONT], TOP + 27, P, 'left'), caption, { size: 4.4, tone: 'lo', anchor: 'middle' }))
+  face.push('<g class="home-label-led">')
+  face.push(k.solidSvg(G.ringBand(0, 1.5, 2.4, 3.4, led, P), { tone: 'mid' }))
+  face.push(k.solidSvg(G.disc(1, 2.5, 2.2, led, P), { tone: 'hi' }))
+  face.push(k.lineSvg(G.circleOf(led, 2.6, 2.2, P), { tone: 'faint' }))
+  face.push('</g>')
+  for (let i = 0; i < 5; i++) face.push(k.lineSvg(k.segment([10, FRONT + 0.3, TOP + 13 + i * 2.6], [50, FRONT + 0.3, TOP + 13 + i * 2.6], P), { tone: 'lo' }))
+  face.push(k.faceTextSvg(k.sideMatrix([0, FRONT], TOP + 27, P, 'left'), caption, { size: 4.4, tone: 'lo', anchor: 'middle' }))
+
+  out.push(part('face', 5, ...face))
 
   // ---- the tickets, last ------------------------------------------------
+  // They wait for the case: the wrapper holds them back until the last panel is
+  // on, and each ticket's own delay is measured from that beat.
   const ring = cardRing().map(([u, w]) => [u, 0, w])
   const [mx, my] = k.iso(MOUTH, P)
   const [ox, oy] = k.iso(OUT, P)
+  const tickets = []
   FLY.map((at, index) => ({ F: cardAt(at), index }))
     .sort((a, b) => k.depthOf(a.F.at(0, 0, 0), P) - k.depthOf(b.F.at(0, 0, 0), P))
     .forEach(({ F, index }) => {
@@ -216,14 +260,15 @@ export function buildLabels(P, options = {}) {
       // deltas run from the float *back* to the machine: mouth first, then out
       const fly = [mx - fx, my - fy]
       const exit = [ox - fx, oy - fy]
-      out.push(`<g class="home-ticket" style="--fly-x:${fly[0].toFixed(1)}px;--fly-y:${fly[1].toFixed(1)}px;--out-x:${exit[0].toFixed(1)}px;--out-y:${exit[1].toFixed(1)}px;--fly-delay:${index * 700}ms">`)
-      out.push(`<path class="home-ticket-paper" fill="var(--home-paper)" d="${paper}"/>`)
+      tickets.push(`<g class="home-ticket" style="--fly-x:${fly[0].toFixed(1)}px;--fly-y:${fly[1].toFixed(1)}px;--out-x:${exit[0].toFixed(1)}px;--out-y:${exit[1].toFixed(1)}px;--fly-delay:${BUILD + index * PRINT_GAP}ms">`)
+      tickets.push(`<path class="home-ticket-paper" fill="var(--home-paper)" d="${paper}"/>`)
       // the perforated edge down the left margin
-      out.push(k.lineSvg(k.pathOf([k.iso(F.at(-14.6, 0, -6.8), P), k.iso(F.at(-14.6, 0, 6.8), P)]), { tone: 'lo', dotted: true }))
-      out.push(k.faceTextSvg(faceMatrix(F, [2.4, 0, -size * 0.36], [1, 0, 0], [0, 0, -1], P), tag, { size, tone: 'hi', anchor: 'middle' }))
-      out.push(k.lineSvg(paper, { tone: 'lo' }))
-      out.push('</g>')
+      tickets.push(k.lineSvg(k.pathOf([k.iso(F.at(-14.6, 0, -6.8), P), k.iso(F.at(-14.6, 0, 6.8), P)]), { tone: 'lo', dotted: true }))
+      tickets.push(k.faceTextSvg(faceMatrix(F, [2.4, 0, -size * 0.36], [1, 0, 0], [0, 0, -1], P), tag, { size, tone: 'hi', anchor: 'middle' }))
+      tickets.push(k.lineSvg(paper, { tone: 'lo' }))
+      tickets.push('</g>')
     })
+  out.push(part('tickets', 6, ...tickets))
 
   return out.join('')
 }

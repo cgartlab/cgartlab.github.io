@@ -5,7 +5,127 @@
    --out-x / --out-y to a point just clear of the front face at slot height.
    The keyframes run the mechanism: emerge at the slot, slide out, get cut, then
    rise and settle into the float.
+
+   The assembly. home.css gives every `.home-part` the same generic settle; here
+   the machine builds itself in the order a ticket printer is put together. The
+   feet drop and take the weight, the body settles onto them, the window frame
+   swings down onto the lid, the stock roll drops into the cradle and rocks once,
+   the front bar clamps over it, and the face plate comes on last, bringing the
+   slot, the transport pair, the cutter, the carriage, the rocker and the lamp
+   with it. Only then do the tickets start: the wrapper holds them back until
+   the case is closed, and each ticket's own delay is measured from that beat.
+   The whole build is over in ~1000ms; the printing then keeps its own cycle.
+
+   Every animation ends on `transform: none; opacity: 1`, so the assembled
+   machine is exactly the static drawing.
    ========================================================================== */
+
+/* ---- the assembly ------------------------------------------------------- */
+
+/* the feet: they drop out of the air and take the machine's weight --------- */
+.home-stage .home-module.is-active .home-part[data-part='feet'] {
+  animation: labels-feet-drop 260ms cubic-bezier(0.22, 0.9, 0.24, 1) both;
+  animation-delay: 0ms;
+}
+
+/* the body: down onto the seated feet, a touch too far, then back up ------- */
+.home-stage .home-module.is-active .home-part[data-part='body'] {
+  animation: labels-body-seat 300ms cubic-bezier(0.22, 0.9, 0.24, 1) both;
+  animation-delay: 70ms;
+}
+
+/* the window frame: it swings down on its back edge and beds onto the lid --- */
+.home-stage .home-module.is-active .home-part[data-part='window'] {
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+  animation: labels-window-swing 250ms cubic-bezier(0.22, 0.9, 0.24, 1) both;
+  animation-delay: 260ms;
+}
+
+/* the stock roll: it drops into the cradle the bars have just made, and rocks
+   once as it finds the seat ---------------------------------------------- */
+.home-stage .home-module.is-active .home-part[data-part='roll'] {
+  transform-box: fill-box;
+  transform-origin: 50% 50%;
+  animation: labels-roll-drop 320ms cubic-bezier(0.3, 0.7, 0.3, 1) both;
+  animation-delay: 380ms;
+}
+
+/* the cradle's front bar: hinged on its top edge, it clamps over the roll ---- */
+.home-stage .home-module.is-active .home-part[data-part='cradle'] {
+  transform-box: fill-box;
+  transform-origin: 50% 0%;
+  animation: labels-cradle-close 220ms cubic-bezier(0.22, 0.9, 0.24, 1) both;
+  animation-delay: 660ms;
+}
+
+/* the face plate: last, lifted up into the body with the whole mechanism on
+   it — the slot, the platen and wheel, the cutter, the carriage, the rocker
+   and the lamp all ride in together --------------------------------------- */
+.home-stage .home-module.is-active .home-part[data-part='face'] {
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+  animation: labels-face-close 260ms cubic-bezier(0.22, 0.9, 0.24, 1) both;
+  animation-delay: 680ms;
+}
+
+/* the tickets: they are not there until the case is closed. The gate is a
+   visibility beat rather than an opacity one, so the cards never sit on a
+   composited layer and their paper keeps the exact tone it has today; the
+   tickets' own emerge still starts from opacity 0 at 1000ms ----------------- */
+.home-stage .home-module.is-active .home-part[data-part='tickets'] {
+  animation: labels-tickets-gate 60ms linear both;
+  animation-delay: 880ms;
+}
+
+@keyframes labels-feet-drop {
+  0% { opacity: 0; transform: translateY(-16px) scale(0.94); }
+  62% { opacity: 1; transform: translateY(1.8px) scale(1); }
+  82% { transform: translateY(-0.5px); }
+  100% { transform: none; }
+}
+
+@keyframes labels-body-seat {
+  0% { opacity: 0; transform: translateY(-22px); }
+  58% { opacity: 1; transform: translateY(2.6px); }
+  80% { transform: translateY(-1px); }
+  100% { transform: none; }
+}
+
+@keyframes labels-window-swing {
+  0% { opacity: 0; transform: rotate(-8deg) translateY(-5px); }
+  64% { opacity: 1; transform: rotate(1.4deg) translateY(0); }
+  86% { transform: rotate(-0.4deg); }
+  100% { transform: none; }
+}
+
+/* one rock: it lands past the seat, rolls back, and comes to rest ----------- */
+@keyframes labels-roll-drop {
+  0% { opacity: 0; transform: translateY(-30px) rotate(-6deg); }
+  52% { opacity: 1; transform: translateY(2.6px) rotate(4.6deg); }
+  72% { transform: translateY(-1.4px) rotate(-2.4deg); }
+  88% { transform: translateY(0.4px) rotate(0.9deg); }
+  100% { transform: none; }
+}
+
+@keyframes labels-cradle-close {
+  0% { opacity: 0; transform: rotate(-3deg) translateY(-10px); }
+  62% { opacity: 1; transform: rotate(0.8deg) translateY(0); }
+  100% { transform: none; }
+}
+
+@keyframes labels-face-close {
+  0% { opacity: 0; transform: translateY(12px) rotate(-1.6deg); }
+  62% { opacity: 1; transform: translateY(-1.6px) rotate(0.3deg); }
+  100% { transform: none; }
+}
+
+@keyframes labels-tickets-gate {
+  0% { visibility: hidden; }
+  100% { visibility: visible; }
+}
+
+/* ---- the mechanism ------------------------------------------------------ */
 
 .home-stage .home-ticket {
   opacity: 0;
@@ -102,18 +222,35 @@
   50% { opacity: 0.25; }
 }
 
+/* ---- reduced motion: the machine is simply there ------------------------ */
+
+html.reduce-motion .home-stage .home-module.is-active .home-part[data-part],
+html.reduce-motion .home-stage .home-part[data-part='tickets'] {
+  animation: none !important;
+  animation-delay: 0ms !important;
+  opacity: 1;
+}
+
+/* The mechanism's own rules out-specify the plain reduce-motion block, so this
+   one has to be explicit: with motion reduced the machine simply stands there. */
 html.reduce-motion .home-stage .home-module.is-active .home-ticket,
-html.reduce-motion .home-stage .home-print-head,
-html.reduce-motion .home-stage .home-feed-roller,
-html.reduce-motion .home-stage .home-cutter,
-html.reduce-motion .home-stage .home-label-led { animation: none; }
+html.reduce-motion .home-stage .home-module.is-active .home-print-head,
+html.reduce-motion .home-stage .home-module.is-active .home-feed-roller,
+html.reduce-motion .home-stage .home-module.is-active .home-cutter,
+html.reduce-motion .home-stage .home-module.is-active .home-label-led { animation: none !important; }
 html.reduce-motion .home-stage .home-ticket { opacity: 1; }
 
 @media (prefers-reduced-motion: reduce) {
+  .home-stage .home-module.is-active .home-part[data-part] {
+    animation: none !important;
+    animation-delay: 0ms !important;
+    opacity: 1;
+  }
+
   .home-stage .home-module.is-active .home-ticket,
-  .home-stage .home-print-head,
-  .home-stage .home-feed-roller,
-  .home-stage .home-cutter,
-  .home-stage .home-label-led { animation: none; }
+  .home-stage .home-module.is-active .home-print-head,
+  .home-stage .home-module.is-active .home-feed-roller,
+  .home-stage .home-module.is-active .home-cutter,
+  .home-stage .home-module.is-active .home-label-led { animation: none !important; }
   .home-stage .home-ticket { opacity: 1; }
 }

@@ -101,42 +101,74 @@ export function buildNewsrack(P, options = {}) {
   const issues = options.issues || []
   const out = []
 
-  // backboard, the farthest thing in the frame
+  /**
+   * One sub-assembly. Every group is a contiguous run of what already painted
+   * together, so splitting the rack changes no painter's order — only which
+   * assembly a path belongs to. `--step` is the shared settle contract in
+   * home.css; newsrack.css replaces it with the real assembly.
+   *
+   * `--step` counts within a part (the two posts, the two rails, the four
+   * sheets), not across the rack: each part's own wave reads left to right or
+   * far to near on its own, and the cross-part beat order lives in the CSS.
+   */
+  const part = (name, step, ...items) =>
+    `<g class="home-part" data-part="${name}" style="--step:${step}">${items.join('')}</g>`
+
+  // ---- back: the backboard, the farthest thing in the frame -------------
   const panel = facePath(F, [[POST, 4.5, PLINTH], [W - POST, 4.5, PLINTH], [W - POST, 4.5, 90], [POST, 4.5, 90]], P)
-  out.push(`<path class="iso-shade" data-shade="1" d="${panel}"/>`)
-  out.push(k.lineSvg(panel, { tone: 'faint' }))
+  out.push(part('back', 0,
+    `<path class="iso-shade" data-shade="1" d="${panel}"/>`,
+    k.lineSvg(panel, { tone: 'faint' }),
+  ))
 
-  // the plinth everything stands on
-  out.push(boxSvg(F, { u: 0, v: 0, w: 0, uw: W, vd: D, wh: PLINTH }, P, { tone: 'lo' }))
+  // ---- plinth: the base everything stands on ---------------------------
+  // Named `plinth`, not `base`: typewriter.css already owns `[data-part='base']`
+  // and these selectors are module-agnostic, so a shared name would hand the
+  // typewriter's case this rack's beat.
+  out.push(part('plinth', 0,
+    boxSvg(F, { u: 0, v: 0, w: 0, uw: W, vd: D, wh: PLINTH }, P, { tone: 'lo' }),
+  ))
 
-  // two posts, each capped with a knurled knob
-  for (const u of [0, W - POST]) {
-    out.push(boxSvg(F, { u, v: 2, w: PLINTH, uw: POST, vd: D - 4, wh: H - PLINTH }, P, { tone: 'mid' }))
-    out.push(cap(u + POST / 2, P))
+  // ---- posts: one run each, so each stands up about its own foot --------
+  for (const [index, u] of [0, W - POST].entries()) {
+    out.push(part('posts', index,
+      boxSvg(F, { u, v: 2, w: PLINTH, uw: POST, vd: D - 4, wh: H - PLINTH }, P, { tone: 'mid' }),
+      cap(u + POST / 2, P),
+    ))
   }
 
-  // the two rails, spanning the posts
-  for (const w of RAILS) {
-    out.push(boxSvg(F, { u: POST, v: 20, w, uw: W - POST * 2, vd: 6, wh: 4 }, P, { tone: 'mid' }))
+  // ---- rails: one run each, so each drops into its own notch ------------
+  for (const [index, w] of RAILS.entries()) {
+    out.push(part('rails', index,
+      boxSvg(F, { u: POST, v: 20, w, uw: W - POST * 2, vd: 6, wh: 4 }, P, { tone: 'mid' }),
+    ))
   }
 
-  // four issues, two per rail, painted far to near
+  // ---- sheets: four issues, two per rail, painted far to near ----------
+  // The whole `<a>` is wrapped, never the `.home-issue-sheet-group` inside it:
+  // the hover swing is a transition on that inner group and stays untouched.
+  // Each sheet carries its own clips, so it lands as one hanging paper and
+  // `--step` is the loading order — far sheet first, near sheet last.
   const slots = []
   RAILS.forEach((w, rail) => COLUMNS.forEach((u0, column) => slots.push({ u0, w0: w + 2, index: rail * 2 + column })))
   slots
     .map((slot) => ({ ...slot, depth: k.depthOf(F.at(slot.u0 + SHEET.w / 2, V_TOP + 17 * SIN, slot.w0 - 17 * COS), P) }))
     .sort((a, b) => a.depth - b.depth)
-    .forEach((slot) => {
+    .forEach((slot, order) => {
       const issue = issues[slot.index] || {}
       const label = issue.label || issue.number || ''
-      out.push(`<a class="home-issue" data-index="${slot.index}" href="${esc(issue.href || '#')}" aria-label="${esc(label)}"><title>${esc(label)}</title>`)
-      out.push(sheetSvg(issue, slot.index, slot.u0, slot.w0, P))
-      out.push('</a>')
+      out.push(part('sheets', order,
+        `<a class="home-issue" data-index="${slot.index}" href="${esc(issue.href || '#')}" aria-label="${esc(label)}"><title>${esc(label)}</title>${sheetSvg(issue, slot.index, slot.u0, slot.w0, P)}</a>`,
+      ))
     })
 
-  // front lip last: the papers hang down behind it
-  out.push(boxSvg(F, { u: POST, v: LIP.v0, w: PLINTH, uw: W - POST * 2, vd: LIP.vd, wh: LIP.wh }, P, { tone: 'mid' }))
-  for (const u of [10, W - 10]) out.push(screw(u, P))
+  // ---- plinth again: the front lip is bolted to the plinth, but it is --
+  // painted last because the papers hang down behind it. Same part, same
+  // beat, so the two runs move as one plinth and the paint order stands.
+  out.push(part('plinth', 0,
+    boxSvg(F, { u: POST, v: LIP.v0, w: PLINTH, uw: W - POST * 2, vd: LIP.vd, wh: LIP.wh }, P, { tone: 'mid' }),
+    ...([10, W - 10].map(u => screw(u, P))),
+  ))
 
   return out.join('')
 }

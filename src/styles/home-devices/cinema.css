@@ -1,7 +1,7 @@
-/* ==========================================================================
+﻿/* ==========================================================================
    02 — 作品: the film projector
-   Only the machine lives in the SVG; the picture it throws is a page-level
-   layer (see `.home-projection` in home.css).
+   Only the machine lives in the SVG. Its beam leaves the page at the upper
+   left and lands on a page-level layer (see `.home-projection` in home.css).
    ========================================================================== */
 
 .home-stage .home-cine-body .iso-fill { fill: color-mix(in oklch, oklch(var(--un-preset-theme-colors-primary)) 38%, oklch(var(--un-preset-theme-colors-background)) 62%); }
@@ -11,35 +11,154 @@
 .home-stage .home-cine-reel .iso-shade { fill: color-mix(in oklch, oklch(var(--un-preset-theme-colors-primary)) 44%, oklch(var(--un-preset-theme-colors-background)) 56%); }
 .home-stage .home-cine-reel .iso-top { fill: color-mix(in oklch, oklch(var(--un-preset-theme-colors-primary)) 56%, oklch(var(--un-preset-theme-colors-background)) 44%); }
 
-/* the beam leaves the lens and washes the page */
+/* the cone: a gradient emitted by the module, quiet in daylight */
 .home-stage .home-cine-beam {
-  fill: oklch(var(--un-preset-theme-colors-highlight));
-  fill-opacity: 0.2;
+  fill: url(#home-beam-fade);
   stroke: none;
-  animation: home-cine-beam 5.2s ease-in-out infinite;
+  opacity: 0.32;
+  filter: blur(3px);
 }
 
-@keyframes home-cine-beam {
-  0%, 100% { opacity: 0.7; }
-  50% { opacity: 1; }
+.dark .home-stage .home-cine-beam { opacity: 0.9; }
+
+/* --------------------------------------------------------------------------
+   The assembly. Every rule here overrides the generic `.home-part` settle in
+   home.css (higher specificity: two classes + the data-part attribute) and
+   states both `animation` and `animation-delay`, so the beats stay legible:
+   feet 0 → body 1 → panel 2 → lamphouse 3 → barrel 4 → gate 5 → reels 6 →
+   beam 7. The last part lands at 880 ms.
+
+   Fill mode is `backwards`, not `both`: every keyframe ends on
+   `transform: none; opacity: 1`, which is exactly the resting style, so the
+   backwards fill hides a part during its delay and then lets go once it lands.
+   Holding the fill instead would keep the group composited, and the caption
+   inside the panel would re-rasterise without subpixel AA (measured: 68/255
+   max delta on that text versus 23/255 of group-edge AA with `backwards`).
+   -------------------------------------------------------------------------- */
+
+.home-module.is-active .home-part[data-part='feet'] {
+  animation: home-cine-feet 250ms cubic-bezier(0.28, 0.72, 0.24, 1) backwards;
+  animation-delay: 110ms;
 }
 
-/* the lens breathes */
-.home-stage .home-cine-glow {
-  transform-box: fill-box;
+.home-module.is-active .home-part[data-part='body'] {
+  animation: home-cine-body 330ms cubic-bezier(0.2, 0.86, 0.22, 1) backwards;
+  animation-delay: 200ms;
+}
+
+.home-module.is-active .home-part[data-part='panel'] {
   transform-origin: 50% 50%;
-  animation: home-cine-glow 3.4s ease-in-out infinite;
+  animation: home-cine-panel 200ms cubic-bezier(0.2, 0.9, 0.24, 1) backwards;
+  animation-delay: 320ms;
 }
 
-@keyframes home-cine-glow {
-  0%, 100% { opacity: 0.5; transform: scale(1); }
-  50% { opacity: 0.95; transform: scale(1.14); }
+.home-module.is-active .home-part[data-part='hump'] {
+  animation: home-cine-hump 290ms cubic-bezier(0.22, 0.88, 0.24, 1) backwards;
+  animation-delay: 390ms;
 }
 
-html.reduce-motion .home-stage .home-cine-beam,
-html.reduce-motion .home-stage .home-cine-glow { animation: none; }
+.home-module.is-active .home-part[data-part='lens'] {
+  animation: home-cine-lens 310ms cubic-bezier(0.16, 0.86, 0.22, 1) backwards;
+  animation-delay: 450ms;
+}
+
+.home-module.is-active .home-part[data-part='gate'] {
+  animation: home-cine-gate 260ms cubic-bezier(0.24, 0.84, 0.26, 1) backwards;
+  animation-delay: 500ms;
+}
+
+.home-module.is-active .home-part[data-part='reels'] {
+  transform-origin: 50% 50%;
+  animation: home-cine-reels 300ms cubic-bezier(0.12, 0.9, 0.2, 1) backwards;
+  animation-delay: 540ms;
+}
+
+/* the cone is the last thing on: fade only, so it never fights the fill,
+   the blur or the opacity the path already carries in either theme */
+.home-module.is-active .home-part[data-part='beam'] {
+  animation: home-cine-beam-in 260ms cubic-bezier(0.3, 0.6, 0.3, 1) backwards;
+  animation-delay: 620ms;
+}
+
+/* feet land first, a touch from above, and take the weight */
+@keyframes home-cine-feet {
+  from { opacity: 0; transform: translateY(-7px) scale(0.94); }
+  62% { opacity: 1; }
+  80% { transform: translateY(1px) scale(1); }
+  to { opacity: 1; transform: none; }
+}
+
+/* the shell rides up over the feet and settles back down onto them */
+@keyframes home-cine-body {
+  from { opacity: 0; transform: translateY(7px) scale(0.988); }
+  68% { opacity: 1; transform: translateY(-1.3px) scale(1.002); }
+  to { opacity: 1; transform: none; }
+}
+
+/* the plate and its knobs click on: a short snap up from 0.9 about centre */
+@keyframes home-cine-panel {
+  from { opacity: 0; transform: scale(0.9); }
+  52% { opacity: 1; transform: scale(1.016); }
+  to { opacity: 1; transform: none; }
+}
+
+/* the lamphouse settles onto the lid, hinge side last */
+@keyframes home-cine-hump {
+  from { opacity: 0; transform: translateY(-5px) scale(0.965); }
+  70% { opacity: 1; transform: translateY(0.9px) scale(1.002); }
+  to { opacity: 1; transform: none; }
+}
+
+/* the barrel slides forward out of its mount along the projected axis:
+   the cone leaves at 45deg up-left, so the retracted start sits down-right */
+@keyframes home-cine-lens {
+  from { opacity: 0; transform: translate(3.4px, 3.4px); }
+  40% { opacity: 1; }
+  82% { transform: translate(-0.5px, -0.5px); }
+  to { opacity: 1; transform: none; }
+}
+
+/* gate and film strip thread in together, from the reel side */
+@keyframes home-cine-gate {
+  from { opacity: 0; transform: translate(2.6px, -2.2px) scale(0.94); }
+  58% { opacity: 1; }
+  to { opacity: 1; transform: none; }
+}
+
+/* the reels spin on: a short turn that decelerates as the hub seats.
+   Each reel is its own group, so the turn happens about its own hub. */
+@keyframes home-cine-reels {
+  from { opacity: 0; transform: rotate(-18deg) scale(0.9); }
+  55% { opacity: 1; }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes home-cine-beam-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+html.reduce-motion .home-stage .home-cine-beam { opacity: 0.32; }
 
 @media (prefers-reduced-motion: reduce) {
-  .home-stage .home-cine-beam,
-  .home-stage .home-cine-glow { animation: none; }
+  .home-stage .home-cine-beam { opacity: 0.32; }
 }
+
+/* reduced motion: the machine is simply there ------------------------------ */
+
+html.reduce-motion .home-module.is-active .home-part[data-part] {
+  animation: none !important;
+  animation-delay: 0ms !important;
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-module.is-active .home-part[data-part] {
+    animation: none !important;
+    animation-delay: 0ms !important;
+    opacity: 1;
+    transform: none;
+  }
+}
+

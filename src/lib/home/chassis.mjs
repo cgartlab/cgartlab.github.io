@@ -101,8 +101,8 @@ export function buildChassis(P, options = {}) {
   }
   out.push('</g>')
 
-  // lift platform
-  out.push(k.solidSvg(k.slabOf(PLATFORM, TOP - 4, 4, P, 8, 0.6), { tone: 'hi' }))
+  // lift platform — its own group so the swap can drop and raise it
+  out.push(`<g class="home-lift">${k.solidSvg(k.slabOf(PLATFORM, TOP - 4, 4, P, 8, 0.6), { tone: 'hi' })}</g>`)
 
   // deck detailing
   for (const [x, y] of k.corners(k.insetPlan(CABINET, 14))) {
