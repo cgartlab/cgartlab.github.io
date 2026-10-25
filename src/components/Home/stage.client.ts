@@ -12,11 +12,11 @@ const STAGE = '[data-home-stage]'
 const TOUR_DELAY = 600
 const TOUR_INTERVAL = 55
 const RESUME_DELAY = 5200
-const TILT_Y = 3.4
-const TILT_X = 1.8
+const CAM_Y = 4.2
+const CAM_X = 1.9
 const EASE = 0.14
-const BREATH_Y = 1.1
-const BREATH_X = 0.55
+const BREATH_Y = 0.7
+const BREATH_X = 0.35
 const BREATH_PERIOD = 3.4
 
 interface State {
@@ -123,14 +123,14 @@ function tiltLoop(s: State): void {
   }
   s.cx += (s.tx - s.cx) * EASE
   s.cy += (s.ty - s.cy) * EASE
-  s.stage.style.setProperty('--tilt-y', s.cx.toFixed(3))
-  s.stage.style.setProperty('--tilt-x', s.cy.toFixed(3))
+  s.stage.style.setProperty('--cam-y', s.cx.toFixed(3))
+  s.stage.style.setProperty('--cam-x', s.cy.toFixed(3))
   const settled = Math.abs(s.tx - s.cx) < 0.01 && Math.abs(s.ty - s.cy) < 0.01
   if (settled && !s.idle) {
     s.cx = s.tx
     s.cy = s.ty
-    s.stage.style.setProperty('--tilt-y', s.cx.toFixed(3))
-    s.stage.style.setProperty('--tilt-x', s.cy.toFixed(3))
+    s.stage.style.setProperty('--cam-y', s.cx.toFixed(3))
+    s.stage.style.setProperty('--cam-x', s.cy.toFixed(3))
     s.tiltRaf = 0
     return
   }
@@ -152,9 +152,12 @@ function mount(): void {
   const stage = document.querySelector<HTMLElement>(STAGE)
   if (!stage)
     return
+  if (stage.dataset.stageReady)
+    return
   const svg = stage.querySelector('svg')
   if (!svg)
     return
+  stage.dataset.stageReady = '1'
 
   let lines: string[] = []
   try {
@@ -218,8 +221,8 @@ function mount(): void {
     const nx = (event.clientX - rect.left) / rect.width - 0.5
     const ny = (event.clientY - rect.top) / rect.height - 0.5
     s.idle = false
-    s.tx = -nx * 2 * TILT_Y
-    s.ty = ny * 2 * TILT_X
+    s.tx = -nx * 2 * CAM_Y
+    s.ty = ny * 2 * CAM_X
     nudgeTilt(s)
     stopTour(s)
     scheduleResume(s)
@@ -264,8 +267,8 @@ function mount(): void {
     document.removeEventListener('visibilitychange', onVisibility)
     if (s.tiltRaf)
       window.cancelAnimationFrame(s.tiltRaf)
-    stage.style.removeProperty('--tilt-y')
-    stage.style.removeProperty('--tilt-x')
+    stage.style.removeProperty('--cam-y')
+    stage.style.removeProperty('--cam-x')
   }
 
   state = s
@@ -287,9 +290,17 @@ function unmount(): void {
 }
 
 function boot(): void {
+  const stage = document.querySelector<HTMLElement>(STAGE)
+  if (stage?.dataset.stageReady)
+    return
   unmount()
   mount()
 }
 
 document.addEventListener('astro:page-load', boot)
 document.addEventListener('astro:before-swap', unmount)
+
+if (document.readyState === 'loading')
+  document.addEventListener('DOMContentLoaded', boot, { once: true })
+else
+  boot()

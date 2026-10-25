@@ -67,7 +67,7 @@ body {
   color: oklch(var(--un-preset-theme-colors-primary));
   font-family: var(--un-preset-theme-font-family-sans);
 }
-main { position: relative; width: min(760px, 96vw); aspect-ratio: 760 / 620; }
+main.home-stage { position: relative; width: min(760px, 96vw); height: auto; aspect-ratio: 760 / 620; }
 `
 
 const theme = process.argv.includes('--light') ? 'light' : 'dark'
@@ -75,7 +75,7 @@ const boxArg = process.argv.find((a) => a.startsWith('--box='))
 const box = boxArg ? boxArg.slice(6).split(',').map(Number) : null
 const tiltArg = process.argv.find((a) => a.startsWith('--tilt='))
 const tilt = tiltArg ? tiltArg.slice(7).split(',').map(Number) : null
-const tiltStyle = tilt ? ` style="--tilt-y:${tilt[0]};--tilt-x:${tilt[1]}"` : ''
+const tiltStyle = tilt ? ` style="--cam-y:${tilt[0]};--cam-x:${tilt[1]}"` : ''
 const fitted = box
   ? svg.replace(`viewBox="0 0 ${W} ${H}"`, `viewBox="${box[0]} ${box[1]} ${box[2]} ${box[3]}"`)
   : svg
@@ -87,7 +87,7 @@ const html = `<!doctype html>
 <title>home stage — ${theme}</title>
 <style>${SITE_TOKENS}${css}</style>
 </head>
-<body class="home-stage"${tiltStyle}><main>${fitted}</main></body>
+<body><main class="home-stage"${tiltStyle}>${fitted}</main></body>
 </html>`
 
 const tb = typewriterBounds().map((p) => k.iso(p, P))
