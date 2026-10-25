@@ -435,6 +435,21 @@ html.reduce-motion .home-keycap.is-active .iso-fill { animation: none; }
   fill: var(--anatomy-shade-2);
   transition: fill 220ms ease;
 }
+.home-stage .home-issue-photo {
+  filter: grayscale(1) contrast(0.92);
+  transition: filter 260ms ease;
+}
+.home-stage .home-issue {
+  transition: transform 240ms cubic-bezier(0.32, 0.72, 0, 1);
+}
+.home-stage .home-issue:hover,
+.home-stage .home-issue:focus-visible {
+  transform: translateY(-5px);
+}
+.home-stage .home-issue:hover .home-issue-photo,
+.home-stage .home-issue:focus-visible .home-issue-photo {
+  filter: none;
+}
 .home-stage .home-issue:hover .home-issue-cover,
 .home-stage .home-issue:focus-visible .home-issue-cover {
   fill: color-mix(in oklch, oklch(var(--un-preset-theme-colors-highlight)) 58%, oklch(var(--un-preset-theme-colors-background)) 42%);

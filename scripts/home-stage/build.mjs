@@ -22,7 +22,7 @@ const bounds = [
   ...placeholderBounds(),
   ...newsrackBounds(),
 ]
-const P = k.fitProjection(bounds, W, H, { pad: 30, azimuth: 88, elevation: 18, focal: 1200, center: [0, 0, 55] })
+const P = k.fitProjection(bounds, W, H, { pad: 30, azimuth: 90, elevation: 18, focal: 1200, center: [0, 0, 55] })
 
 const ISSUES = ['16', '15', '14', '13', '12', '11'].map((n, i) => ({
   number: `No.${n}`,

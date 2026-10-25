@@ -13,7 +13,11 @@ import {
   TOP,
 } from '@/lib/home/chassis.mjs'
 import { buildPlaceholder, placeholderBounds } from '@/lib/home/placeholder.mjs'
+import { buildGallery, galleryBounds } from '@/lib/home/gallery.mjs'
 import { buildNewsrack, newsrackBounds } from '@/lib/home/newsrack.mjs'
+import { buildServer, serverBounds } from '@/lib/home/server.mjs'
+import { buildSorter, sorterBounds } from '@/lib/home/sorter.mjs'
+import { buildTelescope, telescopeBounds } from '@/lib/home/telescope.mjs'
 import { buildPrinter, printerBounds } from '@/lib/home/printer.mjs'
 import { buildTypewriter, typewriterBounds } from '@/lib/home/typewriter.mjs'
 import { getPostsByTag, getRegularPosts } from '@/utils/content'
@@ -50,14 +54,38 @@ const bounds = [
   ...placeholderBounds(),
   ...newsrackBounds(),
   ...printerBounds(),
+  ...galleryBounds(),
+  ...serverBounds(),
+  ...sorterBounds(),
+  ...telescopeBounds(),
 ]
 const P = k.fitProjection(bounds, W, H, {
   pad: 30,
-  azimuth: 88,
+  azimuth: 90,
   elevation: 18,
   focal: 1200,
   center: [0, 0, 55],
 })
+
+const coverGlob = import.meta.glob<{ default: ImageMetadata }>(
+  '/src/content/posts/_images/**/*.{jpeg,jpg,png,gif,webp}',
+  { eager: true },
+)
+
+function coverOf(post: { body?: string }): string {
+  const m = (post.body || '').match(/!\[[^\]]*\]\((.*?\.(?:webp|jpg|jpeg|png|gif))\)/)
+  if (!m)
+    return ''
+  const raw = decodeURIComponent(m[1])
+  if (raw.startsWith('http'))
+    return raw
+  if (raw.startsWith('./_images/') || raw.startsWith('../_images/')) {
+    const name = raw.replace(/^(\.\.?\/)?_images\//, '')
+    const entry = coverGlob[`/src/content/posts/_images/${name}`]
+    return entry ? entry.default.src : ''
+  }
+  return ''
+}
 
 const columnTag = currentLang === 'zh' || currentLang === 'zh-tw' ? '专栏' : 'Journal'
 const columns = (await getPostsByTag(columnTag, currentLang)).slice(0, 6)
@@ -69,6 +97,7 @@ const issues = columns.map((post) => {
     number: n ? `No.${n}` : '',
     label: post.data.title,
     href: getPostPath(abbr || post.id, currentLang),
+    cover: coverOf(post),
   }
 })
 
@@ -77,17 +106,24 @@ const paperHref = posts[0]
   : getLocalizedPath('/posts/', currentLang)
 
 const modules = ids.map((id, index) => {
+  const caption = labels[index]
   const body = index === 0
     ? buildTypewriter(P, {
         title: latest,
         paperHref,
         paperLabel: currentLang === 'zh' ? `阅读最新一篇：${latest}` : `Read the latest: ${latest}`,
       })
-    : index === 2
-      ? buildNewsrack(P, { issues })
-      : index === 5
-        ? buildPrinter(P, { caption: labels[index] })
-        : buildPlaceholder(P, { letter: letters[index], caption: labels[index], index })
+    : index === 1
+      ? buildGallery(P, { caption })
+      : index === 2
+        ? buildNewsrack(P, { issues })
+        : index === 3
+          ? buildServer(P, { caption })
+          : index === 4
+            ? buildSorter(P, { caption })
+            : index === 5
+              ? buildPrinter(P, { caption })
+              : buildTelescope(P, { caption })
   return `<g class="home-module${index === 0 ? ' is-active' : ''}" data-index="${index}" data-module="${id}">${body}</g>`
 }).join('')
 
