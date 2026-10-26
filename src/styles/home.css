@@ -40,8 +40,8 @@
 
   /* machine-specific ------------------------------------------------------ */
   --home-cavity: color-mix(in oklch, oklch(var(--un-preset-theme-colors-primary)) 56%, oklch(var(--un-preset-theme-colors-background)) 44%);
-  --home-brass: color-mix(in oklab, oklch(var(--un-preset-theme-colors-highlight)) 42%, oklch(var(--un-preset-theme-colors-background)) 58%);
-  --home-brass-deep: color-mix(in oklab, oklch(var(--un-preset-theme-colors-highlight)) 62%, oklch(var(--un-preset-theme-colors-primary)) 38%);
+  --home-brass: oklch(72% 0.052 74);
+  --home-brass-deep: oklch(58% 0.062 64);
 
   --anatomy-weight: 0.6px;
   --anatomy-ease: cubic-bezier(0.32, 0.72, 0, 1);
@@ -65,8 +65,8 @@
 
   --anatomy-halo-opacity: 0.62;
   --home-cavity: oklch(var(--un-preset-theme-colors-background));
-  --home-brass: color-mix(in oklab, oklch(var(--un-preset-theme-colors-highlight)) 55%, oklch(var(--un-preset-theme-colors-background)) 45%);
-  --home-brass-deep: color-mix(in oklab, oklch(var(--un-preset-theme-colors-highlight)) 75%, oklch(var(--un-preset-theme-colors-primary)) 25%);
+  --home-brass: oklch(68% 0.058 74);
+  --home-brass-deep: oklch(54% 0.07 64);
 }
 
 /* --------------------------------------------------------------------------
