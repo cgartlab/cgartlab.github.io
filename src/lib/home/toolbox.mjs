@@ -171,59 +171,214 @@ function staySvg(P) {
 }
 
 // ---- the trays ----------------------------------------------------------
+//
+// The three trays are the three sections of the 资源 page, in order: the tools,
+// the learning and the people. Each holds one kind of object rather than a
+// mixed bag of stationery, so the case reads as a kit of what the page links
+// to — a sheet of app badges, a clipped memo pad and a notebook, a fan of
+// visiting cards. Everything is seated: the badges lie on their board, the pad
+// and the book stand on the tray floor, the cards stand in their slot.
 
-function notebook(x, y, w, d, z, P) {
-  return solid({ x, y, w, d, r: 1 }, z, 1.4, P, 'mid', 4, 0.4)
-    + topRect(x, y, x + w, y + d, z + 1.46, P, 3, 'mid') + topRect(x, y, x + 3, y + d, z + 1.5, P, 0, 'lo')
-    + k.lineSvg(k.planOutline({ x: x + 6, y: y + 3, w: w - 9, d: d - 6, r: 1 }, z + 1.52, P, 3), { tone: 'mid' })
+const num = (n) => Number(n.toFixed(3))
+
+// --- the badge glyphs ---
+//
+// A glyph is drawn in a ±2 box with y up, then mapped onto the tile. The tile
+// is a real horizontal plane, and a mark printed on it would collapse to a
+// third of its height at this camera elevation — a smear at six units across.
+// The glyph therefore keeps twice the plane's foreshortening, which fills the
+// tile exactly and still reads as a mark rather than a decal facing the lens.
+
+const ink = (d) => `<path class="iso-shade" data-shade="0" d="${d}"/>`
+const cut = (d) => `<path class="iso-top" d="${d}"/>`
+const trace = (d) => `<path class="iso-line home-case-glyph" data-tone="hi" d="${d}"/>`
+
+const GLYPHS = [
+  // Figma — a pen nib
+  () => [ink('M-1.55 1.95 L1.55 1.95 L0 -1.95 Z'), cut('M-0.16 1.95 L0.16 1.95 L0.16 0.5 L-0.16 0.5 Z')],
+  // ColorHunt — a map pin
+  () => [
+    ink('M0 2 C0.63 2 1.15 1.48 1.15 0.85 C1.15 0.22 0.63 -0.3 0 -0.3 C-0.63 -0.3 -1.15 0.22 -1.15 0.85 C-1.15 1.48 -0.63 2 0 2 Z'),
+    ink('M-0.95 0.6 L0.95 0.6 L0 -2 Z'),
+    cut('M0 1.3 C0.25 1.3 0.45 1.1 0.45 0.85 C0.45 0.6 0.25 0.4 0 0.4 C-0.25 0.4 -0.45 0.6 -0.45 0.85 C-0.45 1.1 -0.25 1.3 0 1.3 Z'),
+  ],
+  // OpenCode — a terminal chevron
+  () => [trace('M-1.7 1.35 L-0.35 0.05 L-1.7 -1.25'), trace('M0.45 -1.2 L1.8 -1.2')],
+  // VSCode — angle brackets
+  () => [trace('M-0.65 1.65 L-1.9 0 L-0.65 -1.65'), trace('M0.65 1.65 L1.9 0 L0.65 -1.65')],
+  // Obsidian — a crystal
+  () => [ink('M0 2 L1.4 0.55 L0 -2 L-1.4 0.55 Z'), cut('M-1.4 0.55 L1.4 0.55 L1.15 0.85 L-1.15 0.85 Z')],
+  // Docker — containers on a base
+  () => [ink('M-1.95 -1.35 L1.95 -1.35 L1.95 -0.8 L-1.95 -0.8 Z'), ink('M-1.85 -0.55 L-0.75 -0.55 L-0.75 0.45 L-1.85 0.45 Z'), ink('M-0.55 -0.55 L0.55 -0.55 L0.55 0.45 L-0.55 0.45 Z'), ink('M0.75 -0.55 L1.85 -0.55 L1.85 0.45 L0.75 0.45 Z')],
+  // PVE — a shield
+  () => [ink('M0 2 L1.75 1.25 L1.75 -0.25 C1.75 -1.3 0.9 -1.8 0 -2.05 C-0.9 -1.8 -1.75 -1.3 -1.75 -0.25 L-1.75 1.25 Z'), cut('M-0.85 0.5 L0 -0.4 L0.85 0.5 L0.5 0.82 L0 0.26 L-0.5 0.82 Z')],
+  // Cinema 4D — a cube
+  () => [trace('M0 2 L1.7 1 L1.7 -1 L0 -2 L-1.7 -1 L-1.7 1 Z'), trace('M0 2 L0 0 L1.7 -1'), trace('M0 0 L-1.7 -1')],
+  // After Effects — a play triangle
+  () => [ink('M-1.3 1.9 L1.8 0 L-1.3 -1.9 Z')],
+  // Photoshop — a palette
+  () => [ink('M0 1.95 C1.08 1.95 1.95 1.08 1.95 0 C1.95 -1.08 1.08 -1.95 0 -1.95 C-1.08 -1.95 -1.95 -1.08 -1.95 0 C-1.95 1.08 -1.08 1.95 0 1.95 Z'), cut('M-1.05 0.55 L-0.65 0.95 L-0.25 0.55 L-0.65 0.15 Z'), cut('M0.35 0.9 L0.7 1.25 L1.05 0.9 L0.7 0.55 Z'), cut('M-0.3 -0.15 L0.05 0.2 L0.4 -0.15 L0.05 -0.5 Z')],
+]
+
+function glyphSvg(cx, cy, z, parts, P) {
+  const o = k.iso([cx, cy, z], P)
+  const edge = k.iso([cx + 1, cy, z], P)
+  const sx = edge[0] - o[0]
+  const sy = sx * 0.62
+  return `<g class="home-case-glyph-mark" transform="matrix(${num(sx)} 0 0 ${num(-sy)} ${num(o[0])} ${num(o[1])})">${parts.join('')}</g>`
 }
 
-function card(cx, cy, yaw, tab, P) {
-  const F = frameOf({ yaw, origin: [cx, cy, FLOOR_Z + 0.5] })
-  const face = facePath(F, [[-5.5, 0.56, 0], [5.5, 0.56, 0], [5.5, 0.56, 10], [-5.5, 0.56, 10]], P)
-  return boxSvg(F, { u: -5.5, v: -0.55, w: 0, uw: 11, vd: 1.1, wh: 10 }, P, { tone: 'mid' })
-    + `<path class="iso-top" d="${face}"/>${k.lineSvg(face, { tone: 'hi' })}`
-    + boxSvg(F, { u: tab ? 2.1 : -5.5, v: -0.55, w: 10, uw: 3.4, vd: 1.1, wh: 2.2 }, P, { tone: 'lo' })
-}
+// --- left: the sheet of app badges ---------------------------------------
+
+const SHEET = { x: -76, y: -30, w: 68, d: 32, r: 1.6 }
+const SHEET_H = 1.8
+const BADGE = 9
+const BADGE_H = 1.8
+const BADGE_COLS = 5
+const BADGE_PITCH = [13.8, 13.6]
+const BADGE_GRID = [-42, -18.6]
 
 function leftTray(P) {
   const z = FLOOR_Z
-  const brush = frameOf({ yaw: 34, origin: [-46, -6, z + 3.05] })
-  const out = [solid({ x: -77, y: -30, w: 70, d: 54, r: 2 }, z, 3, P, 'mid', 4, 0.6), topRect(-77, -30, -7, 24, z + 3.06, P, 1)]
-  // foam block with four cut-outs: pencil, rule, square, brush
-  for (const [a, b, c, d] of [[-76, -28, -30, -21], [-76, -19, -13, -11], [-77, -8, -45, -1], [-77, -8, -70, 15]])
-    out.push(topRect(a, b, c, d, z + 3.1, P, 0, 'lo'))
-  out.push(faceQuad([[-2, -3.6], [35, -3.6], [35, 3.6], [-2, 3.6]].map(([u, v]) => [...brush.at(u, v, 0).slice(0, 2), z + 3.1]), P, 0, 'lo'))
+  const out = []
+  // a stiff board lying in the tray: dark face, lit rim, so it reads as a
+  // panel set into the well rather than another patch of tray floor
+  out.push(solid(SHEET, z, SHEET_H, P, 'mid', 5, 0.6))
+  out.push(`<path class="home-case-board" d="${k.planOutline(SHEET, z + SHEET_H + 0.04, P, 5)}"/>`)
+  out.push(k.lineSvg(k.planOutline(SHEET, z + SHEET_H + 0.06, P, 5), { tone: 'mid' }))
+  // a printed rule across the front margin of the board
+  out.push(k.lineSvg(k.segment([-73, -0.9, z + SHEET_H + 0.07], [-11, -0.9, z + SHEET_H + 0.07], P), { tone: 'lo' }))
 
-  // pencil: barrel, sharpened tip, one highlight
-  out.push(k.solidSvg(G.disc(0, 38, 1.4, G.frameAlong([-74, -24, z + 3.6], [1, 0, 0]), P), { tone: 'hi' }))
-  out.push(k.solidSvg(G.solidOf([[0, 1.4], [7, 0.18]], G.frameAlong([-36, -24, z + 3.6], [1, 0, 0]), P), { tone: 'mid' }))
-  out.push(k.lineSvg(k.segment([-72, -24, z + 4.9], [-40, -24, z + 4.9], P), { tone: 'faint' }))
+  const rows = Math.ceil(GLYPHS.length / BADGE_COLS)
+  const x0 = BADGE_GRID[0] - ((BADGE_COLS - 1) * BADGE_PITCH[0]) / 2
+  const y0 = BADGE_GRID[1] - ((rows - 1) * BADGE_PITCH[1]) / 2
+  GLYPHS.forEach((glyph, index) => {
+    const cx = x0 + (index % BADGE_COLS) * BADGE_PITCH[0]
+    const cy = y0 + Math.floor(index / BADGE_COLS) * BADGE_PITCH[1]
+    const plan = { x: cx - BADGE / 2, y: cy - BADGE / 2, w: BADGE, d: BADGE, r: 1.35 }
+    // the shadow it casts on the board, then the tile, then the mark
+    out.push(`<path class="home-case-badge-shadow" d="${k.planOutline({ ...plan, x: plan.x + 0.85, y: plan.y + 1.4 }, z + SHEET_H + 0.08, P, 4)}"/>`)
+    out.push(solid(plan, z + SHEET_H, BADGE_H, P, 'mid', 4, 0.55))
+    out.push(glyphSvg(cx, cy, z + SHEET_H + BADGE_H + 0.02, glyph(), P))
+  })
+  return out.join('')
+}
 
-  // steel rule, ticks every four units
-  out.push(solid({ x: -74, y: -16, w: 60, d: 7, r: 0.4 }, z + 2.8, 0.9, P, 'hi', 3, 0.2))
-  for (let i = 0; i <= 13; i++)
-    out.push(k.lineSvg(k.segment([-70 + i * 4, -15.4, z + 3.75], [-70 + i * 4, i % 3 ? -13 : -11.6, z + 3.75], P), { tone: 'mid' }))
+// --- middle: the memo pad and the notebook -------------------------------
 
-  // set square: two bars meeting at a right angle, corner at the back-left
-  out.push(solid({ x: -75, y: -7, w: 30, d: 5, r: 0.4 }, z + 2.8, 0.9, P, 'hi', 3, 0.2))
-  out.push(solid({ x: -75, y: -7, w: 5, d: 21, r: 0.4 }, z + 2.8, 0.9, P, 'hi', 3, 0.2))
+const MEMO = { x: -1.4, y: -29.6, w: 17, d: 35, r: 0.8 }
+const MEMO_H = 3.2
+const MEMO_SHEETS = 6
+const BOOK = { x: 20.4, y: -29, w: 15.4, d: 34.4, r: 0.9 }
+const BOOK_H = 2.2
 
-  // brush, laid on the diagonal: handle, ferrule, splayed bristles
-  out.push(boxSvg(brush, { u: 0, v: -2, w: 0, uw: 17, vd: 4, wh: 1.5 }, P, { tone: 'mid' }))
-  out.push(boxSvg(brush, { u: 17, v: -2.2, w: 0, uw: 4, vd: 4.4, wh: 1.7 }, P, { tone: 'hi' }))
-  out.push(paint(facePath(brush, [[21, -2.1, 1.05], [30, -0.9, 1.05], [30, 0.9, 1.05], [21, 2.1, 1.05]], P), 0, 'hi'))
+function memoPad(P) {
+  const z = FLOOR_Z
+  const out = [solid(MEMO, z, MEMO_H, P, 'mid', 4, 0.4)]
+  // the block: the sheet edges read as lines down the near face
+  for (let i = 1; i < MEMO_SHEETS; i++)
+    out.push(k.lineSvg(k.segment([MEMO.x + 0.5, MEMO.y + MEMO.d, z + (i * MEMO_H) / MEMO_SHEETS], [MEMO.x + MEMO.w - 0.5, MEMO.y + MEMO.d, z + (i * MEMO_H) / MEMO_SHEETS], P), { tone: 'lo' }))
+
+  // the top sheet, torn along its near edge and left ragged over the block
+  const front = MEMO.y + MEMO.d
+  const ring = [[MEMO.x, MEMO.y], [MEMO.x + MEMO.w, MEMO.y], [MEMO.x + MEMO.w, front + 1]]
+  const tears = 8
+  for (let i = 1; i <= tears; i++) {
+    const t = i / tears
+    ring.push([MEMO.x + MEMO.w - t * MEMO.w, front + (i === tears ? 0.4 : i % 2 ? 2 : 0.45)])
+  }
+  out.push(k.solidSvg(k.extrude(ring, z + MEMO_H, 0.42, P, { convex: false }), { tone: 'mid' }))
+  const paper = z + MEMO_H + 0.46
+  for (const y of [-23.5, -18, -12.5])
+    out.push(k.lineSvg(k.segment([MEMO.x + 1.8, y, paper], [MEMO.x + MEMO.w - 1.8, y, paper], P), { tone: 'faint' }))
+
+  // the bulldog clip, clamping the bound edge at the back
+  out.push(solid({ x: 4.4, y: MEMO.y - 0.4, w: 6.8, d: 3.4, r: 1 }, paper, 1.3, P, 'mid', 4, 0.4))
+  out.push(topPlan({ x: 4.4, y: MEMO.y - 0.4, w: 6.8, d: 3.4, r: 1 }, paper + 1.34, P, 0, 'mid'))
+  for (const dx of [0.5, 4.9])
+    out.push(topRect(4.4 + dx, MEMO.y + 1.6, 4.4 + dx + 1.4, MEMO.y + 2.6, paper + 1.36, P, 2, 'mid'))
+  return out.join('')
+}
+
+function notebookSvg(P) {
+  const z = FLOOR_Z
+  const out = [solid(BOOK, z, BOOK_H, P, 'mid', 4, 0.5)]
+  // the spine, down the left edge and proud of the cover
+  const spine = { x: 19.5, y: BOOK.y + 0.5, w: 2.4, d: BOOK.d - 1, r: 1.1 }
+  out.push(solid(spine, z, BOOK_H + 0.7, P, 'mid', 5, 0.5))
+  out.push(topPlan(spine, z + BOOK_H + 0.74, P, 2, 'mid'))
+  // the cover line, inset from the edges
+  out.push(k.lineSvg(k.planOutline({ x: BOOK.x + 2.6, y: BOOK.y + 2.2, w: BOOK.w - 4.2, d: BOOK.d - 4.4, r: 0.6 }, z + BOOK_H + 0.06, P, 4), { tone: 'faint' }))
+  // the page block, seen as lines under the cover
+  for (let i = 1; i <= 3; i++)
+    out.push(k.lineSvg(k.segment([BOOK.x + 1.2, BOOK.y + BOOK.d, z + i * 0.42], [BOOK.x + BOOK.w - 1.2, BOOK.y + BOOK.d, z + i * 0.42], P), { tone: 'lo' }))
+
+  // the ribbon: lying back along the cover, then over the front edge
+  const ribbon = { x: 26.4, y: -12.5, w: 1.9, d: 19.4, r: 0.2 }
+  out.push(solid(ribbon, z + BOOK_H, 0.26, P, 'lo', 3, 0.1))
+  out.push(topPlan(ribbon, z + BOOK_H + 0.3, P, 2, 'faint'))
+  const lip = BOOK.y + BOOK.d + 0.06
+  out.push(paint(k.pathOf([[26.4, lip, z + 1.1], [27.35, lip, z + 0.45], [28.3, lip, z + 1.1], [28.3, lip, z + BOOK_H + 0.1], [26.4, lip, z + BOOK_H + 0.1]].map((p) => k.iso(p, P)), true), 2, 'mid'))
   return out.join('')
 }
 
 function middleTray(P) {
-  return notebook(-2, -27, 34, 22, FLOOR_Z, P) + notebook(3, -21, 29, 17, FLOOR_Z + 1.4, P)
+  return memoPad(P) + notebookSvg(P)
+}
+
+// --- right: the visiting cards -------------------------------------------
+
+const CARD_W = 9, CARD_H = 9.8, CARD_T = 0.9, CARD_Z = FLOOR_Z + 0.4
+
+/** A ribbon folded over the top edge of a card: the tail stands behind it. */
+function ribbonBack(F, dx, P) {
+  const hw = 0.75
+  return paint(facePath(F, [[dx - hw, -0.47, CARD_H], [dx + hw, -0.47, CARD_H], [dx + hw, -0.47, CARD_H + 1.7], [dx - hw, -0.47, CARD_H + 1.7]], P), 1, 'mid')
+}
+
+function ribbonFront(F, dx, P) {
+  const hw = 0.75
+  const fold = paint(facePath(F, [[dx - hw, -0.47, CARD_H], [dx + hw, -0.47, CARD_H], [dx + hw, 0.47, CARD_H], [dx - hw, 0.47, CARD_H]], P), 2, 'mid')
+  const hang = paint(facePath(F, [[dx - hw, 0.49, CARD_H - 2.4], [dx, 0.49, CARD_H - 1.7], [dx + hw, 0.49, CARD_H - 2.4], [dx + hw, 0.49, CARD_H], [dx - hw, 0.49, CARD_H]], P), 1, 'mid')
+  return fold + hang
+}
+
+function card(cx, cy, yaw, tab, ribbon, P) {
+  const F = frameOf({ yaw, origin: [cx, cy, CARD_Z] })
+  const face = 0.47
+  const out = []
+  if (ribbon !== null)
+    out.push(ribbonBack(F, ribbon, P))
+  out.push(boxSvg(F, { u: -CARD_W / 2, v: -CARD_T / 2, w: 0, uw: CARD_W, vd: CARD_T, wh: CARD_H }, P, { tone: 'mid' }))
+  // the printed face: paper, with an avatar block, a name band and two rules
+  const front = facePath(F, [[-CARD_W / 2, face, 0], [CARD_W / 2, face, 0], [CARD_W / 2, face, CARD_H], [-CARD_W / 2, face, CARD_H]], P)
+  out.push(`<path class="iso-top" d="${front}"/>${k.lineSvg(front, { tone: 'mid' })}`)
+  out.push(paint(facePath(F, [[-3.5, face, 6.7], [-0.9, face, 6.7], [-0.9, face, 9.1], [-3.5, face, 9.1]], P), 2, 'mid'))
+  out.push(paint(facePath(F, [[0.1, face, 7.8], [3.9, face, 7.8], [3.9, face, 8.8], [0.1, face, 8.8]], P), 1, 'faint'))
+  out.push(k.lineSvg(k.segment(F.at(-3.6, face, 5.6), F.at(3.6, face, 5.6), P), { tone: 'faint' }))
+  out.push(paint(facePath(F, [[-3.6, face, 4.3], [1.6, face, 4.3], [1.6, face, 4.9], [-3.6, face, 4.9]], P), 3, 'faint'))
+  // the tab above the top edge
+  out.push(boxSvg(F, { u: tab ? 1.5 : -4.1, v: -CARD_T / 2, w: CARD_H, uw: 2.6, vd: CARD_T, wh: 1.7 }, P, { tone: 'mid' }))
+  if (ribbon !== null)
+    out.push(ribbonFront(F, ribbon, P))
+  return out.join('')
 }
 
 function rightTray(P) {
-  const out = [topRect(41, -25, 77, -11, FLOOR_Z + 0.4, P, 0, 'lo')]
-  const cards = [[45.5, -23, -10], [54.5, -20.5, -3], [63.5, -18, 4], [72.5, -15.5, 11]]
-  cards.forEach(([cx, cy, yaw], i) => out.push(card(cx, cy, yaw, i % 2, P)))
+  const out = [topRect(41, -26.5, 77, -13, FLOOR_Z + 0.3, P, 0, 'lo')]
+  // the lip the cards stand against
+  out.push(solid({ x: 41, y: -28.2, w: 36, d: 1.9, r: 0.6 }, FLOOR_Z, 2.6, P, 'mid', 4, 0.4))
+  // fanned left to right, so each card stands in front of the one before it;
+  // two of them carry a ribbon folded over the top edge
+  const row = [
+    [44.6, -23.4, -11, true, null],
+    [51.4, -21.4, -5.5, false, null],
+    [58.2, -19.4, 0, true, -2.6],
+    [65, -17.4, 5.5, false, null],
+    [71.8, -15.4, 11, true, 2.6],
+  ]
+  for (const [cx, cy, yaw, tab, ribbon] of row)
+    out.push(card(cx, cy, yaw, tab, ribbon, P))
   return out.join('')
 }
 

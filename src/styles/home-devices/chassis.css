@@ -1,0 +1,227 @@
+/* ==========================================================================
+   00 — the chassis: its entrance on page load, and the mechanism inside the
+   well. Owned by the chassis module; the boot timeline is driven from
+   stage.client.ts (the stage gets .is-booting for the first ~1.4 s).
+
+   THE BUILD
+   home.css gives every `.home-part` a generic settle for the device swap. The
+   chassis is not a device, so it carries its own assembly, gated on
+   `.home-stage.is-booting` — that class is on the stage for the first ~1.4 s of
+   the page and never comes back, so switching devices does not replay it.
+
+     part        beat                                                 window
+     ----------  ---------------------------------------------------  --------
+     shadow      the cast shadow fades up under the machine           0 → 180
+     feet        they drop out of the air and land, one squash        0 → 300
+     body        it rises out of the deck and seats, a touch too far  150 → 800
+     well        the cavity comes with it                             220 → 460
+     rim         the opening's lip is repainted over the lift         220 → 460
+     mechanism   the train arrives with the shell (the closed         300 → 500
+                 cover plates hide it), then spins up                700 → 1300
+     deck        the deck details settle onto the shell               480 → 800
+     bay         two cover plates part on the centre line, hold,      600 → 1000
+                 then close again                                    1150 → 1450
+     platform    the lift rises out of the bay last                  1200 → 1500
+     panel       the front plate slides on from the left              880 → 1220
+     keys        five keys pop up in sequence, 46 ms apart             900 → 1484
+     vents       the grille draws itself across                      980 → 1260
+     power       the rocker, the fuse and the screws snap on        1020 → 1320
+     cable       the lead whips into place                          1060 → 1360
+
+   Every animation ends on `transform: none; opacity: 1` — and the cover plates
+   end closed, hidden under the lift — so the moment `.is-booting` is dropped
+   the chassis is exactly the static drawing. The two long beats (the plates
+   closing, the lift rising) use a very flat ease-out tail so that dropping the
+   class a few frames early cannot be seen.
+   ========================================================================== */
+
+/* ---- the bay's mechanism tones ----------------------------------------- */
+
+/* the back of the bay: a step darker than the opening, so the hole reads deep */
+.home-stage .home-bay-wall {
+  fill: color-mix(in oklch, var(--home-cavity) 80%, oklch(var(--un-preset-theme-colors-primary)) 20%);
+  stroke: none;
+}
+
+.home-stage .home-mech-edge { fill: var(--anatomy-shade-0); }
+.home-stage .home-mech-face { fill: var(--anatomy-shade-2); }
+.home-stage .home-mech-light { fill: var(--anatomy-top); }
+.home-stage .home-mech-mid { fill: var(--anatomy-shade-1); }
+.home-stage .home-mech-dark { fill: var(--home-cavity); }
+
+/* the gears turn about their own centres, which the module writes inline */
+.home-stage .home-chassis .home-gear {
+  transform-box: view-box;
+  will-change: transform;
+}
+
+/* ---- the build --------------------------------------------------------- */
+
+.home-stage.is-booting .home-chassis .home-part[data-part='shadow'] {
+  animation: home-boot-shadow 180ms linear both;
+}
+
+.home-stage.is-booting .home-chassis .home-part[data-part='feet'] {
+  animation: home-boot-feet 300ms cubic-bezier(0.3, 0.9, 0.3, 1) both;
+}
+
+.home-stage.is-booting .home-chassis .home-part[data-part='body'] {
+  animation: home-boot-body 650ms cubic-bezier(0.24, 0.9, 0.26, 1) 150ms both;
+}
+
+.home-stage.is-booting .home-chassis .home-part[data-part='well'],
+.home-stage.is-booting .home-chassis .home-part[data-part='rim'] {
+  animation: home-boot-well 240ms cubic-bezier(0.32, 0.72, 0, 1) 220ms both;
+}
+
+.home-stage.is-booting .home-chassis .home-part[data-part='deck'] {
+  animation: home-boot-deck 320ms cubic-bezier(0.22, 0.9, 0.24, 1) 480ms both;
+}
+
+/* the train is already seated when the deck opens; it only has to arrive with
+   the shell, and the closed cover plates hide the fade */
+.home-stage.is-booting .home-chassis .home-part[data-part='mechanism'] {
+  animation: home-boot-well 200ms linear 300ms both;
+}
+
+/* the cover plates: they arrive with the shell, part, hold, and close again.
+   `--slide-x` is the screen distance that clears the opening, written by the
+   module for each half, so the two halves travel opposite ways. */
+.home-stage.is-booting .home-chassis .home-bay-plate {
+  animation: home-boot-bay 1450ms linear both;
+}
+
+.home-stage.is-booting .home-chassis .home-lift {
+  animation: home-boot-lift 1500ms linear both;
+}
+
+.home-stage.is-booting .home-chassis .home-part[data-part='panel'] {
+  animation: home-boot-panel 340ms cubic-bezier(0.22, 0.9, 0.24, 1) 880ms both;
+}
+
+.home-stage.is-booting .home-chassis .home-key-slot {
+  transform-box: fill-box;
+  animation: home-boot-key 400ms cubic-bezier(0.2, 1.3, 0.4, 1) both;
+  animation-delay: calc(900ms + var(--slot, 0) * 46ms);
+}
+
+.home-stage.is-booting .home-chassis .home-part[data-part='vents'] {
+  transform-origin: 0% 50%;
+  animation: home-boot-vents 280ms cubic-bezier(0.32, 0.72, 0, 1) 980ms both;
+}
+
+.home-stage.is-booting .home-chassis .home-part[data-part='power'] {
+  animation: home-boot-power 300ms cubic-bezier(0.2, 1.4, 0.4, 1) 1020ms both;
+}
+
+.home-stage.is-booting .home-chassis .home-part[data-part='cable'] {
+  animation: home-boot-cable 300ms cubic-bezier(0.2, 1.3, 0.35, 1) 1060ms both;
+}
+
+.home-stage.is-booting .home-chassis .home-gear {
+  animation: home-boot-spin 600ms cubic-bezier(0.4, 0, 0.3, 1) 700ms both;
+}
+
+/* ---- the beats --------------------------------------------------------- */
+
+@keyframes home-boot-shadow {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* the feet fall, land, and squash once */
+@keyframes home-boot-feet {
+  0% { opacity: 0; transform: translateY(-26px); }
+  46% { opacity: 1; transform: translateY(1.6px) scaleY(0.94); }
+  70% { transform: translateY(-0.6px) scaleY(1.01); }
+  100% { transform: none; }
+}
+
+/* the body comes up through the deck and seats with a slight overshoot */
+@keyframes home-boot-body {
+  0% { opacity: 0; transform: translateY(52px); }
+  58% { opacity: 1; transform: translateY(-2.4px); }
+  78% { transform: translateY(1px); }
+  90% { transform: translateY(-0.3px); }
+  100% { transform: none; }
+}
+
+@keyframes home-boot-well {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes home-boot-deck {
+  0% { opacity: 0; transform: translateY(9px); }
+  100% { opacity: 1; transform: none; }
+}
+
+/* the deck splits: closed until 600 ms, apart by 1000, held, closed by 1450 */
+@keyframes home-boot-bay {
+  0% { opacity: 0; transform: translateX(0) translateY(5px); }
+  17% { opacity: 1; transform: translateX(0) translateY(0); }
+  41.4% { opacity: 1; transform: translateX(0); animation-timing-function: cubic-bezier(0.4, 0.9, 0.3, 1); }
+  69% { opacity: 1; transform: translateX(var(--slide-x, 0px)); }
+  79.3% { opacity: 1; transform: translateX(var(--slide-x, 0px)); animation-timing-function: cubic-bezier(0.5, 0.05, 0.2, 1); }
+  100% { opacity: 1; transform: translateX(0); }
+}
+
+/* the lift is out of the bay while the deck is open, then rises into place */
+@keyframes home-boot-lift {
+  0% { visibility: hidden; transform: translateY(30px); }
+  79.9% { visibility: hidden; transform: translateY(30px); }
+  80% { visibility: visible; transform: translateY(30px); animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1); }
+  93% { transform: translateY(-1.4px); animation-timing-function: cubic-bezier(0.3, 0.7, 0.4, 1); }
+  100% { visibility: visible; transform: none; }
+}
+
+/* the front plate slides on from the left */
+@keyframes home-boot-panel {
+  0% { opacity: 0; transform: translateX(-22px); }
+  100% { opacity: 1; transform: none; }
+}
+
+/* each key pops up out of its recess */
+@keyframes home-boot-key {
+  0% { opacity: 0; transform: translateY(7px) scale(0.82); }
+  60% { opacity: 1; transform: translateY(-1.2px) scale(1.02); }
+  100% { transform: none; }
+}
+
+/* the grille is drawn across the face, line by line */
+@keyframes home-boot-vents {
+  0% { opacity: 0; transform: scaleX(0); }
+  30% { opacity: 1; }
+  100% { opacity: 1; transform: none; }
+}
+
+@keyframes home-boot-power {
+  0% { opacity: 0; transform: scale(0.66); }
+  64% { opacity: 1; transform: scale(1.04); }
+  100% { transform: none; }
+}
+
+/* the lead swings in from behind the cabinet and settles */
+@keyframes home-boot-cable {
+  0% { opacity: 0; transform: translate(-16px, 12px) rotate(-7deg); }
+  62% { opacity: 1; transform: translate(2px, -1.4px) rotate(1.4deg); }
+  100% { transform: none; }
+}
+
+/* the train spins up while the deck is open, then stops dead */
+@keyframes home-boot-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(var(--turn, 240deg)); }
+}
+
+/* ---- reduced motion: the machine is simply there ------------------------ */
+
+html.reduce-motion .home-stage .home-chassis .home-bay-plate,
+html.reduce-motion .home-stage .home-chassis .home-gear,
+html.reduce-motion .home-stage .home-chassis .home-key-slot { animation: none !important; }
+
+@media (prefers-reduced-motion: reduce) {
+  .home-stage .home-chassis .home-bay-plate,
+  .home-stage .home-chassis .home-gear,
+  .home-stage .home-chassis .home-key-slot { animation: none !important; }
+}

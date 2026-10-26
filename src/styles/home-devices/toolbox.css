@@ -11,6 +11,32 @@
      390 – 1100   the lid lifts, the tools on its face resolve, the stay swings
    ========================================================================== */
 
+/* --------------------------------------------------------------------------
+   Tray contents — the app badges on the left tray's board.
+
+   The board takes the darkest step the drawing has, so the shadow each badge
+   casts on it cannot be another step of the palette: it is a physical one, and
+   this is the only place in the module where a bare black is right. The glyphs
+   keep a fixed screen weight instead of the plane's, because at six units
+   across a 0.6px hairline inside a tile disappears.
+   -------------------------------------------------------------------------- */
+
+.home-stage .home-case-badge-shadow {
+  fill: rgb(0 0 0 / 0.15);
+  stroke: none;
+}
+
+/* the board's face: darker than the tray floor it lies on, so the panel reads
+   as a dark card rather than as a second patch of the same floor */
+.home-stage .home-case-board {
+  fill: color-mix(in oklch, var(--anatomy-shade-0) 80%, var(--anatomy-hi) 20%);
+  stroke: none;
+}
+
+.home-stage .iso-line.home-case-glyph {
+  stroke-width: 1.05;
+}
+
 /* the closed lid: a flat slab lying on the case, visible only while shut */
 .home-stage .home-case-closed {
   opacity: 1;

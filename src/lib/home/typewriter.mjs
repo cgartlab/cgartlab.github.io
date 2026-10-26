@@ -17,15 +17,30 @@ const DECK_TOP = BASE_Z + 8
 
 const PLATEN = { y: -24, z: 131, r: 10, half: 64 }
 const PAPER_BOTTOM = { y: -30, z: 141 }
-const PAPER_TOP = { y: -52, z: 188 }
 const PAPER_HALF = 64
+
+/** the sheet leans back off the roller along this unit vector */
+const PAPER_DOWN = [0, 0.4239, -0.9057]
+/**
+ * The page's top margin, in paper units. It is the blank the sheet keeps above
+ * the first line, so it is also the whole sheet standing above the roller
+ * before a character is struck — a fresh page shows its margin, not a banner.
+ */
+const SHEET_MARGIN = 16
+const PAPER_TOP = {
+  y: PAPER_BOTTOM.y - SHEET_MARGIN * PAPER_DOWN[1],
+  z: PAPER_BOTTOM.z - SHEET_MARGIN * PAPER_DOWN[2],
+}
 
 const SHEET_H = Math.hypot(PAPER_TOP.y - PAPER_BOTTOM.y, PAPER_TOP.z - PAPER_BOTTOM.z)
 /** the roller line, in paper units measured from the sheet's top edge */
 const ROLLER_V = Math.round(SHEET_H)
-/** the strip runs well past the roller; the platen and the clip hide the rest */
-const SHEET_BOTTOM = ROLLER_V + 40
-const TEXT = { x: 9, leading: 7.8, size: 5.7 }
+/** the strip is 92 units long, always longer than the fullest feed, so the tail
+ *  below the roller is paper too; the platen and the clip hide the rest */
+const SHEET_BOTTOM = 92
+/** the sheet is cut for six lines of eighteen characters, set like a typed page */
+const TEXT = { x: 10.5, leading: 8.1, size: 5.8 }
+const MAX_LINES = 6
 
 // rows run back to front; each nearer row sits on a lower step
 const ROWS = [
@@ -159,12 +174,14 @@ export function buildTypewriter(P, options = {}) {
   }
 
   const paper = []
-  paper.push(`<defs><clipPath id="home-sheet-clip" clipPathUnits="userSpaceOnUse"><rect x="-14" y="-440" width="${PAPER_HALF * 2 + 28}" height="${440 + ROLLER_V}"/></clipPath></defs>`)
+  // The clip stops a couple of units below the roller line, where the platen's
+  // own silhouette takes over: the sheet disappears behind the roller, and the
+  // line standing at the type point keeps its descenders.
+  paper.push(`<defs><clipPath id="home-sheet-clip" clipPathUnits="userSpaceOnUse"><rect x="-14" y="-440" width="${PAPER_HALF * 2 + 28}" height="${440 + ROLLER_V + 2}"/></clipPath></defs>`)
   paper.push(`<g transform="${matrix}" clip-path="url(#home-sheet-clip)">`)
   paper.push(`<g class="home-paper-group" data-leading="${TEXT.leading}" data-lines="${lines.length}">`)
   paper.push(`<path class="home-paper-shadow" d="${strip(2.5, 2.5)}"/>`)
   paper.push(`<a class="home-paper-link" href="${paperHref}" aria-label="${paperLabel}"><path class="home-paper" d="${strip(0, 0)}"/></a>`)
-  paper.push(k.lineSvg(strip(0, 0), { tone: 'lo' }))
   lines.forEach((line, index) => {
     paper.push(`<text class="iso-face-text home-typed-line" data-line="${index}" data-tone="lit" font-size="${TEXT.size}" x="${TEXT.x}" y="${(ROLLER_V + index * TEXT.leading).toFixed(2)}">${escapeText(line)}</text>`)
   })
@@ -230,7 +247,6 @@ export function buildTypewriter(P, options = {}) {
   out.push(part('carriage', 5,
     k.lineSvg(k.segment([-60, -14.2, BASE_Z + 39], [60, -14.2, BASE_Z + 39], P), { tone: 'hi' }),
     k.dotsSvg([k.iso([-60, -14.2, BASE_Z + 39], P), k.iso([60, -14.2, BASE_Z + 39], P)], { size: 0.9, tone: 'mid' }),
-    k.lineSvg(k.segment([-PAPER_HALF + 4, PAPER_TOP.y + 9, PAPER_TOP.z - 9], [PAPER_HALF - 4, PAPER_TOP.y + 9, PAPER_TOP.z - 9], P), { tone: 'mid' }),
   ))
 
   // ---- badge, vents ----------------------------------------------------
@@ -253,13 +269,14 @@ export function buildTypewriter(P, options = {}) {
 }
 
 export function typewriterBounds() {
+  const feed = (MAX_LINES - 1) * TEXT.leading
   return [
     ...k.boxCorners(BASE, BASE_Z, BASE_Z + 30),
     [-PAPER_HALF, PAPER_TOP.y, PAPER_TOP.z],
     [PAPER_HALF, PAPER_TOP.y, PAPER_TOP.z],
     // the sheet's top edge rises by (maxLines - 1) * leading as it feeds
-    [-PAPER_HALF, PAPER_TOP.y - 39 * 0.424, PAPER_TOP.z + 39 * 0.906],
-    [PAPER_HALF, PAPER_TOP.y - 39 * 0.424, PAPER_TOP.z + 39 * 0.906],
+    [-PAPER_HALF, PAPER_TOP.y - feed * PAPER_DOWN[1], PAPER_TOP.z - feed * PAPER_DOWN[2]],
+    [PAPER_HALF, PAPER_TOP.y - feed * PAPER_DOWN[1], PAPER_TOP.z - feed * PAPER_DOWN[2]],
     [102, -18, BASE_Z + 60],
   ]
 }

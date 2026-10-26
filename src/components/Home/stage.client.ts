@@ -1,9 +1,9 @@
 /**
  * Home stage runtime.
  *
- * The machine is static SVG; this file drives what moves: the typewriter
- * striking keys and feeding its sheet, the device swap, and the page-level
- * projection behind the 作品 section.
+ * The machine is static SVG; this file drives what moves: the three-second
+ * page-load build, the typewriter striking keys and feeding its sheet, the
+ * device swap, and the page-level projection behind the 作品 section.
  *
  * There is no camera tilt. A rotation of the drawing plane only ever reads as
  * a sheet of paper turning, so the stage stays square to the reader.
@@ -13,9 +13,18 @@
 
 const STAGE = '[data-home-stage]'
 const PROJECTION = '.home-projection'
+const FRAME = '.home-projection-frame'
 const TOUR_DELAY = 600
 const TOUR_INTERVAL = 34
 const RESUME_DELAY = 5200
+/** the chassis has finished building; the device rides up on the lift */
+const BOOT_DEVICE = 1200
+/** chassis (0 → 1.2 s) + device (1.2 → 3 s): the page is whole at three */
+const BOOT_TOTAL = 3000
+/** the projector threads the film before the reel rolls (the cinema's build) */
+const SCREEN_DELAY = 900
+/** the frame's rect is cached; layout is re-read at most this often */
+const RECT_TTL = 250
 
 interface State {
   stage: HTMLElement
@@ -29,6 +38,12 @@ interface State {
   timer: number
   resume: number
   swapTimer: number
+  bootTimer: number
+  bootEnd: number
+  /** a key chosen while the chassis is still building, seated at 1200 ms */
+  pending: number
+  /** false until the boot is over: the tour waits for a whole page */
+  ready: boolean
   modules: SVGGElement[]
   caps: SVGGElement[]
   channels: SVGAElement[]
@@ -37,6 +52,20 @@ interface State {
 }
 
 let state: State | null = null
+
+/* --------------------------------------------------------------------------
+   The projection. The layer is page-level and sits behind the page
+   (z-index: -1), so the frame can never be hovered and nothing is thrown until
+   the projector has threaded. Both are flags on <html>, read by home.css.
+   -------------------------------------------------------------------------- */
+
+let screenTimer = 0
+let frameRect: DOMRect | null = null
+let frameAt = 0
+let pointerX = -1
+let pointerY = -1
+/** true while the console is assembling: nothing is screened until it is whole */
+let bootActive = false
 
 function prefersReducedMotion(): boolean {
   return document.documentElement.classList.contains('reduce-motion')
@@ -105,13 +134,14 @@ function step(s: State): void {
     return
   }
   typeOne(s)
-  s.timer = window.setTimeout(() => step(s), TOUR_INTERVAL)
+  s.timer = window.setTimeout(step, TOUR_INTERVAL, s)
 }
 
 function startTour(s: State): void {
-  if (s.timer || s.shown >= s.total)
+  // the sheet only starts printing once the console is whole
+  if (!s.ready || s.timer || s.shown >= s.total)
     return
-  s.timer = window.setTimeout(() => step(s), TOUR_DELAY)
+  s.timer = window.setTimeout(step, TOUR_DELAY, s)
 }
 
 function stopTour(s: State): void {
@@ -133,18 +163,101 @@ function scheduleResume(s: State): void {
   }, RESUME_DELAY)
 }
 
+/* ---- the screening gate -------------------------------------------------- */
+
+function projectionVideo(): HTMLVideoElement | null {
+  return document.querySelector<HTMLVideoElement>(`${PROJECTION} video`)
+}
+
+function projectionFrame(): HTMLElement | null {
+  return document.querySelector<HTMLElement>(FRAME)
+}
+
+/** The layer is fixed and static, so its rect only moves on resize — cache it. */
+function refreshFrame(): void {
+  const frame = projectionFrame()
+  frameRect = frame ? frame.getBoundingClientRect() : null
+  frameAt = performance.now()
+}
+
+function insideFrame(rect: DOMRect | null, x: number, y: number): boolean {
+  return !!rect
+    && x >= rect.left
+    && x <= rect.right
+    && y >= rect.top
+    && y <= rect.bottom
+}
+
+function setHover(on: boolean): void {
+  const html = document.documentElement
+  if (on) {
+    if (html.dataset.projection !== 'hover')
+      html.dataset.projection = 'hover'
+    return
+  }
+  if (html.dataset.projection)
+    html.removeAttribute('data-projection')
+}
+
+/**
+ * The frame is unreachable by :hover (z-index: -1 puts it under the page), so
+ * the colour reveal is driven from the pointer position against its rect.
+ * No layout is read on every move: the rect is refreshed on resize and at most
+ * once per RECT_TTL.
+ */
+function syncHover(): void {
+  const html = document.documentElement
+  if (html.dataset.screening !== 'on' || html.dataset.homeSection !== 'works') {
+    setHover(false)
+    return
+  }
+  if (!frameRect || performance.now() - frameAt > RECT_TTL)
+    refreshFrame()
+  setHover(insideFrame(frameRect, pointerX, pointerY))
+}
+
+/** Nothing is thrown and nothing plays: the room goes quiet at once. */
+function stopScreening(): void {
+  if (screenTimer) {
+    window.clearTimeout(screenTimer)
+    screenTimer = 0
+  }
+  document.documentElement.removeAttribute('data-screening')
+  setHover(false)
+  frameRect = null
+  const video = projectionVideo()
+  if (video)
+    video.pause()
+}
+
 /** Only the 作品 section projects; everything else keeps the page quiet. */
 function projectSection(section: string): void {
-  const video = document.querySelector<HTMLVideoElement>(`${PROJECTION} video`)
-  if (!video)
+  if (section !== 'works') {
+    stopScreening()
     return
-  if (section === 'works') {
+  }
+  if (screenTimer)
+    window.clearTimeout(screenTimer)
+  // the projector threads first: the reel only rolls once the film is through
+  screenTimer = window.setTimeout(() => {
+    screenTimer = 0
+    const html = document.documentElement
+    // the reader may have moved on, or the console may still be assembling
+    if (bootActive || html.dataset.homeSection !== 'works')
+      return
+    html.dataset.screening = 'on'
+    refreshFrame()
+    const video = projectionVideo()
+    if (!video) {
+      syncHover()
+      return
+    }
+    if (video.readyState === 0)
+      video.load()
     // autoplay may be refused; the frame then simply keeps its poster
     video.play().catch(() => {})
-  }
-  else {
-    video.pause()
-  }
+    syncHover()
+  }, SCREEN_DELAY)
 }
 
 /**
@@ -181,6 +294,11 @@ function applyModule(s: State, index: number): void {
 function setModule(s: State, index: number): void {
   if (index === s.active)
     return
+  if (s.stage.classList.contains('is-booting')) {
+    // the deck is still building: remember the key, seat it when the lift arrives
+    s.pending = index
+    return
+  }
   const prev = s.modules.find(m => Number(m.dataset.index) === s.active)
   s.active = index
   window.clearTimeout(s.swapTimer)
@@ -196,6 +314,22 @@ function setModule(s: State, index: number): void {
     s.swapTimer = 0
     applyModule(s, index)
   }, 180)
+}
+
+/**
+ * 1200 ms: the chassis has built itself (chassis.css) and the device rides up
+ * on the lift with the same choreography as a swap — the lift dips and rises,
+ * the machine settles on it and its sub-assemblies seat in sequence.
+ */
+function seatDevice(s: State): void {
+  s.stage.classList.remove('is-booting')
+  const index = s.pending >= 0 ? s.pending : 0
+  s.pending = -1
+  s.active = index
+  s.stage.classList.remove('is-swapping')
+  void s.stage.offsetWidth
+  s.stage.classList.add('is-swapping')
+  applyModule(s, index)
 }
 
 function mount(): void {
@@ -241,6 +375,10 @@ function mount(): void {
     timer: 0,
     resume: 0,
     swapTimer: 0,
+    bootTimer: 0,
+    bootEnd: 0,
+    pending: -1,
+    ready: false,
     modules,
     caps,
     channels,
@@ -248,10 +386,40 @@ function mount(): void {
     cleanup: () => {},
   }
 
-  setModule(s, 0)
+  // the projection is page-level: track the pointer from the document, not the
+  // stage, and keep the flag alive for as long as this page is mounted
+  const onProjectionMove = (event: PointerEvent) => {
+    pointerX = event.clientX
+    pointerY = event.clientY
+    syncHover()
+  }
+  const onProjectionResize = () => {
+    refreshFrame()
+    syncHover()
+  }
+  document.addEventListener('pointermove', onProjectionMove, { passive: true })
+  window.addEventListener('resize', onProjectionResize, { passive: true })
+  const detachProjection = () => {
+    document.removeEventListener('pointermove', onProjectionMove)
+    window.removeEventListener('resize', onProjectionResize)
+  }
 
-  if (prefersReducedMotion())
+  if (prefersReducedMotion()) {
+    // nothing assembles and nothing types: the machine is simply there
+    s.ready = true
+    setModule(s, 0)
+    s.cleanup = detachProjection
+    state = s
     return
+  }
+
+  // ---- the boot ----------------------------------------------------------
+  // the chassis carries its own build, gated on .is-booting; the device is
+  // held back (no .is-active) so its own assembly cannot run behind it
+  stage.classList.add('is-booting')
+  for (const m of modules)
+    m.classList.remove('is-active')
+  bootActive = true
 
   // start from a blank sheet and let the machine fill it
   s.shown = 0
@@ -317,6 +485,7 @@ function mount(): void {
   document.addEventListener('visibilitychange', onVisibility)
 
   s.cleanup = () => {
+    detachProjection()
     window.removeEventListener('keydown', onKey)
     stage.removeEventListener('pointermove', onPointerMove)
     stage.removeEventListener('pointerdown', onPointerDown)
@@ -326,13 +495,27 @@ function mount(): void {
   }
 
   state = s
-  s.resume = window.setTimeout(() => startTour(s), TOUR_DELAY)
+
+  s.bootTimer = window.setTimeout(() => {
+    s.bootTimer = 0
+    seatDevice(s)
+  }, BOOT_DEVICE)
+
+  s.bootEnd = window.setTimeout(() => {
+    s.bootEnd = 0
+    bootActive = false
+    s.ready = true
+    // the reel may have been asked for while the console was still building
+    projectSection(document.documentElement.dataset.homeSection || '')
+    startTour(s)
+  }, BOOT_TOTAL)
 }
 
 function unmount(): void {
   // the projection is page-level, so it must stop even when the reduced-motion
   // bail-out left no state behind
-  projectSection('')
+  stopScreening()
+  bootActive = false
   document.documentElement.removeAttribute('data-home-section')
   if (!state)
     return
@@ -341,7 +524,17 @@ function unmount(): void {
     window.clearTimeout(state.resume)
   if (state.swapTimer)
     window.clearTimeout(state.swapTimer)
+  // the page may be left mid-boot: every timer and the gate go with it
+  if (state.bootTimer)
+    window.clearTimeout(state.bootTimer)
+  if (state.bootEnd)
+    window.clearTimeout(state.bootEnd)
+  state.resume = 0
+  state.swapTimer = 0
+  state.bootTimer = 0
+  state.bootEnd = 0
   state.stage.classList.remove('is-swapping')
+  state.stage.classList.remove('is-booting')
   state.cleanup()
   state = null
 }

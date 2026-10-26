@@ -113,6 +113,28 @@
   100% { transform: none; }
 }
 
+/* the sheet's stock ------------------------------------------------------- */
+/* The page is a warm off-white, so the sheet cannot borrow it: paper reads as
+   paper by being a shade brighter and cooler than the surface it lies on, never
+   white. At night the sheet keeps its dark stock and the accent ink carries it.
+   No edge stroke — the fill and the soft shadow alone hold the silhouette. */
+.home-stage .home-paper-holder {
+  --home-sheet: oklch(99.2% 0.004 96);
+}
+
+.dark .home-stage .home-paper-holder {
+  --home-sheet: color-mix(in oklch, oklch(var(--un-preset-theme-colors-primary)) 24%, oklch(var(--un-preset-theme-colors-background)) 76%);
+}
+
+.home-stage .home-paper-holder .home-paper {
+  fill: var(--home-sheet);
+}
+
+.home-stage .home-paper-link:hover .home-paper,
+.home-stage .home-paper-link:focus-visible .home-paper {
+  fill: color-mix(in oklch, var(--home-sheet) 82%, oklch(var(--un-preset-theme-colors-highlight)) 18%);
+}
+
 /* reduced motion: the machine is simply there ------------------------------ */
 
 html.reduce-motion .home-module.is-active .home-part[data-part] {
