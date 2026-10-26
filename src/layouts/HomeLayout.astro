@@ -4,6 +4,7 @@ import Button from '@/components/Button.astro'
 import SearchIcon from '@/assets/icons/search-icon.svg'
 import { themeConfig } from '@/config'
 import Head from '@/layouts/Head.astro'
+import Search from '@/components/Search.astro'
 import { ui } from '@/i18n/ui'
 import { getPageInfo } from '@/utils/page'
 import '@unocss/reset/tailwind.css'
@@ -41,17 +42,19 @@ const siteTitle = themeConfig.site.i18nTitle ? t.title : themeConfig.site.title
         </a>
         <div class="home-tools">
           <a class="home-about" href={getLocalizedPath('/about/')}>{t.about}</a>
-          <a
+          <button
+            id="search-trigger"
+            type="button"
             class="home-search"
-            href={getLocalizedPath('/search/')}
             aria-label={t.search}
           >
             <SearchIcon aria-hidden="true" fill="currentColor" />
-          </a>
+          </button>
           <Button {supportedLangs} variant="home" />
         </div>
       </header>
       <slot />
     </div>
+    <Search />
   </body>
 </html>
