@@ -32,6 +32,9 @@ interface State {
   lines: string[]
   textEls: SVGTextElement[]
   paper: SVGGElement | null
+  lever: SVGGElement | null
+  leverTimer: number
+  line: number
   keys: Map<string, SVGGElement>
   shown: number
   total: number
@@ -94,6 +97,18 @@ function paint(s: State, count: number): void {
  * own top edge all travel together, and the line being struck always sits at
  * the roller. The CSS transition on .home-paper-group makes it a feed.
  */
+/** Knock the carriage return lever over — one throw per new line. */
+function swingLever(s: State): void {
+  const lever = s.lever
+  if (!lever)
+    return
+  lever.classList.remove('is-returning')
+  void lever.getBoundingClientRect()
+  lever.classList.add('is-returning')
+  window.clearTimeout(s.leverTimer)
+  s.leverTimer = window.setTimeout(() => lever.classList.remove('is-returning'), 460)
+}
+
 function feed(s: State, count: number): void {
   const group = s.paper
   if (!group)
@@ -106,6 +121,9 @@ function feed(s: State, count: number): void {
     line = i
   }
   group.style.transform = `translateY(${(-line * leading).toFixed(2)}px)`
+  if (line > s.line)
+    swingLever(s)
+  s.line = line
 }
 
 function strike(s: State, char: string): void {
@@ -356,6 +374,7 @@ function mount(): void {
   const channels = [...svg.querySelectorAll<SVGAElement>('.home-channel')]
   const textEls = [...svg.querySelectorAll<SVGTextElement>('.home-typed-line')]
   const paper = svg.querySelector<SVGGElement>('.home-paper-group')
+  const lever = svg.querySelector<SVGGElement>('.home-return-lever')
   const keys = new Map<string, SVGGElement>()
   for (const key of svg.querySelectorAll<SVGGElement>('.home-key')) {
     const id = key.getAttribute('data-key')
@@ -369,6 +388,9 @@ function mount(): void {
     lines,
     textEls,
     paper,
+    lever,
+    leverTimer: 0,
+    line: 0,
     keys,
     shown: totalChars(lines),
     total: totalChars(lines),
@@ -524,6 +546,8 @@ function unmount(): void {
     window.clearTimeout(state.resume)
   if (state.swapTimer)
     window.clearTimeout(state.swapTimer)
+  if (state.leverTimer)
+    window.clearTimeout(state.leverTimer)
   // the page may be left mid-boot: every timer and the gate go with it
   if (state.bootTimer)
     window.clearTimeout(state.bootTimer)

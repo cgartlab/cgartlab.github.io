@@ -222,9 +222,35 @@ export function buildTypewriter(P, options = {}) {
   ))
 
   // carriage return lever, drawn before the knobs so they hide its root
+  // carriage return lever: a real mechanism on the right cheek — a pivot boss,
+  // a tapered arm, a knurled grip and a link rod back to the carriage. The
+  // client swings it whenever the sheet feeds a new line.
+  const pivot = [84, -26, BASE_Z + 46]
+  const tip = [104, -12, BASE_Z + 59]
+  const armDir = (() => {
+    const d = [tip[0] - pivot[0], tip[1] - pivot[1], tip[2] - pivot[2]]
+    const len = Math.hypot(...d)
+    return [d[0] / len, d[1] / len, d[2] / len]
+  })()
+  const ARM_LEN = Math.hypot(tip[0] - pivot[0], tip[1] - pivot[1], tip[2] - pivot[2])
+  const ARM = G.frameAlong(pivot, armDir)
+  const [pivotX, pivotY] = k.iso(pivot, P)
+  const lever = [
+    // bracket bolted to the cheek
+    k.solidSvg(k.slabOf({ x: 78, y: -33, w: 9, d: 15, r: 2 }, BASE_Z + 37, 15, P, 3, 0.7), { tone: 'mid' }),
+    // pivot boss, facing the reader's right
+    k.solidSvg(G.disc(0, 3.2, 4.2, G.frameAlong(pivot, [1, 0, 0]), P), { tone: 'hi' }),
+    k.lineSvg(k.ring(pivot[0], pivot[1], 4.2, pivot[2], P, 18), { tone: 'faint' }),
+    // arm: a rod that thickens into the grip
+    k.solidSvg(G.solidOf([[0, 2.2], [ARM_LEN - 11, 2.2], [ARM_LEN - 11, 2.6], [ARM_LEN - 3, 2.6], [ARM_LEN - 3, 4.4], [ARM_LEN + 3.6, 4.4], [ARM_LEN + 3.6, 2.2]], ARM, P), { tone: 'mid' }),
+    // grip rings
+    ...[-1.5, 0.4, 2.3].map(d => k.lineSvg(G.arcOf(ARM, ARM_LEN + d, 4.5, P, { steps: 20 }), { tone: 'faint' })),
+    // link rod back to the carriage
+    k.lineSvg(k.segment([86, -20, BASE_Z + 40], [92, -18, BASE_Z + 48], P), { tone: 'mid' }),
+    k.dotsSvg([k.iso([86, -20, BASE_Z + 40], P), k.iso([92, -18, BASE_Z + 48], P)], { size: 0.7, tone: 'mid' }),
+  ]
   out.push(part('carriage', 5,
-    k.lineSvg(k.segment([69, -30, BASE_Z + 46], [102, -18, BASE_Z + 60], P), { tone: 'mid' }),
-    k.dotsSvg([k.iso([102, -18, BASE_Z + 60], P)], { size: 2.6, tone: 'mid' }),
+    `<g class="home-return-lever" style="transform-origin:${pivotX.toFixed(1)}px ${pivotY.toFixed(1)}px">${lever.join('')}</g>`,
   ))
 
   // one knob per side, so each twists about its own axis rather than the pair
