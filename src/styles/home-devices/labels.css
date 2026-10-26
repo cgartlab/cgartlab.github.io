@@ -14,7 +14,10 @@
    slot, the transport pair, the cutter, the carriage, the rocker and the lamp
    with it. Only then do the tickets start: the wrapper holds them back until
    the case is closed, and each ticket's own delay is measured from that beat.
-   The whole build is over in ~1000ms; the printing then keeps its own cycle.
+   The whole build is over in ~1000ms. The printing then keeps its own cycle:
+   the beat between sheets is not fixed here but computed from the tag count in
+   the module, which hands each ticket its `--fly-delay` — one ticket per tag, so
+   26 sheets print in the same handful of seconds as 8 rather than a minute.
 
    Every animation ends on `transform: none; opacity: 1`, so the assembled
    machine is exactly the static drawing.

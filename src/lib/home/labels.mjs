@@ -12,17 +12,31 @@ import { faceMatrix, facePath, frameOf } from './frame.mjs'
  * vent grille low down; the engraved caption; the slot with its platen just
  * inside and the knurled transport wheel at its right; the cutter bar over the
  * slot; and above that a print carriage riding a rail, its dark print bar hanging
- * clear of the cutter. Eight tickets have already left the slot and hang in the
- * air, each printed with a real tag; they are the only parts that are not seated.
+ * clear of the cutter. One ticket per tag on the site has already left the slot
+ * and hangs in the air, each printed with a real tag; they are the only parts
+ * that are not seated.
  *
- * Each ticket stands in its frame's u-w plane — a card 40 wide by 18 tall, tipped
- * 18 degrees so its top edge comes toward the reader — and is drawn at its
- * floating position with no transform of its own. The CSS flies it out of the
- * slot with two screen-space deltas:
+ * The tickets are not a fixed table. The module prints exactly as many as it is
+ * given, so the stack is laid out from `tags.length`: five across, rows filling
+ * upward from just above the stock roll, a sheet 30 wide by 13 tall with 3.5
+ * between. Twenty-six tags make six rows; sixty would make twelve, and the stack
+ * grows rather than the module capping it. The widest row may not reach past
+ * |x| = 100, and since a wider span would drag the shared projection sideways,
+ * it is the sheet that shrinks there — to a floor of 24 × 11 — not the span.
+ *
+ * Each ticket stands in its frame's u-w plane — tipped 18 degrees so its top edge
+ * comes toward the reader — and is drawn at its floating position with no
+ * transform of its own. The CSS flies it out of the slot with two screen-space
+ * deltas:
  *
  *   --fly-x / --fly-y   from the float back to the slot mouth  (it appears there)
  *   --out-x / --out-y   from the float to a point a few units clear of the
  *                       front face at slot height (it slides out and waits)
+ *
+ * The beat follows the count, too: twenty-six sheets at the old 700ms stagger
+ * would have taken eighteen seconds, so the gap is 5600/N clamped to 140–700ms.
+ * The sheets then arrive over five and a half seconds whatever the count, and the
+ * last one settles before eight; the first still waits for the case to close.
  *
  * Painter order is far to near: feet, body, lid, the frame's back and side bars,
  * the roll and its clear cover, the frame's front bar (which hides the roll's
@@ -70,31 +84,93 @@ const RAIL = { x: SLOT.x - 7, w: SLOT.w + 14, z: SLOT.z + SLOT.h / 2 + 16.1, h: 
 const CARRIAGE = { x: -15, w: 30, z: RAIL.z - 6.2, h: 6.2 }
 const PRINT_BAR = { x: -12, w: 24, z: CARRIAGE.z - 2.8, h: 2.8 }
 
-const CARD = { w: 40, h: 18, r: 2.8, pitch: -18 }
+const CARD = { w: 30, h: 13, r: 2.1, pitch: -18 }
+/** The plane the sheets hang in: a few units clear of the front face. */
+const FLOAT_Y = 38
 /**
- * x, y, height above TOP. Five low and near on a shallow arc, three high and
- * far in a tighter one nested over the gaps: the fan rises clear of the roll and
- * never overlaps itself or the machine.
+ * The stage looks down at 18°, so a sheet hung d in front of a thing sits
+ * d·tan18 lower on screen than the thing itself.
  */
-const FLY = [
-  [-94, 38, 103], [-47, 38, 115], [0, 38, 121], [47, 38, 115], [94, 38, 103],
-  [-68, 14, 132], [0, 14, 138], [68, 14, 132],
-]
+const RAKE = (18 * Math.PI) / 180
+/** The crown of the stock roll, its clear cover included. */
+const CROWN = ROLL_Z + ROLL.r + 1.8
+/**
+ * The stack: five across, a 3.5 gutter between sheets, the lowest row above the
+ * roll's crown so the stack rises out of the machine. Rows fill upward, so the
+ * stack reads bottom-up in the site's own order — the most-used tag was printed
+ * first and sits nearest the machine. Heights here are above TOP; cardAt adds
+ * the deck.
+ *
+ * The lowest row cannot sit on the lid: the sheets stand three units in front of
+ * the front face, and that depth alone drops them ~13 units on screen — enough
+ * to print straight through the roll. Clearing the crown is what fixes the base.
+ */
+const GRID = {
+  maxCols: 7,
+  /** how tall the stack may stand before the rows start overlapping */
+  height: 122,
+  gap: 3.5,
+  base: CROWN - TOP + (FLOAT_Y - ROLL.y) * Math.tan(RAKE) + (CARD.h / 2) * Math.cos(RAKE) + 4,
+}
+/** The stack may not reach past this in x; past it the sheet shrinks, not the span. */
+const REACH = 100
+/** The smallest a sheet may shrink to and still read as a label. */
+const FLOOR = { w: 24, h: 11 }
 
 /**
  * How long the case takes to build. The tickets wait for it: the first one
- * leaves the slot just after the last panel closes, and each follows 700ms
- * apart, so printing starts on a finished machine.
+ * leaves the slot just after the last panel closes, so printing starts on a
+ * finished machine. The beat between sheets then divides a fixed run between
+ * however many tags there are, so 26 tickets print in the same handful of
+ * seconds as 8 — clamped, because a 140ms beat is as fast as the eye reads a
+ * sheet arriving and 700ms is as slow as a short run should feel.
  */
 const BUILD = 1000
-const PRINT_GAP = 700
+const RUN = 5600
+const BEAT = { min: 140, max: 700 }
 
 /**
- * One sub-assembly. Each run is a contiguous stretch of what already painted
- * together, so wrapping it changes no painter's order — only which assembly a
- * path belongs to. `--step` is the shared settle contract in home.css;
- * labels.css replaces it with the real assembly.
+ * The layout for a given number of tags: a centred row of up to five, rows
+ * stacked upward. A short last row is centred on its own length, so the stack
+ * reads as a stack rather than a grid with a hole punched out of it.
  */
+function layout(count) {
+  const n = Math.max(0, Math.floor(count))
+  // the grid squares up as the tag count grows: six columns at 26 tags, seven
+  // when the site carries dozens, so the stack widens before it towers
+  const cols = Math.min(GRID.maxCols, Math.max(1, Math.ceil(Math.sqrt(n * 1.5))))
+  const widest = cols ? cols * CARD.w + (cols - 1) * GRID.gap : 0
+  const squeeze = widest ? Math.min(1, (REACH * 2) / widest) : 1
+  const card = {
+    ...CARD,
+    w: Math.max(FLOOR.w, CARD.w * squeeze),
+    h: Math.max(FLOOR.h, CARD.h * squeeze),
+  }
+  const across = card.w + GRID.gap
+  const rows = Math.max(1, Math.ceil(n / cols))
+  // a tall stack is allowed to close up — past the budget the rows overlap like
+  // a pile of printed labels instead of pushing the whole stage smaller
+  const wanted = card.h + GRID.gap
+  const upward = rows > 1 ? Math.min(wanted, GRID.height / (rows - 1)) : wanted
+  const seats = []
+  for (let index = 0; index < n; index++) {
+    const row = Math.floor(index / cols)
+    const column = index % cols
+    const inRow = Math.min(cols, n - row * cols)
+    seats.push({
+      x: (column - (inRow - 1) / 2) * across,
+      y: FLOAT_Y,
+      z: GRID.base + row * upward,
+      row,
+    })
+  }
+  return { seats, card }
+}
+
+/** One sub-assembly. Each run is a contiguous stretch of what already painted
+ *  together, so wrapping it changes no painter's order — only which assembly a
+ *  path belongs to. `--step` is the shared settle contract in home.css;
+ *  labels.css replaces it with the real assembly. */
 function part(name, step, ...items) {
   return `<g class="home-part" data-part="${name}" style="--step:${step}">${items.join('')}</g>`
 }
@@ -102,11 +178,26 @@ function part(name, step, ...items) {
 const HAN = /[\u3000-\u9fff\uff00-\uffef]/
 /** Rough advance in em, so a nine-character tag still fits the paper. */
 const measure = (text) => [...text].reduce((n, ch) => n + (HAN.test(ch) ? 1 : 0.62), 0)
-const sizeOf = (text) => Math.min(6.8, 32 / Math.max(1, measure(text)))
+/** The sheet's inner measure, and the type that fits it. */
+const inkOf = (card) => card.w * 0.8
+const sizeOf = (text, card) => Math.min(card.w * 0.17, inkOf(card) / Math.max(1, measure(text)))
+/**
+ * A tag too long for the sheet at reading size is clipped with an ellipsis
+ * rather than shrunk into a smudge: the type never falls below ~11% of the
+ * sheet's width, so every printed tag stays legible at 26 tickets.
+ */
+function printed(text, card) {
+  const room = inkOf(card) / (card.w * 0.113)
+  const chars = [...text]
+  if (measure(text) <= room)
+    return text
+  let keep = chars.length - 1
+  while (keep > 1 && measure(`${chars.slice(0, keep).join('')}…`) > room) keep--
+  return `${chars.slice(0, keep).join('')}…`
+}
 
 /** A rounded rectangle in card space: u across, w up the card. */
-function cardRing() {
-  const { w, h, r } = CARD
+function cardRing({ w, h, r }) {
   const corners = [[w / 2 - r, -h / 2 + r, -90], [w / 2 - r, h / 2 - r, 0], [-w / 2 + r, h / 2 - r, 90], [-w / 2 + r, -h / 2 + r, 180]]
   return corners.flatMap(([cu, cv, s]) => Array.from({ length: 4 }, (_, i) => {
     const a = ((s + i * 30) * Math.PI) / 180
@@ -114,7 +205,7 @@ function cardRing() {
   }))
 }
 
-const cardAt = ([x, y, z]) => frameOf({ pitch: CARD.pitch, origin: [x, y, TOP + z] })
+const cardAt = ({ x, y, z }) => frameOf({ pitch: CARD.pitch, origin: [x, y, TOP + z] })
 
 /** A rocker switch, seated on the front face. */
 function rocker(x, z, P, w = 17, h = 9) {
@@ -245,26 +336,30 @@ export function buildLabels(P, options = {}) {
 
   // ---- the tickets, last ------------------------------------------------
   // They wait for the case: the wrapper holds them back until the last panel is
-  // on, and each ticket's own delay is measured from that beat.
-  const ring = cardRing().map(([u, w]) => [u, 0, w])
+  // on, and each ticket's own delay is measured from that beat. The count is the
+  // tag count, so the stack grows with the site rather than stopping at eight.
+  const { seats, card } = layout(tags.length)
+  const ring = cardRing(card).map(([u, w]) => [u, 0, w])
   const [mx, my] = k.iso(MOUTH, P)
   const [ox, oy] = k.iso(OUT, P)
+  const beat = Math.round(Math.min(BEAT.max, Math.max(BEAT.min, RUN / Math.max(1, seats.length))))
+  const stitch = -card.w * 0.365
   const tickets = []
-  FLY.map((at, index) => ({ F: cardAt(at), index }))
+  seats.map((seat, index) => ({ F: cardAt(seat), index }))
     .sort((a, b) => k.depthOf(a.F.at(0, 0, 0), P) - k.depthOf(b.F.at(0, 0, 0), P))
     .forEach(({ F, index }) => {
-      const tag = [...(tags[index] || '')].slice(0, 9).join('')
-      const size = sizeOf(tag)
+      const tag = printed(tags[index] || '', card)
+      const size = sizeOf(tag, card)
       const paper = facePath(F, ring, P)
       const [fx, fy] = k.iso(F.at(0, 0, 0), P)
       // deltas run from the float *back* to the machine: mouth first, then out
       const fly = [mx - fx, my - fy]
       const exit = [ox - fx, oy - fy]
-      tickets.push(`<g class="home-ticket" style="--fly-x:${fly[0].toFixed(1)}px;--fly-y:${fly[1].toFixed(1)}px;--out-x:${exit[0].toFixed(1)}px;--out-y:${exit[1].toFixed(1)}px;--fly-delay:${BUILD + index * PRINT_GAP}ms">`)
+      tickets.push(`<g class="home-ticket" style="--fly-x:${fly[0].toFixed(1)}px;--fly-y:${fly[1].toFixed(1)}px;--out-x:${exit[0].toFixed(1)}px;--out-y:${exit[1].toFixed(1)}px;--fly-delay:${BUILD + index * beat}ms">`)
       tickets.push(`<path class="home-ticket-paper" fill="var(--home-paper)" d="${paper}"/>`)
       // the perforated edge down the left margin
-      tickets.push(k.lineSvg(k.pathOf([k.iso(F.at(-14.6, 0, -6.8), P), k.iso(F.at(-14.6, 0, 6.8), P)]), { tone: 'lo', dotted: true }))
-      tickets.push(k.faceTextSvg(faceMatrix(F, [2.4, 0, -size * 0.36], [1, 0, 0], [0, 0, -1], P), tag, { size, tone: 'hi', anchor: 'middle' }))
+      tickets.push(k.lineSvg(k.pathOf([k.iso(F.at(stitch, 0, -card.h * 0.38), P), k.iso(F.at(stitch, 0, card.h * 0.38), P)]), { tone: 'lo', dotted: true }))
+      tickets.push(k.faceTextSvg(faceMatrix(F, [card.w * 0.06, 0, -size * 0.36], [1, 0, 0], [0, 0, -1], P), tag, { size, tone: 'hi', anchor: 'middle' }))
       tickets.push(k.lineSvg(paper, { tone: 'lo' }))
       tickets.push('</g>')
     })
@@ -273,7 +368,17 @@ export function buildLabels(P, options = {}) {
   return out.join('')
 }
 
-export function labelsBounds() {
+/**
+ * The envelope the shared projection has to hold. Bounds are read before the
+ * tags are known — the caller builds the projection once, for every device —
+ * so the stack is reserved at the depth it reaches at the site's tag count
+ * today: six rows. A caller that does have the tags can pass them and get the
+ * exact envelope for its own stack.
+ */
+const RESERVE_ROWS = 6
+const RESERVE = RESERVE_ROWS * GRID.cols
+
+export function labelsBounds(options = {}) {
   const out = [
     ...k.boxCorners(BODY, TOP, LID_TOP),
     ...k.boxCorners(TRAY, LID_TOP, LID_TOP + TRAY_H),
@@ -284,9 +389,11 @@ export function labelsBounds() {
     [WHEEL.x - WHEEL.r - 2.4, FRONT + WHEEL.face, WHEEL.z - WHEEL.r - 2.4], [WHEEL.x + WHEEL.r + 2.4, FRONT, WHEEL.z + WHEEL.r + 2.4],
     [MOUTH[0], FRONT + 1.5, SLOT.z - SLOT.h / 2], [SLOT.x + SLOT.w, FRONT, SLOT.z + SLOT.h / 2],
   ]
-  for (const at of FLY) {
-    const F = cardAt(at)
-    for (const [u, w] of [[-CARD.w / 2, -CARD.h / 2], [CARD.w / 2, -CARD.h / 2], [CARD.w / 2, CARD.h / 2], [-CARD.w / 2, CARD.h / 2]]) out.push(F.at(u, 0, w))
+  const count = options.tags?.length ?? options.count ?? RESERVE
+  const { seats, card } = layout(count)
+  for (const seat of seats) {
+    const F = cardAt(seat)
+    for (const [u, w] of [[-card.w / 2, -card.h / 2], [card.w / 2, -card.h / 2], [card.w / 2, card.h / 2], [-card.w / 2, card.h / 2]]) out.push(F.at(u, 0, w))
   }
   return out
 }

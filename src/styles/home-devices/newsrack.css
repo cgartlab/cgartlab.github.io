@@ -1,24 +1,29 @@
 /* ==========================================================================
    03 — 专栏: the newspaper rack
    The rack is drawn as six sub-assemblies, in paint order: the backboard, the
-   plinth, the two posts (each with its knurled cap), the two rails, the four
+   plinth, the two posts (each with its knurled cap), one rail per tier, the
    hung issues (each with its own clips), and finally the front lip with its
    screws — which belongs to the plinth but has to paint last, because the
    papers hang down behind it.
 
+   The number of tiers and of papers is the module's business, not this file's:
+   newsrack.mjs lays out one paper per issue and hands each part a `--step`
+   within its own wave, plus `--lag` for the papers, which shrinks as the rack
+   fills — a full rack hangs in a second and a bit rather than in five.
+
    home.css gives every `.home-part` the same generic settle. Here the rack is
    actually assembled, in the order you would build it: the plinth is set down
    and takes the weight, the posts telescope up out of it, the rails drop into
-   their notches, the backboard slides in behind them, and then the four issues
-   are hung one after another, each dropping onto its clips and swinging itself
+   their notches, the backboard slides in behind them, and then the issues are
+   hung one after another, each dropping onto its clips and swinging itself
    still.
 
-   Beat map (delay → end), five parts across six runs:
-     plinth  60ms → 340ms   (both runs: the plinth and the front lip)
-     posts  190ms → 495ms   (each post its own run: 190 / 245)
-     rails  270ms → 550ms   (each rail its own run: 270 / 320)
+   Beat map (delay → end), five parts, a run each per post / per tier / per paper:
+     plinth  60ms → 340ms    (both runs: the plinth and the front lip)
+     posts  190ms → 495ms    (each post its own run: 190 / 245)
+     rails  270ms → 680ms    (per tier: 270 / 315 / 360 / 405 / 450, +230ms)
      back   350ms → 620ms
-     sheets 410ms → 870ms   (four issues: 410 / 470 / 530 / 590)
+     sheets 410ms → ~1360ms  (per paper, one `--lag` apart: 24 papers at 29ms)
 
    Fill mode is `backwards`, not `both`: every keyframe ends on
    `transform: none; opacity: 1`, which is exactly the resting style, so the
@@ -53,8 +58,8 @@
 /* the rails: dropped from just above, a clunk past the notch, then seated ---- */
 .home-module.is-active .home-part[data-part='rails'] {
   animation: nr-rail-drop 230ms cubic-bezier(0.3, 0.9, 0.24, 1) backwards;
-  /* --step is the rail: upper rail first, then lower */
-  animation-delay: calc(270ms + var(--step) * 50ms);
+  /* --step is the rail: top tier first, then down the rack */
+  animation-delay: calc(270ms + var(--step) * 45ms);
 }
 
 /* the sheets: hung from the top edge, swinging about the clip line ----------- */
@@ -62,8 +67,10 @@
   transform-box: fill-box;
   transform-origin: 50% 0%;
   animation: nr-sheet-hang 280ms cubic-bezier(0.24, 0.86, 0.26, 1) backwards;
-  /* --step is the load order: far sheet first, near sheet last */
-  animation-delay: calc(410ms + var(--step) * 60ms);
+  /* --step is the load order (newest first, far to near) and --lag the stagger
+     the module picks for this rack: 60ms while the rack is nearly empty, down
+     to a dozen ms when it is full, so the wave never outlasts the page */
+  animation-delay: calc(410ms + var(--step) * var(--lag, 60ms));
 }
 
 /* the backboard slides in along the wall, a hair past its seat --------------- */

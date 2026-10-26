@@ -41,13 +41,17 @@ const hrefs = ['/posts/', '/works/', '/column/', '/resource/', '/tags/']
 const W = 760
 const H = 620
 
+// the tags page already has these; the machine prints one label per tag, and
+// the count follows the content with no cap
+const tags = await getAllTags(currentLang)
+
 const bounds = [
   ...k.boxCorners(CABINET, -18, TOP),
   ...typewriterBounds(),
   ...cinemaBounds(),
   ...newsrackBounds(),
   ...toolboxBounds(),
-  ...labelsBounds(),
+  ...labelsBounds({ tags }),
 ]
 const P = k.fitProjection(bounds, W, H, {
   pad: 30,
@@ -78,7 +82,8 @@ function coverOf(post: { body?: string }): string {
 }
 
 const columnTag = currentLang === 'zh' || currentLang === 'zh-tw' ? '专栏' : 'Journal'
-const columns = (await getPostsByTag(columnTag, currentLang)).slice(0, 4)
+// every column issue hangs on the rack — the count follows the content
+const columns = await getPostsByTag(columnTag, currentLang)
 const issues = columns.map((post) => {
   const abbr = post.data.abbrlink || ''
   const m = abbr.match(/weekly-(\d+)/)
@@ -90,11 +95,6 @@ const issues = columns.map((post) => {
     cover: coverOf(post),
   }
 })
-
-// the tags page already has these; the machine prints them back out
-const tags = (await getAllTags(currentLang))
-  .filter(tag => tag !== '专栏' && tag !== 'Journal')
-  .slice(0, 8)
 
 const perLine = currentLang === 'zh' ? 18 : 26
 const maxLines = 6
