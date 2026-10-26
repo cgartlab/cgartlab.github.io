@@ -157,7 +157,7 @@ const modules = ids.map((id, index) => {
         : index === 3
           ? buildToolbox(P, { labels: toolboxLabels })
           : buildLabels(P, { tags, caption })
-  return `<g class="home-module${index === 0 ? ' is-active' : ''}" data-index="${index}" data-module="${id}">${body}</g>`
+  return `<g class="home-module${index === 0 ? ' is-active' : ''}" data-index="${index}" data-module="${id}" data-position="0">${body}</g>`
 }).join('')
 
 const svg = `<svg class="iso-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" role="group" aria-label="CGArtLab：一台控制台，面板上有五个栏目按键，当前展示的装置立在升降台上。">

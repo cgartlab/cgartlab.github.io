@@ -452,6 +452,13 @@ function mount(): void {
       return
     if (event.key === 'Tab')
       return
+    const focus = event.target instanceof Element ? event.target : null
+    const dial = focus?.closest('.home-dial')
+    if (dial && (event.key === 'Enter' || event.key === ' ')) {
+      event.preventDefault()
+      cycleDial(dial)
+      return
+    }
     stopTour(s)
     typeOne(s)
     scheduleResume(s)
@@ -468,11 +475,29 @@ function mount(): void {
   // tapping the machine types the next character; tapping a link just follows it
   const onPointerDown = (event: PointerEvent) => {
     const target = event.target instanceof Element ? event.target : null
-    if (target?.closest('a'))
+    if (target?.closest('a, .home-dial'))
       return
     stopTour(s)
     typeOne(s)
     scheduleResume(s)
+  }
+
+  /** The resource case's three-position dial: 工具 → 学习 → 作者 → 工具. */
+  const cycleDial = (dial: Element) => {
+    const module = dial.closest('.home-module')
+    if (!module)
+      return
+    const at = Number(module.getAttribute('data-position') || 0)
+    module.setAttribute('data-position', String((at + 1) % 3))
+  }
+
+  const onClick = (event: Event) => {
+    const target = event.target instanceof Element ? event.target : null
+    const dial = target?.closest('.home-dial')
+    if (!dial)
+      return
+    event.preventDefault()
+    cycleDial(dial)
   }
 
   const onOver = (event: Event) => {
@@ -503,6 +528,7 @@ function mount(): void {
   stage.addEventListener('pointermove', onPointerMove, { passive: true })
   stage.addEventListener('pointerdown', onPointerDown, { passive: true })
   stage.addEventListener('pointerover', onOver, { passive: true })
+  stage.addEventListener('click', onClick)
   stage.addEventListener('focusin', onFocus)
   document.addEventListener('visibilitychange', onVisibility)
 
@@ -512,6 +538,7 @@ function mount(): void {
     stage.removeEventListener('pointermove', onPointerMove)
     stage.removeEventListener('pointerdown', onPointerDown)
     stage.removeEventListener('pointerover', onOver)
+    stage.removeEventListener('click', onClick)
     stage.removeEventListener('focusin', onFocus)
     document.removeEventListener('visibilitychange', onVisibility)
   }

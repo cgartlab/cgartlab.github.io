@@ -8,33 +8,302 @@
    Two phases, and the second one only starts after the first is done:
      0 – 390 ms   the case assembles itself shut (see the assembly below)
      390 ms       the slab hands over to the hinged lid
-     390 – 1100   the lid lifts, the tools on its face resolve, the stay swings
+     390 – 1100   the lid lifts, the board on its face resolves, the stay swings
+
+   Then the case stops being a tool box and becomes a drawer with three floors:
+   the rotary knob on the front-right indexes them. The knob only reads
+   `data-position` — stage.client.ts sets it on the enclosing `.home-module`,
+   and everything below keys off that one attribute, so there is no second
+   source of truth and nothing here needs script.
    ========================================================================== */
 
 /* --------------------------------------------------------------------------
-   Tray contents — the app badges on the left tray's board.
+   The lid board — the index of the resource page.
 
-   The board takes the darkest step the drawing has, so the shadow each badge
-   casts on it cannot be another step of the palette: it is a physical one, and
-   this is the only place in the module where a bare black is right. The glyphs
-   keep a fixed screen weight instead of the plane's, because at six units
-   across a 0.6px hairline inside a tile disappears.
+   The lid's face projects one-to-one (see the module comment), so every mark
+   on it is drawn at its true type size: the board is 156 units across and the
+   creator names sit at 5, which is what makes them readable at homepage scale.
+   The board is one step darker than the lid's inner face, the app tiles are
+   paper, and every mark is cut out of them in the ink tone — the same trade
+   the four-tone shading makes everywhere else, so it holds in both themes.
    -------------------------------------------------------------------------- */
 
-.home-stage .home-case-badge-shadow {
-  fill: rgb(0 0 0 / 0.15);
+.home-stage .home-lid-board {
+  fill: var(--anatomy-shade-1);
   stroke: none;
 }
 
-/* the board's face: darker than the tray floor it lies on, so the panel reads
-   as a dark card rather than as a second patch of the same floor */
-.home-stage .home-case-board {
-  fill: color-mix(in oklch, var(--anatomy-shade-0) 80%, var(--anatomy-hi) 20%);
+/* an app chip: a printed tile, its glyph knocked out of it */
+.home-stage .home-lid-tile {
+  fill: var(--anatomy-top);
   stroke: none;
 }
 
-.home-stage .iso-line.home-case-glyph {
+.home-stage .home-lid-ink {
+  fill: var(--anatomy-hi);
+  stroke: none;
+}
+
+/* a carve is the tile's own tone, so it reads as a hole in the mark */
+.home-stage .home-lid-carve {
+  fill: var(--anatomy-top);
+  stroke: none;
+}
+
+/* the stroke glyphs keep a fixed screen weight: at eleven units across a
+   hairline inside a tile would disappear */
+.home-stage .home-lid-trace {
+  fill: none;
+  stroke: var(--anatomy-hi);
   stroke-width: 1.05;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* a creator's name plate: a hairline chip, a step off the board */
+.home-stage .home-lid-chip-face {
+  fill: var(--anatomy-shade-3);
+  stroke: none;
+}
+
+/* --------------------------------------------------------------------------
+   The rotary knob — three detents, one per section of the resource page.
+
+   The pointer is emitted as its own group with the dial's centre as its
+   transform origin (inline, in user units), so rotating it turns it about the
+   knob's axis rather than about the group's own bounding box. The detent snap
+   overshoots: a real knob is spring-loaded and lands a touch past the mark.
+   -------------------------------------------------------------------------- */
+
+.home-stage .home-dial {
+  outline: none;
+}
+
+/* the dial is a real button, so it must not be tabbable while its module is
+   off the platform */
+.home-stage .home-module:not(.is-active) .home-dial {
+  visibility: hidden;
+}
+
+/* the printed arrow on the dial: the accent, because it is the one thing on
+   the case that says which seat the knob has selected */
+.home-stage .home-dial-mark {
+  fill: var(--anatomy-lit);
+  stroke: none;
+}
+
+.home-stage .home-dial-pointer {
+  rotate: -55deg;
+  transition: rotate 520ms cubic-bezier(0.34, 1.56, 0.5, 1);
+}
+
+.home-stage .home-module[data-position='1'] .home-dial-pointer {
+  rotate: 0deg;
+}
+
+.home-stage .home-module[data-position='2'] .home-dial-pointer {
+  rotate: 55deg;
+}
+
+/* the seat the knob is on lights its lamp and its label on the front panel, so
+   the switch has a legend: the plate says which section the interior shows */
+.home-stage .home-dial,
+.home-stage .home-seat {
+  --tb-knob: color-mix(in oklch, var(--anatomy-shade-0) 45%, var(--anatomy-hi) 55%);
+}
+
+.home-stage .home-seat-lamp {
+  fill: var(--anatomy-shade-1);
+  stroke: none;
+}
+
+.home-stage .home-module:not([data-position='1']):not([data-position='2']) .home-seat[data-seat='0'] .home-seat-lamp,
+.home-stage .home-module[data-position='0'] .home-seat[data-seat='0'] .home-seat-lamp,
+.home-stage .home-module[data-position='1'] .home-seat[data-seat='1'] .home-seat-lamp,
+.home-stage .home-module[data-position='2'] .home-seat[data-seat='2'] .home-seat-lamp {
+  fill: var(--anatomy-lit);
+}
+
+.home-stage .home-module:not([data-position='1']):not([data-position='2']) .home-seat[data-seat='0'] .home-seat-label text,
+.home-stage .home-module[data-position='0'] .home-seat[data-seat='0'] .home-seat-label text,
+.home-stage .home-module[data-position='1'] .home-seat[data-seat='1'] .home-seat-label text,
+.home-stage .home-module[data-position='2'] .home-seat[data-seat='2'] .home-seat-label text {
+  fill: var(--anatomy-lit);
+}
+
+/* the knob itself: a dark detent collar with light index marks round a lit
+   dial, and the accent arrow on it. At nine units across the tones have to do
+   the reading — a single step of the palette would vanish at this size. These
+   rules carry an extra class because the shading rules in home.css come after
+   the device sheet and would otherwise win on source order. */
+.home-stage .home-dial .home-dial-collar .iso-fill,
+.home-stage .home-dial .home-dial-collar .iso-shade,
+.home-stage .home-dial .home-dial-collar .iso-top {
+  fill: var(--tb-knob);
+}
+
+.home-stage .home-dial .home-dial-collar .iso-edge {
+  stroke: var(--anatomy-top);
+  stroke-opacity: 0.5;
+}
+
+/* the pawl reads as part of the same mechanism */
+.home-stage .home-dial .home-dial-pawl {
+  fill: var(--tb-knob);
+}
+
+/* the three index marks are cut out of the dark collar, not drawn on it — a
+   hairline would vanish at nine units across, so they keep a screen weight */
+.home-stage .home-dial .iso-line.home-dial-tick {
+  stroke: var(--anatomy-top);
+  stroke-opacity: 0.8;
+  stroke-width: 1.4px;
+}
+
+/* the collar takes the accent while the knob is hovered or focused, so the
+   switch says it can be turned */
+.home-stage .home-dial:focus-visible .home-dial-collar .iso-edge {
+  stroke: var(--anatomy-lit);
+  stroke-width: 1.6px;
+}
+
+.home-stage .home-dial:hover .home-dial-collar .iso-edge {
+  stroke: var(--anatomy-mid);
+}
+
+/* --------------------------------------------------------------------------
+   The three interior sets.
+
+   Only the set matching the module's position is live. The changeover is a
+   drawer indexing: the outgoing set drops and fades, the incoming one rises
+   item by item — `--in` is the switch (0 out, 1 in) and every item carries its
+   own `--i`, so the rise cascades instead of arriving as one block. The
+   `visibility` delay keeps the outgoing set out of hit-testing while it is
+   still fading, and keeps the incoming one unhoverable until it has landed.
+   -------------------------------------------------------------------------- */
+
+.home-stage .home-tray-set {
+  --in: 0;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 160ms ease, visibility 0s linear 360ms;
+}
+
+.home-stage .home-module:not([data-position='1']):not([data-position='2']) .home-tray-set[data-set='0'],
+.home-stage .home-module[data-position='0'] .home-tray-set[data-set='0'],
+.home-stage .home-module[data-position='1'] .home-tray-set[data-set='1'],
+.home-stage .home-module[data-position='2'] .home-tray-set[data-set='2'] {
+  --in: 1;
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 140ms ease, visibility 0s;
+}
+
+/* one item of a set: the wrapper the changeover staggers. Its own transform is
+   the only thing here — the playful motion lives on the group inside it, so
+   the two never fight over the same property. */
+.home-stage .home-set-item {
+  opacity: calc(0.3 + var(--in, 0) * 0.7);
+  transform: translateY(calc((1 - var(--in, 0)) * 9px));
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+  transition: transform 300ms cubic-bezier(0.24, 0.86, 0.26, 1), opacity 200ms ease;
+  transition-delay: calc(var(--in, 0) * 60ms + var(--i, 0) * 26ms);
+}
+
+/* an invisible pad over a thin object, so a pencil can still be pointed at */
+.home-stage .home-set-hit {
+  fill: transparent;
+  stroke: none;
+}
+
+/* the stationery's own tones. Flat marks take the four-step scale directly:
+   on the paper of a solid's top face every step reads darker, on the well
+   floor every step reads lighter, and `ink` is the high-contrast one in both
+   themes — dark on light, light on dark. */
+.home-stage .home-set-s0,
+.home-stage .home-set-floor { fill: var(--anatomy-shade-0); }
+.home-stage .home-set-s1 { fill: var(--anatomy-shade-1); }
+.home-stage .home-set-s2 { fill: var(--anatomy-shade-2); }
+.home-stage .home-set-s3 { fill: var(--anatomy-shade-3); }
+.home-stage .home-set-paper { fill: var(--anatomy-top); }
+.home-stage .home-set-ink { fill: var(--anatomy-hi); }
+
+/* a print on a card, and the wire of a paper clip */
+.home-stage .home-photo { fill: var(--anatomy-shade-0); }
+
+/* the magnifier's rim: a line, not a tone — at five units across the palette
+   steps are too close to separate the glass from its frame */
+.home-stage .iso-line.home-lens-rim {
+  stroke: var(--anatomy-hi);
+  stroke-width: 2.2px;
+}
+
+/* a frame on the film: a step off the base, never a window — at this size a
+   bright frame turns the strip into a row of keys */
+.home-stage .home-film-frame {
+  fill: color-mix(in oklch, var(--anatomy-hi) 72%, var(--anatomy-top) 28%);
+  stroke: none;
+}
+.home-stage .home-clip-wire {
+  fill: none;
+  stroke: var(--anatomy-hi);
+  stroke-width: 0.9;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* --------------------------------------------------------------------------
+   The play. One or two small motions per set, and nothing else moves: the
+   pointer is the only other moving part on the case.
+
+   Every one of them is a gesture the object could actually make — a pencil
+   rolls against its neighbour, a clip hops when it is flicked, a compass leg
+   swings on its hinge, a magnifier slides along its handle, a stamp is
+   pressed, a strip of film is pulled.
+   -------------------------------------------------------------------------- */
+
+.home-stage .home-pencil,
+.home-stage .home-magnifier,
+.home-stage .home-film,
+.home-stage .home-stamp {
+  transition: transform 340ms cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+.home-stage .home-compass-arm {
+  transition: rotate 420ms cubic-bezier(0.34, 1.4, 0.5, 1);
+}
+
+.home-stage .home-pencil:hover {
+  transform: translate(0, 2.6px) rotate(-1.1deg);
+}
+
+.home-stage .home-compass:hover .home-compass-arm {
+  rotate: -7deg;
+}
+
+.home-stage .home-magnifier:hover {
+  transform: translate(3.4px, 1.2px);
+}
+
+.home-stage .home-clip:hover {
+  animation: home-clip-hop 560ms cubic-bezier(0.3, 0.9, 0.3, 1);
+}
+
+.home-stage .home-film:hover {
+  transform: translate(3.2px, 1.1px);
+}
+
+.home-stage .home-stamp:hover {
+  transform: translateY(2.4px);
+}
+
+@keyframes home-clip-hop {
+  0%, 100% { transform: translateY(0); }
+  28% { transform: translateY(-5px); }
+  52% { transform: translateY(0.8px); }
+  72% { transform: translateY(-1.8px); }
+  88% { transform: translateY(0.3px); }
 }
 
 /* the closed lid: a flat slab lying on the case, visible only while shut */
@@ -51,7 +320,7 @@
   transition: transform 700ms cubic-bezier(0.45, 0.05, 0.25, 1);
 }
 
-/* the tools ride the lid, so they only resolve once it is nearly up */
+/* the board rides the lid, so it only resolves once the lid is nearly up */
 .home-stage .home-case-tools {
   opacity: 0.35;
   transition: opacity 260ms ease;
@@ -69,7 +338,7 @@
 
 /* The handover. The delays sit on the active state only, so the way out — the
    module leaving the stage — still closes and drops immediately instead of
-   waiting 390 ms first. The relative offsets of the tools and the stay are the
+   waiting 390 ms first. The relative offsets of the board and the stay are the
    ones the case has always had (380 / 470 ms after the lid starts). */
 .home-stage .home-module.is-active .home-case-closed {
   opacity: 0;
@@ -198,6 +467,21 @@ html.reduce-motion .home-stage .home-case-lid,
 html.reduce-motion .home-stage .home-case-prop { transform: none; transition: none; }
 html.reduce-motion .home-stage .home-case-tools { opacity: 1; transition: none; }
 html.reduce-motion .home-stage .home-case-closed { display: none; }
+html.reduce-motion .home-stage .home-tray-set,
+html.reduce-motion .home-stage .home-set-item,
+html.reduce-motion .home-stage .home-dial-pointer { transition: none; }
+html.reduce-motion .home-stage .home-set-item { transform: none; }
+html.reduce-motion .home-stage .home-pencil,
+html.reduce-motion .home-stage .home-compass-arm,
+html.reduce-motion .home-stage .home-magnifier,
+html.reduce-motion .home-stage .home-film,
+html.reduce-motion .home-stage .home-stamp { transition: none; }
+html.reduce-motion .home-stage .home-pencil:hover,
+html.reduce-motion .home-stage .home-compass:hover .home-compass-arm,
+html.reduce-motion .home-stage .home-magnifier:hover,
+html.reduce-motion .home-stage .home-film:hover,
+html.reduce-motion .home-stage .home-stamp:hover { transform: none; rotate: 0deg; }
+html.reduce-motion .home-stage .home-clip:hover { animation: none; }
 
 html.reduce-motion .home-module.is-active .home-part[data-part],
 html.reduce-motion .home-module.is-active .home-case-tray {
@@ -212,6 +496,22 @@ html.reduce-motion .home-module.is-active .home-case-tray {
   .home-stage .home-case-prop { transform: none; transition: none; }
   .home-stage .home-case-tools { opacity: 1; transition: none; }
   .home-stage .home-case-closed { display: none; }
+
+  .home-stage .home-tray-set,
+  .home-stage .home-set-item,
+  .home-stage .home-dial-pointer { transition: none; }
+  .home-stage .home-set-item { transform: none; }
+  .home-stage .home-pencil,
+  .home-stage .home-compass-arm,
+  .home-stage .home-magnifier,
+  .home-stage .home-film,
+  .home-stage .home-stamp { transition: none; }
+  .home-stage .home-pencil:hover,
+  .home-stage .home-compass:hover .home-compass-arm,
+  .home-stage .home-magnifier:hover,
+  .home-stage .home-film:hover,
+  .home-stage .home-stamp:hover { transform: none; rotate: 0deg; }
+  .home-stage .home-clip:hover { animation: none; }
 
   .home-module.is-active .home-part[data-part],
   .home-module.is-active .home-case-tray {
