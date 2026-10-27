@@ -225,29 +225,30 @@ export function buildTypewriter(P, options = {}) {
   // carriage return lever: a real mechanism on the right cheek — a pivot boss,
   // a tapered arm, a knurled grip and a link rod back to the carriage. The
   // client swings it whenever the sheet feeds a new line.
-  const pivot = [84, -26, BASE_Z + 46]
-  const tip = [104, -12, BASE_Z + 59]
+  // carriage return lever: a collar clamped round the platen's right end, an
+  // arm rising from it, and a turned grip. Nothing floats: the collar turns on
+  // the same axle as the roller, so the lever is part of the carriage.
+  const PIVOT = [PLATEN.half + 12, PLATEN.y, PLATEN.z]
+  const armStart = [PLATEN.half + 12, PLATEN.y, PLATEN.z + 12]
+  const tip = [PLATEN.half + 30, PLATEN.y + 9, PLATEN.z + 21]
   const armDir = (() => {
-    const d = [tip[0] - pivot[0], tip[1] - pivot[1], tip[2] - pivot[2]]
+    const d = [tip[0] - armStart[0], tip[1] - armStart[1], tip[2] - armStart[2]]
     const len = Math.hypot(...d)
     return [d[0] / len, d[1] / len, d[2] / len]
   })()
-  const ARM_LEN = Math.hypot(tip[0] - pivot[0], tip[1] - pivot[1], tip[2] - pivot[2])
-  const ARM = G.frameAlong(pivot, armDir)
-  const [pivotX, pivotY] = k.iso(pivot, P)
+  const ARM_LEN = Math.hypot(tip[0] - armStart[0], tip[1] - armStart[1], tip[2] - armStart[2])
+  const ARM = G.frameAlong(armStart, armDir)
+  const [pivotX, pivotY] = k.iso(PIVOT, P)
+  const collar = G.ringBand(PLATEN.half + 8, PLATEN.half + 16, PLATEN.r + 1.4, PLATEN.r + 3.6, platenFrame, P)
   const lever = [
-    // bracket bolted to the cheek
-    k.solidSvg(k.slabOf({ x: 78, y: -33, w: 9, d: 15, r: 2 }, BASE_Z + 37, 15, P, 3, 0.7), { tone: 'mid' }),
-    // pivot boss, facing the reader's right
-    k.solidSvg(G.disc(0, 3.2, 4.2, G.frameAlong(pivot, [1, 0, 0]), P), { tone: 'hi' }),
-    k.lineSvg(k.ring(pivot[0], pivot[1], 4.2, pivot[2], P, 18), { tone: 'faint' }),
-    // arm: a rod that thickens into the grip
-    k.solidSvg(G.solidOf([[0, 2.2], [ARM_LEN - 11, 2.2], [ARM_LEN - 11, 2.6], [ARM_LEN - 3, 2.6], [ARM_LEN - 3, 4.4], [ARM_LEN + 3.6, 4.4], [ARM_LEN + 3.6, 2.2]], ARM, P), { tone: 'mid' }),
+    // the collar: a machined band clamped on the roller's end
+    `<path class="home-brass" d="${[...collar.shades, collar.top].join('')}"/>`,
+    k.lineSvg(G.arcOf(platenFrame, PLATEN.half + 16, PLATEN.r + 3.6, P), { tone: 'lo' }),
+    k.lineSvg(G.arcOf(platenFrame, PLATEN.half + 8, PLATEN.r + 3.6, P), { tone: 'lo' }),
+    // the arm springs off the top of the collar
+    k.solidSvg(G.solidOf([[0, 2.4], [ARM_LEN - 9, 2.4], [ARM_LEN - 9, 2.9], [ARM_LEN - 2, 2.9], [ARM_LEN - 2, 4.6], [ARM_LEN + 4, 4.6], [ARM_LEN + 4, 2.2]], ARM, P), { tone: 'mid' }),
     // grip rings
-    ...[-1.5, 0.4, 2.3].map(d => k.lineSvg(G.arcOf(ARM, ARM_LEN + d, 4.5, P, { steps: 20 }), { tone: 'faint' })),
-    // link rod back to the carriage
-    k.lineSvg(k.segment([86, -20, BASE_Z + 40], [92, -18, BASE_Z + 48], P), { tone: 'mid' }),
-    k.dotsSvg([k.iso([86, -20, BASE_Z + 40], P), k.iso([92, -18, BASE_Z + 48], P)], { size: 0.7, tone: 'mid' }),
+    ...[-1.5, 0.6, 2.7].map(d => k.lineSvg(G.arcOf(ARM, ARM_LEN + d, 4.7, P, { steps: 20 }), { tone: 'faint' })),
   ]
   out.push(part('carriage', 5,
     `<g class="home-return-lever" style="transform-origin:${pivotX.toFixed(1)}px ${pivotY.toFixed(1)}px">${lever.join('')}</g>`,
@@ -303,6 +304,6 @@ export function typewriterBounds() {
     // the sheet's top edge rises by (maxLines - 1) * leading as it feeds
     [-PAPER_HALF, PAPER_TOP.y - feed * PAPER_DOWN[1], PAPER_TOP.z - feed * PAPER_DOWN[2]],
     [PAPER_HALF, PAPER_TOP.y - feed * PAPER_DOWN[1], PAPER_TOP.z - feed * PAPER_DOWN[2]],
-    [102, -18, BASE_Z + 60],
+    [PLATEN.half + 30, PLATEN.y + 9, PLATEN.z + 21],
   ]
 }
