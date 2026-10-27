@@ -153,4 +153,31 @@ export function quadSvg(F, points, P, { tone = 'lo', className, fillClass } = {}
   return `${fill}${k.lineSvg(d, { tone, className })}`
 }
 
+/**
+ * A part's own assembly axis, in the stage's screen space.
+ *
+ * Pass the two ends of the axis the part is fitted along — a shaft's two ends,
+ * a panel's centre and a point out along its normal, a post's foot and its
+ * head — and this returns the CSS custom properties a part needs to come in
+ * along that axis: the unit vector (`--axis-x`, `--axis-y`), how far it should
+ * travel (`--travel`), and the pivot it should scale about (`--pivot-x`,
+ * `--pivot-y`, the midpoint of the axis, in stage px).
+ *
+ * The point is that no entry motion is guessed in screen space: a platen slides
+ * on its own bearing, a knob screws down its own shaft, a panel comes in square
+ * to its own face, because the direction was read off the geometry.
+ */
+export function axisStyle(P, from, to, travel = 28) {
+  const [ax, ay] = k.iso(from, P)
+  const [bx, by] = k.iso(to, P)
+  const len = Math.hypot(bx - ax, by - ay) || 1
+  return [
+    `--axis-x:${((bx - ax) / len).toFixed(3)}`,
+    `--axis-y:${((by - ay) / len).toFixed(3)}`,
+    `--travel:${travel.toFixed(1)}px`,
+    `--pivot-x:${((ax + bx) / 2).toFixed(1)}px`,
+    `--pivot-y:${((ay + by) / 2).toFixed(1)}px`,
+  ].join(';')
+}
+
 export { signedArea }

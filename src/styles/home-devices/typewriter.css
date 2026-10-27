@@ -8,14 +8,18 @@
      ribbon threaded → side covers → nameplate → sheet → first run
 
    No part fades in. Each one is solid from the first frame and arrives by the
-   motion its own mechanism would make: the feet come up under the case, the case
-   is lowered onto them, the decks and their keys rise along the keyboard's
-   vertical, the basket swings open out of the segment, the fork and the bell are
-   turned in on their own axes, the rails slide in along the carriage's travel,
-   the platen drops into its bearings, the knobs are pressed on and twisted, the
-   return lever and the paper bail hinge down, the covers slide shut from their
-   own sides, the plate is stuck on and screwed, and the sheet is fed up through
-   the roller.
+   motion its own mechanism would make — and along its own axis, read off the
+   drawing rather than picked in screen space (`axisStyle` in frame.mjs writes
+   `--axis-x/--axis-y/--travel` and the pivot from two world points): the feet
+   rise out of the ground they stand on, the case is lowered onto them, the
+   decks and their keys travel up the key stroke and land on the face they are
+   bolted to, the basket swings open out of the segment, the fork and the bell
+   turn down their own screws, the rails slide in along their own length, the
+   platen comes up square to the roller and rolls as it settles, the knobs are
+   pressed on along the axle and twisted, the lever slides on and hinges at its
+   real root, the bail flips down about the line it clamps on, the covers close
+   along their own normals, the plate is stuck on and screwed square to the
+   case, and the sheet is fed up through the roller along the page's own axis.
 
    Delays are relative to the module picking up `.is-active`; the last
    sub-assembly lands at 2380 ms and the machine is run for the first time at
@@ -23,23 +27,34 @@
    is exactly the static drawing.
    ========================================================================== */
 
-/* 01 the feet: they come up off the platform and take the case's weight ------ */
+/* 01 the feet: they rise out of the platform and take the case's weight ------ */
+/* The axis is the ground they stand on, so the pivot is the sole plane: the
+   little scale grows them up off the platform instead of swelling them. */
 .home-module.is-active .home-part[data-part='tw-feet'] {
+  transform-box: view-box;
+  transform-origin: var(--pivot-x, 50%) var(--pivot-y, 50%);
   animation: tw-feet-seat 300ms cubic-bezier(0.2, 0.85, 0.3, 1) 0ms both;
 }
 
 /* 02 the case: lowered onto the four feet, a touch too far, then back up ----- */
 .home-module.is-active .home-part[data-part='base'] {
+  transform-box: view-box;
+  transform-origin: var(--pivot-x, 50%) var(--pivot-y, 50%);
   animation: tw-base-seat 440ms cubic-bezier(0.22, 0.9, 0.24, 1) 80ms both;
 }
 
 /* 03 the four stepped decks: each rises up its own step of the keyboard ------ */
 .home-module.is-active .home-part[data-part='deck'] {
+  transform-box: view-box;
+  transform-origin: var(--pivot-x, 50%) var(--pivot-y, 50%);
   animation: tw-deck-rise 260ms cubic-bezier(0.22, 0.9, 0.24, 1) calc(220ms + var(--step) * 80ms) both;
 }
 
 /* 04 the keys: up with their deck, then pressed home a beat behind it -------- */
+/* A key's axis is its travel, so each row lands on the deck it belongs to. */
 .home-module.is-active .home-part[data-part='keys'] {
+  transform-box: view-box;
+  transform-origin: var(--pivot-x, 50%) var(--pivot-y, 50%);
   animation: tw-key-rise 300ms cubic-bezier(0.22, 0.9, 0.24, 1) calc(310ms + var(--step) * 80ms) both;
 }
 
@@ -55,49 +70,63 @@
 }
 
 /* 06 the ribbon fork: screwed down into the gap between the two ribbon runs -- */
+/* It turns down its own screw, so its axis is vertical and its pivot is the
+   deck the two prongs stand on. */
 .home-module.is-active .home-part[data-part='tw-fork'] {
-  transform-box: fill-box;
-  transform-origin: 50% 50%;
+  transform-box: view-box;
+  transform-origin: var(--pivot-x, 50%) var(--pivot-y, 50%);
   animation: tw-fork-screw 240ms cubic-bezier(0.22, 0.9, 0.24, 1) 1000ms both;
 }
 
 /* 07 the margin bell: turned down onto its post at the left of the segment --- */
 .home-module.is-active .home-part[data-part='tw-bell'] {
-  transform-box: fill-box;
-  transform-origin: 50% 50%;
+  transform-box: view-box;
+  transform-origin: var(--pivot-x, 50%) var(--pivot-y, 50%);
   animation: tw-bell-screw 260ms cubic-bezier(0.3, 1.15, 0.4, 1) 1080ms both;
 }
 
 /* 08 the rails: they slide in along the line the carriage will travel -------- */
+/* The only parts whose axis is their own length: the rail is the line. */
 .home-module.is-active .home-part[data-part='carriage'] {
+  transform-box: view-box;
+  transform-origin: var(--pivot-x, 50%) var(--pivot-y, 50%);
   animation: tw-carriage-slide 320ms cubic-bezier(0.22, 0.9, 0.24, 1) calc(1200ms + var(--step) * 60ms) both;
 }
 
 /* 09 the platen: dropped into its bearings, once, with one bounce ----------- */
+/* Its own axis is the roller, but it is fitted square to that axis, so the
+   travel is vertical through the roller's middle and the small turn is the
+   roller rolling as it settles. */
 .home-module.is-active .home-part[data-part='platen'] {
-  transform-box: fill-box;
-  transform-origin: 50% 50%;
+  transform-box: view-box;
+  transform-origin: var(--pivot-x, 50%) var(--pivot-y, 50%);
   animation:
-    tw-platen-drop 340ms cubic-bezier(0.3, 0.9, 0.4, 1) 1420ms both,
+    tw-platen-seat 340ms cubic-bezier(0.3, 0.9, 0.4, 1) 1420ms both,
     tw-travel 360ms cubic-bezier(0.4, 0, 0.25, 1) 2420ms forwards;
 }
 
 /* 10 the knobs: each pressed on along the roller's axis and twisted home ----- */
-/* `--step` is 0 on the left knob and 1 on the right, so the same pair of
-   keyframes presses each one in from its own side. */
+/* `--step` is 0 on the left knob and 1 on the right, but the side is in the
+   axis now: the left knob's axis points in, the right knob's points in from the
+   other side, so the same keyframes close the pair on the roller. */
 .home-module.is-active .home-part[data-part='tw-knob'] {
-  transform-box: fill-box;
-  transform-origin: 50% 50%;
+  transform-box: view-box;
+  transform-origin: var(--pivot-x, 50%) var(--pivot-y, 50%);
   animation:
     tw-knob-press 300ms cubic-bezier(0.22, 0.9, 0.24, 1) calc(1500ms + var(--step) * 70ms) both,
     tw-travel 360ms cubic-bezier(0.4, 0, 0.25, 1) 2420ms forwards;
 }
 
-/* 11 the return lever: the arm swings down onto the collar ------------------ */
-/* The collar is clamped on the platen's axle and must not move; only the arm is
-   hinged, and its hinge is written into the markup at the arm's root. */
+/* 11 the return lever: the collar slides on, the arm swings down onto it ----- */
+/* The collar is clamped on the platen's axle and must not move once it is on;
+   only the arm is hinged, and its hinge is written into the markup at the arm's
+   root. The group's own axis is that axle, so the pivot is the hinge itself. */
 .home-module.is-active .home-part[data-part='tw-lever'] {
-  animation: tw-travel 360ms cubic-bezier(0.4, 0, 0.25, 1) 2420ms forwards;
+  transform-box: view-box;
+  transform-origin: var(--pivot-x, 50%) var(--pivot-y, 50%);
+  animation:
+    tw-lever-seat 300ms cubic-bezier(0.3, 0.9, 0.35, 1) 1640ms both,
+    tw-travel 360ms cubic-bezier(0.4, 0, 0.25, 1) 2420ms forwards;
 }
 
 .home-stage .tw-lever-arm {
@@ -109,9 +138,11 @@
 }
 
 /* 12 the paper bail: it flips down onto the front of the roller ------------- */
+/* A hinged part too: its axis is the line its two arms clamp on, and the pivot
+   is that line's middle, so the flip is about the real hinge. */
 .home-module.is-active .home-part[data-part='tw-bail'] {
-  transform-box: fill-box;
-  transform-origin: 50% 100%;
+  transform-box: view-box;
+  transform-origin: var(--pivot-x, 50%) var(--pivot-y, 50%);
   animation:
     tw-bail-hinge 300ms cubic-bezier(0.3, 0.9, 0.35, 1) 1700ms both,
     tw-travel 360ms cubic-bezier(0.4, 0, 0.25, 1) 2420ms forwards;
@@ -127,24 +158,30 @@
 }
 
 /* 14 the side covers: each slides shut from its own side of the case -------- */
+/* Each panel carries the normal of its own face, so the pair closes inward
+   without a hand-written sign: the axis already knows which side it is on. */
 .home-module.is-active .home-part[data-part='tw-hood'] {
   animation: none;
 }
 
 .home-module.is-active .home-part[data-part='tw-hood'] .tw-hood-panel {
+  transform-box: view-box;
+  transform-origin: var(--pivot-x, 50%) var(--pivot-y, 50%);
   animation: tw-hood-shut 320ms cubic-bezier(0.3, 1.15, 0.35, 1) 1860ms both;
 }
 
 /* 15 the nameplate: stuck on the case, then its two screws driven in -------- */
+/* The plate arrives along the normal of the face it is stuck to; the screws
+   inherit that same axis, so they go in square to the plate. */
 .home-module.is-active .home-part[data-part='tw-plate'] {
-  transform-box: fill-box;
-  transform-origin: 50% 50%;
+  transform-box: view-box;
+  transform-origin: var(--pivot-x, 50%) var(--pivot-y, 50%);
   animation: tw-plate-stick 280ms cubic-bezier(0.22, 0.9, 0.24, 1) 1960ms both;
 }
 
 .home-module.is-active .home-part[data-part='tw-plate'] .tw-plate-screws {
-  transform-box: fill-box;
-  transform-origin: 50% 50%;
+  transform-box: view-box;
+  transform-origin: var(--pivot-x, 50%) var(--pivot-y, 50%);
   animation: tw-plate-screw 130ms cubic-bezier(0.4, 1.5, 0.5, 1) 2190ms both;
 }
 
@@ -183,75 +220,145 @@
     tw-spin 480ms linear 2420ms;
 }
 
+/* Every entry below starts at -1 × the part's own axis, so the direction comes
+   off the drawing (`--axis-x` / `--axis-y`, written by `axisStyle` in
+   frame.mjs) and the pivot is the point on the part the motion turns about
+   (`--pivot-x` / `--pivot-y`). The overshoot beats are +1 × the axis: past the
+   seat, then back onto it. */
+
 @keyframes tw-feet-seat {
-  0% { transform: translateY(38px); }
-  62% { transform: translateY(-2.6px); }
-  82% { transform: translateY(1px); }
+  0% {
+    transform:
+      translate(calc(var(--axis-x, 0) * var(--travel, 34px) * -1),
+                calc(var(--axis-y, -1) * var(--travel, 34px) * -1))
+      scale(0.94);
+  }
+  62% { transform: translate(calc(var(--axis-x, 0) * 2.6px), calc(var(--axis-y, -1) * 2.6px)); }
+  82% { transform: translate(calc(var(--axis-x, 0) * -1px), calc(var(--axis-y, -1) * -1px)); }
   100% { transform: none; }
 }
 
 @keyframes tw-base-seat {
-  0% { transform: translateY(-26px); }
-  62% { transform: translateY(2.8px); }
-  82% { transform: translateY(-0.8px); }
+  0% {
+    transform:
+      translate(calc(var(--axis-x, 0) * var(--travel, 26px) * -1),
+                calc(var(--axis-y, 1) * var(--travel, 26px) * -1))
+      scale(0.96);
+  }
+  62% { transform: translate(calc(var(--axis-x, 0) * 2.8px), calc(var(--axis-y, 1) * 2.8px)); }
+  82% { transform: translate(calc(var(--axis-x, 0) * -0.8px), calc(var(--axis-y, 1) * -0.8px)); }
   100% { transform: none; }
 }
 
 @keyframes tw-deck-rise {
-  0% { transform: translateY(30px); }
-  58% { transform: translateY(-2px); }
-  78% { transform: translateY(1.6px); }
+  0% {
+    transform:
+      translate(calc(var(--axis-x, 0) * var(--travel, 30px) * -1),
+                calc(var(--axis-y, -1) * var(--travel, 30px) * -1))
+      scale(0.94);
+  }
+  58% { transform: translate(calc(var(--axis-x, 0) * 2px), calc(var(--axis-y, -1) * 2px)); }
+  78% { transform: translate(calc(var(--axis-x, 0) * -1.6px), calc(var(--axis-y, -1) * -1.6px)); }
   100% { transform: none; }
 }
 
 @keyframes tw-key-rise {
-  0% { transform: translateY(26px); }
-  54% { transform: translateY(-2.2px); }
-  74% { transform: translateY(1.8px); }
-  88% { transform: translateY(-0.4px); }
+  0% {
+    transform:
+      translate(calc(var(--axis-x, 0) * var(--travel, 26px) * -1),
+                calc(var(--axis-y, -1) * var(--travel, 26px) * -1))
+      scale(0.9);
+  }
+  54% { transform: translate(calc(var(--axis-x, 0) * 2.2px), calc(var(--axis-y, -1) * 2.2px)); }
+  74% { transform: translate(calc(var(--axis-x, 0) * -1.8px), calc(var(--axis-y, -1) * -1.8px)); }
+  88% { transform: translate(calc(var(--axis-x, 0) * 0.4px), calc(var(--axis-y, -1) * 0.4px)); }
   100% { transform: none; }
 }
 
+/* the basket is the one part with no travel at all: it opens as a fan about the
+   segment, so its from-state is a squeeze and a tilt, not an offset. */
 @keyframes tw-basket-open {
-  0% { transform: translateY(8px) rotate(-10deg) scaleX(0.55); }
-  58% { transform: translateY(-1px) rotate(1.6deg) scaleX(1.04); }
+  0% { transform: rotate(-10deg) scaleX(0.55); }
+  58% { transform: rotate(1.6deg) scaleX(1.04); }
   100% { transform: none; }
 }
 
 @keyframes tw-fork-screw {
-  0% { transform: translateY(34px); rotate: -360deg; }
+  0% {
+    transform:
+      translate(calc(var(--axis-x, 0) * var(--travel, 30px) * -1),
+                calc(var(--axis-y, -1) * var(--travel, 30px) * -1))
+      scale(0.8);
+    rotate: -360deg;
+  }
   100% { transform: none; rotate: 0deg; }
 }
 
 @keyframes tw-bell-screw {
-  0% { transform: translateY(-16px); rotate: -360deg; }
-  64% { transform: translateY(1px); rotate: 8deg; }
+  0% {
+    transform:
+      translate(calc(var(--axis-x, 0) * var(--travel, 18px) * -1),
+                calc(var(--axis-y, 1) * var(--travel, 18px) * -1))
+      scale(0.75);
+    rotate: -360deg;
+  }
+  64% {
+    transform: translate(calc(var(--axis-x, 0) * 1px), calc(var(--axis-y, 1) * 1px));
+    rotate: 8deg;
+  }
   100% { transform: none; rotate: 0deg; }
 }
 
 @keyframes tw-carriage-slide {
-  0% { transform: translateX(-64px); }
-  60% { transform: translateX(3.4px); }
-  80% { transform: translateX(-0.9px); }
+  0% {
+    transform:
+      translate(calc(var(--axis-x, 1) * var(--travel, 64px) * -1),
+                calc(var(--axis-y, 0) * var(--travel, 64px) * -1))
+      scale(0.94);
+  }
+  60% { transform: translate(calc(var(--axis-x, 1) * 3.4px), calc(var(--axis-y, 0) * 3.4px)); }
+  80% { transform: translate(calc(var(--axis-x, 1) * -0.9px), calc(var(--axis-y, 0) * -0.9px)); }
   100% { transform: none; }
 }
 
-@keyframes tw-platen-drop {
-  0% { transform: translateY(-30px); }
-  58% { transform: translateY(2.8px); }
-  78% { transform: translateY(-1.1px); }
+@keyframes tw-platen-seat {
+  0% {
+    transform:
+      translate(calc(var(--axis-x, 0) * var(--travel, 16px) * -1),
+                calc(var(--axis-y, -1) * var(--travel, 16px) * -1))
+      rotate(-2.5deg)
+      scale(0.92);
+  }
+  58% { transform: translate(calc(var(--axis-x, 0) * 1.8px), calc(var(--axis-y, -1) * 1.8px)) rotate(0.4deg); }
+  78% { transform: translate(calc(var(--axis-x, 0) * -0.7px), calc(var(--axis-y, -1) * -0.7px)) rotate(-0.15deg); }
   100% { transform: none; }
 }
 
 @keyframes tw-knob-press {
-  0% { transform: translateX(calc((var(--step) * 2 - 1) * 30px)); }
-  62% { transform: translateX(calc((var(--step) * 2 - 1) * -1.6px)); }
+  0% {
+    transform:
+      translate(calc(var(--axis-x, 1) * var(--travel, 30px) * -1),
+                calc(var(--axis-y, 0) * var(--travel, 30px) * -1))
+      scale(0.85);
+  }
+  62% { transform: translate(calc(var(--axis-x, 1) * 1.6px), calc(var(--axis-y, 0) * 1.6px)); }
   100% { transform: none; }
 }
 
 @keyframes tw-knob-twist {
   0% { rotate: -720deg; }
   100% { rotate: 0deg; }
+}
+
+@keyframes tw-lever-seat {
+  0% {
+    transform:
+      translate(calc(var(--axis-x, -1) * var(--travel, 24px) * -1),
+                calc(var(--axis-y, 0) * var(--travel, 24px) * -1))
+      scale(0.9);
+  }
+  60% { transform: translate(calc(var(--axis-x, -1) * 2.4px), calc(var(--axis-y, 0) * 2.4px)); }
+  100% { transform: none; }
 }
 
 @keyframes tw-lever-hinge {
@@ -262,8 +369,8 @@
 }
 
 @keyframes tw-bail-hinge {
-  0% { transform: translateY(-30px) rotate(-9deg); }
-  62% { transform: translateY(2px) rotate(1.2deg); }
+  0% { transform: rotate(-9deg) scale(0.94); }
+  62% { transform: rotate(1.2deg); }
   100% { transform: none; }
 }
 
@@ -273,31 +380,50 @@
 }
 
 @keyframes tw-hood-shut {
-  0% { transform: translateX(calc(var(--dir) * 34px)); }
-  62% { transform: translateX(calc(var(--dir) * -3px)); }
+  0% {
+    transform:
+      translate(calc(var(--axis-x, 1) * var(--travel, 34px) * -1),
+                calc(var(--axis-y, 0) * var(--travel, 34px) * -1))
+      scale(0.92);
+  }
+  62% { transform: translate(calc(var(--axis-x, 1) * 3px), calc(var(--axis-y, 0) * 3px)); }
   100% { transform: none; }
 }
 
 @keyframes tw-plate-stick {
-  0% { transform: translateY(24px); }
-  64% { transform: translateY(-1.6px); }
+  0% {
+    transform:
+      translate(calc(var(--axis-x, 0) * var(--travel, 24px) * -1),
+                calc(var(--axis-y, -1) * var(--travel, 24px) * -1))
+      scale(0.9);
+  }
+  64% { transform: translate(calc(var(--axis-x, 0) * 1.6px), calc(var(--axis-y, -1) * 1.6px)); }
   100% { transform: none; }
 }
 
+/* the screws inherit the plate's axis, so they are driven square to the plate */
 @keyframes tw-plate-screw {
-  0% { transform: translateY(-7px); }
+  0% { transform: translate(calc(var(--axis-x, 0) * 7px), calc(var(--axis-y, -1) * 7px)); }
   100% { transform: none; }
 }
 
 @keyframes tw-table-slide {
-  0% { transform: translateY(-26px); }
-  62% { transform: translateY(2px); }
+  0% {
+    transform:
+      translate(calc(var(--axis-x, 0) * var(--travel, 26px) * -1),
+                calc(var(--axis-y, 1) * var(--travel, 26px) * -1))
+      scale(0.94);
+  }
+  62% { transform: translate(calc(var(--axis-x, 0) * 2px), calc(var(--axis-y, 1) * 2px)); }
   100% { transform: none; }
 }
 
 /* the sheet comes up out of the roller: the numbers are paper units, because the
    strip lives inside the page's own matrix. Twenty units is just past the clip's
-   lower edge, so the sheet stays behind the roller until the feed begins. */
+   lower edge, so the sheet stays behind the roller until the feed begins.
+   This is the paper's own `v` axis (PAPER_DOWN reversed), not a stage axis: the
+   clip that hides the sheet is written in that same space, so moving the sheet
+   in stage px would carry the clip off the roller with it. */
 @keyframes tw-sheet-feed {
   0% { transform: translateY(80px); }
   62% { transform: translateY(-1.8px); }

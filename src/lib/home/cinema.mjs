@@ -2,6 +2,7 @@ import * as k from '../anatomy/iso-kit.mjs'
 import * as G from '../anatomy/lathe.mjs'
 import { tubePieces, tubeSvg } from '../anatomy/tube.mjs'
 import { TOP } from './chassis.mjs'
+import { axisStyle } from './frame.mjs'
 
 /**
  * Module 02 — the film projector that carries "作品".
@@ -44,7 +45,8 @@ const AIM = (() => {
   return [d[0] / len, d[1] / len, d[2] / len]
 })()
 const LENS = G.frameAlong(LENS_BASE, AIM)
-const MOUTH = [0, 1, 2].map(i => LENS_BASE[i] + AIM[i] * 26)
+const aimAt = t => LENS_BASE.map((value, index) => value + AIM[index] * t)
+const MOUTH = aimAt(26)
 
 const REEL_R = 26
 const REEL_Y = 10
@@ -58,8 +60,15 @@ const solid = (plan, z, h, P, tone = 'mid', steps = 4, bevel = 0.5, className) =
 export function buildCinema(P, options = {}) {
   const caption = options.caption || ''
   const out = []
-  const part = (name, step, items) =>
-    `<g class="home-part" data-part="${name}" style="--step:${step}">${items.join('')}</g>`
+  // Every sub-assembly declares the axis it is fitted along, read off its own
+  // geometry by `axisStyle` (frame.mjs): two world points, and the screen
+  // vector, travel and pivot that follow from them. The CSS then translates the
+  // part back down that axis and scales it about the axis' midpoint, so no
+  // entry move is picked by eye. `from` is the end the part comes from, `to` is
+  // the end it ends up at, which is why the hinge lines below run bottom-to-top
+  // while the parts that drop run top-to-bottom.
+  const part = (name, step, axis, items) =>
+    `<g class="home-part" data-part="${name}" style="--step:${step}${axis ? `;${axis}` : ''}">${items.join('')}</g>`
 
   // a rectangle drawn on a front face: the only plane with width on the page
   const faceRect = (x0, x1, z0, z1, y) =>
@@ -84,7 +93,7 @@ export function buildCinema(P, options = {}) {
     [mx + dir[0] * REACH - perp[0] * HALF, my + dir[1] * REACH - perp[1] * HALF],
   ]
   out.push(`<defs><linearGradient id="home-beam-fade" gradientUnits="userSpaceOnUse" x1="${mx.toFixed(1)}" y1="${my.toFixed(1)}" x2="${(mx + dir[0] * REACH).toFixed(1)}" y2="${(my + dir[1] * REACH).toFixed(1)}"><stop offset="0" stop-color="#fff" stop-opacity=".4"/><stop offset=".12" stop-color="#fff" stop-opacity=".26"/><stop offset=".3" stop-color="#fff" stop-opacity=".15"/><stop offset=".6" stop-color="#fff" stop-opacity=".05"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient></defs>`)
-  out.push(part('cine-beam', 0, [
+  out.push(part('cine-beam', 0, '', [
     `<path class="home-cine-beam" d="${k.pathOf([near[0], far[0], far[1], near[1]], true)}"/>`,
   ]))
 
@@ -102,7 +111,7 @@ export function buildCinema(P, options = {}) {
     base.push(k.dotsSvg([k.iso([x, y, BZ + 2.6], P)], { size: 1, tone: 'mid' }))
     base.push(k.lineSvg(k.ring(x, y, 2, BZ + 2.6, P, 14), { tone: 'faint' }))
   }
-  out.push(part('cine-base', 1, base))
+  out.push(part('cine-base', 1, axisStyle(P, [0, 1, BZ - 8], [0, 1, BZ + 2.4], 34), base))
 
   // ---- the reel gantry --------------------------------------------------
   // A cast saddle bolted to the head's lid carries one cross beam; the two arms
@@ -119,7 +128,9 @@ export function buildCinema(P, options = {}) {
   for (const [x, y] of [[-66, 9], [4, 9], [-66, -1], [4, -1]]) {
     gantry.push(k.dotsSvg([k.iso([x, y, HEAD_TOP + 3.4], P)], { size: 0.9, tone: 'mid' }))
   }
-  out.push(part('cine-yoke', 2, gantry))
+  // the gantry is levered upright on the saddle, so the axis is the hinge
+  // line itself: the turn happens about the middle of that line
+  out.push(part('cine-yoke', 2, axisStyle(P, [-70, 4, HEAD_TOP + 3], [8, 4, HEAD_TOP + 3], 0), gantry))
 
   // ---- lamphouse --------------------------------------------------------
   const lamp = []
@@ -133,14 +144,20 @@ export function buildCinema(P, options = {}) {
   for (let i = 0; i < 6; i++) {
     lamp.push(k.lineSvg(k.segment([10, LAMP.y + LAMP.d + 0.3, BZ + 13 + i * 2.4], [26, LAMP.y + LAMP.d + 0.3, BZ + 13 + i * 2.4], P), { tone: 'mid' }))
   }
-  out.push(part('cine-lamp', 3, lamp))
+  // pushed in off the head's right flank: the axis is the side face's normal,
+  // read from that face back to the seat
+  out.push(part('cine-lamp', 3, axisStyle(P, [LAMP.x + LAMP.w, 0, BZ + 20], [LAMP.x, 0, BZ + 20], 34), lamp))
 
   // ---- the optical head -------------------------------------------------
   const head = []
   head.push(k.solidSvg(k.slabOf(HEAD, BZ + 2, 64, P, 6, 1.8), { tone: 'mid', className: 'home-cine-body' }))
   head.push(k.lineSvg(k.sideSeam(HEAD, BZ + 46, P, 6), { tone: 'faint' }))
   head.push(k.lineSvg(k.planOutline(k.insetPlan(HEAD, 4), HEAD_TOP + 2, P, 5), { tone: 'faint' }))
-  out.push(part('cine-head', 4, head))
+  // The head falls into the gantry. `axisStyle` pivots on the midpoint of the
+  // two points it is given, so the axis here is the head's own vertical, dropped
+  // half a head: its midpoint — the pivot — lands on the seat, which is the
+  // face the casting has to settle onto.
+  out.push(part('cine-head', 4, axisStyle(P, [-37, 0, BZ + 35], [-37, 0, BZ - 31], 42), head))
 
   // ---- ballast on the lamphouse lid -------------------------------------
   // The arc needs a transformer; it is bolted to the lid behind the flue, so it
@@ -153,7 +170,8 @@ export function buildCinema(P, options = {}) {
     ballast.push(k.lineSvg(k.segment([22, -18 + i * 2.4, BZ + 56.2], [54, -18 + i * 2.4, BZ + 56.2], P), { tone: 'faint' }))
   }
   ballast.push(k.faceTextSvg(k.sideMatrix([22, -6], BZ + 46, P, 'left'), 'BALLAST', { size: 2.6, tone: 'faint' }))
-  out.push(part('cine-transformer', 5, ballast))
+  // set down on the lamphouse lid: vertical, pivoting on the lid it lands on
+  out.push(part('cine-transformer', 5, axisStyle(P, [38, -13, BZ + 48], [38, -13, BZ + 28], 26), ballast))
 
   // ---- the flue ---------------------------------------------------------
   // A carbon arc throws off a lot of hot gas; the flue is the one part of the
@@ -168,7 +186,9 @@ export function buildCinema(P, options = {}) {
   }
   flue.push(k.lineSvg(k.ring(flueX, flueY, 4.6, BZ + 58, P, 16), { tone: 'faint' }))
   flue.push(k.solidSvg(G.solidOf([[0, 4.4], [2.6, 6.6], [4.8, 6.6], [5.6, 3.2]], G.frameAlong([flueX, flueY, BZ + 76], [0, 0, 1]), P), { tone: 'mid' }))
-  out.push(part('cine-stack', 6, flue))
+  // The duct climbs out of its flange: the axis is the flue's own length, and
+  // the two points straddle the flange so the pivot stays down in the collar.
+  out.push(part('cine-stack', 6, axisStyle(P, [flueX, flueY, BZ + 19], [flueX, flueY, BZ + 57], 14), flue))
 
   // ---- gate boss and the shutter port -----------------------------------
   const gatePlan = { x: -52, y: FRONT - 1.6, w: 34, d: 3, r: 3 }
@@ -188,7 +208,9 @@ export function buildCinema(P, options = {}) {
   gate.push(k.solidSvg(G.disc(2.6, 3.6, 1.6, port, P), { tone: 'lo' }))
   gate.push('</g>')
   gate.push('</g>')
-  out.push(part('cine-gate', 7, gate))
+  // The gate is pressed onto the head's face along +y: the axis is the face's
+  // normal, so the boss starts behind the face and is driven out to its seat.
+  out.push(part('cine-gate', 7, axisStyle(P, [-35, gatePlan.y, BZ + 37], [-35, gatePlan.y + gatePlan.d, BZ + 37], 24), gate))
 
   // ---- barrel and hood --------------------------------------------------
   const lens = []
@@ -201,7 +223,9 @@ export function buildCinema(P, options = {}) {
   lens.push(k.lineSvg(G.arcOf(LENS, 3.4, 9.6, P), { tone: 'lo' }))
   lens.push(k.lineSvg(G.arcOf(LENS, 10, 8.4, P), { tone: 'faint' }))
   lens.push(k.lineSvg(G.arcOf(LENS, 18, 7.2, P), { tone: 'faint' }))
-  out.push(part('cine-lens', 8, lens))
+  // the barrel extends out of the shoulder along the optical axis: the axis is
+  // the lens' own, from the retracted root out to the hood
+  out.push(part('cine-lens', 8, axisStyle(P, aimAt(-2), aimAt(26), 20), lens))
 
   // ---- guide rollers ----------------------------------------------------
   // Four rollers on the head's face: they clamp the strip where it turns, so
@@ -215,15 +239,16 @@ export function buildCinema(P, options = {}) {
   const guide = []
   for (const [x, z] of BEND) {
     const F = G.frameAlong([x, FILM_Y + 0.6, z], [0, 1, 0])
-    // one group per roller: they are four separate fixings, so each has to be
-    // able to turn on its own centre (see `home-cine-guide` in cinema.css)
-    guide.push('<g class="home-cine-roller">')
+    // One group per roller: they are four separate fixings, so each has to be
+    // spun on its own centre — and each carries its own axle, because four
+    // fixings do not share a pivot (see `home-cine-guide` in cinema.css).
+    guide.push(`<g class="home-cine-roller" style="${axisStyle(P, [x, FILM_Y + 3.4, z], [x, FILM_Y + 0.6, z], 9)}">`)
     guide.push(k.solidSvg(G.disc(0, 1.6, 3, F, P), { tone: 'hi', className: 'home-cine-body' }))
     guide.push(k.lineSvg(G.circleOf(F, 1.7, 1.6, P), { tone: 'faint' }))
     guide.push(k.solidSvg(G.disc(1.6, 2.8, 1.2, F, P), { tone: 'lo' }))
     guide.push('</g>')
   }
-  out.push(part('cine-guide', 9, guide))
+  out.push(part('cine-guide', 9, '', guide))
 
   // ---- the strip: supply reel → gate → take-up --------------------------
   // Threaded, not drawn: the band is one polyline that carries a dash exactly
@@ -279,7 +304,7 @@ export function buildCinema(P, options = {}) {
     film.push(`<circle cx="${dot.x.toFixed(1)}" cy="${dot.y.toFixed(1)}" r="0.55" style="--at:${Math.round(dot.share * 520)}ms"/>`)
   }
   film.push('</g>')
-  out.push(part('cine-film', 10, film))
+  out.push(part('cine-film', 10, '', film))
 
   // ---- pressure plate ---------------------------------------------------
   // The plate is smaller than the gate on purpose: the strip has to stay
@@ -294,27 +319,39 @@ export function buildCinema(P, options = {}) {
     k.iso([-46, FILM_Y + 5.4, BZ + 50], P),
     k.iso([-39, FILM_Y + 5.4, BZ + 50], P),
   ]), { tone: 'mid' }))
-  out.push(part('cine-pressure', 11, pressure))
+  // The plate swings shut on the gate's left edge: that hinge line is its axis,
+  // so the leaf folds about the middle of the line and does not travel.
+  out.push(part('cine-pressure', 11, axisStyle(P, [-48, 29.7, BZ + 32], [-48, 29.7, BZ + 44], 0), pressure))
 
   // ---- reel spindles and the brake --------------------------------------
   const spindle = []
   for (const x of [-58, -6]) {
     const F = G.frameAlong([x, 0, REEL_Z], [0, 1, 0])
+    // each hub is pressed out of the gantry toward the reader along its own
+    // axle, so it pivots on that axle rather than on the pair's midpoint
+    spindle.push(`<g class="home-cine-hub" style="${axisStyle(P, [x, 3, REEL_Z], [x, 19.4, REEL_Z], 14)}">`)
     spindle.push(k.solidSvg(G.disc(3, 4.6, 4.4, F, P), { tone: 'lo', className: 'home-cine-cast' }))
     spindle.push(k.solidSvg(G.disc(4.6, 17, 2.4, F, P), { tone: 'mid', className: 'home-cine-body' }))
     spindle.push(k.solidSvg(G.disc(17, 19.4, 3.2, F, P), { tone: 'lo' }))
     spindle.push(k.lineSvg(G.circleOf(F, 17.2, 2.6, P), { tone: 'faint' }))
+    spindle.push('</g>')
   }
-  // only the supply reel is braked: a felt shoe on the arm, riding the rim
+  // Only the supply reel is braked: a felt shoe on the arm, riding the rim. It
+  // comes in on the same axle as the hub it bears on.
+  spindle.push(`<g class="home-cine-brake" style="${axisStyle(P, [-58, 7, REEL_Z - REEL_R - 2.6], [-58, 14, REEL_Z - REEL_R - 2.6], 14)}">`)
   spindle.push(solid({ x: -66, y: 7, w: 16, d: 7, r: 1.6 }, REEL_Z - REEL_R - 4.6, 4, P, 'lo', 3, 0.6, 'home-cine-cast'))
   spindle.push(k.lineSvg(k.segment([-50, 12, REEL_Z - REEL_R - 1.2], [-56, 5, HEAD_TOP + 9], P), { tone: 'mid' }))
   spindle.push(k.dotsSvg([k.iso([-58, 9, REEL_Z - REEL_R - 0.6], P)], { size: 0.9, tone: 'mid' }))
-  out.push(part('cine-spindle', 12, spindle))
+  spindle.push('</g>')
+  out.push(part('cine-spindle', 12, '', spindle))
 
   // ---- the two reels on their hubs --------------------------------------
   const reels = []
   for (const [index, x] of [-58, -6].entries()) {
     const F = G.frameAlong([x, REEL_Y, REEL_Z], [0, 1, 0])
+    // Each reel drops onto its own collar along its own axle, so the seat group
+    // carries the axis and the two reels do not share a pivot.
+    reels.push(`<g class="home-cine-reel-seat" style="${axisStyle(P, [x, REEL_Y + 5.4, REEL_Z], [x, REEL_Y, REEL_Z], 12)}">`)
     reels.push('<g class="home-cine-mech">')
     reels.push(`<g class="home-reel-spin" data-reel="${index === 0 ? 'a' : 'b'}">`)
     reels.push(k.solidSvg(G.disc(0, 3, REEL_R, F, P), { tone: 'mid', className: 'home-cine-reel' }))
@@ -333,8 +370,9 @@ export function buildCinema(P, options = {}) {
     reels.push(k.solidSvg(G.disc(3.2, 5.4, 3.6, F, P), { tone: 'hi' }))
     reels.push(k.lineSvg(G.circleOf(F, 5.5, 1.4, P), { tone: 'faint' }))
     reels.push('</g>')
+    reels.push('</g>')
   }
-  out.push(part('cine-reels', 13, reels))
+  out.push(part('cine-reels', 13, '', reels))
 
   // ---- louvres, control panel, hand-wheel -------------------------------
   // The head's face has one clear stretch: the left end, from the base seam to
@@ -371,7 +409,9 @@ export function buildCinema(P, options = {}) {
     panel.push(k.faceTextSvg(k.sideMatrix([-66, FRONT], BZ + 9, P, 'left'), caption, { size: 3, tone: 'faint', anchor: 'middle' }))
   }
 
-  out.push(part('cine-panel', 14, panel))
+  // the control plate is slid onto the face from in front of it: the axis is
+  // the panel's normal, so the plate starts off the face and presses back
+  out.push(part('cine-panel', 14, axisStyle(P, [-66, panelPlan.y + panelPlan.d, BZ + 23], [-66, panelPlan.y, BZ + 23], 18), panel))
 
   // ---- hand-wheel -------------------------------------------------------
   // The framing knob sits on the head's face just right of the gate, where the
@@ -384,7 +424,9 @@ export function buildCinema(P, options = {}) {
   hand.push(k.lineSvg(G.circleOf(wheel, 3.7, 5.4, P), { tone: 'faint' }))
   hand.push(k.lineSvg(G.spokesOf(wheel, 3.7, 2.6, 5.2, 4, P), { tone: 'hi' }))
   hand.push(k.solidSvg(G.disc(3.6, 5, 2.2, wheel, P), { tone: 'lo' }))
-  out.push(part('cine-wheel', 15, hand))
+  // the wheel is spun onto its shaft: the axis is that shaft, so it screws down
+  // the axle it will turn on
+  out.push(part('cine-wheel', 15, axisStyle(P, [-3.5, FRONT + 6.6, BZ + 21], [-3.5, FRONT + 1.6, BZ + 21], 13), hand))
 
   // ---- lamphouse door ---------------------------------------------------
   const doorPlan = { x: 28, y: LAMP.y + LAMP.d + 0.2, w: 52, d: 2.2, r: 2 }
@@ -397,7 +439,9 @@ export function buildCinema(P, options = {}) {
   }
   door.push(solid({ x: 76, y: 24.4, w: 4, d: 4.6, r: 1.2 }, BZ + 30, 6, P, 'lo', 3, 0.5))
   door.push(k.lineSvg(k.segment([80, 28.9, BZ + 34], [82.6, 28.9, BZ + 30], P), { tone: 'mid' }))
-  out.push(part('cine-door', 16, door))
+  // The door swings shut on the hinge at its left edge: the hinge line is the
+  // axis, so the leaf folds about the middle of the line.
+  out.push(part('cine-door', 16, axisStyle(P, [28, 25.3, BZ + 8], [28, 25.3, BZ + 32], 0), door))
 
   // ---- nameplate --------------------------------------------------------
   const name = []
@@ -406,7 +450,8 @@ export function buildCinema(P, options = {}) {
   for (const x of [-74, -40]) {
     name.push(k.dotsSvg([k.iso([x, BASE.y + BASE.d - 5.5, BZ + 3.9], P)], { size: 0.8, tone: 'mid' }))
   }
-  out.push(part('cine-plate', 17, name))
+  // the nameplate is pressed onto the deck's front edge: its normal is the axis
+  out.push(part('cine-plate', 17, axisStyle(P, [-57, BASE.y + BASE.d - 2, BZ + 3.1], [-57, BASE.y + BASE.d - 9, BZ + 3.1], 8), name))
 
   // ---- jumper cable -----------------------------------------------------
   const cable = []
@@ -414,7 +459,10 @@ export function buildCinema(P, options = {}) {
   for (const piece of tubePieces(route, 2.2, P, { maxLength: 22 })) {
     cable.push(tubeSvg(piece, { tone: 'lo' }))
   }
-  out.push(part('cine-wiring', 18, cable))
+  // The jumper is plugged in along its own run: the axis is the cable's own
+  // span, from the head end across to the socket on the lamphouse, so it
+  // arrives by sliding over rather than by growing out of nowhere.
+  out.push(part('cine-wiring', 18, axisStyle(P, [HEAD.x + HEAD.w + 1, -10, BZ + 30], [LAMP.x + 6, -6, BZ + 34], 9), cable))
 
   return out.join('')
 }

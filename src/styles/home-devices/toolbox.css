@@ -417,62 +417,77 @@
    fill instead would keep fifty groups composited for the rest of the page's
    life, and the engraved nameplates would re-rasterise without subpixel AA
    (the same trade measured on 02 in cinema.css).
+
+   Every displacement below is read off the part's own assembly axis. The module
+   passes the two ends of that axis in world coordinates through `axisStyle`,
+   which lands here as `--axis-x`/`--axis-y` (the unit vector it travels along),
+   `--travel` (how far back its start pose sits) and `--pivot-x`/`--pivot-y` (the
+   seat it folds about, in stage px). So a pad rises out of the deck it stands
+   on, a wall out of its own base line, the near wall about its left standing
+   edge, a chip square onto the board — the direction and the pivot are both
+   properties of the drawing, and no rule here picks a screen direction by eye.
    -------------------------------------------------------------------------- */
 
+/* The one place the axis becomes a transform. Every run backs off along its own
+   axis for its start pose and folds about its own seat; the keyframes then only
+   say how far along that axis the overshoot lands. */
+.home-module.is-active .home-part[data-part] {
+  transform-box: view-box;
+  transform-origin: var(--pivot-x, 50%) var(--pivot-y, 50%);
+  --entry-x: calc(var(--axis-x, 0) * var(--travel, 28px) * -1);
+  --entry-y: calc(var(--axis-y, 1) * var(--travel, 28px) * -1);
+}
+
 /* the four rubber pads are pressed up out of the deck and the case lands on
-   them. Anchored at their base, so a pad grows out of the deck instead of
-   swelling in place — and the deck clip swallows the pose it starts in. */
+   them. The axis is the vertical through each pad's own seat on the deck, so
+   the fold is about the deck itself: a pad grows out of the deck instead of
+   swelling in place, and the deck clip swallows the pose it starts in. */
 .home-module.is-active .home-part[data-part='tb-foot'] {
-  transform-box: fill-box;
-  transform-origin: 50% 100%;
   animation: home-tb-pad 200ms cubic-bezier(0.3, 0.72, 0.4, 1) backwards;
   animation-delay: calc(20ms + var(--step) * 52ms);
 }
 
-/* the plinth takes the weight */
+/* the plinth takes the weight. It comes down the vertical through its own
+   underside, so the run is a drop onto the pads and not a slide across them. */
 .home-module.is-active .home-part[data-part='shell'] {
   animation: home-tb-plinth 300ms cubic-bezier(0.42, 0, 0.58, 1) backwards;
   animation-delay: 40ms;
 }
 
 /* the three far walls are raised out of their rebates in the order a case is
-   built: back, left, right. The origin is the base line, so each wall is
-   extruded up out of the plinth rather than sliding through it. */
+   built: back, left, right. Each axis is the vertical through its own base
+   line, so the wall is extruded up out of the plinth rather than sliding
+   through it. */
 .home-module.is-active .home-part[data-part='tb-wall'] {
-  transform-box: fill-box;
-  transform-origin: 50% 100%;
   animation: home-tb-wall 320ms cubic-bezier(0.3, 0.72, 0.4, 1) backwards;
   animation-delay: calc(170ms + var(--step) * 95ms);
 }
 
-/* the near wall is the last panel: it swings shut on its left hinge. A panel
-   swung toward the camera projects to a horizontal squash about that edge —
-   the same trade the lid's swing makes on the other axis. */
+/* the near wall is the last panel: it swings shut on its left hinge. Its axis
+   is that hinge — the standing edge itself — so the panel folds about the edge
+   it actually turns on, and the last few pixels of its travel drop it into the
+   rebate. A panel swung toward the camera projects to a horizontal squash about
+   that edge, the same trade the lid's swing makes on the other axis. */
 .home-module.is-active .home-part[data-part='front'] {
-  transform-box: fill-box;
-  transform-origin: 0% 50%;
   animation: home-tb-front 330ms cubic-bezier(0.42, 0, 0.58, 1) backwards;
   animation-delay: 540ms;
 }
 
 /* the latch and the carry handle are hinged along the top of the near panel:
-   both fold down onto it, so the beat is a vertical squash about that line */
+   their axis runs out of the panel at the rim, so both unfold down onto it */
 .home-module.is-active .home-part[data-part='tb-hardware'] {
-  transform-box: fill-box;
-  transform-origin: 50% 0%;
   animation: home-tb-fitted 300ms cubic-bezier(0.42, 0, 0.58, 1) backwards;
   animation-delay: 700ms;
 }
 
-/* the legend goes on one bay at a time, in the order the knob indexes it */
+/* the legend goes on one bay at a time, in the order the knob indexes it. Each
+   plate arrives square to the near panel, through its own centre. */
 .home-module.is-active .home-part[data-part='tb-seat'] {
-  transform-box: fill-box;
-  transform-origin: 50% 50%;
   animation: home-tb-stamp 280ms cubic-bezier(0.3, 0.72, 0.4, 1) backwards;
   animation-delay: calc(810ms + var(--step) * 55ms);
 }
 
-/* the maker's plate is slid up the panel into its recess */
+/* the maker's plate is slid up the panel into its recess, square to the face */
 .home-module.is-active .home-part[data-part='tb-plate'] {
   animation: home-tb-plate 250ms cubic-bezier(0.3, 0.72, 0.4, 1) backwards;
   animation-delay: 890ms;
@@ -481,30 +496,27 @@
 /* and riveted: each head swells out of the plate a hair past its seat and
    presses back flush, one corner at a time */
 .home-module.is-active .home-part[data-part='tb-rivet'] {
-  transform-box: fill-box;
-  transform-origin: 50% 50%;
   animation: home-tb-rivet 160ms cubic-bezier(0.3, 0.72, 0.4, 1) backwards;
   animation-delay: calc(1140ms + var(--step) * 55ms);
 }
 
-/* a partition is dropped into its slot; its rail settles on top */
+/* a partition is dropped down the vertical through its slot; its rail settles
+   on top of it */
 .home-module.is-active .home-part[data-part='tb-divider'] {
   animation: home-tb-divider 270ms cubic-bezier(0.42, 0, 0.58, 1) backwards;
   animation-delay: calc(830ms + var(--step) * 95ms);
 }
 
-/* the knuckles are dropped onto the back rim */
+/* the knuckles are dropped onto the back rim, down the vertical through it */
 .home-module.is-active .home-part[data-part='tb-hinge'] {
   animation: home-tb-hinge 300ms cubic-bezier(0.42, 0, 0.58, 1) backwards;
   animation-delay: 900ms;
 }
 
-/* then the pin is driven through them along its own axis. A barrel entering
-   the knuckles from the left end projects to a stretch out of that end, so the
-   run grows from the left cap with the far cap riding its tip. */
+/* then the pin is driven through them along its own axis. The axis is the
+   barrel's centre line, so the run is a stretch out of the hinge's middle with
+   the whole pin sliding after it — the direction is the pin's, not the page's. */
 .home-module.is-active .home-part[data-part='tb-pin'] {
-  transform-box: fill-box;
-  transform-origin: 0% 50%;
   animation: home-tb-pin 260ms cubic-bezier(0.35, 0.05, 0.55, 1) backwards;
   animation-delay: 960ms;
 }
@@ -515,26 +527,21 @@
   animation-delay: 880ms;
 }
 
-/* the switch is screwed into its boss; the pointer is turned to its seat later */
+/* the switch is screwed down its own shaft — the boss's centre line, square to
+   the panel; the pointer is turned to its seat later */
 .home-module.is-active .home-part[data-part='tb-dial'] {
-  transform-box: fill-box;
-  transform-origin: 50% 50%;
   animation: home-tb-dial 260ms cubic-bezier(0.3, 0.72, 0.4, 1) backwards;
   animation-delay: 980ms;
 }
 
-/* the index panel is pressed into the lid's recess */
+/* the index panel is pressed into the lid's recess, square to the board */
 .home-module.is-active .home-part[data-part='tb-board'] {
-  transform-box: fill-box;
-  transform-origin: 50% 50%;
   animation: home-tb-board 300ms cubic-bezier(0.3, 0.72, 0.4, 1) backwards;
   animation-delay: 1370ms;
 }
 
-/* the clamp rail is slid up over the panel's top edge and tightened down */
+/* the clamp rail is tightened down over the panel's top edge, square to it */
 .home-module.is-active .home-part[data-part='tb-bead'] {
-  transform-box: fill-box;
-  transform-origin: 50% 0%;
   animation: home-tb-bead 260ms cubic-bezier(0.3, 0.72, 0.4, 1) backwards;
   animation-delay: 1600ms;
 }
@@ -542,18 +549,15 @@
 /* Sixteen chips, pinned one at a time: 30 ms apart and 210 ms each, so about
    seven are in the air at once and the board fills as a wave instead of a
    block. This is the run the whole build is for — the board is the index of the
-   resource page, so it is populated, not printed. */
+   resource page, so it is populated, not printed. Each chip comes in square to
+   the board, about its own centre. */
 .home-module.is-active .home-part[data-part='tb-badge'] {
-  transform-box: fill-box;
-  transform-origin: 50% 50%;
   animation: home-tb-badge 210ms cubic-bezier(0.3, 0.72, 0.4, 1) backwards;
   animation-delay: calc(1700ms + var(--step) * 30ms);
 }
 
 /* eight name plates follow, a touch faster, so both columns finish together */
 .home-module.is-active .home-part[data-part='tb-link'] {
-  transform-box: fill-box;
-  transform-origin: 50% 50%;
   animation: home-tb-link 200ms cubic-bezier(0.3, 0.72, 0.4, 1) backwards;
   animation-delay: calc(1930ms + var(--step) * 22ms);
 }
@@ -564,10 +568,14 @@
   animation: none;
 }
 
-/* each tray is its own group, so each can be dropped onto its own seat */
+/* each tray is its own group and carries its own axis — the vertical through
+   the middle of the bay it drops into — so the three land in their own slots
+   rather than as one block. */
 .home-module.is-active .home-part[data-part='trays'] .home-case-tray {
-  transform-box: fill-box;
-  transform-origin: 50% 50%;
+  transform-box: view-box;
+  transform-origin: var(--pivot-x, 50%) var(--pivot-y, 50%);
+  --entry-x: calc(var(--axis-x, 0) * var(--travel, 20px) * -1);
+  --entry-y: calc(var(--axis-y, 1) * var(--travel, 20px) * -1);
 }
 
 .home-module.is-active .home-part[data-part='trays'] .home-case-tray[data-index='0'] {
@@ -595,150 +603,150 @@
 
 /* a pad is pressed up out of the deck and seats a hair proud */
 @keyframes home-tb-pad {
-  from { transform: translateY(9px) scaleY(0.45); }
-  62% { transform: translateY(-1.6px) scaleY(1.06); }
+  from { transform: translate(var(--entry-x, 0px), var(--entry-y, 0px)) scaleY(0.45); }
+  62% { transform: translate(calc(var(--entry-x, 0px) * -0.07), calc(var(--entry-y, 0px) * -0.07)) scaleY(1.06); }
   to { transform: none; }
 }
 
 /* the plinth is lowered onto the pads and settles under its own weight */
 @keyframes home-tb-plinth {
-  from { transform: translateY(-26px); }
-  54% { transform: translateY(2.6px); }
-  78% { transform: translateY(-1px); }
+  from { transform: translate(var(--entry-x, 0px), var(--entry-y, 0px)); }
+  54% { transform: translate(calc(var(--entry-x, 0px) * -0.057), calc(var(--entry-y, 0px) * -0.057)); }
+  78% { transform: translate(calc(var(--entry-x, 0px) * 0.022), calc(var(--entry-y, 0px) * 0.022)); }
   to { transform: none; }
 }
 
 /* a wall is extruded up out of its rebate, starting flat on the base line */
 @keyframes home-tb-wall {
-  from { transform: scaleY(0.001); }
-  72% { transform: scaleY(1.03); }
-  88% { transform: scaleY(0.994); }
+  from { transform: translate(var(--entry-x, 0px), var(--entry-y, 0px)) scaleY(0.05); }
+  72% { transform: translate(calc(var(--entry-x, 0px) * -0.08), calc(var(--entry-y, 0px) * -0.08)) scaleY(1.03); }
+  88% { transform: translate(calc(var(--entry-x, 0px) * 0.02), calc(var(--entry-y, 0px) * 0.02)) scaleY(0.994); }
   to { transform: none; }
 }
 
-/* the near wall swings shut and closes over the rebate */
+/* the near wall swings shut about its standing edge and closes over the rebate */
 @keyframes home-tb-front {
-  from { transform: scaleX(0.03); }
-  70% { transform: scaleX(1.014); }
-  88% { transform: scaleX(0.997); }
+  from { transform: translate(var(--entry-x, 0px), var(--entry-y, 0px)) scaleX(0.03); }
+  70% { transform: translate(calc(var(--entry-x, 0px) * -0.1), calc(var(--entry-y, 0px) * -0.1)) scaleX(1.014); }
+  88% { transform: translate(calc(var(--entry-x, 0px) * 0.04), calc(var(--entry-y, 0px) * 0.04)) scaleX(0.997); }
   to { transform: none; }
 }
 
 /* the latch folds down onto the panel and hooks */
 @keyframes home-tb-fitted {
-  from { transform: scaleY(0.02); }
-  64% { transform: scaleY(1.045); }
-  86% { transform: scaleY(0.99); }
+  from { transform: translate(var(--entry-x, 0px), var(--entry-y, 0px)) scaleY(0.02); }
+  64% { transform: translate(calc(var(--entry-x, 0px) * -0.09), calc(var(--entry-y, 0px) * -0.09)) scaleY(1.045); }
+  86% { transform: translate(calc(var(--entry-x, 0px) * 0.02), calc(var(--entry-y, 0px) * 0.02)) scaleY(0.99); }
   to { transform: none; }
 }
 
 /* a plate is pressed onto the panel: it comes off the face and flattens */
 @keyframes home-tb-stamp {
-  from { transform: scale(1.09); }
-  58% { transform: scale(0.978); }
-  82% { transform: scale(1.005); }
+  from { transform: translate(var(--entry-x, 0px), var(--entry-y, 0px)) scale(1.06); }
+  58% { transform: translate(calc(var(--entry-x, 0px) * -0.09), calc(var(--entry-y, 0px) * -0.09)) scale(0.985); }
+  82% { transform: translate(calc(var(--entry-x, 0px) * 0.03), calc(var(--entry-y, 0px) * 0.03)) scale(1.004); }
   to { transform: none; }
 }
 
-/* the maker's plate is slid up the panel into its recess and seats */
+/* the maker's plate is slid into its recess, square to the panel, and seats */
 @keyframes home-tb-plate {
-  from { transform: translateY(16px); }
-  62% { transform: translateY(-1.5px); }
-  84% { transform: translateY(0.5px); }
+  from { transform: translate(var(--entry-x, 0px), var(--entry-y, 0px)) scale(1.03); }
+  62% { transform: translate(calc(var(--entry-x, 0px) * -0.08), calc(var(--entry-y, 0px) * -0.08)) scale(0.994); }
+  84% { transform: translate(calc(var(--entry-x, 0px) * 0.03), calc(var(--entry-y, 0px) * 0.03)) scale(1.002); }
   to { transform: none; }
 }
 
 /* a rivet head is set: it swells out of the plate and presses back flush */
 @keyframes home-tb-rivet {
-  from { transform: scale(0.18); }
-  60% { transform: scale(1.35); }
-  82% { transform: scale(0.94); }
+  from { transform: translate(var(--entry-x, 0px), var(--entry-y, 0px)) scale(0.18); }
+  60% { transform: translate(calc(var(--entry-x, 0px) * -0.3), calc(var(--entry-y, 0px) * -0.3)) scale(1.35); }
+  82% { transform: translate(calc(var(--entry-x, 0px) * 0.08), calc(var(--entry-y, 0px) * 0.08)) scale(0.94); }
   to { transform: none; }
 }
 
-/* a partition drops into its slot and its rail settles on top */
+/* a partition drops down its slot and its rail settles on top */
 @keyframes home-tb-divider {
-  0% { visibility: hidden; transform: translateY(-30px); }
-  1% { visibility: visible; transform: translateY(-30px); }
-  52% { transform: translateY(1.8px); }
-  80% { transform: translateY(-0.8px); }
+  0% { visibility: hidden; transform: translate(var(--entry-x, 0px), var(--entry-y, 0px)); }
+  1% { visibility: visible; transform: translate(var(--entry-x, 0px), var(--entry-y, 0px)); }
+  52% { transform: translate(calc(var(--entry-x, 0px) * -0.07), calc(var(--entry-y, 0px) * -0.07)); }
+  80% { transform: translate(calc(var(--entry-x, 0px) * 0.03), calc(var(--entry-y, 0px) * 0.03)); }
   100% { transform: none; }
 }
 
 /* the knuckles are dropped onto the back rim, overshoot, and seat */
 @keyframes home-tb-hinge {
-  0% { visibility: hidden; transform: translateY(-16px); }
-  1% { visibility: visible; transform: translateY(-16px); }
-  60% { transform: translateY(1.2px); }
-  84% { transform: translateY(-0.5px); }
+  0% { visibility: hidden; transform: translate(var(--entry-x, 0px), var(--entry-y, 0px)); }
+  1% { visibility: visible; transform: translate(var(--entry-x, 0px), var(--entry-y, 0px)); }
+  60% { transform: translate(calc(var(--entry-x, 0px) * -0.075), calc(var(--entry-y, 0px) * -0.075)); }
+  84% { transform: translate(calc(var(--entry-x, 0px) * 0.03), calc(var(--entry-y, 0px) * 0.03)); }
   100% { transform: none; }
 }
 
-/* the pin runs in from the left cap through both knuckles */
+/* the pin runs in through both knuckles along its own centre line */
 @keyframes home-tb-pin {
-  from { transform: scaleX(0.015); }
-  74% { transform: scaleX(1.012); }
+  from { transform: translate(var(--entry-x, 0px), var(--entry-y, 0px)) scaleX(0.015); }
+  74% { transform: translate(calc(var(--entry-x, 0px) * -0.08), calc(var(--entry-y, 0px) * -0.08)) scaleX(1.012); }
   to { transform: none; }
 }
 
 /* the shut slab is set down on the rim */
 @keyframes home-tb-closed {
-  0% { visibility: hidden; transform: translateY(-34px); }
-  1% { visibility: visible; transform: translateY(-34px); }
-  54% { transform: translateY(2.2px); }
-  80% { transform: translateY(-0.9px); }
+  0% { visibility: hidden; transform: translate(var(--entry-x, 0px), var(--entry-y, 0px)); }
+  1% { visibility: visible; transform: translate(var(--entry-x, 0px), var(--entry-y, 0px)); }
+  54% { transform: translate(calc(var(--entry-x, 0px) * -0.065), calc(var(--entry-y, 0px) * -0.065)); }
+  80% { transform: translate(calc(var(--entry-x, 0px) * 0.026), calc(var(--entry-y, 0px) * 0.026)); }
   100% { transform: none; }
 }
 
-/* The switch is screwed into its boss: it stands a third off the panel (a
+/* The switch is screwed down its shaft: it stands a third off the panel (a
    third larger, being nearer the camera), winds back onto its axis and seats on
    the collar. The wind is capped at a third of a turn — a full one would carry
    the ratchet pawl and its spring around with it, and at nine units across it
    would read as a blur rather than as a turn. */
 @keyframes home-tb-dial {
-  from { transform: scale(1.35) rotate(-36deg); }
-  62% { transform: scale(0.965) rotate(4deg); }
-  84% { transform: scale(1.012) rotate(-1deg); }
+  from { transform: translate(var(--entry-x, 0px), var(--entry-y, 0px)) scale(1.35) rotate(-36deg); }
+  62% { transform: translate(calc(var(--entry-x, 0px) * -0.09), calc(var(--entry-y, 0px) * -0.09)) scale(0.965) rotate(4deg); }
+  84% { transform: translate(calc(var(--entry-x, 0px) * 0.03), calc(var(--entry-y, 0px) * 0.03)) scale(1.012) rotate(-1deg); }
   to { transform: none; }
 }
 
 /* the index panel is pressed into the lid's recess */
 @keyframes home-tb-board {
-  from { transform: scale(1.04); }
-  64% { transform: scale(0.994); }
+  from { transform: translate(var(--entry-x, 0px), var(--entry-y, 0px)) scale(1.04); }
+  64% { transform: translate(calc(var(--entry-x, 0px) * -0.09), calc(var(--entry-y, 0px) * -0.09)) scale(0.994); }
   to { transform: none; }
 }
 
-/* the clamp rail is slid up over the panel's top edge and tightened down */
+/* the clamp rail is tightened down over the panel's top edge */
 @keyframes home-tb-bead {
-  from { transform: translateY(4px) rotate(1.6deg); }
-  68% { transform: translateY(-0.6px) rotate(-0.3deg); }
+  from { transform: translate(var(--entry-x, 0px), var(--entry-y, 0px)) rotate(1.6deg); }
+  68% { transform: translate(calc(var(--entry-x, 0px) * -0.1), calc(var(--entry-y, 0px) * -0.1)) rotate(-0.3deg); }
   to { transform: none; }
 }
 
 /* a chip is pressed onto the board: it comes off the face a hair large and
    flattens under the thumb */
 @keyframes home-tb-badge {
-  from { transform: translateY(-7px) scale(1.06); }
-  55% { transform: translateY(0.8px) scale(0.975); }
-  78% { transform: translateY(-0.3px) scale(1.004); }
+  from { transform: translate(var(--entry-x, 0px), var(--entry-y, 0px)) scale(1.06); }
+  55% { transform: translate(calc(var(--entry-x, 0px) * -0.11), calc(var(--entry-y, 0px) * -0.11)) scale(0.975); }
+  78% { transform: translate(calc(var(--entry-x, 0px) * 0.04), calc(var(--entry-y, 0px) * 0.04)) scale(1.004); }
   to { transform: none; }
 }
 
-/* a name plate is printed on: it runs in from the left and presses flat */
+/* a name plate is pressed on square to the board and seats flat */
 @keyframes home-tb-link {
-  from { transform: translateX(-11px) scale(1.05); }
-  58% { transform: translateX(0.8px) scale(0.988); }
-  80% { transform: translateX(-0.3px) scale(1.003); }
+  from { transform: translate(var(--entry-x, 0px), var(--entry-y, 0px)) scale(1.05); }
+  58% { transform: translate(calc(var(--entry-x, 0px) * -0.11), calc(var(--entry-y, 0px) * -0.11)) scale(0.988); }
+  80% { transform: translate(calc(var(--entry-x, 0px) * 0.04), calc(var(--entry-y, 0px) * 0.04)) scale(1.003); }
   to { transform: none; }
 }
 
-/* a set is set down into its bay */
+/* a set is lowered down the vertical through the middle of its bay */
 @keyframes home-tb-tray {
-  0% { visibility: hidden; transform: translateY(-20px); }
-  1% { visibility: visible; transform: translateY(-20px); }
-  58% { transform: translateY(1.8px); }
-  82% { transform: translateY(-0.7px); }
+  0% { visibility: hidden; transform: translate(var(--entry-x, 0px), var(--entry-y, 0px)); }
+  1% { visibility: visible; transform: translate(var(--entry-x, 0px), var(--entry-y, 0px)); }
+  58% { transform: translate(calc(var(--entry-x, 0px) * -0.09), calc(var(--entry-y, 0px) * -0.09)); }
+  82% { transform: translate(calc(var(--entry-x, 0px) * 0.035), calc(var(--entry-y, 0px) * 0.035)); }
   100% { transform: none; }
 }
 

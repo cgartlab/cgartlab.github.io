@@ -1,7 +1,7 @@
 import * as k from '../anatomy/iso-kit.mjs'
 import * as G from '../anatomy/lathe.mjs'
 import { TOP } from './chassis.mjs'
-import { boxSvg, faceMatrix, facePath, frameOf } from './frame.mjs'
+import { axisStyle, boxSvg, faceMatrix, facePath, frameOf } from './frame.mjs'
 
 /**
  * Module 03 — the newsstand that carries the column.
@@ -46,6 +46,10 @@ const PAD = { u: 8.5, v: 3.6, wh: 1.4, collar: 0.9, stem: 2.6, nut: 1.1 }
 // knee plate braces a post to the plinth in the plane of the plinth's face.
 const BRACE = { v: 6.4, vd: 4.6, w: 86, wh: 8 }
 const GUSSET = { v: 31.8, vd: 2.4, top: 18 }
+// The maker's plate: two engraved rules standing in for type, between the feet.
+// The band is named out here because the plate's assembly axis runs out of the
+// middle of it.
+const BADGE = { w0: 1.3, w1: 4.1 }
 
 // ---- the hanging wall -----------------------------------------------------
 // The papers live between the posts and between the plinth and the post caps.
@@ -153,9 +157,9 @@ function gussetSvg(u0, dir, P) {
 /** The machined cap plate that closes a drive block, with its two bolts. */
 function blockCapSvg(u, P) {
   const w = BLOCK.w + BLOCK.wh
-  const out = [boxSvg(F, { u: u + 1, v: BLOCK.v - 0.6, w, uw: BLOCK.uw - 2, vd: BLOCK.vd + 1.2, wh: 1.7 }, P, { tone: 'hi' })]
+  const out = [boxSvg(F, { u: u + 1, v: BLOCK.v - 0.6, w, uw: BLOCK.uw - 2, vd: BLOCK.vd + 1.2, wh: BLOCK.cap }, P, { tone: 'hi' })]
   for (const du of [2.8, BLOCK.uw - 2.8]) {
-    const [cx, cy] = F.at(u + du, BLOCK.v + BLOCK.vd / 2, w + 1.7)
+    const [cx, cy] = F.at(u + du, BLOCK.v + BLOCK.vd / 2, w + BLOCK.cap)
     out.push(k.solidSvg(k.cylinder(cx, cy, 1, TOP + w + 1.7, 0.8, P, 12), { tone: 'mid' }))
     out.push(k.lineSvg(k.ring(cx, cy, 1, TOP + w + 2.5, P, 12), { tone: 'faint' }))
   }
@@ -165,7 +169,7 @@ function blockCapSvg(u, P) {
 /** The maker's plate, riveted to the plinth's face between the feet. */
 function badgeSvg(P) {
   const u0 = W / 2 - 12, u1 = W / 2 + 12
-  const w0 = 1.3, w1 = 4.1
+  const w0 = BADGE.w0, w1 = BADGE.w1
   const d = facePath(F, [[u0, D, w0], [u1, D, w0], [u1, D, w1], [u0, D, w1]], P)
   const out = [`<path class="iso-shade" data-shade="1" d="${d}"/>`, k.lineSvg(d, { tone: 'mid' })]
   // two engraved rules stand in for the type, which is far below a legible size
@@ -199,11 +203,24 @@ function cap(u, P) {
 // whole group to the right by `--run-x / --run-y`, the screen delta between the
 // two ends of the rail, so the module never has to know about time.
 const TRACK = { v: 36.2, w: 10.6, r: 1.05 }
-const BLOCK = { u: 8, v: 33, w: 6, uw: 12, vd: 8, wh: 9.4 }
+const BLOCK = { u: 8, v: 33, w: 6, uw: 12, vd: 8, wh: 9.4, cap: 1.7 }
 const TRAVEL = { u0: 34, u1: 136 }
 const PULLEY = { r: 3.6, face: 2.2 }
 const LENS = { r: 5, v: 37.4, w: 22.6 }
-const ARCHIVE = { u: 7, v: 45, w: 34, d: 15 }
+// The pile of back issues on the deck: five sheets, each `sheet` thick, held by
+// a paper strap that stands `band` proud of the top issue. The stack's height
+// is read off the sheet list rather than restated, because the pile's assembly
+// axis is the plumb line through the middle of that height.
+const ARCHIVE = {
+  u: 7,
+  v: 45,
+  w: 34,
+  d: 15,
+  sheet: 1.55,
+  band: 0.55,
+  stack: [[0, 0], [0.9, -0.8], [-0.9, 0.7], [0.5, 0.9], [-0.4, -0.5]],
+}
+const PILE = ARCHIVE.stack.length * ARCHIVE.sheet + ARCHIVE.band
 
 /** A world-space frame on the rack whose axis points out of the front face. */
 const facing = (u, v, w) => G.frameAlong(F.at(u, v, w), F.dir(0, 1, 0))
@@ -253,22 +270,21 @@ function crankSvg(u, v, w, P) {
 /** A stack of back issues on the deck, in front of the rack's left end. */
 function archiveSvg(P) {
   const out = []
-  const sheets = [[0, 0], [0.9, -0.8], [-0.9, 0.7], [0.5, 0.9], [-0.4, -0.5]]
-  sheets.forEach(([du, dv], i) => {
+  ARCHIVE.stack.forEach(([du, dv], i) => {
     out.push(boxSvg(F, {
       u: ARCHIVE.u + du,
       v: ARCHIVE.v + dv,
-      w: i * 1.55,
+      w: i * ARCHIVE.sheet,
       uw: ARCHIVE.w,
       vd: ARCHIVE.d,
-      wh: 1.45,
+      wh: ARCHIVE.sheet - 0.1,
     }, P, { tone: i % 2 ? 'mid' : 'hi' }))
   })
-  const top = sheets.length * 1.55
+  const top = ARCHIVE.stack.length * ARCHIVE.sheet
   // the fold down the top issue, and the paper band that keeps the pile square
   out.push(rule([ARCHIVE.u + 1.6, ARCHIVE.v + ARCHIVE.d / 2, top], [ARCHIVE.u + ARCHIVE.w - 1.6, ARCHIVE.v + ARCHIVE.d / 2, top], P))
   out.push(boxSvg(F, { u: ARCHIVE.u + 12.5, v: ARCHIVE.v, w: top + 0.1, uw: 3.6, vd: ARCHIVE.d, wh: 0.45 }, P, { tone: 'lo' }))
-  out.push(boxSvg(F, { u: ARCHIVE.u + 12.5, v: ARCHIVE.v + ARCHIVE.d - 0.45, w: 0, uw: 3.6, vd: 0.45, wh: top + 0.55 }, P, { tone: 'lo' }))
+  out.push(boxSvg(F, { u: ARCHIVE.u + 12.5, v: ARCHIVE.v + ARCHIVE.d - 0.45, w: 0, uw: 3.6, vd: 0.45, wh: top + ARCHIVE.band }, P, { tone: 'lo' }))
   // a corner turned down on the top issue: the crease alone says it, and the
   // top face's own edge closes the shape
   out.push(rule([ARCHIVE.u + ARCHIVE.w - 5.5, ARCHIVE.v + ARCHIVE.d, top + 0.03], [ARCHIVE.u + ARCHIVE.w, ARCHIVE.v + ARCHIVE.d - 5, top + 0.03], P))
@@ -429,58 +445,97 @@ export function buildNewsrack(P, options = {}) {
    * cross-part beat order lives in the CSS.
    * The sheets also carry `--lag`, the stagger the CSS should use: it shrinks
    * as the rack fills, so twenty-four papers still hang in a single wave.
+   *
+   * The third argument is the part's assembly axis, already resolved to CSS
+   * custom properties by `axisStyle` — see the block below.
    */
-  const part = (name, step, ...items) =>
-    `<g class="home-part" data-part="${name}" style="--step:${step}">${items.join('')}</g>`
+  const part = (name, step, axis, ...items) =>
+    `<g class="home-part" data-part="${name}" style="--step:${step};${axis}">${items.join('')}</g>`
 
   const lag = Math.min(44, Math.max(9, Math.round(340 / Math.max(1, L.n))))
-  const sheetPart = (step, ...items) =>
-    `<g class="home-part" data-part="sheets" style="--step:${step};--lag:${lag}ms">${items.join('')}</g>`
+  const sheetPart = (step, axis, ...items) =>
+    `<g class="home-part" data-part="sheets" style="--step:${step};--lag:${lag}ms;${axis}">${items.join('')}</g>`
+
+  // ---- the axis every part is fitted along ---------------------------------
+  //
+  // Nothing below is a screen-space guess. `axisStyle` takes two world points
+  // that lie on the axis a part is actually fitted on — the length of a rail,
+  // the normal of a plate, the plumb line through a seat — and returns the
+  // projected unit vector (`--axis-x/--axis-y`), the distance the part travels
+  // and the pivot it turns about (`--pivot-x/--pivot-y`). The pivot is the
+  // midpoint of the two points, so where a part does not turn about the middle
+  // of its span (a post on its foot, a sheet on its clip line) the two points
+  // straddle that point instead of spanning the part.
+  //
+  // The three helpers below are the three ways a part arrives here: up a plumb
+  // line, in along a face normal, or along the rack's length. `rising` and
+  // `forward` only pick which end of the axis the part comes from — the axis
+  // itself is still the geometry's.
+  const ax = (from, to, travel) => axisStyle(P, from, to, travel)
+  const normal = F.dir(0, 1, 0) // out of every front face on the rack
+  const across = F.dir(1, 0, 0) // along the lip, the rails, the hanging wall
+  const off = (point, dir, by) => [point[0] + dir[0] * by, point[1] + dir[1] * by, point[2] + dir[2] * by]
+  const plumb = (point, half, travel, rising) => ax(off(point, [0, 0, 1], rising ? -half : half), off(point, [0, 0, 1], rising ? half : -half), travel)
+  const press = (point, half, travel) => ax(off(point, normal, half), off(point, normal, -half), travel)
+  const slide = (point, half, travel, forward) => ax(off(point, across, forward ? -half : half), off(point, across, forward ? half : -half), travel)
 
   // ---- back: the backboard, the farthest thing in the frame -------------
+  // Slid in along the wall it hangs on: the axis is the board's own length,
+  // read across its centre, so it enters from behind the left post.
   const panel = facePath(F, [[POST, 4.5, PLINTH], [W - POST, 4.5, PLINTH], [W - POST, 4.5, HEAD], [POST, 4.5, HEAD]], P)
-  out.push(part('back', 0,
-    `<path class="iso-shade" data-shade="1" d="${panel}"/>`,
-    k.lineSvg(panel, { tone: 'faint' }),
-  ))
+  const backAxis = slide(F.at(W / 2, 4.5, (PLINTH + HEAD) / 2), (W - POST * 2) / 2, 34, true)
+  out.push(part('back', 0, backAxis, `<path class="iso-shade" data-shade="1" d="${panel}"/>`, k.lineSvg(panel, { tone: 'faint' })))
 
   // ---- plinth: the base everything stands on ---------------------------
   // Named `plinth`, not `base`: typewriter.css already owns `[data-part='base']`
   // and these selectors are module-agnostic, so a shared name would hand the
   // typewriter's case this rack's beat. The front lip used to ride along in this
   // part; it is bolted on long after the papers are hung, so it is its own run.
-  out.push(part('plinth', 0,
-    boxSvg(F, { u: 0, v: 0, w: 0, uw: W, vd: D, wh: PLINTH }, P, { tone: 'lo' }),
-  ))
+  // Set down on the feet that are already carrying it: the axis is the plumb
+  // line through the seat face, pointing down, so the slab comes from above and
+  // its pivot sits on the seat rather than at mid-height.
+  const plinthAxis = plumb(F.at(W / 2, D / 2, 0), PLINTH / 2, 20, false)
+  out.push(part('plinth', 0, plinthAxis, boxSvg(F, { u: 0, v: 0, w: 0, uw: W, vd: D, wh: PLINTH }, P, { tone: 'lo' })))
 
   // ---- feet: the levelling pads under the front of the base -------------
   // Painted after the plinth because they stand proud of its face, not under it.
   // Both sit inboard of the back issues, which would otherwise swallow the left
   // one the moment the pile is set down.
+  // Each pad is jacked up its own plumb line off the deck, so the axis runs from
+  // the deck up through the pad and the part rises into the load.
   for (const [index, u] of [44 - PAD.u / 2, W - 44 - PAD.u / 2].entries()) {
-    out.push(part('nr-feet', index, footSvg(u, P)))
+    const footAxis = plumb(F.at(u + PAD.u / 2, D + PAD.v / 2, 0), 3, 16, true)
+    out.push(part('nr-feet', index, footAxis, footSvg(u, P)))
   }
 
   // ---- posts: one run each, so each stands up about its own foot --------
+  // The axis is the post's own length with the pivot at its foot, so `scaleY`
+  // telescopes it out of the plinth instead of growing it from mid-air.
   for (const [index, u] of [0, W - POST].entries()) {
-    out.push(part('posts', index,
-      boxSvg(F, { u, v: 2, w: PLINTH, uw: POST, vd: D - 4, wh: H - PLINTH }, P, { tone: 'mid' }),
-      cap(u + POST / 2, P),
-    ))
+    const postAxis = plumb(F.at(u + POST / 2, 2 + (D - 4) / 2, PLINTH), (H - PLINTH) / 2, 6, true)
+    out.push(part('posts', index, postAxis, boxSvg(F, { u, v: 2, w: PLINTH, uw: POST, vd: D - 4, wh: H - PLINTH }, P, { tone: 'mid' }), cap(u + POST / 2, P)))
   }
 
   // ---- brace: the cross member that ties the two post heads -------------
-  out.push(part('nr-brace', 0, braceSvg(P)))
+  // Fed in between the heads along its own length — the same axis a rail runs
+  // on — and pivoted at its centre.
+  const braceAxis = slide(F.at(W / 2, BRACE.v + BRACE.vd / 2, BRACE.w + BRACE.wh / 2), (W - POST * 2) / 2, 26, true)
+  out.push(part('nr-brace', 0, braceAxis, braceSvg(P)))
 
   // ---- gussets: a knee plate at each post's foot -----------------------
-  out.push(part('nr-gusset', 0, gussetSvg(0, 1, P)))
-  out.push(part('nr-gusset', 1, gussetSvg(W, -1, P)))
+  // Each plate swings about the hinge it actually has: the axis is its bottom
+  // edge on the plinth, so the pivot lands on that edge and the plate tips up
+  // against the post instead of rotating about its middle. Travel is zero — the
+  // plate is not slid anywhere, only swung.
+  const gussetAxis = (u0, dir) => ax(F.at(u0, GUSSET.v + GUSSET.vd / 2, PLINTH), F.at(u0 - POST * dir, GUSSET.v + GUSSET.vd / 2, PLINTH), 0)
+  out.push(part('nr-gusset', 0, gussetAxis(0, 1), gussetSvg(0, 1, P)))
+  out.push(part('nr-gusset', 1, gussetAxis(W, -1), gussetSvg(W, -1, P)))
 
-  // ---- rails: one run per tier, so each drops into its own notch --------
+  // ---- rails: one run per tier, so each slides into its own notch -------
+  // Each rail travels along the lip it is bolted to, pivoted at its own centre.
   for (const [index, w] of L.rails.entries()) {
-    out.push(part('rails', index,
-      boxSvg(F, { u: POST, v: RAIL.v, w, uw: W - POST * 2, vd: RAIL.vd, wh: RAIL.wh }, P, { tone: 'mid' }),
-    ))
+    const railAxis = slide(F.at(W / 2, RAIL.v + RAIL.vd / 2, w + RAIL.wh / 2), (W - POST * 2) / 2, 16, true)
+    out.push(part('rails', index, railAxis, boxSvg(F, { u: POST, v: RAIL.v, w, uw: W - POST * 2, vd: RAIL.vd, wh: RAIL.wh }, P, { tone: 'mid' })))
   }
 
   // ---- sheets: one paper per issue, painted tier by tier, left to right --
@@ -488,6 +543,8 @@ export function buildNewsrack(P, options = {}) {
   // the hover swing is a transition on that inner group and stays untouched.
   // Each sheet carries its own clips, so it lands as one hanging paper and
   // `--step` is the loading order — newest issue first, far side to near.
+  // The axis is the plumb line through that paper's own clip line, so it falls
+  // onto the clips it will hang from and swings about them, not about mid-page.
   let order = 0
   let index = 0
   for (const [tier, count] of L.rows.entries()) {
@@ -497,7 +554,11 @@ export function buildNewsrack(P, options = {}) {
       const issue = issues[index] || {}
       const label = issue.label || issue.number || ''
       const su = u0 + column * (L.w + COL_GAP)
-      out.push(sheetPart(order++,
+      const clip = F.at(su + M.w / 2, V_TOP, L.rails[tier] + 2)
+      const sheetAxis = plumb(clip, (M.h * DROP) / 2, 26, false)
+      out.push(sheetPart(
+        order++,
+        sheetAxis,
         `<a class="home-issue" data-index="${index}" href="${esc(issue.href || '#')}" aria-label="${esc(label)}"><title>${esc(label)}</title>${sheetSvg(issue, index, su, L.rails[tier] + 2, M, P)}</a>`,
       ))
       index++
@@ -506,44 +567,75 @@ export function buildNewsrack(P, options = {}) {
 
   // ---- lip: the front board, and the two bolts that pin it down ---------
   // Both paint after the sheets because the papers hang down behind them.
-  out.push(part('nr-lip', 0,
-    boxSvg(F, { u: POST, v: LIP.v0, w: PLINTH, uw: W - POST * 2, vd: LIP.vd, wh: LIP.wh }, P, { tone: 'mid' }),
-  ))
-  out.push(part('nr-bolt', 0, boltSvg(44, P)))
-  out.push(part('nr-bolt', 1, boltSvg(W - 44, P)))
+  // The lip is pressed onto the plinth's edge from outside it: the axis is the
+  // board's own normal, so it comes in square to the face it closes.
+  const lipAxis = press(F.at(W / 2, LIP.v0 + LIP.vd / 2, PLINTH + LIP.wh / 2), LIP.vd / 2, 14)
+  out.push(part('nr-lip', 0, lipAxis, boxSvg(F, { u: POST, v: LIP.v0, w: PLINTH, uw: W - POST * 2, vd: LIP.vd, wh: LIP.wh }, P, { tone: 'mid' })))
+  // A bolt is offered up out of the face it will sit on, so its axis is the
+  // bolt's own thread line, running into the plate.
+  for (const [step, u] of [44, W - 44].entries()) {
+    const boltAxis = press(F.at(u, LIP.v0 + LIP.vd, PLINTH + LIP.wh / 2), 1.5, 6)
+    out.push(part('nr-bolt', step, boltAxis, boltSvg(u, P)))
+  }
 
   // ---- badge: the maker's plate on the plinth's face --------------------
-  out.push(part('nr-badge', 0, badgeSvg(P)))
+  // Pressed on along its normal, out of the middle of its own band.
+  const badgeAxis = press(F.at(W / 2, D, (BADGE.w0 + BADGE.w1) / 2), (BADGE.w1 - BADGE.w0) / 2, 7)
+  out.push(part('nr-badge', 0, badgeAxis, badgeSvg(P)))
 
   // ---- archive: the back issues stacked on the deck, front left ---------
-  out.push(part('archive', 0, archiveSvg(P)))
+  // A pile is set down, not slid: the axis is the plumb line through the middle
+  // of the stack with the pivot on the deck, so it lands flat on the platform.
+  const archiveAxis = plumb(F.at(ARCHIVE.u + ARCHIVE.w / 2, ARCHIVE.v + ARCHIVE.d / 2, 0), PILE / 2, 28, false)
+  out.push(part('archive', 0, archiveAxis, archiveSvg(P)))
 
   // ---- drive: a block at each end of the lip, the rail between them -----
   // The rail is drawn with the left block, the right one carries the wheel the
-  // crank is dropped onto.
+  // crank is dropped onto. Each block is slid in from its own end of the lip,
+  // along the lip, so the rail rides in with the left one; the pivot is that
+  // block's own centre, and the direction is read off the lip rather than
+  // mirrored out of `--step`.
   const railU0 = BLOCK.u + BLOCK.uw / 2
   const railU1 = W - BLOCK.u - BLOCK.uw / 2
-  out.push(part('drive', 0,
+  const blockAxis = (u, inward) =>
+    slide(F.at(u + BLOCK.uw / 2, BLOCK.v + BLOCK.vd / 2, BLOCK.w + BLOCK.wh / 2), BLOCK.uw / 2, 30, inward > 0)
+  out.push(part(
+    'drive',
+    0,
+    blockAxis(BLOCK.u, 1),
     blockSvg(BLOCK.u, P),
     k.solidSvg(G.solidOf([[0, TRACK.r], [railU1 - railU0, TRACK.r]], G.frameAlong(F.at(railU0, TRACK.v, TRACK.w), F.dir(1, 0, 0)), P), { tone: 'mid' }),
     pulleySvg(railU0, BLOCK.v + BLOCK.vd, BLOCK.w + BLOCK.wh / 2, P),
   ))
-  out.push(part('drive', 1,
+  out.push(part(
+    'drive',
+    1,
+    blockAxis(W - BLOCK.u - BLOCK.uw, -1),
     blockSvg(W - BLOCK.u - BLOCK.uw, P),
     pulleySvg(railU1, BLOCK.v + BLOCK.vd, BLOCK.w + BLOCK.wh / 2, P),
   ))
 
   // ---- cap plates: each block is closed with a bolted cover -------------
-  out.push(part('nr-plate', 0, blockCapSvg(BLOCK.u, P)))
-  out.push(part('nr-plate', 1, blockCapSvg(W - BLOCK.u - BLOCK.uw, P)))
+  // The plate's normal is vertical here, so "along its normal" is "lowered onto
+  // the block": the plumb line through the plate's own centre.
+  for (const [step, u] of [BLOCK.u, W - BLOCK.u - BLOCK.uw].entries()) {
+    const capAxis = plumb(F.at(u + BLOCK.uw / 2, BLOCK.v + BLOCK.vd / 2, BLOCK.w + BLOCK.wh + BLOCK.cap / 2), BLOCK.cap / 2, 11, false)
+    out.push(part('nr-plate', step, capAxis, blockCapSvg(u, P)))
+  }
 
-  // ---- crank: dropped onto the right wheel's axle ----------------------
-  out.push(part('nr-crank', 0, crankSvg(railU1, BLOCK.v + BLOCK.vd, BLOCK.w + BLOCK.wh / 2, P)))
+  // ---- crank: slipped onto the right wheel's axle ----------------------
+  // Along the axle it turns about, from outside the block's face.
+  const crankAxis = press(F.at(railU1, BLOCK.v + BLOCK.vd, BLOCK.w + BLOCK.wh / 2), 1.4, 9)
+  out.push(part('nr-crank', 0, crankAxis, crankSvg(railU1, BLOCK.v + BLOCK.vd, BLOCK.w + BLOCK.wh / 2, P)))
 
   // ---- reader: the magnifier on the rail, last --------------------------
+  // The clamp rides in along the rail it will run on, pivoted where it grips it.
   const [rx, ry] = k.iso(F.at(TRAVEL.u0, TRACK.v, TRACK.w), P)
   const [ex, ey] = k.iso(F.at(TRAVEL.u1, TRACK.v, TRACK.w), P)
-  out.push(part('reader', 0,
+  out.push(part(
+    'reader',
+    0,
+    slide(F.at(TRAVEL.u0, TRACK.v, TRACK.w), 10, 20, true),
     `<g class="home-reader" style="--run-x:${(ex - rx).toFixed(1)}px;--run-y:${(ey - ry).toFixed(1)}px">${readerSvg(P)}</g>`,
   ))
 

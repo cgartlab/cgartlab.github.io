@@ -13,7 +13,7 @@
    together the way a bench is actually put together: the feet are pushed up off
    the floor, the shell is lifted onto them and pressed home, the mouth of the
    well is cut out of the deck, the gear train climbs out of the bay and turns
-   over, the covers are pushed up and slid shut, the lift comes up the shaft, the
+   over, the covers slide shut under it, the lift comes up the shaft, the
    front plate is pushed on from the operator's side, and the keys, grille,
    rocker and lead go on last.
 
@@ -27,9 +27,10 @@
      mechanism   the train climbs out of the bay                     400 → 740
      gears       it turns over once it is seated                     620 → 1060
      deck        the deck furniture is pressed flush                 400 → 700
-     bay         the covers come up and slide shut over the train    760 → 980
+     bay         the covers slide shut over the train, out from         760 → 980
+                 under the deck
      panel       the front plate is pushed on from the front         620 → 940
-     keys        five caps come up out of their recesses, 32 ms      720 → 1148
+     keys        five caps are pressed into their recesses, 32 ms      720 → 1148
                  apart
      vents       the grille draws itself across the plate            800 → 1040
      power       the rocker snaps over, the fuse seats               860 → 1120
@@ -46,6 +47,16 @@
    chassis is drawn outside the well clip, so a part parked in the air would be
    visible over the bench for the first frames; everything that belongs to the
    bay instead starts far enough down the shaft to be swallowed by the opening.
+
+   Every entrance is read off geometry. Each part carries --axis-x/--axis-y (the
+   unit vector of the axis it is fitted along, in screen space), --travel (how
+   far it comes in) and --pivot-x/--pivot-y (the point it scales or turns about),
+   all written by axisStyle() in the module. No keyframe below names a direction
+   of its own: every translate is `var(--axis-*) * var(--travel)`, so the foot
+   rises up the sole's normal, the cover slides along its own slide, the plate
+   comes in down its own face. The chassis is drawn at azimuth 90, which makes
+   most of those axes resolve to the same screen vector — that is the geometry
+   agreeing with itself, not a shared shortcut.
    ========================================================================== */
 
 /* ---- the bay's mechanism tones ----------------------------------------- */
@@ -62,25 +73,26 @@
 .home-stage .home-mech-mid { fill: var(--anatomy-shade-1); }
 .home-stage .home-mech-dark { fill: var(--home-cavity); }
 
-/* the gears turn about their own centres, which the module writes inline */
+/* the gears spin on their own centres, which arrive as --pivot-x/y like every
+   other part's; they keep a compositor layer because the spin is long */
 .home-stage .home-chassis .home-gear {
-  transform-box: view-box;
   will-change: transform;
 }
 
 /* ---- the build --------------------------------------------------------- */
 
-/* SVG groups resolve transform-origin against the object's own box, and the
-   initial value there is 0 0 — every scale and hinge below needs the centre
-   spelled out or the part shrinks into its top-left corner */
-.home-stage .home-chassis .home-part[data-part='shadow'],
-.home-stage .home-chassis .home-part[data-part='well'],
-.home-stage .home-chassis .home-part[data-part='rim'],
-.home-stage .home-chassis .home-part[data-part='panel'],
-.home-stage .home-chassis .home-part[data-part='power'],
-.home-stage .home-chassis .home-part[data-part='cable'],
-.home-stage .home-chassis .home-key-slot {
-  transform-origin: 50% 50%;
+/* one rule for every moving piece: `view-box` makes the px in --pivot-x/y
+   resolve against the stage's viewBox, which is the space axisStyle measured
+   them in, and the origin is the pivot that came back with the axis. SVG groups
+   default to 0 0, so a scale would otherwise collapse into the top-left corner */
+.home-stage .home-chassis .home-part,
+.home-stage .home-chassis .home-mech-riser,
+.home-stage .home-chassis .home-bay-plate,
+.home-stage .home-chassis .home-lift,
+.home-stage .home-chassis .home-key-slot,
+.home-stage .home-chassis .home-gear {
+  transform-box: view-box;
+  transform-origin: var(--pivot-x, 50%) var(--pivot-y, 50%);
 }
 
 /* the shadow is the one thing that is not a part: it cannot slide in, so it
@@ -90,7 +102,6 @@
 }
 
 .home-stage.is-booting .home-chassis .home-part[data-part='feet'] {
-  transform-origin: 50% 100%;
   animation: home-boot-feet 240ms cubic-bezier(0.2, 0.9, 0.3, 1) both;
 }
 
@@ -115,13 +126,12 @@
 /* the train climbs the bay on the inside of the well clip, so it is swallowed
    by the hole until it reaches its seat */
 .home-stage.is-booting .home-chassis .home-mech-riser {
-  transform-box: fill-box;
   animation: home-boot-mech-rise 340ms cubic-bezier(0.24, 0.9, 0.26, 1) 400ms both;
 }
 
-/* the cover plates are the last thing into the bay: they are pushed up out of
-   the shaft and slid shut over the train. `--slide-x` is the screen distance
-   that clears the opening, written by the module for each half. */
+/* the cover plates are the last thing into the bay: each is parked outside the
+   opening, behind the deck, and slides shut along its own axis. The travel is
+   the screen length of the 104-unit slide the module asked for. */
 .home-stage.is-booting .home-chassis .home-bay-plate {
   animation: home-boot-bay 220ms cubic-bezier(0.22, 0.9, 0.24, 1) 760ms both;
 }
@@ -130,20 +140,18 @@
   animation: home-boot-lift 200ms cubic-bezier(0.16, 1, 0.3, 1) 940ms both;
 }
 
-/* the front plate is pushed on from the operator's side: along -y, which this
-   camera sees as a short lift and a hair of foreshortening, not a slide */
+/* the front plate is pushed on from the operator's side: its axis is its own
+   normal, which this camera sees as a short lift and a hair of foreshortening */
 .home-stage.is-booting .home-chassis .home-part[data-part='panel'] {
   animation: home-boot-panel 320ms cubic-bezier(0.22, 0.9, 0.24, 1) 620ms both;
 }
 
 .home-stage.is-booting .home-chassis .home-key-slot {
-  transform-box: fill-box;
   animation: home-boot-key 300ms cubic-bezier(0.2, 1.3, 0.4, 1) both;
   animation-delay: calc(720ms + var(--slot, 0) * 32ms);
 }
 
 .home-stage.is-booting .home-chassis .home-part[data-part='vents'] {
-  transform-origin: 0% 100%;
   animation: home-boot-vents 240ms cubic-bezier(0.32, 0.72, 0, 1) 800ms both;
 }
 
@@ -164,31 +172,68 @@
 /* the shadow trails the shell by 40 ms: as the cabinet comes down the contact
    patch tightens and then spreads out under the full weight */
 @keyframes home-boot-shadow {
-  0% { transform: translateY(38px) scale(0.84); }
-  60% { transform: translateY(-1px) scale(1.02); }
+  0% {
+    transform:
+      translate(calc(var(--axis-x, 0) * var(--travel, 34px) * -1),
+                calc(var(--axis-y, -1) * var(--travel, 34px) * -1))
+      scale(0.84);
+  }
+  60% {
+    transform:
+      translate(calc(var(--axis-x, 0) * var(--travel, 34px) * 0.03),
+                calc(var(--axis-y, -1) * var(--travel, 34px) * 0.03))
+      scale(1.02);
+  }
   100% { transform: none; }
 }
 
-/* the feet are pushed up off the floor, land, and squash once under the load */
+/* the feet are pushed up off the floor along the sole's normal, land, and squash
+   once under the load — the squash pivots on the sole, so the pads stay put */
 @keyframes home-boot-feet {
-  0% { transform: translateY(34px); }
-  52% { transform: translateY(0) scaleY(0.94); }
-  72% { transform: translateY(-1.4px) scaleY(1.015); }
+  0% {
+    transform:
+      translate(calc(var(--axis-x, 0) * var(--travel, 34px) * -1),
+                calc(var(--axis-y, -1) * var(--travel, 34px) * -1));
+  }
+  52% { transform: translate(0, 0) scaleY(0.94); }
+  72% {
+    transform:
+      translate(calc(var(--axis-x, 0) * var(--travel, 34px) * 0.04),
+                calc(var(--axis-y, -1) * var(--travel, 34px) * 0.04))
+      scaleY(1.015);
+  }
   100% { transform: none; }
 }
 
-/* the shell is lifted onto the feet, seats a touch too deep, and comes back up */
+/* the shell is lifted onto the feet, seats a touch too deep, and comes back up.
+   The pivot is on the bottom face, so the overshoot reads as the base settling */
 @keyframes home-boot-body {
-  0% { transform: translateY(40px); }
-  58% { transform: translateY(-2.6px); }
-  76% { transform: translateY(1.2px); }
-  90% { transform: translateY(-0.4px); }
+  0% {
+    transform:
+      translate(calc(var(--axis-x, 0) * var(--travel, 40px) * -1),
+                calc(var(--axis-y, -1) * var(--travel, 40px) * -1));
+  }
+  58% {
+    transform:
+      translate(calc(var(--axis-x, 0) * var(--travel, 40px) * 0.065),
+                calc(var(--axis-y, -1) * var(--travel, 40px) * 0.065));
+  }
+  76% {
+    transform:
+      translate(calc(var(--axis-x, 0) * var(--travel, 40px) * -0.03),
+                calc(var(--axis-y, -1) * var(--travel, 40px) * -0.03));
+  }
+  90% {
+    transform:
+      translate(calc(var(--axis-x, 0) * var(--travel, 40px) * 0.01),
+                calc(var(--axis-y, -1) * var(--travel, 40px) * 0.01));
+  }
   100% { transform: none; }
 }
 
 /* the mouth is opened out of the deck from its own centre: a slit first, then
    the full opening. The rim carries the same beat 40 ms later, so the two never
-   come apart. */
+   come apart. No translate: a hole is cut where it is, it does not slide. */
 @keyframes home-boot-mouth {
   0% { transform: scale(0.44, 0.3); }
   62% { transform: scale(1.015, 1.02); }
@@ -197,49 +242,107 @@
 
 /* the deck furniture comes up through the deck plane and presses flush */
 @keyframes home-boot-deck {
-  0% { transform: translateY(9px); }
-  62% { transform: translateY(-1.4px); }
+  0% {
+    transform:
+      translate(calc(var(--axis-x, 0) * var(--travel, 9px) * -1),
+                calc(var(--axis-y, -1) * var(--travel, 9px) * -1));
+  }
+  62% {
+    transform:
+      translate(calc(var(--axis-x, 0) * var(--travel, 9px) * 0.155),
+                calc(var(--axis-y, -1) * var(--travel, 9px) * 0.155));
+  }
   100% { transform: none; }
 }
 
-/* the train climbs out of the bay and seats with one small bounce */
+/* the train climbs the bay along the same vertical the screw and the rods run on
+   and seats with one small bounce */
 @keyframes home-boot-mech-rise {
-  0% { transform: translateY(60px); }
-  66% { transform: translateY(-1.4px); }
+  0% {
+    transform:
+      translate(calc(var(--axis-x, 0) * var(--travel, 60px) * -1),
+                calc(var(--axis-y, -1) * var(--travel, 60px) * -1));
+  }
+  66% {
+    transform:
+      translate(calc(var(--axis-x, 0) * var(--travel, 60px) * 0.023),
+                calc(var(--axis-y, -1) * var(--travel, 60px) * 0.023));
+  }
   100% { transform: none; }
 }
 
-/* the covers come up out of the shaft already sliding shut */
+/* the covers slide shut along their own axes and press a hair past centre */
 @keyframes home-boot-bay {
-  0% { transform: translate(var(--slide-x, 0px), 48px); }
-  72% { transform: translate(0, -1.4px); }
+  0% {
+    transform:
+      translate(calc(var(--axis-x, 0) * var(--travel, 178px) * -1),
+                calc(var(--axis-y, 0) * var(--travel, 178px) * -1));
+  }
+  72% {
+    transform:
+      translate(calc(var(--axis-x, 0) * var(--travel, 178px) * 0.008),
+                calc(var(--axis-y, 0) * var(--travel, 178px) * 0.008));
+  }
   100% { transform: none; }
 }
 
 /* the lift runs up the shaft and sets the platform flush with the deck */
 @keyframes home-boot-lift {
-  0% { transform: translateY(34px); }
-  82% { transform: translateY(-1.2px); }
+  0% {
+    transform:
+      translate(calc(var(--axis-x, 0) * var(--travel, 34px) * -1),
+                calc(var(--axis-y, -1) * var(--travel, 34px) * -1));
+  }
+  82% {
+    transform:
+      translate(calc(var(--axis-x, 0) * var(--travel, 34px) * 0.035),
+                calc(var(--axis-y, -1) * var(--travel, 34px) * 0.035));
+  }
   100% { transform: none; }
 }
 
-/* the front plate is pushed on from the front: it starts a hair proud of the
+/* the front plate is pushed on down its own normal: it starts a hair proud of the
    face and slightly enlarged by the shorter distance, and presses back in */
 @keyframes home-boot-panel {
-  0% { transform: translateY(8px) scale(1.035); }
-  64% { transform: translateY(-1.4px) scale(0.998); }
+  0% {
+    transform:
+      translate(calc(var(--axis-x, 0) * var(--travel, 10px) * -1),
+                calc(var(--axis-y, -1) * var(--travel, 10px) * -1))
+      scale(1.035);
+  }
+  64% {
+    transform:
+      translate(calc(var(--axis-x, 0) * var(--travel, 10px) * 0.14),
+                calc(var(--axis-y, -1) * var(--travel, 10px) * 0.14))
+      scale(0.998);
+  }
   100% { transform: none; }
 }
 
-/* each cap comes up out of its recess and is pressed home once */
+/* each cap is pressed into its recess along the key travel, square to the panel */
 @keyframes home-boot-key {
-  0% { transform: translateY(9px) scale(0.9); }
-  58% { transform: translateY(-1.8px) scale(1.025); }
-  80% { transform: translateY(0.6px) scale(0.995); }
+  0% {
+    transform:
+      translate(calc(var(--axis-x, 0) * var(--travel, 9px) * -1),
+                calc(var(--axis-y, -1) * var(--travel, 9px) * -1))
+      scale(0.9);
+  }
+  58% {
+    transform:
+      translate(calc(var(--axis-x, 0) * var(--travel, 9px) * 0.2),
+                calc(var(--axis-y, -1) * var(--travel, 9px) * 0.2))
+      scale(1.025);
+  }
+  80% {
+    transform:
+      translate(calc(var(--axis-x, 0) * var(--travel, 9px) * -0.067),
+                calc(var(--axis-y, -1) * var(--travel, 9px) * -0.067))
+      scale(0.995);
+  }
   100% { transform: none; }
 }
 
-/* the louvres open out of the bottom of the grille */
+/* the louvres open out of the bottom of the grille, about the lowest one */
 @keyframes home-boot-vents {
   0% { transform: scaleY(0.06); }
   100% { transform: none; }
@@ -252,10 +355,20 @@
   100% { transform: none; }
 }
 
-/* the lead swings in from behind the cabinet and settles */
+/* the lead swings in along its own run and settles */
 @keyframes home-boot-cable {
-  0% { transform: translate(-14px, 10px) rotate(-6deg); }
-  64% { transform: translate(2px, -1.4px) rotate(1.2deg); }
+  0% {
+    transform:
+      translate(calc(var(--axis-x, 0) * var(--travel, 18px) * -1),
+                calc(var(--axis-y, -1) * var(--travel, 18px) * -1))
+      rotate(-6deg);
+  }
+  64% {
+    transform:
+      translate(calc(var(--axis-x, 0) * var(--travel, 18px) * 0.1),
+                calc(var(--axis-y, -1) * var(--travel, 18px) * 0.1))
+      rotate(1.2deg);
+  }
   100% { transform: none; }
 }
 

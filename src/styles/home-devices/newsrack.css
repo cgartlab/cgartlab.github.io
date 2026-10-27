@@ -15,19 +15,22 @@
    home.css gives every `.home-part` the same generic settle. Here the rack is
    actually built, in the order a fitter would build it: the feet are jacked up
    off the deck, the plinth is set down on them, the posts telescope up out of
-   it, the cross member is lowered between their heads and the knee plates are
-   swung up against them, the rails drop into their notches, the backboard slides
-   in from the side behind them, and the issues are hung one after another, each
+   it, the cross member is fed in between their heads and the knee plates are
+   swung up against them, the rails slide into their notches, the backboard comes
+   in along the wall behind them, and the issues are hung one after another, each
    dropping onto its clips and swinging itself still. Then the front lip is
-   lifted into the plinth's edge and its bolts are run home, the maker's plate is
+   pressed into the plinth's edge and its bolts are run home, the maker's plate is
    pressed on, the drive is slid in end by end, each block is closed with its cap
    plate, the crank is slipped onto the right-hand axle, and the reader slides
    onto the rail.
 
-   Nothing fades. The rack arrives on the platform, so a part that was merely
-   transparent would still be standing on screen; instead every part starts just
-   off its seat — a few dozen pixels, well inside the 132px band the well mouth
-   swallows — and travels the way it would be fitted.
+   Nothing fades, and nothing is placed by eye. Every part is slid, dropped or
+   pressed along the axis it is actually fitted on: newsrack.mjs reads that axis
+   off the drawing — two world points on it — and hands the CSS a projected unit
+   vector, a distance and a pivot. So a rail comes in along the lip, a paper
+   falls down its own clip line, a bolt runs in along its own thread, and no
+   keyframe below has to invent a screen vector. The distances stay inside the
+   132px band the well mouth swallows.
 
    Beat map (delay → end), 2380ms from the module taking `.is-active`:
      feet     40ms → 270ms    (per foot: 40 / 70)
@@ -54,65 +57,101 @@
    the issue numbers inside the sheets would re-rasterise without subpixel AA.
    ========================================================================== */
 
-/* the backboard: slid in along the wall from behind the left post ----------- */
+/* ---- the entry every part shares ------------------------------------------
+   The direction, the distance and the pivot are not in this file. newsrack.mjs
+   gives each part `--axis-x/--axis-y` (the projected unit vector of the axis it
+   is fitted along), `--travel`, and `--pivot-x/--pivot-y` (a point in the
+   stage's own viewBox), all of them read off two world points on that axis.
+   `--from-scale` is opt-in: a part pressed on from outside its face starts a
+   hair large, everything else starts at its own size.
+   The step at 64% is along the same axis — a part that goes a hair past its
+   seat and is drawn back — never a second, invented direction. */
+@keyframes nr-axis-in {
+  from {
+    transform:
+      translate(calc(var(--axis-x, 0) * var(--travel, 28px) * -1),
+                calc(var(--axis-y, 1) * var(--travel, 28px) * -1))
+      scale(var(--from-scale, 1));
+  }
+  64% {
+    transform:
+      translate(calc(var(--axis-x, 0) * var(--travel, 28px) * 0.08),
+                calc(var(--axis-y, 1) * var(--travel, 28px) * 0.08));
+  }
+  to { transform: none; }
+}
+
+/* the backboard: slid along the wall it hangs on, in from behind the left post */
 .home-module.is-active .home-part[data-part='back'] {
-  animation: nr-back-slide 270ms cubic-bezier(0.24, 0.82, 0.26, 1) backwards;
+  transform-box: view-box;
+  transform-origin: var(--pivot-x, 50%) var(--pivot-y, 50%);
+  animation: nr-axis-in 270ms cubic-bezier(0.24, 0.82, 0.26, 1) backwards;
   animation-delay: 1150ms;
 }
 
-/* the plinth: set down on the feet that are already carrying it --------------
+/* the plinth: set down the plumb line onto the feet that already carry it -----
    `plinth`, not `base`: typewriter.css already styles `[data-part='base']` and
    these selectors are module-agnostic — the name is the only namespace. */
 .home-module.is-active .home-part[data-part='plinth'] {
-  animation: nr-plinth-seat 280ms cubic-bezier(0.22, 0.9, 0.24, 1) backwards;
+  transform-box: view-box;
+  transform-origin: var(--pivot-x, 50%) var(--pivot-y, 50%);
+  animation: nr-axis-in 280ms cubic-bezier(0.22, 0.9, 0.24, 1) backwards;
   animation-delay: 300ms;
 }
 
-/* the levelling feet: each pad is jacked up off the deck and takes the weight -
+/* the levelling feet: each pad is jacked up its own plumb line off the deck ---
    They are painted after the plinth (they stand proud of its face) but they
    land before it, so the base is set down on feet that are already there. */
 .home-module.is-active .home-part[data-part='nr-feet'] {
-  animation: nr-foot-jack 200ms cubic-bezier(0.26, 0.88, 0.28, 1) backwards;
+  transform-box: view-box;
+  transform-origin: var(--pivot-x, 50%) var(--pivot-y, 50%);
+  animation: nr-axis-in 200ms cubic-bezier(0.26, 0.88, 0.28, 1) backwards;
   animation-delay: calc(40ms + var(--step) * 30ms);
 }
 
-/* the posts: no fade at all — each one telescopes up out of its own foot ----- */
+/* the posts: each telescopes up out of its own foot -------------------------- */
 .home-module.is-active .home-part[data-part='posts'] {
-  transform-box: fill-box;
-  transform-origin: 50% 100%;
+  transform-box: view-box;
+  transform-origin: var(--pivot-x, 50%) var(--pivot-y, 50%);
   animation: nr-post-stand 270ms cubic-bezier(0.2, 0.86, 0.24, 1) backwards;
   /* --step is the post: left first, then right */
   animation-delay: calc(620ms + var(--step) * 60ms);
 }
 
-/* the cross member: lowered between the post heads, one clunk, bolted -------- */
+/* the cross member: fed in between the heads along its own length ----------- */
 .home-module.is-active .home-part[data-part='nr-brace'] {
-  animation: nr-brace-drop 230ms cubic-bezier(0.26, 0.9, 0.24, 1) backwards;
+  transform-box: view-box;
+  transform-origin: var(--pivot-x, 50%) var(--pivot-y, 50%);
+  animation: nr-axis-in 230ms cubic-bezier(0.26, 0.9, 0.24, 1) backwards;
   animation-delay: 900ms;
 }
 
-/* the knee plates: each swings up about its foot and is pinned to the post ---
+/* the knee plates: each swings up about the hinge it actually has ------------
+   The pivot is the plate's bottom edge on the plinth, handed over by the axis,
+   so the plate tips up against its post instead of turning about its middle.
    The pair is mirror-handed: the angle comes out of `--step` (0 left, 1 right)
    so one keyframe swings each plate's apex toward its own post. */
 .home-module.is-active .home-part[data-part='nr-gusset'] {
-  transform-box: fill-box;
-  transform-origin: 50% 100%;
+  transform-box: view-box;
+  transform-origin: var(--pivot-x, 50%) var(--pivot-y, 50%);
   animation: nr-gusset-swing 220ms cubic-bezier(0.24, 0.86, 0.26, 1) backwards;
   /* --step is the plate: left first, then right */
   animation-delay: calc(960ms + var(--step) * 40ms);
 }
 
-/* the rails: dropped from just above, a clunk past the notch, then seated ---- */
+/* the rails: each slid in along the lip it is bolted to ---------------------- */
 .home-module.is-active .home-part[data-part='rails'] {
-  animation: nr-rail-drop 230ms cubic-bezier(0.3, 0.9, 0.24, 1) backwards;
+  transform-box: view-box;
+  transform-origin: var(--pivot-x, 50%) var(--pivot-y, 50%);
+  animation: nr-axis-in 230ms cubic-bezier(0.3, 0.9, 0.24, 1) backwards;
   /* --step is the rail: top tier first, then down the rack */
   animation-delay: calc(1000ms + var(--step) * 50ms);
 }
 
-/* the sheets: hung from the top edge, swinging about the clip line ----------- */
+/* the sheets: each falls down its own clip line and swings about it ---------- */
 .home-module.is-active .home-part[data-part='sheets'] {
-  transform-box: fill-box;
-  transform-origin: 50% 0%;
+  transform-box: view-box;
+  transform-origin: var(--pivot-x, 50%) var(--pivot-y, 50%);
   animation: nr-sheet-hang 230ms cubic-bezier(0.24, 0.86, 0.26, 1) backwards;
   /* --step is the load order (newest first, far to near) and --lag the stagger
      the module picks for this rack: 44ms while the rack is nearly empty, down
@@ -120,17 +159,22 @@
   animation-delay: calc(1300ms + var(--step) * var(--lag, 44ms));
 }
 
-/* the front lip: lifted into the plinth's front edge and dropped home -------- */
+/* the front lip: pressed onto the plinth's front edge along its own normal ---- */
 .home-module.is-active .home-part[data-part='nr-lip'] {
-  animation: nr-lip-seat 210ms cubic-bezier(0.22, 0.9, 0.24, 1) backwards;
+  --from-scale: 1.03;
+  transform-box: view-box;
+  transform-origin: var(--pivot-x, 50%) var(--pivot-y, 50%);
+  animation: nr-axis-in 210ms cubic-bezier(0.22, 0.9, 0.24, 1) backwards;
   animation-delay: 1780ms;
 }
 
-/* the bolts: each is offered up out of the face and run home while it seats ---
+/* the bolts: each offered up along its own thread and run home while it seats -
    The washer is part of the bolt; only the head turns, so the slot winds round
    against a plate that stays put. */
 .home-module.is-active .home-part[data-part='nr-bolt'] {
-  animation: nr-bolt-set 200ms cubic-bezier(0.26, 0.86, 0.28, 1) backwards;
+  transform-box: view-box;
+  transform-origin: var(--pivot-x, 50%) var(--pivot-y, 50%);
+  animation: nr-axis-in 200ms cubic-bezier(0.26, 0.86, 0.28, 1) backwards;
   /* --step is the bolt: left first, then right */
   animation-delay: calc(2000ms + var(--step) * 30ms);
 }
@@ -141,109 +185,64 @@
   animation-delay: calc(2000ms + var(--step) * 30ms);
 }
 
-/* the maker's plate: pressed onto the plinth's face, then riveted ----------- */
+/* the maker's plate: pressed onto the plinth's face along its own normal ------ */
 .home-module.is-active .home-part[data-part='nr-badge'] {
-  transform-box: fill-box;
-  transform-origin: 50% 50%;
-  animation: nr-badge-set 180ms cubic-bezier(0.24, 0.86, 0.26, 1) backwards;
+  --from-scale: 1.05;
+  transform-box: view-box;
+  transform-origin: var(--pivot-x, 50%) var(--pivot-y, 50%);
+  animation: nr-axis-in 180ms cubic-bezier(0.24, 0.86, 0.26, 1) backwards;
   animation-delay: 2070ms;
 }
 
-/* the backboard rides in along the wall, a hair past its seat ---------------- */
-@keyframes nr-back-slide {
-  from { transform: translate(-38px, -3.1px); }
-  82% { transform: translate(1.6px, 0.14px); }
-  to { transform: none; }
-}
-
-/* the plinth is set down on the feet, which are already standing ------------- */
-@keyframes nr-plinth-seat {
-  from { transform: translateY(-20px); }
-  62% { transform: translateY(1.6px); }
-  84% { transform: translateY(-0.5px); }
-  to { transform: none; }
-}
-
-/* a foot is jacked up off the deck until the pad takes the load --------------
-   Solid from the first frame: it rises out of the well mouth, which is where a
-   jack would come from. */
-@keyframes nr-foot-jack {
-  from { transform: translateY(16px); }
-  66% { transform: translateY(-2px); }
-  86% { transform: translateY(0.6px); }
-  to { transform: none; }
-}
-
-/* a post stands up: collapsed into the plinth at the start, no fade ---------- */
+/* a post stands up: collapsed into the plinth about its own foot, and a few
+   pixels below its seat, so it telescopes out of the base rather than growing
+   in mid-air ---------------------------------------------------------------- */
 @keyframes nr-post-stand {
-  from { transform: scaleY(0.06); }
+  from {
+    transform:
+      translate(calc(var(--axis-x, 0) * var(--travel, 6px) * -1),
+                calc(var(--axis-y, 1) * var(--travel, 6px) * -1))
+      scaleY(0.06);
+  }
   58% { transform: scaleY(1.04); }
   78% { transform: scaleY(0.988); }
-  to { transform: none; }
-}
-
-/* the cross member is lowered between the heads and bites -------------------- */
-@keyframes nr-brace-drop {
-  from { transform: translateY(-26px); }
-  70% { transform: translateY(2px); }
-  88% { transform: translateY(-0.6px); }
   to { transform: none; }
 }
 
 /* a knee plate swings up about its foot and settles flat against the post ----
    Mirrored pair: `--step` 0 starts the left plate tipped outward (20° the other
    way from its post), 1 the right, so each swings up toward its own post and
-   overshoots it a hair before seating. */
+   overshoots it a hair before seating. The pivot is the hinge, not the plate's
+   middle, which is what makes it a swing rather than a spin. */
 @keyframes nr-gusset-swing {
   from { transform: rotate(calc((var(--step) * 2 - 1) * 20deg)); }
   68% { transform: rotate(calc((1 - var(--step) * 2) * 2.4deg)); }
   to { transform: none; }
 }
 
-/* a rail falls into its notch: down, one bounce, seated --------------------- */
-@keyframes nr-rail-drop {
-  from { transform: translateY(-16px); }
-  62% { transform: translateY(2px); }
-  84% { transform: translateY(-0.6px); }
-  to { transform: none; }
-}
-
-/* a sheet is hung: dropped onto the clips and left to swing itself still -----
-   It falls further than the rail does (26px to the rail's 16), so the paper is
-   seen to land on clips that are already seated rather than riding in with them. */
+/* a sheet is hung: it falls down its own clip line and is left to swing still -
+   It falls further than a rail travels (26px to 16), so the paper is seen to
+   land on clips that are already seated rather than riding in with them. */
 @keyframes nr-sheet-hang {
-  from { transform: translateY(-26px) rotate(-2.2deg); }
-  64% { transform: translateY(1.4px) rotate(0.9deg); }
-  84% { transform: translateY(-0.3px) rotate(-0.3deg); }
-  to { transform: none; }
-}
-
-/* the front board is lifted off the deck in front of the plinth and set into
-   its edge — up the plinth's face, then down onto the seat ------------------ */
-@keyframes nr-lip-seat {
-  from { transform: translate(-7px, 10px); }
-  70% { transform: translate(0.4px, -2px); }
-  88% { transform: translate(0, 0.6px); }
-  to { transform: none; }
-}
-
-/* a bolt is offered up along its own axis, a few units out of the face ------ */
-@keyframes nr-bolt-set {
-  from { transform: translate(-2.6px, 2.2px); }
-  78% { transform: translate(0.5px, -0.4px); }
+  from {
+    transform:
+      translate(calc(var(--axis-x, 0) * var(--travel, 26px) * -1),
+                calc(var(--axis-y, 1) * var(--travel, 26px) * -1))
+      rotate(-2.2deg);
+  }
+  64% {
+    transform:
+      translate(calc(var(--axis-x, 0) * var(--travel, 26px) * 0.06),
+                calc(var(--axis-y, 1) * var(--travel, 26px) * 0.06))
+      rotate(0.9deg);
+  }
+  84% { transform: rotate(-0.3deg); }
   to { transform: none; }
 }
 
 /* a bolt run home: the head winds round two thirds of a turn as it lands ----- */
 @keyframes nr-bolt-turn {
   from { transform: rotate(-210deg); }
-  to { transform: none; }
-}
-
-/* the maker's plate is pressed onto the plinth's face and riveted ------------ */
-@keyframes nr-badge-set {
-  from { transform: translate(-6px, 5px); }
-  58% { transform: translate(-0.8px, 0.7px); }
   to { transform: none; }
 }
 
@@ -257,74 +256,49 @@
    with the idler, the crank and the cable all turning together.
    ------------------------------------------------------------------------- */
 
+/* the pile of back issues: set down on the deck along its own plumb line ------ */
 .home-module.is-active .home-part[data-part='archive'] {
-  animation: nr-archive-set 250ms cubic-bezier(0.22, 0.9, 0.24, 1) backwards;
+  transform-box: view-box;
+  transform-origin: var(--pivot-x, 50%) var(--pivot-y, 50%);
+  animation: nr-axis-in 250ms cubic-bezier(0.22, 0.9, 0.24, 1) backwards;
   animation-delay: 1900ms;
 }
 
+/* each block is slid in from its own end of the lip, along the lip, so the rail
+   rides in with the left one and the right block clamps over its end. The two
+   directions are not mirrored here: each block's axis was read off the lip, so
+   one is +u and the other -u, and `--step` is only the beat. */
 .home-module.is-active .home-part[data-part='drive'] {
-  animation: nr-drive-seat 210ms cubic-bezier(0.22, 0.9, 0.24, 1) backwards;
+  transform-box: view-box;
+  transform-origin: var(--pivot-x, 50%) var(--pivot-y, 50%);
+  animation: nr-axis-in 210ms cubic-bezier(0.22, 0.9, 0.24, 1) backwards;
   /* --step is the end: the left block (with the rail) first, then the right */
   animation-delay: calc(2020ms + var(--step) * 40ms);
 }
 
-/* the cap plates: each is lowered onto its block and bolted down ------------- */
+/* the cap plates: each is lowered onto its block along its own normal --------- */
 .home-module.is-active .home-part[data-part='nr-plate'] {
-  animation: nr-plate-set 170ms cubic-bezier(0.26, 0.88, 0.26, 1) backwards;
+  transform-box: view-box;
+  transform-origin: var(--pivot-x, 50%) var(--pivot-y, 50%);
+  animation: nr-axis-in 170ms cubic-bezier(0.26, 0.88, 0.26, 1) backwards;
   /* --step is the block it closes */
   animation-delay: calc(2110ms + var(--step) * 25ms);
 }
 
-/* the crank: slipped onto the right-hand axle and settled on its pin --------- */
+/* the crank: slipped onto the right-hand axle along the axle it turns about --- */
 .home-module.is-active .home-part[data-part='nr-crank'] {
-  animation: nr-crank-fit 190ms cubic-bezier(0.24, 0.86, 0.26, 1) backwards;
+  transform-box: view-box;
+  transform-origin: var(--pivot-x, 50%) var(--pivot-y, 50%);
+  animation: nr-axis-in 190ms cubic-bezier(0.24, 0.86, 0.26, 1) backwards;
   animation-delay: 2150ms;
 }
 
+/* the reader rides in along the rail it will run on -------------------------- */
 .home-module.is-active .home-part[data-part='reader'] {
-  animation: nr-reader-in 210ms cubic-bezier(0.24, 0.86, 0.26, 1) backwards;
+  transform-box: view-box;
+  transform-origin: var(--pivot-x, 50%) var(--pivot-y, 50%);
+  animation: nr-axis-in 210ms cubic-bezier(0.24, 0.86, 0.26, 1) backwards;
   animation-delay: 2170ms;
-}
-
-/* the pile of back issues is dropped onto the deck and settles ------------- */
-@keyframes nr-archive-set {
-  from { transform: translateY(-28px); }
-  58% { transform: translateY(2.2px); }
-  80% { transform: translateY(-0.6px); }
-  to { transform: none; }
-}
-
-/* each end block is slid in from its own end of the lip, along the lip, so the
-   rail rides in with the left one and the right block clamps over its end ----
-   `--step` 0 comes from the left, 1 from the right: one keyframe, mirrored. */
-@keyframes nr-drive-seat {
-  from { transform: translate(calc((var(--step) * 2 - 1) * 30px), calc((var(--step) * 2 - 1) * 2.4px)); }
-  62% { transform: translate(calc((1 - var(--step) * 2) * 2.6px), calc((1 - var(--step) * 2) * 0.2px)); }
-  to { transform: none; }
-}
-
-/* a cap plate is pressed down onto its block and bolted --------------------- */
-@keyframes nr-plate-set {
-  from { transform: translateY(-11px); }
-  78% { transform: translateY(1px); }
-  to { transform: none; }
-}
-
-/* the crank is slipped onto the axle along the axle's own axis, then settles
-   onto its pin — the move is straight out of the face, not out of the sky --- */
-@keyframes nr-crank-fit {
-  from { transform: translate(-9px, 7.4px); }
-  72% { transform: translate(0.8px, -0.6px); }
-  to { transform: none; }
-}
-
-/* the reader slides onto the rail from its left end, along the rail's own fall.
-   It stops short of the block's pulley: a longer run would start the clamp
-   inside the drive block, which reads as a part passing through another. */
-@keyframes nr-reader-in {
-  from { transform: translate(-20px, -1.6px); }
-  62% { transform: translate(1.6px, 0.13px); }
-  to { transform: none; }
 }
 
 /* the loop. 14s: hold, run out over 5s, read for 2s, run back over 5s, hold.

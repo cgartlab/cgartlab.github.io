@@ -1,7 +1,7 @@
 import * as k from '../anatomy/iso-kit.mjs'
 import * as G from '../anatomy/lathe.mjs'
 import { TOP } from './chassis.mjs'
-import { boxSvg, faceMatrix, facePath, frameOf } from './frame.mjs'
+import { axisStyle, boxSvg, faceMatrix, facePath, frameOf } from './frame.mjs'
 
 /**
  * Module 05 — the label printer that carries "标签".
@@ -53,6 +53,16 @@ import { boxSvg, faceMatrix, facePath, frameOf } from './frame.mjs'
  * time. The machine then runs itself for a beat — the transport wheel turns a
  * revolution and the blade snaps at nothing — before the first ticket is
  * printed, so the wall is only ever fed by a machine that works.
+ *
+ * Each assembly also carries its own fit axis, read off the drawing by
+ * `axisStyle`: the two ends of a hinge line, a seat and a point up the direction
+ * the part drops, a face centre and the two sides of its normal. The axis goes
+ * over as a screen vector, a travel and a pivot, so labels.css can bring a part
+ * in along the line it is actually fitted on and grow it out of its own seat —
+ * the feet rise up the vertical through the deck, the roll drops onto the
+ * cradle's centre line, the plate comes in square to the panel's front, the
+ * drawer slides home down its own runners. The chords are short and centred on
+ * the seat or the centre of the part, because the pivot is the chord's midpoint.
  */
 
 const BODY = { x: -62, y: -35, w: 124, d: 70, r: 9 }
@@ -105,8 +115,12 @@ const GUIDE_F = frameOf({ pitch: GUIDE.pitch, origin: [0, GUIDE.y, GUIDE.z] })
 const PINCH = { x: -23, gap: 8, r: 2, z: SLOT.z - SLOT.h / 2 + 0.2 }
 // the badge, the lid latch and the waste drawer, spread over the front panel
 const PLATE = { x: 10, w: 22, z: TOP + 8.6, h: 4.2 }
+const PLATE_PLAN = { x: PLATE.x, y: FRONT - 0.5, w: PLATE.w, d: 1.8, r: 1 }
 const LATCH = { z: TOP + 53.6, h: 10.4 }
+/** The latch's pivot boss: the latch swings about this, so it is also the axis. */
+const BOSS = [48, FRONT + 0.3, LATCH.z + 3.4]
 const BIN = { z: TOP + 8.2, h: 7.8, d: 3.2 }
+const BIN_PLAN = { x: -54, y: FRONT - 1, w: 17, d: BIN.d, r: 1.4 }
 
 const CARD = { w: 32, h: 13.6, r: 1.2 }
 /**
@@ -215,9 +229,12 @@ function layout(count) {
 /** One sub-assembly. Each run is a contiguous stretch of what already painted
  *  together, so wrapping it changes no painter's order — only which assembly a
  *  path belongs to. `--step` is the shared settle contract in home.css;
- *  labels.css replaces it with the real assembly. */
-function part(name, step, ...items) {
-  return `<g class="home-part" data-part="${name}" style="--step:${step}">${items.join('')}</g>`
+ *  labels.css replaces it with the real assembly. `axis` is the part's own fit
+ *  axis from `axisStyle`, or '' for a part that folds on a hinge and only needs
+ *  the pivot. */
+function part(name, step, axis, ...items) {
+  const style = axis ? `--step:${step};${axis}` : `--step:${step}`
+  return `<g class="home-part" data-part="${name}" style="${style}">${items.join('')}</g>`
 }
 
 const HAN = /[\u3000-\u9fff\uff00-\uffef]/
@@ -376,7 +393,7 @@ function pinchRoller(P) {
 /** The badge: a stamped plate riveted under the vent, carrying the name the
  *  machine prints its tickets in. */
 function namePlate(P, caption) {
-  const plan = { x: PLATE.x, y: FRONT - 0.5, w: PLATE.w, d: 1.8, r: 1 }
+  const plan = PLATE_PLAN
   const out = [
     k.solidSvg(k.slabOf(plan, PLATE.z, PLATE.h, P, 4, 0.5), { tone: 'hi' }),
     k.lineSvg(k.planOutline(k.insetPlan(plan, 1), PLATE.z + PLATE.h, P, 4), { tone: 'faint' }),
@@ -398,7 +415,7 @@ function lidLatch(P) {
     k.solidSvg(k.slabOf({ x: 44, y: FRONT + 0.2, w: 8, d: 2.2, r: 1.2 }, LATCH.z + 1.6, 8.2, P, 4, 0.6), { tone: 'hi' }),
     k.solidSvg(k.slabOf({ x: 43.4, y: FRONT + 0.1, w: 9.2, d: 2.3, r: 0.8 }, LATCH.z + 8.8, 2.6, P, 4, 0.6), { tone: 'hi' }),
   ]
-  const F = G.frameAlong([48, FRONT + 0.3, LATCH.z + 3.4], [0, 1, 0])
+  const F = G.frameAlong(BOSS, [0, 1, 0])
   out.push(k.solidSvg(G.solidOf([[0, 2.2], [1.2, 2.2]], F, P), { tone: 'mid' }))
   out.push(k.lineSvg(G.circleOf(F, 1.3, 2.2, P), { tone: 'lo' }))
   return out.join('')
@@ -407,7 +424,7 @@ function lidLatch(P) {
 /** The waste drawer: the blade trims the liner, and the offcuts drop through the
  *  mouth in its face. It slides home under the switch, on the panel's lower left. */
 function wasteBin(P) {
-  const plan = { x: -54, y: FRONT - 1, w: 17, d: BIN.d, r: 1.4 }
+  const plan = BIN_PLAN
   const face = plan.y + plan.d
   const out = [k.solidSvg(k.slabOf(plan, BIN.z, BIN.h, P, 4, 0.8), { tone: 'mid' })]
   const mouth = k.pathOf([
@@ -437,16 +454,53 @@ const tags = (options.tags || []).slice(0, MAX_TAGS)
   const caption = options.caption || '标签'
   const out = []
 
+  // Every assembly is fitted along a line the drawing already contains, so its
+  // entry motion is read off that line instead of picked in screen space. Each
+  // pair is a short chord lying on it, centred on the part's seat or on its own
+  // centre — `axisStyle` takes the chord's midpoint as the pivot, so a chord
+  // that is not centred would grow the part out of the wrong point.
+  const AX = {
+    // vertical, up out of the well: the feet stand on the deck
+    feet: axisStyle(P, [0, 0, TOP], [0, 0, TOP + FOOT], 16),
+    // vertical, down onto the seated feet: the pivot is the body's underside
+    body: axisStyle(P, [0, 0, BZ + 8], [0, 0, BZ], 26),
+    // the window frame folds on its back edge, so the axis is that edge
+    window: axisStyle(P, [TRAY.x, TRAY.y, LID_TOP], [TRAY.x + TRAY.w, TRAY.y, LID_TOP], 0),
+    // The roll turns on its own x axis, but it is fitted by dropping it into the
+    // cradle, so the chord runs vertically through the wound centre.
+    roll: axisStyle(P, [ROLL.x0 + LEN / 2, ROLL.y, ROLL_Z + 4], [ROLL.x0 + LEN / 2, ROLL.y, ROLL_Z - 4], 30),
+    // the front bar folds down on its top edge
+    cradle: axisStyle(P, [TRAY.x, TRAY.y + TRAY.d - BAR, LID_TOP + TRAY_H], [TRAY.x + TRAY.w, TRAY.y + TRAY.d - BAR, LID_TOP + TRAY_H], 0),
+    // the blade drops square onto its seat on the panel's top edge
+    cutter: axisStyle(P, [0, FRONT, CUTTER + 4], [0, FRONT, CUTTER - 4], 22),
+    // the face plate is pushed in square to the panel, along −y into the body
+    face: axisStyle(P, [0, FRONT + 4, TOP + BODY_H / 2], [0, FRONT - 4, TOP + BODY_H / 2], 9),
+    // the chute folds forward on the lid seam
+    guide: axisStyle(P, [-GUIDE.w / 2, GUIDE.y, GUIDE.z], [GUIDE.w / 2, GUIDE.y, GUIDE.z], 0),
+    // the pinch pair is pushed out of the mouth along its own lip
+    pinch: axisStyle(P, [PINCH.x, FRONT - 4, PINCH.z], [PINCH.x, FRONT + 4, PINCH.z], 7),
+    // the badge is pressed on square to the face it sits on
+    plate: axisStyle(P,
+      [PLATE.x + PLATE.w / 2, PLATE_PLAN.y + PLATE_PLAN.d / 2 + 4, PLATE.z + PLATE.h / 2],
+      [PLATE.x + PLATE.w / 2, PLATE_PLAN.y + PLATE_PLAN.d / 2 - 4, PLATE.z + PLATE.h / 2], 8),
+    // the latch swings about its boss, so the axis is the boss's centre line
+    latch: axisStyle(P, [BOSS[0], BOSS[1] - 3, BOSS[2]], [BOSS[0], BOSS[1] + 3, BOSS[2]], 0),
+    // the drawer slides home down its runners
+    bin: axisStyle(P,
+      [BIN_PLAN.x + BIN_PLAN.w / 2, BIN_PLAN.y + BIN_PLAN.d / 2 + 4, BIN.z + BIN.h / 2],
+      [BIN_PLAN.x + BIN_PLAN.w / 2, BIN_PLAN.y + BIN_PLAN.d / 2 - 4, BIN.z + BIN.h / 2], 11),
+  }
+
   // feet, far to near: they land first, and the body settles onto them
   const feet = []
   for (const { x, y } of k.corners(BODY, 7).map(([x, y]) => ({ x, y, d: k.depthOf([x, y, 0], P) })).sort((a, b) => a.d - b.d)) {
     feet.push(k.solidSvg(k.cylinder(x, y, 7, TOP, FOOT, P, 20), { tone: 'lo' }))
     feet.push(k.lineSvg(k.sideArc(x, y, 7, TOP + FOOT - 1.6, P, 14), { tone: 'faint' }))
   }
-  out.push(part('feet', 0, ...feet))
+  out.push(part('feet', 0, AX.feet, ...feet))
 
   // body, its lid seam, then the lid: one slab with a heavy bevel, so it domes
-  out.push(part('body', 1,
+  out.push(part('body', 1, AX.body,
     k.solidSvg(k.slabOf(BODY, BZ, BODY_H, P, 8, 3), { tone: 'mid' }),
     k.lineSvg(k.sideSeam(BODY, LID_Z, P, 8), { tone: 'faint' }),
     k.solidSvg(k.slabOf(k.insetPlan(BODY, 5), LID_Z, LID_TOP - LID_Z, P, 8, 3.4), { tone: 'hi' }),
@@ -462,19 +516,19 @@ const tags = (options.tags || []).slice(0, MAX_TAGS)
     bars.push(k.solidSvg(k.slabOf(bar, LID_TOP, TRAY_H, P, 4, 0.6), { tone: 'mid' }))
     bars.push(k.lineSvg(k.planOutline(k.insetPlan(bar, 1.8), LID_TOP + TRAY_H, P, 4), { tone: 'faint' }))
   }
-  out.push(part('window', 2, ...bars))
+  out.push(part('window', 2, AX.window, ...bars))
 
   // the stock roll: it drops into the cradle the bars have just made
-  out.push(part('roll', 3, stock(P)))
+  out.push(part('roll', 3, AX.roll, stock(P)))
 
   // the frame's front bar closes over the roll: it hides the underside
-  out.push(part('cradle', 4,
+  out.push(part('cradle', 4, AX.cradle,
     k.solidSvg(k.slabOf({ x: TRAY.x, y: TRAY.y + TRAY.d - BAR, w: TRAY.w, d: BAR, r: 2.5 }, LID_TOP, TRAY_H, P, 4, 0.6), { tone: 'mid' }),
   ))
 
   // the blade bar: it seats on the panel's top edge before the panel arrives, so
   // the cutter is a part of the machine and not of the plate
-  out.push(part('lb-cutter', 5, `<g class="home-cutter">${cutterBar(P)}</g>`))
+  out.push(part('lb-cutter', 5, AX.cutter, `<g class="home-cutter">${cutterBar(P)}</g>`))
 
   // ---- front face -------------------------------------------------------
   // The plate carries the rest of the mechanism, so it closes on last and brings
@@ -527,17 +581,17 @@ const tags = (options.tags || []).slice(0, MAX_TAGS)
   for (let i = 0; i < 5; i++) face.push(k.lineSvg(k.segment([10, FRONT + 0.3, TOP + 13 + i * 2.6], [50, FRONT + 0.3, TOP + 13 + i * 2.6], P), { tone: 'lo' }))
   face.push(k.faceTextSvg(k.sideMatrix([0, FRONT], TOP + 27, P, 'left'), caption, { size: 4.4, tone: 'lo', anchor: 'middle' }))
 
-  out.push(part('face', 6, ...face))
+  out.push(part('face', 6, AX.face, ...face))
 
   // ---- the fittings, one at a time --------------------------------------
   // Each of these bolts onto the panel that has just gone on, so they are drawn
   // after it — and they are separate assemblies, so the build reads as a machine
   // being dressed rather than a plate arriving with everything already on it.
-  out.push(part('lb-guide', 7, paperGuide(P)))
-  out.push(part('lb-pinch', 8, pinchRoller(P)))
-  out.push(part('lb-plate', 9, namePlate(P, caption)))
-  out.push(part('lb-latch', 10, lidLatch(P)))
-  out.push(part('lb-bin', 11, wasteBin(P)))
+  out.push(part('lb-guide', 7, AX.guide, paperGuide(P)))
+  out.push(part('lb-pinch', 8, AX.pinch, pinchRoller(P)))
+  out.push(part('lb-plate', 9, AX.plate, namePlate(P, caption)))
+  out.push(part('lb-latch', 10, AX.latch, lidLatch(P)))
+  out.push(part('lb-bin', 11, AX.bin, wasteBin(P)))
 
   // ---- the tickets, last ------------------------------------------------
   // They wait for the case: the wrapper holds them back until the last fitting
@@ -563,7 +617,11 @@ const tags = (options.tags || []).slice(0, MAX_TAGS)
       // deltas run from the wall *back* to the machine: mouth first, then out
       const fly = [mx - fx, my - fy]
       const exit = [ox - fx, oy - fy]
-      tickets.push(`<g class="home-ticket" style="--tilt:${seat.tilt.toFixed(2)}deg;--fly-x:${fly[0].toFixed(1)}px;--fly-y:${fly[1].toFixed(1)}px;--out-x:${exit[0].toFixed(1)}px;--out-y:${exit[1].toFixed(1)}px;--fly-delay:${BUILD + index * beat}ms">`)
+      // The sheet leaves the slot along the mouth's normal, and it grows about
+      // its own centre: the chord straddles that centre by half a slot height,
+      // so the pivot lands exactly on the card.
+      const axis = axisStyle(P, F.at(0, -SLOT.h / 2, 0), F.at(0, SLOT.h / 2, 0), 8)
+      tickets.push(`<g class="home-ticket" style="--tilt:${seat.tilt.toFixed(2)}deg;--fly-x:${fly[0].toFixed(1)}px;--fly-y:${fly[1].toFixed(1)}px;--out-x:${exit[0].toFixed(1)}px;--out-y:${exit[1].toFixed(1)}px;--fly-delay:${BUILD + index * beat}ms;${axis}">`)
       // the shadow is drawn, not filtered: one flat offset copy of the sheet, so
       // ninety of them can fly at once without a filter pass per sheet
       tickets.push(`<path class="home-ticket-shadow" d="${paper}" transform="translate(1.2 1.6)"/>`)
@@ -576,7 +634,7 @@ const tags = (options.tags || []).slice(0, MAX_TAGS)
       if (seat.tape) tickets.push(tapeOn(F, card, seat.corner, seat.tapeAngle, P))
       tickets.push('</g>')
     })
-  out.push(part('tickets', 12, ...tickets))
+  out.push(part('tickets', 12, '', ...tickets))
 
   return out.join('')
 }

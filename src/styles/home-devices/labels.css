@@ -3,8 +3,11 @@
    Each ticket is drawn at its stuck position on the wall above the machine and
    carries two screen-space deltas: --fly-x / --fly-y back to the slot mouth,
    where it appears, and --out-x / --out-y to a point just clear of the front
-   face at slot height. The keyframes run the mechanism: emerge at the slot,
-   slide out, get cut, then rise to the wall and be pressed onto it.
+   face at slot height. Those two are distances between points the module
+   projects, not offsets picked by eye; the last few units of the emerge — the
+   step out of the lip — run along the slot's own normal, which arrives as the
+   ticket's axis. The keyframes run the mechanism: emerge at the slot, slide out,
+   get cut, then rise to the wall and be pressed onto it.
 
    The wall is paper stuck up by hand: the module deals the sheets into cells
    and then nudges, turns and sizes each one, so nothing lines up. All this file
@@ -34,6 +37,14 @@
    behind. The starts are kept within a part's own throw (≤ ~25 stage units), so
    an exploded part stays inside the 132 units of well it has to hide in.
 
+   The direction of every entry is read off the drawing, not chosen on screen.
+   The module hands each part its fit axis as `--axis-x` / `--axis-y` (a unit
+   vector in stage px), `--travel`, and `--pivot-x` / `--pivot-y` (the chord's
+   midpoint: the seat, or the centre the part turns about), and each rule below
+   folds that into one start offset. A part therefore rises, drops, slides or
+   presses in exactly along the line it is fitted on, and grows out of its own
+   seat rather than out of the middle of its bounding box.
+
    The printing keeps its own cycle: the beat between sheets is not fixed here
    but computed from the tag count in the module, which hands each ticket its
    `--fly-delay` — one ticket per tag, so 26 sheets print in the same handful of
@@ -47,14 +58,21 @@
 
 /* the feet: jacked up out of the well until they meet the body's underside.
    They start below the deck line, so the well mouth clips them and they rise
-   into the drawing rather than sliding across it --------------------------- */
+   into the drawing rather than sliding across it. The pivot is the middle of the
+   feet on the deck's centre line, so the base grows out of the ground -------- */
 .home-stage .home-module.is-active .home-part[data-part='feet'] {
+  transform-box: view-box;
+  transform-origin: var(--pivot-x, 50%) var(--pivot-y, 50%);
   animation: labels-feet-rise 260ms cubic-bezier(0.22, 0.9, 0.24, 1) both;
   animation-delay: 0ms;
 }
 
-/* the body: down onto the seated feet, a touch too far, then back up ------- */
+/* the body: down onto the seated feet along the vertical, a touch too far, then
+   back up. The pivot is just above its underside — the face that lands — so the
+   overshoot reads as the shell bedding onto the feet ------------------------ */
 .home-stage .home-module.is-active .home-part[data-part='body'] {
+  transform-box: view-box;
+  transform-origin: var(--pivot-x, 50%) var(--pivot-y, 50%);
   animation: labels-body-seat 280ms cubic-bezier(0.22, 0.9, 0.24, 1) both;
   animation-delay: 200ms;
 }
@@ -65,22 +83,24 @@
    above, a rotation about the back edge collapses almost entirely into vertical
    foreshortening, and a screen-space `rotate` on it would read as the part
    sliding sideways off the machine. So the lid's hinges — the window frame, the
-   cradle bar, the paper guide — squash toward their own top edge instead. */
+   cradle bar, the paper guide — squash toward the hinge line itself, which is
+   the pivot the module reads off that edge. They carry no entry offset: the fold
+   is the motion. */
 
 /* the window frame: hinged on its back edge, it stands up off the lid and then
    falls forward until the tray is flat ------------------------------------ */
 .home-stage .home-module.is-active .home-part[data-part='window'] {
-  transform-box: fill-box;
-  transform-origin: 50% 0%;
+  transform-box: view-box;
+  transform-origin: var(--pivot-x, 50%) var(--pivot-y, 50%);
   animation: labels-window-swing 260ms cubic-bezier(0.22, 0.9, 0.24, 1) both;
   animation-delay: 420ms;
 }
 
-/* the stock roll: it drops into the cradle the bars have just made, and rocks
-   once as it finds the seat ---------------------------------------------- */
+/* the stock roll: it drops onto the cradle along the vertical through its own
+   wound centre, and rocks once about that centre as it finds the seat ------- */
 .home-stage .home-module.is-active .home-part[data-part='roll'] {
-  transform-box: fill-box;
-  transform-origin: 50% 50%;
+  transform-box: view-box;
+  transform-origin: var(--pivot-x, 50%) var(--pivot-y, 50%);
   animation: labels-roll-drop 300ms cubic-bezier(0.3, 0.7, 0.3, 1) both;
   animation-delay: 620ms;
 }
@@ -88,153 +108,257 @@
 /* the cradle's front bar: hinged on its top edge, it folds down and clamps over
    the roll --------------------------------------------------------------- */
 .home-stage .home-module.is-active .home-part[data-part='cradle'] {
-  transform-box: fill-box;
-  transform-origin: 50% 0%;
+  transform-box: view-box;
+  transform-origin: var(--pivot-x, 50%) var(--pivot-y, 50%);
   animation: labels-cradle-close 220ms cubic-bezier(0.22, 0.9, 0.24, 1) both;
   animation-delay: 860ms;
 }
 
-/* the blade bar: it drops into the seat on the panel's top edge, so the slot
-   below it is already framed when the plate arrives ----------------------- */
+/* the blade bar: it drops square onto the seat on the panel's top edge, so the
+   slot below it is already framed when the plate arrives ------------------- */
 .home-stage .home-module.is-active .home-part[data-part='lb-cutter'] {
-  transform-box: fill-box;
-  transform-origin: 50% 100%;
+  transform-box: view-box;
+  transform-origin: var(--pivot-x, 50%) var(--pivot-y, 50%);
   animation: labels-cutter-seat 220ms cubic-bezier(0.22, 0.9, 0.24, 1) both;
   animation-delay: 1020ms;
 }
 
-/* the face plate: pushed in from the front along the body's own depth axis —
-   the slot, the platen and wheel, the carriage, the rocker and the lamp all
-   ride in together, and it beds square a hair past the face. Its throw is only
-   the plate's own thickness: the mechanism runs edge to edge on the front, so
-   any more travel would slide the vent grille off the body onto the deck ---- */
+/* the face plate: pushed in square to the panel — the slot, the platen and
+   wheel, the carriage, the rocker and the lamp all ride in together, and it beds
+   square a hair past the face. Its throw is only the panel's own depth: the
+   mechanism runs edge to edge on the front, so any more travel would slide the
+   vent grille off the body onto the deck ------------------------------- */
 .home-stage .home-module.is-active .home-part[data-part='face'] {
-  transform-box: fill-box;
-  transform-origin: 50% 100%;
+  transform-box: view-box;
+  transform-origin: var(--pivot-x, 50%) var(--pivot-y, 50%);
   animation: labels-face-close 300ms cubic-bezier(0.22, 0.9, 0.24, 1) both;
   animation-delay: 1160ms;
 }
 
-/* the paper guide: hinged on the frame's front bar, it falls forward and beds
-   on the lid seam, so the strip has somewhere to run --------------------- */
+/* the paper guide: hinged on the lid seam, it falls forward and beds on the
+   seam, so the strip has somewhere to run ------------------------------- */
 .home-stage .home-module.is-active .home-part[data-part='lb-guide'] {
-  transform-box: fill-box;
-  transform-origin: 50% 0%;
+  transform-box: view-box;
+  transform-origin: var(--pivot-x, 50%) var(--pivot-y, 50%);
   animation: labels-guide-seat 260ms cubic-bezier(0.22, 0.9, 0.24, 1) both;
   animation-delay: 1380ms;
 }
 
-/* the pinch roller: pushed out of the mouth along +Y until it beds against the
-   platen. It starts inside the slot, where the mouth's clip hides it ------- */
+/* the pinch roller: pushed out of the mouth along its own lip until it beds
+   against the platen. It starts inside the slot, where the mouth's clip hides
+   it ------------------------------------------------------------------- */
 .home-stage .home-module.is-active .home-part[data-part='lb-pinch'] {
-  transform-box: fill-box;
-  transform-origin: 50% 50%;
+  transform-box: view-box;
+  transform-origin: var(--pivot-x, 50%) var(--pivot-y, 50%);
   animation: labels-pinch-seat 240ms cubic-bezier(0.24, 0.9, 0.26, 1) both;
   animation-delay: 1560ms;
 }
 
-/* the badge: pressed onto the panel, a shade too large, then flat ---------- */
+/* the badge: pressed on square to the face it sits on, a shade too large, then
+   flat ------------------------------------------------------------------- */
 .home-stage .home-module.is-active .home-part[data-part='lb-plate'] {
-  transform-box: fill-box;
-  transform-origin: 50% 50%;
+  transform-box: view-box;
+  transform-origin: var(--pivot-x, 50%) var(--pivot-y, 50%);
   animation: labels-plate-press 220ms cubic-bezier(0.26, 1.1, 0.4, 1) both;
   animation-delay: 1720ms;
 }
 
-/* the lid latch: it swings down on its pivot and hooks the seam ------------ */
+/* the lid latch: it swings down about its own boss and hooks the seam. The axis
+   only supplies the pivot — the boss is the hinge, so there is nothing to slide */
 .home-stage .home-module.is-active .home-part[data-part='lb-latch'] {
-  transform-box: fill-box;
-  transform-origin: 50% 100%;
+  transform-box: view-box;
+  transform-origin: var(--pivot-x, 50%) var(--pivot-y, 50%);
   animation: labels-latch-swing 240ms cubic-bezier(0.3, 0.9, 0.3, 1) both;
   animation-delay: 1860ms;
 }
 
-/* the waste drawer: slid home from the front, under the switch ------------- */
+/* the waste drawer: slid home down its runners, under the switch ------------- */
 .home-stage .home-module.is-active .home-part[data-part='lb-bin'] {
-  transform-box: fill-box;
-  transform-origin: 50% 50%;
+  transform-box: view-box;
+  transform-origin: var(--pivot-x, 50%) var(--pivot-y, 50%);
   animation: labels-bin-slide 260ms cubic-bezier(0.22, 0.9, 0.24, 1) both;
   animation-delay: 2020ms;
 }
 
+/* Every offset below is `var(--axis-x) * var(--travel)`: the axis the part was
+   measured along, times how far it comes in. The fractions are the overshoots —
+   positive still coming in, negative settling back past the seat — so the whole
+   entry stays on one line, and 100% is `transform: none`. The `travel` fallbacks
+   are each part's own, so a keyframe still reads on its own. */
+
 @keyframes labels-feet-rise {
-  0% { transform: translateY(16px); }
-  68% { transform: translateY(-1.6px); }
-  86% { transform: translateY(0.5px); }
+  0% {
+    transform:
+      translate(calc(var(--axis-x, 0) * var(--travel, 16px) * -1),
+                calc(var(--axis-y, -1) * var(--travel, 16px) * -1));
+  }
+  68% {
+    transform:
+      translate(calc(var(--axis-x, 0) * var(--travel, 16px) * 0.1),
+                calc(var(--axis-y, -1) * var(--travel, 16px) * 0.1));
+  }
+  86% {
+    transform:
+      translate(calc(var(--axis-x, 0) * var(--travel, 16px) * -0.03),
+                calc(var(--axis-y, -1) * var(--travel, 16px) * -0.03));
+  }
   100% { transform: none; }
 }
 
 @keyframes labels-body-seat {
-  0% { transform: translateY(-26px); }
-  56% { transform: translateY(2.6px); }
-  78% { transform: translateY(-1px); }
+  0% {
+    transform:
+      translate(calc(var(--axis-x, 0) * var(--travel, 26px) * -1),
+                calc(var(--axis-y, 1) * var(--travel, 26px) * -1));
+  }
+  56% {
+    transform:
+      translate(calc(var(--axis-x, 0) * var(--travel, 26px) * 0.1),
+                calc(var(--axis-y, 1) * var(--travel, 26px) * 0.1));
+  }
+  78% {
+    transform:
+      translate(calc(var(--axis-x, 0) * var(--travel, 26px) * -0.04),
+                calc(var(--axis-y, 1) * var(--travel, 26px) * -0.04));
+  }
   100% { transform: none; }
 }
 
 @keyframes labels-window-swing {
-  0% { transform: translateY(-12px) scaleY(0.66); }
-  62% { transform: translateY(1.2px) scaleY(1.03); }
-  84% { transform: translateY(-0.3px) scaleY(0.995); }
+  0% { transform: scaleY(0.66); }
+  62% { transform: scaleY(1.03); }
+  84% { transform: scaleY(0.995); }
   100% { transform: none; }
 }
 
-/* one rock: it lands past the seat, rolls back, and comes to rest ----------- */
+/* one rock about the wound centre: it lands past the seat, rolls back, and
+   comes to rest ------------------------------------------------------------ */
 @keyframes labels-roll-drop {
-  0% { transform: translateY(-34px) rotate(-7deg); }
-  52% { transform: translateY(2.8px) rotate(5deg); }
-  72% { transform: translateY(-1.6px) rotate(-2.6deg); }
-  88% { transform: translateY(0.5px) rotate(1deg); }
+  0% {
+    transform:
+      translate(calc(var(--axis-x, 0) * var(--travel, 30px) * -1),
+                calc(var(--axis-y, 1) * var(--travel, 30px) * -1))
+      rotate(-7deg);
+  }
+  52% {
+    transform:
+      translate(calc(var(--axis-x, 0) * var(--travel, 30px) * 0.09),
+                calc(var(--axis-y, 1) * var(--travel, 30px) * 0.09))
+      rotate(5deg);
+  }
+  72% {
+    transform:
+      translate(calc(var(--axis-x, 0) * var(--travel, 30px) * -0.05),
+                calc(var(--axis-y, 1) * var(--travel, 30px) * -0.05))
+      rotate(-2.6deg);
+  }
+  88% {
+    transform:
+      translate(calc(var(--axis-x, 0) * var(--travel, 30px) * 0.02),
+                calc(var(--axis-y, 1) * var(--travel, 30px) * 0.02))
+      rotate(1deg);
+  }
   100% { transform: none; }
 }
 
 @keyframes labels-cradle-close {
-  0% { transform: translateY(-9px) scaleY(0.6); }
-  62% { transform: translateY(0.8px) scaleY(1.06); }
+  0% { transform: scaleY(0.6); }
+  62% { transform: scaleY(1.06); }
   100% { transform: none; }
 }
 
 @keyframes labels-cutter-seat {
-  0% { transform: translateY(-22px); }
-  56% { transform: translateY(1.6px); }
-  80% { transform: translateY(-0.6px); }
+  0% {
+    transform:
+      translate(calc(var(--axis-x, 0) * var(--travel, 22px) * -1),
+                calc(var(--axis-y, 1) * var(--travel, 22px) * -1));
+  }
+  56% {
+    transform:
+      translate(calc(var(--axis-x, 0) * var(--travel, 22px) * 0.07),
+                calc(var(--axis-y, 1) * var(--travel, 22px) * 0.07));
+  }
+  80% {
+    transform:
+      translate(calc(var(--axis-x, 0) * var(--travel, 22px) * -0.03),
+                calc(var(--axis-y, 1) * var(--travel, 22px) * -0.03));
+  }
   100% { transform: none; }
 }
 
 @keyframes labels-face-close {
-  0% { transform: translateY(7px) rotate(-1.4deg); }
-  62% { transform: translateY(-1.6px) rotate(0.3deg); }
+  0% {
+    transform:
+      translate(calc(var(--axis-x, 0) * var(--travel, 9px) * -1),
+                calc(var(--axis-y, -1) * var(--travel, 9px) * -1))
+      rotate(-1.4deg);
+  }
+  62% {
+    transform:
+      translate(calc(var(--axis-x, 0) * var(--travel, 9px) * 0.22),
+                calc(var(--axis-y, -1) * var(--travel, 9px) * 0.22))
+      rotate(0.3deg);
+  }
   100% { transform: none; }
 }
 
 @keyframes labels-guide-seat {
-  0% { transform: translateY(-10px) scaleY(0.55); }
-  64% { transform: translateY(1.2px) scaleY(1.04); }
+  0% { transform: scaleY(0.55); }
+  64% { transform: scaleY(1.04); }
   100% { transform: none; }
 }
 
 /* it comes out short, presses a hair further, and lets go ------------------- */
 @keyframes labels-pinch-seat {
-  0% { transform: translateY(-7px) scale(0.9); }
-  58% { transform: translateY(1.4px) scale(1); }
+  0% {
+    transform:
+      translate(calc(var(--axis-x, 0) * var(--travel, 7px) * -1),
+                calc(var(--axis-y, 1) * var(--travel, 7px) * -1))
+      scale(0.9);
+  }
+  58% {
+    transform:
+      translate(calc(var(--axis-x, 0) * var(--travel, 7px) * 0.2),
+                calc(var(--axis-y, 1) * var(--travel, 7px) * 0.2))
+      scale(1);
+  }
   100% { transform: none; }
 }
 
 @keyframes labels-plate-press {
-  0% { transform: translateY(-8px) scale(1.06); }
-  56% { transform: translateY(0.6px) scale(0.99); }
+  0% {
+    transform:
+      translate(calc(var(--axis-x, 0) * var(--travel, 8px) * -1),
+                calc(var(--axis-y, -1) * var(--travel, 8px) * -1))
+      scale(1.06);
+  }
+  56% {
+    transform:
+      translate(calc(var(--axis-x, 0) * var(--travel, 8px) * 0.08),
+                calc(var(--axis-y, -1) * var(--travel, 8px) * 0.08))
+      scale(0.99);
+  }
   100% { transform: none; }
 }
 
 @keyframes labels-latch-swing {
-  0% { transform: rotate(-34deg) translateY(-3px); }
+  0% { transform: rotate(-34deg); }
   60% { transform: rotate(4deg); }
   82% { transform: rotate(-1.4deg); }
   100% { transform: none; }
 }
 
 @keyframes labels-bin-slide {
-  0% { transform: translateY(11px); }
-  62% { transform: translateY(-1.2px); }
+  0% {
+    transform:
+      translate(calc(var(--axis-x, 0) * var(--travel, 11px) * -1),
+                calc(var(--axis-y, -1) * var(--travel, 11px) * -1));
+  }
+  62% {
+    transform:
+      translate(calc(var(--axis-x, 0) * var(--travel, 11px) * 0.11),
+                calc(var(--axis-y, -1) * var(--travel, 11px) * 0.11));
+  }
   100% { transform: none; }
 }
 
@@ -245,7 +369,10 @@
      sheet is either there or it is not — it never sits half-printed on a
      composited layer, and its paper keeps the exact tone it has today */
   visibility: hidden;
-  transform-box: fill-box;
+  transform-box: view-box;
+  /* the sheet grows about its own centre, which is the pivot the module reads
+     off the card's seat */
+  transform-origin: var(--pivot-x, 50%) var(--pivot-y, 50%);
   /* each sheet hangs crooked: the module hands it its own angle, and it keeps
      that angle once it is up */
   rotate: var(--tilt, 0deg);
@@ -282,13 +409,17 @@
   100% { visibility: visible; }
 }
 
-/* the sheet is spat out of the slot: it starts behind the mouth at 60% and is
-   pushed forward along the mouth's axis, growing as it clears the lip, then it
-   keeps its size and rises to the wall. Nothing fades — the paper is solid from
-   the instant it leaves the slot, and the size is what sells the nearness */
+/* the sheet is spat out of the slot: it starts a slot-depth behind the lip,
+   inside the mouth, and is pushed forward along the mouth's normal — the axis
+   the module reads off the slot — growing as it clears the lip, then it keeps
+   its size and rises to the wall. Nothing fades: the paper is solid from the
+   instant it leaves the slot, and the size is what sells the nearness */
 @keyframes home-ticket-emerge {
   0% {
-    transform: translate(var(--fly-x, 0px), calc(var(--fly-y, 0px) - 7px)) scale(0.6);
+    transform:
+      translate(var(--fly-x, 0px), var(--fly-y, 0px))
+      translate(calc(var(--axis-x, 0) * var(--travel, 8px) * -1), calc(var(--axis-y, 1) * var(--travel, 8px) * -1))
+      scale(0.6);
   }
   9% {
     transform: translate(var(--fly-x, 0px), var(--fly-y, 0px)) scale(0.66);
@@ -297,7 +428,10 @@
     transform: translate(var(--out-x, 0px), var(--out-y, 0px)) scale(0.78);
   }
   40% {
-    transform: translate(var(--out-x, 0px), calc(var(--out-y, 0px) - 3px)) scale(0.84);
+    transform:
+      translate(var(--out-x, 0px), var(--out-y, 0px))
+      translate(calc(var(--axis-x, 0) * var(--travel, 8px) * -0.45), calc(var(--axis-y, 1) * var(--travel, 8px) * -0.45))
+      scale(0.84);
   }
   100% {
     transform: none;

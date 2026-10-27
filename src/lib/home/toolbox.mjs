@@ -1,7 +1,7 @@
 import * as k from '../anatomy/iso-kit.mjs'
 import * as G from '../anatomy/lathe.mjs'
 import { TOP } from './chassis.mjs'
-import { boxSvg, faceMatrix, facePath, frameOf } from './frame.mjs'
+import { axisStyle, boxSvg, faceMatrix, facePath, frameOf } from './frame.mjs'
 
 /**
  * Module 04 — the machined tool case that carries "资源".
@@ -54,9 +54,31 @@ const solid = (plan, z, h, P, tone = 'mid', steps = 4, bevel = 0.5) => k.solidSv
  * path belongs to. `--step` is the index *inside* a run (the third wall, the
  * ninth chip); toolbox.css owns the clock that reads it, so the order the case
  * is built in lives in one place and the drawing stays a drawing.
+ *
+ * `axis` is the CSS `axisStyle` returned for the part — the stage-space unit
+ * vector it arrives along, how far it travels and the pivot it turns about.
+ * The stylesheet reads nothing else, so no entry motion is guessed by eye.
  */
-const part = (name, step, items) =>
-  `<g class="home-part" data-part="${name}" style="--step:${step}">${items.join('')}</g>`
+const part = (name, step, axis, items) =>
+  `<g class="home-part" data-part="${name}" style="--step:${step}${axis ? `;${axis}` : ''}">${items.join('')}</g>`
+
+/**
+ * The stroke a part is fitted along, as the CSS it needs.
+ *
+ * `seat` is the world point the part comes to rest on, `dir` the world
+ * direction it travels to get there — up out of the deck, down onto a rim,
+ * square into a panel — and `half` how much of that axis the part spans. The
+ * axis is laid symmetrically about the seat, so the pivot the stylesheet folds
+ * about *is* the seat: a pad grows out of the deck it stands on, a wall out of
+ * its own base line, a chip about its own centre on the board.
+ */
+function stroke(P, seat, dir, half, travel) {
+  const [x, y, z] = seat
+  const [dx, dy, dz] = dir
+  const n = Math.hypot(dx, dy, dz) || 1
+  const end = (sign) => [x + (sign * dx * half) / n, y + (sign * dy * half) / n, z + (sign * dz * half) / n]
+  return axisStyle(P, end(-1), end(1), travel)
+}
 
 /** Fill an already-projected path with one of the four shades. */
 const paint = (d, shade, tone = 'faint') => `<path class="iso-shade" data-shade="${shade}" d="${d}"/>${k.lineSvg(d, { tone })}`
@@ -91,6 +113,20 @@ const faceCircle = (cx, cz, r, y, P, n = 12) =>
 // whole reason the names can be read at homepage scale.
 
 const LW = -2.7
+/** The lid's face normal — what every mark on the board is pressed on square to. */
+const LID_N = LID.dir(0, 0, 1)
+/**
+ * The axis a printed mark on the board arrives along, through its own centre.
+ *
+ * The board is parallel to the picture plane, so its normal projects to almost
+ * nothing: at this focal length the lens offsets between the axis's two ends are
+ * larger than the direction itself, and every chip would arrive from a slightly
+ * different angle. The normal is a property of the face, not of the lens, so the
+ * direction is read off a parallel projection. The pivot shifts by under two
+ * pixels, which is well inside the chip's own scale.
+ */
+const boardAxis = (P, u, v, travel) => stroke({ ...P, focal: 0 }, LID.at(u, v, LW), LID_N, 3, travel)
+
 /**
  * The board. Its bottom edge stops at v = 5: the case's back rim stands in
  * front of the hinge, and anything printed below that line is swallowed by it
@@ -250,7 +286,7 @@ function appBadge(index, cu, cv, href, name, P) {
   // without that the marks hang upside down.
   const m = faceMatrix(LID, [cu - size / 2, cv + size / 2, LW - 0.25], [1, 0, 0], [0, -1, 0], P)
   const tile = lidRect([cu - half, cv - half, cu + half, cv + half], 2.3, P)
-  return part('tb-badge', index, [
+  return part('tb-badge', index, boardAxis(P, cu, cv, 7), [
     `<g class="home-lid-app"><title>${name}</title>`,
     `<path class="home-lid-tile" d="${tile}"/>`,
     k.lineSvg(tile, { tone: 'lo' }),
@@ -263,7 +299,7 @@ function appBadge(index, cu, cv, href, name, P) {
 function linkPlate(index, name, cy, P) {
   const [u0, u1] = LINKS_ZONE
   const chip = lidRect([u0, cy - 2.95, u1, cy + 2.95], 1.3, P)
-  return part('tb-link', index, [
+  return part('tb-link', index, boardAxis(P, (u0 + u1) / 2, cy, 7), [
     `<g class="home-lid-chip"><title>${name}</title>`,
     `<path class="home-lid-chip-face" d="${chip}"/>`,
     k.lineSvg(chip, { tone: 'faint' }),
@@ -322,7 +358,13 @@ function lidBoard(P) {
   const top = 56
   const links = FRIENDS.map((name, index) => linkPlate(index, name, top - index * pitch, P))
 
-  return [part('tb-board', 0, panel), part('tb-bead', 0, bead), ...badges, ...links].join('')
+  const boardMid = [(BOARD[0] + BOARD[2]) / 2, (BOARD[1] + BOARD[3]) / 2]
+  return [
+    part('tb-board', 0, boardAxis(P, boardMid[0], boardMid[1], 8), panel),
+    part('tb-bead', 0, boardAxis(P, 0, 67.8, 6), bead),
+    ...badges,
+    ...links,
+  ].join('')
 }
 
 function lidSvg(P) {
@@ -851,10 +893,11 @@ function setAuthor(P) {
   return [a, b, c]
 }
 
-/** One set, wrapped so the dial can swap it. */
-function traySet(index, bays) {
+/** One set, wrapped so the dial can swap it. Each bay carries the axis its own
+ *  tray is lowered along, because a set is three drops, not one. */
+function traySet(index, bays, axes) {
   return `<g class="home-tray-set" data-set="${index}">${bays
-    .map((body, bay) => `<g class="home-case-tray" data-index="${bay}">${body}</g>`)
+    .map((body, bay) => `<g class="home-case-tray" data-index="${bay}" style="${axes[bay]}">${body}</g>`)
     .join('')}</g>`
 }
 
@@ -908,6 +951,14 @@ export function buildToolbox(P, options = {}) {
     [solid({ x: SHELL.x, y: BACK, w: WALL, d: SHELL.d, r: 1 }, FLOOR_Z, RIM_Z - FLOOR_Z, P, 'mid')],
     [solid({ x: SHELL.x + SHELL.w - WALL, y: BACK, w: WALL, d: SHELL.d, r: 1 }, FLOOR_Z, RIM_Z - FLOOR_Z, P, 'mid')],
   ]
+  // Each wall is raised out of its own rebate: the axis is the vertical through
+  // its base line, so it folds about the base and its start pose sits inside the
+  // plinth it is standing in.
+  const wallAxis = [
+    [0, BACK + WALL / 2, FLOOR_Z],
+    [SHELL.x + WALL / 2, 0, FLOOR_Z],
+    [SHELL.x + SHELL.w - WALL / 2, 0, FLOOR_Z],
+  ].map((seat) => stroke(P, seat, [0, 0, 1], (RIM_Z - FLOOR_Z) / 2, 6))
 
   // --- the partitions -----------------------------------------------------
   // Two full-height dividers make the three bays. Each carries a machined rail
@@ -937,11 +988,10 @@ export function buildToolbox(P, options = {}) {
     pin.push(k.solidSvg(G.disc(0, 2.2, 1.55, G.frameAlong([x, PIN.y, PIN.z], [dir, 0, 0]), P), { tone: 'mid' }))
 
   // --- the three sets -----------------------------------------------------
-  const trays = [
-    traySet(0, setTools(P)),
-    traySet(1, setStudy(P)),
-    traySet(2, setAuthor(P)),
-  ]
+  // A set is three drops, not one: each bay's tray is lowered into its own
+  // slot, so each bay carries the vertical through its own centre.
+  const trayAxis = TRAY_X.map(([a, b]) => stroke(P, [(a + b) / 2, 0, FZ], [0, 0, -1], 5, 20))
+  const trays = [setTools(P), setStudy(P), setAuthor(P)].map((bays, index) => traySet(index, bays, trayAxis))
 
   // --- the near wall ------------------------------------------------------
   // It closes the case and hides the near half of the sets, so it is the last
@@ -978,7 +1028,7 @@ export function buildToolbox(P, options = {}) {
     if (labels[i])
       seat.push(`<g class="home-seat-label">${k.faceTextSvg(k.sideMatrix([TRAY_MID[i], FRONT], TOP + 13.5, P, 'left'), labels[i], { size: 2.6, tone: 'mid', anchor: 'middle' })}</g>`)
     seat.push('</g>')
-    seats.push(part('tb-seat', i, seat))
+    seats.push(part('tb-seat', i, stroke(P, [TRAY_MID[i], FRONT, TOP + 13.5], [0, -1, 0], 5, 10), seat))
   })
 
   // --- the nameplate ------------------------------------------------------
@@ -1002,7 +1052,7 @@ export function buildToolbox(P, options = {}) {
   const rivets = []
   for (const x of [p0 + 1.8, p1 - 1.8])
     for (const z of [pz0 + 1, pz1 - 1])
-      rivets.push(part('tb-rivet', rivets.length, [k.lineSvg(faceCircle(x, z, 0.62, py + 0.03, P), { tone: 'faint' })]))
+      rivets.push(part('tb-rivet', rivets.length, stroke(P, [x, py, z], [0, -1, 0], 2.5, 5), [k.lineSvg(faceCircle(x, z, 0.62, py + 0.03, P), { tone: 'faint' })]))
 
   // --- the switch ---------------------------------------------------------
   const dial = [dialSvg(P)]
@@ -1014,7 +1064,7 @@ export function buildToolbox(P, options = {}) {
   // camera looking straight down +y, and where they would be on a real case.
   // They are laid down first and the case is lowered onto them.
   const pads = PADS.map((cx, index) =>
-    part('tb-foot', index, [solid({ x: cx - 7.5, y: FRONT - 0.4, w: 15, d: 2.8, r: 1.2 }, TOP, 3.4, P, 'lo', 4, 0.5)]))
+    part('tb-foot', index, stroke(P, [cx, FRONT + 1, TOP], [0, 0, 1], 1.7, 22), [solid({ x: cx - 7.5, y: FRONT - 0.4, w: 15, d: 2.8, r: 1.2 }, TOP, 3.4, P, 'lo', 4, 0.5)]))
 
   // the shut slab: the only thing in its run, and the last thing painted
   const closed = [closedLidSvg(P)]
@@ -1023,21 +1073,21 @@ export function buildToolbox(P, options = {}) {
   // the body; the shut lid comes last of all and covers the whole interior
   return [
     lidSvg(P),
-    part('shell', 0, plinth),
-    ...walls.map((wall, index) => part('tb-wall', index, wall)),
-    part('tb-hinge', 0, hinge),
-    part('tb-pin', 0, pin),
-    ...dividers.map((divider, index) => part('tb-divider', index, divider)),
-    part('trays', 0, trays),
-    part('front', 0, front),
+    part('shell', 0, stroke(P, [0, 0, TOP], [0, 0, -1], BASE_H / 2, 46), plinth),
+    ...walls.map((wall, index) => part('tb-wall', index, wallAxis[index], wall)),
+    part('tb-hinge', 0, stroke(P, [0, BACK + 2.9, RIM_Z], [0, 0, -1], 4, 16), hinge),
+    part('tb-pin', 0, stroke(P, [0, PIN.y, PIN.z], [1, 0, 0], 80, 14), pin),
+    ...dividers.map((divider, index) => part('tb-divider', index, stroke(P, [DIVIDERS[index] + 1, 0, (FLOOR_Z + RIM_Z) / 2], [0, 0, -1], 3.5, 26), divider)),
+    part('trays', 0, '', trays),
+    part('front', 0, stroke(P, [SHELL.x, FRONT - WALL / 2, TOP + 15], [0, 0, 1], 15, 5), front),
     ...pads,
-    part('tb-hardware', 0, hardware),
+    part('tb-hardware', 0, stroke(P, [0, FRONT, RIM_Z], [0, -1, 0], 8, 6), hardware),
     ...seats,
-    part('tb-plate', 0, plate),
+    part('tb-plate', 0, stroke(P, [(p0 + p1) / 2, py, (pz0 + pz1) / 2], [0, -1, 0], 5, 12), plate),
     ...rivets,
-    part('tb-dial', 0, dial),
+    part('tb-dial', 0, stroke(P, [DIAL.x, FRONT, DIAL.z], [0, -1, 0], 3, 14), dial),
     staySvg(P),
-    part('closed', 0, closed),
+    part('closed', 0, stroke(P, [0, 0, RIM_Z], [0, 0, -1], 4, 34), closed),
   ].join('')
 }
 
