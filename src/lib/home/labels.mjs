@@ -139,7 +139,7 @@ const GRID = {
   pitchX: CARD.w + 3.5,
   pitchZ: CARD.h + 3.5,
   /** the box the wall may occupy — the same on every locale */
-  box: { w: 259, h: 76 },
+  box: { w: 296, h: 80 },
   base: CROWN - TOP + (FLOAT_Y - ROLL.y) * Math.tan(RAKE) + CARD.h / 2 + 4,
 }
 
@@ -178,7 +178,11 @@ function layout(count) {
   const rows = Math.max(1, Math.ceil(n / cols))
   // squeeze the pitch (and with it the sheets) into the fixed box, so a locale
   // with many tags gets a denser wall rather than a smaller machine
-  const fit = Math.min(1, GRID.box.w / (cols * GRID.pitchX), GRID.box.h / (rows * GRID.pitchZ))
+  // a dense wall never fills its cells: the sheets are stuck up by hand, so
+  // they keep air around them and the jitter below has somewhere to go. A short
+  // run keeps the full sheet, which is the size the wall is designed around.
+  const cap = n > 28 ? 0.9 : 1
+  const fit = Math.min(cap, GRID.box.w / (cols * GRID.pitchX), GRID.box.h / (rows * GRID.pitchZ))
   const pitchX = GRID.pitchX * fit
   const pitchZ = GRID.pitchZ * fit
   const seats = []
@@ -189,16 +193,16 @@ function layout(count) {
     const r = slot => rnd(index * 11 + slot)
     // every row is also pushed along a little, so the vertical seams of the
     // grid never line up down the wall
-    const rowShift = (rnd(row * 31 + 13) - 0.5) * pitchX * 0.7
-    const scale = fit * (0.93 + r(1) * 0.13)
+    const rowShift = (rnd(row * 31 + 13) - 0.5) * pitchX
+    const scale = fit * (0.86 + r(1) * 0.22)
     seats.push({
-      x: (column - (inRow - 1) / 2) * pitchX + rowShift + (r(2) - 0.5) * pitchX * 0.16,
+      x: (column - (inRow - 1) / 2) * pitchX + rowShift + (r(2) - 0.5) * pitchX * 0.4,
       // a hair of depth either way, so overlapping sheets layer instead of
       // fighting — the wall has a little relief, not a plane of stickers
       y: FLOAT_Y + (r(3) - 0.5) * 2.2,
-      z: GRID.base + row * pitchZ + (rnd(row * 17 + 3) - 0.5) * pitchZ * 0.5 + (r(4) - 0.5) * pitchZ * 0.16,
+      z: GRID.base + row * pitchZ + (rnd(row * 17 + 3) - 0.5) * pitchZ * 0.3 + (r(4) - 0.5) * pitchZ * 0.12,
       scale,
-      tilt: (r(5) - 0.5) * 9,
+      tilt: (r(5) - 0.5) * 12,
       corner: r(6) < 0.5 ? -1 : 1,
       tape: r(7) < 0.74,
       tapeAngle: (r(8) - 0.5) * 74,
