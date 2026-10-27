@@ -324,9 +324,12 @@ function stock(P) {
   const edge = (x, side) => k.iso([x, ROLL.y + side * ROLL.r * sinE, ROLL_Z - side * ROLL.r * cosE], P)
   const outline = k.pathOf([edge(ROLL.x0, -1), edge(ROLL.x1, -1), edge(ROLL.x1, 1), edge(ROLL.x0, 1)], true)
   out.push(`<defs><clipPath id="home-roll-clip"><path d="${outline}"/></clipPath></defs>`)
-  out.push(`<g class="home-stock-roll" style="--roll-shift:${shift.toFixed(2)}px" clip-path="url(#home-roll-clip)">`)
+  // the clip has to sit on a group that does not move: on the animated group it
+  // travels with the coil, and the end of the seam slides out past the roll
+  out.push('<g clip-path="url(#home-roll-clip)">')
+  out.push(`<g class="home-stock-roll" style="--roll-shift:${shift.toFixed(2)}px">`)
   out.push(k.lineSvg(wound.front, { tone: 'lo' }))
-  out.push('</g>')
+  out.push('</g></g>')
 
   for (const s of [-5, LEN]) {
     out.push(k.solidSvg(G.solidOf([[s, 4.2], [s + 5, 4.2]], ROLL_F, P), { tone: 'hi' }) + k.lineSvg(G.circleOf(ROLL_F, s + 5, 4.2, P), { tone: 'lo' }))
