@@ -51,7 +51,7 @@ const bounds = [
   ...cinemaBounds(),
   ...newsrackBounds(),
   ...toolboxBounds(),
-  ...labelsBounds({ tags }),
+  ...labelsBounds(),
 ]
 const P = k.fitProjection(bounds, W, H, {
   pad: 30,

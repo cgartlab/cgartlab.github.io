@@ -13,24 +13,22 @@ import { faceMatrix, facePath, frameOf } from './frame.mjs'
  * inside and the knurled transport wheel at its right; the cutter bar over the
  * slot; and above that a print carriage riding a rail, its dark print bar hanging
  * clear of the cutter. One ticket per tag on the site has already left the slot
- * and hangs in the air, each printed with a real tag; they are the only parts
- * that are not seated.
+ * and been stuck to the wall above the machine, each printed with a real tag;
+ * they are the only parts that are not seated.
  *
  * The tickets are not a fixed table. The module prints exactly as many as it is
- * given, so the stack is laid out from `tags.length`: five across, rows filling
- * upward from just above the stock roll, a sheet 30 wide by 13 tall with 3.5
- * between. Twenty-six tags make six rows; sixty would make twelve, and the stack
- * grows rather than the module capping it. The widest row may not reach past
- * |x| = 100, and since a wider span would drag the shared projection sideways,
- * it is the sheet that shrinks there — to a floor of 24 × 11 — not the span.
+ * given, so the wall is dealt from `tags.length`: the sheets are dealt into a
+ * grid of cells above the stock roll, then each one is nudged, turned and sized
+ * on its own, so the result reads as paper stuck up by hand rather than a table.
+ * Twenty-six tags make seven across and four rows; ninety-one make twelve and
+ * eight, and the wall grows denser rather than the module capping it.
  *
- * Each ticket stands in its frame's u-w plane — tipped 18 degrees so its top edge
- * comes toward the reader — and is drawn at its floating position with no
- * transform of its own. The CSS flies it out of the slot with two screen-space
- * deltas:
+ * Each ticket stands upright in its frame's u-w plane — a vertical wall facing
+ * the reader — and is drawn at its stuck position with no transform of its own.
+ * The CSS flies it out of the slot with two screen-space deltas:
  *
- *   --fly-x / --fly-y   from the float back to the slot mouth  (it appears there)
- *   --out-x / --out-y   from the float to a point a few units clear of the
+ *   --fly-x / --fly-y   from the wall back to the slot mouth  (it appears there)
+ *   --out-x / --out-y   from the wall to a point a few units clear of the
  *                       front face at slot height (it slides out and waits)
  *
  * The beat follows the count, too: twenty-six sheets at the old 700ms stagger
@@ -84,8 +82,13 @@ const RAIL = { x: SLOT.x - 7, w: SLOT.w + 14, z: SLOT.z + SLOT.h / 2 + 16.1, h: 
 const CARRIAGE = { x: -15, w: 30, z: RAIL.z - 6.2, h: 6.2 }
 const PRINT_BAR = { x: -12, w: 24, z: CARRIAGE.z - 2.8, h: 2.8 }
 
-const CARD = { w: 32, h: 13.6, r: 2.2, pitch: -18 }
-/** The plane the sheets hang in: a few units clear of the front face. */
+const CARD = { w: 32, h: 13.6, r: 1.2 }
+/**
+ * The wall the sheets are stuck to: a vertical plane a few units clear of the
+ * front face, square to the reader. A sheet pinned to a wall stands upright in
+ * it — the only lean it gets is the 18° the stage looks down from.
+ */
+const WALL_PITCH = 0
 const FLOAT_Y = 38
 /**
  * The stage looks down at 18°, so a sheet hung d in front of a thing sits
@@ -95,11 +98,10 @@ const RAKE = (18 * Math.PI) / 180
 /** The crown of the stock roll, its clear cover included. */
 const CROWN = ROLL_Z + ROLL.r + 1.8
 /**
- * The stack: five across, a 3.5 gutter between sheets, the lowest row above the
- * roll's crown so the stack rises out of the machine. Rows fill upward, so the
- * stack reads bottom-up in the site's own order — the most-used tag was printed
- * first and sits nearest the machine. Heights here are above TOP; cardAt adds
- * the deck.
+ * The wall's cells: one sheet per cell, the lowest row above the roll's crown so
+ * the wall rises out of the machine. Rows fill upward, so the wall reads
+ * bottom-up in the site's own order — the most-used tag was printed first and
+ * sits nearest the machine. Heights here are above TOP; cardAt adds the deck.
  *
  * The lowest row cannot sit on the lid: the sheets stand three units in front of
  * the front face, and that depth alone drops them ~13 units on screen — enough
@@ -107,18 +109,13 @@ const CROWN = ROLL_Z + ROLL.r + 1.8
  */
 const GRID = {
   maxCols: 12,
-  /** honeycomb pitch: air between the sheets, rows half a cell apart */
-  pitchX: 38,
-  pitchZ: 30,
-  /** the box the array may occupy — the same on every locale */
-  box: { w: 285, h: 120 },
-  gap: 4.5,
-  base: CROWN - TOP + (FLOAT_Y - ROLL.y) * Math.tan(RAKE) + (CARD.h / 2) * Math.cos(RAKE) + 4,
+  /** cell pitch: a sheet's own size plus the gutter it is stuck up with */
+  pitchX: CARD.w + 5,
+  pitchZ: CARD.h + 5.2,
+  /** the box the wall may occupy — the same on every locale */
+  box: { w: 259, h: 76 },
+  base: CROWN - TOP + (FLOAT_Y - ROLL.y) * Math.tan(RAKE) + CARD.h / 2 + 4,
 }
-/** The stack may not reach past this in x; past it the sheet shrinks, not the span. */
-const REACH = 100
-/** The smallest a sheet may shrink to and still read as a label. */
-const FLOOR = { w: 24, h: 11 }
 
 /**
  * How long the case takes to build. The tickets wait for it: the first one
@@ -132,10 +129,20 @@ const BUILD = 1000
 const RUN = 5600
 const BEAT = { min: 140, max: 700 }
 
+/** A fixed pseudo-random in [0, 1): the wall is dealt the same way every build. */
+function rnd(seed) {
+  let t = (seed + 0x9e3779b9) | 0
+  t = Math.imul(t ^ (t >>> 16), 0x21f0aaad)
+  t = Math.imul(t ^ (t >>> 15), 0x735a2d97)
+  return ((t ^ (t >>> 15)) >>> 0) / 4294967296
+}
+
 /**
- * The layout for a given number of tags: a centred row of up to five, rows
- * stacked upward. A short last row is centred on its own length, so the stack
- * reads as a stack rather than a grid with a hole punched out of it.
+ * The layout for a given number of tags. The sheets are dealt into a grid of
+ * cells and then each one is nudged off its cell, turned and sized on its own —
+ * a grid is only there to stop them burying each other, and it should not be
+ * visible. A short last row is centred on its own length, so the wall keeps its
+ * balance when the count does not divide.
  */
 function layout(count) {
   const n = Math.max(0, Math.floor(count))
@@ -143,7 +150,7 @@ function layout(count) {
   const rows = Math.max(1, Math.ceil(n / cols))
   // squeeze the pitch (and with it the sheets) into the fixed box, so a locale
   // with many tags gets a denser wall rather than a smaller machine
-  const fit = Math.min(1, GRID.box.w / (cols * GRID.pitchX + GRID.pitchX / 2), GRID.box.h / (rows * GRID.pitchZ))
+  const fit = Math.min(1, GRID.box.w / (cols * GRID.pitchX), GRID.box.h / (rows * GRID.pitchZ))
   const pitchX = GRID.pitchX * fit
   const pitchZ = GRID.pitchZ * fit
   const seats = []
@@ -151,24 +158,26 @@ function layout(count) {
     const row = Math.floor(index / cols)
     const column = index % cols
     const inRow = Math.min(cols, n - row * cols)
-    // the bottom row is nearest the reader, the top row furthest back and
-    // smallest: the projection does the rest
-    const t = rows > 1 ? row / (rows - 1) : 0
-    const scale = (1.16 - t * 0.38) * fit
-    const depth = 14 - t * 58
-    const card = { ...CARD, w: CARD.w * scale, h: CARD.h * scale, r: CARD.r * scale }
-    const honey = row % 2 ? pitchX / 2 : 0
+    const r = slot => rnd(index * 11 + slot)
+    // every row is also pushed along a little, so the vertical seams of the
+    // grid never line up down the wall
+    const rowShift = (rnd(row * 31 + 13) - 0.5) * pitchX * 0.7
+    const scale = fit * (0.93 + r(1) * 0.13)
     seats.push({
-      x: (column - (inRow - 1) / 2) * pitchX + honey,
-      y: FLOAT_Y + depth,
-      z: GRID.base + row * pitchZ,
-      row,
+      x: (column - (inRow - 1) / 2) * pitchX + rowShift + (r(2) - 0.5) * pitchX * 0.16,
+      // a hair of depth either way, so overlapping sheets layer instead of
+      // fighting — the wall has a little relief, not a plane of stickers
+      y: FLOAT_Y + (r(3) - 0.5) * 2.2,
+      z: GRID.base + row * pitchZ + (rnd(row * 17 + 3) - 0.5) * pitchZ * 0.5 + (r(4) - 0.5) * pitchZ * 0.16,
       scale,
-      depth,
-      card,
+      tilt: (r(5) - 0.5) * 9,
+      corner: r(6) < 0.5 ? -1 : 1,
+      tape: r(7) < 0.74,
+      tapeAngle: (r(8) - 0.5) * 74,
+      card: { ...CARD, w: CARD.w * scale, h: CARD.h * scale, r: CARD.r * scale },
     })
   }
-  return { seats, card: CARD }
+  return { seats }
 }
 
 /** One sub-assembly. Each run is a contiguous stretch of what already painted
@@ -209,7 +218,24 @@ function cardRing({ w, h, r }) {
   }))
 }
 
-const cardAt = ({ x, y, z }) => frameOf({ pitch: CARD.pitch, origin: [x, y, TOP + z] })
+const cardAt = ({ x, y, z }) => frameOf({ pitch: WALL_PITCH, origin: [x, y, TOP + z] })
+
+/**
+ * A strip of tape over a corner of the sheet, half on the paper and half on the
+ * wall. It is drawn in the card's own plane, a whisker in front of it, so it
+ * turns with the sheet; the angle is the sheet's, not the reader's.
+ */
+function tapeOn(F, card, corner, angle, P) {
+  const a = (angle * Math.PI) / 180
+  const ca = Math.cos(a)
+  const sa = Math.sin(a)
+  const cu = corner * (card.w / 2 - 1.9)
+  const cv = card.h / 2 - 1.5
+  const half = { u: 4.4, v: 1.5 }
+  const pts = [[-half.u, -half.v], [half.u, -half.v], [half.u, half.v], [-half.u, half.v]]
+    .map(([u, v]) => [cu + u * ca - v * sa, 0.35, cv + u * sa + v * ca])
+  return `<path class="home-ticket-tape" d="${facePath(F, pts, P)}"/>`
+}
 
 /** A rocker switch, seated on the front face. */
 function rocker(x, z, P, w = 17, h = 9) {
@@ -367,15 +393,20 @@ export function buildLabels(P, options = {}) {
       const size = sizeOf(tag, card)
       const paper = facePath(F, ring, P)
       const [fx, fy] = k.iso(F.at(0, 0, 0), P)
-      // deltas run from the float *back* to the machine: mouth first, then out
+      // deltas run from the wall *back* to the machine: mouth first, then out
       const fly = [mx - fx, my - fy]
       const exit = [ox - fx, oy - fy]
-      tickets.push(`<g class="home-ticket" data-depth="${seat.scale > 1.05 ? 'near' : seat.scale > 0.9 ? 'mid' : 'far'}" style="--fly-x:${fly[0].toFixed(1)}px;--fly-y:${fly[1].toFixed(1)}px;--out-x:${exit[0].toFixed(1)}px;--out-y:${exit[1].toFixed(1)}px;--fly-delay:${BUILD + index * beat}ms">`)
+      tickets.push(`<g class="home-ticket" style="--tilt:${seat.tilt.toFixed(2)}deg;--fly-x:${fly[0].toFixed(1)}px;--fly-y:${fly[1].toFixed(1)}px;--out-x:${exit[0].toFixed(1)}px;--out-y:${exit[1].toFixed(1)}px;--fly-delay:${BUILD + index * beat}ms">`)
+      // the shadow is drawn, not filtered: one flat offset copy of the sheet, so
+      // ninety of them can fly at once without a filter pass per sheet
+      tickets.push(`<path class="home-ticket-shadow" d="${paper}" transform="translate(1.2 1.6)"/>`)
       tickets.push(`<path class="home-ticket-paper" fill="var(--home-paper)" d="${paper}"/>`)
       // the perforated edge down the left margin
       tickets.push(k.lineSvg(k.pathOf([k.iso(F.at(stitch, 0, -card.h * 0.38), P), k.iso(F.at(stitch, 0, card.h * 0.38), P)]), { tone: 'lo', dotted: true }))
       tickets.push(k.faceTextSvg(faceMatrix(F, [card.w * 0.06, 0, -size * 0.36], [1, 0, 0], [0, 0, -1], P), tag, { size, tone: 'hi', anchor: 'middle' }))
       tickets.push(k.lineSvg(paper, { tone: 'lo' }))
+      // and the strip of tape that holds it up, over one corner
+      if (seat.tape) tickets.push(tapeOn(F, card, seat.corner, seat.tapeAngle, P))
       tickets.push('</g>')
     })
   out.push(part('tickets', 6, ...tickets))
@@ -385,15 +416,12 @@ export function buildLabels(P, options = {}) {
 
 /**
  * The envelope the shared projection has to hold. Bounds are read before the
- * tags are known — the caller builds the projection once, for every device —
- * so the stack is reserved at the depth it reaches at the site's tag count
- * today: six rows. A caller that does have the tags can pass them and get the
- * exact envelope for its own stack.
+ * tags are known — the caller builds the projection once, for every device — so
+ * the wall is reserved as a fixed box rather than at the count of the moment:
+ * a locale with ninety-one tags and one with twenty-six must project at the
+ * same size, or the machine changes size with the language.
  */
-const RESERVE_ROWS = 6
-const RESERVE = RESERVE_ROWS * GRID.cols
-
-export function labelsBounds(options = {}) {
+export function labelsBounds() {
   const out = [
     ...k.boxCorners(BODY, TOP, LID_TOP),
     ...k.boxCorners(TRAY, LID_TOP, LID_TOP + TRAY_H),
@@ -404,11 +432,12 @@ export function labelsBounds(options = {}) {
     [WHEEL.x - WHEEL.r - 2.4, FRONT + WHEEL.face, WHEEL.z - WHEEL.r - 2.4], [WHEEL.x + WHEEL.r + 2.4, FRONT, WHEEL.z + WHEEL.r + 2.4],
     [MOUTH[0], FRONT + 1.5, SLOT.z - SLOT.h / 2], [SLOT.x + SLOT.w, FRONT, SLOT.z + SLOT.h / 2],
   ]
-  // the envelope, not the live array: every locale must fit the same box, or
-  // the console would be drawn at a different size on /en/
-  for (const x of [-GRID.box.w / 2, GRID.box.w / 2])
-    for (const y of [FLOAT_Y - 44, FLOAT_Y + 14])
-      for (const z of [TOP + GRID.base, TOP + GRID.base + GRID.box.h])
+  // the wall's box, with room for the jitter, the largest sheet and the tape
+  // that hangs over its edge
+  const half = GRID.box.w / 2 + 7
+  for (const x of [-half, half])
+    for (const y of [FLOAT_Y - 3, FLOAT_Y + 3])
+      for (const z of [TOP + GRID.base - 9, TOP + GRID.base + GRID.box.h + 9])
         out.push([x, y, z])
   return out
 }

@@ -206,7 +206,6 @@ const TILE = 11
 const TILE_PITCH = 13.8
 const TILE_COL_PITCH = 15
 const TILE_GRID = [-40, 32.75]
-const TILE_GLYPH = 2.1
 const LINKS_ZONE = [3, 73]
 
 /** One app chip: a printed tile with its mark knocked out of it. */

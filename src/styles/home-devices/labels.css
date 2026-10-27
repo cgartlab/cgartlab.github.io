@@ -1,10 +1,16 @@
 /* ==========================================================================
    05 — 标签: the ticket printer
-   Each ticket is drawn at its floating position and carries two screen-space
-   deltas: --fly-x / --fly-y back to the slot mouth, where it appears, and
-   --out-x / --out-y to a point just clear of the front face at slot height.
-   The keyframes run the mechanism: emerge at the slot, slide out, get cut, then
-   rise and settle into the float.
+   Each ticket is drawn at its stuck position on the wall above the machine and
+   carries two screen-space deltas: --fly-x / --fly-y back to the slot mouth,
+   where it appears, and --out-x / --out-y to a point just clear of the front
+   face at slot height. The keyframes run the mechanism: emerge at the slot,
+   slide out, get cut, then rise to the wall and be pressed onto it.
+
+   The wall is paper stuck up by hand: the module deals the sheets into cells
+   and then nudges, turns and sizes each one, so nothing lines up. All this file
+   adds is the last beat — the sheet arrives square to the flight and settles
+   into its own crooked angle, with a shadow under it and a strip of tape over
+   one corner.
 
    The assembly. home.css gives every `.home-part` the same generic settle; here
    the machine builds itself in the order a ticket printer is put together. The
@@ -133,15 +139,31 @@
 .home-stage .home-ticket {
   opacity: 0;
   transform-box: fill-box;
+  /* each sheet hangs crooked: the module hands it its own angle, and it keeps
+     that angle once it is up */
+  rotate: var(--tilt, 0deg);
+  /* a wall of paper, not a wall of holes: the same bright stock the typewriter
+     feeds, so the sheets sit a shade above the page and the shadow can be the
+     only thing holding them */
+  --home-sheet: oklch(99.2% 0.004 96);
 }
 
-.home-stage .home-ticket-paper { fill: var(--home-paper); }
+.dark .home-stage .home-ticket {
+  --home-sheet: color-mix(in oklch, oklch(var(--un-preset-theme-colors-primary)) 24%, oklch(var(--un-preset-theme-colors-background)) 76%);
+}
+
+.home-stage .home-ticket-paper { fill: var(--home-sheet, var(--home-paper)); }
+
+/* the contact shadow: a flat offset copy of the sheet, drawn under it. Cheaper
+   than a filter per sheet, and it stays crisp while the sheet flies */
+.home-stage .home-ticket-shadow { fill: rgba(0, 0, 0, 0.13); }
+.dark .home-stage .home-ticket-shadow { fill: rgba(0, 0, 0, 0.38); }
 
 /* the mechanism only moves while the machine is running */
 .home-stage .home-module.is-active .home-ticket {
   animation:
     home-ticket-emerge 1500ms cubic-bezier(0.34, 0.9, 0.28, 1) var(--fly-delay, 0ms) both,
-    home-ticket-bob 5.2s ease-in-out calc(var(--fly-delay, 0ms) + 1600ms) infinite;
+    home-ticket-stick 300ms cubic-bezier(0.3, 1.2, 0.4, 1) calc(var(--fly-delay, 0ms) + 1420ms) both;
 }
 
 @keyframes home-ticket-emerge {
@@ -167,9 +189,12 @@
   }
 }
 
-@keyframes home-ticket-bob {
-  0%, 100% { translate: 0 0; rotate: 0deg; }
-  50% { translate: 0 -4px; rotate: -0.5deg; }
+/* the last few units: the sheet is pressed onto the wall, so it overshoots its
+   angle a touch and settles back into it */
+@keyframes home-ticket-stick {
+  0% { scale: 1.06; rotate: calc(var(--tilt, 0deg) - 3deg); }
+  58% { scale: 0.985; rotate: calc(var(--tilt, 0deg) + 0.7deg); }
+  100% { scale: 1; rotate: var(--tilt, 0deg); }
 }
 
 /* the carriage shuttles, the roller turns, the cutter strikes, the lamp blinks */
@@ -259,11 +284,16 @@ html.reduce-motion .home-stage .home-ticket { opacity: 1; }
 }
 
 
-/* depth of field: the sheets furthest back soften, the near ones stay crisp */
-.home-stage .home-ticket[data-depth='far'] {
-  filter: blur(0.8px);
+/* the tape: a frosted strip over one corner, half on the paper and half on the
+   wall behind it — the thing that makes a sheet read as stuck rather than
+   floating */
+.home-stage .home-ticket-tape {
+  fill: rgba(0, 0, 0, 0.085);
+  stroke: rgba(0, 0, 0, 0.09);
+  stroke-width: 0.5;
 }
 
-.home-stage .home-ticket[data-depth='near'] {
-  filter: drop-shadow(0 1.5px 2.5px rgba(0, 0, 0, 0.14));
+.dark .home-stage .home-ticket-tape {
+  fill: rgba(255, 255, 255, 0.15);
+  stroke: rgba(255, 255, 255, 0.17);
 }
