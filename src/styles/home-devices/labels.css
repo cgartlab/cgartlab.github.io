@@ -217,6 +217,18 @@
   will-change: transform;
 }
 
+/* the stock roll turns as well. Its seam is a helix, so sliding it one pitch
+   along the axis is exactly what a turning cylinder looks like; the module
+   draws the coil a pitch past each end and clips it, so the loop has no seam */
+.home-stage .home-module.is-active .home-stock-roll {
+  animation: home-stock-roll 4200ms linear infinite;
+}
+
+@keyframes home-stock-roll {
+  from { transform: translateX(0); }
+  to { transform: translateX(var(--roll-shift, 0px)); }
+}
+
 /* the transport wheel is machined metal, so its knurl reads against the panel */
 .home-stage .home-wheel .iso-fill,
 .home-stage .home-wheel .iso-top,
@@ -264,6 +276,7 @@ html.reduce-motion .home-stage .home-part[data-part='tickets'] {
 html.reduce-motion .home-stage .home-module.is-active .home-ticket,
 html.reduce-motion .home-stage .home-module.is-active .home-print-head,
 html.reduce-motion .home-stage .home-module.is-active .home-feed-roller,
+html.reduce-motion .home-stage .home-module.is-active .home-stock-roll,
 html.reduce-motion .home-stage .home-module.is-active .home-cutter,
 html.reduce-motion .home-stage .home-module.is-active .home-label-led { animation: none !important; }
 html.reduce-motion .home-stage .home-ticket { opacity: 1; }
@@ -278,6 +291,7 @@ html.reduce-motion .home-stage .home-ticket { opacity: 1; }
   .home-stage .home-module.is-active .home-ticket,
   .home-stage .home-module.is-active .home-print-head,
   .home-stage .home-module.is-active .home-feed-roller,
+  .home-stage .home-module.is-active .home-stock-roll,
   .home-stage .home-module.is-active .home-cutter,
   .home-stage .home-module.is-active .home-label-led { animation: none !important; }
   .home-stage .home-ticket { opacity: 1; }

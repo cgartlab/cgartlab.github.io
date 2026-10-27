@@ -69,9 +69,11 @@ const BAR = 6
 const ROLL = { x0: -29, x1: 21, y: -3, r: 10.5 }
 const ROLL_Z = LID_TOP + ROLL.r
 const LEN = ROLL.x1 - ROLL.x0
+/** One turn of the wound seam: the roll turns by exactly this much per loop. */
+const COIL_PITCH = 14
 const ROLL_F = G.frameAlong([ROLL.x0, ROLL.y, ROLL_Z], [1, 0, 0])
 
-// the platen inside the mouth, and the knurled transport wheel at its right
+// the platen inside the mouth, and the transport dial at its right
 const INNER = { y: FRONT - 4.2, z: SLOT.z - 2.4, r: 2.8 }
 const WHEEL = { x: 47, z: SLOT.z, r: 6.2, face: 2.4 }
 const WHEEL_F = G.frameAlong([WHEEL.x, FRONT, WHEEL.z], [0, 1, 0])
@@ -257,7 +259,28 @@ function rib(x, P) {
 function stock(P) {
   const out = []
   out.push(k.solidSvg(G.solidOf([[0, ROLL.r], [LEN, ROLL.r]], ROLL_F, P), { tone: 'mid' }))
-  out.push(k.lineSvg(k.coil(ROLL.x0 + 4, ROLL.x1 - 4, [ROLL.y, ROLL_Z], ROLL.r + 0.2, 3, 'x', P, 20).front, { tone: 'lo' }))
+
+  // The wound paper turns. A cylinder's spin cannot be drawn — the surface is
+  // the same from every angle — so the seam does the work: it is a helix, and a
+  // helix slid along its own axis by one pitch looks exactly like the roll
+  // turning. The coil is drawn a pitch past both ends and clipped to the
+  // silhouette, so the loop has no visible start or finish.
+  const { sinE, cosE } = k.cameraOf(P)
+  const [ax] = k.iso([ROLL.x0, ROLL.y, ROLL_Z], P)
+  const [bx] = k.iso([ROLL.x1, ROLL.y, ROLL_Z], P)
+  const shift = ((bx - ax) / LEN) * COIL_PITCH
+  const from = ROLL.x0 - COIL_PITCH
+  const to = ROLL.x1 + COIL_PITCH
+  const wound = k.coil(from, to, [ROLL.y, ROLL_Z], ROLL.r + 0.2, (to - from) / COIL_PITCH, 'x', P, 20)
+  // the roll's silhouette: the two generators the camera sees edge-on, one at
+  // elevation - 90, one at elevation + 90
+  const edge = (x, side) => k.iso([x, ROLL.y + side * ROLL.r * sinE, ROLL_Z - side * ROLL.r * cosE], P)
+  const outline = k.pathOf([edge(ROLL.x0, -1), edge(ROLL.x1, -1), edge(ROLL.x1, 1), edge(ROLL.x0, 1)], true)
+  out.push(`<defs><clipPath id="home-roll-clip"><path d="${outline}"/></clipPath></defs>`)
+  out.push(`<g class="home-stock-roll" style="--roll-shift:${shift.toFixed(2)}px" clip-path="url(#home-roll-clip)">`)
+  out.push(k.lineSvg(wound.front, { tone: 'lo' }))
+  out.push('</g>')
+
   for (const s of [-5, LEN]) {
     out.push(k.solidSvg(G.solidOf([[s, 4.2], [s + 5, 4.2]], ROLL_F, P), { tone: 'hi' }) + k.lineSvg(G.circleOf(ROLL_F, s + 5, 4.2, P), { tone: 'lo' }))
   }
@@ -319,24 +342,21 @@ export function buildLabels(P, options = {}) {
   face.push(`<path class="home-cavity" d="${slot}"/>`)
   face.push(k.solidSvg(G.solidOf([[0, INNER.r], [SLOT.w - 14, INNER.r]], G.frameAlong([SLOT.x + 7, INNER.y, INNER.z], [1, 0, 0]), P), { tone: 'mid', className: 'home-platen' }))
 
-  // the knurled transport wheel, seated on the face at the mouth's right
+  // the transport dial: a knurled knob seated on the face at the mouth's right,
+  // turning on its own axis. The index notch is what makes the turn readable —
+  // a round knob on its own looks the same at every angle.
   const [wx, wy] = k.iso(WHEEL_AT, P)
-  // the drive is a hand crank, not a wheel: a shaft boss, an arm, a grip and a
-  // counterweight, turning on the shaft's own projected centre
-  face.push(k.lineSvg(G.circleOf(WHEEL_F, 0.2, 4.6, P), { tone: 'faint' }))
-  face.push(k.solidSvg(G.solidOf([[0, 3.6], [2.2, 3.6]], WHEEL_F, P), { tone: 'mid' }))
-  face.push(`<g class="home-feed-roller" style="transform-origin:${wx.toFixed(1)}px ${wy.toFixed(1)}px">`)
-  // the arm: a bar in the face plane, swung 40 degrees off vertical
-  const arm = [[-1.3, 0], [1.3, 0], [8.4 + 1.3, 7.1], [8.4 - 1.3, 7.1]]
-  face.push(k.solidSvg(G.prismOf(WHEEL_F, arm, 1.6, 3.4, P), { tone: 'mid' }))
-  // the counterweight, opposite the grip
-  face.push(k.solidSvg(G.solidOf([[3.4, 3.4], [4.6, 3.4], [4.6, 5.2], [3.4, 5.2]], WHEEL_F, P), { tone: 'lo' }))
-  // the grip: a turned handle standing off the arm
-  const grip = G.frameAlong([WHEEL.x + 8.4, FRONT + 3.4, WHEEL.z + 7.1], [0, 1, 0])
-  face.push(k.solidSvg(G.solidOf([[0, 2.1], [3.6, 2.1], [3.6, 2.6], [6.2, 2.6], [6.2, 2.1]], grip, P), { tone: 'hi' }))
-  face.push(k.lineSvg(G.arcOf(grip, 5.6, 2.7, P), { tone: 'faint' }))
-  face.push('</g>')
-  face.push(k.solidSvg(G.disc(2.2, 4.2, 1.4, WHEEL_F, P), { tone: 'hi' }))
+  const R = WHEEL.r
+  face.push(k.lineSvg(G.circleOf(WHEEL_F, 0.2, R + 1.9, P), { tone: 'faint' }))
+  face.push(`<g class="home-feed-roller" style="transform-origin:${wx.toFixed(1)}px ${wy.toFixed(1)}px"><g class="home-wheel">`)
+  // the barrel, its knurled edge, and the cap that rises out of it
+  face.push(k.solidSvg(G.solidOf([[0, R], [WHEEL.face, R]], WHEEL_F, P), { tone: 'mid' }))
+  face.push(k.lineSvg(G.spokesOf(WHEEL_F, WHEEL.face, R * 0.86, R * 0.99, 18, P), { tone: 'lo' }))
+  face.push(k.solidSvg(G.ringBand(WHEEL.face, WHEEL.face + 1.4, R * 0.36, R * 0.84, WHEEL_F, P), { tone: 'hi' }))
+  face.push(k.lineSvg(G.circleOf(WHEEL_F, WHEEL.face + 1.4, R * 0.84, P), { tone: 'lo' }))
+  face.push(k.solidSvg(G.disc(WHEEL.face + 1.4, WHEEL.face + 2, R * 0.34, WHEEL_F, P), { tone: 'mid' }))
+  face.push(k.lineSvg(G.spokesOf(WHEEL_F, WHEEL.face + 1.5, R * 0.4, R * 0.8, 1, P, { phase: Math.PI / 2 }), { tone: 'lo' }))
+  face.push('</g></g>')
 
 
   // cutter bar over the slot, with its blade line
