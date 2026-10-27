@@ -64,11 +64,14 @@
 .home-stage .home-cine-beam {
   fill: url(#home-beam-fade);
   stroke: none;
-  opacity: 0.34;
+  /* a light beam adds light: screen leaves the paper untouched where the
+     page is already white, and brightens only what it crosses */
+  mix-blend-mode: screen;
+  opacity: 0.85;
   filter: blur(3px);
 }
 
-.dark .home-stage .home-cine-beam { opacity: 0.55; }
+.dark .home-stage .home-cine-beam { opacity: 0.7; }
 
 /* the strip: a band with a perforation line walking along it */
 .home-stage .home-cine-film {
@@ -274,10 +277,10 @@
   to { stroke-dashoffset: -5; }
 }
 
-html.reduce-motion .home-stage .home-cine-beam { opacity: 0.34; }
+html.reduce-motion .home-stage .home-cine-beam { opacity: 0.85; }
 
 @media (prefers-reduced-motion: reduce) {
-  .home-stage .home-cine-beam { opacity: 0.34; }
+  .home-stage .home-cine-beam { opacity: 0.85; }
 }
 
 /* reduced motion: the machine is simply there, already threaded ------------- */
