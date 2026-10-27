@@ -330,8 +330,10 @@ export function buildTypewriter(P, options = {}) {
     k.lineSvg(G.arcOf(platenFrame, PLATEN.half + 16, PLATEN.r + 3.6, P), { tone: 'lo' }),
     k.lineSvg(G.arcOf(platenFrame, PLATEN.half + 8, PLATEN.r + 3.6, P), { tone: 'lo' }),
     // the arm is hinged at its own root, on the top of the collar: it can be
-    // swung down onto the axle without the collar leaving the roller
-    `<g class="tw-lever-arm" style="transform-origin:${armX.toFixed(1)}px ${armY.toFixed(1)}px">${arm}</g>`,
+    // swung down onto the axle without the collar leaving the roller. The throw
+    // is a second hinge inside it, on the same root, so the carriage return can
+    // swing the arm down without touching the collar or the assembly's hinge.
+    `<g class="tw-lever-arm" style="transform-origin:${armX.toFixed(1)}px ${armY.toFixed(1)}px"><g class="tw-lever-throw" style="transform-origin:${armX.toFixed(1)}px ${armY.toFixed(1)}px">${arm}</g></g>`,
   ]
   out.push(part('tw-lever', 0,
     `<g class="home-return-lever" style="transform-origin:${pivotX.toFixed(1)}px ${pivotY.toFixed(1)}px">${lever.join('')}</g>`,
