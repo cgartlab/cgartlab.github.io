@@ -193,6 +193,13 @@ const APP_NAMES = [
   'Docker', 'PVE', 'FnOS', 'Argus', 'Men', 'Cinema 4D', 'After Effects', 'Photoshop',
 ]
 
+/** The real favicon of each tool, copied into public/icons/tools. */
+const ICONS = [
+  'figma.png', 'colorhunt.svg', 'opencode.ico', 'openclaw.svg', 'vscode.ico', 'obsidian.ico',
+  'affine.ico', 'blinko.png', 'docker.svg', 'pve.ico', 'fnos.ico', 'argus.png',
+  'men.svg', 'cinema4d.svg', 'aftereffects.svg', 'photoshop.svg',
+]
+
 const FRIENDS = ['阮一峰', '卢昌海', '李笑来', 'Tw93', 'Richard Chan', 'Yihui Xie', 'Takuya Matsuyama', 'Bo.Ke']
 
 const TILE = 11
@@ -203,13 +210,16 @@ const TILE_GLYPH = 2.1
 const LINKS_ZONE = [3, 73]
 
 /** One app chip: a printed tile with its mark knocked out of it. */
-function appTile(cu, cv, parts, name, P) {
+function appTile(cu, cv, href, name, P) {
   const half = TILE / 2
-  const [x, y] = k.iso(LID.at(cu, cv, LW), P)
+  const inset = 1.15
+  const size = TILE - inset * 2
+  // the mark is the tool's own favicon, laid on the tile in the lid's plane
+  const m = faceMatrix(LID, [cu - size / 2, cv - size / 2, LW - 0.25], [1, 0, 0], [0, 1, 0], P)
   return `<g class="home-lid-app"><title>${name}</title>`
     + `<path class="home-lid-tile" d="${lidRect([cu - half, cv - half, cu + half, cv + half], 2.3, P)}"/>`
     + k.lineSvg(lidRect([cu - half, cv - half, cu + half, cv + half], 2.3, P), { tone: 'lo' })
-    + `<g class="home-lid-glyph" transform="matrix(${num(TILE_GLYPH)} 0 0 ${num(-TILE_GLYPH)} ${num(x)} ${num(y)})">${parts.join('')}</g>`
+    + `<image class="home-lid-icon" href="/icons/tools/${href}" width="${num(size)}" height="${num(size)}" preserveAspectRatio="xMidYMid meet" transform="${m}"/>`
     + '</g>'
 }
 
@@ -236,10 +246,10 @@ function lidBoard(P) {
   const rows = Math.ceil(APPS.length / 4)
   const x0 = TILE_GRID[0] - ((3 * TILE_COL_PITCH) / 2)
   const y0 = TILE_GRID[1] + (((rows - 1) * TILE_PITCH) / 2)
-  APPS.forEach((glyph, index) => {
+  APPS.forEach((_glyph, index) => {
     const cu = x0 + (index % 4) * TILE_COL_PITCH
     const cv = y0 - Math.floor(index / 4) * TILE_PITCH
-    out.push(appTile(cu, cv, glyph(), APP_NAMES[index], P))
+    out.push(appTile(cu, cv, ICONS[index], APP_NAMES[index], P))
   })
 
   // the name plates: one chip per creator, a hairline plate with its own arrow
@@ -262,7 +272,16 @@ function lidBoard(P) {
 }
 
 function lidSvg(P) {
-  const out = ['<g class="home-case-lid">']
+  // pin the swing to the hinge itself: a bbox-relative origin drifts as soon as
+  // anything in the group reaches past the lid, and the lid then folds out from
+  // under the case instead of up from its back rim
+  const [, hy] = k.iso([0, BACK, HINGE_Z], P)
+  const out = [`<g class="home-case-lid" style="--hinge:${hy.toFixed(1)}px">`]
+  // the hinge barrel the lid turns on, mating with the shell's two knuckles
+  const HINGE_AXIS = G.frameAlong([-78, BACK + 0.6, HINGE_Z], [1, 0, 0])
+  out.push(k.solidSvg(G.solidOf([[0, 1.5], [156, 1.5]], HINGE_AXIS, P), { tone: 'mid' }))
+  out.push(k.solidSvg(G.disc(0, 1.4, 2.1, G.frameAlong([-79, BACK + 0.6, HINGE_Z], [1, 0, 0]), P), { tone: 'hi' }))
+  out.push(k.solidSvg(G.disc(0, 1.4, 2.1, G.frameAlong([78, BACK + 0.6, HINGE_Z], [-1, 0, 0]), P), { tone: 'hi' }))
   out.push(boxSvg(LID, { u: -84, v: 0, w: -2, uw: 168, vd: LID_H, wh: 4 }, P, { tone: 'mid' }))
   // the board is the lid's cargo, so it rides the tools' handover
   out.push(`<g class="home-case-tools">${lidBoard(P)}</g>`)

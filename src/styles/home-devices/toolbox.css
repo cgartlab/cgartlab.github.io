@@ -314,9 +314,9 @@
 
 /* the hinged lid: shut (nearly edge-on) to open */
 .home-stage .home-case-lid {
-  transform-box: fill-box;
-  transform-origin: 50% 100%;
-  transform: scaleY(0.04);
+  /* the swing is written as translate/scale/translate about the hinge line the
+     module passes in, so it never depends on where a bbox happens to end */
+  transform: translateY(var(--hinge, 0px)) scaleY(0.04) translateY(calc(-1 * var(--hinge, 0px)));
   transition: transform 700ms cubic-bezier(0.45, 0.05, 0.25, 1);
 }
 
@@ -345,7 +345,7 @@
   transition-delay: 390ms;
 }
 .home-stage .home-module.is-active .home-case-lid {
-  transform: scaleY(1);
+  transform: translateY(var(--hinge, 0px)) scaleY(1) translateY(calc(-1 * var(--hinge, 0px)));
   transition-delay: 390ms;
 }
 .home-stage .home-module.is-active .home-case-tools {
