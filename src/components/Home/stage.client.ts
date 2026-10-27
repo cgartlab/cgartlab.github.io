@@ -21,8 +21,8 @@ const RESUME_DELAY = 5200
 const BOOT_DEVICE = 1200
 /** chassis (0 → 1.2 s) + device (1.2 → 3 s): the page is whole at three */
 const BOOT_TOTAL = 3000
-/** the projector threads the film before the reel rolls (the cinema's build) */
-const SCREEN_DELAY = 900
+/** the projector threads the film and strikes the lamp before the reel rolls */
+const SCREEN_DELAY = 1250
 /** the frame's rect is cached; layout is re-read at most this often */
 const RECT_TTL = 250
 
