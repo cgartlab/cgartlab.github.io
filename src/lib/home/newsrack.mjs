@@ -101,6 +101,112 @@ function cap(u, P) {
     + k.lineSvg(k.knurl(cx, cy, 4.4, TOP + H, TOP + H + 3, 16, P, 0.3), { tone: 'faint' })
 }
 
+// ---- the rail, the reader and the two end blocks --------------------------
+//
+// The front lip is not only a lip. A rail stands off it, a block at each end of
+// the lip holds that rail, and a reader rides the rail with a magnifier: the
+// rack is being read, not just displayed. The idler pulley sits on the left
+// block, the crank on the right one, and both turn as the reader travels.
+//
+// The reader is drawn once, at the left end of its travel; the CSS slides the
+// whole group to the right by `--run-x / --run-y`, the screen delta between the
+// two ends of the rail, so the module never has to know about time.
+const TRACK = { v: 36.2, w: 10.6, r: 1.05 }
+const BLOCK = { u: 8, v: 33, w: 6, uw: 12, vd: 8, wh: 9.4 }
+const TRAVEL = { u0: 34, u1: 136 }
+const PULLEY = { r: 3.6, face: 2.2 }
+const LENS = { r: 5, v: 37.4, w: 22.6 }
+const ARCHIVE = { u: 7, v: 45, w: 34, d: 15 }
+
+/** A world-space frame on the rack whose axis points out of the front face. */
+const facing = (u, v, w) => G.frameAlong(F.at(u, v, w), F.dir(0, 1, 0))
+
+/** A pulley on a block's face; the right-hand one carries the crank. */
+function pulleySvg(u, v, w, P, crank = false) {
+  const pf = facing(u, v, w)
+  const [cx, cy] = k.iso(F.at(u, v, w), P)
+  const out = [`<g class="home-pulley" style="transform-origin:${cx.toFixed(1)}px ${cy.toFixed(1)}px">`]
+  out.push(k.solidSvg(G.disc(0, 1.4, PULLEY.r * 0.66, pf, P), { tone: 'lo' }))
+  out.push(k.solidSvg(G.ringBand(0, PULLEY.face, PULLEY.r * 0.66, PULLEY.r, pf, P), { tone: 'mid' }))
+  out.push(k.lineSvg(G.circleOf(pf, PULLEY.face, PULLEY.r * 0.66, P), { tone: 'lo' }))
+  out.push(k.lineSvg(G.spokesOf(pf, PULLEY.face, PULLEY.r * 0.18, PULLEY.r * 0.62, 5, P), { tone: 'lo' }))
+  out.push(k.solidSvg(G.disc(PULLEY.face, PULLEY.face + 1.1, PULLEY.r * 0.18, pf, P), { tone: 'hi' }))
+  if (crank) {
+    // the arm lies on the wheel's face; the grip stands off its end
+    const arm = [[-1.2, -0.9], [PULLEY.r * 0.86, -0.9], [PULLEY.r * 0.86, 0.9], [-1.2, 0.9]]
+    out.push(k.solidSvg(G.prismOf(pf, arm, PULLEY.face, PULLEY.face + 1.4, P), { tone: 'hi' }))
+    const axis = F.dir(0, 1, 0)
+    const o = F.at(u, v, w)
+    const base = [0, 1, 2].map(i => o[i] + pf.u[i] * (PULLEY.r * 0.72) + axis[i] * (PULLEY.face + 1.4))
+    out.push(k.solidSvg(G.solidOf([[0, 1.25], [3.2, 1.25]], G.frameAlong(base, axis), P), { tone: 'hi' }))
+  }
+  out.push('</g>')
+  return out.join('')
+}
+
+/** One end block on the lip: a machined clamp, its cap plate, its bearing. */
+function blockSvg(u, P) {
+  const out = []
+  out.push(boxSvg(F, { u, v: BLOCK.v, w: BLOCK.w, uw: BLOCK.uw, vd: BLOCK.vd, wh: BLOCK.wh }, P, { tone: 'mid' }))
+  out.push(boxSvg(F, { u: u + 1, v: BLOCK.v - 0.6, w: BLOCK.w + BLOCK.wh, uw: BLOCK.uw - 2, vd: BLOCK.vd + 1.2, wh: 1.7 }, P, { tone: 'hi' }))
+  // the bearing boss the wheel turns on
+  out.push(k.solidSvg(G.disc(0, 1.2, 2.4, facing(u + BLOCK.uw / 2, BLOCK.v + BLOCK.vd, BLOCK.w + BLOCK.wh / 2), P), { tone: 'hi' }))
+  return out.join('')
+}
+
+/** A stack of back issues on the deck, in front of the rack's left end. */
+function archiveSvg(P) {
+  const out = []
+  const sheets = [[0, 0], [0.9, -0.8], [-0.9, 0.7], [0.5, 0.9], [-0.4, -0.5]]
+  sheets.forEach(([du, dv], i) => {
+    out.push(boxSvg(F, {
+      u: ARCHIVE.u + du,
+      v: ARCHIVE.v + dv,
+      w: i * 1.55,
+      uw: ARCHIVE.w,
+      vd: ARCHIVE.d,
+      wh: 1.45,
+    }, P, { tone: i % 2 ? 'mid' : 'hi' }))
+  })
+  const top = sheets.length * 1.55
+  // the fold down the top issue, and the paper band that keeps the pile square
+  out.push(rule([ARCHIVE.u + 1.6, ARCHIVE.v + ARCHIVE.d / 2, top], [ARCHIVE.u + ARCHIVE.w - 1.6, ARCHIVE.v + ARCHIVE.d / 2, top], P))
+  out.push(boxSvg(F, { u: ARCHIVE.u + 12.5, v: ARCHIVE.v, w: top + 0.1, uw: 3.6, vd: ARCHIVE.d, wh: 0.45 }, P, { tone: 'lo' }))
+  out.push(boxSvg(F, { u: ARCHIVE.u + 12.5, v: ARCHIVE.v + ARCHIVE.d - 0.45, w: 0, uw: 3.6, vd: 0.45, wh: top + 0.55 }, P, { tone: 'lo' }))
+  // a corner turned down on the top issue: the crease alone says it, and the
+  // top face's own edge closes the shape
+  out.push(rule([ARCHIVE.u + ARCHIVE.w - 5.5, ARCHIVE.v + ARCHIVE.d, top + 0.03], [ARCHIVE.u + ARCHIVE.w, ARCHIVE.v + ARCHIVE.d - 5, top + 0.03], P))
+  return out.join('')
+}
+
+/** The reader: a clamp on the rail, an arm, and the magnifier it carries. */
+function readerSvg(P) {
+  const u = TRAVEL.u0
+  const out = []
+  // the clamp, its two guide rollers on the rail's face
+  out.push(boxSvg(F, { u: u - 5, v: 33.6, w: 9, uw: 10, vd: 6.2, wh: 4.4 }, P, { tone: 'hi' }))
+  for (const du of [-2.4, 2.4]) {
+    const rf = facing(u + du, TRACK.v + 2.6, TRACK.w)
+    out.push(k.solidSvg(G.disc(0, 1.1, 1.7, rf, P), { tone: 'mid' }))
+    out.push(k.lineSvg(G.circleOf(rf, 1.1, 1.7, P), { tone: 'lo' }))
+  }
+  // the arm up to the lens
+  out.push(boxSvg(F, { u: u - 1.3, v: 35.4, w: 13.2, uw: 2.6, vd: 1.9, wh: LENS.w - 16.4 }, P, { tone: 'mid' }))
+  // the magnifier: ring, glass, one highlight
+  const lf = facing(u, LENS.v, LENS.w)
+  out.push(k.solidSvg(G.ringBand(0, 1.7, LENS.r * 0.72, LENS.r, lf, P), { tone: 'mid' }))
+  out.push(`<path class="home-reader-glass" d="${G.circleOf(lf, 0.75, LENS.r * 0.72, P)}"/>`)
+  // the glass: a thin dark rim, one bright highlight, and nothing else — a
+  // lens has to show the page through it or it reads as a white disc
+  out.push(k.lineSvg(G.circleOf(lf, 1.72, LENS.r, P), { tone: 'lo' }))
+  out.push(k.lineSvg(G.circleOf(lf, 0.1, LENS.r, P), { tone: 'lo' }))
+  out.push(k.lineSvg(G.circleOf(lf, 0.76, LENS.r * 0.72, P), { tone: 'lo' }))
+  out.push(k.lineSvg(G.circleOf(lf, 0.78, LENS.r * 0.66, P), { tone: 'faint' }))
+  out.push(k.lineSvg(G.arcOf(lf, 0.8, LENS.r * 0.58, P, { from: Math.PI * 1.02, to: Math.PI * 1.42 }), { tone: 'hi' }))
+  out.push(k.lineSvg(G.arcOf(lf, 0.8, LENS.r * 0.5, P, { from: Math.PI * 1.52, to: Math.PI * 1.66 }), { tone: 'lo' }))
+  return out.join('')
+}
+
 /**
  * The rack's layout, from the number of issues alone.
  *
@@ -294,6 +400,30 @@ export function buildNewsrack(P, options = {}) {
     ...([10, W - 10].map(u => screw(u, P))),
   ))
 
+  // ---- archive: the back issues stacked on the deck, front left ---------
+  out.push(part('archive', 0, archiveSvg(P)))
+
+  // ---- drive: a block at each end of the lip, the rail between them -----
+  // The rail is drawn with the left block, the crank lives on the right one.
+  const railU0 = BLOCK.u + BLOCK.uw / 2
+  const railU1 = W - BLOCK.u - BLOCK.uw / 2
+  out.push(part('drive', 0,
+    blockSvg(BLOCK.u, P),
+    k.solidSvg(G.solidOf([[0, TRACK.r], [railU1 - railU0, TRACK.r]], G.frameAlong(F.at(railU0, TRACK.v, TRACK.w), F.dir(1, 0, 0)), P), { tone: 'mid' }),
+    pulleySvg(railU0, BLOCK.v + BLOCK.vd, BLOCK.w + BLOCK.wh / 2, P),
+  ))
+  out.push(part('drive', 1,
+    blockSvg(W - BLOCK.u - BLOCK.uw, P),
+    pulleySvg(railU1, BLOCK.v + BLOCK.vd, BLOCK.w + BLOCK.wh / 2, P, true),
+  ))
+
+  // ---- reader: the magnifier on the rail, last --------------------------
+  const [rx, ry] = k.iso(F.at(TRAVEL.u0, TRACK.v, TRACK.w), P)
+  const [ex, ey] = k.iso(F.at(TRAVEL.u1, TRACK.v, TRACK.w), P)
+  out.push(part('reader', 0,
+    `<g class="home-reader" style="--run-x:${(ex - rx).toFixed(1)}px;--run-y:${(ey - ry).toFixed(1)}px">${readerSvg(P)}</g>`,
+  ))
+
   return out.join('')
 }
 
@@ -324,5 +454,16 @@ export function newsrackBounds() {
       out.push(F.at(u, V_TOP + sv * SIN, FOOT))
     }
   }
+  // the end blocks with their wheels and the crank's grip, the reader's lens at
+  // both ends of its run, and the stack of back issues on the deck
+  for (const u of [BLOCK.u, W - BLOCK.u])
+    for (const v of [BLOCK.v, BLOCK.v + BLOCK.vd + 3.6])
+      for (const w of [BLOCK.w, BLOCK.w + BLOCK.wh + 2]) out.push(F.at(u, v, w))
+  for (const u of [TRAVEL.u0, TRAVEL.u1])
+    for (const du of [-LENS.r, LENS.r])
+      for (const dw of [-LENS.r, LENS.r]) out.push(F.at(u + du, LENS.v, LENS.w + dw))
+  for (const u of [ARCHIVE.u, ARCHIVE.u + ARCHIVE.w])
+    for (const v of [ARCHIVE.v, ARCHIVE.v + ARCHIVE.d])
+      for (const w of [0, 8.6]) out.push(F.at(u, v, w))
   return out
 }
