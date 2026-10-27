@@ -385,7 +385,7 @@ export function buildLabels(P, options = {}) {
   const led = G.frameAlong([-20, FRONT, TOP + 19], [0, 1, 0])
   face.push('<g class="home-label-led">')
   face.push(k.solidSvg(G.ringBand(0, 1.5, 2.4, 3.4, led, P), { tone: 'mid' }))
-  face.push(k.solidSvg(G.disc(1, 2.5, 2.2, led, P), { tone: 'hi' }))
+  face.push(k.solidSvg(G.disc(1, 2.5, 2.2, led, P), { tone: 'hi', className: 'home-led-lamp' }))
   face.push(k.lineSvg(G.circleOf(led, 2.6, 2.2, P), { tone: 'faint' }))
   face.push('</g>')
   for (let i = 0; i < 5; i++) face.push(k.lineSvg(k.segment([10, FRONT + 0.3, TOP + 13 + i * 2.6], [50, FRONT + 0.3, TOP + 13 + i * 2.6], P), { tone: 'lo' }))

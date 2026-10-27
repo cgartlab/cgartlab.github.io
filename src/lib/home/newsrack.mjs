@@ -198,7 +198,7 @@ function readerSvg(P) {
   out.push(`<path class="home-reader-glass" d="${G.circleOf(lf, 0.75, LENS.r * 0.72, P)}"/>`)
   // the glass: a thin dark rim, one bright highlight, and nothing else — a
   // lens has to show the page through it or it reads as a white disc
-  out.push(k.lineSvg(G.circleOf(lf, 1.72, LENS.r, P), { tone: 'lo' }))
+  out.push(k.lineSvg(G.circleOf(lf, 1.72, LENS.r, P), { tone: 'lit' }))
   out.push(k.lineSvg(G.circleOf(lf, 0.1, LENS.r, P), { tone: 'lo' }))
   out.push(k.lineSvg(G.circleOf(lf, 0.76, LENS.r * 0.72, P), { tone: 'lo' }))
   out.push(k.lineSvg(G.circleOf(lf, 0.78, LENS.r * 0.66, P), { tone: 'faint' }))

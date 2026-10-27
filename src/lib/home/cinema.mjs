@@ -134,7 +134,7 @@ export function buildCinema(P, options = {}) {
   panel.push(k.solidSvg(G.disc(0, 1.4, 6.4, dial, P), { tone: 'hi' }))
   panel.push(k.lineSvg(G.circleOf(dial, 1.5, 6.4, P), { tone: 'mid' }))
   panel.push(k.lineSvg(G.circleOf(dial, 1.6, 4.6, P), { tone: 'faint' }))
-  panel.push(k.lineSvg(k.segment([20, FRONT + 2.4, BZ + 26], [23.6, FRONT + 2.4, BZ + 29.6], P), { tone: 'hi' }))
+  panel.push(k.lineSvg(k.segment([20, FRONT + 2.4, BZ + 26], [23.6, FRONT + 2.4, BZ + 29.6], P), { tone: 'lit' }))
   if (caption) {
     panel.push(k.faceTextSvg(k.sideMatrix([-35, FRONT], BZ + 10, P, 'left'), caption, { size: 4.4, tone: 'mid', anchor: 'middle' }))
   }

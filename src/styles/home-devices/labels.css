@@ -238,6 +238,15 @@
 .home-stage .home-platen .iso-shade { fill: var(--home-metal); }
 .home-stage .home-wheel .iso-edge { stroke: var(--anatomy-mid); }
 
+/* the indicator lamp is the one lit thing on the panel, so it carries the
+   accent — the same green the machine prints its labels in. The shading rules
+   in home.css carry a `[data-shade]` and land later in the cascade, so the
+   sides have to be named with the attribute to out-weigh them. */
+.home-stage .home-led-lamp .iso-fill,
+.home-stage .home-led-lamp .iso-top { fill: var(--anatomy-lit); }
+.home-stage .home-led-lamp .iso-shade[data-shade] { fill: var(--anatomy-lit-shade); }
+.home-stage .home-led-lamp .iso-edge { stroke: var(--anatomy-lit-shade); }
+
 @keyframes home-print-head {
   0%, 100% { transform: translateX(-2.4px); }
   25% { transform: translateX(2.4px); }
