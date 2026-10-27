@@ -84,7 +84,7 @@ const RAIL = { x: SLOT.x - 7, w: SLOT.w + 14, z: SLOT.z + SLOT.h / 2 + 16.1, h: 
 const CARRIAGE = { x: -15, w: 30, z: RAIL.z - 6.2, h: 6.2 }
 const PRINT_BAR = { x: -12, w: 24, z: CARRIAGE.z - 2.8, h: 2.8 }
 
-const CARD = { w: 30, h: 13, r: 2.1, pitch: -18 }
+const CARD = { w: 32, h: 13.6, r: 2.2, pitch: -18 }
 /** The plane the sheets hang in: a few units clear of the front face. */
 const FLOAT_Y = 38
 /**
@@ -106,10 +106,11 @@ const CROWN = ROLL_Z + ROLL.r + 1.8
  * to print straight through the roll. Clearing the crown is what fixes the base.
  */
 const GRID = {
-  maxCols: 7,
-  /** how tall the stack may stand before the rows start overlapping */
-  height: 122,
-  gap: 3.5,
+  maxCols: 6,
+  /** honeycomb pitch: air between the sheets, rows half a cell apart */
+  pitchX: 38,
+  pitchZ: 30,
+  gap: 4.5,
   base: CROWN - TOP + (FLOAT_Y - ROLL.y) * Math.tan(RAKE) + (CARD.h / 2) * Math.cos(RAKE) + 4,
 }
 /** The stack may not reach past this in x; past it the sheet shrinks, not the span. */
@@ -136,35 +137,31 @@ const BEAT = { min: 140, max: 700 }
  */
 function layout(count) {
   const n = Math.max(0, Math.floor(count))
-  // the grid squares up as the tag count grows: six columns at 26 tags, seven
-  // when the site carries dozens, so the stack widens before it towers
-  const cols = Math.min(GRID.maxCols, Math.max(1, Math.ceil(Math.sqrt(n * 1.5))))
-  const widest = cols ? cols * CARD.w + (cols - 1) * GRID.gap : 0
-  const squeeze = widest ? Math.min(1, (REACH * 2) / widest) : 1
-  const card = {
-    ...CARD,
-    w: Math.max(FLOOR.w, CARD.w * squeeze),
-    h: Math.max(FLOOR.h, CARD.h * squeeze),
-  }
-  const across = card.w + GRID.gap
+  const cols = Math.min(GRID.maxCols, Math.max(1, Math.ceil(Math.sqrt(n * 1.45))))
   const rows = Math.max(1, Math.ceil(n / cols))
-  // a tall stack is allowed to close up — past the budget the rows overlap like
-  // a pile of printed labels instead of pushing the whole stage smaller
-  const wanted = card.h + GRID.gap
-  const upward = rows > 1 ? Math.min(wanted, GRID.height / (rows - 1)) : wanted
   const seats = []
   for (let index = 0; index < n; index++) {
     const row = Math.floor(index / cols)
     const column = index % cols
     const inRow = Math.min(cols, n - row * cols)
+    // the bottom row is nearest the reader, the top row furthest back and
+    // smallest: the projection does the rest
+    const t = rows > 1 ? row / (rows - 1) : 0
+    const scale = 1.16 - t * 0.38
+    const depth = 14 - t * 58
+    const card = { ...CARD, w: CARD.w * scale, h: CARD.h * scale, r: CARD.r * scale }
+    const honey = row % 2 ? GRID.pitchX / 2 : 0
     seats.push({
-      x: (column - (inRow - 1) / 2) * across,
-      y: FLOAT_Y,
-      z: GRID.base + row * upward,
+      x: (column - (inRow - 1) / 2) * GRID.pitchX + honey,
+      y: FLOAT_Y + depth,
+      z: GRID.base + row * GRID.pitchZ,
       row,
+      scale,
+      depth,
+      card,
     })
   }
-  return { seats, card }
+  return { seats, card: CARD }
 }
 
 /** One sub-assembly. Each run is a contiguous stretch of what already painted
@@ -291,14 +288,23 @@ export function buildLabels(P, options = {}) {
 
   // the knurled transport wheel, seated on the face at the mouth's right
   const [wx, wy] = k.iso(WHEEL_AT, P)
-  face.push(k.lineSvg(G.circleOf(WHEEL_F, 0.2, WHEEL.r + 2.2, P), { tone: 'faint' }))
-  face.push(`<g class="home-feed-roller" style="transform-origin:${wx.toFixed(1)}px ${wy.toFixed(1)}px"><g class="home-wheel">`)
-  face.push(k.solidSvg(G.solidOf([[0, WHEEL.r], [WHEEL.face, WHEEL.r]], WHEEL_F, P), { tone: 'mid' }))
-  face.push(k.lineSvg(G.spokesOf(WHEEL_F, WHEEL.face, WHEEL.r * 0.68, WHEEL.r * 0.98, 20, P), { tone: 'hi' }))
-  face.push(k.lineSvg(G.circleOf(WHEEL_F, WHEEL.face, WHEEL.r * 0.68, P), { tone: 'faint' }))
-  face.push(k.solidSvg(G.ringBand(WHEEL.face, WHEEL.face + 1.2, WHEEL.r * 0.28, WHEEL.r * 0.68, WHEEL_F, P), { tone: 'mid' }))
-  face.push(k.lineSvg(G.circleOf(WHEEL_F, WHEEL.face + 1.2, WHEEL.r * 0.28, P), { tone: 'lo' }))
-  face.push('</g></g>')
+  // the drive is a hand crank, not a wheel: a shaft boss, an arm, a grip and a
+  // counterweight, turning on the shaft's own projected centre
+  face.push(k.lineSvg(G.circleOf(WHEEL_F, 0.2, 4.6, P), { tone: 'faint' }))
+  face.push(k.solidSvg(G.solidOf([[0, 3.6], [2.2, 3.6]], WHEEL_F, P), { tone: 'mid' }))
+  face.push(`<g class="home-feed-roller" style="transform-origin:${wx.toFixed(1)}px ${wy.toFixed(1)}px">`)
+  // the arm: a bar in the face plane, swung 40 degrees off vertical
+  const arm = [[-1.3, 0], [1.3, 0], [8.4 + 1.3, 7.1], [8.4 - 1.3, 7.1]]
+  face.push(k.solidSvg(G.prismOf(WHEEL_F, arm, 1.6, 3.4, P), { tone: 'mid' }))
+  // the counterweight, opposite the grip
+  face.push(k.solidSvg(G.solidOf([[3.4, 3.4], [4.6, 3.4], [4.6, 5.2], [3.4, 5.2]], WHEEL_F, P), { tone: 'lo' }))
+  // the grip: a turned handle standing off the arm
+  const grip = G.frameAlong([WHEEL.x + 8.4, FRONT + 3.4, WHEEL.z + 7.1], [0, 1, 0])
+  face.push(k.solidSvg(G.solidOf([[0, 2.1], [3.6, 2.1], [3.6, 2.6], [6.2, 2.6], [6.2, 2.1]], grip, P), { tone: 'hi' }))
+  face.push(k.lineSvg(G.arcOf(grip, 5.6, 2.7, P), { tone: 'faint' }))
+  face.push('</g>')
+  face.push(k.solidSvg(G.disc(2.2, 4.2, 1.4, WHEEL_F, P), { tone: 'hi' }))
+
 
   // cutter bar over the slot, with its blade line
   face.push('<g class="home-cutter">')
@@ -338,16 +344,18 @@ export function buildLabels(P, options = {}) {
   // They wait for the case: the wrapper holds them back until the last panel is
   // on, and each ticket's own delay is measured from that beat. The count is the
   // tag count, so the stack grows with the site rather than stopping at eight.
-  const { seats, card } = layout(tags.length)
-  const ring = cardRing(card).map(([u, w]) => [u, 0, w])
+  const { seats } = layout(tags.length)
   const [mx, my] = k.iso(MOUTH, P)
   const [ox, oy] = k.iso(OUT, P)
   const beat = Math.round(Math.min(BEAT.max, Math.max(BEAT.min, RUN / Math.max(1, seats.length))))
-  const stitch = -card.w * 0.365
   const tickets = []
   seats.map((seat, index) => ({ F: cardAt(seat), index }))
     .sort((a, b) => k.depthOf(a.F.at(0, 0, 0), P) - k.depthOf(b.F.at(0, 0, 0), P))
     .forEach(({ F, index }) => {
+      const seat = seats[index]
+      const card = seat.card
+      const ring = cardRing(card).map(([u, w]) => [u, 0, w])
+      const stitch = -card.w * 0.365
       const tag = printed(tags[index] || '', card)
       const size = sizeOf(tag, card)
       const paper = facePath(F, ring, P)
@@ -355,7 +363,7 @@ export function buildLabels(P, options = {}) {
       // deltas run from the float *back* to the machine: mouth first, then out
       const fly = [mx - fx, my - fy]
       const exit = [ox - fx, oy - fy]
-      tickets.push(`<g class="home-ticket" style="--fly-x:${fly[0].toFixed(1)}px;--fly-y:${fly[1].toFixed(1)}px;--out-x:${exit[0].toFixed(1)}px;--out-y:${exit[1].toFixed(1)}px;--fly-delay:${BUILD + index * beat}ms">`)
+      tickets.push(`<g class="home-ticket" data-depth="${seat.scale > 1.05 ? 'near' : seat.scale > 0.9 ? 'mid' : 'far'}" style="--fly-x:${fly[0].toFixed(1)}px;--fly-y:${fly[1].toFixed(1)}px;--out-x:${exit[0].toFixed(1)}px;--out-y:${exit[1].toFixed(1)}px;--fly-delay:${BUILD + index * beat}ms">`)
       tickets.push(`<path class="home-ticket-paper" fill="var(--home-paper)" d="${paper}"/>`)
       // the perforated edge down the left margin
       tickets.push(k.lineSvg(k.pathOf([k.iso(F.at(stitch, 0, -card.h * 0.38), P), k.iso(F.at(stitch, 0, card.h * 0.38), P)]), { tone: 'lo', dotted: true }))
