@@ -211,15 +211,6 @@
 
 .home-copy { max-width: 34rem; }
 
-.home-eyebrow {
-  margin: 0 0 0.75rem;
-  font-family: var(--un-preset-theme-font-family-sans);
-  font-size: 0.7rem;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: oklch(var(--un-preset-theme-colors-secondary));
-}
-
 .home-title {
   margin: 0;
   font-family: var(--un-preset-theme-font-family-title);
