@@ -213,8 +213,11 @@ function appTile(cu, cv, href, name, P) {
   const half = TILE / 2
   const inset = 1.15
   const size = TILE - inset * 2
-  // the mark is the tool's own favicon, laid on the tile in the lid's plane
-  const m = faceMatrix(LID, [cu - size / 2, cv - size / 2, LW - 0.25], [1, 0, 0], [0, 1, 0], P)
+  // The mark is the tool's own favicon, laid on the tile in the lid's plane. The
+  // board's v runs up the lid while an image's y runs down the page, so the
+  // vertical axis is negated and the origin taken at the tile's top edge —
+  // without that the marks hang upside down.
+  const m = faceMatrix(LID, [cu - size / 2, cv + size / 2, LW - 0.25], [1, 0, 0], [0, -1, 0], P)
   return `<g class="home-lid-app"><title>${name}</title>`
     + `<path class="home-lid-tile" d="${lidRect([cu - half, cv - half, cu + half, cv + half], 2.3, P)}"/>`
     + k.lineSvg(lidRect([cu - half, cv - half, cu + half, cv + half], 2.3, P), { tone: 'lo' })
