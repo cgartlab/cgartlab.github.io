@@ -129,6 +129,10 @@ export function buildCinema(P, options = {}) {
   for (let i = 0; i < 7; i++) {
     lamp.push(k.lineSvg(k.segment([LAMP.x + LAMP.w - 14, LAMP.y + 8 + i * 4, BZ + 34.6], [LAMP.x + LAMP.w - 5, LAMP.y + 8 + i * 4, BZ + 34.6], P), { tone: 'hi' }))
   }
+  // cooling louvres on the front strip left of the door
+  for (let i = 0; i < 6; i++) {
+    lamp.push(k.lineSvg(k.segment([10, LAMP.y + LAMP.d + 0.3, BZ + 13 + i * 2.4], [26, LAMP.y + LAMP.d + 0.3, BZ + 13 + i * 2.4], P), { tone: 'mid' }))
+  }
   out.push(part('cine-lamp', 3, lamp))
 
   // ---- the optical head -------------------------------------------------
@@ -321,38 +325,54 @@ export function buildCinema(P, options = {}) {
   }
   out.push(part('cine-reels', 13, reels))
 
-  // ---- vents, control panel ---------------------------------------------
+  // ---- louvres, control panel, hand-wheel -------------------------------
+  // The head's face has one clear stretch: the left end, from the base seam to
+  // the seam under the lid. That is the operator's side, so the whole control
+  // panel goes there — a plate inset in the face, the framing dial at the top,
+  // the two push buttons under it with the pilot lamp between them, the name at
+  // the foot. The louvres move to the lamphouse, which is the part that runs
+  // hot, and the framing knob goes right of the gate, where the shaft it turns
+  // actually goes.
   const panel = []
-  for (let i = 0; i < 6; i++) {
-    panel.push(k.lineSvg(k.segment([-72, FRONT + 0.3, BZ + 8 + i * 2.6], [-60, FRONT + 0.3, BZ + 8 + i * 2.6], P), { tone: 'lo' }))
+  const panelPlan = { x: -78, y: FRONT - 1.2, w: 24, d: 2.4, r: 1.6 }
+  panel.push(solid(panelPlan, BZ + 4, 38, P, 'mid', 4, 0.6))
+  panel.push(k.lineSvg(k.planOutline(k.insetPlan(panelPlan, 1.2), BZ + 42, P, 4), { tone: 'faint' }))
+
+  // the framing dial: the one control an operator turns with the show running
+  const dial = G.frameAlong([-66, FRONT + 1.2, BZ + 31], [0, 1, 0])
+  panel.push(k.solidSvg(G.disc(0, 1.5, 5.2, dial, P), { tone: 'hi' }))
+  panel.push(k.lineSvg(G.circleOf(dial, 1.6, 5.2, P), { tone: 'mid' }))
+  panel.push(k.lineSvg(G.circleOf(dial, 1.7, 3.6, P), { tone: 'faint' }))
+  panel.push(k.lineSvg(k.segment([-65.2, FRONT + 2.7, BZ + 31.6], [-62.1, FRONT + 2.7, BZ + 34.6], P), { tone: 'lit' }))
+
+  // the two push buttons, the lamp between them
+  for (const x of [-72, -60]) {
+    const F = G.frameAlong([x, FRONT + 1.2, BZ + 17.5], [0, 1, 0])
+    panel.push(k.solidSvg(G.disc(0, 1.3, 2.6, F, P), { tone: 'hi' }))
+    panel.push(k.lineSvg(G.circleOf(F, 1.4, 2.6, P), { tone: 'mid' }))
+    panel.push(k.lineSvg(G.circleOf(F, 1.5, 1.5, P), { tone: 'faint' }))
   }
-  const panelPlan = { x: -10, y: FRONT - 1.4, w: 34, d: 2.6, r: 1.6 }
-  panel.push(solid(panelPlan, BZ + 8, 26, P, 'mid', 4, 0.6))
-  for (const x of [-3, 11]) {
-    const F = G.frameAlong([x, FRONT + 0.9, BZ + 26], [0, 1, 0])
-    panel.push(k.solidSvg(G.disc(0, 4.6, 5.2, F, P), { tone: 'hi' }))
-    panel.push(k.lineSvg(G.circleOf(F, 4.7, 3.4, P), { tone: 'faint' }))
-    panel.push(k.lineSvg(k.segment([x, FRONT + 5.4, BZ + 26], [x, FRONT + 5.4, BZ + 29.4], P), { tone: 'hi' }))
-  }
-  const dial = G.frameAlong([20, FRONT + 0.8, BZ + 26], [0, 1, 0])
-  panel.push(k.solidSvg(G.disc(0, 1.4, 6.4, dial, P), { tone: 'hi' }))
-  panel.push(k.lineSvg(G.circleOf(dial, 1.5, 6.4, P), { tone: 'mid' }))
-  panel.push(k.lineSvg(G.circleOf(dial, 1.6, 4.6, P), { tone: 'faint' }))
-  panel.push(k.lineSvg(k.segment([20, FRONT + 2.4, BZ + 26], [23.6, FRONT + 2.4, BZ + 29.6], P), { tone: 'lit' }))
+  const pilot = G.frameAlong([-66, FRONT + 1.2, BZ + 17.5], [0, 1, 0])
+  panel.push(k.solidSvg(G.disc(0, 0.9, 1.2, pilot, P), { tone: 'lo' }))
+  panel.push(k.lineSvg(G.circleOf(pilot, 1, 1.6, P), { tone: 'faint' }))
+
   if (caption) {
-    panel.push(k.faceTextSvg(k.sideMatrix([-7, FRONT], BZ + 12, P, 'left'), caption, { size: 3.4, tone: 'mid' }))
+    panel.push(k.faceTextSvg(k.sideMatrix([-66, FRONT], BZ + 9, P, 'left'), caption, { size: 3, tone: 'faint', anchor: 'middle' }))
   }
+
   out.push(part('cine-panel', 14, panel))
 
   // ---- hand-wheel -------------------------------------------------------
-  // On the head's face, left of the gate: the framing knob an operator cranks
-  // by hand. It has to face +y or it would be edge-on to the camera.
-  const wheel = G.frameAlong([-70, FRONT + 2.2, BZ + 34], [0, 1, 0])
+  // The framing knob sits on the head's face just right of the gate, where the
+  // shaft it turns actually goes: the operator cranks it and the aperture walks
+  // up or down a frame. It faces +y, or it would be edge-on to the camera.
+  const wheel = G.frameAlong([-3.5, FRONT + 1.6, BZ + 21], [0, 1, 0])
   const hand = []
-  hand.push(k.solidSvg(G.disc(0, 2.4, 7.2, wheel, P), { tone: 'mid', className: 'home-cine-body' }))
-  hand.push(k.lineSvg(G.circleOf(wheel, 2.5, 5.4, P), { tone: 'faint' }))
-  hand.push(k.lineSvg(G.spokesOf(wheel, 2.5, 2.6, 5.2, 4, P), { tone: 'hi' }))
-  hand.push(k.solidSvg(G.disc(2.4, 3.8, 2.2, wheel, P), { tone: 'lo' }))
+  hand.push(k.solidSvg(G.disc(0, 1.2, 8, wheel, P), { tone: 'lo' }))
+  hand.push(k.solidSvg(G.disc(1.2, 3.6, 7, wheel, P), { tone: 'mid', className: 'home-cine-body' }))
+  hand.push(k.lineSvg(G.circleOf(wheel, 3.7, 5.4, P), { tone: 'faint' }))
+  hand.push(k.lineSvg(G.spokesOf(wheel, 3.7, 2.6, 5.2, 4, P), { tone: 'hi' }))
+  hand.push(k.solidSvg(G.disc(3.6, 5, 2.2, wheel, P), { tone: 'lo' }))
   out.push(part('cine-wheel', 15, hand))
 
   // ---- lamphouse door ---------------------------------------------------
