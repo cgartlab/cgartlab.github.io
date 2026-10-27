@@ -163,15 +163,20 @@ const modules = ids.map((id, index) => {
 const svg = `<svg class="iso-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" role="group" aria-label="CGArtLab：一台控制台，面板上有五个栏目按键，当前展示的装置立在升降台上。">
 ${chassisDefs(P)}
 ${buildChassis(P, { labels, labelSize: currentLang === 'zh' ? 9 : 8 })}
-${modules}
+<g class="home-modules" clip-path="url(#home-deck-clip)">${modules}</g>
 ${buildChannelLinks(P, { labels, hrefs, active: 0 })}
 </svg>`
+
+// the mouth of the well, in stage units: the machines rise out of it, so the
+// deck mask and every module's rise hang off this point
+const [wellX, wellY] = k.iso([0, 0, TOP], P)
 
 const isDefault = currentLang === defaultLocale
 ---
 
 <div
   class="home-stage"
+  style={`--well-x:${wellX.toFixed(1)}px;--well-y:${wellY.toFixed(1)}px`}
   data-home-stage
   data-typed={JSON.stringify(typedLines)}
   data-lang={currentLang}

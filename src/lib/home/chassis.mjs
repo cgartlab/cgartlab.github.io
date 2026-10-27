@@ -84,7 +84,14 @@ function part(name, step, ...items) {
 
 export function chassisDefs(P) {
   const ring = k.ringOf(HATCH, 12).map(([x, y]) => k.iso([x, y, TOP], P))
-  return `<defs><clipPath id="${WELL_ID}"><path d="${k.pathOf(ring, true)}"/></clipPath></defs>`
+  // The deck's near rim, carried well past the machine on both sides and up out
+  // of the drawing. Everything below this line is the inside of the box: the
+  // machines are clipped by it, so one coming up the lift is hidden until it
+  // clears the rim instead of sliding across the cabinet's front.
+  const [, cy] = k.iso([0, HATCH.y + HATCH.d, TOP], P)
+  const edge = (cy + 3).toFixed(1)
+  return `<defs><clipPath id="${WELL_ID}"><path d="${k.pathOf(ring, true)}"/></clipPath>`
+    + `<clipPath id="home-deck-clip"><path d="M-400 -200L1200 -200L1200 ${edge}L-400 ${edge}Z"/></clipPath></defs>`
 }
 
 /** A cross-head screw sitting on the front face. */

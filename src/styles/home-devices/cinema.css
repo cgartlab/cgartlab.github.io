@@ -99,6 +99,9 @@
   fill: color-mix(in oklch, oklch(var(--un-preset-theme-colors-background)) 72%, oklch(var(--un-preset-theme-colors-primary)) 28%);
   stroke: none;
   opacity: 1;
+  /* each hole is punched in place, so it scales about its own centre */
+  transform-box: fill-box;
+  transform-origin: 50% 50%;
 }
 
 /* the gate the strip runs through: a block a step darker than the head, with
@@ -145,6 +148,19 @@
      cine-wiring         2400   200    2600
      the lamp strikes    2680
 
+   Nothing here fades in. The machine rides up out of the well as one solid
+   object (see `.home-module` in home.css), so each sub-assembly has to arrive
+   by a move a fitter could actually make: the casting lifts off the lift, the
+   gantry is levered upright on its root, the boxes drop and bounce once, the
+   flue telescopes out of its collar, the plates are pressed onto the face, the
+   knobs are spun on. A part is solid from the first frame — it is only ever in
+   the wrong place.
+
+   Every start pose is a short move: at most ~40 stage units of travel, except
+   the two hinged leaves, which fold in on their own edges rather than travel.
+   All of it stays well inside the 132 units the well swallows while the module
+   is still coming up, so nothing ever floats above the deck.
+
    Neighbouring beats overlap by 30–120 ms so the build reads as continuous
    work rather than a queue. Every rule states both `animation` and
    `animation-delay`, which outranks the generic `.home-part` settle in
@@ -156,50 +172,53 @@
    machine another module's beat.
 
    Fill mode is `backwards`, not `both`: every keyframe ends on
-   `transform: none; opacity: 1`, which is exactly the resting style, so the
-   backwards fill hides a part during its delay and then lets go once it lands.
+   `transform: none`, which is exactly the resting style, so the backwards
+   fill holds the start pose through the delay and lets go once the part lands.
    Holding the fill instead would keep the group composited, and the stencil on
    the gate would re-rasterise without subpixel AA.
    -------------------------------------------------------------------------- */
 
-/* the casting rises out of the platform and takes the weight */
+/* the casting comes up out of the platform and takes the weight */
 .home-stage .home-module.is-active .home-part[data-part='cine-base'] {
   animation: home-cine-base 340ms cubic-bezier(0.28, 0.72, 0.24, 1) backwards;
   animation-delay: 80ms;
 }
 
-/* the reel gantry is bolted to the head's lid before the head is on it */
+/* the gantry is levered upright on its root and bolted to the head's lid
+   before the head is on it: the pivot is the saddle, not the middle */
 .home-stage .home-module.is-active .home-part[data-part='cine-yoke'] {
+  transform-origin: 50% 100%;
   animation: home-cine-yoke 320ms cubic-bezier(0.2, 0.86, 0.22, 1) backwards;
   animation-delay: 330ms;
 }
 
-/* the head rides down into the gantry */
+/* the head is lowered into the gantry and bounces once on the seat */
 .home-stage .home-module.is-active .home-part[data-part='cine-head'] {
   animation: home-cine-head 330ms cubic-bezier(0.2, 0.86, 0.22, 1) backwards;
   animation-delay: 520ms;
 }
 
-/* the lamphouse slides in from the right and seats against the head */
+/* the lamphouse is pushed in from the right and drops onto its seat */
 .home-stage .home-module.is-active .home-part[data-part='cine-lamp'] {
   animation: home-cine-lamp 330ms cubic-bezier(0.22, 0.88, 0.24, 1) backwards;
   animation-delay: 700ms;
 }
 
-/* the ballast drops onto the lamphouse lid */
+/* the ballast is set down on the lamphouse lid and turned onto its bolts */
 .home-stage .home-module.is-active .home-part[data-part='cine-transformer'] {
   animation: home-cine-transformer 290ms cubic-bezier(0.2, 0.86, 0.22, 1) backwards;
   animation-delay: 880ms;
 }
 
-/* the flue draws itself up out of the lid — the one part that leaves the boxes */
+/* the flue telescopes up out of its collar — the one part that leaves the
+   boxes, so it has to grow rather than arrive */
 .home-stage .home-module.is-active .home-part[data-part='cine-stack'] {
   transform-origin: 50% 100%;
   animation: home-cine-stack 300ms cubic-bezier(0.24, 0.84, 0.26, 1) backwards;
   animation-delay: 1020ms;
 }
 
-/* gate and shutter press in from the front, onto the head's face */
+/* gate and shutter are pressed back onto the head's face from in front of it */
 .home-stage .home-module.is-active .home-part[data-part='cine-gate'] {
   animation: home-cine-gate 280ms cubic-bezier(0.24, 0.84, 0.26, 1) backwards;
   animation-delay: 1160ms;
@@ -212,8 +231,16 @@
   animation-delay: 1300ms;
 }
 
-/* the guide rollers snap onto the face where the strip will turn */
+/* The guide rollers are four separate fixings, so the beat lives on each
+   roller: one group per roller in cinema.mjs lets all four be spun on their
+   own centres instead of the whole cluster swinging as one plate. */
 .home-stage .home-module.is-active .home-part[data-part='cine-guide'] {
+  animation: none;
+}
+
+.home-stage .home-module.is-active .home-part[data-part='cine-guide'] .home-cine-roller {
+  transform-box: fill-box;
+  transform-origin: 50% 50%;
   animation: home-cine-guide 220ms cubic-bezier(0.24, 0.84, 0.26, 1) backwards;
   animation-delay: 1470ms;
 }
@@ -236,55 +263,59 @@
   animation-delay: calc(1580ms + var(--at, 0ms));
 }
 
-/* the pressure plate closes over the gate and hides the middle of the strip */
+/* the pressure plate swings shut on the hinge at the gate's left edge and
+   hides the middle of the strip */
 .home-stage .home-module.is-active .home-part[data-part='cine-pressure'] {
+  transform-origin: 0% 50%;
   animation: home-cine-pressure 260ms cubic-bezier(0.3, 0.9, 0.24, 1) backwards;
   animation-delay: 1900ms;
 }
 
-/* the spindles push out of the gantry toward the reader */
+/* the spindles push out of the gantry toward the reader, along their own axis */
 .home-stage .home-module.is-active .home-part[data-part='cine-spindle'] {
   animation: home-cine-spindle 240ms cubic-bezier(0.24, 0.84, 0.26, 1) backwards;
   animation-delay: 1990ms;
 }
 
-/* the reels drop onto their collars: a short turn that decelerates as the hub
-   seats. Each reel is its own group, so the turn happens about its own hub. */
+/* the reels are brought in along the spindle axis from in front of the
+   machine, with a short turn that decelerates as the hub seats */
 .home-stage .home-module.is-active .home-part[data-part='cine-reels'] {
   transform-origin: 50% 50%;
   animation: home-cine-reels 320ms cubic-bezier(0.12, 0.9, 0.2, 1) backwards;
   animation-delay: 2080ms;
 }
 
-/* the control plate goes on last of the electrics */
+/* the control plate is slid onto the face from in front of it */
 .home-stage .home-module.is-active .home-part[data-part='cine-panel'] {
   animation: home-cine-panel 300ms cubic-bezier(0.24, 0.84, 0.26, 1) backwards;
   animation-delay: 2180ms;
 }
 
-/* the hand-wheel spins on and comes to rest */
+/* the hand-wheel is spun onto its shaft and comes to rest */
 .home-stage .home-module.is-active .home-part[data-part='cine-wheel'] {
   transform-origin: 50% 50%;
   animation: home-cine-wheel 280ms cubic-bezier(0.2, 0.86, 0.22, 1) backwards;
   animation-delay: 2280ms;
 }
 
-/* The lamphouse door swings shut. A door turning on a vertical hinge loses its
-   width on the page before it loses its plane, so the honest 2D stand-in is a
-   scale on the hinge axis rather than a rotation the projection would flatten. */
+/* The lamphouse door swings shut on the hinge at its left edge. A door turning
+   on a vertical hinge loses its width on the page before it loses its plane, so
+   the hinge motion is a scale on that axis; the small rotation is what keeps it
+   reading as a swung leaf rather than as a squash. */
 .home-stage .home-module.is-active .home-part[data-part='cine-door'] {
   transform-origin: 0% 50%;
   animation: home-cine-door 280ms cubic-bezier(0.32, 0.72, 0, 1) backwards;
   animation-delay: 2300ms;
 }
 
-/* the nameplate is screwed onto the deck while the door is still closing */
+/* the nameplate is pressed onto the deck's front edge while the door is still
+   closing, and its two screws go in with it */
 .home-stage .home-module.is-active .home-part[data-part='cine-plate'] {
   animation: home-cine-plate 220ms cubic-bezier(0.24, 0.84, 0.26, 1) backwards;
   animation-delay: 2350ms;
 }
 
-/* the jumper ties the lamphouse to the head, and the build is done */
+/* the jumper is plugged into the lamphouse, and the build is done */
 .home-stage .home-module.is-active .home-part[data-part='cine-wiring'] {
   animation: home-cine-wiring 200ms cubic-bezier(0.24, 0.84, 0.26, 1) backwards;
   animation-delay: 2400ms;
@@ -312,71 +343,71 @@
   100% { opacity: 0; }
 }
 
-/* the casting lands first, a touch from above, and takes the weight */
+/* the casting lifts out of the well, clears the platform, and settles */
 @keyframes home-cine-base {
-  from { opacity: 0; transform: translateY(-6px) scale(0.94); }
-  62% { opacity: 1; }
-  82% { transform: translateY(1px) scale(1); }
-  to { opacity: 1; transform: none; }
+  from { transform: translateY(36px); }
+  74% { transform: translateY(-1.8px); }
+  90% { transform: translateY(0.6px); }
+  to { transform: none; }
 }
 
-/* the gantry rises out of the lid and bolts down */
+/* the gantry stands up on its root: levered from 22deg back to plumb */
 @keyframes home-cine-yoke {
-  from { opacity: 0; transform: translateY(9px) scale(0.97); }
-  70% { opacity: 1; transform: translateY(-1px) scale(1.002); }
-  to { opacity: 1; transform: none; }
+  from { transform: rotate(-22deg); }
+  72% { transform: rotate(1.6deg); }
+  to { transform: none; }
 }
 
-/* the head rides down into the gantry */
+/* the head falls into the gantry and bounces once on the seat */
 @keyframes home-cine-head {
-  from { opacity: 0; transform: translateY(-8px) scale(0.985); }
-  68% { opacity: 1; transform: translateY(1.2px) scale(1.002); }
-  to { opacity: 1; transform: none; }
+  from { transform: translateY(-42px); }
+  62% { transform: translateY(2.6px); }
+  79% { transform: translateY(-1.5px); }
+  91% { transform: translateY(0.5px); }
+  to { transform: none; }
 }
 
-/* the lamphouse slides in from the right and seats */
+/* the lamphouse is pushed in from the right, then drops the last few units
+   onto the head's flank */
 @keyframes home-cine-lamp {
-  from { opacity: 0; transform: translate(7px, 2px) scale(0.985); }
-  66% { opacity: 1; }
-  to { opacity: 1; transform: none; }
+  from { transform: translate(38px, -5px); }
+  70% { transform: translate(-2px, 0.8px); }
+  to { transform: none; }
 }
 
-/* the ballast drops onto the lid */
+/* the ballast is lowered onto the lid and turned onto its bolts */
 @keyframes home-cine-transformer {
-  from { opacity: 0; transform: translateY(-8px) scale(0.97); }
-  66% { opacity: 1; }
-  86% { transform: translateY(1px) scale(1); }
-  to { opacity: 1; transform: none; }
+  from { transform: translateY(-26px) rotate(-12deg); }
+  72% { transform: translateY(1.6px) rotate(1.4deg); }
+  to { transform: none; }
 }
 
-/* the flue grows up out of its collar */
+/* the flue telescopes up out of its collar: the foot stays in the flange */
 @keyframes home-cine-stack {
-  from { opacity: 0; transform: translateY(6px) scaleY(0.55); }
-  60% { opacity: 1; }
-  84% { transform: translateY(-0.8px) scaleY(1.01); }
-  to { opacity: 1; transform: none; }
+  from { transform: scaleY(0.1); }
+  74% { transform: scaleY(1.04); }
+  to { transform: none; }
 }
 
-/* gate and shutter press in from the front */
+/* gate and shutter are pressed back onto the face: they start in front of it */
 @keyframes home-cine-gate {
-  from { opacity: 0; transform: translate(2px, 5px); }
-  58% { opacity: 1; }
-  to { opacity: 1; transform: none; }
+  from { transform: translateY(24px); }
+  74% { transform: translateY(-1.4px); }
+  to { transform: none; }
 }
 
 /* the barrel extends on its own axis */
 @keyframes home-cine-lens {
-  from { opacity: 0; transform: translate(3.2px, 3.2px); }
-  40% { opacity: 1; }
-  84% { transform: translate(-0.5px, -0.5px); }
-  to { opacity: 1; transform: none; }
+  from { transform: translate(10px, 10px); }
+  84% { transform: translate(-0.8px, -0.8px); }
+  to { transform: none; }
 }
 
-/* the guide rollers snap down onto the face */
+/* each roller is spun onto the face: a twist and a turn of the screw */
 @keyframes home-cine-guide {
-  from { opacity: 0; transform: scale(0.8); }
-  60% { opacity: 1; }
-  to { opacity: 1; transform: none; }
+  from { transform: translateY(9px) rotate(-38deg) scale(0.62); }
+  76% { transform: translateY(-0.6px) rotate(2deg) scale(1.03); }
+  to { transform: none; }
 }
 
 /* the strip walks from the supply hub to the take-up hub. The band carries a
@@ -387,69 +418,71 @@
   to { stroke-dashoffset: 0; }
 }
 
+/* a perforation is punched through the band as the threading head reaches it:
+   it opens from nothing, overshoots the hole size, and settles */
 @keyframes home-cine-perf {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from { transform: scale(0.001); }
+  70% { transform: scale(1.45); }
+  to { transform: none; }
 }
 
-/* the pressure plate drops onto the gate */
+/* The pressure plate swings shut on the vertical hinge at the gate's left
+   edge. That hinge is parallel to the camera's up axis, so its swing shows up
+   as the plate's width closing rather than as a turn: a rotate here would lay a
+   dark slab across the face instead of opening a leaf. The plate also stands
+   off the face while it is open, which the translate covers. */
 @keyframes home-cine-pressure {
-  from { opacity: 0; transform: translateY(-9px); }
-  62% { opacity: 1; }
-  86% { transform: translateY(1.2px); }
-  to { opacity: 1; transform: none; }
+  from { transform: translate(8px, 3px) scaleX(0.12) rotate(-5deg); }
+  72% { transform: translate(-0.6px, -0.4px) scaleX(1.02) rotate(0.6deg); }
+  to { transform: none; }
 }
 
-/* the spindles push out toward the reader */
+/* the spindles push out of the gantry toward the reader */
 @keyframes home-cine-spindle {
-  from { opacity: 0; transform: translateY(-7px) scale(0.92); }
-  58% { opacity: 1; }
-  84% { transform: translateY(1px) scale(1); }
-  to { opacity: 1; transform: none; }
+  from { transform: translateY(17px) scale(0.96); }
+  80% { transform: translateY(-1.2px) scale(1.005); }
+  to { transform: none; }
 }
 
-/* the reels drop onto their collars and stop turning */
+/* the reels slide onto their collars along the spindle axis and stop turning */
 @keyframes home-cine-reels {
-  from { opacity: 0; transform: translateY(-9px) rotate(-16deg) scale(0.88); }
-  55% { opacity: 1; }
-  82% { transform: translateY(1.4px) rotate(0.6deg) scale(1.002); }
-  to { opacity: 1; transform: none; }
+  from { transform: translate(2px, 12px) rotate(-13deg) scale(0.95); }
+  72% { transform: translate(-0.4px, -1px) rotate(1deg) scale(1.005); }
+  to { transform: none; }
 }
 
-/* the control plate slides onto the face */
+/* the control plate is slid onto the face from in front of it */
 @keyframes home-cine-panel {
-  from { opacity: 0; transform: translateY(6px); }
-  62% { opacity: 1; }
-  to { opacity: 1; transform: none; }
+  from { transform: translateY(20px); }
+  74% { transform: translateY(-1.2px); }
+  to { transform: none; }
 }
 
-/* the hand-wheel spins on */
+/* the hand-wheel is turned onto its shaft: two full turns while it travels */
 @keyframes home-cine-wheel {
-  from { opacity: 0; transform: rotate(-120deg) scale(0.86); }
-  55% { opacity: 1; }
-  to { opacity: 1; transform: none; }
+  from { transform: translateY(13px) rotate(-720deg); }
+  to { transform: none; }
 }
 
 /* the door swings shut on its hinge */
 @keyframes home-cine-door {
-  from { opacity: 0; transform: scaleX(0.1); }
-  30% { opacity: 1; }
-  82% { transform: scaleX(1.015); }
-  to { opacity: 1; transform: none; }
+  from { transform: scaleX(0.12) rotate(-5deg); }
+  72% { transform: scaleX(1.02) rotate(0.6deg); }
+  to { transform: none; }
 }
 
-/* the nameplate goes on */
+/* the nameplate is pressed up onto the deck edge */
 @keyframes home-cine-plate {
-  from { opacity: 0; transform: translateY(3px) scale(0.96); }
-  70% { opacity: 1; }
-  to { opacity: 1; transform: none; }
+  from { transform: translateY(11px); }
+  72% { transform: translateY(-1.4px); }
+  to { transform: none; }
 }
 
-/* the jumper settles between the two boxes */
+/* the jumper is pushed into its socket from the head end */
 @keyframes home-cine-wiring {
-  from { opacity: 0; transform: translateY(4px) scaleX(0.9); }
-  70% { opacity: 1; }
-  to { opacity: 1; transform: none; }
+  from { transform: translate(-6px, -8px) scale(0.8); }
+  76% { transform: translate(0.6px, 0.8px) scale(1.02); }
+  to { transform: none; }
 }
 
 /* --------------------------------------------------------------------------
@@ -522,6 +555,7 @@ html.reduce-motion .home-module.is-active .home-cine-film-perf circle {
   animation: none !important;
   opacity: 1;
   stroke-dashoffset: 0;
+  transform: none;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -530,17 +564,21 @@ html.reduce-motion .home-module.is-active .home-cine-film-perf circle {
     animation: none !important;
     opacity: 1;
     stroke-dashoffset: 0;
+    transform: none;
   }
 }
 
+/* the rollers are their own fixings, so they need their own kill switch */
 html.reduce-motion .home-module.is-active .home-cine-mech,
-html.reduce-motion .home-module.is-active .home-cine-mech * {
+html.reduce-motion .home-module.is-active .home-cine-mech *,
+html.reduce-motion .home-module.is-active .home-cine-roller {
   animation: none !important;
 }
 
 @media (prefers-reduced-motion: reduce) {
   .home-module.is-active .home-cine-mech,
-  .home-module.is-active .home-cine-mech * {
+  .home-module.is-active .home-cine-mech *,
+  .home-module.is-active .home-cine-roller {
     animation: none !important;
   }
 }

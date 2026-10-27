@@ -214,6 +214,11 @@ export function buildTypewriter(P, options = {}) {
   // line standing at the type point keeps its descenders.
   paper.push(`<defs><clipPath id="home-sheet-clip" clipPathUnits="userSpaceOnUse"><rect x="-14" y="-440" width="${PAPER_HALF * 2 + 28}" height="${440 + ROLLER_V + 2}"/></clipPath></defs>`)
   paper.push(`<g transform="${matrix}" clip-path="url(#home-sheet-clip)">`)
+  // The feed is its own wrapper so the sheet can be drawn up through the roller
+  // without touching the group the client translates a line at a time. The clip
+  // is a fixed window at the roller line, so sliding the strip down inside it
+  // hides the sheet behind the roller instead of fading it in.
+  paper.push(`<g class="home-sheet-feed">`)
   paper.push(`<g class="home-paper-group" data-leading="${TEXT.leading}" data-lines="${lines.length}">`)
   paper.push(`<path class="home-paper-shadow" d="${strip(2.5, 2.5)}"/>`)
   paper.push(`<a class="home-paper-link" href="${paperHref}" aria-label="${paperLabel}"><path class="home-paper" d="${strip(0, 0)}"/></a>`)
@@ -221,6 +226,7 @@ export function buildTypewriter(P, options = {}) {
     paper.push(`<text class="iso-face-text home-typed-line" data-line="${index}" data-tone="lit" font-size="${TEXT.size}" x="${TEXT.x}" y="${(ROLLER_V + index * TEXT.leading).toFixed(2)}">${escapeText(line)}</text>`)
   })
   paper.push('</g></g>')
+  paper.push('</g>')
   // The holder is wrapped whole: the sheet, its clip and the group the client
   // translates are untouched inside. It is its own part because the sheet rides
   // on the carriage, while the table behind it stays bolted to the frame.
@@ -314,16 +320,18 @@ export function buildTypewriter(P, options = {}) {
   const ARM_LEN = Math.hypot(tip[0] - armStart[0], tip[1] - armStart[1], tip[2] - armStart[2])
   const ARM = G.frameAlong(armStart, armDir)
   const [pivotX, pivotY] = k.iso(PIVOT, P)
+  const [armX, armY] = k.iso(armStart, P)
   const collar = G.ringBand(PLATEN.half + 8, PLATEN.half + 16, PLATEN.r + 1.4, PLATEN.r + 3.6, platenFrame, P)
+  const arm = k.solidSvg(G.solidOf([[0, 2.4], [ARM_LEN - 9, 2.4], [ARM_LEN - 9, 2.9], [ARM_LEN - 2, 2.9], [ARM_LEN - 2, 4.6], [ARM_LEN + 4, 4.6], [ARM_LEN + 4, 2.2]], ARM, P), { tone: 'mid' })
+    + [-1.5, 0.6, 2.7].map(d => k.lineSvg(G.arcOf(ARM, ARM_LEN + d, 4.7, P, { steps: 20 }), { tone: 'faint' })).join('')
   const lever = [
     // the collar: a machined band clamped on the roller's end
     `<path class="home-brass" d="${[...collar.shades, collar.top].join('')}"/>`,
     k.lineSvg(G.arcOf(platenFrame, PLATEN.half + 16, PLATEN.r + 3.6, P), { tone: 'lo' }),
     k.lineSvg(G.arcOf(platenFrame, PLATEN.half + 8, PLATEN.r + 3.6, P), { tone: 'lo' }),
-    // the arm springs off the top of the collar
-    k.solidSvg(G.solidOf([[0, 2.4], [ARM_LEN - 9, 2.4], [ARM_LEN - 9, 2.9], [ARM_LEN - 2, 2.9], [ARM_LEN - 2, 4.6], [ARM_LEN + 4, 4.6], [ARM_LEN + 4, 2.2]], ARM, P), { tone: 'mid' }),
-    // grip rings
-    ...[-1.5, 0.6, 2.7].map(d => k.lineSvg(G.arcOf(ARM, ARM_LEN + d, 4.7, P, { steps: 20 }), { tone: 'faint' })),
+    // the arm is hinged at its own root, on the top of the collar: it can be
+    // swung down onto the axle without the collar leaving the roller
+    `<g class="tw-lever-arm" style="transform-origin:${armX.toFixed(1)}px ${armY.toFixed(1)}px">${arm}</g>`,
   ]
   out.push(part('tw-lever', 0,
     `<g class="home-return-lever" style="transform-origin:${pivotX.toFixed(1)}px ${pivotY.toFixed(1)}px">${lever.join('')}</g>`,
@@ -373,10 +381,12 @@ export function buildTypewriter(P, options = {}) {
   // ---- side covers: the two panels that close over the works ------------
   // Shallow and low: they shoulder the carriage at its ends without standing
   // between the reader and the ribbon spools on the deck.
+  // Each cover is its own group: the pair has to slide shut from opposite sides,
+  // and a single group can only travel one way. `--dir` carries which side.
   out.push(part('tw-hood', 0,
-    ...[-1, 1].flatMap((side) => {
+    ...[-1, 1].map((side) => {
       const plan = { x: side > 0 ? HOOD.x : -(HOOD.x + HOOD.w), y: HOOD.y, w: HOOD.w, d: HOOD.d, r: 2.5 }
-      return [
+      const panel = [
         k.solidSvg(k.slabOf(plan, DECK_TOP, HOOD.h, P, 5, 1.2), { tone: 'mid' }),
         k.lineSvg(k.sideSeam(plan, DECK_TOP + HOOD.h, P, 5), { tone: 'faint' }),
         k.lineSvg(k.planOutline(k.insetPlan(plan, 1.6), DECK_TOP + HOOD.h, P, 5), { tone: 'faint' }),
@@ -384,11 +394,15 @@ export function buildTypewriter(P, options = {}) {
         ...Array.from({ length: 2 }, (_, i) =>
           k.lineSvg(k.segment([plan.x + 2.5, plan.y + plan.d, DECK_TOP + 8 + i * 7], [plan.x + plan.w - 2.5, plan.y + plan.d, DECK_TOP + 8 + i * 7], P), { tone: 'faint' })),
       ]
+      return `<g class="tw-hood-panel" style="--dir:${side}">${panel.join('')}</g>`
     }),
   ))
 
   // ---- nameplate: the last thing screwed to the case --------------------
   const plate = { x: -38, y: 43, w: 76, d: 3, r: 1.2 }
+  // the two screws go in after the plate is on the case, so they are their own
+  // group: a plate that slides up with its screws already in is not a plate
+  // being fitted, it is a decal.
   out.push(part('tw-plate', 0,
     k.solidSvg(k.slabOf(plate, BASE_Z + 1.5, 5, P, 3, 0.3), { tone: 'lo' }),
     k.faceTextSvg(k.sideMatrix([0, plate.y + plate.d], BASE_Z + 4.2, P, 'left'), 'No.01 · TYPE', {
@@ -396,10 +410,10 @@ export function buildTypewriter(P, options = {}) {
       tone: 'mid',
       anchor: 'middle',
     }),
-    k.dotsSvg([
+    `<g class="tw-plate-screws">${k.dotsSvg([
       k.iso([-33, plate.y + plate.d + 0.2, BASE_Z + 4], P),
       k.iso([33, plate.y + plate.d + 0.2, BASE_Z + 4], P),
-    ], { size: 0.7, tone: 'mid' }),
+    ], { size: 0.7, tone: 'mid' })}</g>`,
   ))
 
   return out.join('')

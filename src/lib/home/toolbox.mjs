@@ -922,16 +922,19 @@ export function buildToolbox(P, options = {}) {
   // Two knuckles stand on the back rim, a pin runs the length of it and a
   // turned cap closes each end. The pin is what makes the two blocks read as
   // one hinge instead of two brackets — and it is drawn here, outside the lid
-  // group, because a barrel does not turn with the leaf it carries.
+  // group, because a barrel does not turn with the leaf it carries. Knuckles
+  // and pin are separate runs: the blocks are dropped on the rim first, then
+  // the pin is driven through them, which is the only way the two read as one
+  // hinge rather than as a bracket that grows out of the rim.
   const hinge = []
   for (const x of [-64, 50]) {
     hinge.push(solid({ x, y: BACK + 0.6, w: 14, d: 4.6, r: 1.4 }, RIM_Z, 2.6, P, 'mid', 4, 0.4))
     hinge.push(k.lineSvg(k.segment([x + 4.4, BACK + 0.6, RIM_Z + 2.65], [x + 4.4, BACK + 5.1, RIM_Z + 2.65], P), { tone: 'lo' }))
   }
   const PIN = { y: BACK + 2.4, z: RIM_Z + 1.5, r: 0.85 }
-  hinge.push(k.solidSvg(G.solidOf([[0, PIN.r], [160, PIN.r]], G.frameAlong([-80, PIN.y, PIN.z], [1, 0, 0]), P), { tone: 'lo' }))
+  const pin = [k.solidSvg(G.solidOf([[0, PIN.r], [160, PIN.r]], G.frameAlong([-80, PIN.y, PIN.z], [1, 0, 0]), P), { tone: 'lo' })]
   for (const [x, dir] of [[-80, -1], [80, 1]])
-    hinge.push(k.solidSvg(G.disc(0, 2.2, 1.55, G.frameAlong([x, PIN.y, PIN.z], [dir, 0, 0]), P), { tone: 'mid' }))
+    pin.push(k.solidSvg(G.disc(0, 2.2, 1.55, G.frameAlong([x, PIN.y, PIN.z], [dir, 0, 0]), P), { tone: 'mid' }))
 
   // --- the three sets -----------------------------------------------------
   const trays = [
@@ -962,22 +965,27 @@ export function buildToolbox(P, options = {}) {
   // --- the legend ---------------------------------------------------------
   // Three engraved plates, one per seat of the dial, each with its label and a
   // small indicator lamp. toolbox.css lights the lamp and the label of whichever
-  // seat the knob is standing on, so the switch has a legend.
+  // seat the knob is standing on, so the switch has a legend. Each plate is its
+  // own run, so the legend goes on one bay at a time instead of arriving as a
+  // single strip.
   const seats = []
   TRAY_X.forEach(([a, b], i) => {
-    seats.push(`<g class="home-seat" data-seat="${i}">`)
-    seats.push(k.lineSvg(k.pathOf([[a + 3, FRONT + 0.2, TOP + 10], [b - 3, FRONT + 0.2, TOP + 10], [b - 3, FRONT + 0.2, TOP + 17], [a + 3, FRONT + 0.2, TOP + 17]].map((p) => k.iso(p, P)), true), { tone: 'faint', className: 'home-seat-plate' }))
+    const seat = [`<g class="home-seat" data-seat="${i}">`]
+    seat.push(k.lineSvg(k.pathOf([[a + 3, FRONT + 0.2, TOP + 10], [b - 3, FRONT + 0.2, TOP + 10], [b - 3, FRONT + 0.2, TOP + 17], [a + 3, FRONT + 0.2, TOP + 17]].map((p) => k.iso(p, P)), true), { tone: 'faint', className: 'home-seat-plate' }))
     const lamp = G.frameAlong([a + 6.6, FRONT + 0.3, TOP + 13.5], [0, 1, 0])
-    seats.push(`<path class="home-seat-lamp" d="${G.circleOf(lamp, 0, 1.05, P, 16)}"/>`)
-    seats.push(k.lineSvg(G.circleOf(lamp, 0.02, 1.05, P, 16), { tone: 'faint' }))
+    seat.push(`<path class="home-seat-lamp" d="${G.circleOf(lamp, 0, 1.05, P, 16)}"/>`)
+    seat.push(k.lineSvg(G.circleOf(lamp, 0.02, 1.05, P, 16), { tone: 'faint' }))
     if (labels[i])
-      seats.push(`<g class="home-seat-label">${k.faceTextSvg(k.sideMatrix([TRAY_MID[i], FRONT], TOP + 13.5, P, 'left'), labels[i], { size: 2.6, tone: 'mid', anchor: 'middle' })}</g>`)
-    seats.push('</g>')
+      seat.push(`<g class="home-seat-label">${k.faceTextSvg(k.sideMatrix([TRAY_MID[i], FRONT], TOP + 13.5, P, 'left'), labels[i], { size: 2.6, tone: 'mid', anchor: 'middle' })}</g>`)
+    seat.push('</g>')
+    seats.push(part('tb-seat', i, seat))
   })
 
   // --- the nameplate ------------------------------------------------------
   // The one place on the near panel a case of this size would carry its maker's
   // mark: a stamped plate, riveted at the corners, with the type code on it.
+  // The rivets are their own runs: the plate is slid into its recess first and
+  // then each corner is set, which is the order the plate would be fixed in.
   const [p0, pz0, p1, pz1] = PLATE
   const py = FRONT + 0.3
   const plateQuad = (dx, dz, dy = 0) => k.pathOf([
@@ -991,9 +999,10 @@ export function buildToolbox(P, options = {}) {
     frontText(p0 + 3.4, pz1 - 2.1, 'TOOL CASE', 1.9, 'lo', P),
     frontText(p0 + 3.4, pz0 + 2.0, 'TB-04', 2.9, 'mid', P),
   ]
+  const rivets = []
   for (const x of [p0 + 1.8, p1 - 1.8])
     for (const z of [pz0 + 1, pz1 - 1])
-      plate.push(k.lineSvg(faceCircle(x, z, 0.62, py + 0.03, P), { tone: 'faint' }))
+      rivets.push(part('tb-rivet', rivets.length, [k.lineSvg(faceCircle(x, z, 0.62, py + 0.03, P), { tone: 'faint' })]))
 
   // --- the switch ---------------------------------------------------------
   const dial = [dialSvg(P)]
@@ -1017,13 +1026,15 @@ export function buildToolbox(P, options = {}) {
     part('shell', 0, plinth),
     ...walls.map((wall, index) => part('tb-wall', index, wall)),
     part('tb-hinge', 0, hinge),
+    part('tb-pin', 0, pin),
     ...dividers.map((divider, index) => part('tb-divider', index, divider)),
     part('trays', 0, trays),
     part('front', 0, front),
     ...pads,
     part('tb-hardware', 0, hardware),
-    part('tb-seat', 0, seats),
+    ...seats,
     part('tb-plate', 0, plate),
+    ...rivets,
     part('tb-dial', 0, dial),
     staySvg(P),
     part('closed', 0, closed),

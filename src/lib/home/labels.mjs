@@ -136,8 +136,8 @@ const CROWN = ROLL_Z + ROLL.r + 1.8
 const GRID = {
   maxCols: 12,
   /** cell pitch: a sheet's own size plus the gutter it is stuck up with */
-  pitchX: CARD.w + 5,
-  pitchZ: CARD.h + 5.2,
+  pitchX: CARD.w + 3.5,
+  pitchZ: CARD.h + 3.5,
   /** the box the wall may occupy — the same on every locale */
   box: { w: 259, h: 76 },
   base: CROWN - TOP + (FLOAT_Y - ROLL.y) * Math.tan(RAKE) + CARD.h / 2 + 4,
@@ -423,7 +423,13 @@ function cutterBar(P) {
 }
 
 export function buildLabels(P, options = {}) {
-  const tags = options.tags || []
+  // The wall has room for so many sheets at a readable size; past that the cards
+// shrink until the tags stop being readable at all. The site sorts tags by how
+// many posts carry them, so the machine prints the most-used ones and the tags
+// page keeps the long tail. Forty is what the fixed box holds at ~90% of a
+// sheet — the same envelope, so the machine does not change size.
+const MAX_TAGS = 40
+const tags = (options.tags || []).slice(0, MAX_TAGS)
   const caption = options.caption || '标签'
   const out = []
 

@@ -84,7 +84,7 @@ const svg = k.figureSvg({
   width: W,
   height: H,
   label: 'CGArtLab 首页机座与装置',
-  body: [chassisDefs(P), buildChassis(P, { labels: LABELS }), modules],
+  body: [chassisDefs(P), buildChassis(P, { labels: LABELS }), `<g class="home-modules" clip-path="url(#home-deck-clip)">${modules}</g>`],
 })
 
 const css = readFileSync(join(ROOT, 'src', 'styles', 'home.css'), 'utf8')

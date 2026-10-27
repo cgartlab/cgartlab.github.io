@@ -284,41 +284,51 @@
 .home-module {
   opacity: 0;
   pointer-events: none;
+  /* the rise is a real one: the machine comes up out of the well, so it turns
+     about the mouth of the well, not about its own middle */
+  transform-origin: var(--well-x, 380px) var(--well-y, 300px);
 }
 
 .home-module.is-active {
   opacity: 1;
   pointer-events: auto;
-  animation: home-module-rise 580ms cubic-bezier(0.22, 0.9, 0.24, 1) both;
+  /* a second to clear the rim: the lift takes the weight, runs up, and sets the
+     machine down a hair past its seat. The parts start landing while it is
+     still coming up, so the machine arrives already building. */
+  animation: home-module-rise 1000ms cubic-bezier(0.42, 0, 0.18, 1) both;
 }
 
 /* the outgoing machine drops through the deck */
 .home-module.is-leaving {
   pointer-events: none;
-  animation: home-module-leave 240ms cubic-bezier(0.5, 0, 0.8, 0.4) both;
+  /* the old machine goes back down the well, so it is still whole while it
+     sinks — it must not fade, or the swap reads as two drawings cross-fading */
+  animation: home-module-leave 380ms cubic-bezier(0.5, 0, 0.8, 0.4) both;
 }
 
 @keyframes home-module-rise {
-  from { opacity: 0; transform: translateY(12px); }
-  to { opacity: 1; transform: translateY(0); }
+  0% { transform: translateY(132px) scale(0.88); }
+  72% { transform: translateY(-3.5px) scale(1.003); }
+  88% { transform: translateY(1px) scale(1); }
+  100% { transform: none; }
 }
 
 @keyframes home-module-leave {
-  from { opacity: 1; transform: translateY(0); }
-  to { opacity: 0; transform: translateY(11px); }
+  from { transform: none; }
+  to { transform: translateY(132px) scale(0.88); }
 }
 
 /* the platform under the machine cycles with it */
 /* the lift carries the swap: down with the old machine on it, back up with
-   the new one, over 900ms — long enough to read as weight, short enough that
+   the new one, over 1200ms — long enough to read as weight, short enough that
    the incoming machine's own assembly is still the main event */
 .home-stage.is-swapping .home-lift {
-  animation: home-lift-cycle 900ms cubic-bezier(0.4, 0, 0.2, 1) both;
+  animation: home-lift-cycle 1200ms cubic-bezier(0.4, 0, 0.2, 1) both;
 }
 
 @keyframes home-lift-cycle {
   0% { transform: translateY(0); }
-  24% { transform: translateY(12px); }
+  30% { transform: translateY(12px); }
   100% { transform: translateY(0); }
 }
 
@@ -332,9 +342,11 @@
   animation-delay: calc(130ms + var(--step, 0) * 55ms);
 }
 
+/* the shared fallback for a part with no rule of its own: it drops onto its
+   seat. No fade — a part either moves into place or is not there yet. */
 @keyframes home-part-settle {
-  from { opacity: 0; transform: translateY(8px) scale(0.985); }
-  to { opacity: 1; transform: none; }
+  from { transform: translateY(16px) scale(0.97); }
+  to { transform: none; }
 }
 
 html.reduce-motion .home-module,

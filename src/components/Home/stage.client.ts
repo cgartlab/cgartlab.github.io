@@ -331,11 +331,12 @@ function setModule(s: State, index: number): void {
   s.stage.classList.remove('is-swapping')
   void s.stage.offsetWidth
   s.stage.classList.add('is-swapping')
-  // the old machine has sunk and the lift is on its way down: seat the new one
+  // the old machine is most of the way down the well: seat the new one, which
+  // then takes 900 ms of its own to clear the rim
   s.swapTimer = window.setTimeout(() => {
     s.swapTimer = 0
     applyModule(s, index)
-  }, 240)
+  }, 420)
 }
 
 /**

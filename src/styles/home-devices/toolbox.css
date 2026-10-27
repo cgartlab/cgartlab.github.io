@@ -363,9 +363,18 @@
 }
 
 /* --------------------------------------------------------------------------
-   The assembly. Every rule here overrides the generic `.home-part` settle in
-   home.css (higher specificity: the extra `[data-part]` attribute) and states
-   both `animation` and `animation-delay`, so the eighteen beats stay legible:
+   The assembly. No part of it fades in: the case is built, so every run is a
+   motion the object could actually make — pads pressed up out of the deck, a
+   plinth lowered onto them, walls raised out of their rebates, the near wall
+   swung shut on its hinge, a latch folded down, partitions dropped into their
+   slots, a pin driven through the knuckles, a slab set on the rim, a knob
+   screwed into its boss, a board pressed into the lid, chips and name plates
+   pressed on one at a time. Everything is solid from the first frame; the
+   build is read from the movement, never from a dissolve.
+
+   Every rule here overrides the generic `.home-part` settle in home.css
+   (higher specificity: the extra `[data-part]` attribute) and states both
+   `animation` and `animation-delay`, so the beats stay legible:
 
      run        part         delay           dur   lands
      pads       tb-foot      20 + 52·step    200   220 … 376
@@ -373,10 +382,12 @@
      walls      tb-wall      170 + 95·step    320   490 / 585 / 680
      near       front        540             330   870
      latch      tb-hardware  700             300  1000
-     legend     tb-seat      810             280  1090
+     legend     tb-seat      810 + 55·step    280  1090 / 1145 / 1200
      plate      tb-plate     890             250  1140
+     rivets     tb-rivet    1140 + 55·step    160  1300 … 1465
      parts      tb-divider   830 + 95·step    270  1100 / 1195
      hinge      tb-hinge     900             300  1200
+     pin        tb-pin       960             260  1220
      shut       closed       880             320  1200
      switch     tb-dial      980             260  1240
      open       .home-case-lid      (a transition, 1210 → 1710)
@@ -391,88 +402,140 @@
    hands over to the hinged lid only when it is home — the reader sees the
    inside of the case for the first time through a lid that actually opened.
 
-   Fill mode is `backwards`, not `both`: every keyframe ends on
-   `transform: none; opacity: 1`, which is exactly the resting style, so the
-   backwards fill hides a run during its delay and then lets go once it lands.
-   Holding the fill instead would keep forty groups composited for the rest of
-   the page's life, and the engraved nameplates would re-rasterise without
-   subpixel AA (the same trade measured on 02 in cinema.css).
+   Four runs — a partition, the hinge knuckles, the shut slab, the interiors —
+   are placed from above their own seat, so their start pose clears the rim.
+   They carry a `visibility` beat as well: without it they would hover over an
+   open case for the whole build. The gate closes in the first frames of the
+   run, before anything has moved, so what the reader sees is still the part
+   being set down. Everything else starts inside the object it belongs to (a
+   wall flat in its rebate, a pin inside its left cap, a pad below the deck,
+   a plate off the face) and needs no gate.
+
+   Fill mode is `backwards`, not `both`: every keyframe ends on `transform:
+   none`, which is exactly the resting style, so the backwards fill holds a run
+   at its start pose during its delay and lets go once it lands. Holding the
+   fill instead would keep fifty groups composited for the rest of the page's
+   life, and the engraved nameplates would re-rasterise without subpixel AA
+   (the same trade measured on 02 in cinema.css).
    -------------------------------------------------------------------------- */
 
-/* the four rubber pads are pressed onto the deck; the case is lowered onto them */
+/* the four rubber pads are pressed up out of the deck and the case lands on
+   them. Anchored at their base, so a pad grows out of the deck instead of
+   swelling in place — and the deck clip swallows the pose it starts in. */
 .home-module.is-active .home-part[data-part='tb-foot'] {
-  animation: home-tb-pad 200ms cubic-bezier(0.22, 0.9, 0.24, 1) backwards;
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+  animation: home-tb-pad 200ms cubic-bezier(0.3, 0.72, 0.4, 1) backwards;
   animation-delay: calc(20ms + var(--step) * 52ms);
 }
 
 /* the plinth takes the weight */
 .home-module.is-active .home-part[data-part='shell'] {
-  animation: home-tb-plinth 300ms cubic-bezier(0.2, 0.86, 0.24, 1) backwards;
+  animation: home-tb-plinth 300ms cubic-bezier(0.42, 0, 0.58, 1) backwards;
   animation-delay: 40ms;
 }
 
-/* the three far walls stand up in the order a case is built: back, left, right */
+/* the three far walls are raised out of their rebates in the order a case is
+   built: back, left, right. The origin is the base line, so each wall is
+   extruded up out of the plinth rather than sliding through it. */
 .home-module.is-active .home-part[data-part='tb-wall'] {
-  animation: home-tb-wall 320ms cubic-bezier(0.2, 0.86, 0.24, 1) backwards;
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+  animation: home-tb-wall 320ms cubic-bezier(0.3, 0.72, 0.4, 1) backwards;
   animation-delay: calc(170ms + var(--step) * 95ms);
 }
 
-/* the near wall is the last panel: it holds a hair proud, then snaps shut */
+/* the near wall is the last panel: it swings shut on its left hinge. A panel
+   swung toward the camera projects to a horizontal squash about that edge —
+   the same trade the lid's swing makes on the other axis. */
 .home-module.is-active .home-part[data-part='front'] {
-  animation: home-tb-front 330ms cubic-bezier(0.2, 0.86, 0.24, 1) backwards;
+  transform-box: fill-box;
+  transform-origin: 0% 50%;
+  animation: home-tb-front 330ms cubic-bezier(0.42, 0, 0.58, 1) backwards;
   animation-delay: 540ms;
 }
 
-/* the latch and the carry handle go on once the panel is home */
+/* the latch and the carry handle are hinged along the top of the near panel:
+   both fold down onto it, so the beat is a vertical squash about that line */
 .home-module.is-active .home-part[data-part='tb-hardware'] {
-  animation: home-tb-fitted 300ms cubic-bezier(0.22, 0.9, 0.24, 1) backwards;
+  transform-box: fill-box;
+  transform-origin: 50% 0%;
+  animation: home-tb-fitted 300ms cubic-bezier(0.42, 0, 0.58, 1) backwards;
   animation-delay: 700ms;
 }
 
-/* then the legend and the maker's plate are stamped on */
+/* the legend goes on one bay at a time, in the order the knob indexes it */
 .home-module.is-active .home-part[data-part='tb-seat'] {
-  animation: home-tb-stamp 280ms cubic-bezier(0.22, 0.9, 0.24, 1) backwards;
-  animation-delay: 810ms;
+  transform-box: fill-box;
+  transform-origin: 50% 50%;
+  animation: home-tb-stamp 280ms cubic-bezier(0.3, 0.72, 0.4, 1) backwards;
+  animation-delay: calc(810ms + var(--step) * 55ms);
 }
 
+/* the maker's plate is slid up the panel into its recess */
 .home-module.is-active .home-part[data-part='tb-plate'] {
-  animation: home-tb-stamp 250ms cubic-bezier(0.22, 0.9, 0.24, 1) backwards;
+  animation: home-tb-plate 250ms cubic-bezier(0.3, 0.72, 0.4, 1) backwards;
   animation-delay: 890ms;
 }
 
-/* a partition is dropped into its slot and its rail settles on top */
+/* and riveted: each head swells out of the plate a hair past its seat and
+   presses back flush, one corner at a time */
+.home-module.is-active .home-part[data-part='tb-rivet'] {
+  transform-box: fill-box;
+  transform-origin: 50% 50%;
+  animation: home-tb-rivet 160ms cubic-bezier(0.3, 0.72, 0.4, 1) backwards;
+  animation-delay: calc(1140ms + var(--step) * 55ms);
+}
+
+/* a partition is dropped into its slot; its rail settles on top */
 .home-module.is-active .home-part[data-part='tb-divider'] {
-  animation: home-tb-divider 270ms cubic-bezier(0.24, 0.86, 0.26, 1) backwards;
+  animation: home-tb-divider 270ms cubic-bezier(0.42, 0, 0.58, 1) backwards;
   animation-delay: calc(830ms + var(--step) * 95ms);
 }
 
-/* the pin is driven through the knuckles and the caps land on its ends */
+/* the knuckles are dropped onto the back rim */
 .home-module.is-active .home-part[data-part='tb-hinge'] {
-  animation: home-tb-hinge 300ms cubic-bezier(0.24, 0.86, 0.26, 1) backwards;
+  animation: home-tb-hinge 300ms cubic-bezier(0.42, 0, 0.58, 1) backwards;
   animation-delay: 900ms;
+}
+
+/* then the pin is driven through them along its own axis. A barrel entering
+   the knuckles from the left end projects to a stretch out of that end, so the
+   run grows from the left cap with the far cap riding its tip. */
+.home-module.is-active .home-part[data-part='tb-pin'] {
+  transform-box: fill-box;
+  transform-origin: 0% 50%;
+  animation: home-tb-pin 260ms cubic-bezier(0.35, 0.05, 0.55, 1) backwards;
+  animation-delay: 960ms;
 }
 
 /* the slab the reader meets is lowered onto the rim, and only then hands over */
 .home-module.is-active .home-part[data-part='closed'] {
-  animation: home-tb-closed 320ms cubic-bezier(0.2, 0.86, 0.24, 1) backwards;
+  animation: home-tb-closed 320ms cubic-bezier(0.42, 0, 0.58, 1) backwards;
   animation-delay: 880ms;
 }
 
-/* the switch is fitted to the panel; the pointer is turned to its seat later */
+/* the switch is screwed into its boss; the pointer is turned to its seat later */
 .home-module.is-active .home-part[data-part='tb-dial'] {
-  animation: home-tb-dial 260ms cubic-bezier(0.24, 0.86, 0.26, 1) backwards;
+  transform-box: fill-box;
+  transform-origin: 50% 50%;
+  animation: home-tb-dial 260ms cubic-bezier(0.3, 0.72, 0.4, 1) backwards;
   animation-delay: 980ms;
 }
 
-/* the index panel is pressed onto the lid's inner face */
+/* the index panel is pressed into the lid's recess */
 .home-module.is-active .home-part[data-part='tb-board'] {
-  animation: home-tb-board 300ms cubic-bezier(0.22, 0.9, 0.24, 1) backwards;
+  transform-box: fill-box;
+  transform-origin: 50% 50%;
+  animation: home-tb-board 300ms cubic-bezier(0.3, 0.72, 0.4, 1) backwards;
   animation-delay: 1370ms;
 }
 
-/* the clamp rail is screwed over the panel's top edge */
+/* the clamp rail is slid up over the panel's top edge and tightened down */
 .home-module.is-active .home-part[data-part='tb-bead'] {
-  animation: home-tb-bead 260ms cubic-bezier(0.22, 0.9, 0.24, 1) backwards;
+  transform-box: fill-box;
+  transform-origin: 50% 0%;
+  animation: home-tb-bead 260ms cubic-bezier(0.3, 0.72, 0.4, 1) backwards;
   animation-delay: 1600ms;
 }
 
@@ -481,13 +544,17 @@
    block. This is the run the whole build is for — the board is the index of the
    resource page, so it is populated, not printed. */
 .home-module.is-active .home-part[data-part='tb-badge'] {
-  animation: home-tb-badge 210ms cubic-bezier(0.22, 0.9, 0.24, 1) backwards;
+  transform-box: fill-box;
+  transform-origin: 50% 50%;
+  animation: home-tb-badge 210ms cubic-bezier(0.3, 0.72, 0.4, 1) backwards;
   animation-delay: calc(1700ms + var(--step) * 30ms);
 }
 
 /* eight name plates follow, a touch faster, so both columns finish together */
 .home-module.is-active .home-part[data-part='tb-link'] {
-  animation: home-tb-link 200ms cubic-bezier(0.22, 0.9, 0.24, 1) backwards;
+  transform-box: fill-box;
+  transform-origin: 50% 50%;
+  animation: home-tb-link 200ms cubic-bezier(0.3, 0.72, 0.4, 1) backwards;
   animation-delay: calc(1930ms + var(--step) * 22ms);
 }
 
@@ -504,17 +571,17 @@
 }
 
 .home-module.is-active .home-part[data-part='trays'] .home-case-tray[data-index='0'] {
-  animation: home-tb-tray 220ms cubic-bezier(0.24, 0.86, 0.26, 1) backwards;
+  animation: home-tb-tray 220ms cubic-bezier(0.42, 0, 0.58, 1) backwards;
   animation-delay: 1600ms;
 }
 
 .home-module.is-active .home-part[data-part='trays'] .home-case-tray[data-index='1'] {
-  animation: home-tb-tray 220ms cubic-bezier(0.24, 0.86, 0.26, 1) backwards;
+  animation: home-tb-tray 220ms cubic-bezier(0.42, 0, 0.58, 1) backwards;
   animation-delay: 1670ms;
 }
 
 .home-module.is-active .home-part[data-part='trays'] .home-case-tray[data-index='2'] {
-  animation: home-tb-tray 220ms cubic-bezier(0.24, 0.86, 0.26, 1) backwards;
+  animation: home-tb-tray 220ms cubic-bezier(0.42, 0, 0.58, 1) backwards;
   animation-delay: 1740ms;
 }
 
@@ -526,117 +593,153 @@
   animation-delay: 2130ms;
 }
 
-/* a pad is pressed flat onto the deck */
+/* a pad is pressed up out of the deck and seats a hair proud */
 @keyframes home-tb-pad {
-  from { opacity: 0; transform: translateY(-6px) scale(0.88); }
-  58% { opacity: 1; transform: translateY(0.5px) scale(1.02); }
-  to { opacity: 1; transform: none; }
+  from { transform: translateY(9px) scaleY(0.45); }
+  62% { transform: translateY(-1.6px) scaleY(1.06); }
+  to { transform: none; }
 }
 
 /* the plinth is lowered onto the pads and settles under its own weight */
 @keyframes home-tb-plinth {
-  from { opacity: 0; transform: translateY(-14px); }
-  52% { opacity: 1; transform: translateY(1.5px); }
-  76% { transform: translateY(-0.6px); }
-  to { opacity: 1; transform: none; }
+  from { transform: translateY(-26px); }
+  54% { transform: translateY(2.6px); }
+  78% { transform: translateY(-1px); }
+  to { transform: none; }
 }
 
-/* a wall is stood up in its rebate */
+/* a wall is extruded up out of its rebate, starting flat on the base line */
 @keyframes home-tb-wall {
-  from { opacity: 0; transform: translateY(15px); }
-  48% { opacity: 1; }
-  82% { transform: translateY(-1.1px); }
-  to { opacity: 1; transform: none; }
+  from { transform: scaleY(0.001); }
+  72% { transform: scaleY(1.03); }
+  88% { transform: scaleY(0.994); }
+  to { transform: none; }
 }
 
-/* the near wall holds a hair proud of the rebate, then closes over it */
+/* the near wall swings shut and closes over the rebate */
 @keyframes home-tb-front {
-  from { opacity: 0; transform: translateY(12px); }
-  26% { opacity: 1; }
-  62% { transform: translateY(2.2px); }
-  to { opacity: 1; transform: none; }
+  from { transform: scaleX(0.03); }
+  70% { transform: scaleX(1.014); }
+  88% { transform: scaleX(0.997); }
+  to { transform: none; }
 }
 
-/* a fitted part is offered up to the panel and pressed home */
+/* the latch folds down onto the panel and hooks */
 @keyframes home-tb-fitted {
-  from { opacity: 0; transform: translateY(-8px); }
-  60% { opacity: 1; }
-  84% { transform: translateY(1px); }
-  to { opacity: 1; transform: none; }
+  from { transform: scaleY(0.02); }
+  64% { transform: scaleY(1.045); }
+  86% { transform: scaleY(0.99); }
+  to { transform: none; }
 }
 
-/* a plate is stamped on: it lands a shade small and flattens out */
+/* a plate is pressed onto the panel: it comes off the face and flattens */
 @keyframes home-tb-stamp {
-  from { opacity: 0; transform: scale(0.86); }
-  64% { opacity: 1; transform: scale(1.03); }
-  to { opacity: 1; transform: none; }
+  from { transform: scale(1.09); }
+  58% { transform: scale(0.978); }
+  82% { transform: scale(1.005); }
+  to { transform: none; }
+}
+
+/* the maker's plate is slid up the panel into its recess and seats */
+@keyframes home-tb-plate {
+  from { transform: translateY(16px); }
+  62% { transform: translateY(-1.5px); }
+  84% { transform: translateY(0.5px); }
+  to { transform: none; }
+}
+
+/* a rivet head is set: it swells out of the plate and presses back flush */
+@keyframes home-tb-rivet {
+  from { transform: scale(0.18); }
+  60% { transform: scale(1.35); }
+  82% { transform: scale(0.94); }
+  to { transform: none; }
 }
 
 /* a partition drops into its slot and its rail settles on top */
 @keyframes home-tb-divider {
-  from { opacity: 0; transform: translateY(-20px); }
-  52% { opacity: 1; }
-  80% { transform: translateY(1.4px); }
-  to { opacity: 1; transform: none; }
+  0% { visibility: hidden; transform: translateY(-30px); }
+  1% { visibility: visible; transform: translateY(-30px); }
+  52% { transform: translateY(1.8px); }
+  80% { transform: translateY(-0.8px); }
+  100% { transform: none; }
 }
 
-/* the pin grows out through the knuckles, overshoots, and the caps land */
+/* the knuckles are dropped onto the back rim, overshoot, and seat */
 @keyframes home-tb-hinge {
-  from { opacity: 0; transform: scaleX(0.5); }
-  40% { opacity: 1; }
-  78% { transform: scaleX(1.02); }
-  to { opacity: 1; transform: none; }
+  0% { visibility: hidden; transform: translateY(-16px); }
+  1% { visibility: visible; transform: translateY(-16px); }
+  60% { transform: translateY(1.2px); }
+  84% { transform: translateY(-0.5px); }
+  100% { transform: none; }
 }
 
-/* the shut slab is lowered onto the rim */
+/* the pin runs in from the left cap through both knuckles */
+@keyframes home-tb-pin {
+  from { transform: scaleX(0.015); }
+  74% { transform: scaleX(1.012); }
+  to { transform: none; }
+}
+
+/* the shut slab is set down on the rim */
 @keyframes home-tb-closed {
-  from { opacity: 0; transform: translateY(-22px); }
-  54% { opacity: 1; }
-  80% { transform: translateY(1.1px); }
-  to { opacity: 1; transform: none; }
+  0% { visibility: hidden; transform: translateY(-34px); }
+  1% { visibility: visible; transform: translateY(-34px); }
+  54% { transform: translateY(2.2px); }
+  80% { transform: translateY(-0.9px); }
+  100% { transform: none; }
 }
 
-/* the switch is fitted and its detent collar settles into the boss */
+/* The switch is screwed into its boss: it stands a third off the panel (a
+   third larger, being nearer the camera), winds back onto its axis and seats on
+   the collar. The wind is capped at a third of a turn — a full one would carry
+   the ratchet pawl and its spring around with it, and at nine units across it
+   would read as a blur rather than as a turn. */
 @keyframes home-tb-dial {
-  from { opacity: 0; transform: scale(0.7); }
-  60% { opacity: 1; transform: scale(1.06); }
-  to { opacity: 1; transform: none; }
+  from { transform: scale(1.35) rotate(-36deg); }
+  62% { transform: scale(0.965) rotate(4deg); }
+  84% { transform: scale(1.012) rotate(-1deg); }
+  to { transform: none; }
 }
 
-/* the index panel is pressed onto the lid's face */
+/* the index panel is pressed into the lid's recess */
 @keyframes home-tb-board {
-  from { opacity: 0; transform: scale(0.95); }
-  to { opacity: 1; transform: none; }
+  from { transform: scale(1.04); }
+  64% { transform: scale(0.994); }
+  to { transform: none; }
 }
 
-/* the clamp rail is lowered onto the panel's top edge */
+/* the clamp rail is slid up over the panel's top edge and tightened down */
 @keyframes home-tb-bead {
-  from { opacity: 0; transform: translateY(-10px); }
-  68% { opacity: 1; transform: translateY(0.9px); }
-  to { opacity: 1; transform: none; }
+  from { transform: translateY(4px) rotate(1.6deg); }
+  68% { transform: translateY(-0.6px) rotate(-0.3deg); }
+  to { transform: none; }
 }
 
-/* a chip is pinned on: it arrives a little large and presses flat */
+/* a chip is pressed onto the board: it comes off the face a hair large and
+   flattens under the thumb */
 @keyframes home-tb-badge {
-  from { opacity: 0; transform: scale(1.55) rotate(-6deg); }
-  55% { opacity: 1; transform: scale(0.95) rotate(1.2deg); }
-  78% { transform: scale(1.02) rotate(-0.4deg); }
-  to { opacity: 1; transform: none; }
+  from { transform: translateY(-7px) scale(1.06); }
+  55% { transform: translateY(0.8px) scale(0.975); }
+  78% { transform: translateY(-0.3px) scale(1.004); }
+  to { transform: none; }
 }
 
-/* a name plate is printed onto the board */
+/* a name plate is printed on: it runs in from the left and presses flat */
 @keyframes home-tb-link {
-  from { opacity: 0; transform: translateX(-8px) scaleX(0.86); }
-  60% { opacity: 1; }
-  to { opacity: 1; transform: none; }
+  from { transform: translateX(-11px) scale(1.05); }
+  58% { transform: translateX(0.8px) scale(0.988); }
+  80% { transform: translateX(-0.3px) scale(1.003); }
+  to { transform: none; }
 }
 
 /* a set is set down into its bay */
 @keyframes home-tb-tray {
-  from { opacity: 0; transform: translateY(-9px); }
-  58% { opacity: 1; }
-  82% { transform: translateY(1px); }
-  to { opacity: 1; transform: none; }
+  0% { visibility: hidden; transform: translateY(-20px); }
+  1% { visibility: visible; transform: translateY(-20px); }
+  58% { transform: translateY(1.8px); }
+  82% { transform: translateY(-0.7px); }
+  100% { transform: none; }
 }
 
 /* the detent snap: it overshoots the mark the way a spring-loaded knob does */

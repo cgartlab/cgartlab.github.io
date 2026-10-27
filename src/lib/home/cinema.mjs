@@ -215,9 +215,13 @@ export function buildCinema(P, options = {}) {
   const guide = []
   for (const [x, z] of BEND) {
     const F = G.frameAlong([x, FILM_Y + 0.6, z], [0, 1, 0])
+    // one group per roller: they are four separate fixings, so each has to be
+    // able to turn on its own centre (see `home-cine-guide` in cinema.css)
+    guide.push('<g class="home-cine-roller">')
     guide.push(k.solidSvg(G.disc(0, 1.6, 3, F, P), { tone: 'hi', className: 'home-cine-body' }))
     guide.push(k.lineSvg(G.circleOf(F, 1.7, 1.6, P), { tone: 'faint' }))
     guide.push(k.solidSvg(G.disc(1.6, 2.8, 1.2, F, P), { tone: 'lo' }))
+    guide.push('</g>')
   }
   out.push(part('cine-guide', 9, guide))
 
