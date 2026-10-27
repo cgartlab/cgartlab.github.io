@@ -40,7 +40,9 @@ const FILM_Y = FRONT + 1.8
 
 // the optical axis: 45 degrees up-left on the page
 const AIM = (() => {
-  const d = [-1, 0, 1.05]
+  // raked up and to the left, but not so steep that the cone leaves the top of
+  // the stage: the throw has to die inside the drawing, not against its edge
+  const d = [-1, 0, 0.52]
   const len = Math.hypot(...d)
   return [d[0] / len, d[1] / len, d[2] / len]
 })()
@@ -82,8 +84,11 @@ export function buildCinema(P, options = {}) {
   const perp = [-dir[1], dir[0]]
   const rim = k.iso(G.pointOf(LENS, 26, 9, 0), P)
   const rimR = Math.hypot(rim[0] - mx, rim[1] - my)
-  const REACH = 560
-  const HALF = 820
+  // the cone is long, but its light is spent by 44% of that: the stage clips at
+  // its own edge, and a beam still bright where it meets the top of the stage
+  // reads as a cut. It dies in the air instead.
+  const REACH = 620
+  const HALF = 520
   const near = [
     [mx + perp[0] * rimR, my + perp[1] * rimR],
     [mx - perp[0] * rimR, my - perp[1] * rimR],
@@ -92,7 +97,7 @@ export function buildCinema(P, options = {}) {
     [mx + dir[0] * REACH + perp[0] * HALF, my + dir[1] * REACH + perp[1] * HALF],
     [mx + dir[0] * REACH - perp[0] * HALF, my + dir[1] * REACH - perp[1] * HALF],
   ]
-  out.push(`<defs><linearGradient id="home-beam-fade" gradientUnits="userSpaceOnUse" x1="${mx.toFixed(1)}" y1="${my.toFixed(1)}" x2="${(mx + dir[0] * REACH).toFixed(1)}" y2="${(my + dir[1] * REACH).toFixed(1)}"><stop offset="0" stop-color="#fff" stop-opacity=".4"/><stop offset=".12" stop-color="#fff" stop-opacity=".26"/><stop offset=".3" stop-color="#fff" stop-opacity=".15"/><stop offset=".6" stop-color="#fff" stop-opacity=".05"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient></defs>`)
+  out.push(`<defs><linearGradient id="home-beam-fade" gradientUnits="userSpaceOnUse" x1="${mx.toFixed(1)}" y1="${my.toFixed(1)}" x2="${(mx + dir[0] * REACH).toFixed(1)}" y2="${(my + dir[1] * REACH).toFixed(1)}"><stop offset="0" stop-color="#fff" stop-opacity=".4"/><stop offset=".1" stop-color="#fff" stop-opacity=".23"/><stop offset=".22" stop-color="#fff" stop-opacity=".11"/><stop offset=".34" stop-color="#fff" stop-opacity=".03"/><stop offset=".44" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient></defs>`)
   out.push(part('cine-beam', 0, '', [
     `<path class="home-cine-beam" d="${k.pathOf([near[0], far[0], far[1], near[1]], true)}"/>`,
   ]))
