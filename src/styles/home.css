@@ -610,7 +610,7 @@ html.reduce-motion .home-stage .home-issue-sheet-group { transition: none; }
 
 .home-projection {
   /* the soft border of the rectangle — 40–70px band, scaling with the frame */
-  --projection-feather: clamp(44px, 5vw, 68px);
+  --projection-feather: clamp(64px, 7vw, 96px);
   position: fixed;
   inset: 0;
   z-index: -1;
@@ -632,16 +632,74 @@ html[data-home-section='works'][data-screening='on'] .home-projection { opacity:
   width: 100vw;
   height: min(62vh, 56.25vw);
   overflow: hidden;
-  /* a projected picture is never sharp; the mask edge is feathered separately */
-  filter: blur(2.4px) saturate(1) contrast(1.02);
-  /* rectangle with a soft, blurred border: horizontal × vertical feather */
+  /* a projected picture is never sharp. The blur is a real gaussian (CSS blur
+     is one); the edge is the part that used to read as a band, so it is a
+     six-stop falloff instead of a straight ramp — the alpha follows a gaussian's
+     shoulder, which is what light on a wall actually does */
+  filter: blur(3.2px) saturate(1) contrast(1.02);
   -webkit-mask-image:
-    linear-gradient(to right, transparent 0, #000 var(--projection-feather), #000 calc(100% - var(--projection-feather)), transparent 100%),
-    linear-gradient(to bottom, transparent 0, #000 var(--projection-feather), #000 calc(100% - var(--projection-feather)), transparent 100%);
+    linear-gradient(to right,
+      transparent 0,
+      rgba(0, 0, 0, 0.04) calc(var(--projection-feather) * 0.14),
+      rgba(0, 0, 0, 0.16) calc(var(--projection-feather) * 0.3),
+      rgba(0, 0, 0, 0.38) calc(var(--projection-feather) * 0.46),
+      rgba(0, 0, 0, 0.64) calc(var(--projection-feather) * 0.62),
+      rgba(0, 0, 0, 0.86) calc(var(--projection-feather) * 0.8),
+      #000 var(--projection-feather),
+      #000 calc(100% - var(--projection-feather)),
+      rgba(0, 0, 0, 0.86) calc(100% - var(--projection-feather) * 0.8),
+      rgba(0, 0, 0, 0.64) calc(100% - var(--projection-feather) * 0.62),
+      rgba(0, 0, 0, 0.38) calc(100% - var(--projection-feather) * 0.46),
+      rgba(0, 0, 0, 0.16) calc(100% - var(--projection-feather) * 0.3),
+      rgba(0, 0, 0, 0.04) calc(100% - var(--projection-feather) * 0.14),
+      transparent 100%),
+    linear-gradient(to bottom,
+      transparent 0,
+      rgba(0, 0, 0, 0.04) calc(var(--projection-feather) * 0.14),
+      rgba(0, 0, 0, 0.16) calc(var(--projection-feather) * 0.3),
+      rgba(0, 0, 0, 0.38) calc(var(--projection-feather) * 0.46),
+      rgba(0, 0, 0, 0.64) calc(var(--projection-feather) * 0.62),
+      rgba(0, 0, 0, 0.86) calc(var(--projection-feather) * 0.8),
+      #000 var(--projection-feather),
+      #000 calc(100% - var(--projection-feather)),
+      rgba(0, 0, 0, 0.86) calc(100% - var(--projection-feather) * 0.8),
+      rgba(0, 0, 0, 0.64) calc(100% - var(--projection-feather) * 0.62),
+      rgba(0, 0, 0, 0.38) calc(100% - var(--projection-feather) * 0.46),
+      rgba(0, 0, 0, 0.16) calc(100% - var(--projection-feather) * 0.3),
+      rgba(0, 0, 0, 0.04) calc(100% - var(--projection-feather) * 0.14),
+      transparent 100%);
   -webkit-mask-composite: source-in;
   mask-image:
-    linear-gradient(to right, transparent 0, #000 var(--projection-feather), #000 calc(100% - var(--projection-feather)), transparent 100%),
-    linear-gradient(to bottom, transparent 0, #000 var(--projection-feather), #000 calc(100% - var(--projection-feather)), transparent 100%);
+    linear-gradient(to right,
+      transparent 0,
+      rgba(0, 0, 0, 0.04) calc(var(--projection-feather) * 0.14),
+      rgba(0, 0, 0, 0.16) calc(var(--projection-feather) * 0.3),
+      rgba(0, 0, 0, 0.38) calc(var(--projection-feather) * 0.46),
+      rgba(0, 0, 0, 0.64) calc(var(--projection-feather) * 0.62),
+      rgba(0, 0, 0, 0.86) calc(var(--projection-feather) * 0.8),
+      #000 var(--projection-feather),
+      #000 calc(100% - var(--projection-feather)),
+      rgba(0, 0, 0, 0.86) calc(100% - var(--projection-feather) * 0.8),
+      rgba(0, 0, 0, 0.64) calc(100% - var(--projection-feather) * 0.62),
+      rgba(0, 0, 0, 0.38) calc(100% - var(--projection-feather) * 0.46),
+      rgba(0, 0, 0, 0.16) calc(100% - var(--projection-feather) * 0.3),
+      rgba(0, 0, 0, 0.04) calc(100% - var(--projection-feather) * 0.14),
+      transparent 100%),
+    linear-gradient(to bottom,
+      transparent 0,
+      rgba(0, 0, 0, 0.04) calc(var(--projection-feather) * 0.14),
+      rgba(0, 0, 0, 0.16) calc(var(--projection-feather) * 0.3),
+      rgba(0, 0, 0, 0.38) calc(var(--projection-feather) * 0.46),
+      rgba(0, 0, 0, 0.64) calc(var(--projection-feather) * 0.62),
+      rgba(0, 0, 0, 0.86) calc(var(--projection-feather) * 0.8),
+      #000 var(--projection-feather),
+      #000 calc(100% - var(--projection-feather)),
+      rgba(0, 0, 0, 0.86) calc(100% - var(--projection-feather) * 0.8),
+      rgba(0, 0, 0, 0.64) calc(100% - var(--projection-feather) * 0.62),
+      rgba(0, 0, 0, 0.38) calc(100% - var(--projection-feather) * 0.46),
+      rgba(0, 0, 0, 0.16) calc(100% - var(--projection-feather) * 0.3),
+      rgba(0, 0, 0, 0.04) calc(100% - var(--projection-feather) * 0.14),
+      transparent 100%);
   mask-composite: intersect;
   opacity: 0.62;
 }

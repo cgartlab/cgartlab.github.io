@@ -508,6 +508,30 @@
   transform-origin: 50% 50%;
 }
 
+/* The wound film pays out and winds on. A show runs the supply down and the
+   take-up up over the reel's whole length, so the roll radius is what moves —
+   the hub is drawn over it, so the spool never opens a hole. 54 s of running,
+   then 6 s of rewind back to the start: one loop of the film's own life. */
+.home-module.is-active .home-reel-coil[data-reel='a'] {
+  animation: home-reel-unwind 60000ms linear 2600ms infinite;
+}
+
+.home-module.is-active .home-reel-coil[data-reel='b'] {
+  animation: home-reel-wind 60000ms linear 2600ms infinite;
+}
+
+@keyframes home-reel-unwind {
+  0% { transform: scale(1); }
+  90% { transform: scale(0.45); }
+  100% { transform: scale(1); }
+}
+
+@keyframes home-reel-wind {
+  0% { transform: scale(0.45); }
+  90% { transform: scale(1); }
+  100% { transform: scale(0.45); }
+}
+
 .home-module.is-active .home-reel-spin[data-reel='a'] {
   animation: home-cine-turn 5600ms linear 2600ms infinite;
 }
@@ -548,6 +572,11 @@ html.reduce-motion .home-module.is-active .home-part[data-part] {
     transform: none;
   }
 }
+
+/* the film is already wound to where the loop starts */
+html.reduce-motion .home-module.is-active .home-reel-coil,
+html.reduce-motion .home-module.is-active .home-reel-spin,
+html.reduce-motion .home-module.is-active .home-cine-shutter { animation: none !important; }
 
 /* the strip is already through the gate, and the perforations are on it */
 html.reduce-motion .home-module.is-active .home-cine-film,

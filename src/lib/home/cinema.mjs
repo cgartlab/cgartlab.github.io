@@ -321,7 +321,14 @@ export function buildCinema(P, options = {}) {
     reels.push(k.solidSvg(G.ringBand(2.2, 3.8, REEL_R - 2, REEL_R, F, P), { tone: 'hi' }))
     reels.push(k.lineSvg(G.spokesOf(F, 3.6, 4.4, REEL_R - 3, 4, P, { phase: 0.4 }), { tone: 'hi' }))
     reels.push(k.lineSvg(G.circleOf(F, 3.9, REEL_R - 5.5, P), { tone: 'faint' }))
-    reels.push(k.lineSvg(k.pathOf(G.spiral(F, 4.2, REEL_R - 8.5, REEL_R - 2.4, 0, Math.PI * 5.2, 60).map(point => k.iso(point, P))), { tone: 'mid' }))
+    // the wound film: a filled roll with a spiral on it, in its own group so it
+    // can shrink as the show runs — the supply pays out, the take-up winds on.
+    // The hub is drawn after it, so scaling the roll never opens a hole in it.
+    const [coilX, coilY] = k.iso([x, REEL_Y, REEL_Z], P)
+    reels.push(`<g class="home-reel-coil" data-reel="${index === 0 ? 'a' : 'b'}" style="transform-origin:${coilX.toFixed(1)}px ${coilY.toFixed(1)}px">`)
+    reels.push(k.solidSvg(G.disc(4, 4.4, REEL_R - 3.2, F, P), { tone: 'lo', className: 'home-cine-coil' }))
+    reels.push(k.lineSvg(k.pathOf(G.spiral(F, 4.5, REEL_R - 8.5, REEL_R - 2.8, 0, Math.PI * 9, 96).map(point => k.iso(point, P))), { tone: 'mid' }))
+    reels.push('</g>')
     reels.push('</g>')
     reels.push(k.solidSvg(G.disc(3.2, 5.4, 3.6, F, P), { tone: 'hi' }))
     reels.push(k.lineSvg(G.circleOf(F, 5.5, 1.4, P), { tone: 'faint' }))
