@@ -212,6 +212,7 @@
 .home-copy { max-width: 34rem; }
 
 .home-title {
+  position: relative;
   margin: 0;
   font-family: var(--un-preset-theme-font-family-title);
   font-size: clamp(1.7rem, 3.3vw, 2.9rem);
@@ -219,6 +220,48 @@
   line-height: 1.08;
   color: oklch(var(--un-preset-theme-colors-primary));
   text-wrap: balance;
+}
+
+/* A digital hiccup. Every few seconds the headline slips for a third of a
+   second: two ghost copies of the same line, each clipped to a band and nudged
+   a couple of pixels the other way, in the accent so the artefact stays inside
+   the drawing's palette. Both copies are laid out by the same rule as the
+   text, so a wrapped headline breaks in the same place and the bands land on
+   the real letters. */
+.home-title::before,
+.home-title::after {
+  content: attr(data-text);
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  color: oklch(var(--un-preset-theme-colors-highlight));
+  opacity: 0;
+  clip-path: inset(100% 0 0 0);
+}
+
+.home-title::before { animation: home-title-slip-a 6.5s steps(1, end) infinite; }
+.home-title::after { animation: home-title-slip-b 6.5s steps(1, end) 40ms infinite; }
+
+/* two bands per hiccup, each a single frame — a dropped scanline, not a wobble */
+@keyframes home-title-slip-a {
+  0%, 92%, 100% { opacity: 0; clip-path: inset(100% 0 0 0); transform: none; }
+  92.4% { opacity: 0.45; clip-path: inset(18% 0 54% 0); transform: translateX(-2.5px); }
+  93.6% { opacity: 0.45; clip-path: inset(56% 0 24% 0); transform: translateX(1.8px); }
+  95% { opacity: 0; clip-path: inset(100% 0 0 0); transform: none; }
+}
+
+@keyframes home-title-slip-b {
+  0%, 92%, 100% { opacity: 0; clip-path: inset(100% 0 0 0); transform: none; }
+  92.8% { opacity: 0.3; clip-path: inset(38% 0 34% 0); transform: translateX(2.2px); }
+  94.2% { opacity: 0; clip-path: inset(100% 0 0 0); transform: none; }
+}
+
+html.reduce-motion .home-title::before,
+html.reduce-motion .home-title::after { animation: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .home-title::before,
+  .home-title::after { animation: none; }
 }
 
 .home-sub {
