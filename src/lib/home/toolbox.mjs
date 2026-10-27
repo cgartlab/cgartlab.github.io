@@ -48,6 +48,16 @@ const num = (n) => Number(n.toFixed(3))
 
 const solid = (plan, z, h, P, tone = 'mid', steps = 4, bevel = 0.5) => k.solidSvg(k.slabOf(plan, z, h, P, steps, bevel), { tone })
 
+/**
+ * One sub-assembly. Every run is a contiguous stretch of what already painted
+ * together, so wrapping it changes no painter's order — only which assembly a
+ * path belongs to. `--step` is the index *inside* a run (the third wall, the
+ * ninth chip); toolbox.css owns the clock that reads it, so the order the case
+ * is built in lives in one place and the drawing stays a drawing.
+ */
+const part = (name, step, items) =>
+  `<g class="home-part" data-part="${name}" style="--step:${step}">${items.join('')}</g>`
+
 /** Fill an already-projected path with one of the four shades. */
 const paint = (d, shade, tone = 'faint') => `<path class="iso-shade" data-shade="${shade}" d="${d}"/>${k.lineSvg(d, { tone })}`
 
@@ -60,6 +70,17 @@ const topPlan = (plan, z, P, shade, tone) => paint(k.pathOf(k.ringOf(plan, 5).ma
 /** A flat mark on the floor plane, in one of the set tones. */
 const flat = (d, cls, tone) => `<path class="${cls}" d="${d}"/>${tone ? k.lineSvg(d, { tone }) : ''}`
 const flatPlan = (ring, z, P, cls, tone) => flat(k.pathOf(ring.map(([x, y]) => k.iso([x, y, z], P)), true), cls, tone)
+
+/** A line of engraving on the near panel, laid on its own face plane. */
+const frontText = (x, z, text, size, tone, P, anchor = 'start') =>
+  k.faceTextSvg(k.sideMatrix([x, FRONT + 0.3], z, P, 'left'), text, { size, tone, anchor })
+
+/** A circle on the near panel — a rivet head, not a plan circle. */
+const faceCircle = (cx, cz, r, y, P, n = 12) =>
+  k.pathOf(Array.from({ length: n }, (_, i) => {
+    const a = (i / n) * Math.PI * 2
+    return k.iso([cx + r * Math.cos(a), y, cz + r * Math.sin(a)], P)
+  }), true)
 
 // ---- the lid -------------------------------------------------------------
 //
@@ -208,8 +229,18 @@ const TILE_COL_PITCH = 15
 const TILE_GRID = [-40, 32.75]
 const LINKS_ZONE = [3, 73]
 
-/** One app chip: a printed tile with its mark knocked out of it. */
-function appTile(cu, cv, href, name, P) {
+/** A circle on the lid's face — a screw head, not a plan circle. */
+const lidRing = (cu, cv, r, P, w = LW) =>
+  facePath(LID, Array.from({ length: 14 }, (_, i) => {
+    const a = (i / 14) * Math.PI * 2
+    return [cu + r * Math.cos(a), cv + r * Math.sin(a), w]
+  }), P)
+
+/**
+ * One app chip, as its own sub-assembly. The board is not printed in one pass:
+ * it is pinned up chip by chip, and `--step` is the order they go on.
+ */
+function appBadge(index, cu, cv, href, name, P) {
   const half = TILE / 2
   const inset = 1.15
   const size = TILE - inset * 2
@@ -218,59 +249,80 @@ function appTile(cu, cv, href, name, P) {
   // vertical axis is negated and the origin taken at the tile's top edge —
   // without that the marks hang upside down.
   const m = faceMatrix(LID, [cu - size / 2, cv + size / 2, LW - 0.25], [1, 0, 0], [0, -1, 0], P)
-  return `<g class="home-lid-app"><title>${name}</title>`
-    + `<path class="home-lid-tile" d="${lidRect([cu - half, cv - half, cu + half, cv + half], 2.3, P)}"/>`
-    + k.lineSvg(lidRect([cu - half, cv - half, cu + half, cv + half], 2.3, P), { tone: 'lo' })
-    + `<image class="home-lid-icon" href="/icons/tools/${href}" width="${num(size)}" height="${num(size)}" preserveAspectRatio="xMidYMid meet" transform="${m}"/>`
-    + '</g>'
+  const tile = lidRect([cu - half, cv - half, cu + half, cv + half], 2.3, P)
+  return part('tb-badge', index, [
+    `<g class="home-lid-app"><title>${name}</title>`,
+    `<path class="home-lid-tile" d="${tile}"/>`,
+    k.lineSvg(tile, { tone: 'lo' }),
+    `<image class="home-lid-icon" href="/icons/tools/${href}" width="${num(size)}" height="${num(size)}" preserveAspectRatio="xMidYMid meet" transform="${m}"/>`,
+    '</g>',
+  ])
 }
 
+/** One creator's name plate, printed on the right-hand column. */
+function linkPlate(index, name, cy, P) {
+  const [u0, u1] = LINKS_ZONE
+  const chip = lidRect([u0, cy - 2.95, u1, cy + 2.95], 1.3, P)
+  return part('tb-link', index, [
+    `<g class="home-lid-chip"><title>${name}</title>`,
+    `<path class="home-lid-chip-face" d="${chip}"/>`,
+    k.lineSvg(chip, { tone: 'faint' }),
+    lidText(u0 + 3.4, cy - 1.75, name, 5, 'hi', P),
+    // the arrow: a diagonal with a corner head, pointing off the plate
+    lidLine([[u1 - 8.2, cy - 1.25], [u1 - 4.6, cy + 1.25]], 'lo', P),
+    lidLine([[u1 - 4.6, cy + 1.25], [u1 - 6.5, cy + 1.25]], 'lo', P),
+    lidLine([[u1 - 4.6, cy + 1.25], [u1 - 4.6, cy - 0.5]], 'lo', P),
+    '</g>',
+  ])
+}
+
+/**
+ * The lid's index, in the order it is built: the recessed panel, the clamp rail
+ * screwed over its top edge, then the chips and the name plates one at a time.
+ * Each comes back as its own run so the clock can hold it back.
+ */
 function lidBoard(P) {
-  const out = []
+  const panel = []
   // the panel: a recessed board, double-ruled the way a specimen board is
-  out.push(`<path class="home-lid-board" d="${lidRect(BOARD, 3.2, P)}"/>`)
-  out.push(k.lineSvg(lidRect(BOARD, 3.2, P), { tone: 'lo' }))
-  out.push(k.lineSvg(lidRect([BOARD[0] + 1.7, BOARD[1] + 1.7, BOARD[2] - 1.7, BOARD[3] - 1.7], 2.4, P), { tone: 'faint' }))
+  panel.push(`<path class="home-lid-board" d="${lidRect(BOARD, 3.2, P)}"/>`)
+  panel.push(k.lineSvg(lidRect(BOARD, 3.2, P), { tone: 'lo' }))
+  panel.push(k.lineSvg(lidRect([BOARD[0] + 1.7, BOARD[1] + 1.7, BOARD[2] - 1.7, BOARD[3] - 1.7], 2.4, P), { tone: 'faint' }))
   // four screws holding it to the lid
-  for (const [u, v] of [[-75, 8], [75, 8], [-75, 65], [75, 65]]) {
-    out.push(k.lineSvg(k.ring(u, v, 0.95, 0, P, 12), { tone: 'faint' }))
-  }
+  for (const [u, v] of [[-75, 8], [75, 8], [-75, 65], [75, 65]])
+    panel.push(k.lineSvg(k.ring(u, v, 0.95, 0, P, 12), { tone: 'faint' }))
 
   // captions over each zone, and the count of what is pinned there
-  out.push(lidText(-70, 63.2, '常用工具', 3.6, 'mid', P))
-  out.push(lidText(-10, 62.9, String(APPS.length), 3.0, 'lo', P, 'end'))
-  out.push(lidText(3.2, 63.2, '喜欢的创作者', 3.6, 'mid', P))
-  out.push(lidText(73, 62.9, String(FRIENDS.length).padStart(2, '0'), 3.0, 'lo', P, 'end'))
+  panel.push(lidText(-70, 63.2, '常用工具', 3.6, 'mid', P))
+  panel.push(lidText(-10, 62.9, String(APPS.length), 3.0, 'lo', P, 'end'))
+  panel.push(lidText(3.2, 63.2, '喜欢的创作者', 3.6, 'mid', P))
+  panel.push(lidText(73, 62.9, String(FRIENDS.length).padStart(2, '0'), 3.0, 'lo', P, 'end'))
   // the hairline that splits the two zones
-  out.push(lidLine([[-2.5, 6.5], [-2.5, 59]], 'lo', P))
+  panel.push(lidLine([[-2.5, 6.5], [-2.5, 59]], 'lo', P))
+
+  // the clamp rail: the one thing on the board that is a solid rather than a
+  // print, so the panel reads as bolted to the lid instead of painted on it
+  const bead = [
+    boxSvg(LID, { u: -83, v: 66, w: -3.9, uw: 166, vd: 3.6, wh: 1.8 }, P, { tone: 'mid' }),
+    k.lineSvg(lidRing(-78, 67.8, 0.85, P, -3.95), { tone: 'faint' }),
+    k.lineSvg(lidRing(78, 67.8, 0.85, P, -3.95), { tone: 'faint' }),
+  ]
 
   // the app grid, reading order top-left to bottom-right
   const rows = Math.ceil(APPS.length / 4)
   const x0 = TILE_GRID[0] - ((3 * TILE_COL_PITCH) / 2)
   const y0 = TILE_GRID[1] + (((rows - 1) * TILE_PITCH) / 2)
-  APPS.forEach((_glyph, index) => {
+  const badges = APPS.map((_glyph, index) => {
     const cu = x0 + (index % 4) * TILE_COL_PITCH
     const cv = y0 - Math.floor(index / 4) * TILE_PITCH
-    out.push(appTile(cu, cv, ICONS[index], APP_NAMES[index], P))
+    return appBadge(index, cu, cv, ICONS[index], APP_NAMES[index], P)
   })
 
   // the name plates: one chip per creator, a hairline plate with its own arrow
   const pitch = 6.65
   const top = 56
-  FRIENDS.forEach((name, index) => {
-    const cy = top - index * pitch
-    const [u0, u1] = LINKS_ZONE
-    out.push(`<g class="home-lid-chip"><title>${name}</title>`)
-    out.push(`<path class="home-lid-chip-face" d="${lidRect([u0, cy - 2.95, u1, cy + 2.95], 1.3, P)}"/>`)
-    out.push(k.lineSvg(lidRect([u0, cy - 2.95, u1, cy + 2.95], 1.3, P), { tone: 'faint' }))
-    out.push(lidText(u0 + 3.4, cy - 1.75, name, 5, 'hi', P))
-    // the arrow: a diagonal with a corner head, pointing off the plate
-    out.push(lidLine([[u1 - 8.2, cy - 1.25], [u1 - 4.6, cy + 1.25]], 'lo', P))
-    out.push(lidLine([[u1 - 4.6, cy + 1.25], [u1 - 6.5, cy + 1.25]], 'lo', P))
-    out.push(lidLine([[u1 - 4.6, cy + 1.25], [u1 - 4.6, cy - 0.5]], 'lo', P))
-    out.push('</g>')
-  })
-  return out.join('')
+  const links = FRIENDS.map((name, index) => linkPlate(index, name, top - index * pitch, P))
+
+  return [part('tb-board', 0, panel), part('tb-bead', 0, bead), ...badges, ...links].join('')
 }
 
 function lidSvg(P) {
@@ -279,14 +331,10 @@ function lidSvg(P) {
   // under the case instead of up from its back rim
   const [, hy] = k.iso([0, BACK, HINGE_Z], P)
   const out = [`<g class="home-case-lid" style="--hinge:${hy.toFixed(1)}px">`]
-  // the hinge barrel the lid turns on, mating with the shell's two knuckles
-  const HINGE_AXIS = G.frameAlong([-78, BACK + 0.6, HINGE_Z], [1, 0, 0])
-  out.push(k.solidSvg(G.solidOf([[0, 1.5], [156, 1.5]], HINGE_AXIS, P), { tone: 'mid' }))
-  out.push(k.solidSvg(G.disc(0, 1.4, 2.1, G.frameAlong([-79, BACK + 0.6, HINGE_Z], [1, 0, 0]), P), { tone: 'hi' }))
-  out.push(k.solidSvg(G.disc(0, 1.4, 2.1, G.frameAlong([78, BACK + 0.6, HINGE_Z], [-1, 0, 0]), P), { tone: 'hi' }))
   out.push(boxSvg(LID, { u: -84, v: 0, w: -2, uw: 168, vd: LID_H, wh: 4 }, P, { tone: 'mid' }))
-  // the board is the lid's cargo, so it rides the tools' handover
-  out.push(`<g class="home-case-tools">${lidBoard(P)}</g>`)
+  // the board is the lid's cargo: it rides the swing, so every chip is already
+  // square to the camera by the time the case is open
+  out.push(lidBoard(P))
   out.push('</g>')
   return out.join('')
 }
@@ -812,89 +860,173 @@ function traySet(index, bays) {
 
 // ---- the case -----------------------------------------------------------
 //
-// The case assembles itself in four beats. `--step` carries the order for the
-// shared settle contract in home.css; toolbox.css replaces that generic settle
-// with the real mechanism (the shell rises off the deck, the trays drop into
-// their seats one after another, the front wall and its dial close the case up
-// last, while the shut slab rides the rim until it hands over to the hinged
-// lid).
+// The case is built, not faded in. toolbox.css owns the clock; this file only
+// decides which paths travel together, and the order a real case would go
+// together in:
 //
-// The groups are contiguous runs of what already painted together, so the
+//   pads    four rubber pads on the deck
+//   plinth  the machined base, lowered onto them
+//   walls   back → left → right, each stood up in its own rebate
+//   near    the near wall, the last panel, which closes the body
+//   parts   two partitions dropped into their slots
+//   hinge   knuckles, pin and end caps on the back rim
+//   shut    the slab the reader meets, lowered onto the rim
+//   …       then it opens and the index on its face is pinned up chip by chip
+//
+// The runs are contiguous stretches of what already painted together, so the
 // split changes no painter's order — only which assembly a path belongs to.
-// The lid, its board, the stay and the shut lid keep their own animations and
-// are wrapped around, never marked.
+// The lid, its board, the stay and the shut slab keep their own transitions
+// and are wrapped around, never marked.
 
-const STEPS = { shell: 0, trays: 1, front: 2, closed: 3 }
-
-const part = (name, inner) =>
-  `<g class="home-part" data-part="${name}" style="--step:${STEPS[name]}">${inner.join('')}</g>`
+/** The four pads, left to right. They clear the carry handle's mounts. */
+const PADS = [-72, -38, 38, 72]
+/** The nameplate on the near panel: right of the latch, clear of the switch. */
+const PLATE = [18, TOP + 21.6, 52, TOP + 28.2]
 
 export function buildToolbox(P, options = {}) {
   const labels = options.labels || ['工具', '学习', '作者']
-  const shell = []
-  const trays = []
-  const front = []
-  const closed = []
 
-  // a thick machined base, so the trays sit in a shallow well
-  shell.push(solid(SHELL, TOP, BASE_H, P, 'mid', 6, 1.2))
-  // far wall with its shaded inner face, and the two side walls
-  shell.push(solid({ x: SHELL.x, y: BACK, w: SHELL.w, d: WALL, r: 1 }, FLOOR_Z, RIM_Z - FLOOR_Z, P, 'mid'))
-  shell.push(faceQuad([[-79, BACK + WALL - 0.2, FLOOR_Z], [79, BACK + WALL - 0.2, FLOOR_Z], [79, BACK + WALL - 0.2, RIM_Z], [-79, BACK + WALL - 0.2, RIM_Z]], P, 1))
-  for (const z of [99.5, 101.8]) shell.push(k.lineSvg(k.segment([-78, BACK + WALL - 0.1, z], [78, BACK + WALL - 0.1, z], P), { tone: 'faint' }))
-  for (const x of [SHELL.x, SHELL.x + SHELL.w - WALL]) shell.push(solid({ x, y: BACK, w: WALL, d: SHELL.d, r: 1 }, FLOOR_Z, RIM_Z - FLOOR_Z, P, 'mid'))
-  // hinge knuckles: two machined blocks on the back rim, at the lid's foot
+  // --- the plinth ---------------------------------------------------------
+  // A thick machined base, so the trays sit in a shallow well. The well floor
+  // is the base's own top face, so it lands with it.
+  const plinth = [
+    solid(SHELL, TOP, BASE_H, P, 'mid', 6, 1.2),
+    topRect(IN.x0, IN.y0, IN.x1, IN.y1, FLOOR_Z + 0.06, P, 0),
+  ]
+
+  // --- the three far walls ------------------------------------------------
+  // The back wall carries its own shaded inner face, so the well has a lit
+  // surface behind the trays instead of the wall's raw shade.
+  const back = [
+    solid({ x: SHELL.x, y: BACK, w: SHELL.w, d: WALL, r: 1 }, FLOOR_Z, RIM_Z - FLOOR_Z, P, 'mid'),
+    faceQuad([[-79, BACK + WALL - 0.2, FLOOR_Z], [79, BACK + WALL - 0.2, FLOOR_Z], [79, BACK + WALL - 0.2, RIM_Z], [-79, BACK + WALL - 0.2, RIM_Z]], P, 1),
+  ]
+  for (const z of [99.5, 101.8])
+    back.push(k.lineSvg(k.segment([-78, BACK + WALL - 0.1, z], [78, BACK + WALL - 0.1, z], P), { tone: 'faint' }))
+  const walls = [
+    back,
+    [solid({ x: SHELL.x, y: BACK, w: WALL, d: SHELL.d, r: 1 }, FLOOR_Z, RIM_Z - FLOOR_Z, P, 'mid')],
+    [solid({ x: SHELL.x + SHELL.w - WALL, y: BACK, w: WALL, d: SHELL.d, r: 1 }, FLOOR_Z, RIM_Z - FLOOR_Z, P, 'mid')],
+  ]
+
+  // --- the partitions -----------------------------------------------------
+  // Two full-height dividers make the three bays. Each carries a machined rail
+  // on top: the rail is the part that reads at homepage scale, and it is what
+  // the shut lid actually lands on.
+  const dividers = DIVIDERS.map((x) => [
+    solid({ x, y: IN.y0, w: 2, d: IN.y1 - IN.y0, r: 0.5 }, FLOOR_Z, RIM_Z - FLOOR_Z, P, 'mid'),
+    solid({ x: x - 0.9, y: IN.y0, w: 3.8, d: IN.y1 - IN.y0, r: 0.9 }, RIM_Z - 2.4, 2.4, P, 'hi', 4, 0.5),
+  ])
+
+  // --- the hinge ----------------------------------------------------------
+  // Two knuckles stand on the back rim, a pin runs the length of it and a
+  // turned cap closes each end. The pin is what makes the two blocks read as
+  // one hinge instead of two brackets — and it is drawn here, outside the lid
+  // group, because a barrel does not turn with the leaf it carries.
+  const hinge = []
   for (const x of [-64, 50]) {
-    shell.push(solid({ x, y: BACK + 0.6, w: 14, d: 4.6, r: 1.4 }, RIM_Z, 2.6, P, 'mid', 4, 0.4))
-    shell.push(k.lineSvg(k.segment([x + 4.4, BACK + 0.6, RIM_Z + 2.65], [x + 4.4, BACK + 5.1, RIM_Z + 2.65], P), { tone: 'lo' }))
+    hinge.push(solid({ x, y: BACK + 0.6, w: 14, d: 4.6, r: 1.4 }, RIM_Z, 2.6, P, 'mid', 4, 0.4))
+    hinge.push(k.lineSvg(k.segment([x + 4.4, BACK + 0.6, RIM_Z + 2.65], [x + 4.4, BACK + 5.1, RIM_Z + 2.65], P), { tone: 'lo' }))
   }
-  // the well floor, then the two dividers that make the three bays
-  shell.push(topRect(IN.x0, IN.y0, IN.x1, IN.y1, FLOOR_Z + 0.06, P, 0))
-  for (const x of DIVIDERS) shell.push(solid({ x, y: IN.y0, w: 2, d: IN.y1 - IN.y0, r: 0.5 }, FLOOR_Z, RIM_Z - FLOOR_Z, P, 'mid'))
+  const PIN = { y: BACK + 2.4, z: RIM_Z + 1.5, r: 0.85 }
+  hinge.push(k.solidSvg(G.solidOf([[0, PIN.r], [160, PIN.r]], G.frameAlong([-80, PIN.y, PIN.z], [1, 0, 0]), P), { tone: 'lo' }))
+  for (const [x, dir] of [[-80, -1], [80, 1]])
+    hinge.push(k.solidSvg(G.disc(0, 2.2, 1.55, G.frameAlong([x, PIN.y, PIN.z], [dir, 0, 0]), P), { tone: 'mid' }))
 
-  // the three sets, each its own group so the dial can index between them
-  trays.push(traySet(0, setTools(P)))
-  trays.push(traySet(1, setStudy(P)))
-  trays.push(traySet(2, setAuthor(P)))
+  // --- the three sets -----------------------------------------------------
+  const trays = [
+    traySet(0, setTools(P)),
+    traySet(1, setStudy(P)),
+    traySet(2, setAuthor(P)),
+  ]
 
-  // the near wall last: it closes the case and hides the near half of the sets
-  front.push(solid({ x: SHELL.x, y: IN.y1, w: SHELL.w, d: WALL, r: 1 }, TOP, RIM_Z - TOP, P, 'mid', 4, 1))
-  front.push(k.lineSvg(k.planOutline(k.insetPlan(SHELL, 3.6), RIM_Z + 0.5, P, 6), { tone: 'faint' }))
-  front.push(k.lineSvg(k.planOutline({ x: IN.x0, y: IN.y0, w: IN.x1 - IN.x0, d: IN.y1 - IN.y0, r: 2 }, RIM_Z + 0.4, P, 4), { tone: 'faint' }))
+  // --- the near wall ------------------------------------------------------
+  // It closes the case and hides the near half of the sets, so it is the last
+  // panel and gets its own beat.
+  const front = [
+    solid({ x: SHELL.x, y: IN.y1, w: SHELL.w, d: WALL, r: 1 }, TOP, RIM_Z - TOP, P, 'mid', 4, 1),
+    k.lineSvg(k.planOutline(k.insetPlan(SHELL, 3.6), RIM_Z + 0.5, P, 6), { tone: 'faint' }),
+    k.lineSvg(k.planOutline({ x: IN.x0, y: IN.y0, w: IN.x1 - IN.x0, d: IN.y1 - IN.y0, r: 2 }, RIM_Z + 0.4, P, 4), { tone: 'faint' }),
+  ]
 
-  // front latch with its slot, and the carry handle on two mounts
-  front.push(solid({ x: -10, y: FRONT - 2.2, w: 20, d: 2.4, r: 1 }, TOP + 22, 7, P, 'mid', 4, 0.5))
-  front.push(frontRect(-4.5, TOP + 24.5, 4.5, TOP + 26.5, FRONT + 0.3, P, 0, 'lo'))
-  for (const x of [-25, 19]) front.push(solid({ x, y: FRONT - 0.6, w: 6, d: 4.6, r: 1 }, TOP + 1, 8, P, 'mid'))
-  front.push(solid({ x: -21, y: FRONT + 1.2, w: 42, d: 3.4, r: 1.6 }, TOP + 3.5, 6, P, 'hi', 6, 0.8))
-  // three engraved nameplates, one per seat of the dial, each with its label
-  // and a small indicator lamp. They are the dial's legend: toolbox.css lights
-  // the lamp and the label of whichever seat the knob is standing on.
+  // --- the hardware -------------------------------------------------------
+  const hardware = [
+    // the latch, with the slot the hasps drop into
+    solid({ x: -10, y: FRONT - 2.2, w: 20, d: 2.4, r: 1 }, TOP + 22, 7, P, 'mid', 4, 0.5),
+    frontRect(-4.5, TOP + 24.5, 4.5, TOP + 26.5, FRONT + 0.3, P, 0, 'lo'),
+  ]
+  // the carry handle, folded onto two mounts
+  for (const x of [-25, 19]) hardware.push(solid({ x, y: FRONT - 0.6, w: 6, d: 4.6, r: 1 }, TOP + 1, 8, P, 'mid'))
+  hardware.push(solid({ x: -21, y: FRONT + 1.2, w: 42, d: 3.4, r: 1.6 }, TOP + 3.5, 6, P, 'hi', 6, 0.8))
+
+  // --- the legend ---------------------------------------------------------
+  // Three engraved plates, one per seat of the dial, each with its label and a
+  // small indicator lamp. toolbox.css lights the lamp and the label of whichever
+  // seat the knob is standing on, so the switch has a legend.
+  const seats = []
   TRAY_X.forEach(([a, b], i) => {
-    front.push(`<g class="home-seat" data-seat="${i}">`)
-    front.push(k.lineSvg(k.pathOf([[a + 3, FRONT + 0.2, TOP + 10], [b - 3, FRONT + 0.2, TOP + 10], [b - 3, FRONT + 0.2, TOP + 17], [a + 3, FRONT + 0.2, TOP + 17]].map((p) => k.iso(p, P)), true), { tone: 'faint', className: 'home-seat-plate' }))
+    seats.push(`<g class="home-seat" data-seat="${i}">`)
+    seats.push(k.lineSvg(k.pathOf([[a + 3, FRONT + 0.2, TOP + 10], [b - 3, FRONT + 0.2, TOP + 10], [b - 3, FRONT + 0.2, TOP + 17], [a + 3, FRONT + 0.2, TOP + 17]].map((p) => k.iso(p, P)), true), { tone: 'faint', className: 'home-seat-plate' }))
     const lamp = G.frameAlong([a + 6.6, FRONT + 0.3, TOP + 13.5], [0, 1, 0])
-    front.push(`<path class="home-seat-lamp" d="${G.circleOf(lamp, 0, 1.05, P, 16)}"/>`)
-    front.push(k.lineSvg(G.circleOf(lamp, 0.02, 1.05, P, 16), { tone: 'faint' }))
+    seats.push(`<path class="home-seat-lamp" d="${G.circleOf(lamp, 0, 1.05, P, 16)}"/>`)
+    seats.push(k.lineSvg(G.circleOf(lamp, 0.02, 1.05, P, 16), { tone: 'faint' }))
     if (labels[i])
-      front.push(`<g class="home-seat-label">${k.faceTextSvg(k.sideMatrix([TRAY_MID[i], FRONT], TOP + 13.5, P, 'left'), labels[i], { size: 2.6, tone: 'mid', anchor: 'middle' })}</g>`)
-    front.push('</g>')
+      seats.push(`<g class="home-seat-label">${k.faceTextSvg(k.sideMatrix([TRAY_MID[i], FRONT], TOP + 13.5, P, 'left'), labels[i], { size: 2.6, tone: 'mid', anchor: 'middle' })}</g>`)
+    seats.push('</g>')
   })
-  // the rotary switch that indexes the three seats
-  front.push(dialSvg(P))
+
+  // --- the nameplate ------------------------------------------------------
+  // The one place on the near panel a case of this size would carry its maker's
+  // mark: a stamped plate, riveted at the corners, with the type code on it.
+  const [p0, pz0, p1, pz1] = PLATE
+  const py = FRONT + 0.3
+  const plateQuad = (dx, dz, dy = 0) => k.pathOf([
+    [p0 + dx, py + dy, pz0 + dz], [p1 - dx, py + dy, pz0 + dz],
+    [p1 - dx, py + dy, pz1 - dz], [p0 + dx, py + dy, pz1 - dz],
+  ].map((p) => k.iso(p, P)), true)
+  const plate = [
+    `<path class="home-tb-plate" d="${plateQuad(0, 0)}"/>`,
+    k.lineSvg(plateQuad(0, 0), { tone: 'lo' }),
+    k.lineSvg(plateQuad(1.4, 1.4, 0.02), { tone: 'faint' }),
+    frontText(p0 + 3.4, pz1 - 2.1, 'TOOL CASE', 1.9, 'lo', P),
+    frontText(p0 + 3.4, pz0 + 2.0, 'TB-04', 2.9, 'mid', P),
+  ]
+  for (const x of [p0 + 1.8, p1 - 1.8])
+    for (const z of [pz0 + 1, pz1 - 1])
+      plate.push(k.lineSvg(faceCircle(x, z, 0.62, py + 0.03, P), { tone: 'faint' }))
+
+  // --- the switch ---------------------------------------------------------
+  const dial = [dialSvg(P)]
+
+  // --- the pads -----------------------------------------------------------
+  // The deck is at TOP and the plinth's underside is flush with it, so there is
+  // no room *under* the body for a foot. The pads sit against the plinth's
+  // front band and stand proud of the panel: that is where they read from a
+  // camera looking straight down +y, and where they would be on a real case.
+  // They are laid down first and the case is lowered onto them.
+  const pads = PADS.map((cx, index) =>
+    part('tb-foot', index, [solid({ x: cx - 7.5, y: FRONT - 0.4, w: 15, d: 2.8, r: 1.2 }, TOP, 3.4, P, 'lo', 4, 0.5)]))
 
   // the shut slab: the only thing in its run, and the last thing painted
-  closed.push(closedLidSvg(P))
+  const closed = [closedLidSvg(P)]
 
   // the stay sits in front of the lid's face and on the rim, so it comes after
   // the body; the shut lid comes last of all and covers the whole interior
   return [
     lidSvg(P),
-    part('shell', shell),
-    part('trays', trays),
-    part('front', front),
+    part('shell', 0, plinth),
+    ...walls.map((wall, index) => part('tb-wall', index, wall)),
+    part('tb-hinge', 0, hinge),
+    ...dividers.map((divider, index) => part('tb-divider', index, divider)),
+    part('trays', 0, trays),
+    part('front', 0, front),
+    ...pads,
+    part('tb-hardware', 0, hardware),
+    part('tb-seat', 0, seats),
+    part('tb-plate', 0, plate),
+    part('tb-dial', 0, dial),
     staySvg(P),
-    part('closed', closed),
+    part('closed', 0, closed),
   ].join('')
 }
 

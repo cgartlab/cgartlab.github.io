@@ -19,11 +19,14 @@ import { boxSvg, faceMatrix, facePath, frameOf } from './frame.mjs'
  * issue), a shorter one gets fewer, larger papers.
  *
  * Painter order follows the frame's own depth (k.depthOf: +v comes toward the
- * reader, +w toward the camera's raised eye): backboard, plinth, posts, the
- * rails, then the sheets tier by tier and left to right — every paper sits on
- * the same leaning plane, so column order is depth order — each one finishing
- * with its own clips, and the front lip last because the papers hang down
- * behind it.
+ * reader, +w toward the camera's raised eye): the plinth, the posts with their
+ * knee plates, the cross member that ties their heads, the rails, then the
+ * sheets tier by tier and left to right — every paper sits on the same leaning
+ * plane, so column order is depth order — each one finishing with its own
+ * clips, and the front lip and its bolts last because the papers hang down
+ * behind them. Everything that stands off that wall closes the queue: the
+ * levelling feet, the maker's plate, the back issues, the drive blocks with
+ * their cap plates, the crank, and the reading magnifier on its rail.
  */
 
 const YAW = 16
@@ -33,6 +36,16 @@ const W = 168, D = 34, H = 96
 const POST = 7
 const RAIL = { v: 20, vd: 6, wh: 4 } // every tier's rail, in frame units
 const PLINTH = 6, LIP = { v0: 26, vd: 8, wh: 2.5 }
+
+// The parts that stand off the frame rather than between the posts. The foot is
+// a levelling pad under the front of the base: it has to sit proud of the
+// plinth's face to be seen at all, because an 18° camera cannot look under a
+// six-unit slab.
+const PAD = { u: 8.5, v: 3.6, wh: 1.4, collar: 0.9, stem: 2.6, nut: 1.1 }
+// The cross member ties the two post heads together above the top rail; the
+// knee plate braces a post to the plinth in the plane of the plinth's face.
+const BRACE = { v: 6.4, vd: 4.6, w: 86, wh: 8 }
+const GUSSET = { v: 31.8, vd: 2.4, top: 18 }
 
 // ---- the hanging wall -----------------------------------------------------
 // The papers live between the posts and between the plinth and the post caps.
@@ -84,13 +97,87 @@ function rule(a, b, P) {
   return k.lineSvg(k.pathOf([k.iso(F.at(...a), P), k.iso(F.at(...b), P)]), { tone: 'lo' })
 }
 
-/** A slotted screw on the lip's front face. */
-function screw(u, P) {
+/** A bolt on the lip's front face: the head turns as it is run home. */
+function boltSvg(u, P) {
   const w = PLINTH + LIP.wh / 2
   const face = LIP.v0 + LIP.vd
   const head = G.frameAlong(F.at(u, face, w), F.dir(0, 1, 0))
-  return k.solidSvg(G.disc(0, 0.8, 1.1, head, P), { tone: 'mid' })
-    + k.lineSvg(k.pathOf([k.iso(F.at(u - 0.8, face + 0.85, w), P), k.iso(F.at(u + 0.8, face + 0.85, w), P)]), { tone: 'faint' })
+  const [cx, cy] = k.iso(F.at(u, face, w), P)
+  const out = []
+  // the washer stays put, the head and its slot turn together
+  out.push(k.solidSvg(G.ringBand(0, 0.5, 1.45, 2.05, head, P), { tone: 'lo' }))
+  out.push(`<g class="home-bolt-head" style="transform-origin:${cx.toFixed(1)}px ${cy.toFixed(1)}px">`)
+  out.push(k.solidSvg(G.disc(0.4, 1.5, 1.5, head, P), { tone: 'mid' }))
+  out.push(k.lineSvg(k.pathOf([k.iso(F.at(u - 0.9, face + 1.5, w), P), k.iso(F.at(u + 0.9, face + 1.5, w), P)]), { tone: 'faint' }))
+  out.push('</g>')
+  return out.join('')
+}
+
+/**
+ * A levelling foot under the front of the base: the pad stands on the deck, the
+ * stem climbs the plinth's face to a lock nut under the lip. The rear pair sits
+ * behind the plinth from this camera and is not drawn.
+ */
+function footSvg(u, P) {
+  const collar = PAD.wh + PAD.collar
+  const stem = collar + PAD.stem
+  const su = u + PAD.u / 2
+  return [
+    boxSvg(F, { u, v: D, w: 0, uw: PAD.u, vd: PAD.v, wh: PAD.wh }, P, { tone: 'mid' }),
+    boxSvg(F, { u: u + 1, v: D + 0.8, w: PAD.wh, uw: PAD.u - 2, vd: PAD.v - 1.6, wh: PAD.collar }, P, { tone: 'hi' }),
+    boxSvg(F, { u: su - 1, v: D, w: collar, uw: 2, vd: 0.5, wh: PAD.stem }, P, { tone: 'hi' }),
+    boxSvg(F, { u: su - 1.6, v: D, w: stem, uw: 3.2, vd: 1, wh: PAD.nut }, P, { tone: 'mid' }),
+  ].join('')
+}
+
+/** The cross member over the top rail, bolted through both post heads. */
+function braceSvg(P) {
+  const out = [boxSvg(F, { u: POST, v: BRACE.v, w: BRACE.w, uw: W - POST * 2, vd: BRACE.vd, wh: BRACE.wh }, P, { tone: 'mid' })]
+  for (const u of [POST + 4.5, W - POST - 4.5]) {
+    const bf = facing(u, BRACE.v + BRACE.vd, BRACE.w + BRACE.wh / 2)
+    out.push(k.solidSvg(G.disc(0, 0.9, 1.2, bf, P), { tone: 'hi' }))
+    out.push(k.lineSvg(G.circleOf(bf, 0.9, 1.2, P), { tone: 'lo' }))
+  }
+  return out.join('')
+}
+
+/** A triangular knee plate: a post's front face down onto the plinth's edge. */
+function gussetSvg(u0, dir, P) {
+  const frame = G.frameAlong(F.at(u0, GUSSET.v, 0), F.dir(0, 1, 0), F.dir(1, 0, 0), F.dir(0, 0, 1))
+  const plate = [[0, PLINTH], [POST * dir, PLINTH], [2.2 * dir, GUSSET.top]]
+  // one bolt through the plate, so it reads as a bracket rather than a fin
+  const bolt = k.solidSvg(G.disc(0, 0.9, 1.05, facing(u0 + 3.4 * dir, GUSSET.v + GUSSET.vd, 11), P), { tone: 'lo' })
+  return k.solidSvg(G.prismOf(frame, plate, 0, GUSSET.vd, P), { tone: 'mid' }) + bolt
+}
+
+/** The machined cap plate that closes a drive block, with its two bolts. */
+function blockCapSvg(u, P) {
+  const w = BLOCK.w + BLOCK.wh
+  const out = [boxSvg(F, { u: u + 1, v: BLOCK.v - 0.6, w, uw: BLOCK.uw - 2, vd: BLOCK.vd + 1.2, wh: 1.7 }, P, { tone: 'hi' })]
+  for (const du of [2.8, BLOCK.uw - 2.8]) {
+    const [cx, cy] = F.at(u + du, BLOCK.v + BLOCK.vd / 2, w + 1.7)
+    out.push(k.solidSvg(k.cylinder(cx, cy, 1, TOP + w + 1.7, 0.8, P, 12), { tone: 'mid' }))
+    out.push(k.lineSvg(k.ring(cx, cy, 1, TOP + w + 2.5, P, 12), { tone: 'faint' }))
+  }
+  return out.join('')
+}
+
+/** The maker's plate, riveted to the plinth's face between the feet. */
+function badgeSvg(P) {
+  const u0 = W / 2 - 12, u1 = W / 2 + 12
+  const w0 = 1.3, w1 = 4.1
+  const d = facePath(F, [[u0, D, w0], [u1, D, w0], [u1, D, w1], [u0, D, w1]], P)
+  const out = [`<path class="iso-shade" data-shade="1" d="${d}"/>`, k.lineSvg(d, { tone: 'mid' })]
+  // two engraved rules stand in for the type, which is far below a legible size
+  for (const [from, to, w] of [[0.22, 0.62, 2.5], [0.7, 0.92, 1.6]]) {
+    const su0 = u0 + (u1 - u0) * from
+    const su1 = u0 + (u1 - u0) * to
+    out.push(k.lineSvg(k.pathOf([k.iso(F.at(su0, D, w), P), k.iso(F.at(su1, D, w), P)]), { tone: 'faint' }))
+  }
+  for (const u of [u0 + 1.4, u1 - 1.4]) {
+    out.push(k.dotsSvg([k.iso(F.at(u, D, (w0 + w1) / 2), P)], { size: 0.6, tone: 'lo' }))
+  }
+  return out.join('')
 }
 
 /** A knurled cap seated on a post. */
@@ -121,8 +208,8 @@ const ARCHIVE = { u: 7, v: 45, w: 34, d: 15 }
 /** A world-space frame on the rack whose axis points out of the front face. */
 const facing = (u, v, w) => G.frameAlong(F.at(u, v, w), F.dir(0, 1, 0))
 
-/** A pulley on a block's face; the right-hand one carries the crank. */
-function pulleySvg(u, v, w, P, crank = false) {
+/** A pulley on a block's face. The crank is a part of its own. */
+function pulleySvg(u, v, w, P) {
   const pf = facing(u, v, w)
   const [cx, cy] = k.iso(F.at(u, v, w), P)
   const out = [`<g class="home-pulley" style="transform-origin:${cx.toFixed(1)}px ${cy.toFixed(1)}px">`]
@@ -131,26 +218,35 @@ function pulleySvg(u, v, w, P, crank = false) {
   out.push(k.lineSvg(G.circleOf(pf, PULLEY.face, PULLEY.r * 0.66, P), { tone: 'lo' }))
   out.push(k.lineSvg(G.spokesOf(pf, PULLEY.face, PULLEY.r * 0.18, PULLEY.r * 0.62, 5, P), { tone: 'lo' }))
   out.push(k.solidSvg(G.disc(PULLEY.face, PULLEY.face + 1.1, PULLEY.r * 0.18, pf, P), { tone: 'hi' }))
-  if (crank) {
-    // the arm lies on the wheel's face; the grip stands off its end
-    const arm = [[-1.2, -0.9], [PULLEY.r * 0.86, -0.9], [PULLEY.r * 0.86, 0.9], [-1.2, 0.9]]
-    out.push(k.solidSvg(G.prismOf(pf, arm, PULLEY.face, PULLEY.face + 1.4, P), { tone: 'hi' }))
-    const axis = F.dir(0, 1, 0)
-    const o = F.at(u, v, w)
-    const base = [0, 1, 2].map(i => o[i] + pf.u[i] * (PULLEY.r * 0.72) + axis[i] * (PULLEY.face + 1.4))
-    out.push(k.solidSvg(G.solidOf([[0, 1.25], [3.2, 1.25]], G.frameAlong(base, axis), P), { tone: 'hi' }))
-  }
   out.push('</g>')
   return out.join('')
 }
 
-/** One end block on the lip: a machined clamp, its cap plate, its bearing. */
+/** One end block on the lip: a machined clamp and the bearing it carries. */
 function blockSvg(u, P) {
   const out = []
   out.push(boxSvg(F, { u, v: BLOCK.v, w: BLOCK.w, uw: BLOCK.uw, vd: BLOCK.vd, wh: BLOCK.wh }, P, { tone: 'mid' }))
-  out.push(boxSvg(F, { u: u + 1, v: BLOCK.v - 0.6, w: BLOCK.w + BLOCK.wh, uw: BLOCK.uw - 2, vd: BLOCK.vd + 1.2, wh: 1.7 }, P, { tone: 'hi' }))
   // the bearing boss the wheel turns on
   out.push(k.solidSvg(G.disc(0, 1.2, 2.4, facing(u + BLOCK.uw / 2, BLOCK.v + BLOCK.vd, BLOCK.w + BLOCK.wh / 2), P), { tone: 'hi' }))
+  return out.join('')
+}
+
+/**
+ * The crank, as its own part: it is dropped onto the right wheel's axle after
+ * the drive is bolted down. It turns with the wheel, so its group carries the
+ * same rotation the pulley does.
+ */
+function crankSvg(u, v, w, P) {
+  const pf = facing(u, v, w)
+  const [cx, cy] = k.iso(F.at(u, v, w), P)
+  const out = [`<g class="home-crank" style="transform-origin:${cx.toFixed(1)}px ${cy.toFixed(1)}px">`]
+  const arm = [[-1.2, -0.9], [PULLEY.r * 0.86, -0.9], [PULLEY.r * 0.86, 0.9], [-1.2, 0.9]]
+  out.push(k.solidSvg(G.prismOf(pf, arm, PULLEY.face, PULLEY.face + 1.4, P), { tone: 'hi' }))
+  const axis = F.dir(0, 1, 0)
+  const o = F.at(u, v, w)
+  const base = [0, 1, 2].map(i => o[i] + pf.u[i] * (PULLEY.r * 0.72) + axis[i] * (PULLEY.face + 1.4))
+  out.push(k.solidSvg(G.solidOf([[0, 1.25], [3.2, 1.25]], G.frameAlong(base, axis), P), { tone: 'hi' }))
+  out.push('</g>')
   return out.join('')
 }
 
@@ -327,17 +423,17 @@ export function buildNewsrack(P, options = {}) {
    * assembly a path belongs to. `--step` is the shared settle contract in
    * home.css; newsrack.css replaces it with the real assembly.
    *
-   * `--step` counts within a part (the two posts, one run per tier, one run per
-   * paper), not across the rack: each part's own wave reads left to right or
-   * far to near on its own, and the cross-part beat order lives in the CSS.
+   * `--step` counts within a part (the two posts, the two feet, the two knee
+   * plates, one run per tier, one run per paper), not across the rack: each
+   * part's own wave reads left to right or far to near on its own, and the
+   * cross-part beat order lives in the CSS.
    * The sheets also carry `--lag`, the stagger the CSS should use: it shrinks
-   * as the rack fills, so twenty-four papers still finish hanging in about as
-   * long as four did.
+   * as the rack fills, so twenty-four papers still hang in a single wave.
    */
   const part = (name, step, ...items) =>
     `<g class="home-part" data-part="${name}" style="--step:${step}">${items.join('')}</g>`
 
-  const lag = Math.min(60, Math.round(700 / Math.max(1, L.n)))
+  const lag = Math.min(44, Math.max(9, Math.round(340 / Math.max(1, L.n))))
   const sheetPart = (step, ...items) =>
     `<g class="home-part" data-part="sheets" style="--step:${step};--lag:${lag}ms">${items.join('')}</g>`
 
@@ -351,10 +447,19 @@ export function buildNewsrack(P, options = {}) {
   // ---- plinth: the base everything stands on ---------------------------
   // Named `plinth`, not `base`: typewriter.css already owns `[data-part='base']`
   // and these selectors are module-agnostic, so a shared name would hand the
-  // typewriter's case this rack's beat.
+  // typewriter's case this rack's beat. The front lip used to ride along in this
+  // part; it is bolted on long after the papers are hung, so it is its own run.
   out.push(part('plinth', 0,
     boxSvg(F, { u: 0, v: 0, w: 0, uw: W, vd: D, wh: PLINTH }, P, { tone: 'lo' }),
   ))
+
+  // ---- feet: the levelling pads under the front of the base -------------
+  // Painted after the plinth because they stand proud of its face, not under it.
+  // Both sit inboard of the back issues, which would otherwise swallow the left
+  // one the moment the pile is set down.
+  for (const [index, u] of [44 - PAD.u / 2, W - 44 - PAD.u / 2].entries()) {
+    out.push(part('nr-feet', index, footSvg(u, P)))
+  }
 
   // ---- posts: one run each, so each stands up about its own foot --------
   for (const [index, u] of [0, W - POST].entries()) {
@@ -363,6 +468,13 @@ export function buildNewsrack(P, options = {}) {
       cap(u + POST / 2, P),
     ))
   }
+
+  // ---- brace: the cross member that ties the two post heads -------------
+  out.push(part('nr-brace', 0, braceSvg(P)))
+
+  // ---- gussets: a knee plate at each post's foot -----------------------
+  out.push(part('nr-gusset', 0, gussetSvg(0, 1, P)))
+  out.push(part('nr-gusset', 1, gussetSvg(W, -1, P)))
 
   // ---- rails: one run per tier, so each drops into its own notch --------
   for (const [index, w] of L.rails.entries()) {
@@ -392,19 +504,23 @@ export function buildNewsrack(P, options = {}) {
     }
   }
 
-  // ---- plinth again: the front lip is bolted to the plinth, but it is --
-  // painted last because the papers hang down behind it. Same part, same
-  // beat, so the two runs move as one plinth and the paint order stands.
-  out.push(part('plinth', 0,
+  // ---- lip: the front board, and the two bolts that pin it down ---------
+  // Both paint after the sheets because the papers hang down behind them.
+  out.push(part('nr-lip', 0,
     boxSvg(F, { u: POST, v: LIP.v0, w: PLINTH, uw: W - POST * 2, vd: LIP.vd, wh: LIP.wh }, P, { tone: 'mid' }),
-    ...([10, W - 10].map(u => screw(u, P))),
   ))
+  out.push(part('nr-bolt', 0, boltSvg(44, P)))
+  out.push(part('nr-bolt', 1, boltSvg(W - 44, P)))
+
+  // ---- badge: the maker's plate on the plinth's face --------------------
+  out.push(part('nr-badge', 0, badgeSvg(P)))
 
   // ---- archive: the back issues stacked on the deck, front left ---------
   out.push(part('archive', 0, archiveSvg(P)))
 
   // ---- drive: a block at each end of the lip, the rail between them -----
-  // The rail is drawn with the left block, the crank lives on the right one.
+  // The rail is drawn with the left block, the right one carries the wheel the
+  // crank is dropped onto.
   const railU0 = BLOCK.u + BLOCK.uw / 2
   const railU1 = W - BLOCK.u - BLOCK.uw / 2
   out.push(part('drive', 0,
@@ -414,8 +530,15 @@ export function buildNewsrack(P, options = {}) {
   ))
   out.push(part('drive', 1,
     blockSvg(W - BLOCK.u - BLOCK.uw, P),
-    pulleySvg(railU1, BLOCK.v + BLOCK.vd, BLOCK.w + BLOCK.wh / 2, P, true),
+    pulleySvg(railU1, BLOCK.v + BLOCK.vd, BLOCK.w + BLOCK.wh / 2, P),
   ))
+
+  // ---- cap plates: each block is closed with a bolted cover -------------
+  out.push(part('nr-plate', 0, blockCapSvg(BLOCK.u, P)))
+  out.push(part('nr-plate', 1, blockCapSvg(W - BLOCK.u - BLOCK.uw, P)))
+
+  // ---- crank: dropped onto the right wheel's axle ----------------------
+  out.push(part('nr-crank', 0, crankSvg(railU1, BLOCK.v + BLOCK.vd, BLOCK.w + BLOCK.wh / 2, P)))
 
   // ---- reader: the magnifier on the rail, last --------------------------
   const [rx, ry] = k.iso(F.at(TRAVEL.u0, TRACK.v, TRACK.w), P)

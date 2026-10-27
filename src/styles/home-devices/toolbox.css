@@ -3,15 +3,20 @@
    The lid is a real hinged group in the SVG. A rotation about a horizontal
    hinge parallel to the picture plane projects to a vertical squash about the
    hinge line, so the opening is animated as scaleY on the lid group, with the
-   closed lid slab underneath handing over once the case has assembled.
+   closed lid slab underneath handing over once the case has been built.
 
-   Two phases, and the second one only starts after the first is done:
-     0 – 390 ms   the case assembles itself shut (see the assembly below)
-     390 ms       the slab hands over to the hinged lid
-     390 – 1100   the lid lifts, the board on its face resolves, the stay swings
+   The build runs to 2400 ms, and its order is the order a case is actually
+   assembled in: four pads are laid on the deck, the plinth is lowered onto
+   them, the walls go up back → left → right, the near wall closes the body,
+   the partitions drop into their slots, the hinge is pinned, the hardware and
+   the legend go on, and the slab is lowered shut. Only then does the lid swing
+   up — and its face is not printed, it is populated: sixteen app chips are
+   pinned on one at a time, then eight name plates, while the three interiors
+   are set down in the well. The knob is turned to its first detent last, and
+   that is the machine running.
 
-   Then the case stops being a tool box and becomes a drawer with three floors:
-   the rotary knob on the front-right indexes them. The knob only reads
+   After that the case stops being a tool box and becomes a drawer with three
+   floors: the rotary knob on the front-right indexes them. The knob only reads
    `data-position` — stage.client.ts sets it on the enclosing `.home-module`,
    and everything below keys off that one attribute, so there is no second
    source of truth and nothing here needs script.
@@ -62,6 +67,12 @@
 
 /* a creator's name plate: a hairline chip, a step off the board */
 .home-stage .home-lid-chip-face {
+  fill: var(--anatomy-shade-3);
+  stroke: none;
+}
+
+/* the maker's plate on the near panel: bright stock, so the engraving reads */
+.home-stage .home-tb-plate {
   fill: var(--anatomy-shade-3);
   stroke: none;
 }
@@ -309,7 +320,7 @@
 /* the closed lid: a flat slab lying on the case, visible only while shut */
 .home-stage .home-case-closed {
   opacity: 1;
-  transition: opacity 260ms ease;
+  transition: opacity 200ms ease;
 }
 
 /* the hinged lid: shut (nearly edge-on) to open */
@@ -317,14 +328,12 @@
   /* the swing is written as translate/scale/translate about the hinge line the
      module passes in, so it never depends on where a bbox happens to end */
   transform: translateY(var(--hinge, 0px)) scaleY(0.04) translateY(calc(-1 * var(--hinge, 0px)));
-  transition: transform 700ms cubic-bezier(0.45, 0.05, 0.25, 1);
+  transition: transform 500ms cubic-bezier(0.45, 0.05, 0.25, 1);
 }
 
-/* the board rides the lid, so it only resolves once the lid is nearly up */
-.home-stage .home-case-tools {
-  opacity: 0.35;
-  transition: opacity 260ms ease;
-}
+/* the board on the lid's face is not faded in as a block any more: every chip
+   and every name plate on it is its own run, held back by the clock below, so
+   the panel resolves by being populated rather than by appearing */
 
 /* the prop arm that holds the lid up swings out last. Its origin is the foot
    pivot on the back rim, which sits a hair above the group's bounding box
@@ -333,71 +342,159 @@
   transform-box: fill-box;
   transform-origin: 50% 95%;
   transform: scaleY(0.1);
-  transition: transform 240ms ease;
+  transition: transform 260ms ease;
 }
 
 /* The handover. The delays sit on the active state only, so the way out — the
    module leaving the stage — still closes and drops immediately instead of
-   waiting 390 ms first. The relative offsets of the board and the stay are the
-   ones the case has always had (380 / 470 ms after the lid starts). */
+   waiting 1210 ms first. The stay follows the lid by 440 ms, which is where it
+   reads as catching the lid at the top of its swing. */
 .home-stage .home-module.is-active .home-case-closed {
   opacity: 0;
-  transition-delay: 390ms;
+  transition-delay: 1210ms;
 }
 .home-stage .home-module.is-active .home-case-lid {
   transform: translateY(var(--hinge, 0px)) scaleY(1) translateY(calc(-1 * var(--hinge, 0px)));
-  transition-delay: 390ms;
-}
-.home-stage .home-module.is-active .home-case-tools {
-  opacity: 1;
-  transition-delay: 770ms;
+  transition-delay: 1210ms;
 }
 .home-stage .home-module.is-active .home-case-prop {
   transform: scaleY(1);
-  transition-delay: 860ms;
+  transition-delay: 1650ms;
 }
 
 /* --------------------------------------------------------------------------
    The assembly. Every rule here overrides the generic `.home-part` settle in
    home.css (higher specificity: the extra `[data-part]` attribute) and states
-   both `animation` and `animation-delay`, so the four beats stay legible:
+   both `animation` and `animation-delay`, so the eighteen beats stay legible:
 
-     shell  0   80 → 340   the whole body rises off the deck and settles back
-     trays  1  110 → 350   three trays drop into their seats, one after another
-     front  2   80 → 380   the near wall holds proud, then snaps home last
-     closed 3   80 → 340   the shut slab rides the rim, welded to the shell
+     run        part         delay           dur   lands
+     pads       tb-foot      20 + 52·step    200   220 … 376
+     plinth     shell         40             300   340
+     walls      tb-wall      170 + 95·step    320   490 / 585 / 680
+     near       front        540             330   870
+     latch      tb-hardware  700             300  1000
+     legend     tb-seat      810             280  1090
+     plate      tb-plate     890             250  1140
+     parts      tb-divider   830 + 95·step    270  1100 / 1195
+     hinge      tb-hinge     900             300  1200
+     shut       closed       880             320  1200
+     switch     tb-dial      980             260  1240
+     open       .home-case-lid      (a transition, 1210 → 1710)
+     panel      tb-board    1370             300  1670
+     interiors  trays       1600 + 70·step    220  1820 / 1890 / 1960
+     rail       tb-bead     1600             260  1860
+     chips      tb-badge    1700 + 30·step    210  1910 … 2360
+     names      tb-link     1930 + 22·step    200  2130 … 2284
+     detent     .home-dial-pointer      240  2130 → 2370
 
-   The shut slab covers the well, so the trays seat underneath it and the case
-   opens onto a finished interior rather than a filling one.
+   The case arrives shut, so the slab is lowered on after the body is built and
+   hands over to the hinged lid only when it is home — the reader sees the
+   inside of the case for the first time through a lid that actually opened.
 
    Fill mode is `backwards`, not `both`: every keyframe ends on
    `transform: none; opacity: 1`, which is exactly the resting style, so the
-   backwards fill hides a part during its delay and then lets go once it lands.
-   Holding the fill instead would keep the group composited for the rest of the
-   page's life, and the engraved nameplates would re-rasterise without subpixel
-   AA (the same trade measured on 02 in cinema.css).
+   backwards fill hides a run during its delay and then lets go once it lands.
+   Holding the fill instead would keep forty groups composited for the rest of
+   the page's life, and the engraved nameplates would re-rasterise without
+   subpixel AA (the same trade measured on 02 in cinema.css).
    -------------------------------------------------------------------------- */
 
+/* the four rubber pads are pressed onto the deck; the case is lowered onto them */
+.home-module.is-active .home-part[data-part='tb-foot'] {
+  animation: home-tb-pad 200ms cubic-bezier(0.22, 0.9, 0.24, 1) backwards;
+  animation-delay: calc(20ms + var(--step) * 52ms);
+}
+
+/* the plinth takes the weight */
 .home-module.is-active .home-part[data-part='shell'] {
-  animation: home-tb-shell 260ms cubic-bezier(0.2, 0.86, 0.24, 1) backwards;
-  animation-delay: 80ms;
+  animation: home-tb-plinth 300ms cubic-bezier(0.2, 0.86, 0.24, 1) backwards;
+  animation-delay: 40ms;
 }
 
-/* the shut slab shares the shell's transform curve to the millisecond, so the
-   two never separate at the rim while the case is being lowered onto the deck */
-.home-module.is-active .home-part[data-part='closed'] {
-  animation: home-tb-closed 260ms cubic-bezier(0.2, 0.86, 0.24, 1) backwards;
-  animation-delay: 80ms;
+/* the three far walls stand up in the order a case is built: back, left, right */
+.home-module.is-active .home-part[data-part='tb-wall'] {
+  animation: home-tb-wall 320ms cubic-bezier(0.2, 0.86, 0.24, 1) backwards;
+  animation-delay: calc(170ms + var(--step) * 95ms);
 }
 
-.home-module.is-active .home-part[data-part='trays'] {
-  animation: home-tb-trays 120ms linear backwards;
-  animation-delay: 110ms;
-}
-
+/* the near wall is the last panel: it holds a hair proud, then snaps shut */
 .home-module.is-active .home-part[data-part='front'] {
-  animation: home-tb-front 300ms cubic-bezier(0.2, 0.86, 0.24, 1) backwards;
-  animation-delay: 80ms;
+  animation: home-tb-front 330ms cubic-bezier(0.2, 0.86, 0.24, 1) backwards;
+  animation-delay: 540ms;
+}
+
+/* the latch and the carry handle go on once the panel is home */
+.home-module.is-active .home-part[data-part='tb-hardware'] {
+  animation: home-tb-fitted 300ms cubic-bezier(0.22, 0.9, 0.24, 1) backwards;
+  animation-delay: 700ms;
+}
+
+/* then the legend and the maker's plate are stamped on */
+.home-module.is-active .home-part[data-part='tb-seat'] {
+  animation: home-tb-stamp 280ms cubic-bezier(0.22, 0.9, 0.24, 1) backwards;
+  animation-delay: 810ms;
+}
+
+.home-module.is-active .home-part[data-part='tb-plate'] {
+  animation: home-tb-stamp 250ms cubic-bezier(0.22, 0.9, 0.24, 1) backwards;
+  animation-delay: 890ms;
+}
+
+/* a partition is dropped into its slot and its rail settles on top */
+.home-module.is-active .home-part[data-part='tb-divider'] {
+  animation: home-tb-divider 270ms cubic-bezier(0.24, 0.86, 0.26, 1) backwards;
+  animation-delay: calc(830ms + var(--step) * 95ms);
+}
+
+/* the pin is driven through the knuckles and the caps land on its ends */
+.home-module.is-active .home-part[data-part='tb-hinge'] {
+  animation: home-tb-hinge 300ms cubic-bezier(0.24, 0.86, 0.26, 1) backwards;
+  animation-delay: 900ms;
+}
+
+/* the slab the reader meets is lowered onto the rim, and only then hands over */
+.home-module.is-active .home-part[data-part='closed'] {
+  animation: home-tb-closed 320ms cubic-bezier(0.2, 0.86, 0.24, 1) backwards;
+  animation-delay: 880ms;
+}
+
+/* the switch is fitted to the panel; the pointer is turned to its seat later */
+.home-module.is-active .home-part[data-part='tb-dial'] {
+  animation: home-tb-dial 260ms cubic-bezier(0.24, 0.86, 0.26, 1) backwards;
+  animation-delay: 980ms;
+}
+
+/* the index panel is pressed onto the lid's inner face */
+.home-module.is-active .home-part[data-part='tb-board'] {
+  animation: home-tb-board 300ms cubic-bezier(0.22, 0.9, 0.24, 1) backwards;
+  animation-delay: 1370ms;
+}
+
+/* the clamp rail is screwed over the panel's top edge */
+.home-module.is-active .home-part[data-part='tb-bead'] {
+  animation: home-tb-bead 260ms cubic-bezier(0.22, 0.9, 0.24, 1) backwards;
+  animation-delay: 1600ms;
+}
+
+/* Sixteen chips, pinned one at a time: 30 ms apart and 210 ms each, so about
+   seven are in the air at once and the board fills as a wave instead of a
+   block. This is the run the whole build is for — the board is the index of the
+   resource page, so it is populated, not printed. */
+.home-module.is-active .home-part[data-part='tb-badge'] {
+  animation: home-tb-badge 210ms cubic-bezier(0.22, 0.9, 0.24, 1) backwards;
+  animation-delay: calc(1700ms + var(--step) * 30ms);
+}
+
+/* eight name plates follow, a touch faster, so both columns finish together */
+.home-module.is-active .home-part[data-part='tb-link'] {
+  animation: home-tb-link 200ms cubic-bezier(0.22, 0.9, 0.24, 1) backwards;
+  animation-delay: calc(1930ms + var(--step) * 22ms);
+}
+
+/* the three interiors are set down in the well, one bay at a time. The group
+   itself carries no animation: each tray does, so they arrive in sequence. */
+.home-module.is-active .home-part[data-part='trays'] {
+  animation: none;
 }
 
 /* each tray is its own group, so each can be dropped onto its own seat */
@@ -407,65 +504,152 @@
 }
 
 .home-module.is-active .home-part[data-part='trays'] .home-case-tray[data-index='0'] {
-  animation: home-tb-tray 110ms cubic-bezier(0.24, 0.86, 0.26, 1) backwards;
-  animation-delay: 130ms;
+  animation: home-tb-tray 220ms cubic-bezier(0.24, 0.86, 0.26, 1) backwards;
+  animation-delay: 1600ms;
 }
 
 .home-module.is-active .home-part[data-part='trays'] .home-case-tray[data-index='1'] {
-  animation: home-tb-tray 110ms cubic-bezier(0.24, 0.86, 0.26, 1) backwards;
-  animation-delay: 185ms;
+  animation: home-tb-tray 220ms cubic-bezier(0.24, 0.86, 0.26, 1) backwards;
+  animation-delay: 1670ms;
 }
 
 .home-module.is-active .home-part[data-part='trays'] .home-case-tray[data-index='2'] {
-  animation: home-tb-tray 110ms cubic-bezier(0.24, 0.86, 0.26, 1) backwards;
-  animation-delay: 240ms;
+  animation: home-tb-tray 220ms cubic-bezier(0.24, 0.86, 0.26, 1) backwards;
+  animation-delay: 1740ms;
 }
 
-/* the body comes up off the deck and takes the weight */
-@keyframes home-tb-shell {
-  from { opacity: 0; transform: translateY(6px); }
-  18% { opacity: 1; }
-  70% { transform: translateY(-0.7px); }
+/* The trial run: the knob is turned to its first detent, the seat the page opens
+   on. It is written on the default seat only — on the other two the pointer is
+   already where it belongs, and a turn there would end on the wrong mark. */
+.home-module.is-active:not([data-position='1']):not([data-position='2']) .home-dial-pointer {
+  animation: home-tb-detent 240ms cubic-bezier(0.34, 1.45, 0.5, 1) backwards;
+  animation-delay: 2130ms;
+}
+
+/* a pad is pressed flat onto the deck */
+@keyframes home-tb-pad {
+  from { opacity: 0; transform: translateY(-6px) scale(0.88); }
+  58% { opacity: 1; transform: translateY(0.5px) scale(1.02); }
   to { opacity: 1; transform: none; }
 }
 
-/* the shut slab: there from the first frame — the case arrives closed — and
-   riding the shell's exact curve, so the rim never opens up under it */
-@keyframes home-tb-closed {
-  from { opacity: 0; transform: translateY(6px); }
-  8% { opacity: 1; }
-  70% { transform: translateY(-0.7px); }
+/* the plinth is lowered onto the pads and settles under its own weight */
+@keyframes home-tb-plinth {
+  from { opacity: 0; transform: translateY(-14px); }
+  52% { opacity: 1; transform: translateY(1.5px); }
+  76% { transform: translateY(-0.6px); }
   to { opacity: 1; transform: none; }
 }
 
-@keyframes home-tb-trays {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-/* a tray drops from a little above its seat and takes one small bounce */
-@keyframes home-tb-tray {
-  from { opacity: 0; transform: translateY(-7px); }
-  45% { opacity: 1; }
-  78% { transform: translateY(0.9px); }
+/* a wall is stood up in its rebate */
+@keyframes home-tb-wall {
+  from { opacity: 0; transform: translateY(15px); }
+  48% { opacity: 1; }
+  82% { transform: translateY(-1.1px); }
   to { opacity: 1; transform: none; }
 }
 
-/* the near wall rides up with the body, then holds a hair proud of the base
-   until the trays are home, and snaps shut over them — the last thing to land */
+/* the near wall holds a hair proud of the rebate, then closes over it */
 @keyframes home-tb-front {
-  from { opacity: 0; transform: translateY(9px); }
-  14% { opacity: 1; }
-  55% { transform: translateY(2px); }
-  82% { transform: translateY(2px); }
+  from { opacity: 0; transform: translateY(12px); }
+  26% { opacity: 1; }
+  62% { transform: translateY(2.2px); }
   to { opacity: 1; transform: none; }
+}
+
+/* a fitted part is offered up to the panel and pressed home */
+@keyframes home-tb-fitted {
+  from { opacity: 0; transform: translateY(-8px); }
+  60% { opacity: 1; }
+  84% { transform: translateY(1px); }
+  to { opacity: 1; transform: none; }
+}
+
+/* a plate is stamped on: it lands a shade small and flattens out */
+@keyframes home-tb-stamp {
+  from { opacity: 0; transform: scale(0.86); }
+  64% { opacity: 1; transform: scale(1.03); }
+  to { opacity: 1; transform: none; }
+}
+
+/* a partition drops into its slot and its rail settles on top */
+@keyframes home-tb-divider {
+  from { opacity: 0; transform: translateY(-20px); }
+  52% { opacity: 1; }
+  80% { transform: translateY(1.4px); }
+  to { opacity: 1; transform: none; }
+}
+
+/* the pin grows out through the knuckles, overshoots, and the caps land */
+@keyframes home-tb-hinge {
+  from { opacity: 0; transform: scaleX(0.5); }
+  40% { opacity: 1; }
+  78% { transform: scaleX(1.02); }
+  to { opacity: 1; transform: none; }
+}
+
+/* the shut slab is lowered onto the rim */
+@keyframes home-tb-closed {
+  from { opacity: 0; transform: translateY(-22px); }
+  54% { opacity: 1; }
+  80% { transform: translateY(1.1px); }
+  to { opacity: 1; transform: none; }
+}
+
+/* the switch is fitted and its detent collar settles into the boss */
+@keyframes home-tb-dial {
+  from { opacity: 0; transform: scale(0.7); }
+  60% { opacity: 1; transform: scale(1.06); }
+  to { opacity: 1; transform: none; }
+}
+
+/* the index panel is pressed onto the lid's face */
+@keyframes home-tb-board {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: none; }
+}
+
+/* the clamp rail is lowered onto the panel's top edge */
+@keyframes home-tb-bead {
+  from { opacity: 0; transform: translateY(-10px); }
+  68% { opacity: 1; transform: translateY(0.9px); }
+  to { opacity: 1; transform: none; }
+}
+
+/* a chip is pinned on: it arrives a little large and presses flat */
+@keyframes home-tb-badge {
+  from { opacity: 0; transform: scale(1.55) rotate(-6deg); }
+  55% { opacity: 1; transform: scale(0.95) rotate(1.2deg); }
+  78% { transform: scale(1.02) rotate(-0.4deg); }
+  to { opacity: 1; transform: none; }
+}
+
+/* a name plate is printed onto the board */
+@keyframes home-tb-link {
+  from { opacity: 0; transform: translateX(-8px) scaleX(0.86); }
+  60% { opacity: 1; }
+  to { opacity: 1; transform: none; }
+}
+
+/* a set is set down into its bay */
+@keyframes home-tb-tray {
+  from { opacity: 0; transform: translateY(-9px); }
+  58% { opacity: 1; }
+  82% { transform: translateY(1px); }
+  to { opacity: 1; transform: none; }
+}
+
+/* the detent snap: it overshoots the mark the way a spring-loaded knob does */
+@keyframes home-tb-detent {
+  from { rotate: 55deg; }
+  58% { rotate: -63deg; }
+  to { rotate: -55deg; }
 }
 
 /* reduced motion: the case is simply open, in place, with nothing to settle -- */
 
 html.reduce-motion .home-stage .home-case-lid,
 html.reduce-motion .home-stage .home-case-prop { transform: none; transition: none; }
-html.reduce-motion .home-stage .home-case-tools { opacity: 1; transition: none; }
 html.reduce-motion .home-stage .home-case-closed { display: none; }
 html.reduce-motion .home-stage .home-tray-set,
 html.reduce-motion .home-stage .home-set-item,
@@ -491,10 +675,12 @@ html.reduce-motion .home-module.is-active .home-case-tray {
   transform: none;
 }
 
+/* the knob is where the markup says it is; there is no turn to watch */
+html.reduce-motion .home-module.is-active .home-dial-pointer { animation: none !important; }
+
 @media (prefers-reduced-motion: reduce) {
   .home-stage .home-case-lid,
   .home-stage .home-case-prop { transform: none; transition: none; }
-  .home-stage .home-case-tools { opacity: 1; transition: none; }
   .home-stage .home-case-closed { display: none; }
 
   .home-stage .home-tray-set,
@@ -520,4 +706,6 @@ html.reduce-motion .home-module.is-active .home-case-tray {
     opacity: 1;
     transform: none;
   }
+
+  .home-module.is-active .home-dial-pointer { animation: none !important; }
 }

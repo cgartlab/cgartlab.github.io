@@ -1,6 +1,6 @@
 import * as k from '../anatomy/iso-kit.mjs'
 import * as G from '../anatomy/lathe.mjs'
-import { TOP } from './chassis.mjs'
+import { PLATFORM_Z, TOP } from './chassis.mjs'
 
 /**
  * Module 01 — the typewriter.
@@ -9,6 +9,11 @@ import { TOP } from './chassis.mjs'
  * what was struck. The paper is the only lit part, and it carries a real
  * excerpt: the client types it one character at a time and the sheet feeds up
  * out of the roller a line at a time, so the text emerges from the machine.
+ *
+ * The build reads like a real one: the feet take the case, the case takes the
+ * keyboard, the basket goes in, the carriage lands on its rails, the platen and
+ * its fittings go on, the covers close, the plate is screwed down, and only then
+ * is the sheet fed in and the machine run for the first time.
  */
 
 const BASE_Z = TOP
@@ -59,6 +64,32 @@ const KEY_ROWS = [
 ]
 const PITCH = 13.4
 
+/** the four rubber feet; they fill the gap between the bay's platform and the case */
+const FOOT = { x: 78, y: 33, r: 5.6 }
+/**
+ * The side covers sit outside the platen's knobs (which end at x 72) and stay
+ * below the roller's axis, so neither the knobs nor the ribbon spools on the
+ * deck (x 45–63) are ever crowded by them. `d` is kept well short of the case's
+ * own depth: a full-depth panel reads as a wall, a shallow one as a shoulder.
+ */
+const HOOD = { x: 74, y: -36, w: 11, d: 56, h: 22 }
+/** the ribbon runs across the front of the basket, level with the type point */
+const RIBBON_Z = DECK_TOP + 22.2
+/** the fork sits in the gap between the two halves of the ribbon */
+const FORK = { y: -10, z: RIBBON_Z }
+/**
+ * The paper bail rides at the roller's 3 o'clock — on the axis line, just clear
+ * of the rubber's surface — so it draws a line straight across the roller's
+ * face instead of hiding under its silhouette.
+ */
+const BAIL = { y: -13.6, z: 130.2, half: 58, r: 1.1, wheel: 2, wheelHalf: 3.2 }
+/**
+ * The margin bell is bolted to the left rear of the deck, clear of the ribbon
+ * spools: it has to be heard before the carriage reaches the margin, so it
+ * hangs off the frame rather than off the carriage.
+ */
+const BELL = { x: -65, y: -29, z: DECK_TOP + 16 }
+
 export const TYPEWRITER_TOP = PAPER_TOP.z
 
 /** Affine matrix for text laid on an arbitrary 3D plane. */
@@ -90,19 +121,29 @@ export function buildTypewriter(P, options = {}) {
   /**
    * One sub-assembly. The groups are contiguous runs of what already painted
    * together, so splitting the machine changes no painter's order — only which
-   * of the five assemblies a path belongs to. `--step` is the shared settle
+   * of the assemblies a path belongs to. `--step` is the shared settle
    * contract (home.css); typewriter.css replaces it with the real mechanism.
    */
   const part = (name, step, ...items) =>
     `<g class="home-part" data-part="${name}" style="--step:${step}">${items.join('')}</g>`
+
+  // ---- feet: four rubber blocks that take the case's weight --------------
+  // They are what the machine actually stands on: without them the case would
+  // hover over the bay's platform on its own shadow.
+  out.push(part('tw-feet', 0,
+    ...[-1, 1].flatMap(sx => [-1, 1].map((sy) => {
+      const cx = sx * FOOT.x
+      const cy = sy * FOOT.y
+      return k.solidSvg(k.cylinder(cx, cy, FOOT.r, PLATFORM_Z, BASE_Z - PLATFORM_Z, P, 20, 0.6), { tone: 'lo' })
+        + k.lineSvg(k.ring(cx, cy, FOOT.r - 0.9, PLATFORM_Z + 1.1, P, 18), { tone: 'faint' })
+    })),
+  ))
 
   // ---- base: the case the whole machine is bolted to --------------------
   out.push(part('base', 0,
     k.solidSvg(k.slabOf(BASE, BASE_Z, 8, P, 12, 3), { tone: 'mid' }),
     k.lineSvg(k.sideSeam(BASE, BASE_Z + 8, P, 12), { tone: 'faint' }),
     k.lineSvg(k.planOutline(k.insetPlan(BASE, 1.2), BASE_Z + 8, P, 12), { tone: 'hi' }),
-    k.solidSvg(k.slabOf({ x: -85, y: -39, w: 13, d: 74, r: 3 }, DECK_TOP, 22, P, 5, 1.4), { tone: 'mid' }),
-    k.solidSvg(k.slabOf({ x: 72, y: -39, w: 13, d: 74, r: 3 }, DECK_TOP, 22, P, 5, 1.4), { tone: 'mid' }),
     k.solidSvg(k.slabOf({ x: -72, y: -35, w: 144, d: 39, r: 6 }, DECK_TOP, 16, P, 6, 1.2), { tone: 'mid' }),
     k.solidSvg(k.slabOf({ x: -72, y: -43, w: 144, d: 8, r: 2 }, DECK_TOP, 25, P, 4, 2), { tone: 'mid' }),
     k.lineSvg(k.planOutline(k.insetPlan({ x: -72, y: -43, w: 144, d: 8, r: 2 }, 2), DECK_TOP + 25, P, 4), { tone: 'faint' }),
@@ -144,15 +185,9 @@ export function buildTypewriter(P, options = {}) {
     k.solidSvg(k.slabOf({ x: -52, y: -12, w: 104, d: 8, r: 4 }, DECK_TOP + 16, 6, P, 5, 1), { tone: 'mid' }),
   ))
 
-  // ---- carriage: the assembly that travels on the rails ----------------
-  out.push(part('carriage', 5,
-    k.lineSvg(k.segment([-70, -32, DECK_TOP + 16.3], [70, -32, DECK_TOP + 16.3], P), { tone: 'mid' }),
-    k.lineSvg(k.segment([-70, -16, DECK_TOP + 16.3], [70, -16, DECK_TOP + 16.3], P), { tone: 'mid' }),
-  ))
-
-  // ---- paper table and sheet -------------------------------------------
+  // ---- paper table: the fixed rest the sheet leans back against ---------
   const table = [k.iso([-66, -35, BASE_Z + 33], P), k.iso([66, -35, BASE_Z + 33], P), k.iso([66, -46, BASE_Z + 65], P), k.iso([-66, -46, BASE_Z + 65], P)]
-  out.push(part('paper', 8,
+  out.push(part('tw-table', 0,
     `<path class="home-table" d="${k.pathOf(table, true)}"/>`,
     k.lineSvg(k.pathOf(table, true), { tone: 'lo' }),
     k.lineSvg(k.segment([-60, -44.5, BASE_Z + 63], [60, -44.5, BASE_Z + 63], P), { tone: 'faint' }),
@@ -187,12 +222,57 @@ export function buildTypewriter(P, options = {}) {
   })
   paper.push('</g></g>')
   // The holder is wrapped whole: the sheet, its clip and the group the client
-  // translates are untouched inside.
-  out.push(part('paper', 8, `<g class="home-paper-holder">${paper.join('')}</g>`))
+  // translates are untouched inside. It is its own part because the sheet rides
+  // on the carriage, while the table behind it stays bolted to the frame.
+  out.push(part('tw-sheet', 0, `<g class="home-paper-holder">${paper.join('')}</g>`))
 
-  // ---- platen, ribbon, carriage ----------------------------------------
+  // ---- typebar basket: the fan of bars under the type point -------------
+  // The middle bar is its own group so the machine can strike once, on its own,
+  // when it is first run.
+  out.push(part('mechanism', 0,
+    ...Array.from({ length: 9 }, (_, i) => {
+      const t = (i / 8) * 2 - 1
+      const bar = k.lineSvg(k.segment([t * 34, -2, BASE_Z + 26], [t * 16, -12, BASE_Z + 33], P), { tone: 'mid' })
+        + k.dotsSvg([k.iso([t * 16, -12, BASE_Z + 33], P)], { size: 0.6, tone: 'hi' })
+      return i === 4 ? `<g class="tw-bar">${bar}</g>` : bar
+    }),
+  ))
+
+  // ---- ribbon fork: the vibrator that lifts the ribbon to the type point -
+  // The ribbon cannot run straight across the print point: it has to be held up
+  // between two prongs and dropped again between strikes. Those prongs are the
+  // gap the ribbon closes when it is threaded.
+  out.push(part('tw-fork', 0,
+    k.lineSvg(k.segment([-7, FORK.y, DECK_TOP + 19.2], [-7, FORK.y, FORK.z + 6.2], P), { tone: 'mid' }),
+    k.lineSvg(k.segment([7, FORK.y, DECK_TOP + 19.2], [7, FORK.y, FORK.z + 6.2], P), { tone: 'mid' }),
+    k.lineSvg(k.segment([-7, FORK.y, DECK_TOP + 19.2], [7, FORK.y, DECK_TOP + 19.2], P), { tone: 'mid' }),
+    k.dotsSvg([k.iso([-7, FORK.y, FORK.z + 6.2], P), k.iso([7, FORK.y, FORK.z + 6.2], P)], { size: 0.7, tone: 'hi' }),
+  ))
+
+  // ---- margin bell: it rings a few characters before the right margin ----
+  const bellFrame = G.frameAlong([BELL.x, BELL.y, BELL.z], [0, 0, 1])
+  out.push(part('tw-bell', 0,
+    k.solidSvg(G.solidOf([[0, 3.7], [0.4, 3.7], [1, 3.2], [2.1, 2.4], [3.2, 1.2], [3.8, 0]], bellFrame, P), { tone: 'lo' }),
+    k.lineSvg(G.arcOf(bellFrame, 0.45, 3.7, P, { steps: 18 }), { tone: 'faint' }),
+    k.lineSvg(k.segment([BELL.x - 3.4, BELL.y, BELL.z + 0.6], [BELL.x - 6.6, BELL.y + 1.4, BELL.z + 0.6], P), { tone: 'faint' }),
+    k.dotsSvg([k.iso([BELL.x + 5.2, BELL.y, BELL.z + 1.9], P)], { size: 0.6, tone: 'mid' }),
+  ))
+
+  // ---- carriage: the rails the assembly travels on, and the spool deck --
+  out.push(part('carriage', 0,
+    k.lineSvg(k.segment([-70, -32, DECK_TOP + 16.3], [70, -32, DECK_TOP + 16.3], P), { tone: 'mid' }),
+    k.lineSvg(k.segment([-70, -16, DECK_TOP + 16.3], [70, -16, DECK_TOP + 16.3], P), { tone: 'mid' }),
+    // ribbon spools sit on the carriage deck, in front of the roller
+    ...[-54, 54].flatMap(sx => [
+      k.solidSvg(k.cylinder(sx, -4, 7, DECK_TOP + 16, 5, P, 22), { tone: 'mid' }),
+      k.solidSvg(k.cylinder(sx, -4, 9, DECK_TOP + 15, 1.6, P, 24), { tone: 'lo' }),
+      k.solidSvg(k.cylinder(sx, -4, 4, DECK_TOP + 21, 1.4, P, 16), { tone: 'lo' }),
+    ]),
+  ))
+
+  // ---- platen, and the knobs that turn it ------------------------------
   const platenFrame = G.frameAlong([0, PLATEN.y, PLATEN.z], [1, 0, 0])
-  out.push(part('platen', 6,
+  out.push(part('platen', 0,
     k.solidSvg(G.disc(-PLATEN.half, PLATEN.half, PLATEN.r, platenFrame, P, { smooth: true }), { tone: 'hi' }),
     k.lineSvg(k.segment([-PLATEN.half + 2, PLATEN.y - PLATEN.r, PLATEN.z + 2], [PLATEN.half - 2, PLATEN.y - PLATEN.r, PLATEN.z + 2], P), { tone: 'faint' }),
     k.lineSvg(
@@ -201,30 +281,25 @@ export function buildTypewriter(P, options = {}) {
     ),
   ))
 
-  // ribbon spools sit on the carriage deck, in front of the roller
-  out.push(part('carriage', 5,
-    ...[-54, 54].flatMap(sx => [
-      k.solidSvg(k.cylinder(sx, -4, 7, DECK_TOP + 16, 5, P, 22), { tone: 'mid' }),
-      k.solidSvg(k.cylinder(sx, -4, 9, DECK_TOP + 15, 1.6, P, 24), { tone: 'lo' }),
-      k.solidSvg(k.cylinder(sx, -4, 4, DECK_TOP + 21, 1.4, P, 16), { tone: 'lo' }),
-    ]),
-  ))
+  // one knob per side, so each twists about its own axis rather than the pair.
+  // Only the knurling spins on the first run: the turned body keeps its own
+  // shading, which is what a lathed knob does under a fixed light.
+  for (const side of [-1, 1]) {
+    const s0 = side > 0 ? PLATEN.half : -PLATEN.half - 8
+    const s1 = side > 0 ? PLATEN.half + 8 : -PLATEN.half
+    out.push(part('tw-knob', side > 0 ? 1 : 0,
+      k.solidSvg(G.disc(s0, s1, PLATEN.r + 1.4, platenFrame, P, { bevel: 1 }), { tone: 'mid' }),
+      k.lineSvg(G.circleOf(platenFrame, s1, PLATEN.r - 1.5, P), { tone: 'faint' }),
+      `<g class="tw-knob-spin">${k.lineSvg(
+        Array.from({ length: 9 }, (_, i) => {
+          const a = (i / 9) * Math.PI * 2
+          return G.arcOf(platenFrame, s1, PLATEN.r + 1.6, P, { from: a, to: a + 0.16, steps: 2 })
+        }).join(''),
+        { tone: 'faint' },
+      )}</g>`,
+    ))
+  }
 
-  // typebars and ribbon sit in front of the roller, so they paint over it
-  out.push(part('mechanism', 7,
-    ...Array.from({ length: 9 }, (_, i) => {
-      const t = (i / 8) * 2 - 1
-      return k.lineSvg(k.segment([t * 34, -2, BASE_Z + 26], [t * 16, -12, BASE_Z + 33], P), { tone: 'mid' })
-        + k.dotsSvg([k.iso([t * 16, -12, BASE_Z + 33], P)], { size: 0.6, tone: 'hi' })
-    }),
-    k.lineSvg(k.segment([-50, -6, DECK_TOP + 22.2], [-6, -10, DECK_TOP + 22.2], P), { tone: 'lit' }),
-    k.lineSvg(k.segment([6, -10, DECK_TOP + 22.2], [50, -6, DECK_TOP + 22.2], P), { tone: 'lit' }),
-  ))
-
-  // carriage return lever, drawn before the knobs so they hide its root
-  // carriage return lever: a real mechanism on the right cheek — a pivot boss,
-  // a tapered arm, a knurled grip and a link rod back to the carriage. The
-  // client swings it whenever the sheet feeds a new line.
   // carriage return lever: a collar clamped round the platen's right end, an
   // arm rising from it, and a turned grip. Nothing floats: the collar turns on
   // the same axle as the roller, so the lever is part of the carriage.
@@ -250,46 +325,81 @@ export function buildTypewriter(P, options = {}) {
     // grip rings
     ...[-1.5, 0.6, 2.7].map(d => k.lineSvg(G.arcOf(ARM, ARM_LEN + d, 4.7, P, { steps: 20 }), { tone: 'faint' })),
   ]
-  out.push(part('carriage', 5,
+  out.push(part('tw-lever', 0,
     `<g class="home-return-lever" style="transform-origin:${pivotX.toFixed(1)}px ${pivotY.toFixed(1)}px">${lever.join('')}</g>`,
   ))
 
-  // one knob per side, so each twists about its own axis rather than the pair
-  for (const side of [-1, 1]) {
-    const s0 = side > 0 ? PLATEN.half : -PLATEN.half - 8
-    const s1 = side > 0 ? PLATEN.half + 8 : -PLATEN.half
-    out.push(part('platen', 6,
-      k.solidSvg(G.disc(s0, s1, PLATEN.r + 1.4, platenFrame, P, { bevel: 1 }), { tone: 'mid' }),
-      k.lineSvg(G.circleOf(platenFrame, s1, PLATEN.r - 1.5, P), { tone: 'faint' }),
-      k.lineSvg(
-        Array.from({ length: 9 }, (_, i) => {
-          const a = (i / 9) * Math.PI * 2
-          return G.arcOf(platenFrame, s1, PLATEN.r + 1.6, P, { from: a, to: a + 0.16, steps: 2 })
-        }).join(''),
-        { tone: 'faint' },
-      ),
-    ))
-  }
+  // ---- paper bail: a rod across the front of the roller, on two arms -----
+  // It is what stops the sheet from lifting off the platen, so it goes on after
+  // the roller is in and before the ribbon is threaded past it.
+  const bailFrame = G.frameAlong([0, BAIL.y, BAIL.z], [1, 0, 0])
+  out.push(part('tw-bail', 0,
+    ...[1, -1].flatMap((side) => {
+      // the arm hugs the roller's front-bottom quadrant: its foot sits on the
+      // roller's silhouette, so the bail reads as clamped to the platen rather
+      // than hung in front of it
+      const from = [side * BAIL.half, -22.8, 121.9]
+      const to = [side * BAIL.half, BAIL.y - 0.2, BAIL.z - 0.4]
+      const rise = [0, to[1] - from[1], to[2] - from[2]]
+      const frame = G.frameAlong(from, rise)
+      const len = Math.hypot(rise[1], rise[2])
+      return [
+        k.solidSvg(G.disc(-0.5, 1.8, 1.6, frame, P), { tone: 'lo' }),
+        k.solidSvg(G.disc(0, len, 0.85, frame, P), { tone: 'mid' }),
+      ]
+    }),
+    k.solidSvg(G.disc(-BAIL.half, BAIL.half, BAIL.r, bailFrame, P), { tone: 'mid' }),
+    // two rubber tyres slipped onto the rod, not two loose eggs on the basket
+    ...[-34, 34].flatMap(cx => [
+      k.solidSvg(G.disc(cx - BAIL.wheelHalf, cx + BAIL.wheelHalf, BAIL.wheel, bailFrame, P), { tone: 'lo' }),
+      k.lineSvg(G.arcOf(bailFrame, cx + BAIL.wheelHalf, BAIL.wheel, P, { steps: 18 }), { tone: 'faint' }),
+      k.lineSvg(G.arcOf(bailFrame, cx - BAIL.wheelHalf, BAIL.wheel, P, { steps: 18 }), { tone: 'faint' }),
+    ]),
+  ))
 
-  out.push(part('carriage', 5,
+  out.push(part('carriage', 1,
     k.lineSvg(k.segment([-60, -14.2, BASE_Z + 39], [60, -14.2, BASE_Z + 39], P), { tone: 'hi' }),
     k.dotsSvg([k.iso([-60, -14.2, BASE_Z + 39], P), k.iso([60, -14.2, BASE_Z + 39], P)], { size: 0.9, tone: 'mid' }),
   ))
 
-  // ---- badge, vents ----------------------------------------------------
+  // ---- ribbon: threaded from one spool, through the fork, to the other ---
+  // `pathLength` normalises the path so the CSS can draw it with a dash that
+  // runs from nothing to the whole length, whatever the projection did to it.
+  const ribbon = k.pathOf([[-54, -4, RIBBON_Z], [-50, -6, RIBBON_Z], [-6, FORK.y, RIBBON_Z], [6, FORK.y, RIBBON_Z], [50, -6, RIBBON_Z], [54, -4, RIBBON_Z]].map(p => k.iso(p, P)))
+  out.push(part('tw-ribbon', 0,
+    `<path class="iso-line tw-ribbon" data-tone="lit" pathLength="1" d="${ribbon}"/>`,
+  ))
+
+  // ---- side covers: the two panels that close over the works ------------
+  // Shallow and low: they shoulder the carriage at its ends without standing
+  // between the reader and the ribbon spools on the deck.
+  out.push(part('tw-hood', 0,
+    ...[-1, 1].flatMap((side) => {
+      const plan = { x: side > 0 ? HOOD.x : -(HOOD.x + HOOD.w), y: HOOD.y, w: HOOD.w, d: HOOD.d, r: 2.5 }
+      return [
+        k.solidSvg(k.slabOf(plan, DECK_TOP, HOOD.h, P, 5, 1.2), { tone: 'mid' }),
+        k.lineSvg(k.sideSeam(plan, DECK_TOP + HOOD.h, P, 5), { tone: 'faint' }),
+        k.lineSvg(k.planOutline(k.insetPlan(plan, 1.6), DECK_TOP + HOOD.h, P, 5), { tone: 'faint' }),
+        // louvres on the front face, where the case lets the heat out
+        ...Array.from({ length: 2 }, (_, i) =>
+          k.lineSvg(k.segment([plan.x + 2.5, plan.y + plan.d, DECK_TOP + 8 + i * 7], [plan.x + plan.w - 2.5, plan.y + plan.d, DECK_TOP + 8 + i * 7], P), { tone: 'faint' })),
+      ]
+    }),
+  ))
+
+  // ---- nameplate: the last thing screwed to the case --------------------
   const plate = { x: -38, y: 43, w: 76, d: 3, r: 1.2 }
-  out.push(part('base', 0,
+  out.push(part('tw-plate', 0,
     k.solidSvg(k.slabOf(plate, BASE_Z + 1.5, 5, P, 3, 0.3), { tone: 'lo' }),
     k.faceTextSvg(k.sideMatrix([0, plate.y + plate.d], BASE_Z + 4.2, P, 'left'), 'No.01 · TYPE', {
       size: 3.8,
       tone: 'mid',
       anchor: 'middle',
     }),
-  ))
-
-  out.push(part('base', 0,
-    ...Array.from({ length: 4 }, (_, i) =>
-      k.lineSvg(k.segment([85, -22 + i * 10, DECK_TOP + 4], [85, -22 + i * 10, DECK_TOP + 17], P), { tone: 'faint' })),
+    k.dotsSvg([
+      k.iso([-33, plate.y + plate.d + 0.2, BASE_Z + 4], P),
+      k.iso([33, plate.y + plate.d + 0.2, BASE_Z + 4], P),
+    ], { size: 0.7, tone: 'mid' }),
   ))
 
   return out.join('')

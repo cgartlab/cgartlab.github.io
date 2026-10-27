@@ -143,7 +143,9 @@ const html = `<!doctype html>
 <body><main class="home-stage${closed ? ' closed' : ''}"${camStyle}>${fitted}</main></body>
 </html>`
 
+const outArg = process.argv.find((a) => a.startsWith('--out='))
+const outFile = outArg ? outArg.slice(6) : `index-${theme}.html`
 mkdirSync(OUT, { recursive: true })
-writeFileSync(join(OUT, `index-${theme}.html`), html)
-console.log(`wrote index-${theme}.html  module=${active}  platform z=${PLATFORM_Z}`)
+writeFileSync(join(OUT, outFile), html)
+console.log(`wrote ${outFile}  module=${active}  platform z=${PLATFORM_Z}`)
 console.log(loaded.map((d) => `${d.file}: ${d.mod ? 'ok' : `MISSING (${d.error})`}`).join('\n'))

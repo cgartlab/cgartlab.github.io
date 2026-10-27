@@ -16,14 +16,19 @@
    the machine builds itself in the order a ticket printer is put together. The
    feet drop and take the weight, the body settles onto them, the window frame
    swings down onto the lid, the stock roll drops into the cradle and rocks once,
-   the front bar clamps over it, and the face plate comes on last, bringing the
-   slot, the transport pair, the cutter, the carriage, the rocker and the lamp
-   with it. Only then do the tickets start: the wrapper holds them back until
-   the case is closed, and each ticket's own delay is measured from that beat.
-   The whole build is over in ~1000ms. The printing then keeps its own cycle:
-   the beat between sheets is not fixed here but computed from the tag count in
-   the module, which hands each ticket its `--fly-delay` — one ticket per tag, so
-   26 sheets print in the same handful of seconds as 8 rather than a minute.
+   the front bar clamps over it, the blade bar seats on the panel's top edge, and
+   the face plate comes on carrying the slot, the transport pair, the carriage,
+   the rocker and the lamp. Then the fittings are bolted on one at a time — the
+   chute over the lid's lip, the pinch roller in the mouth, the badge, the lid
+   latch, the waste drawer — and only then does the machine run itself for a
+   beat: the transport wheel turns a full revolution and the blade snaps at
+   nothing before the first ticket is printed. The last fitting lands at ~2.3s
+   and the printing starts at 3s, so the wall is fed by a machine that works.
+
+   The printing keeps its own cycle: the beat between sheets is not fixed here
+   but computed from the tag count in the module, which hands each ticket its
+   `--fly-delay` — one ticket per tag, so 26 sheets print in the same handful of
+   seconds as 8 rather than a minute.
 
    Every animation ends on `transform: none; opacity: 1`, so the assembled
    machine is exactly the static drawing.
@@ -39,16 +44,16 @@
 
 /* the body: down onto the seated feet, a touch too far, then back up ------- */
 .home-stage .home-module.is-active .home-part[data-part='body'] {
-  animation: labels-body-seat 300ms cubic-bezier(0.22, 0.9, 0.24, 1) both;
-  animation-delay: 70ms;
+  animation: labels-body-seat 280ms cubic-bezier(0.22, 0.9, 0.24, 1) both;
+  animation-delay: 200ms;
 }
 
 /* the window frame: it swings down on its back edge and beds onto the lid --- */
 .home-stage .home-module.is-active .home-part[data-part='window'] {
   transform-box: fill-box;
   transform-origin: 50% 100%;
-  animation: labels-window-swing 250ms cubic-bezier(0.22, 0.9, 0.24, 1) both;
-  animation-delay: 260ms;
+  animation: labels-window-swing 260ms cubic-bezier(0.22, 0.9, 0.24, 1) both;
+  animation-delay: 420ms;
 }
 
 /* the stock roll: it drops into the cradle the bars have just made, and rocks
@@ -56,8 +61,8 @@
 .home-stage .home-module.is-active .home-part[data-part='roll'] {
   transform-box: fill-box;
   transform-origin: 50% 50%;
-  animation: labels-roll-drop 320ms cubic-bezier(0.3, 0.7, 0.3, 1) both;
-  animation-delay: 380ms;
+  animation: labels-roll-drop 300ms cubic-bezier(0.3, 0.7, 0.3, 1) both;
+  animation-delay: 620ms;
 }
 
 /* the cradle's front bar: hinged on its top edge, it clamps over the roll ---- */
@@ -65,26 +70,77 @@
   transform-box: fill-box;
   transform-origin: 50% 0%;
   animation: labels-cradle-close 220ms cubic-bezier(0.22, 0.9, 0.24, 1) both;
-  animation-delay: 660ms;
+  animation-delay: 860ms;
 }
 
-/* the face plate: last, lifted up into the body with the whole mechanism on
-   it — the slot, the platen and wheel, the cutter, the carriage, the rocker
-   and the lamp all ride in together --------------------------------------- */
+/* the blade bar: it comes down onto the panel's top edge, nose first, and beds
+   square so the slot below it is already framed when the plate arrives ------ */
+.home-stage .home-module.is-active .home-part[data-part='lb-cutter'] {
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+  animation: labels-cutter-seat 220ms cubic-bezier(0.22, 0.9, 0.24, 1) both;
+  animation-delay: 1020ms;
+}
+
+/* the face plate: lifted up into the body with the mechanism on it — the slot,
+   the platen and wheel, the carriage, the rocker and the lamp all ride in
+   together ---------------------------------------------------------------- */
 .home-stage .home-module.is-active .home-part[data-part='face'] {
   transform-box: fill-box;
   transform-origin: 50% 100%;
-  animation: labels-face-close 260ms cubic-bezier(0.22, 0.9, 0.24, 1) both;
-  animation-delay: 680ms;
+  animation: labels-face-close 300ms cubic-bezier(0.22, 0.9, 0.24, 1) both;
+  animation-delay: 1160ms;
 }
 
-/* the tickets: they are not there until the case is closed. The gate is a
-   visibility beat rather than an opacity one, so the cards never sit on a
-   composited layer and their paper keeps the exact tone it has today; the
-   tickets' own emerge still starts from opacity 0 at 1000ms ----------------- */
+/* the paper guide: it comes down nose first and beds under the frame's front
+   bar, so the strip has somewhere to run -------------------------------- */
+.home-stage .home-module.is-active .home-part[data-part='lb-guide'] {
+  transform-box: fill-box;
+  transform-origin: 50% 0%;
+  animation: labels-guide-seat 260ms cubic-bezier(0.22, 0.9, 0.24, 1) both;
+  animation-delay: 1380ms;
+}
+
+/* the pinch roller: it rises into the mouth and beds against the platen ---- */
+.home-stage .home-module.is-active .home-part[data-part='lb-pinch'] {
+  transform-box: fill-box;
+  transform-origin: 50% 50%;
+  animation: labels-pinch-seat 240ms cubic-bezier(0.24, 0.9, 0.26, 1) both;
+  animation-delay: 1560ms;
+}
+
+/* the badge: pressed onto the panel, a shade too large, then flat ---------- */
+.home-stage .home-module.is-active .home-part[data-part='lb-plate'] {
+  transform-box: fill-box;
+  transform-origin: 50% 50%;
+  animation: labels-plate-press 220ms cubic-bezier(0.26, 1.1, 0.4, 1) both;
+  animation-delay: 1720ms;
+}
+
+/* the lid latch: it swings down on its pivot and hooks the seam ------------ */
+.home-stage .home-module.is-active .home-part[data-part='lb-latch'] {
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+  animation: labels-latch-swing 240ms cubic-bezier(0.3, 0.9, 0.3, 1) both;
+  animation-delay: 1860ms;
+}
+
+/* the waste drawer: slid home from the front, under the switch ------------- */
+.home-stage .home-module.is-active .home-part[data-part='lb-bin'] {
+  transform-box: fill-box;
+  transform-origin: 50% 50%;
+  animation: labels-bin-slide 260ms cubic-bezier(0.22, 0.9, 0.24, 1) both;
+  animation-delay: 2020ms;
+}
+
+/* the tickets: they are not there until the machine has been built and has run
+   its trial beat. The gate is a visibility beat rather than an opacity one, so
+   the cards never sit on a composited layer and their paper keeps the exact
+   tone it has today; the tickets' own emerge still starts from opacity 0 at
+   3000ms, 120ms after the gate ------------------------------- */
 .home-stage .home-module.is-active .home-part[data-part='tickets'] {
   animation: labels-tickets-gate 60ms linear both;
-  animation-delay: 880ms;
+  animation-delay: 2880ms;
 }
 
 @keyframes labels-feet-drop {
@@ -123,9 +179,47 @@
   100% { transform: none; }
 }
 
+@keyframes labels-cutter-seat {
+  0% { opacity: 0; transform: translateY(-9px) scaleX(0.965); }
+  58% { opacity: 1; transform: translateY(1.2px) scaleX(1); }
+  100% { transform: none; }
+}
+
 @keyframes labels-face-close {
   0% { opacity: 0; transform: translateY(12px) rotate(-1.6deg); }
   62% { opacity: 1; transform: translateY(-1.6px) rotate(0.3deg); }
+  100% { transform: none; }
+}
+
+@keyframes labels-guide-seat {
+  0% { opacity: 0; transform: translateY(-12px) rotate(-2.4deg); }
+  64% { opacity: 1; transform: translateY(1.6px) rotate(0.6deg); }
+  100% { transform: none; }
+}
+
+/* it comes up short, presses a hair further, and lets go -------------------- */
+@keyframes labels-pinch-seat {
+  0% { opacity: 0; transform: translateY(10px) scale(0.94); }
+  58% { opacity: 1; transform: translateY(-1.6px) scale(1); }
+  100% { transform: none; }
+}
+
+@keyframes labels-plate-press {
+  0% { opacity: 0; transform: translateY(-6px) scale(1.08); }
+  56% { opacity: 1; transform: translateY(0.8px) scale(0.985); }
+  100% { transform: none; }
+}
+
+@keyframes labels-latch-swing {
+  0% { opacity: 0; transform: rotate(-26deg) translateY(-4px); }
+  60% { opacity: 1; transform: rotate(3deg); }
+  82% { transform: rotate(-1deg); }
+  100% { transform: none; }
+}
+
+@keyframes labels-bin-slide {
+  0% { opacity: 0; transform: translateY(16px) scale(0.96); }
+  62% { opacity: 1; transform: translateY(-1.2px) scale(1); }
   100% { transform: none; }
 }
 
@@ -197,18 +291,31 @@
   100% { scale: 1; rotate: var(--tilt, 0deg); }
 }
 
-/* the carriage shuttles, the roller turns, the cutter strikes, the lamp blinks */
-.home-stage .home-module.is-active .home-print-head {
-  animation: home-print-head 1500ms cubic-bezier(0.34, 0.9, 0.28, 1) infinite;
-}
+/* ---- the trial run ------------------------------------------------------
+   The machine is closed at ~2.3s but does not print yet: it runs itself once
+   first. The transport wheel turns a full revolution and the blade snaps at
+   nothing; the trial reuses the steady keyframes with a short duration, so the
+   hand-off at 2960ms is seamless — one turn ends exactly where the loop starts,
+   and the blade's first empty cut is the one the trial made. Only after that
+   does the machine start feeding sheets. */
+
 .home-stage .home-module.is-active .home-feed-roller {
-  animation: home-feed-roller 2400ms linear infinite;
+  animation:
+    home-feed-roller 660ms cubic-bezier(0.32, 0.6, 0.2, 1) 2300ms both,
+    home-feed-roller 2400ms linear 2960ms infinite;
 }
 .home-stage .home-module.is-active .home-cutter {
-  animation: home-cutter 1500ms cubic-bezier(0.34, 0.9, 0.28, 1) infinite;
+  animation:
+    home-cutter 620ms cubic-bezier(0.34, 0.9, 0.28, 1) 2340ms both,
+    home-cutter 1500ms cubic-bezier(0.34, 0.9, 0.28, 1) 2960ms infinite;
+}
+/* the carriage and the lamp come alive with the trial: the lamp is already lit
+   when the panel goes on, and starts blinking once the machine is running */
+.home-stage .home-module.is-active .home-print-head {
+  animation: home-print-head 1500ms cubic-bezier(0.34, 0.9, 0.28, 1) 2960ms infinite;
 }
 .home-stage .home-module.is-active .home-label-led {
-  animation: home-label-led 1500ms steps(1, end) infinite;
+  animation: home-label-led 1500ms steps(1, end) 2960ms infinite;
 }
 
 /* the roller spins about its own centre, given in page px on the group */
@@ -217,11 +324,12 @@
   will-change: transform;
 }
 
-/* the stock roll turns as well. Its seam is a helix, so sliding it one pitch
-   along the axis is exactly what a turning cylinder looks like; the module
-   draws the coil a pitch past each end and clips it, so the loop has no seam */
+/* the stock roll turns as well, and it only starts on the trial beat. Its seam
+   is a helix, so sliding it one pitch along the axis is exactly what a turning
+   cylinder looks like; the module draws the coil a pitch past each end and clips
+   it, so the loop has no seam */
 .home-stage .home-module.is-active .home-stock-roll {
-  animation: home-stock-roll 4200ms linear infinite;
+  animation: home-stock-roll 4200ms linear 2960ms infinite;
 }
 
 @keyframes home-stock-roll {
@@ -237,6 +345,13 @@
 .home-stage .home-platen .iso-top,
 .home-stage .home-platen .iso-shade { fill: var(--home-metal); }
 .home-stage .home-wheel .iso-edge { stroke: var(--anatomy-mid); }
+
+/* the pinch wheels are the same steel as the platen they press, which is what
+   separates them from the pale panel around the mouth */
+.home-stage .home-lb-pinch .iso-fill,
+.home-stage .home-lb-pinch .iso-top,
+.home-stage .home-lb-pinch .iso-shade { fill: var(--home-metal); }
+.home-stage .home-lb-pinch .iso-edge { stroke: var(--anatomy-mid); }
 
 /* the indicator lamp is the one lit thing on the panel, so it carries the
    accent — the same green the machine prints its labels in. The shading rules

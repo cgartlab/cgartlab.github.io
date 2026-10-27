@@ -17,7 +17,7 @@
 .home-stage .home-cine-body.iso-solid > .iso-shade { fill: color-mix(in oklch, oklch(var(--un-preset-theme-colors-primary)) 36%, oklch(var(--un-preset-theme-colors-background)) 64%); }
 .home-stage .home-cine-body.iso-solid > .iso-top { fill: color-mix(in oklch, oklch(var(--un-preset-theme-colors-primary)) 30%, oklch(var(--un-preset-theme-colors-background)) 70%); }
 
-/* cast iron: the socket, the yoke arms, the flywheel — darker and heavier */
+/* cast iron: the gantry, the spindles, the brake shoe — darker and heavier */
 .home-stage .home-cine-cast.iso-solid > .iso-fill { fill: color-mix(in oklch, oklch(var(--un-preset-theme-colors-primary)) 64%, oklch(var(--un-preset-theme-colors-background)) 36%); }
 .home-stage .home-cine-cast.iso-solid > .iso-shade { fill: color-mix(in oklch, oklch(var(--un-preset-theme-colors-primary)) 58%, oklch(var(--un-preset-theme-colors-background)) 42%); }
 .home-stage .home-cine-cast.iso-solid > .iso-top { fill: color-mix(in oklch, oklch(var(--un-preset-theme-colors-primary)) 50%, oklch(var(--un-preset-theme-colors-background)) 50%); }
@@ -44,7 +44,7 @@
 /* the lens glass: the one dark hole in the drawing */
 .home-stage .home-cine-glass { fill: color-mix(in oklch, oklch(var(--un-preset-theme-colors-primary)) 88%, oklch(var(--un-preset-theme-colors-background)) 12%); stroke: none; }
 
-/* the pipes and the drive arm are the same brass as the bands */
+/* the flue and the jumper are the same brass as the bands */
 .home-stage .home-cine-pipe .tb-body { fill: color-mix(in oklch, var(--home-brass) 46%, oklch(var(--un-preset-theme-colors-primary)) 54%); }
 .home-stage .home-cine-pipe .tb-shine { fill: color-mix(in oklch, var(--home-brass) 78%, oklch(var(--un-preset-theme-colors-primary)) 22%); }
 .home-stage .home-cine-pipe .tb-shade { fill: color-mix(in oklch, var(--home-brass) 18%, oklch(var(--un-preset-theme-colors-primary)) 82%); }
@@ -76,37 +76,79 @@
   filter: blur(3px);
 }
 
-/* the strip: a band with a perforation line walking along it */
-.home-stage .home-cine-film {
+/* The strip is a real band, not a hairline: it has to out-weigh `.iso-line`'s
+   shared 0.6px weight, which is declared later in home.css at a lower
+   specificity — hence the explicit `.home-part .iso-line` chain.
+
+   `vector-effect: none` is load-bearing. With the page-wide non-scaling stroke
+   the browser measures the dash pattern in screen pixels while the path is
+   measured in user units, so a stage that renders wider than the viewBox cuts
+   the tail of the strip off. Here the width is in user units like the dash. */
+.home-stage .home-part .iso-line.home-cine-film {
   fill: none;
-  stroke: color-mix(in oklch, oklch(var(--un-preset-theme-colors-primary)) 62%, oklch(var(--un-preset-theme-colors-background)) 38%);
+  stroke: color-mix(in oklch, oklch(var(--un-preset-theme-colors-primary)) 72%, oklch(var(--un-preset-theme-colors-background)) 28%);
   stroke-width: 3.6;
   stroke-linecap: round;
   stroke-linejoin: round;
-}
-.home-stage .home-cine-film-perf {
-  fill: none;
-  stroke: color-mix(in oklch, oklch(var(--un-preset-theme-colors-background)) 62%, oklch(var(--un-preset-theme-colors-primary)) 38%);
-  stroke-width: 1.2;
-  stroke-linecap: butt;
-  stroke-dasharray: 1.6 3.4;
+  vector-effect: none;
 }
 
-/* the gate the strip runs through: a dark block the film crosses over */
-.home-stage .home-cine-gate.iso-solid > .iso-fill { fill: color-mix(in oklch, oklch(var(--un-preset-theme-colors-primary)) 70%, oklch(var(--un-preset-theme-colors-background)) 30%); }
-.home-stage .home-cine-gate.iso-solid > .iso-shade { fill: color-mix(in oklch, oklch(var(--un-preset-theme-colors-primary)) 64%, oklch(var(--un-preset-theme-colors-background)) 36%); }
-.home-stage .home-cine-gate.iso-solid > .iso-top { fill: color-mix(in oklch, oklch(var(--un-preset-theme-colors-primary)) 76%, oklch(var(--un-preset-theme-colors-background)) 24%); }
+/* the perforations ride the band's edge; each one is timed to the moment the
+   threading head reaches it (see the `--at` written by cinema.mjs) */
+.home-stage .home-cine-film-perf circle {
+  fill: color-mix(in oklch, oklch(var(--un-preset-theme-colors-background)) 72%, oklch(var(--un-preset-theme-colors-primary)) 28%);
+  stroke: none;
+  opacity: 1;
+}
+
+/* the gate the strip runs through: a block a step darker than the head, with
+   the aperture cut out of it as a slot (see `.home-cine-slot`) */
+.home-stage .home-cine-gate.iso-solid > .iso-fill { fill: color-mix(in oklch, oklch(var(--un-preset-theme-colors-primary)) 54%, oklch(var(--un-preset-theme-colors-background)) 46%); }
+.home-stage .home-cine-gate.iso-solid > .iso-shade { fill: color-mix(in oklch, oklch(var(--un-preset-theme-colors-primary)) 50%, oklch(var(--un-preset-theme-colors-background)) 50%); }
+.home-stage .home-cine-gate.iso-solid > .iso-top { fill: color-mix(in oklch, oklch(var(--un-preset-theme-colors-primary)) 44%, oklch(var(--un-preset-theme-colors-background)) 56%); }
 
 /* the shutter, seen through the lamphouse port: two blades on a disc */
-.home-stage .home-cine-port { fill: color-mix(in oklch, oklch(var(--un-preset-theme-colors-primary)) 82%, oklch(var(--un-preset-theme-colors-background)) 18%); }
-.home-stage .home-cine-blade { fill: color-mix(in oklch, oklch(var(--un-preset-theme-colors-primary)) 52%, oklch(var(--un-preset-theme-colors-background)) 48%); }
-.home-stage .home-cine-blade-light { fill: color-mix(in oklch, oklch(var(--un-preset-theme-colors-background)) 84%, oklch(var(--un-preset-theme-colors-primary)) 16%); }
+.home-stage .home-cine-port.iso-solid > .iso-fill { fill: color-mix(in oklch, oklch(var(--un-preset-theme-colors-primary)) 84%, oklch(var(--un-preset-theme-colors-background)) 16%); }
+.home-stage .home-cine-port.iso-solid > .iso-shade { fill: color-mix(in oklch, oklch(var(--un-preset-theme-colors-primary)) 80%, oklch(var(--un-preset-theme-colors-background)) 20%); }
+.home-stage .home-cine-blade.iso-solid > .iso-fill { fill: color-mix(in oklch, oklch(var(--un-preset-theme-colors-primary)) 52%, oklch(var(--un-preset-theme-colors-background)) 48%); }
+.home-stage .home-cine-blade.iso-solid > .iso-shade { fill: color-mix(in oklch, oklch(var(--un-preset-theme-colors-primary)) 46%, oklch(var(--un-preset-theme-colors-background)) 54%); }
+.home-stage .home-cine-blade-light { fill: color-mix(in oklch, oklch(var(--un-preset-theme-colors-background)) 84%, oklch(var(--un-preset-theme-colors-primary)) 16%); stroke: none; }
 
 /* --------------------------------------------------------------------------
-   The assembly. Every rule here outranks the generic `.home-part` settle in
-   home.css and states both `animation` and `animation-delay`, so the beats stay
-   legible: socket 0 → yoke 1 → boiler 2 → pipes 3 → barrel 4 → gate 5 →
-   reels 6 → beam 7. The last part lands at 880 ms.
+   The assembly — 2.5 s, eighteen beats.
+
+   The order is the order a projector is actually built in: the casting lands,
+   the reel gantry is bolted to the head's lid, the two boxes drop on, the
+   electrics (ballast, flue, jumper) go in, the optical parts (gate, barrel,
+   guides) follow, and only then is the film handled: the strip is threaded
+   through the gate, the pressure plate closes over it, and the reels finally
+   drop onto their spindles and turn.
+
+     part                delay   dur   lands
+     cine-base             80   340     420
+     cine-yoke            330   320     650
+     cine-head            520   330     850
+     cine-lamp            700   330    1030
+     cine-transformer     880   290    1170
+     cine-stack          1020   300    1320
+     cine-gate           1160   280    1440
+     cine-lens           1300   320    1620
+     cine-guide          1470   220    1690
+     cine-film           1580   520    2100   (stroke-dashoffset thread)
+     cine-pressure       1900   260    2160
+     cine-spindle        1990   240    2230
+     cine-reels          2080   320    2400
+     cine-panel          2180   300    2480
+     cine-wheel          2280   280    2560
+     cine-door           2300   280    2580
+     cine-plate          2350   220    2570
+     cine-wiring         2400   200    2600
+     the lamp strikes    2680
+
+   Neighbouring beats overlap by 30–120 ms so the build reads as continuous
+   work rather than a queue. Every rule states both `animation` and
+   `animation-delay`, which outranks the generic `.home-part` settle in
+   home.css.
 
    The part names carry a `cine-` prefix (see cinema.mjs): `data-part` is a
    module-agnostic selector and labels.css claims `feet` and `body` for its own
@@ -120,62 +162,143 @@
    the gate would re-rasterise without subpixel AA.
    -------------------------------------------------------------------------- */
 
-/* the socket rises out of the platform and seats */
+/* the casting rises out of the platform and takes the weight */
 .home-stage .home-module.is-active .home-part[data-part='cine-base'] {
-  animation: home-cine-base 280ms cubic-bezier(0.28, 0.72, 0.24, 1) backwards;
-  animation-delay: 110ms;
+  animation: home-cine-base 340ms cubic-bezier(0.28, 0.72, 0.24, 1) backwards;
+  animation-delay: 80ms;
 }
 
-/* the yoke closes over it */
+/* the reel gantry is bolted to the head's lid before the head is on it */
 .home-stage .home-module.is-active .home-part[data-part='cine-yoke'] {
-  animation: home-cine-yoke 300ms cubic-bezier(0.2, 0.86, 0.22, 1) backwards;
-  animation-delay: 190ms;
-}
-
-/* the boiler drops into the yoke and settles on its trunnions */
-.home-stage .home-module.is-active .home-part[data-part='cine-body'] {
-  animation: home-cine-body 340ms cubic-bezier(0.2, 0.86, 0.22, 1) backwards;
-  animation-delay: 260ms;
-}
-
-/* the pipes plumb it back into the deck */
-.home-stage .home-module.is-active .home-part[data-part='cine-pipes'] {
-  transform-origin: 50% 100%;
-  animation: home-cine-pipes 260ms cubic-bezier(0.24, 0.84, 0.26, 1) backwards;
+  animation: home-cine-yoke 320ms cubic-bezier(0.2, 0.86, 0.22, 1) backwards;
   animation-delay: 330ms;
+}
+
+/* the head rides down into the gantry */
+.home-stage .home-module.is-active .home-part[data-part='cine-head'] {
+  animation: home-cine-head 330ms cubic-bezier(0.2, 0.86, 0.22, 1) backwards;
+  animation-delay: 520ms;
+}
+
+/* the lamphouse slides in from the right and seats against the head */
+.home-stage .home-module.is-active .home-part[data-part='cine-lamp'] {
+  animation: home-cine-lamp 330ms cubic-bezier(0.22, 0.88, 0.24, 1) backwards;
+  animation-delay: 700ms;
+}
+
+/* the ballast drops onto the lamphouse lid */
+.home-stage .home-module.is-active .home-part[data-part='cine-transformer'] {
+  animation: home-cine-transformer 290ms cubic-bezier(0.2, 0.86, 0.22, 1) backwards;
+  animation-delay: 880ms;
+}
+
+/* the flue draws itself up out of the lid — the one part that leaves the boxes */
+.home-stage .home-module.is-active .home-part[data-part='cine-stack'] {
+  transform-origin: 50% 100%;
+  animation: home-cine-stack 300ms cubic-bezier(0.24, 0.84, 0.26, 1) backwards;
+  animation-delay: 1020ms;
+}
+
+/* gate and shutter press in from the front, onto the head's face */
+.home-stage .home-module.is-active .home-part[data-part='cine-gate'] {
+  animation: home-cine-gate 280ms cubic-bezier(0.24, 0.84, 0.26, 1) backwards;
+  animation-delay: 1160ms;
 }
 
 /* the barrel slides forward out of the shoulder along its own axis:
    the cone leaves at 45deg up-left, so the retracted start sits down-right */
 .home-stage .home-module.is-active .home-part[data-part='cine-lens'] {
-  animation: home-cine-lens 300ms cubic-bezier(0.16, 0.86, 0.22, 1) backwards;
-  animation-delay: 400ms;
+  animation: home-cine-lens 320ms cubic-bezier(0.16, 0.86, 0.22, 1) backwards;
+  animation-delay: 1300ms;
 }
 
-/* gate, shutter and film thread in together, from the reel side */
-.home-stage .home-module.is-active .home-part[data-part='cine-gate'] {
-  animation: home-cine-gate 250ms cubic-bezier(0.24, 0.84, 0.26, 1) backwards;
-  animation-delay: 470ms;
+/* the guide rollers snap onto the face where the strip will turn */
+.home-stage .home-module.is-active .home-part[data-part='cine-guide'] {
+  animation: home-cine-guide 220ms cubic-bezier(0.24, 0.84, 0.26, 1) backwards;
+  animation-delay: 1470ms;
 }
 
-/* the gantry and its reels spin on: a short turn that decelerates as the hub
+/* The strip is threaded, not faded in. The part itself never animates: the band
+   is hidden by its own dash offset and the perforations by their own delays, so
+   there is nothing left for a group-level fade to do. */
+.home-stage .home-module.is-active .home-part[data-part='cine-film'] {
+  animation: none;
+}
+
+.home-module.is-active .home-part[data-part='cine-film'] .home-cine-film {
+  animation: home-cine-thread 520ms cubic-bezier(0.32, 0.72, 0, 1) backwards;
+  animation-delay: 1580ms;
+}
+
+/* each perforation arrives when the threading head gets to it */
+.home-module.is-active .home-part[data-part='cine-film'] .home-cine-film-perf circle {
+  animation: home-cine-perf 160ms linear backwards;
+  animation-delay: calc(1580ms + var(--at, 0ms));
+}
+
+/* the pressure plate closes over the gate and hides the middle of the strip */
+.home-stage .home-module.is-active .home-part[data-part='cine-pressure'] {
+  animation: home-cine-pressure 260ms cubic-bezier(0.3, 0.9, 0.24, 1) backwards;
+  animation-delay: 1900ms;
+}
+
+/* the spindles push out of the gantry toward the reader */
+.home-stage .home-module.is-active .home-part[data-part='cine-spindle'] {
+  animation: home-cine-spindle 240ms cubic-bezier(0.24, 0.84, 0.26, 1) backwards;
+  animation-delay: 1990ms;
+}
+
+/* the reels drop onto their collars: a short turn that decelerates as the hub
    seats. Each reel is its own group, so the turn happens about its own hub. */
 .home-stage .home-module.is-active .home-part[data-part='cine-reels'] {
   transform-origin: 50% 50%;
-  animation: home-cine-reels 300ms cubic-bezier(0.12, 0.9, 0.2, 1) backwards;
-  animation-delay: 540ms;
+  animation: home-cine-reels 320ms cubic-bezier(0.12, 0.9, 0.2, 1) backwards;
+  animation-delay: 2080ms;
 }
 
-/* The lamp strikes. The machine is already turning by 900 ms; the cone blooms
-   out of the hood just after that, holds while the picture fades up on the wall
-   behind the page (the projection gate opens at 1250 ms and takes 680 ms), and
-   is gone by the time the film is playing — what is left on the wall is the
-   picture, not the beam.
+/* the control plate goes on last of the electrics */
+.home-stage .home-module.is-active .home-part[data-part='cine-panel'] {
+  animation: home-cine-panel 300ms cubic-bezier(0.24, 0.84, 0.26, 1) backwards;
+  animation-delay: 2180ms;
+}
 
-   1900 ms from 980 ms: the arc catches over 980 → 1210, holds until 1930 —
-   the moment the picture on the wall reaches full — and is out by 2880. */
+/* the hand-wheel spins on and comes to rest */
+.home-stage .home-module.is-active .home-part[data-part='cine-wheel'] {
+  transform-origin: 50% 50%;
+  animation: home-cine-wheel 280ms cubic-bezier(0.2, 0.86, 0.22, 1) backwards;
+  animation-delay: 2280ms;
+}
+
+/* The lamphouse door swings shut. A door turning on a vertical hinge loses its
+   width on the page before it loses its plane, so the honest 2D stand-in is a
+   scale on the hinge axis rather than a rotation the projection would flatten. */
+.home-stage .home-module.is-active .home-part[data-part='cine-door'] {
+  transform-origin: 0% 50%;
+  animation: home-cine-door 280ms cubic-bezier(0.32, 0.72, 0, 1) backwards;
+  animation-delay: 2300ms;
+}
+
+/* the nameplate is screwed onto the deck while the door is still closing */
+.home-stage .home-module.is-active .home-part[data-part='cine-plate'] {
+  animation: home-cine-plate 220ms cubic-bezier(0.24, 0.84, 0.26, 1) backwards;
+  animation-delay: 2350ms;
+}
+
+/* the jumper ties the lamphouse to the head, and the build is done */
+.home-stage .home-module.is-active .home-part[data-part='cine-wiring'] {
+  animation: home-cine-wiring 200ms cubic-bezier(0.24, 0.84, 0.26, 1) backwards;
+  animation-delay: 2400ms;
+}
+
+/* The lamp strikes 80 ms after the last part lands. The machine is threaded by
+   2600 ms; the cone blooms out of the hood just after that, holds while the
+   picture fades up on the wall behind the page, and is gone by the time the
+   film is playing — what is left on the wall is the picture, not the beam.
+
+   1900 ms from 2680: the arc catches over 2680 → 2910, holds until 3630 — the
+   moment the picture on the wall reaches full — and is out by 4580. */
 .home-stage .home-module.is-active .home-cine-beam {
-  animation: home-cine-beam-strike 1900ms linear 980ms both;
+  animation: home-cine-beam-strike 1900ms linear 2680ms both;
 }
 
 @keyframes home-cine-beam-strike {
@@ -189,7 +312,7 @@
   100% { opacity: 0; }
 }
 
-/* the socket lands first, a touch from above, and takes the weight */
+/* the casting lands first, a touch from above, and takes the weight */
 @keyframes home-cine-base {
   from { opacity: 0; transform: translateY(-6px) scale(0.94); }
   62% { opacity: 1; }
@@ -197,24 +320,47 @@
   to { opacity: 1; transform: none; }
 }
 
-/* the arms unfold up out of the ring */
+/* the gantry rises out of the lid and bolts down */
 @keyframes home-cine-yoke {
-  from { opacity: 0; transform: translateY(6px) scale(0.97); }
-  70% { opacity: 1; transform: translateY(-0.9px) scale(1.002); }
+  from { opacity: 0; transform: translateY(9px) scale(0.97); }
+  70% { opacity: 1; transform: translateY(-1px) scale(1.002); }
   to { opacity: 1; transform: none; }
 }
 
-/* the boiler rides down onto its trunnions */
-@keyframes home-cine-body {
-  from { opacity: 0; transform: translateY(-7px) scale(0.985); }
+/* the head rides down into the gantry */
+@keyframes home-cine-head {
+  from { opacity: 0; transform: translateY(-8px) scale(0.985); }
   68% { opacity: 1; transform: translateY(1.2px) scale(1.002); }
   to { opacity: 1; transform: none; }
 }
 
-/* the pipes draw themselves down into the deck */
-@keyframes home-cine-pipes {
-  from { opacity: 0; transform: scaleY(0.72); }
+/* the lamphouse slides in from the right and seats */
+@keyframes home-cine-lamp {
+  from { opacity: 0; transform: translate(7px, 2px) scale(0.985); }
+  66% { opacity: 1; }
+  to { opacity: 1; transform: none; }
+}
+
+/* the ballast drops onto the lid */
+@keyframes home-cine-transformer {
+  from { opacity: 0; transform: translateY(-8px) scale(0.97); }
+  66% { opacity: 1; }
+  86% { transform: translateY(1px) scale(1); }
+  to { opacity: 1; transform: none; }
+}
+
+/* the flue grows up out of its collar */
+@keyframes home-cine-stack {
+  from { opacity: 0; transform: translateY(6px) scaleY(0.55); }
   60% { opacity: 1; }
+  84% { transform: translateY(-0.8px) scaleY(1.01); }
+  to { opacity: 1; transform: none; }
+}
+
+/* gate and shutter press in from the front */
+@keyframes home-cine-gate {
+  from { opacity: 0; transform: translate(2px, 5px); }
+  58% { opacity: 1; }
   to { opacity: 1; transform: none; }
 }
 
@@ -226,17 +372,83 @@
   to { opacity: 1; transform: none; }
 }
 
-/* the strip threads in from the reel side */
-@keyframes home-cine-gate {
-  from { opacity: 0; transform: translate(2.4px, -2px) scale(0.95); }
-  58% { opacity: 1; }
+/* the guide rollers snap down onto the face */
+@keyframes home-cine-guide {
+  from { opacity: 0; transform: scale(0.8); }
+  60% { opacity: 1; }
   to { opacity: 1; transform: none; }
 }
 
-/* the reels spin on */
+/* the strip walks from the supply hub to the take-up hub. The band carries a
+   dash as long as itself (`pathLength="1"`), so pulling the offset to zero is
+   the same thing as threading it. */
+@keyframes home-cine-thread {
+  from { stroke-dashoffset: 1; }
+  to { stroke-dashoffset: 0; }
+}
+
+@keyframes home-cine-perf {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* the pressure plate drops onto the gate */
+@keyframes home-cine-pressure {
+  from { opacity: 0; transform: translateY(-9px); }
+  62% { opacity: 1; }
+  86% { transform: translateY(1.2px); }
+  to { opacity: 1; transform: none; }
+}
+
+/* the spindles push out toward the reader */
+@keyframes home-cine-spindle {
+  from { opacity: 0; transform: translateY(-7px) scale(0.92); }
+  58% { opacity: 1; }
+  84% { transform: translateY(1px) scale(1); }
+  to { opacity: 1; transform: none; }
+}
+
+/* the reels drop onto their collars and stop turning */
 @keyframes home-cine-reels {
-  from { opacity: 0; transform: rotate(-14deg) scale(0.9); }
+  from { opacity: 0; transform: translateY(-9px) rotate(-16deg) scale(0.88); }
   55% { opacity: 1; }
+  82% { transform: translateY(1.4px) rotate(0.6deg) scale(1.002); }
+  to { opacity: 1; transform: none; }
+}
+
+/* the control plate slides onto the face */
+@keyframes home-cine-panel {
+  from { opacity: 0; transform: translateY(6px); }
+  62% { opacity: 1; }
+  to { opacity: 1; transform: none; }
+}
+
+/* the hand-wheel spins on */
+@keyframes home-cine-wheel {
+  from { opacity: 0; transform: rotate(-120deg) scale(0.86); }
+  55% { opacity: 1; }
+  to { opacity: 1; transform: none; }
+}
+
+/* the door swings shut on its hinge */
+@keyframes home-cine-door {
+  from { opacity: 0; transform: scaleX(0.1); }
+  30% { opacity: 1; }
+  82% { transform: scaleX(1.015); }
+  to { opacity: 1; transform: none; }
+}
+
+/* the nameplate goes on */
+@keyframes home-cine-plate {
+  from { opacity: 0; transform: translateY(3px) scale(0.96); }
+  70% { opacity: 1; }
+  to { opacity: 1; transform: none; }
+}
+
+/* the jumper settles between the two boxes */
+@keyframes home-cine-wiring {
+  from { opacity: 0; transform: translateY(4px) scaleX(0.9); }
+  70% { opacity: 1; }
   to { opacity: 1; transform: none; }
 }
 
@@ -246,8 +458,8 @@
    `.home-cine-mech` is the contract: it wraps every part that moves, and it is
    inert until `.home-module.is-active`. The screening layer keys off the same
    group — the picture may not play until the machine is built and threaded,
-   and the build's last beat (the cone) lands at 880 ms. Every running beat is
-   therefore held to 900 ms: assembly first, then motion.
+   and the build's last beat lands at 2600 ms. Every running beat is therefore
+   held to 2600 ms: assembly first, then motion.
 
    The reels turn in the machine's own plane. The group that spins holds a
    circle and sits *inside* the projection matrix, so `rotate` is a true axle
@@ -264,31 +476,20 @@
 }
 
 .home-module.is-active .home-reel-spin[data-reel='a'] {
-  animation: home-cine-turn 5600ms linear 900ms infinite;
+  animation: home-cine-turn 5600ms linear 2600ms infinite;
 }
 
 .home-module.is-active .home-reel-spin[data-reel='b'] {
-  animation: home-cine-turn 3800ms linear 900ms infinite;
+  animation: home-cine-turn 3800ms linear 2600ms infinite;
 }
 
 .home-module.is-active .home-cine-shutter {
-  animation: home-cine-turn 420ms linear 900ms infinite;
-}
-
-/* the film advances with them: the perforation line walks exactly one dash
-   period a cycle (1.6 + 3.4), so the loop closes without a seam */
-.home-module.is-active .home-cine-film-perf {
-  animation: home-cine-film-run 900ms linear 900ms infinite;
+  animation: home-cine-turn 420ms linear 2600ms infinite;
 }
 
 @keyframes home-cine-turn {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
-}
-
-@keyframes home-cine-film-run {
-  from { stroke-dashoffset: 0; }
-  to { stroke-dashoffset: -5; }
 }
 
 html.reduce-motion .home-stage .home-cine-beam { opacity: 0; animation: none !important; }
@@ -312,6 +513,23 @@ html.reduce-motion .home-module.is-active .home-part[data-part] {
     animation-delay: 0ms !important;
     opacity: 1;
     transform: none;
+  }
+}
+
+/* the strip is already through the gate, and the perforations are on it */
+html.reduce-motion .home-module.is-active .home-cine-film,
+html.reduce-motion .home-module.is-active .home-cine-film-perf circle {
+  animation: none !important;
+  opacity: 1;
+  stroke-dashoffset: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-module.is-active .home-cine-film,
+  .home-module.is-active .home-cine-film-perf circle {
+    animation: none !important;
+    opacity: 1;
+    stroke-dashoffset: 0;
   }
 }
 

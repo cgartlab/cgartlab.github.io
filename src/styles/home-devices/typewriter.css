@@ -1,75 +1,162 @@
 /* ==========================================================================
    01 — 文章: the typewriter
-   The machine is drawn as seven sub-assemblies, in paint order: the case, the
-   four stepped decks, the four rows of keys, the carriage that travels on the
-   rails, the platen with its knobs, the typebars and ribbon, and the paper with
-   the table it rests on.
+   The machine is built in sixteen passes, in the order a typewriter is actually
+   assembled, and every pass is a sub-assembly of its own:
+
+     feet → case → keyboard decks → key rows → typebar basket → ribbon fork →
+     margin bell → carriage rails → platen → knobs → return lever → paper bail →
+     ribbon threaded → side covers → nameplate → sheet → first run
 
    home.css gives every `.home-part` the same generic settle. Here each one gets
-   the motion its own mechanism would have, and they arrive in the order the
-   machine would be assembled: the case comes up from under the deck, the key
-   rows snap up one after another, the carriage slides in from the right and
-   drops onto its rails, the platen and knobs twist down onto the carriage, the
-   typebars flick into the basket, and the paper is fed up through the roller
-   last. The whole assembly is over in ~860ms.
+   the motion its own mechanism would have. Delays are relative to the module
+   picking up `.is-active`; the last sub-assembly lands at 2380 ms and the
+   machine is run for the first time at 2420 ms.
 
    Every animation ends on `transform: none; opacity: 1`, so the assembled
    machine is exactly the static drawing.
    ========================================================================== */
 
-/* the case: up from below, a touch too far, then back onto the deck --------- */
-.home-module.is-active .home-part[data-part='base'] {
-  animation: tw-base-seat 460ms cubic-bezier(0.22, 0.9, 0.24, 1) both;
-  animation-delay: 60ms;
+/* 01 the feet: they come up off the platform and take the case's weight ------ */
+.home-module.is-active .home-part[data-part='tw-feet'] {
+  animation: tw-feet-seat 300ms cubic-bezier(0.2, 0.85, 0.3, 1) 0ms both;
 }
 
-/* the four stepped decks: each rises out of the deck plane under it --------- */
+/* 02 the case: down onto the feet, a touch too far, then back up ------------- */
+.home-module.is-active .home-part[data-part='base'] {
+  animation: tw-base-seat 440ms cubic-bezier(0.22, 0.9, 0.24, 1) 80ms both;
+}
+
+/* 03 the four stepped decks: each rises out of the deck plane under it ------- */
 .home-module.is-active .home-part[data-part='deck'] {
   transform-box: fill-box;
   transform-origin: 50% 100%;
-  animation: tw-deck-pop 250ms cubic-bezier(0.22, 0.9, 0.24, 1) both;
-  /* --step is the row: front row first, then one row after another */
-  animation-delay: calc(120ms + var(--step) * 44ms);
+  animation: tw-deck-pop 260ms cubic-bezier(0.22, 0.9, 0.24, 1) calc(220ms + var(--step) * 80ms) both;
 }
 
-/* the keys: the same row wave, a beat behind their own deck ----------------- */
+/* 04 the keys: the same row wave, a beat behind their own deck --------------- */
 .home-module.is-active .home-part[data-part='keys'] {
   transform-box: fill-box;
   transform-origin: 50% 100%;
-  animation: tw-key-pop 300ms cubic-bezier(0.22, 0.9, 0.24, 1) both;
-  animation-delay: calc(150ms + var(--step) * 44ms);
+  animation: tw-key-pop 300ms cubic-bezier(0.22, 0.9, 0.24, 1) calc(310ms + var(--step) * 80ms) both;
 }
 
-/* the carriage: in from the right, a clunk past the rails, then seated ------ */
-.home-module.is-active .home-part[data-part='carriage'] {
-  animation: tw-carriage-seat 380ms cubic-bezier(0.22, 0.9, 0.24, 1) both;
-  animation-delay: 300ms;
-}
-
-/* the platen and each knob: down onto the carriage with a small twist ------- */
-.home-module.is-active .home-part[data-part='platen'] {
-  transform-box: fill-box;
-  transform-origin: 50% 50%;
-  animation: tw-platen-seat 340ms cubic-bezier(0.22, 0.9, 0.24, 1) both;
-  animation-delay: 420ms;
-}
-
-/* the typebars: they flick up out of the basket and fall back into rest ------ */
+/* 05 the typebar basket: the fan opens out of the segment -------------------- */
 .home-module.is-active .home-part[data-part='mechanism'] {
   transform-box: fill-box;
   transform-origin: 50% 100%;
-  animation: tw-mechanism-seat 280ms cubic-bezier(0.22, 0.9, 0.24, 1) both;
-  animation-delay: 500ms;
+  animation: tw-basket-seat 330ms cubic-bezier(0.22, 0.9, 0.24, 1) 900ms both;
 }
 
-/* the paper: last, fed up through the roller ------------------------------- */
-.home-module.is-active .home-part[data-part='paper'] {
-  animation: tw-paper-feed 320ms cubic-bezier(0.22, 0.9, 0.24, 1) both;
-  animation-delay: 540ms;
+/* 06 the ribbon fork: it rises into the gap between the two ribbon runs ------ */
+.home-module.is-active .home-part[data-part='tw-fork'] {
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+  animation: tw-fork-seat 240ms cubic-bezier(0.22, 0.9, 0.24, 1) 1000ms both;
+}
+
+/* 07 the margin bell: dropped onto its bracket at the left end of the segment - */
+.home-module.is-active .home-part[data-part='tw-bell'] {
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+  animation: tw-bell-seat 260ms cubic-bezier(0.3, 1.4, 0.4, 1) 1080ms both;
+}
+
+/* 08 the rails: the two runs the carriage will travel on, and its spool deck - */
+.home-module.is-active .home-part[data-part='carriage'] {
+  animation: tw-carriage-seat 320ms cubic-bezier(0.22, 0.9, 0.24, 1) calc(1200ms + var(--step) * 60ms) both;
+}
+
+/* 09 the platen: lowered onto the rails and turned into its bearings --------- */
+.home-module.is-active .home-part[data-part='platen'] {
+  transform-box: fill-box;
+  transform-origin: 50% 50%;
+  animation:
+    tw-platen-seat 340ms cubic-bezier(0.22, 0.9, 0.24, 1) 1420ms both,
+    tw-travel 360ms cubic-bezier(0.4, 0, 0.25, 1) 2420ms forwards;
+}
+
+/* 10 the knobs: each pressed on and twisted home ---------------------------- */
+.home-module.is-active .home-part[data-part='tw-knob'] {
+  transform-box: fill-box;
+  transform-origin: 50% 50%;
+  animation:
+    tw-knob-seat 300ms cubic-bezier(0.22, 0.9, 0.24, 1) calc(1500ms + var(--step) * 70ms) both,
+    tw-travel 360ms cubic-bezier(0.4, 0, 0.25, 1) 2420ms forwards;
+}
+
+/* 11 the return lever: the collar drops over the roller's end and swings in -- */
+.home-module.is-active .home-part[data-part='tw-lever'] {
+  transform-box: fill-box;
+  transform-origin: 50% 50%;
+  animation:
+    tw-lever-seat 300ms cubic-bezier(0.22, 0.9, 0.24, 1) 1640ms both,
+    tw-travel 360ms cubic-bezier(0.4, 0, 0.25, 1) 2420ms forwards;
+}
+
+/* 12 the paper bail: it comes down onto the front of the roller -------------- */
+.home-module.is-active .home-part[data-part='tw-bail'] {
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+  animation:
+    tw-bail-seat 300ms cubic-bezier(0.22, 0.9, 0.24, 1) 1700ms both,
+    tw-travel 360ms cubic-bezier(0.4, 0, 0.25, 1) 2420ms forwards;
+}
+
+/* 13 the ribbon: it is drawn out of the left spool and through the fork ------ */
+.home-module.is-active .home-part[data-part='tw-ribbon'] {
+  animation: none;
+}
+
+.home-module.is-active .home-part[data-part='tw-ribbon'] .tw-ribbon {
+  animation: tw-ribbon-thread 420ms cubic-bezier(0.3, 0.7, 0.3, 1) 1760ms both;
+}
+
+/* 14 the side covers: they hinge down over the works ------------------------ */
+.home-module.is-active .home-part[data-part='tw-hood'] {
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+  animation: tw-hood-close 320ms cubic-bezier(0.3, 1.15, 0.35, 1) 1860ms both;
+}
+
+/* 15 the nameplate: screwed down last, once the case is closed -------------- */
+.home-module.is-active .home-part[data-part='tw-plate'] {
+  transform-box: fill-box;
+  transform-origin: 50% 50%;
+  animation: tw-plate-seat 280ms cubic-bezier(0.22, 0.9, 0.24, 1) 1960ms both;
+}
+
+/* 16 the sheet: fed up through the roller, last ----------------------------- */
+.home-module.is-active .home-part[data-part='tw-sheet'] {
+  animation:
+    tw-sheet-feed 330ms cubic-bezier(0.22, 0.9, 0.24, 1) 2050ms both,
+    tw-travel 360ms cubic-bezier(0.4, 0, 0.25, 1) 2420ms forwards;
+}
+
+/* the paper table is bolted to the frame: it goes on with the carriage ------ */
+.home-module.is-active .home-part[data-part='tw-table'] {
+  animation: tw-table-seat 300ms cubic-bezier(0.22, 0.9, 0.24, 1) 1180ms both;
+}
+
+/* first run: the middle bar strikes once, on its own ----------------------- */
+.home-module.is-active .home-part[data-part='mechanism'] .tw-bar {
+  animation: tw-bar-strike 320ms cubic-bezier(0.3, 0.9, 0.3, 1) 2540ms;
+}
+
+/* first run: the roller takes one turn under the operator's hand ----------- */
+.home-module.is-active .home-part[data-part='tw-knob'] .tw-knob-spin {
+  transform-box: fill-box;
+  transform-origin: 50% 50%;
+  animation: tw-spin 480ms linear 2420ms;
+}
+
+@keyframes tw-feet-seat {
+  0% { opacity: 0; transform: translateY(7px); }
+  55% { opacity: 1; transform: translateY(-1.2px); }
+  100% { transform: none; }
 }
 
 @keyframes tw-base-seat {
-  0% { opacity: 0; transform: translateY(17px); }
+  0% { opacity: 0; transform: translateY(15px); }
   58% { opacity: 1; transform: translateY(-2.6px); }
   80% { transform: translateY(0.9px); }
   100% { transform: none; }
@@ -88,10 +175,28 @@
   100% { transform: none; }
 }
 
+@keyframes tw-basket-seat {
+  0% { opacity: 0; transform: translateY(6px) scaleX(0.5) scaleY(0.85); }
+  55% { opacity: 1; transform: translateY(-1px) scaleX(1.03) scaleY(1.04); }
+  100% { transform: none; }
+}
+
+@keyframes tw-fork-seat {
+  0% { opacity: 0; transform: translateY(7px) scaleY(0.6); }
+  58% { opacity: 1; transform: translateY(-1.1px) scaleY(1.05); }
+  100% { transform: none; }
+}
+
+@keyframes tw-bell-seat {
+  0% { opacity: 0; transform: translateY(-9px); }
+  62% { opacity: 1; transform: translateY(0.9px); }
+  100% { transform: none; }
+}
+
 @keyframes tw-carriage-seat {
-  0% { opacity: 0; transform: translate(20px, -8px); }
-  56% { opacity: 1; transform: translate(-2px, 2.2px); }
-  78% { transform: translate(0.7px, -0.7px); }
+  0% { opacity: 0; transform: translate(18px, -6px); }
+  56% { opacity: 1; transform: translate(-1.8px, 1.8px); }
+  78% { transform: translate(0.6px, -0.6px); }
   100% { transform: none; }
 }
 
@@ -101,15 +206,70 @@
   100% { transform: none; }
 }
 
-@keyframes tw-mechanism-seat {
-  0% { opacity: 0; transform: translateY(7px) scaleY(0.8); }
-  55% { opacity: 1; transform: translateY(-1.2px) scaleY(1.05); }
+@keyframes tw-knob-seat {
+  0% { opacity: 0; transform: translateY(7px) rotate(-24deg) scale(0.92); }
+  58% { opacity: 1; transform: translateY(-1.2px) rotate(3deg) scale(1.01); }
   100% { transform: none; }
 }
 
-@keyframes tw-paper-feed {
+@keyframes tw-lever-seat {
+  0% { opacity: 0; transform: translateY(-11px) rotate(7deg); }
+  58% { opacity: 1; transform: translateY(1.2px) rotate(-1.4deg); }
+  100% { transform: none; }
+}
+
+@keyframes tw-bail-seat {
+  0% { opacity: 0; transform: translateY(-12px) rotate(-2deg); }
+  60% { opacity: 1; transform: translateY(1.4px) rotate(0.5deg); }
+  100% { transform: none; }
+}
+
+@keyframes tw-ribbon-thread {
+  0% { stroke-dasharray: 0 1.6; }
+  100% { stroke-dasharray: 1.6 1.6; }
+}
+
+@keyframes tw-hood-close {
+  0% { opacity: 0; transform: translateY(-16px) rotate(-2.6deg); }
+  58% { opacity: 1; transform: translateY(1.6px) rotate(0.6deg); }
+  100% { transform: none; }
+}
+
+@keyframes tw-plate-seat {
+  0% { opacity: 0; transform: translateY(6px); }
+  60% { opacity: 1; transform: translateY(-0.9px); }
+  100% { transform: none; }
+}
+
+@keyframes tw-table-seat {
+  0% { opacity: 0; transform: translateY(7px); }
+  58% { opacity: 1; transform: translateY(-1px); }
+  100% { transform: none; }
+}
+
+@keyframes tw-sheet-feed {
   0% { opacity: 0; transform: translateY(20px); }
   62% { opacity: 1; transform: translateY(-2px); }
+  100% { transform: none; }
+}
+
+/* the carriage takes a line's worth of travel and comes back to the margin --- */
+@keyframes tw-travel {
+  0% { transform: translateX(0); }
+  46% { transform: translateX(30px); }
+  62% { transform: translateX(30px); }
+  100% { transform: translateX(0); }
+}
+
+@keyframes tw-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes tw-bar-strike {
+  0% { transform: none; }
+  28% { transform: translateY(-11px); }
+  55% { transform: translateY(-2px); }
   100% { transform: none; }
 }
 
@@ -137,13 +297,19 @@
 
 /* reduced motion: the machine is simply there ------------------------------ */
 
-html.reduce-motion .home-module.is-active .home-part[data-part] {
+html.reduce-motion .home-module.is-active .home-part[data-part],
+html.reduce-motion .home-module.is-active .tw-ribbon,
+html.reduce-motion .home-module.is-active .tw-bar,
+html.reduce-motion .home-module.is-active .tw-knob-spin {
   animation: none !important;
   animation-delay: 0ms !important;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .home-module.is-active .home-part[data-part] {
+  .home-module.is-active .home-part[data-part],
+  .home-module.is-active .tw-ribbon,
+  .home-module.is-active .tw-bar,
+  .home-module.is-active .tw-knob-spin {
     animation: none !important;
     animation-delay: 0ms !important;
   }

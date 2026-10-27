@@ -295,7 +295,7 @@
 /* the outgoing machine drops through the deck */
 .home-module.is-leaving {
   pointer-events: none;
-  animation: home-module-leave 200ms cubic-bezier(0.5, 0, 0.8, 0.4) both;
+  animation: home-module-leave 240ms cubic-bezier(0.5, 0, 0.8, 0.4) both;
 }
 
 @keyframes home-module-rise {
@@ -309,8 +309,11 @@
 }
 
 /* the platform under the machine cycles with it */
+/* the lift carries the swap: down with the old machine on it, back up with
+   the new one, over 900ms — long enough to read as weight, short enough that
+   the incoming machine's own assembly is still the main event */
 .home-stage.is-swapping .home-lift {
-  animation: home-lift-cycle 760ms cubic-bezier(0.4, 0, 0.2, 1) both;
+  animation: home-lift-cycle 900ms cubic-bezier(0.4, 0, 0.2, 1) both;
 }
 
 @keyframes home-lift-cycle {

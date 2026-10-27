@@ -19,10 +19,13 @@ const TOUR_INTERVAL = 34
 const RESUME_DELAY = 5200
 /** the chassis has finished building; the device rides up on the lift */
 const BOOT_DEVICE = 1200
-/** chassis (0 → 1.2 s) + device (1.2 → 3 s): the page is whole at three */
-const BOOT_TOTAL = 3000
-/** the projector threads the film and strikes the lamp before the reel rolls */
-const SCREEN_DELAY = 1250
+/** chassis (0 → 1.2 s) + the device's own assembly (2.2–2.6 s): the page is
+ *  whole at four, and the sheet only starts printing on a finished machine */
+const BOOT_TOTAL = 4000
+/** the projector threads the film and strikes the lamp before the reel rolls:
+ *  the machine is whole at 2.6 s, the arc catches at 2.68 s, and the picture on
+ *  the wall opens 270 ms after that */
+const SCREEN_DELAY = 2950
 /** the frame's rect is cached; layout is re-read at most this often */
 const RECT_TTL = 250
 
@@ -328,10 +331,11 @@ function setModule(s: State, index: number): void {
   s.stage.classList.remove('is-swapping')
   void s.stage.offsetWidth
   s.stage.classList.add('is-swapping')
+  // the old machine has sunk and the lift is on its way down: seat the new one
   s.swapTimer = window.setTimeout(() => {
     s.swapTimer = 0
     applyModule(s, index)
-  }, 180)
+  }, 240)
 }
 
 /**
