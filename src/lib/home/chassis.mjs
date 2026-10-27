@@ -24,10 +24,12 @@ import { tubePieces, tubeSvg } from '../anatomy/tube.mjs'
  *
  * The runs are also the sub-assemblies: each is a contiguous `<g class=
  * "home-part">` carrying a --step, and chassis.css turns the shared settle into
- * the page-load build — feet land, the body rises and seats, the bay plates
- * part and the train spins up, the plates close, the panel slides on, the keys
- * pop up in sequence, the vents draw in, the power parts snap on, the cable
- * whips into place, and the lift rises last.
+ * the page-load build — feet come up, the body rises and seats, the mouth of the
+ * well is cut out of the deck, the train climbs out of the bay and turns over,
+ * the covers are pushed up and slid shut over it, the lift comes up the shaft,
+ * the panel is pressed on from the front, the keys come up out of their
+ * recesses, the grille draws in, the power parts snap on and the cable swings in
+ * behind.
  */
 
 export const TOP = 74
@@ -301,7 +303,10 @@ export function buildChassis(P, options = {}) {
   well.push('</g>')
   out.push(part('well', 4, ...well))
 
-  out.push(part('mechanism', 5, `<g clip-path="url(#${WELL_ID})">${mechanism(P)}</g>`))
+  // the train is wrapped inside the clip, not around it: a transform on the
+  // clipped group would drag the clip along with it, and the bay would slide
+  // across the deck instead of staying in its hole
+  out.push(part('mechanism', 5, `<g clip-path="url(#${WELL_ID})"><g class="home-mech-riser">${mechanism(P)}</g></g>`))
 
   // the cover plates: two halves that part on the centre line. At rest they are
   // closed and the lift covers them completely, so they cost nothing.
