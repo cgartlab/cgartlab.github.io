@@ -106,10 +106,12 @@ const CROWN = ROLL_Z + ROLL.r + 1.8
  * to print straight through the roll. Clearing the crown is what fixes the base.
  */
 const GRID = {
-  maxCols: 6,
+  maxCols: 12,
   /** honeycomb pitch: air between the sheets, rows half a cell apart */
   pitchX: 38,
   pitchZ: 30,
+  /** the box the array may occupy — the same on every locale */
+  box: { w: 285, h: 120 },
   gap: 4.5,
   base: CROWN - TOP + (FLOAT_Y - ROLL.y) * Math.tan(RAKE) + (CARD.h / 2) * Math.cos(RAKE) + 4,
 }
@@ -139,6 +141,11 @@ function layout(count) {
   const n = Math.max(0, Math.floor(count))
   const cols = Math.min(GRID.maxCols, Math.max(1, Math.ceil(Math.sqrt(n * 1.45))))
   const rows = Math.max(1, Math.ceil(n / cols))
+  // squeeze the pitch (and with it the sheets) into the fixed box, so a locale
+  // with many tags gets a denser wall rather than a smaller machine
+  const fit = Math.min(1, GRID.box.w / (cols * GRID.pitchX + GRID.pitchX / 2), GRID.box.h / (rows * GRID.pitchZ))
+  const pitchX = GRID.pitchX * fit
+  const pitchZ = GRID.pitchZ * fit
   const seats = []
   for (let index = 0; index < n; index++) {
     const row = Math.floor(index / cols)
@@ -147,14 +154,14 @@ function layout(count) {
     // the bottom row is nearest the reader, the top row furthest back and
     // smallest: the projection does the rest
     const t = rows > 1 ? row / (rows - 1) : 0
-    const scale = 1.16 - t * 0.38
+    const scale = (1.16 - t * 0.38) * fit
     const depth = 14 - t * 58
     const card = { ...CARD, w: CARD.w * scale, h: CARD.h * scale, r: CARD.r * scale }
-    const honey = row % 2 ? GRID.pitchX / 2 : 0
+    const honey = row % 2 ? pitchX / 2 : 0
     seats.push({
-      x: (column - (inRow - 1) / 2) * GRID.pitchX + honey,
+      x: (column - (inRow - 1) / 2) * pitchX + honey,
       y: FLOAT_Y + depth,
-      z: GRID.base + row * GRID.pitchZ,
+      z: GRID.base + row * pitchZ,
       row,
       scale,
       depth,
@@ -397,11 +404,11 @@ export function labelsBounds(options = {}) {
     [WHEEL.x - WHEEL.r - 2.4, FRONT + WHEEL.face, WHEEL.z - WHEEL.r - 2.4], [WHEEL.x + WHEEL.r + 2.4, FRONT, WHEEL.z + WHEEL.r + 2.4],
     [MOUTH[0], FRONT + 1.5, SLOT.z - SLOT.h / 2], [SLOT.x + SLOT.w, FRONT, SLOT.z + SLOT.h / 2],
   ]
-  const count = options.tags?.length ?? options.count ?? RESERVE
-  const { seats, card } = layout(count)
-  for (const seat of seats) {
-    const F = cardAt(seat)
-    for (const [u, w] of [[-card.w / 2, -card.h / 2], [card.w / 2, -card.h / 2], [card.w / 2, card.h / 2], [-card.w / 2, card.h / 2]]) out.push(F.at(u, 0, w))
-  }
+  // the envelope, not the live array: every locale must fit the same box, or
+  // the console would be drawn at a different size on /en/
+  for (const x of [-GRID.box.w / 2, GRID.box.w / 2])
+    for (const y of [FLOAT_Y - 44, FLOAT_Y + 14])
+      for (const z of [TOP + GRID.base, TOP + GRID.base + GRID.box.h])
+        out.push([x, y, z])
   return out
 }
