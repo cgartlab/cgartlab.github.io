@@ -260,8 +260,9 @@ export function buildCinema(P, options = {}) {
   // as long as itself, so `stroke-dashoffset` walks the strip from the supply
   // hub, through the gate, to the take-up hub. The perforations pop in behind
   // it at the same rate, which is what sells the direction of travel.
-  // The 520 ms below is the thread's own duration in cinema.css; the two have
-  // to be changed together or the perforations fall out of step with the band.
+  // `home-cine-thread` in cinema.css owns the thread's duration *and* its
+  // easing; both are repeated here, because a hole is punched when the head
+  // reaches it, and the head does not travel at a constant rate.
   const path = [
     [-58, REEL_Y, REEL_Z - REEL_R + 3],
     [-56, FILM_Y, BZ + 58],
@@ -276,6 +277,27 @@ export function buildCinema(P, options = {}) {
   const flat = path.map(([x, y, z]) => k.iso([x, y, z], P).map(tenth))
   const runs = flat.map((point, index) => (index ? Math.hypot(point[0] - flat[index - 1][0], point[1] - flat[index - 1][1]) : 0))
   const filmLen = runs.reduce((sum, run) => sum + run, 0)
+  // The band is pulled in on `cubic-bezier(0.32, 0.72, 0, 1)`: two thirds of
+  // the strip is through the gate in the first fifth of the thread. A
+  // perforation has to appear at the moment the head passes it, so its delay is
+  // that curve read backwards at its own share of the strip. Scheduled
+  // linearly, the holes trail the band by up to 55% of its length — the strip
+  // arrives threaded and is then punched by a second, slower pass.
+  const THREAD_MS = 520
+  const THREAD_EASE = [0.32, 0.72, 0, 1]
+  const bezierAt = (t, p1, p2) => 3 * (1 - t) ** 2 * t * p1 + 3 * (1 - t) * t ** 2 * p2 + t ** 3
+  /** the fraction of the thread's time at which the head has covered `share` */
+  const threadAt = (share) => {
+    let lo = 0
+    let hi = 1
+    for (let i = 0; i < 24; i++) {
+      const mid = (lo + hi) / 2
+      if (bezierAt(mid, THREAD_EASE[1], THREAD_EASE[3]) < share)
+        lo = mid
+      else hi = mid
+    }
+    return bezierAt((lo + hi) / 2, THREAD_EASE[0], THREAD_EASE[2])
+  }
   // `pathLength="1"` normalises the dash to the path itself: one dash is the
   // whole strip whatever the stage is scaled to. (cinema.css also drops the
   // page-wide non-scaling stroke here — the browser measures that dash in
@@ -306,7 +328,7 @@ export function buildCinema(P, options = {}) {
   }
   for (let distance = 6; distance < filmLen - 6; distance += 6.4) {
     const dot = along(distance)
-    film.push(`<circle cx="${dot.x.toFixed(1)}" cy="${dot.y.toFixed(1)}" r="0.55" style="--at:${Math.round(dot.share * 520)}ms"/>`)
+    film.push(`<circle cx="${dot.x.toFixed(1)}" cy="${dot.y.toFixed(1)}" r="0.55" style="--at:${Math.round(threadAt(dot.share) * THREAD_MS)}ms"/>`)
   }
   film.push('</g>')
   out.push(part('cine-film', 10, '', film))

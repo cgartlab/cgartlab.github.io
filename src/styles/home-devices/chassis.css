@@ -74,8 +74,13 @@
 .home-stage .home-mech-dark { fill: var(--home-cavity); }
 
 /* the gears spin on their own centres, which arrive as --pivot-x/y like every
-   other part's; they keep a compositor layer because the spin is long */
-.home-stage .home-chassis .home-gear {
+   other part's; they keep a compositor layer because the spin is long.
+   The hint is scoped to the build on purpose: the spin is the only time a gear
+   moves, and a `will-change` left standing would keep all four groups asking
+   the compositor for a layer for the rest of the session (measured after the
+   build: four gears reporting `will-change: transform` with
+   `animation-name: none`, i.e. a hint with nothing left to hint at). */
+.home-stage.is-booting .home-chassis .home-gear {
   will-change: transform;
 }
 
@@ -138,6 +143,17 @@
 
 .home-stage.is-booting .home-chassis .home-lift {
   animation: home-boot-lift 200ms cubic-bezier(0.16, 1, 0.3, 1) 940ms both;
+}
+
+/* The swap cycle in home.css (`.home-stage.is-swapping .home-lift`) carries the
+   lift for the hand-off to the first device, and it declares `both`, so once it
+   has run the group keeps a `translateY(0)` — an identity transform that still
+   makes it its own layer for the rest of the session, and the one element of the
+   chassis that is not `transform: none` at rest. Its first and last frames are
+   both `translateY(0)` and it has no delay, so dropping the fill changes nothing
+   on screen: it simply stops holding the pose it already ended on. */
+.home-stage.is-swapping .home-chassis .home-lift {
+  animation-fill-mode: none;
 }
 
 /* the front plate is pushed on from the operator's side: its axis is its own

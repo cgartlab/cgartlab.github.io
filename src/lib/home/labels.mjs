@@ -20,8 +20,9 @@ import { axisStyle, boxSvg, faceMatrix, facePath, frameOf } from './frame.mjs'
  * given, so the wall is dealt from `tags.length`: the sheets are dealt into a
  * grid of cells above the stock roll, then each one is nudged, turned and sized
  * on its own, so the result reads as paper stuck up by hand rather than a table.
- * Twenty-six tags make seven across and four rows; ninety-one make twelve and
- * eight, and the wall grows denser rather than the module capping it.
+ * Twenty-six tags make seven across and four rows; a busier site thickens the
+ * wall rather than enlarging the machine, up to the forty sheets the fixed box
+ * still holds at a readable size.
  *
  * Each ticket stands upright in its frame's u-w plane — a vertical wall facing
  * the reader — and is drawn at its stuck position with no transform of its own.
@@ -33,8 +34,9 @@ import { axisStyle, boxSvg, faceMatrix, facePath, frameOf } from './frame.mjs'
  *
  * The beat follows the count, too: twenty-six sheets at the old 700ms stagger
  * would have taken eighteen seconds, so the gap is 5600/N clamped to 140–700ms.
- * The sheets then arrive over five and a half seconds whatever the count, and the
- * last one settles before eight; the first still waits for the case to close.
+ * The sheets are then dealt over five and a half seconds whatever the count, so
+ * the last one leaves the slot at ~8.5s and is stuck by ~10.2s at the cap; the
+ * first still waits for the case to close.
  *
  * Painter order is far to near: feet, body, lid, the frame's back and side bars,
  * the roll and its clear cover, the frame's front bar (which hides the roll's
@@ -448,12 +450,12 @@ function cutterBar(P) {
 
 export function buildLabels(P, options = {}) {
   // The wall has room for so many sheets at a readable size; past that the cards
-// shrink until the tags stop being readable at all. The site sorts tags by how
-// many posts carry them, so the machine prints the most-used ones and the tags
-// page keeps the long tail. Forty is what the fixed box holds at ~90% of a
-// sheet — the same envelope, so the machine does not change size.
-const MAX_TAGS = 40
-const tags = (options.tags || []).slice(0, MAX_TAGS)
+  // shrink until the tags stop being readable at all. The site sorts tags by how
+  // many posts carry them, so the machine prints the most-used ones and the tags
+  // page keeps the long tail. Forty is what the fixed box holds at ~90% of a
+  // sheet — the same envelope, so the machine does not change size.
+  const MAX_TAGS = 40
+  const tags = (options.tags || []).slice(0, MAX_TAGS)
   const caption = options.caption || '标签'
   const out = []
 

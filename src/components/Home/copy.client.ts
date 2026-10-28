@@ -23,6 +23,9 @@
 
 const COPY = '.home-copy'
 const COPY_SEEN = 'cgartlab-copy-seen'
+/** how often the headline drops a scanline, and for how long */
+const SLIP_EVERY = 6500
+const SLIP_FOR = 240
 
 /** Where the noise comes from. CJK for CJK, so the boxes keep their width. */
 const NOISE_CJK = '字墨印迹影光镜轴簧销楔齿槽轨标尺针页图版检录序偏旁部首构件栓凸轮杆簧片'
@@ -173,6 +176,33 @@ function countUp(el: HTMLElement, delay: number, duration: number): void {
   requestAnimationFrame(render)
 }
 
+let slipTimer = 0
+let slipOut = 0
+
+/**
+ * The headline's hiccup, on a clock instead of a six-and-a-half second loop.
+ * The burst is 180 ms; running it as an infinite animation meant the compositor
+ * was asked for a frame every frame of every second to show it.
+ */
+function startSlips(title: HTMLElement): void {
+  window.clearInterval(slipTimer)
+  window.clearTimeout(slipOut)
+  title.classList.remove('is-slipping')
+  slipTimer = window.setInterval(() => {
+    // the page may have been swapped away under this timer
+    if (!title.isConnected) {
+      window.clearInterval(slipTimer)
+      slipTimer = 0
+      return
+    }
+    if (document.hidden)
+      return
+    title.classList.add('is-slipping')
+    window.clearTimeout(slipOut)
+    slipOut = window.setTimeout(() => title.classList.remove('is-slipping'), SLIP_FOR)
+  }, SLIP_EVERY)
+}
+
 function bootCopy(): void {
   const copy = document.querySelector<HTMLElement>(COPY)
   if (!copy || copy.dataset.copyReady)
@@ -184,6 +214,9 @@ function bootCopy(): void {
   document.documentElement.classList.add('copy-ready')
   if (prefersReducedMotion())
     return
+  const titleEl = copy.querySelector<HTMLElement>('.home-title')
+  if (titleEl)
+    startSlips(titleEl)
   // once per session, not once per visit: coming back to the home page should
   // find the sheet already set, not scramble it again
   try {

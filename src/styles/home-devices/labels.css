@@ -396,11 +396,19 @@
 /* the mechanism only moves while the machine is running. The gate is a
    visibility step timed to the sheet's own beat, not a fade: the first frame of
    the emerge is already a solid ticket standing in the mouth, so there is
-   nothing to cross-fade and no flash of a sheet waiting at the slot */
-.home-stage .home-module.is-active .home-ticket {
+   nothing to cross-fade and no flash of a sheet waiting at the slot.
+
+   The rule keeps matching while the module is leaving, because the gate is also
+   what says *which* sheets are printed: cancelling it the instant .is-active
+   goes made all twenty-six vanish in a single frame instead of falling through
+   the deck with the wall they are stuck to. The gate and the press therefore
+   keep `both` (their fill is the state), while the emerge is filled backwards
+   only — it ends on the drawing's own pose, so letting go of it after 1500 ms
+   changes nothing on screen and takes a finished animation off every sheet. */
+.home-stage .home-module:is(.is-active, .is-leaving) .home-ticket {
   animation:
     home-ticket-gate 1ms linear var(--fly-delay, 0ms) both,
-    home-ticket-emerge 1500ms cubic-bezier(0.34, 0.9, 0.28, 1) var(--fly-delay, 0ms) both,
+    home-ticket-emerge 1500ms cubic-bezier(0.34, 0.9, 0.28, 1) var(--fly-delay, 0ms) backwards,
     home-ticket-stick 300ms cubic-bezier(0.3, 1.2, 0.4, 1) calc(var(--fly-delay, 0ms) + 1420ms) both;
 }
 
@@ -452,30 +460,40 @@
    nothing; the trial reuses the steady keyframes with a short duration, so the
    hand-off at 2960ms is seamless — one turn ends exactly where the loop starts,
    and the blade's first empty cut is the one the trial made. Only after that
-   does the machine start feeding sheets. */
+   does the machine start feeding sheets.
 
-.home-stage .home-module.is-active .home-feed-roller {
+   These loops are gated on `.is-leaving` as well as `.is-active`: the machine is
+   still on screen while it comes apart, and cutting the animation at the moment
+   the swap starts would snap the wheel back to 0°, the seam back a whole pitch
+   and the lamp back to full brightness in the first frame of the drop. They stop
+   when the module is retired, which is when it is invisible anyway. */
+
+.home-stage .home-module:is(.is-active, .is-leaving) .home-feed-roller {
   animation:
     home-feed-roller 660ms cubic-bezier(0.32, 0.6, 0.2, 1) 2300ms both,
     home-feed-roller 2400ms linear 2960ms infinite;
 }
-.home-stage .home-module.is-active .home-cutter {
+.home-stage .home-module:is(.is-active, .is-leaving) .home-cutter {
   animation:
     home-cutter 620ms cubic-bezier(0.34, 0.9, 0.28, 1) 2340ms both,
     home-cutter 1500ms cubic-bezier(0.34, 0.9, 0.28, 1) 2960ms infinite;
 }
 /* the carriage and the lamp come alive with the trial: the lamp is already lit
    when the panel goes on, and starts blinking once the machine is running */
-.home-stage .home-module.is-active .home-print-head {
+.home-stage .home-module:is(.is-active, .is-leaving) .home-print-head {
   animation: home-print-head 1500ms cubic-bezier(0.34, 0.9, 0.28, 1) 2960ms infinite;
 }
-.home-stage .home-module.is-active .home-label-led {
+.home-stage .home-module:is(.is-active, .is-leaving) .home-label-led {
   animation: home-label-led 1500ms steps(1, end) 2960ms infinite;
 }
 
-/* the roller spins about its own centre, given in page px on the group */
+/* the roller spins about its own centre, given in page px on the group. The hint
+   is scoped to a machine that is on the platform: left on the bare rule it was
+   held by all five modules, four of them at opacity 0 */
 .home-stage .home-feed-roller {
   transform-box: view-box;
+}
+.home-stage .home-module:is(.is-active, .is-leaving) .home-feed-roller {
   will-change: transform;
 }
 
@@ -483,7 +501,7 @@
    is a helix, so sliding it one pitch along the axis is exactly what a turning
    cylinder looks like; the module draws the coil a pitch past each end and clips
    it, so the loop has no seam */
-.home-stage .home-module.is-active .home-stock-roll {
+.home-stage .home-module:is(.is-active, .is-leaving) .home-stock-roll {
   animation: home-stock-roll 4200ms linear 2960ms infinite;
 }
 
@@ -538,24 +556,30 @@
    one is a pilot light — it only has to say the machine is alive — so the face
    swings between two stops of the same accent, differing in lightness alone,
    and the halo follows on the same clock so the rim never sits lit while the
-   face is out. The blink is the night-time cue and is left to run after dark. */
-html:not(.dark) .home-stage .home-led-lamp {
+   face is out. The blink is the night-time cue and is left to run after dark.
+
+   Both loops are gated on the machine being on the platform. Ungated they were
+   the only animations in the module that survived .is-active going away: seven
+   infinite animations — the halo among them, re-rasterising a drop-shadow every
+   frame — kept running on four machines at opacity 0, and on the labels machine
+   itself every time the reader looked at another channel. */
+html:not(.dark) .home-stage .home-module:is(.is-active, .is-leaving) .home-led-lamp {
   animation: home-led-halo 3.2s ease-in-out infinite;
 }
 
 /* the disc is seen from above, so its side band is most of what the eye gets:
    the breath has to swing both walls, or the lamp pulses only on the sliver of
    top face and the dot itself never changes */
-html:not(.dark) .home-stage .home-led-lamp .iso-fill,
-html:not(.dark) .home-stage .home-led-lamp .iso-top {
+html:not(.dark) .home-stage .home-module:is(.is-active, .is-leaving) .home-led-lamp .iso-fill,
+html:not(.dark) .home-stage .home-module:is(.is-active, .is-leaving) .home-led-lamp .iso-top {
   animation: home-led-breathe 3.2s ease-in-out infinite;
 }
 
-html:not(.dark) .home-stage .home-led-lamp .iso-shade {
+html:not(.dark) .home-stage .home-module:is(.is-active, .is-leaving) .home-led-lamp .iso-shade {
   animation: home-led-breathe-side 3.2s ease-in-out infinite;
 }
 
-html:not(.dark) .home-stage .home-module.is-active .home-label-led { animation: none; }
+html:not(.dark) .home-stage .home-module:is(.is-active, .is-leaving) .home-label-led { animation: none; }
 
 @keyframes home-led-breathe {
   0%, 100% { fill: var(--led-face-dim); }
@@ -575,11 +599,17 @@ html:not(.dark) .home-stage .home-module.is-active .home-label-led { animation: 
 .home-stage .home-led-lamp .iso-shade[data-shade] { fill: var(--led-side); }
 .home-stage .home-led-lamp .iso-edge { stroke: var(--anatomy-lit-shade); }
 
+/* the carriage shuttles across the rail while the machine runs. It starts and
+   ends at rest, so the loop picks up from the drawing's own pose: the old
+   keyframe opened on -2.4px and the carriage ticked 2.4 units sideways in the
+   frame the trial run began. Same amplitude, same speed, same four turns of the
+   period — it is only phased to leave from where the part was standing. */
 @keyframes home-print-head {
-  0%, 100% { transform: translateX(-2.4px); }
-  25% { transform: translateX(2.4px); }
-  50% { transform: translateX(-2.4px); }
-  75% { transform: translateX(2.4px); }
+  0%, 100% { transform: none; }
+  12.5% { transform: translateX(-2.4px); }
+  37.5% { transform: translateX(2.4px); }
+  62.5% { transform: translateX(-2.4px); }
+  87.5% { transform: translateX(2.4px); }
 }
 
 @keyframes home-feed-roller {

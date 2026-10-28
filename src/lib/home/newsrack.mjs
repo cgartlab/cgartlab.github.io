@@ -452,7 +452,13 @@ export function buildNewsrack(P, options = {}) {
   const part = (name, step, axis, ...items) =>
     `<g class="home-part" data-part="${name}" style="--step:${step};${axis}">${items.join('')}</g>`
 
-  const lag = Math.min(44, Math.max(9, Math.round(340 / Math.max(1, L.n))))
+  // The wave is budgeted, not counted: whatever the rack holds, the papers hang
+  // within one 340ms sweep, so the last one is up while the lip is still being
+  // fitted. The floor only keeps the calc off zero and has to stay small enough
+  // not to push the wave past that budget — a 9ms floor did, from the
+  // thirty-eighth paper on. Twenty-four issues come out at 14ms a paper, and
+  // the wave lands at 1622ms.
+  const lag = Math.min(44, Math.max(2, Math.round(340 / Math.max(1, L.n))))
   const sheetPart = (step, axis, ...items) =>
     `<g class="home-part" data-part="sheets" style="--step:${step};--lag:${lag}ms;${axis}">${items.join('')}</g>`
 

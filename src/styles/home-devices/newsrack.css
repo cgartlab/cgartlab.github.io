@@ -305,19 +305,32 @@
    It is held off until 2.5s, a beat after the reader lands at 2380ms, so the
    machine is seen to be finished before it is seen to work. The easing is the
    same on the reader, on both wheels and on the crank, so the cable never looks
-   like it is slipping. */
-.home-stage .home-module.is-active .home-reader {
+   like it is slipping.
+
+   `is-leaving` is in every selector below on purpose. The swap drops
+   `is-active` on the frame the exit starts; a rule that only matched the
+   standing machine would cancel the loop right there, and the reader would
+   jump from wherever it had got to back to the left end of its rail — up to
+   173px — with the wheels snapping to 0deg, all in one frame, as the parts
+   start to fall. Matching the leaving machine keeps the same animation-name in
+   force across the swap, so the animation is not restarted (CSS keys a running
+   animation by its name) and the reader carries on from the phase it reached
+   until the module is dropped a moment later. */
+.home-stage .home-module.is-active .home-reader,
+.home-stage .home-module.is-leaving .home-reader {
   animation: nr-reader-run 14s cubic-bezier(0.45, 0.05, 0.25, 1) 2.5s infinite;
 }
 
-.home-stage .home-module.is-active .home-pulley {
+.home-stage .home-module.is-active .home-pulley,
+.home-stage .home-module.is-leaving .home-pulley {
   transform-box: view-box;
   animation: nr-pulley-turn 14s cubic-bezier(0.45, 0.05, 0.25, 1) 2.5s infinite;
 }
 
 /* the crank is its own group so it can be fitted after the drive is bolted
    down; it still turns with the wheel it is pinned to */
-.home-stage .home-module.is-active .home-crank {
+.home-stage .home-module.is-active .home-crank,
+.home-stage .home-module.is-leaving .home-crank {
   transform-box: view-box;
   animation: nr-pulley-turn 14s cubic-bezier(0.45, 0.05, 0.25, 1) 2.5s infinite;
 }
@@ -347,10 +360,13 @@ html.reduce-motion .home-module.is-active .home-part[data-part] {
   transform: none;
 }
 
-html.reduce-motion .home-module.is-active .home-reader,
-html.reduce-motion .home-module.is-active .home-pulley,
-html.reduce-motion .home-module.is-active .home-crank,
-html.reduce-motion .home-module.is-active .home-bolt-head { animation: none !important; }
+/* the kill is stated without a state, so it also covers the leaving machine:
+   the loop rules above match `.is-leaving` too, and a reader must never be left
+   turning because the OS setting was flipped mid-swap */
+html.reduce-motion .home-module .home-reader,
+html.reduce-motion .home-module .home-pulley,
+html.reduce-motion .home-module .home-crank,
+html.reduce-motion .home-module .home-bolt-head { animation: none !important; }
 
 @media (prefers-reduced-motion: reduce) {
   .home-module.is-active .home-part[data-part] {
@@ -360,8 +376,8 @@ html.reduce-motion .home-module.is-active .home-bolt-head { animation: none !imp
     transform: none;
   }
 
-  .home-module.is-active .home-reader,
-  .home-module.is-active .home-pulley,
-  .home-module.is-active .home-crank,
-  .home-module.is-active .home-bolt-head { animation: none !important; }
+  .home-module .home-reader,
+  .home-module .home-pulley,
+  .home-module .home-crank,
+  .home-module .home-bolt-head { animation: none !important; }
 }

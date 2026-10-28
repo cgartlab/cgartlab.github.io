@@ -103,16 +103,35 @@
   stroke: none;
 }
 
+/* The pointer's three resting marks, and the trial turn that carries it to the
+   first one. The angles live in custom properties rather than in the keyframes
+   so that the detent rule below can be written on `.is-active` alone: a rule
+   that also tests `data-position` starts matching again every time the knob is
+   turned back to the first seat, and an animation that starts matching again
+   starts over — with its 2130 ms delay, which left the pointer on the wrong
+   mark for two seconds while the interior had already changed. */
 .home-stage .home-dial-pointer {
+  --tb-from: 55deg; /* the mark the pointer is drawn on before the trial turn */
+  --tb-mid: -63deg; /* the overshoot past the first detent */
+  --tb-to: -55deg;
   rotate: -55deg;
   transition: rotate 520ms cubic-bezier(0.34, 1.56, 0.5, 1);
 }
 
+/* On the other two seats there is no turn to watch — the pointer is already
+   where it belongs, so its start, its overshoot and its end are all its own
+   resting angle and the run is a no-op. */
 .home-stage .home-module[data-position='1'] .home-dial-pointer {
+  --tb-from: 0deg;
+  --tb-mid: 0deg;
+  --tb-to: 0deg;
   rotate: 0deg;
 }
 
 .home-stage .home-module[data-position='2'] .home-dial-pointer {
+  --tb-from: 55deg;
+  --tb-mid: 55deg;
+  --tb-to: 55deg;
   rotate: 55deg;
 }
 
@@ -346,9 +365,9 @@
 }
 
 /* The handover. The delays sit on the active state only, so the way out — the
-   module leaving the stage — still closes and drops immediately instead of
-   waiting 1210 ms first. The stay follows the lid by 440 ms, which is where it
-   reads as catching the lid at the top of its swing. */
+   module leaving the stage — still lets go immediately instead of waiting
+   1210 ms first. The stay follows the lid by 440 ms, which is where it reads as
+   catching the lid at the top of its swing. */
 .home-stage .home-module.is-active .home-case-closed {
   opacity: 0;
   transition-delay: 1210ms;
@@ -372,6 +391,16 @@
 
 .home-stage .home-module.is-leaving .home-case-prop {
   transform: scaleY(1);
+  transition: none;
+}
+
+/* The shut slab is the same handover in the other direction: it is hidden for
+   as long as the case is open, so it has to stay hidden while the open case is
+   taken apart. Without this its base rule — opacity 1 — brings it back over the
+   well on the first frame of the exit: a solid lid fades in over an open case
+   and then falls with the rest of it. */
+.home-stage .home-module.is-leaving .home-case-closed {
+  opacity: 0;
   transition: none;
 }
 
@@ -607,11 +636,23 @@
 }
 
 /* The trial run: the knob is turned to its first detent, the seat the page opens
-   on. It is written on the default seat only — on the other two the pointer is
-   already where it belongs, and a turn there would end on the wrong mark. */
-.home-module.is-active:not([data-position='1']):not([data-position='2']) .home-dial-pointer {
+   on. Written on `.is-active` alone — not on `data-position` — so turning the
+   knob back to the first seat mid-life does not restart it; what changes per
+   seat is the angle carried in `--tb-*` above, and on the other two seats that
+   angle is the pointer's own resting angle, so the run is a no-op there. */
+.home-module.is-active .home-dial-pointer {
   animation: home-tb-detent 240ms cubic-bezier(0.34, 1.45, 0.5, 1) backwards;
   animation-delay: 2130ms;
+}
+
+/* On the other two seats there is no turn to watch, so the run is a no-op and
+   is over before the build has anything to show. Keeping it early also keeps
+   the switch's place in the build's order where it was: stage.client.ts ranks a
+   part's exit by the moment its own rules land, and a 2130 ms delay there would
+   make the knob the first thing to fall off a case that was left on seat two. */
+.home-module.is-active[data-position='1'] .home-dial-pointer,
+.home-module.is-active[data-position='2'] .home-dial-pointer {
+  animation-delay: 0ms;
 }
 
 /* a pad is pressed up out of the deck and seats a hair proud */
@@ -765,19 +806,26 @@
 
 /* the detent snap: it overshoots the mark the way a spring-loaded knob does */
 @keyframes home-tb-detent {
-  from { rotate: 55deg; }
-  58% { rotate: -63deg; }
-  to { rotate: -55deg; }
+  from { rotate: var(--tb-from, 55deg); }
+  58% { rotate: var(--tb-mid, -63deg); }
+  to { rotate: var(--tb-to, -55deg); }
 }
 
 /* reduced motion: the case is simply open, in place, with nothing to settle -- */
 
 html.reduce-motion .home-stage .home-case-lid,
 html.reduce-motion .home-stage .home-case-prop { transform: none; transition: none; }
-html.reduce-motion .home-stage .home-case-closed { display: none; }
+/* `transition: none` matters as much as `display: none`: the shut slab's fade
+   is delayed 1210 ms by the active rule, and a display:none element produces no
+   frames, so that transition would sit in `getAnimations()` for good. */
+html.reduce-motion .home-stage .home-case-closed { display: none; transition: none; }
+/* the switch's own fade is written on a selector that names both attributes
+   (`.home-module[data-position] … .home-tray-set[data-set]`), so it outranks
+   these on specificity: without `!important` a seat change still cross-faded
+   under reduced motion while everything else stood still. */
 html.reduce-motion .home-stage .home-tray-set,
 html.reduce-motion .home-stage .home-set-item,
-html.reduce-motion .home-stage .home-dial-pointer { transition: none; }
+html.reduce-motion .home-stage .home-dial-pointer { transition: none !important; }
 html.reduce-motion .home-stage .home-set-item { transform: none; }
 html.reduce-motion .home-stage .home-pencil,
 html.reduce-motion .home-stage .home-compass-arm,
@@ -805,11 +853,12 @@ html.reduce-motion .home-module.is-active .home-dial-pointer { animation: none !
 @media (prefers-reduced-motion: reduce) {
   .home-stage .home-case-lid,
   .home-stage .home-case-prop { transform: none; transition: none; }
-  .home-stage .home-case-closed { display: none; }
+  .home-stage .home-case-closed { display: none; transition: none; }
 
+  /* forced for the same reason as the `.reduce-motion` block above */
   .home-stage .home-tray-set,
   .home-stage .home-set-item,
-  .home-stage .home-dial-pointer { transition: none; }
+  .home-stage .home-dial-pointer { transition: none !important; }
   .home-stage .home-set-item { transform: none; }
   .home-stage .home-pencil,
   .home-stage .home-compass-arm,

@@ -366,9 +366,14 @@
    film is playing — what is left on the wall is the picture, not the beam.
 
    1900 ms from 2680: the arc catches over 2680 → 2910, holds until 3630 — the
-   moment the picture on the wall reaches full — and is out by 4580. */
+   moment the picture on the wall reaches full — and is out by 4580.
+
+   Fill is `backwards` for the same reason every part uses it: the 0% keyframe
+   is the resting style (`opacity: 0`), so holding the fill would keep a
+   finished animation — and a `blur(3px)` blended layer — alive on the stage for
+   the whole session to hold a value the element already has. */
 .home-stage .home-module.is-active .home-cine-beam {
-  animation: home-cine-beam-strike 1900ms linear 2680ms both;
+  animation: home-cine-beam-strike 1900ms linear 2680ms backwards;
 }
 
 @keyframes home-cine-beam-strike {
@@ -539,8 +544,20 @@
    circle and sits *inside* the projection matrix, so `rotate` is a true axle
    turn — the ellipse on screen is the projection of that circle, not the shape
    being rotated. Both reels are seen from the same side of the machine, so
-   they share one direction; only their speed differs: the full supply reel
-   (a) turns slowly, the empty take-up (b) turns faster.
+   they share one direction.
+
+   One film speed, two radii: `w = v / r`. The strip is the same width at both
+   ends, so a reel can only turn as fast as its own roll allows. The supply (a)
+   starts full and winds down to 45%, so it gathers speed over the show; the
+   take-up (b) starts empty and fills, so it slows down. Two constants (5.6 s
+   and 3.8 s a turn) pass 25.6 and 17.0 units of film through the two hubs at
+   the same instant — a 1.5x slip at the head of the loop that flips to 3.3x the
+   other way by the end of it, which is what makes the strip read as skidding on
+   the flange. The keyframes below are that law integrated over the show; the
+   last 6 s run it in reverse, because a rewind takes the film off the take-up
+   and puts it back on the supply, so both reels turn the other way while the
+   rolls change back. 100% is 0deg — the pose 0% starts from — so the loop
+   closes on itself with nothing to jump.
    -------------------------------------------------------------------------- */
 
 .home-stage .home-reel-spin,
@@ -552,13 +569,22 @@
 /* The wound film pays out and winds on. A show runs the supply down and the
    take-up up over the reel's whole length, so the roll radius is what moves —
    the hub is drawn over it, so the spool never opens a hole. 54 s of running,
-   then 6 s of rewind back to the start: one loop of the film's own life. */
-.home-module.is-active .home-reel-coil[data-reel='a'] {
-  animation: home-reel-unwind 60000ms linear 2600ms infinite;
+   then 6 s of rewind back to the start: one loop of the film's own life.
+
+   The loops keep running through .is-leaving: the machine is still on screen
+   while it comes apart, and dropping the animation on the first frame of the
+   exit snapped the rolls back to full (0.82 → 1.00) before they fell.
+
+   Fill is `backwards`, like every part's: the loop starts 2600 ms late, and
+   `home-reel-wind` opens on a 45% roll. Without it the take-up spends the whole
+   build showing a full roll and then snaps to 45% on the first frame of the
+   show. */
+.home-module:is(.is-active, .is-leaving) .home-reel-coil[data-reel='a'] {
+  animation: home-reel-unwind 60000ms linear 2600ms infinite backwards;
 }
 
-.home-module.is-active .home-reel-coil[data-reel='b'] {
-  animation: home-reel-wind 60000ms linear 2600ms infinite;
+.home-module:is(.is-active, .is-leaving) .home-reel-coil[data-reel='b'] {
+  animation: home-reel-wind 60000ms linear 2600ms infinite backwards;
 }
 
 @keyframes home-reel-unwind {
@@ -573,21 +599,61 @@
   100% { transform: scale(0.45); }
 }
 
-.home-module.is-active .home-reel-spin[data-reel='a'] {
-  animation: home-cine-turn 5600ms linear 2600ms infinite;
+/* v = 20.8 units of film a second — the geometric midpoint of the two speeds
+   the machine ran at, so neither reel leaves the range it had: a sweeps
+   6.89 → 3.10 s a turn, b sweeps 3.10 → 6.89 s, against 5.6 and 3.8 fixed. */
+.home-module:is(.is-active, .is-leaving) .home-reel-spin[data-reel='a'] {
+  animation: home-cine-reel-a 60000ms linear 2600ms infinite;
 }
 
-.home-module.is-active .home-reel-spin[data-reel='b'] {
-  animation: home-cine-turn 3800ms linear 2600ms infinite;
+.home-module:is(.is-active, .is-leaving) .home-reel-spin[data-reel='b'] {
+  animation: home-cine-reel-b 60000ms linear 2600ms infinite;
 }
 
-.home-module.is-active .home-cine-shutter {
+.home-module:is(.is-active, .is-leaving) .home-cine-shutter {
   animation: home-cine-turn 420ms linear 2600ms infinite;
 }
 
 @keyframes home-cine-turn {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
+}
+
+/* the supply: 4098deg = 11.4 turns over the show — the same total as the
+   take-up, because the same film passes both — reached the slow way */
+@keyframes home-cine-reel-a {
+  0% { transform: rotate(0deg); }
+  10% { transform: rotate(323.6deg); }
+  20% { transform: rotate(669deg); }
+  30% { transform: rotate(1039.3deg); }
+  40% { transform: rotate(1438.5deg); }
+  50% { transform: rotate(1871.3deg); }
+  60% { transform: rotate(2344.1deg); }
+  70% { transform: rotate(2864.8deg); }
+  80% { transform: rotate(3444.4deg); }
+  90% { transform: rotate(4097.9deg); }
+  92.5% { transform: rotate(2729.6deg); }
+  95% { transform: rotate(1650.4deg); }
+  97.5% { transform: rotate(759.1deg); }
+  100% { transform: rotate(0deg); }
+}
+
+/* the take-up: the same 4098deg reached the fast way, then given back */
+@keyframes home-cine-reel-b {
+  0% { transform: rotate(0deg); }
+  10% { transform: rotate(653.5deg); }
+  20% { transform: rotate(1233.1deg); }
+  30% { transform: rotate(1753.8deg); }
+  40% { transform: rotate(2226.6deg); }
+  50% { transform: rotate(2659.4deg); }
+  60% { transform: rotate(3058.6deg); }
+  70% { transform: rotate(3428.9deg); }
+  80% { transform: rotate(3774.3deg); }
+  90% { transform: rotate(4097.9deg); }
+  92.5% { transform: rotate(3338.8deg); }
+  95% { transform: rotate(2447.5deg); }
+  97.5% { transform: rotate(1368.3deg); }
+  100% { transform: rotate(0deg); }
 }
 
 html.reduce-motion .home-stage .home-cine-beam { opacity: 0; animation: none !important; }
@@ -614,10 +680,18 @@ html.reduce-motion .home-module.is-active .home-part[data-part] {
   }
 }
 
-/* the film is already wound to where the loop starts */
+/* the film is already wound to where the loop starts: the supply full, the
+   take-up empty. Killing the loops leaves both coils at their resting scale,
+   which is a full roll on both ends — the same film in two places at once. */
 html.reduce-motion .home-module.is-active .home-reel-coil,
 html.reduce-motion .home-module.is-active .home-reel-spin,
 html.reduce-motion .home-module.is-active .home-cine-shutter { animation: none !important; }
+
+html.reduce-motion .home-module.is-active .home-reel-coil[data-reel='b'] { transform: scale(0.45); }
+
+@media (prefers-reduced-motion: reduce) {
+  .home-module.is-active .home-reel-coil[data-reel='b'] { transform: scale(0.45); }
+}
 
 /* the strip is already through the gate, and the perforations are on it */
 html.reduce-motion .home-module.is-active .home-cine-film,

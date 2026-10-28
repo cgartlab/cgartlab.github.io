@@ -291,6 +291,10 @@ function applyModule(s: State, index: number): void {
   for (const m of s.modules) {
     const on = Number(m.dataset.index) === index
     m.classList.remove('is-leaving')
+    // a lever left mid-swing by the previous visit would replay its throw on
+    // the first frame of the next assembly
+    if (on)
+      m.querySelector('.home-return-lever')?.classList.remove('is-returning')
     m.classList.toggle('is-active', on)
     if (on)
       section = m.dataset.module || ''
@@ -303,6 +307,14 @@ function applyModule(s: State, index: number): void {
     else
       a.removeAttribute('aria-current')
   }
+  // only the typewriter prints, and only while it is the machine on the
+  // platform: feeding a sheet on a hidden device is work nobody can see (and
+  // it used to swing the return lever while the machine was off stage)
+  if (section === 'posts' && s.ready)
+    startTour(s)
+  else
+    stopTour(s)
+
   document.documentElement.dataset.homeSection = section
   projectSection(section)
 }
@@ -318,6 +330,9 @@ function applyModule(s: State, index: number): void {
  * still riding up is still its resting geometry.
  */
 function measureDrops(svg: SVGSVGElement, m: SVGGElement): void {
+  if (m.dataset.drops)
+    return
+  m.dataset.drops = '1'
   const rim = svg.querySelector<SVGPathElement>('#home-deck-clip path')
   const rimBox = rim?.getBBox()
   const rimY = rimBox ? rimBox.y + rimBox.height : 420
@@ -370,14 +385,37 @@ function timeMs(value: string): number {
  * top. The gaps are levelled to one beat, because the build's own gaps are
  * hundreds of milliseconds apart and a disassembly at that pace would drag.
  */
+/**
+ * How far the typewriter's sheet has to travel to be wound back into its roller.
+ *
+ * It is not dropped with the rest of the machine: a sheet is wound on the
+ * platen, so it goes back down its own axis. The strip stands 18 paper units
+ * above the roller line at its freshest and every line the machine has typed
+ * lifts it another line higher, so this is measured at the switch — every time,
+ * not once, because the feed has moved since the last one.
+ */
+function measureSheetRewind(m: SVGGElement): void {
+  for (const p of m.querySelectorAll<SVGGElement>('.home-part')) {
+    const group = p.querySelector<SVGGElement>('.home-paper-group')
+    const feed = p.querySelector<SVGGElement>('.home-sheet-feed')
+    if (!group || !feed)
+      continue
+    const fed = Math.abs(Number(/translateY\((-?[\d.]+)px\)/.exec(group.style.transform)?.[1] ?? 0))
+    feed.style.setProperty('--sheet-rewind', `${(22 + fed).toFixed(1)}px`)
+  }
+}
+
 function scheduleExit(m: SVGGElement, svg: SVGSVGElement): number {
   // the rulings do not change between swaps, and reading computed style for
   // every chip in a toolbox is not free: rank a module once
+  // the paper moves between switches, so its rewind is re-measured even when
+  // the rest of the schedule comes from the cache
+  measureSheetRewind(m)
   const cached = m.dataset.exitMs
   if (cached)
     return Number(cached)
-  // measured now rather than at mount: the typewriter's sheet is sized by the
-  // lines typed into it, and at mount it has none yet
+  // normally already done while the page sat idle (see precomputeDrops); this
+  // only runs if the reader switched before that had a chance to happen
   measureDrops(svg, m)
   const parts = [...m.querySelectorAll<SVGGElement>('.home-part')]
   // a part can be fitted by a rule on the element itself or on something
@@ -405,19 +443,6 @@ function scheduleExit(m: SVGGElement, svg: SVGSVGElement): number {
       landed = Math.max(landed, landedOf(child))
     return landed
   }
-  // The typewriter's sheet is not dropped with the rest of the machine: it is
-  // wound back into its roller, so the distance it has to travel depends on how
-  // many lines it has already been fed — the strip stands 18 units above the
-  // roller line at its freshest, and every feed lifts it another line higher.
-  for (const p of parts) {
-    const group = p.querySelector<SVGGElement>('.home-paper-group')
-    const feed = p.querySelector<SVGGElement>('.home-sheet-feed')
-    if (!group || !feed)
-      continue
-    const fed = Math.abs(Number(/translateY\((-?[\d.]+)px\)/.exec(group.style.transform)?.[1] ?? 0))
-    feed.style.setProperty('--sheet-rewind', `${(22 + fed).toFixed(1)}px`)
-  }
-
   const lands = parts.map(p => landedOf(p))
   const order = lands.map((at, i) => ({ at, i })).sort((a, b) => b.at - a.at)
   // a part should be gone, or nearly, before the next one lets go, or the
@@ -452,6 +477,11 @@ function setModule(s: State, index: number): void {
     s.pending = index
     return
   }
+  // a switch always plays, even if the stage was holding still off screen
+  s.stage.removeAttribute('data-idle')
+  // the sheet stops feeding the moment the machine starts to come apart, or the
+  // rewind distance measured a frame ago is already stale
+  stopTour(s)
   const prev = s.modules.find(m => Number(m.dataset.index) === s.active)
   s.active = index
   window.clearTimeout(s.swapTimer)
@@ -492,6 +522,24 @@ function seatDevice(s: State): void {
   void s.stage.offsetWidth
   s.stage.classList.add('is-swapping')
   applyModule(s, index)
+}
+
+/**
+ * Measure every module's fall while the page is idle.
+ *
+ * The first switch otherwise had to measure five machines — bounding boxes and
+ * computed styles for a couple of hundred parts — inside the frame that starts
+ * the disassembly, which is exactly the frame that must not stutter.
+ */
+function precomputeDrops(s: State): void {
+  const run = () => {
+    for (const m of s.modules)
+      measureDrops(s.svg, m)
+  }
+  if (typeof window.requestIdleCallback === 'function')
+    window.requestIdleCallback(run, { timeout: 1500 })
+  else
+    window.setTimeout(run, 300)
 }
 
 function mount(): void {
@@ -570,26 +618,24 @@ function mount(): void {
     window.removeEventListener('resize', onProjectionResize)
   }
 
-  if (prefersReducedMotion()) {
-    // nothing assembles and nothing types: the machine is simply there
-    s.ready = true
-    setModule(s, 0)
-    s.cleanup = detachProjection
-    state = s
-    return
-  }
+  // Reduced motion is about the animation, not about the controls: the branch
+  // that seats the first machine now sits after the listeners are on, so a
+  // reader with motion turned off can still switch sections and turn the dial.
+  const reduced = prefersReducedMotion()
 
   // ---- the boot ----------------------------------------------------------
   // the chassis carries its own build, gated on .is-booting; the device is
   // held back (no .is-active) so its own assembly cannot run behind it
-  stage.classList.add('is-booting')
-  for (const m of modules)
-    m.classList.remove('is-active')
-  bootActive = true
+  if (!reduced) {
+    stage.classList.add('is-booting')
+    for (const m of modules)
+      m.classList.remove('is-active')
+    bootActive = true
 
-  // start from a blank sheet and let the machine fill it
-  s.shown = 0
-  paint(s, 0)
+    // start from a blank sheet and let the machine fill it
+    s.shown = 0
+    paint(s, 0)
+  }
 
   const onKey = (event: KeyboardEvent) => {
     if (event.metaKey || event.ctrlKey || event.altKey)
@@ -668,6 +714,19 @@ function mount(): void {
     }
   }
 
+  // Nothing on the stage is on screen (the narrow layout puts it below the
+  // copy): stop the loops rather than paint them. The build itself is left
+  // alone — it is a one-shot and the reader may be about to scroll to it.
+  const idleObserver = new IntersectionObserver(([entry]) => {
+    if (!entry)
+      return
+    if (entry.isIntersecting)
+      stage.removeAttribute('data-idle')
+    else if (s.ready)
+      stage.dataset.idle = '1'
+  }, { rootMargin: '160px' })
+  idleObserver.observe(stage)
+
   window.addEventListener('keydown', onKey)
   stage.addEventListener('pointermove', onPointerMove, { passive: true })
   stage.addEventListener('pointerdown', onPointerDown, { passive: true })
@@ -685,9 +744,18 @@ function mount(): void {
     stage.removeEventListener('click', onClick)
     stage.removeEventListener('focusin', onFocus)
     document.removeEventListener('visibilitychange', onVisibility)
+    idleObserver.disconnect()
   }
 
   state = s
+
+  if (reduced) {
+    // nothing assembles and nothing types: the machine is simply there, and
+    // every control is already live
+    s.ready = true
+    setModule(s, 0)
+    return
+  }
 
   s.bootTimer = window.setTimeout(() => {
     s.bootTimer = 0
@@ -701,6 +769,8 @@ function mount(): void {
     // the reel may have been asked for while the console was still building
     projectSection(document.documentElement.dataset.homeSection || '')
     startTour(s)
+    // and the machines measure their fall while nothing else is happening
+    precomputeDrops(s)
   }, BOOT_TOTAL)
 }
 
