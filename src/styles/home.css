@@ -332,12 +332,32 @@ html.reduce-motion .home-title::after { animation: none; }
   animation: home-module-rise 1000ms cubic-bezier(0.42, 0, 0.18, 1) both;
 }
 
-/* the outgoing machine drops through the deck */
+/* The outgoing machine is taken apart, top down.
+   It is not sunk as one rigid body — that read as the drawing being pulled
+   under the desk. Each part comes off its seat the way it went on (back along
+   its own axis, capped so a long-travel part does not fly), then falls under
+   its own weight into the well, and the deck's front rim swallows it. The
+   order is the build run backwards — read off each part's own entry timing —
+   so the last part fitted is the first to go and the machine comes down from
+   the top.
+
+   --drop is measured per part in stage units by measureDrops() — the distance
+   from that part's top to the rim — and --exit-delay is its rank in the build,
+   turned round by scheduleExit() when the switch is made. A part that is
+   further from the hole has further to fall, and falls for longer: duration
+   follows distance, so nothing is yanked down. */
 .home-module.is-leaving {
+  opacity: 1;
   pointer-events: none;
-  /* the old machine goes back down the well, so it is still whole while it
-     sinks — it must not fade, or the swap reads as two drawings cross-fading */
-  animation: home-module-leave 380ms cubic-bezier(0.5, 0, 0.8, 0.4) both;
+  /* the rise is over; the module itself never moves again */
+  animation: none;
+}
+
+.home-module.is-leaving .home-part {
+  animation: home-part-drop both;
+  animation-delay: var(--exit-delay, 0ms);
+  animation-duration: clamp(150ms, calc(90ms + var(--drop, 60) * 0.7ms), 300ms);
+  animation-timing-function: cubic-bezier(0.4, 0, 0.95, 0.62);
 }
 
 @keyframes home-module-rise {
@@ -347,9 +367,17 @@ html.reduce-motion .home-title::after { animation: none; }
   100% { transform: none; }
 }
 
-@keyframes home-module-leave {
-  from { transform: none; }
-  to { transform: translateY(132px) scale(0.88); }
+@keyframes home-part-drop {
+  0% { transform: none; }
+  /* off its own seat first: the reverse of the line it was fitted along */
+  16% {
+    transform: translate(calc(var(--axis-x, 0) * min(var(--travel, 24px), 20px)),
+                         calc(var(--axis-y, 1) * min(var(--travel, 24px), 20px)));
+  }
+  100% {
+    transform: translate(calc(var(--axis-x, 0) * min(var(--travel, 24px), 20px)),
+                         calc(var(--axis-y, 1) * min(var(--travel, 24px), 20px) + var(--drop, 60) * 1px));
+  }
 }
 
 /* the platform under the machine cycles with it */
@@ -357,12 +385,14 @@ html.reduce-motion .home-title::after { animation: none; }
    the new one, over 1200ms — long enough to read as weight, short enough that
    the incoming machine's own assembly is still the main event */
 .home-stage.is-swapping .home-lift {
-  animation: home-lift-cycle 1200ms cubic-bezier(0.4, 0, 0.2, 1) both;
+  animation: home-lift-cycle calc(var(--swap-ms, 420ms) + 320ms) cubic-bezier(0.4, 0, 0.2, 1) both;
 }
 
+/* it waits until the machine has come apart and the last parts are going down,
+   then gives under their weight and comes back up with the next one */
 @keyframes home-lift-cycle {
-  0% { transform: translateY(0); }
-  30% { transform: translateY(12px); }
+  0%, 58% { transform: translateY(0); }
+  80% { transform: translateY(12px); }
   100% { transform: translateY(0); }
 }
 

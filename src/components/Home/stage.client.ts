@@ -308,9 +308,128 @@ function applyModule(s: State, index: number): void {
 }
 
 /**
- * Swap choreography: the outgoing machine drops through the deck while the
- * lift dips, then the incoming one rides up on the platform and its
- * sub-assemblies settle in sequence (see .home-part in home.css).
+ * How far each part has to fall to be out of sight.
+ *
+ * The machines are clipped by the deck's front rim, so a part is gone once its
+ * top edge is below that line: that distance, per part, is what the exit hands
+ * to CSS as --drop, and it sets how long the part takes to fall. Measured in
+ * stage units — the viewBox is fixed, so the numbers hold at any window size —
+ * and from the markup's own transforms, so a reading taken while the machine is
+ * still riding up is still its resting geometry.
+ */
+function measureDrops(svg: SVGSVGElement, m: SVGGElement): void {
+  const rim = svg.querySelector<SVGPathElement>('#home-deck-clip path')
+  const rimBox = rim?.getBBox()
+  const rimY = rimBox ? rimBox.y + rimBox.height : 420
+  // only the transforms written in the markup count here: getCTM() folds in the
+  // running CSS animation as well, and a reading taken while the machine is
+  // still riding up would put every part 132 px lower than it lives
+  const localOf = (el: Element, stop: Element): DOMMatrix => {
+    let acc = new DOMMatrix()
+    let node: Element | null = el
+    while (node && node !== stop) {
+      const own = (node as SVGGraphicsElement).transform?.baseVal.consolidate()
+      if (own)
+        acc = own.matrix.multiply(acc)
+      node = node.parentElement
+    }
+    return acc
+  }
+  for (const p of m.querySelectorAll<SVGGElement>('.home-part')) {
+    const box = p.getBBox()
+    const local = localOf(p, m)
+    let top = Number.POSITIVE_INFINITY
+    for (const x of [box.x, box.x + box.width]) {
+      for (const y of [box.y, box.y + box.height])
+        top = Math.min(top, local.b * x + local.d * y + local.f)
+    }
+    const drop = Math.round(Math.min(420, Math.max(16, rimY + 26 - top)))
+    p.style.setProperty('--drop', String(drop))
+  }
+}
+
+/** A computed animation time ("1.4s", "1420ms", "1s, 300ms") in ms. */
+function timeMs(value: string): number {
+  let out = 0
+  for (const piece of value.split(',')) {
+    const n = Number.parseFloat(piece)
+    if (!Number.isFinite(n))
+      continue
+    out = Math.max(out, piece.trim().endsWith('ms') ? n : n * 1000)
+  }
+  return out
+}
+
+/**
+ * The order the machine comes apart in.
+ *
+ * Each part's own place in the build is the moment its entry animation lands —
+ * read off the running rule rather than guessed from --step, which only counts
+ * within a sub-assembly — and the exit is that list turned upside down: the
+ * last part fitted is the first to go, so the machine is taken down from the
+ * top. The gaps are levelled to one beat, because the build's own gaps are
+ * hundreds of milliseconds apart and a disassembly at that pace would drag.
+ */
+function scheduleExit(m: SVGGElement, svg: SVGSVGElement): number {
+  // the rulings do not change between swaps, and reading computed style for
+  // every chip in a toolbox is not free: rank a module once
+  const cached = m.dataset.exitMs
+  if (cached)
+    return Number(cached)
+  // measured now rather than at mount: the typewriter's sheet is sized by the
+  // lines typed into it, and at mount it has none yet
+  measureDrops(svg, m)
+  const parts = [...m.querySelectorAll<SVGGElement>('.home-part')]
+  // a part can be fitted by a rule on the element itself or on something
+  // inside it (a lid's panel, a strip of ribbon), so its place in the build is
+  // the last of everything it carries
+  const landedOf = (el: Element): number => {
+    const cs = getComputedStyle(el)
+    const delays = cs.animationDelay.split(',')
+    const runs = cs.animationDuration.split(',')
+    const counts = cs.animationIterationCount.split(',')
+    const loopsOf = (i: number) => counts[i % counts.length].trim() === 'infinite'
+    let landed = 0
+    for (let i = 0; i < Math.max(delays.length, runs.length); i++) {
+      const delay = timeMs(delays[i % delays.length])
+      const run = timeMs(runs[i % runs.length])
+      // a part that also runs a loop of its own was fitted when its entry
+      // landed, not when the loop next comes round
+      landed = Math.max(landed, loopsOf(i) ? delay : delay + run)
+    }
+    // a part can also be fitted by a transition rather than an animation (the
+    // toolbox lid swings up on one), and those delays count the same way
+    const trans = timeMs(cs.transitionDelay) + timeMs(cs.transitionDuration)
+    landed = Math.max(landed, trans)
+    for (const child of el.querySelectorAll('*'))
+      landed = Math.max(landed, landedOf(child))
+    return landed
+  }
+  const lands = parts.map(p => landedOf(p))
+  const order = lands.map((at, i) => ({ at, i })).sort((a, b) => b.at - a.at)
+  // a part should be gone, or nearly, before the next one lets go, or the
+  // machine reads as a single mass sliding down instead of a stack coming apart
+  const gap = Math.min(38, 900 / Math.max(1, order.length - 1))
+  let end = 0
+  order.forEach((entry, rank) => {
+    const delay = rank * gap
+    const drop = Number(parts[entry.i].style.getPropertyValue('--drop')) || 60
+    parts[entry.i].style.setProperty('--exit-delay', `${delay.toFixed(0)}ms`)
+    end = Math.max(end, delay + Math.min(300, Math.max(150, 90 + drop * 0.7)))
+  })
+  const total = Math.round(end + 40)
+  // only a module that was actually standing can be ranked; one caught halfway
+  // through a previous swap has no entry rules in force to read
+  if (m.classList.contains('is-active'))
+    m.dataset.exitMs = String(total)
+  return total
+}
+
+/**
+ * Swap choreography: the outgoing machine is taken apart top down — each part
+ * comes off its seat along its own axis and falls into the well — and only
+ * once the last of it has gone through the deck does the incoming one ride up
+ * on the platform and settle its own sub-assemblies in sequence.
  */
 function setModule(s: State, index: number): void {
   if (index === s.active)
@@ -323,20 +442,25 @@ function setModule(s: State, index: number): void {
   const prev = s.modules.find(m => Number(m.dataset.index) === s.active)
   s.active = index
   window.clearTimeout(s.swapTimer)
-  if (!prev || prefersReducedMotion()) {
+  if (!prev || !prev.classList.contains('is-active') || prefersReducedMotion()) {
     applyModule(s, index)
     return
   }
+  // the exit is timed off the entry rules still in force, so it has to be read
+  // before the machine lets go of .is-active; .is-leaving keeps it on screen
+  const exit = scheduleExit(prev, s.svg)
+  prev.classList.remove('is-active')
   prev.classList.add('is-leaving')
   s.stage.classList.remove('is-swapping')
+  s.stage.style.setProperty('--swap-ms', `${exit}ms`)
   void s.stage.offsetWidth
   s.stage.classList.add('is-swapping')
-  // the old machine is most of the way down the well: seat the new one, which
-  // then takes 900 ms of its own to clear the rim
+  // the old machine has gone through the deck: seat the new one, which then
+  // takes its own time to clear the rim
   s.swapTimer = window.setTimeout(() => {
     s.swapTimer = 0
     applyModule(s, index)
-  }, 420)
+  }, exit)
 }
 
 /**
@@ -350,6 +474,8 @@ function seatDevice(s: State): void {
   s.pending = -1
   s.active = index
   s.stage.classList.remove('is-swapping')
+  // the lift rides up with the first machine over 1200 ms, as it always has
+  s.stage.style.setProperty('--swap-ms', '880ms')
   void s.stage.offsetWidth
   s.stage.classList.add('is-swapping')
   applyModule(s, index)

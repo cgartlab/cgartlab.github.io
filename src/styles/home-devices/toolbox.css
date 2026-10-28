@@ -362,6 +362,19 @@
   transition-delay: 1650ms;
 }
 
+/* Taken apart open: the lid and its prop hold their fitted pose while the case
+   comes off, instead of folding shut the moment the module lets go of
+   .is-active — a lid closing under a falling part reads as a glitch. */
+.home-stage .home-module.is-leaving .home-case-lid {
+  transform: translateY(var(--hinge, 0px)) scaleY(1) translateY(calc(-1 * var(--hinge, 0px)));
+  transition: none;
+}
+
+.home-stage .home-module.is-leaving .home-case-prop {
+  transform: scaleY(1);
+  transition: none;
+}
+
 /* --------------------------------------------------------------------------
    The assembly. No part of it fades in: the case is built, so every run is a
    motion the object could actually make — pads pressed up out of the deck, a
