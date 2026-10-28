@@ -105,9 +105,29 @@ function swingLever(s: State): void {
   const lever = s.lever
   if (!lever)
     return
-  lever.classList.remove('is-returning')
-  void lever.getBoundingClientRect()
-  lever.classList.add('is-returning')
+  // Restart the throw without a forced layout. Dropping and re-adding the class
+  // in one frame does not restart a CSS animation, so this used to read
+  // getBoundingClientRect() to flush style — a synchronous layout every line.
+  // If the throw is still in flight, rewind it; if it has landed, the class
+  // starts it again on its own.
+  // the throw is on the lever's arm, not on the lever itself
+  const swing = lever.getAnimations({ subtree: true })
+    .filter(a => (a as CSSAnimation).animationName === 'tw-return')
+  if (swing.length) {
+    for (const a of swing) {
+      a.currentTime = 0
+      a.play()
+    }
+  }
+  else if (lever.classList.contains('is-returning')) {
+    // the class is still on but its throw has landed: let go of it for one
+    // frame so the next one starts, without reading layout to force it
+    lever.classList.remove('is-returning')
+    requestAnimationFrame(() => lever.classList.add('is-returning'))
+  }
+  else {
+    lever.classList.add('is-returning')
+  }
   window.clearTimeout(s.leverTimer)
   s.leverTimer = window.setTimeout(() => lever.classList.remove('is-returning'), 460)
 }
@@ -720,10 +740,16 @@ function mount(): void {
   const idleObserver = new IntersectionObserver(([entry]) => {
     if (!entry)
       return
-    if (entry.isIntersecting)
+    if (entry.isIntersecting) {
       stage.removeAttribute('data-idle')
-    else if (s.ready)
+      // the sheet only prints while someone can see it
+      if (s.ready && document.documentElement.dataset.homeSection === 'posts')
+        startTour(s)
+    }
+    else if (s.ready) {
       stage.dataset.idle = '1'
+      stopTour(s)
+    }
   }, { rootMargin: '160px' })
   idleObserver.observe(stage)
 

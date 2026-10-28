@@ -85,10 +85,14 @@ function scramble(el: HTMLElement, { begin, hold, beat, rate }: ScrambleOptions)
   // the advance is read off the settled glyph, so the noise can never push the
   // line into a different wrap
   const measure = (): void => {
-    for (const span of spans) {
+    // three passes, not a write/read pair per glyph: writing then reading then
+    // writing again forced the browser to lay the line out once per character
+    for (const span of spans)
       span.style.width = 'auto'
-      span.style.width = `${span.getBoundingClientRect().width.toFixed(2)}px`
-    }
+    const widths = spans.map(span => span.getBoundingClientRect().width)
+    spans.forEach((span, i) => {
+      span.style.width = `${widths[i].toFixed(2)}px`
+    })
   }
   measure()
   // if the webfont swaps in mid-run, the advances move with it
