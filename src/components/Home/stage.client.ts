@@ -405,6 +405,19 @@ function scheduleExit(m: SVGGElement, svg: SVGSVGElement): number {
       landed = Math.max(landed, landedOf(child))
     return landed
   }
+  // The typewriter's sheet is not dropped with the rest of the machine: it is
+  // wound back into its roller, so the distance it has to travel depends on how
+  // many lines it has already been fed — the strip stands 18 units above the
+  // roller line at its freshest, and every feed lifts it another line higher.
+  for (const p of parts) {
+    const group = p.querySelector<SVGGElement>('.home-paper-group')
+    const feed = p.querySelector<SVGGElement>('.home-sheet-feed')
+    if (!group || !feed)
+      continue
+    const fed = Math.abs(Number(/translateY\((-?[\d.]+)px\)/.exec(group.style.transform)?.[1] ?? 0))
+    feed.style.setProperty('--sheet-rewind', `${(22 + fed).toFixed(1)}px`)
+  }
+
   const lands = parts.map(p => landedOf(p))
   const order = lands.map((at, i) => ({ at, i })).sort((a, b) => b.at - a.at)
   // a part should be gone, or nearly, before the next one lets go, or the

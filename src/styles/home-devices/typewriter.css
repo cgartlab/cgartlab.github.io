@@ -197,6 +197,34 @@
   animation: tw-sheet-feed 330ms cubic-bezier(0.22, 0.9, 0.24, 1) 2050ms both;
 }
 
+/* When the machine is taken apart the sheet is not dropped through it: a sheet
+   in the machine is wound on the platen, so it goes back the way it came — down
+   its own paper axis until the clip at the roller line swallows it. The generic
+   exit would slide the whole holder down the stage, and because the sheet's
+   clip lives in the same matrix it would travel with it: the paper would be
+   seen lying across the keys instead of disappearing into the roller. */
+.home-module.is-leaving .home-part[data-part='tw-sheet'] {
+  animation: none;
+}
+
+.home-module.is-leaving .home-part[data-part='tw-sheet'] .home-sheet-feed {
+  animation: home-sheet-rewind 260ms cubic-bezier(0.45, 0, 0.7, 0.4) var(--exit-delay, 0ms) both;
+}
+
+/* Only the strip above the roller line is ever on screen; how far it has to
+   travel to be swallowed depends on how many lines it has been fed, so the
+   module measures that at the switch and passes --sheet-rewind. */
+@keyframes home-sheet-rewind {
+  from { transform: none; }
+  to { transform: translateY(var(--sheet-rewind, 26px)); }
+}
+
+/* and the roller waits for it: a sheet cannot be wound out of a platen that has
+   already been lifted away, so it holds its seat until the paper is inside */
+.home-module.is-leaving .home-part[data-part='platen'] {
+  animation-delay: calc(var(--exit-delay, 0ms) + 190ms);
+}
+
 /* the paper table is bolted to the frame: it slides in from behind the roller */
 .home-module.is-active .home-part[data-part='tw-table'] {
   animation: tw-table-slide 300ms cubic-bezier(0.22, 0.9, 0.24, 1) 1180ms both;
@@ -476,6 +504,7 @@
 
 html.reduce-motion .home-module.is-active .home-part[data-part],
 html.reduce-motion .home-module.is-active .tw-lever-arm,
+html.reduce-motion .home-module.is-leaving .home-part[data-part='tw-sheet'] .home-sheet-feed,
 html.reduce-motion .home-module.is-active .home-sheet-feed,
 html.reduce-motion .home-module.is-active .tw-ribbon,
 html.reduce-motion .home-module.is-active .tw-bar,
@@ -489,6 +518,7 @@ html.reduce-motion .home-module.is-active .tw-plate-screws {
 @media (prefers-reduced-motion: reduce) {
   .home-module.is-active .home-part[data-part],
   .home-module.is-active .tw-lever-arm,
+  .home-module.is-leaving .home-part[data-part='tw-sheet'] .home-sheet-feed,
   .home-module.is-active .home-sheet-feed,
   .home-module.is-active .tw-ribbon,
   .home-module.is-active .tw-bar,
