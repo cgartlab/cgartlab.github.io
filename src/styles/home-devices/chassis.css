@@ -383,6 +383,32 @@
   100% { transform: none; }
 }
 
+/* ---- the face's lettering ---------------------------------------------- */
+
+/* Cut, not painted. The ink is the deep tone held back toward the plate it sits
+   in, so it reads as the floor of a groove rather than as type printed on top;
+   the lit lip under each line is the paper tone — the brightest surface in the
+   drawing — and that edge is what tells the eye it is a cut. At night the ink
+   is already the light one, so the lip flips to the darkest plate tone and the
+   groove still reads: light wall above, shadow wall below.
+   The base .iso-face-text rule is imported after this sheet, so these carry the
+   element as well as the class to win the cascade. */
+.home-stage text.iso-face-text.home-engrave {
+  fill: color-mix(in oklch, var(--anatomy-hi) 86%, var(--anatomy-shade-1) 14%);
+}
+
+.home-stage text.iso-face-text.home-engrave-lip {
+  fill: var(--anatomy-paper);
+}
+
+.dark .home-stage text.iso-face-text.home-engrave {
+  fill: color-mix(in oklch, var(--anatomy-hi) 78%, var(--anatomy-shade-1) 22%);
+}
+
+.dark .home-stage text.iso-face-text.home-engrave-lip {
+  fill: var(--anatomy-shade-0);
+}
+
 /* ---- reduced motion: the machine is simply there ------------------------ */
 
 html.reduce-motion .home-stage .home-chassis .home-part,

@@ -119,6 +119,23 @@ function faceScrew(x, z, P, r = 2.2) {
     + k.lineSvg(k.segment([x, FRONT + 1.1, z - r * 0.55], [x, FRONT + 1.1, z + r * 0.55], P), { tone: 'faint' })
 }
 
+/**
+ * Lettering cut into a face rather than printed on it.
+ *
+ * Two copies of the same line: the ink, and a lit lip dropped `lip` face-units
+ * down the face (dy is in the face's own space, so the lip stays under the
+ * letters at any projection). The lip catches the light — that is what makes a
+ * groove read as a groove instead of paint.
+ */
+function engraved(transform, text, { size = 5, lip = 0.6, tracking = 0.12, anchor = 'start' } = {}) {
+  // both copies carry the same tracking and anchor, or the lip would drift out
+  // from under the letters as the line runs on
+  const style = ` style="letter-spacing:${tracking}em"`
+  const place = `transform="${transform}" font-size="${size}" text-anchor="${anchor}"${style}`
+  return `<text class="iso-face-text home-engrave-lip" ${place} dy="${lip}">${text}</text>`
+    + `<text class="iso-face-text home-engrave" ${place}>${text}</text>`
+}
+
 /** A rocker switch on the front face. */
 function rocker(x, z, P, w = 9, h = 6) {
   const out = []
@@ -398,16 +415,28 @@ export function buildChassis(P, options = {}) {
   panel.push(k.lineSvg(k.planOutline(k.insetPlan({ x: -134, y: FRONT - 1.6, w: 268, d: 2.4, r: 2 }, 3), PANEL_Z1, P, 4), { tone: 'faint' }))
   panel.push(k.lineSvg(k.planOutline(k.insetPlan({ x: -134, y: FRONT - 1.6, w: 268, d: 2.4, r: 2 }, 3), PANEL_Z0, P, 4), { tone: 'faint' }))
 
-  // title block, engraved straight into the plate
-  panel.push(k.faceTextSvg(
-    k.sideMatrix([-124, FRONT], 57, P, 'left'),
+  // title block, cut into the plate. The wordmark is set to fill the band above
+  // the keys — cap height across two thirds of it, tracking opened out so it
+  // reads as an instrument face — and the model line trails it on the same
+  // baseline as fine print, so the block stays one line as wide as the band is
+  // tall. It starts on the left edge of the grille below, so the whole front
+  // hangs off one margin.
+  const titleX = -121
+  const titleSize = 8.6
+  const titleTrack = 0.12
+  // monospace advance is 0.6 em; the model line starts a gap past the wordmark's
+  // own measure rather than at a guessed x
+  const titleRun = 'CGARTLAB'.length * titleSize * (0.6 + titleTrack)
+  const titleZ = 54.6
+  panel.push(engraved(
+    k.sideMatrix([titleX, FRONT], titleZ, P, 'left'),
     'CGARTLAB',
-    { size: 5.6, tone: 'hi' },
+    { size: titleSize, lip: 1.3, tracking: titleTrack },
   ))
-  panel.push(k.faceTextSvg(
-    k.sideMatrix([-124, FRONT], 50.5, P, 'left'),
+  panel.push(engraved(
+    k.sideMatrix([titleX + titleRun + 3.2, FRONT], titleZ, P, 'left'),
     'FLOW BENCH · No.1',
-    { size: 3.2, tone: 'faint' },
+    { size: 3.6, lip: 0.62, tracking: 0.12 },
   ))
   // the corner screws bolt the plate on, so they ride in with it
   for (const [x, z] of [[-127, 12], [127, 12], [-127, 62], [127, 62]]) {
@@ -463,7 +492,7 @@ export function buildChassis(P, options = {}) {
   const switchAt = [104, 56]
   const fuseAt = [126, 56]
   power.push(rocker(switchAt[0], switchAt[1], P))
-  power.push(k.faceTextSvg(k.sideMatrix([switchAt[0], FRONT], 48, P, 'left'), 'POWER', { size: 2.6, tone: 'faint', anchor: 'middle' }))
+  power.push(engraved(k.sideMatrix([switchAt[0], FRONT], 48, P, 'left'), 'POWER', { size: 2.6, lip: 0.4, tracking: 0.18, anchor: 'middle' }))
   const fuse = G.frameAlong([fuseAt[0], FRONT, fuseAt[1]], [0, 1, 0])
   power.push(k.solidSvg(G.disc(0, 1.6, 2.6, fuse, P), { tone: 'lo' }))
   power.push(k.lineSvg(G.circleOf(fuse, 1.6, 1.6, P), { tone: 'faint' }))
