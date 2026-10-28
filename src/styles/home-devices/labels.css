@@ -511,29 +511,68 @@
 /* the indicator lamp is the one lit thing on the panel, so it carries the
    accent — the same green the machine prints its labels in. The shading rules
    in home.css carry a `[data-shade]` and land later in the cascade, so the
-   sides have to be named with the attribute to out-weigh them. */
-/* a lamp, not a green dot: the face takes the lit end of the palette so it
-   reads as burning, and only the rim keeps the darker green. At night the
-   accent is already bright, so the face takes it directly and the rim drops to
-   the shade — the same lamp, lit for each room. */
-/* a lamp, not a green dot. The accent alone is a dark olive — right for type,
-   wrong for something that is supposed to be burning — so the face is the
-   accent lifted toward the page until it reads as light, with a soft halo of
-   the accent itself. At night the accent is already bright and carries it. */
+   sides have to be named with the attribute to out-weigh them.
+   A lamp, not a green dot: the accent alone is a dark olive — right for type,
+   wrong for something that is supposed to be burning — so the faces are the
+   accent with only their lightness lifted, and the breath swings that
+   lightness. The disc is seen from above, so its side band is most of what the
+   eye gets: both walls move, or the lamp pulses on the sliver of top face and
+   the dot itself never changes. */
 .home-stage .home-led-lamp {
-  /* keep the accent's chroma and hue, lift only its lightness: mixing with the
-     page washed the green out to a muted olive, which read as a dark dot */
-  --led-face: oklch(from var(--anatomy-lit) 0.82 c h);
+  --led-face: oklch(from var(--anatomy-lit) 0.9 c h);
+  --led-face-dim: oklch(from var(--anatomy-lit) 0.72 c h);
+  --led-side: oklch(from var(--anatomy-lit) 0.66 c h);
+  --led-side-dim: oklch(from var(--anatomy-lit) 0.46 c h);
   filter: drop-shadow(0 0 4px oklch(from var(--anatomy-lit) 0.7 c h / 0.6));
 }
 
 .dark .home-stage .home-led-lamp {
   --led-face: var(--anatomy-lit);
+  --led-side: var(--anatomy-lit);
 }
 
 .home-stage .home-led-lamp .iso-fill,
 .home-stage .home-led-lamp .iso-top { fill: var(--led-face); }
-.home-stage .home-led-lamp .iso-shade[data-shade] { fill: var(--anatomy-lit); }
+
+/* Daylight: the lamp breathes. A hard on/off reads as a fault light, and this
+   one is a pilot light — it only has to say the machine is alive — so the face
+   swings between two stops of the same accent, differing in lightness alone,
+   and the halo follows on the same clock so the rim never sits lit while the
+   face is out. The blink is the night-time cue and is left to run after dark. */
+html:not(.dark) .home-stage .home-led-lamp {
+  animation: home-led-halo 3.2s ease-in-out infinite;
+}
+
+/* the disc is seen from above, so its side band is most of what the eye gets:
+   the breath has to swing both walls, or the lamp pulses only on the sliver of
+   top face and the dot itself never changes */
+html:not(.dark) .home-stage .home-led-lamp .iso-fill,
+html:not(.dark) .home-stage .home-led-lamp .iso-top {
+  animation: home-led-breathe 3.2s ease-in-out infinite;
+}
+
+html:not(.dark) .home-stage .home-led-lamp .iso-shade {
+  animation: home-led-breathe-side 3.2s ease-in-out infinite;
+}
+
+html:not(.dark) .home-stage .home-module.is-active .home-label-led { animation: none; }
+
+@keyframes home-led-breathe {
+  0%, 100% { fill: var(--led-face-dim); }
+  50% { fill: var(--led-face); }
+}
+
+@keyframes home-led-breathe-side {
+  0%, 100% { fill: var(--led-side-dim); }
+  50% { fill: var(--led-side); }
+}
+
+@keyframes home-led-halo {
+  0%, 100% { filter: drop-shadow(0 0 1.4px oklch(from var(--anatomy-lit) 0.62 c h / 0.22)); }
+  50% { filter: drop-shadow(0 0 4.4px oklch(from var(--anatomy-lit) 0.72 c h / 0.62)); }
+}
+
+.home-stage .home-led-lamp .iso-shade[data-shade] { fill: var(--led-side); }
 .home-stage .home-led-lamp .iso-edge { stroke: var(--anatomy-lit-shade); }
 
 @keyframes home-print-head {
@@ -579,7 +618,11 @@ html.reduce-motion .home-stage .home-module.is-active .home-print-head,
 html.reduce-motion .home-stage .home-module.is-active .home-feed-roller,
 html.reduce-motion .home-stage .home-module.is-active .home-stock-roll,
 html.reduce-motion .home-stage .home-module.is-active .home-cutter,
-html.reduce-motion .home-stage .home-module.is-active .home-label-led { animation: none !important; }
+html.reduce-motion .home-stage .home-module.is-active .home-label-led,
+html.reduce-motion .home-stage .home-led-lamp,
+html.reduce-motion .home-stage .home-led-lamp .iso-fill,
+html.reduce-motion .home-stage .home-led-lamp .iso-top,
+html.reduce-motion .home-stage .home-led-lamp .iso-shade { animation: none !important; }
 html.reduce-motion .home-stage .home-ticket { visibility: visible; }
 
 @media (prefers-reduced-motion: reduce) {
@@ -594,7 +637,11 @@ html.reduce-motion .home-stage .home-ticket { visibility: visible; }
   .home-stage .home-module.is-active .home-feed-roller,
   .home-stage .home-module.is-active .home-stock-roll,
   .home-stage .home-module.is-active .home-cutter,
-  .home-stage .home-module.is-active .home-label-led { animation: none !important; }
+  .home-stage .home-module.is-active .home-label-led,
+  .home-stage .home-led-lamp,
+  .home-stage .home-led-lamp .iso-fill,
+  .home-stage .home-led-lamp .iso-top,
+  .home-stage .home-led-lamp .iso-shade { animation: none !important; }
   .home-stage .home-ticket { visibility: visible; }
 }
 
