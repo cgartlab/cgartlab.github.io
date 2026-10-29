@@ -820,14 +820,16 @@ function seatDevice(s: State): void {
     s.bootEnd = 0
     bootActive = false
     s.ready = true
-    // the reel may have been asked for while the console was still building
-    projectSection(document.documentElement.dataset.homeSection || '')
     startTour(s)
-    // and the machines measure their fall while nothing else is happening
-    precomputeDrops(s)
+    // prepare() has already measured every machine off the platform and fitted
+    // the wall; doing it again over the whole 4467-path set was a ~600 ms block
+    // on the last frame of the intro. Only the one-machine fallback needs it.
+    if (!s.whole) {
+      precomputeDrops(s)
+      fitWall(s)
+    }
     startCycle(s)
     placeProjection(s)
-    fitWall(s)
   }, BOOT_TOTAL - BOOT_DEVICE)
 }
 
@@ -945,6 +947,9 @@ async function prepare(s: State): Promise<void> {
   // the boot measures the first one
   precomputeDrops(s)
   fitWall(s)
+  // the reel is not part of the intro; starting it here keeps its decode out of
+  // the assembly (it was an ~800 ms block at the end of the intro)
+  projectSection(document.documentElement.dataset.homeSection || '')
   s.stage.classList.add('is-prepared')
   startCycle(s)
   if (s.pending >= 0) {
