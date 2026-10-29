@@ -65,7 +65,7 @@ const latestHref = latest
       <p class="home-sub">{positioning}</p>
       {latest && (
         <p class="home-latest">
-          <span class="home-latest-label">{currentLang === 'zh' ? '最新' : 'Latest'}</span>
+          <span class="home-latest-label">{currentLang === 'zh' ? '最新发布：' : 'Latest: '}</span>
           <a href={latestHref}>{latest.data.title}</a>
         </p>
       )}

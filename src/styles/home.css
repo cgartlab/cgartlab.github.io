@@ -560,18 +560,20 @@ html.reduce-motion .home-key { animation: none; transition: none; }
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
-  gap: 0.35rem 0.6rem;
+  /* the label carries its own colon (and its own space in English), so the two
+     parts read as one sentence with nothing wedged between them */
+  gap: 0;
   margin: 1.6rem 0 0;
   max-width: 30rem;
   font-family: var(--un-preset-theme-font-family-sans);
   font-size: 0.82rem;
   line-height: 1.5;
 }
+/* same size as the title it introduces: one line, one voice */
 .home-latest-label {
-  font-size: 0.68rem;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: color-mix(in oklch, oklch(var(--un-preset-theme-colors-secondary)) 72%, transparent);
+  font-size: inherit;
+  letter-spacing: 0.02em;
+  color: color-mix(in oklch, oklch(var(--un-preset-theme-colors-secondary)) 86%, transparent);
 }
 .home-latest a {
   color: oklch(var(--un-preset-theme-colors-primary));
