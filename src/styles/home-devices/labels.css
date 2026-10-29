@@ -364,6 +364,16 @@
 
 /* ---- the mechanism ------------------------------------------------------ */
 
+/* The wall as one piece. On a phone the stage has a lot of empty ground above
+   the machine and the sheets are too small to read there; the script scales the
+   whole wall about its foot to fill that ground (and re-aims each sheet's
+   flight, so they still leave the slot). */
+.home-stage .home-tag-wall {
+  transform-box: view-box;
+  transform-origin: var(--wall-x, 50%) var(--wall-y, 100%);
+  transform: scale(var(--wall-scale, 1));
+}
+
 .home-stage .home-ticket {
   /* not on the wall yet: the gate below is a visibility beat, not a fade, so a
      sheet is either there or it is not — it never sits half-printed on a

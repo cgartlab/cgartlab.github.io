@@ -641,7 +641,10 @@ export function buildLabels(P, options = {}) {
       if (seat.tape) tickets.push(tapeOn(F, card, seat.corner, seat.tapeAngle, P))
       tickets.push('</g>')
     })
-  out.push(part('tickets', 12, '', ...tickets))
+  // the wall is wrapped as one piece: on a phone it is scaled up to fill the
+  // ground above the machine, and that scale belongs to the wall, not to each
+  // sheet (the part's own transform is the assembly's)
+  out.push(part('tickets', 12, '', ['<g class="home-tag-wall">', ...tickets, '</g>']))
 
   return out.join('')
 }

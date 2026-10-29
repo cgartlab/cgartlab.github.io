@@ -355,6 +355,59 @@ function projectSection(section: string): void {
 }
 
 /**
+ * Give the tag wall the ground above the machine.
+ *
+ * On a phone the stage is a column: the sheets sit in a small cluster over the
+ * machine and the rest of the space is empty. The wall is scaled as one piece
+ * about its own foot so it fills that ground, and every sheet's flight is
+ * re-aimed so it still leaves the slot: a sheet starts at
+ * foot + k·(seat + fly − foot) and the slot does not move, so the offset is
+ * divided by the scale and corrected for the seat's own displacement.
+ */
+function fitWall(s: State): void {
+  const wall = s.svg.querySelector<SVGGElement>('.home-tag-wall')
+  if (!wall)
+    return
+  const stage = s.stage.getBoundingClientRect()
+  const vb = s.svg.viewBox.baseVal
+  if (!stage.width || !vb.width)
+    return
+  const px = Math.min(stage.width / vb.width, stage.height / vb.height)
+  const box = wall.getBBox()
+  if (!box.width)
+    return
+  const scale = isCompact() ? Math.min(1.9, Math.max(1, (stage.width * 0.92) / (box.width * px))) : 1
+  const foot = { x: box.x + box.width / 2, y: box.y + box.height }
+  wall.style.setProperty('--wall-x', `${foot.x.toFixed(1)}px`)
+  wall.style.setProperty('--wall-y', `${foot.y.toFixed(1)}px`)
+  wall.style.setProperty('--wall-scale', scale.toFixed(3))
+  if (Math.abs(scale - 1) < 0.01)
+    return
+  for (const t of wall.querySelectorAll<SVGGElement>('.home-ticket')) {
+    const b = t.getBBox()
+    const seat = { x: b.x + b.width / 2, y: b.y + b.height / 2 }
+    for (const k of ['--fly', '--out']) {
+      // the untouched offsets are kept on the element, so a rotation or a
+      // resize re-aims from the module's own numbers rather than from the
+      // numbers this function wrote last time
+      const key = k === '--fly' ? 'fly' : 'out'
+      if (t.dataset[`${key}X`] === undefined) {
+        t.dataset[`${key}X`] = t.style.getPropertyValue(`${k}-x`) || '0px'
+        t.dataset[`${key}Y`] = t.style.getPropertyValue(`${k}-y`) || '0px'
+      }
+      const x = Number.parseFloat(t.dataset[`${key}X`] || '')
+      const y = Number.parseFloat(t.dataset[`${key}Y`] || '')
+      if (!Number.isFinite(x) || !Number.isFinite(y))
+        continue
+      const nx = x / scale + (seat.x - foot.x) * (1 / scale - 1)
+      const ny = y / scale + (seat.y - foot.y) * (1 / scale - 1)
+      t.style.setProperty(`${k}-x`, `${nx.toFixed(1)}px`)
+      t.style.setProperty(`${k}-y`, `${ny.toFixed(1)}px`)
+    }
+  }
+}
+
+/**
  * Push the picture in on the machine's upper half.
  *
  * The mechanism is up there — the platen and the sheet, the reels, the roll, the
@@ -846,6 +899,7 @@ function mount(): void {
   }
   const onProjectionResize = () => {
     placeProjection(s)
+    fitWall(s)
     refreshFrame()
     syncHover()
   }
@@ -1010,6 +1064,7 @@ function mount(): void {
     setModule(s, 0)
     startCycle(s)
     placeProjection(s)
+    fitWall(s)
     return
   }
 
@@ -1029,6 +1084,7 @@ function mount(): void {
     precomputeDrops(s)
     startCycle(s)
     placeProjection(s)
+    fitWall(s)
   }, BOOT_TOTAL)
 }
 
