@@ -381,7 +381,10 @@ function fitWall(s: State): void {
   const box = wall.getBBox()
   if (!box.width)
     return
-  const scale = isCompact() ? Math.min(1.9, Math.max(1, (stage.width * 0.92) / (box.width * px))) : 1
+  // the same rule on every screen: the wall takes the ground it is given, up to
+  // a point where the sheets would read as bigger than the machine they hang
+  // behind
+  const scale = Math.min(2.2, Math.max(1, (stage.width * 0.92) / (box.width * px)))
   const foot = { x: box.x + box.width / 2, y: box.y + box.height }
   wall.style.setProperty('--wall-x', `${foot.x.toFixed(1)}px`)
   wall.style.setProperty('--wall-y', `${foot.y.toFixed(1)}px`)
