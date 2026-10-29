@@ -240,8 +240,17 @@ export default {
 
 			// 7. Set cache headers based on file type
 
+			// 首页装置的延后片段 → 5 分钟：文件名不带内容哈希，部署后必须在几分钟内
+			// 到达访客，否则新旧标记会混在一起；既不能走下面 .svg 的 30 天，
+			// 也不必跟 HTML 的 1 小时
+			if (assetPath.startsWith("/home/stage/")) {
+				response.headers.set(
+					"Cache-Control",
+					"public, max-age=300, stale-while-revalidate=600",
+				);
+			}
 			// 指纹资源（_astro/ 目录，所有文件均为 Astro 内容哈希命名）→ 1 年 immutable
-			if (assetPath.startsWith("/_astro/")) {
+			else if (assetPath.startsWith("/_astro/")) {
 				response.headers.set(
 					"Cache-Control",
 					"public, max-age=31536000, immutable",
