@@ -84,7 +84,9 @@ const OUT = [0, FRONT + 8, SLOT.z]
 const TRAY = { x: -42, y: -25, w: 84, d: 50, r: 5 }
 const TRAY_H = 6
 const BAR = 6
-const ROLL = { x0: -29, x1: 21, y: -3, r: 10.5 }
+// centred on the tray it sits in: the axle stubs stick out equally either side,
+// and the whole top assembly reads on the machine's centre line
+const ROLL = { x0: -25, x1: 25, y: -3, r: 10.5 }
 const ROLL_Z = LID_TOP + ROLL.r
 const LEN = ROLL.x1 - ROLL.x0
 /** One turn of the wound seam: the roll turns by exactly this much per loop. */
