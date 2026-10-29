@@ -880,6 +880,8 @@ async function loadLate(s: State): Promise<void> {
     return
   const parser = new DOMParser()
   for (const url of urls) {
+    if (!s.stage.isConnected)
+      return
     try {
       const text = await (await fetch(url)).text()
       const doc = parser.parseFromString(`<svg xmlns="http://www.w3.org/2000/svg">${text}</svg>`, 'image/svg+xml')
@@ -1137,6 +1139,15 @@ function mount(): void {
 
   state = s
 
+  // the rest of the machines are fetched once the page has painted: they cost
+  // more than everything else on it and none of them is on screen at boot
+  if (stage.dataset.late) {
+    if (document.readyState === 'complete')
+      void loadLate(s)
+    else
+      window.addEventListener('load', () => void loadLate(s), { once: true })
+  }
+
   if (reduced) {
     // nothing assembles and nothing types: the machine is simply there, and
     // every control is already live
@@ -1146,15 +1157,6 @@ function mount(): void {
     placeProjection(s)
     fitWall(s)
     return
-  }
-
-  // the rest of the machines are fetched once the page has painted: they cost
-  // more than everything else on it and none of them is on screen at boot
-  if (stage.dataset.late) {
-    if (document.readyState === 'complete')
-      void loadLate(s)
-    else
-      window.addEventListener('load', () => void loadLate(s), { once: true })
   }
 
   s.bootTimer = window.setTimeout(() => {
