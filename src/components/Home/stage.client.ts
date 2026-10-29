@@ -235,13 +235,23 @@ function projectionFrame(): HTMLElement | null {
 function placeProjection(s: State): void {
   const root = document.documentElement
   if (!isCompact()) {
+    root.removeAttribute('data-compact')
     root.style.removeProperty('--projection-top')
     root.style.removeProperty('--projection-height')
     return
   }
+  // a flag the stylesheet can read: the narrow layout treats the copy as
+  // something that sits on the picture, not beside it
+  root.dataset.compact = '1'
   const rect = s.stage.getBoundingClientRect()
-  root.style.setProperty('--projection-top', `${Math.round(rect.top)}px`)
-  root.style.setProperty('--projection-height', `${Math.round(rect.height)}px`)
+  // the picture keeps its foot where it is and grows upward by 70% of its own
+  // height, so it becomes the wall the whole sheet hangs on — the copy included
+  const top = Math.max(0, rect.top - rect.height * 0.7)
+  root.style.setProperty('--projection-top', `${Math.round(top)}px`)
+  // the stage box is padded: its foot sits a little below the console's, so the
+  // picture stops at the base rather than glowing under it
+  const bottom = rect.bottom - rect.height * 0.07
+  root.style.setProperty('--projection-height', `${Math.round(bottom - top)}px`)
 }
 
 /** The layer is fixed and static, so its rect only moves on resize — cache it. */

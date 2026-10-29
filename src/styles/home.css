@@ -352,6 +352,44 @@ html.reduce-motion .home-latest {
   }
 }
 
+/* --------------------------------------------------------------------------
+   The sheet on the picture
+   -------------------------------------------------------------------------- */
+
+/* On the narrow layout the throw is the wall the whole sheet hangs on, so the
+   copy stands on the picture rather than beside it. While the reel runs the
+   ink turns to the screen's own white — the palette's paper at full lightness,
+   so it stays inside the drawing — and the accent keeps the underline. */
+html[data-compact='1'][data-home-section='works'][data-screening='on'] {
+  --home-screen-ink: oklch(from oklch(var(--un-preset-theme-colors-background)) 0.97 c h);
+  --home-screen-dim: oklch(from oklch(var(--un-preset-theme-colors-background)) 0.9 c h);
+}
+
+/* the copy only: the header sits on the picture's feathered top edge, which is
+   as light as the page, so its ink stays as it was */
+html[data-compact='1'][data-home-section='works'][data-screening='on'] .home-title,
+html[data-compact='1'][data-home-section='works'][data-screening='on'] .home-latest a {
+  color: var(--home-screen-ink);
+}
+
+html[data-compact='1'][data-home-section='works'][data-screening='on'] .home-sub,
+html[data-compact='1'][data-home-section='works'][data-screening='on'] .home-latest-label {
+  color: var(--home-screen-dim);
+}
+
+/* the picture is feathered to the page at its edges, and the copy starts in
+   that feather: a shadow under the light ink keeps the first characters legible
+   where the throw is thin */
+html[data-compact='1'][data-home-section='works'][data-screening='on'] .home-title,
+html[data-compact='1'][data-home-section='works'][data-screening='on'] .home-sub,
+html[data-compact='1'][data-home-section='works'][data-screening='on'] .home-latest {
+  text-shadow: 0 0.06em 0.5em rgba(0, 0, 0, 0.38);
+}
+
+html[data-compact='1'][data-home-section='works'][data-screening='on'] .home-latest a {
+  border-bottom-color: color-mix(in oklch, oklch(var(--un-preset-theme-colors-highlight)) 80%, transparent);
+}
+
 /* The shared footer, sat in the sheet's bottom row.
    Every other page floats it as a column at the left; on the sheet it belongs
    to the grid, under the machine, so it is un-fixed and allowed its own height. */
