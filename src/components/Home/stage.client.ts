@@ -32,8 +32,17 @@ const RECT_TTL = 250
 const COMPACT = '(max-width: 899px), (hover: none)'
 /** one machine per turn, long enough for the swap and a beat of stillness */
 const AUTO_SWAP = 6000
-/** 作品 holds: its reel is the reason to stop there, so it gets the time to play */
-const AUTO_SWAP_WORKS = 30000
+/** what each machine is given once it is whole, so its own performance plays
+ *  out: the sheet types its excerpt, the reel runs, the papers swing, the
+ *  tickets are printed. 作品 is the longest because its reel is the reason to
+ *  stop there at all. */
+const DWELL: Record<string, number> = {
+  posts: 4000,
+  works: 30000,
+  column: 14000,
+  resource: 8000,
+  tags: 12000,
+}
 
 const isCompact = (): boolean => window.matchMedia(COMPACT).matches
 
@@ -527,26 +536,55 @@ function scheduleExit(m: SVGGElement, svg: SVGSVGElement): number {
  * The turn, for screens without a pointer.
  *
  * Hover is not a thing on a phone, and tapping a key leaves the page, so the
- * platform turns itself over: one machine every AUTO_SWAP, in the order the
- * keys are printed. It stands still while the tab is hidden or the stage is
- * scrolled away, and it stops for good the moment the reader takes over.
+ * platform turns itself over. A machine is never taken away while it is still
+ * being put together or still playing: the turn waits for the entry animations
+ * to finish (and, for the typewriter, for the sheet to finish typing), then
+ * holds that machine for its own dwell before moving on. It stands still while
+ * the tab is hidden or the stage is scrolled away, and it stops for good the
+ * moment the reader takes over.
  */
 function startCycle(s: State): void {
   if (!isCompact() || s.autoTimer)
     return
-  const current = s.modules.find(m => Number(m.dataset.index) === s.active)
-  const hold = current?.dataset.module === 'works' ? AUTO_SWAP_WORKS : AUTO_SWAP
-  s.autoTimer = window.setTimeout(() => {
+  const armedAt = performance.now()
+  const wait = (): void => {
     s.autoTimer = 0
-    // a hidden tab or a stage that has been scrolled away does not get a turn;
-    // try again after the same hold
-    if (document.hidden || s.stage.dataset.idle || !isCompact()) {
-      startCycle(s)
+    if (!isCompact())
+      return
+    if (document.hidden || s.stage.dataset.idle) {
+      s.autoTimer = window.setTimeout(wait, 600)
       return
     }
-    setModule(s, (s.active + 1) % s.modules.length)
-    startCycle(s)
-  }, hold)
+    const current = s.modules.find(m => Number(m.dataset.index) === s.active)
+    // the incoming machine has no .is-active for the length of the exit: it is
+    // not settled, it has not even arrived
+    const arrived = !!current?.classList.contains('is-active')
+    const typing = current?.dataset.module === 'posts' && s.shown < s.total
+    if ((!arrived || typing || (current && !settled(current))) && performance.now() - armedAt < 16000) {
+      s.autoTimer = window.setTimeout(wait, 250)
+      return
+    }
+    const dwell = DWELL[current?.dataset.module ?? ''] ?? AUTO_SWAP
+    s.autoTimer = window.setTimeout(() => {
+      s.autoTimer = 0
+      if (document.hidden || s.stage.dataset.idle || !isCompact()) {
+        startCycle(s)
+        return
+      }
+      setModule(s, (s.active + 1) % s.modules.length)
+      startCycle(s)
+    }, dwell)
+  }
+  s.autoTimer = window.setTimeout(wait, 250)
+}
+
+/** True when nothing one-shot is still running: the loops never settle, and
+ *  they are not what the turn is waiting for. */
+function settled(m: SVGGElement): boolean {
+  return m.getAnimations({ subtree: true }).every((a) => {
+    const loops = a.effect?.getTiming?.().iterations === Infinity
+    return loops || a.playState !== 'running'
+  })
 }
 
 function stopCycle(s: State): void {
