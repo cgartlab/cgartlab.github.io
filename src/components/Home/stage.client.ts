@@ -862,6 +862,9 @@ function mount(): void {
     lines = JSON.parse(stage.dataset.typed || '[]')
   }
   catch {
+    // the excerpt arrives as a JSON attribute from the build. If it is malformed
+    // the machine still has to come up: a stage with blank paper is a wrong page,
+    // an exception here is a console half-built and no navigation at all.
     lines = []
   }
 
