@@ -82,6 +82,62 @@
    like. It sits under the machine, fills as each fragment lands (--load is the
    fraction of the five machines that are in the document), and leaves with the
    intro rather than snapping away. */
+/* The line under the machine.
+   One line per channel, in the machine's own column and below its base. Only
+   the line for the channel on the platform is shown, keyed off the section the
+   stage writes on <html> — no second source of truth for which machine is up. */
+/* The stage is a 100%-height box whose drawing is absolutely positioned, so it
+   only has height when its parent does: the wrapper takes the grid row's height
+   and gives the stage everything the tagline does not need. */
+.home-machine {
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto;
+  height: 100%;
+  min-width: 0;
+}
+
+.home-tagline {
+  position: relative;
+  min-height: 1.6em;
+  margin: 0.55rem 0 0;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  text-align: center;
+  color: oklch(var(--un-preset-theme-colors-secondary));
+}
+
+.home-tagline > span {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(0.35em);
+  transition:
+    opacity 200ms ease-out,
+    transform 200ms ease-out,
+    visibility 0s linear 200ms;
+}
+
+/* the line arrives a beat after the machine settles, not with it */
+html[data-home-section="posts"] .home-tagline > [data-for="posts"],
+html[data-home-section="works"] .home-tagline > [data-for="works"],
+html[data-home-section="column"] .home-tagline > [data-for="column"],
+html[data-home-section="resource"] .home-tagline > [data-for="resource"],
+html[data-home-section="tags"] .home-tagline > [data-for="tags"] {
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+  transition:
+    opacity 300ms ease-out 140ms,
+    transform 300ms ease-out 140ms,
+    visibility 0s linear 140ms;
+}
+
+.reduce-motion .home-tagline > span {
+  transform: none;
+  transition: none;
+}
+
 .home-stage .home-preload {
   position: absolute;
   left: 12%;

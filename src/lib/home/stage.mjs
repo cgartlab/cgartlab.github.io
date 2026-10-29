@@ -21,6 +21,28 @@ import { buildToolbox, toolboxBounds } from '@/lib/home/toolbox.mjs'
 import { buildTypewriter, typewriterBounds } from '@/lib/home/typewriter.mjs'
 import { getAllTags, getPostsByTag, getRegularPosts } from '@/utils/content'
 
+/**
+ * One line per channel, shown under the machine when that channel is on the
+ * platform. Kept here rather than in the page so the fragment endpoint and the
+ * page never disagree about which section is which.
+ */
+export const TAGLINES = {
+  zh: {
+    posts: '分享终身学习所沉淀的第一手经验。',
+    works: '面向个人创作者的实用工具。',
+    column: '分享给你定期更新的记录和思考。',
+    resource: '我用过和看到的好东西。',
+    tags: '穿越多个领域打造的知识网络。',
+  },
+  en: {
+    posts: 'First-hand lessons from a lifetime of learning.',
+    works: 'Practical tools for independent creators.',
+    column: 'Notes and reflections, updated on a schedule.',
+    resource: 'Good things I have used and come across.',
+    tags: 'A knowledge network built across many fields.',
+  },
+}
+
 /** The stage's drawing box, in stage units. */
 export const W = 760
 export const H = 620

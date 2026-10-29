@@ -7,7 +7,7 @@ import {
   buildChannelLinks,
   chassisDefs,
 } from '@/lib/home/chassis.mjs'
-import { H, lateModulePath, stageData, W } from '@/lib/home/stage.mjs'
+import { H, lateModulePath, stageData, TAGLINES, W } from '@/lib/home/stage.mjs'
 
 interface Props {
   lang?: Language
@@ -16,6 +16,7 @@ interface Props {
 
 const currentLang = Astro.props.lang ?? getLangFromLocale(Astro.currentLocale)
 const data = await stageData(currentLang)
+const taglines = TAGLINES[currentLang === 'en' ? 'en' : 'zh']
 
 const svg = `<svg class="iso-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" role="group" aria-label="CGArtLab：一台控制台，面板上有五个栏目按键，当前展示的装置立在升降台上。">
 ${chassisDefs(data.P)}
@@ -31,17 +32,25 @@ const late = [1, 2, 3, 4].map(i => lateModulePath(currentLang, i)).join(',')
 const isDefault = currentLang === defaultLocale
 ---
 
-<div
-  class="home-stage"
-  style={`--well-x:${data.wellX.toFixed(1)}px;--well-y:${data.wellY.toFixed(1)}px`}
-  data-home-stage
-  data-typed={JSON.stringify(data.typedLines)}
-  data-late={late}
-  data-lang={currentLang}
-  data-is-default={isDefault ? '' : undefined}
->
-  <Fragment set:html={svg} />
-  <div class="home-preload" aria-hidden="true"><i /></div>
+<div class="home-machine">
+  <div
+    class="home-stage"
+    style={`--well-x:${data.wellX.toFixed(1)}px;--well-y:${data.wellY.toFixed(1)}px`}
+    data-home-stage
+    data-typed={JSON.stringify(data.typedLines)}
+    data-late={late}
+    data-lang={currentLang}
+    data-is-default={isDefault ? '' : undefined}
+  >
+    <Fragment set:html={svg} />
+    <div class="home-preload" aria-hidden="true"><i /></div>
+  </div>
+
+  <p class="home-tagline">
+    {Object.entries(taglines).map(([id, text]) => (
+      <span data-for={id}>{text}</span>
+    ))}
+  </p>
 </div>
 
 <script>
