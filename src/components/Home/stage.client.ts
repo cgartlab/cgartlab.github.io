@@ -402,34 +402,53 @@ function measureDrops(svg: SVGSVGElement, m: SVGGElement): void {
   if (m.dataset.drops)
     return
   m.dataset.drops = '1'
+  const rimY = rimLine(svg)
+  for (const p of m.querySelectorAll<SVGGElement>('.home-part'))
+    measurePart(rimY, p, m)
+}
+
+/** Where the deck's front rim is, in stage units: below it nothing is seen. */
+function rimLine(svg: SVGSVGElement): number {
   const rim = svg.querySelector<SVGPathElement>('#home-deck-clip path')
-  const rimBox = rim?.getBBox()
-  const rimY = rimBox ? rimBox.y + rimBox.height : 420
+  const box = rim?.getBBox()
+  return box ? box.y + box.height : 420
+}
+
+/** How far one part has to fall to be out of sight, in stage units. */
+function measurePart(rimY: number, p: SVGGElement, m: Element): void {
   // only the transforms written in the markup count here: getCTM() folds in the
   // running CSS animation as well, and a reading taken while the machine is
   // still riding up would put every part 132 px lower than it lives
-  const localOf = (el: Element, stop: Element): DOMMatrix => {
-    let acc = new DOMMatrix()
-    let node: Element | null = el
-    while (node && node !== stop) {
-      const own = (node as SVGGraphicsElement).transform?.baseVal.consolidate()
-      if (own)
-        acc = own.matrix.multiply(acc)
-      node = node.parentElement
-    }
-    return acc
+  let acc = new DOMMatrix()
+  let node: Element | null = p
+  while (node && node !== m) {
+    const own = (node as SVGGraphicsElement).transform?.baseVal.consolidate()
+    if (own)
+      acc = own.matrix.multiply(acc)
+    node = node.parentElement
   }
-  for (const p of m.querySelectorAll<SVGGElement>('.home-part')) {
-    const box = p.getBBox()
-    const local = localOf(p, m)
-    let top = Number.POSITIVE_INFINITY
-    for (const x of [box.x, box.x + box.width]) {
-      for (const y of [box.y, box.y + box.height])
-        top = Math.min(top, local.b * x + local.d * y + local.f)
-    }
-    const drop = Math.round(Math.min(420, Math.max(16, rimY + 26 - top)))
-    p.style.setProperty('--drop', String(drop))
+  const box = p.getBBox()
+  let top = Number.POSITIVE_INFINITY
+  for (const x of [box.x, box.x + box.width]) {
+    for (const y of [box.y, box.y + box.height])
+      top = Math.min(top, acc.b * x + acc.d * y + acc.f)
   }
+  const drop = Math.round(Math.min(420, Math.max(16, rimY + 26 - top)))
+  p.style.setProperty('--drop', String(drop))
+}
+
+/**
+ * Measure one part again at the moment it leaves.
+ *
+ * A part whose resting shape depends on a state — the tool case's lid is folded
+ * shut while the machine is off the platform and stands open when it is taken
+ * apart — was measured against the wrong shape. It is measured here while it
+ * still stands as the reader sees it.
+ */
+function remeasurePart(svg: SVGSVGElement, m: SVGGElement, name: string): void {
+  const p = m.querySelector<SVGGElement>(`.home-part[data-part="${name}"]`)
+  if (p)
+    measurePart(rimLine(svg), p, m)
 }
 
 /** A computed animation time ("1.4s", "1420ms", "1s, 300ms") in ms. */
@@ -480,6 +499,10 @@ function scheduleExit(m: SVGGElement, svg: SVGSVGElement): number {
   // the paper moves between switches, so its rewind is re-measured even when
   // the rest of the schedule comes from the cache
   measureSheetRewind(m)
+  // the tool case's lid and stay are folded while the machine is off the
+  // platform, so their fall was measured against a shut lid; they are open now
+  remeasurePart(svg, m, 'tb-lid')
+  remeasurePart(svg, m, 'tb-stay')
   const cached = m.dataset.exitMs
   if (cached)
     return Number(cached)
@@ -524,6 +547,15 @@ function scheduleExit(m: SVGGElement, svg: SVGSVGElement): number {
     parts[entry.i].style.setProperty('--exit-delay', `${delay.toFixed(0)}ms`)
     end = Math.max(end, delay + Math.min(300, Math.max(150, 90 + drop * 0.7)))
   })
+  // The tool case's stay is bolted to the lid's face and leans on the rim: it
+  // is one assembly with the lid, so it leaves on the lid's beat. Left to its
+  // own rank it hung in the air for half a second after the lid had gone — a
+  // rod standing over an empty case.
+  const lid = m.querySelector<SVGGElement>('.home-part[data-part="tb-lid"]')
+  const stay = m.querySelector<SVGGElement>('.home-part[data-part="tb-stay"]')
+  if (lid && stay)
+    stay.style.setProperty('--exit-delay', lid.style.getPropertyValue('--exit-delay') || '0ms')
+
   const total = Math.round(end + 40)
   // only a module that was actually standing can be ranked; one caught halfway
   // through a previous swap has no entry rules in force to read

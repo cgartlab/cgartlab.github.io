@@ -1072,7 +1072,11 @@ export function buildToolbox(P, options = {}) {
   // the stay sits in front of the lid's face and on the rim, so it comes after
   // the body; the shut lid comes last of all and covers the whole interior
   return [
-    lidSvg(P),
+    // the open lid is one piece — shell, board and every chip on it — so it is
+    // wrapped in a part of its own. Its entry stays the hinge transition below;
+    // the wrapper exists so the exit can take the whole lid away with the case
+    // instead of leaving it hanging in the air while everything else drops.
+    part('tb-lid', 0, '', [lidSvg(P)]),
     part('shell', 0, stroke(P, [0, 0, TOP], [0, 0, -1], BASE_H / 2, 46), plinth),
     ...walls.map((wall, index) => part('tb-wall', index, wallAxis[index], wall)),
     part('tb-hinge', 0, stroke(P, [0, BACK + 2.9, RIM_Z], [0, 0, -1], 4, 16), hinge),
@@ -1086,7 +1090,10 @@ export function buildToolbox(P, options = {}) {
     part('tb-plate', 0, stroke(P, [(p0 + p1) / 2, py, (pz0 + pz1) / 2], [0, -1, 0], 5, 12), plate),
     ...rivets,
     part('tb-dial', 0, stroke(P, [DIAL.x, FRONT, DIAL.z], [0, -1, 0], 3, 14), dial),
-    staySvg(P),
+    // the stay is bolted to the rim and leans on the lid's face; it is a part of
+    // its own so the exit takes it down with the case instead of leaving a rod
+    // standing in the air
+    part('tb-stay', 0, '', [staySvg(P)]),
     part('closed', 0, stroke(P, [0, 0, RIM_Z], [0, 0, -1], 4, 34), closed),
   ].join('')
 }

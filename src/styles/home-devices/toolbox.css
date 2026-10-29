@@ -364,6 +364,17 @@
   transition: transform 260ms ease;
 }
 
+/* The lid is one piece: its swing is the transition above, and on the way out
+   it drops with the case. Its cargo rides with it, so the board and the chips
+   on it must not drop on their own — they would fall twice as far. */
+.home-module.is-active .home-part[data-part='tb-lid'] {
+  animation: none;
+}
+
+.home-module.is-leaving .home-part[data-part='tb-lid'] .home-part {
+  animation: none;
+}
+
 /* The handover. The delays sit on the active state only, so the way out — the
    module leaving the stage — still lets go immediately instead of waiting
    1210 ms first. The stay follows the lid by 440 ms, which is where it reads as
