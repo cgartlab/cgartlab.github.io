@@ -23,9 +23,6 @@
 
 const COPY = '.home-copy'
 const COPY_SEEN = 'cgartlab-copy-seen'
-/** how often the headline drops a scanline, and for how long */
-const SLIP_EVERY = 6500
-const SLIP_FOR = 240
 
 /** Where the noise comes from. CJK for CJK, so the boxes keep their width. */
 const NOISE_CJK = '字墨印迹影光镜轴簧销楔齿槽轨标尺针页图版检录序偏旁部首构件栓凸轮杆簧片'
@@ -143,31 +140,81 @@ function scramble(el: HTMLElement, { begin, hold, beat, rate }: ScrambleOptions)
   requestAnimationFrame(tick)
 }
 
-let slipTimer = 0
-let slipOut = 0
-
 /**
- * The headline's hiccup, on a clock instead of a six-and-a-half second loop.
- * The burst is 180 ms; running it as an infinite animation meant the compositor
- * was asked for a frame every frame of every second to show it.
+ * Type a line in, one character at a time, with a caret at the insertion point.
+ *
+ * The line is laid out in full first — every glyph in a span of its own advance
+ * — and then revealed, so the sentence never reflows as it is typed (the English
+ * headline wraps, and a line that re-breaks mid-word would look broken). The
+ * caret is a zero-width box, so moving it along does not nudge anything either.
+ * Once the last character is in, the caret stays a beat and goes out, and the
+ * element gets its own text back.
  */
-function startSlips(title: HTMLElement): void {
-  window.clearInterval(slipTimer)
-  window.clearTimeout(slipOut)
-  title.classList.remove('is-slipping')
-  slipTimer = window.setInterval(() => {
-    // the page may have been swapped away under this timer
-    if (!title.isConnected) {
-      window.clearInterval(slipTimer)
-      slipTimer = 0
+function typeIn(el: HTMLElement, { start, beat }: { start: number; beat: number }): void {
+  const source = el.textContent ?? ''
+  if (!source.trim())
+    return
+  el.setAttribute('aria-label', source)
+  el.textContent = ''
+  const spans: HTMLSpanElement[] = []
+  for (const ch of source) {
+    if (!/[\p{L}\p{N}]/u.test(ch)) {
+      el.append(document.createTextNode(ch))
+      continue
+    }
+    const span = document.createElement('span')
+    span.className = 'home-glyph'
+    span.textContent = ch
+    span.style.visibility = 'hidden'
+    el.append(span)
+    spans.push(span)
+  }
+  if (!spans.length)
+    return
+
+  const measure = (): void => {
+    for (const span of spans) {
+      span.style.width = 'auto'
+      span.style.visibility = 'visible'
+    }
+    const widths = spans.map(span => span.getBoundingClientRect().width)
+    spans.forEach((span, i) => {
+      span.style.width = `${widths[i].toFixed(2)}px`
+      span.style.visibility = 'hidden'
+    })
+  }
+  measure()
+  void document.fonts.ready.then(measure)
+
+  const caret = document.createElement('span')
+  caret.className = 'home-caret'
+  caret.setAttribute('aria-hidden', 'true')
+  spans[0].before(caret)
+
+  const step = Math.min(90, beat / Math.max(1, spans.length - 1))
+  const started = performance.now()
+  let shown = 0
+  const finish = (): void => {
+    caret.remove()
+    el.textContent = source
+    el.removeAttribute('aria-label')
+  }
+  const tick = (now: number): void => {
+    const at = now - started - start
+    const due = Math.min(spans.length, Math.max(0, Math.floor(at / step) + 1))
+    while (shown < due) {
+      spans[shown].style.visibility = 'visible'
+      spans[shown].after(caret)
+      shown++
+    }
+    if (shown < spans.length) {
+      requestAnimationFrame(tick)
       return
     }
-    if (document.hidden)
-      return
-    title.classList.add('is-slipping')
-    window.clearTimeout(slipOut)
-    slipOut = window.setTimeout(() => title.classList.remove('is-slipping'), SLIP_FOR)
-  }, SLIP_EVERY)
+    // the caret rests where the typing stopped, then goes out with it
+    window.setTimeout(finish, 1100)
+  }
+  requestAnimationFrame(tick)
 }
 
 function bootCopy(): void {
@@ -181,9 +228,6 @@ function bootCopy(): void {
   document.documentElement.classList.add('copy-ready')
   if (prefersReducedMotion())
     return
-  const titleEl = copy.querySelector<HTMLElement>('.home-title')
-  if (titleEl)
-    startSlips(titleEl)
   // once per session, not once per visit: coming back to the home page should
   // find the sheet already set, not scramble it again
   try {
@@ -196,11 +240,11 @@ function bootCopy(): void {
   const title = copy.querySelector<HTMLElement>('.home-title')
   const sub = copy.querySelector<HTMLElement>('.home-sub')
 
-  // straight away: the line is under the reader's eye from the first frame, so
-  // it is scrambled from the first frame too. The advances are re-measured when
-  // the webfont lands (see scramble), so a late font cannot break the wrap.
+  // the headline is typed, the line under it is scrambled
   if (title)
-    scramble(title, { begin: 140, hold: 0, beat: 620, rate: 44 })
+    typeIn(title, { start: 160, beat: 720 })
+  if (sub)
+    scramble(sub, { begin: 900, hold: 160, beat: 700, rate: 34 })
   if (sub)
     scramble(sub, { begin: 600, hold: 160, beat: 700, rate: 34 })
 }

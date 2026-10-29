@@ -222,62 +222,34 @@
   text-wrap: balance;
 }
 
-/* A digital hiccup. Every few seconds the headline slips for a third of a
-   second: two ghost copies of the same line, each clipped to a band and nudged
-   a couple of pixels the other way, in the accent so the artefact stays inside
-   the drawing's palette. Both copies are laid out by the same rule as the
-   text, so a wrapped headline breaks in the same place and the bands land on
-   the real letters. */
-.home-title::before,
-.home-title::after {
-  content: attr(data-text);
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  color: oklch(var(--un-preset-theme-colors-highlight));
-  opacity: 0;
-  clip-path: inset(100% 0 0 0);
+/* The headline is typed, not pasted: the characters come in one at a time and
+   a caret in the accent marks where the next one will land. The caret is a
+   zero-width box — a border on an empty inline-block, cancelled by a negative
+   margin — so it never nudges the line as it advances. It blinks while it
+   types and goes out with the last character. */
+.home-caret {
+  display: inline-block;
+  width: 0;
+  height: 0.84em;
+  margin-right: -0.1em;
+  border-right: 0.1em solid oklch(var(--un-preset-theme-colors-highlight));
+  vertical-align: -0.05em;
+  animation: home-caret-blink 1s steps(1, end) infinite;
 }
 
-/* The hiccup is a burst, not a loop: the animation is 180 ms long and the
-   script ticks it every 6.5 s. Left as an infinite 6.5 s animation it kept the
-   compositor busy every frame of every second for a 150 ms effect. */
-.home-title.is-slipping::before { animation: home-title-slip-a 180ms steps(1, end) both; }
-.home-title.is-slipping::after { animation: home-title-slip-b 180ms steps(1, end) 40ms both; }
-
-/* two bands per hiccup, each a single frame — a dropped scanline, not a wobble */
-@keyframes home-title-slip-a {
-  0%, 10% { opacity: 0; clip-path: inset(100% 0 0 0); transform: none; }
-  20% { opacity: 0.45; clip-path: inset(18% 0 54% 0); transform: translateX(-2.5px); }
-  62% { opacity: 0.45; clip-path: inset(56% 0 24% 0); transform: translateX(1.8px); }
-  100% { opacity: 0; clip-path: inset(100% 0 0 0); transform: none; }
+@keyframes home-caret-blink {
+  0%, 54% { opacity: 1; }
+  55%, 100% { opacity: 0; }
 }
 
-@keyframes home-title-slip-b {
-  0%, 10% { opacity: 0; clip-path: inset(100% 0 0 0); transform: none; }
-  42% { opacity: 0.3; clip-path: inset(38% 0 34% 0); transform: translateX(2.2px); }
-  100% { opacity: 0; clip-path: inset(100% 0 0 0); transform: none; }
-}
-
-html.reduce-motion .home-title::before,
-html.reduce-motion .home-title::after,
-html.reduce-motion .home-title.is-slipping::before,
-html.reduce-motion .home-title.is-slipping::after { animation: none; }
+html.reduce-motion .home-caret { animation: none; }
 
 @media (prefers-reduced-motion: reduce) {
-  .home-title::before,
-  .home-title::after,
-  .home-title.is-slipping::before,
-  .home-title.is-slipping::after { animation: none; }
+  .home-caret { animation: none; }
 }
 
-/* --------------------------------------------------------------------------
-   First light — the sheet is set before the machine wakes
-   -------------------------------------------------------------------------- */
-
-/* A glyph that is still noise keeps the advance of the letter it will become,
-   so the line never reflows while it is scrambling. The ink is the accent, and
-   it drops back to the page's own colour the moment the glyph locks. */
+/* the page hides the copy until the script owns it, so nothing is read settled
+   before it is typed or scrambled */
 html.copy-arming .home-title,
 html.copy-arming .home-sub {
   visibility: hidden;
