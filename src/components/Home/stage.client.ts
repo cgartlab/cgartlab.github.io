@@ -73,6 +73,8 @@ interface State {
   pending: number
   /** false until the boot is over: the tour waits for a whole page */
   ready: boolean
+  /** true once every machine is in the document — the ones fetched after paint */
+  whole: boolean
   modules: SVGGElement[]
   caps: SVGGElement[]
   channels: SVGAElement[]
@@ -693,7 +695,7 @@ function scheduleExit(m: SVGGElement, svg: SVGSVGElement): number {
  * moment the reader takes over.
  */
 function startCycle(s: State): void {
-  if (!isCompact() || s.autoTimer)
+  if (!isCompact() || s.autoTimer || !s.whole)
     return
   const armedAt = performance.now()
   const wait = (): void => {
@@ -751,6 +753,9 @@ function stopCycle(s: State): void {
  */
 function setModule(s: State, index: number): void {
   if (index === s.active)
+    return
+  // the four fetched machines may still be on their way
+  if (!s.modules.some(m => Number(m.dataset.index) === index))
     return
   if (s.stage.classList.contains('is-booting')) {
     // the deck is still building: remember the key, seat it when the lift arrives
@@ -846,6 +851,59 @@ function precomputeDrops(s: State): void {
     window.setTimeout(run, 300)
 }
 
+/**
+ * Take in the machines that arrived after the page painted.
+ *
+ * The stage is built for five and only ships one, so every query that walks the
+ * machines has to be re-run once the rest are in the document: the swap, the
+ * auto-turn and the fall distances all read this list.
+ */
+function adoptModules(s: State): void {
+  s.modules = [...s.svg.querySelectorAll<SVGGElement>('.home-module')]
+  s.caps = [...s.svg.querySelectorAll<SVGGElement>('.home-keycap')]
+  s.channels = [...s.svg.querySelectorAll<SVGAElement>('.home-channel')]
+  s.whole = true
+}
+
+/**
+ * Fetch the four machines that were left out of the page.
+ *
+ * They are 80% of the document and none of them is on screen at boot, so they
+ * are not worth the first paint. Until they land the keys still navigate (they
+ * are links) and a hover is ignored — a switch to a machine that is not in the
+ * document has nothing to play.
+ */
+async function loadLate(s: State): Promise<void> {
+  const urls = (s.stage.dataset.late || '').split(',').filter(Boolean)
+  const group = s.svg.querySelector('.home-modules')
+  if (!urls.length || !group)
+    return
+  const parser = new DOMParser()
+  for (const url of urls) {
+    try {
+      const text = await (await fetch(url)).text()
+      const doc = parser.parseFromString(`<svg xmlns="http://www.w3.org/2000/svg">${text}</svg>`, 'image/svg+xml')
+      for (const node of [...doc.documentElement.childNodes])
+        group.appendChild(document.importNode(node, true))
+    }
+    catch {
+      // one missing machine leaves one channel without its device; the keys are
+      // still links, so the page degrades to navigation rather than to nothing
+    }
+  }
+  adoptModules(s)
+  // the machines that just arrived are measured now, off the platform, the way
+  // the boot measures the first one
+  precomputeDrops(s)
+  fitWall(s)
+  startCycle(s)
+  if (s.pending >= 0) {
+    const index = s.pending
+    s.pending = -1
+    setModule(s, index)
+  }
+}
+
 function mount(): void {
   const stage = document.querySelector<HTMLElement>(STAGE)
   if (!stage)
@@ -903,6 +961,7 @@ function mount(): void {
     bootEnd: 0,
     pending: -1,
     ready: false,
+    whole: !stage.dataset.late,
     modules,
     caps,
     channels,
@@ -1087,6 +1146,15 @@ function mount(): void {
     placeProjection(s)
     fitWall(s)
     return
+  }
+
+  // the rest of the machines are fetched once the page has painted: they cost
+  // more than everything else on it and none of them is on screen at boot
+  if (stage.dataset.late) {
+    if (document.readyState === 'complete')
+      void loadLate(s)
+    else
+      window.addEventListener('load', () => void loadLate(s), { once: true })
   }
 
   s.bootTimer = window.setTimeout(() => {

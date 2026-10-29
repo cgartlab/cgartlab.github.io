@@ -2,22 +2,12 @@
 import type { Language } from '@/i18n/config'
 import { defaultLocale } from '@/config'
 import { getLangFromLocale } from '@/i18n/lang'
-import { getLocalizedPath, getPostPath } from '@/i18n/path'
-import { ui } from '@/i18n/ui'
-import * as k from '@/lib/anatomy/iso-kit.mjs'
 import {
   buildChassis,
   buildChannelLinks,
-  CABINET,
   chassisDefs,
-  TOP,
 } from '@/lib/home/chassis.mjs'
-import { buildCinema, cinemaBounds } from '@/lib/home/cinema.mjs'
-import { buildLabels, labelsBounds } from '@/lib/home/labels.mjs'
-import { buildNewsrack, newsrackBounds } from '@/lib/home/newsrack.mjs'
-import { buildToolbox, toolboxBounds } from '@/lib/home/toolbox.mjs'
-import { buildTypewriter, typewriterBounds } from '@/lib/home/typewriter.mjs'
-import { getAllTags, getPostsByTag, getRegularPosts } from '@/utils/content'
+import { H, lateModulePath, stageData, W } from '@/lib/home/stage.mjs'
 
 interface Props {
   lang?: Language
@@ -25,160 +15,28 @@ interface Props {
 }
 
 const currentLang = Astro.props.lang ?? getLangFromLocale(Astro.currentLocale)
-const t = ui[currentLang as keyof typeof ui] ?? ui.zh
-
-const posts = await getRegularPosts(currentLang)
-const latest = posts[0]
-
-const labels = currentLang === 'zh'
-  ? [t.posts, t.works, t.column, t.links, t.tags]
-  : ['Posts', 'Works', 'Column', 'Links', 'Tags']
-
-const ids = ['posts', 'works', 'column', 'resource', 'tags']
-const hrefs = ['/posts/', '/works/', '/column/', '/resource/', '/tags/']
-  .map(path => getLocalizedPath(path, currentLang))
-
-const W = 760
-const H = 620
-
-// the tags page already has these; the machine prints one label per tag, and
-// the count follows the content with no cap
-const tags = await getAllTags(currentLang)
-
-const bounds = [
-  ...k.boxCorners(CABINET, -18, TOP),
-  ...typewriterBounds(),
-  ...cinemaBounds(),
-  ...newsrackBounds(),
-  ...toolboxBounds(),
-  ...labelsBounds(),
-]
-const P = k.fitProjection(bounds, W, H, {
-  pad: 30,
-  azimuth: 90,
-  elevation: 18,
-  focal: 1200,
-  center: [0, 0, 55],
-})
-
-const coverGlob = import.meta.glob<{ default: ImageMetadata }>(
-  '/src/content/posts/_images/**/*.{jpeg,jpg,png,gif,webp}',
-  { eager: true },
-)
-
-function coverOf(post: { body?: string }): string {
-  const m = (post.body || '').match(/!\[[^\]]*\]\((.*?\.(?:webp|jpg|jpeg|png|gif))\)/)
-  if (!m)
-    return ''
-  const raw = decodeURIComponent(m[1])
-  if (raw.startsWith('http'))
-    return raw
-  if (raw.startsWith('./_images/') || raw.startsWith('../_images/')) {
-    const name = raw.replace(/^(\.\.?\/)?_images\//, '')
-    const entry = coverGlob[`/src/content/posts/_images/${name}`]
-    return entry ? entry.default.src : ''
-  }
-  return ''
-}
-
-const columnTag = currentLang === 'zh' || currentLang === 'zh-tw' ? '专栏' : 'Journal'
-// every column issue hangs on the rack — the count follows the content
-const columns = await getPostsByTag(columnTag, currentLang)
-const issues = columns.map((post) => {
-  const abbr = post.data.abbrlink || ''
-  const m = abbr.match(/weekly-(\d+)/)
-  const n = m ? m[1] : ''
-  return {
-    number: n ? `No.${n}` : '',
-    label: post.data.title,
-    href: getPostPath(abbr || post.id, currentLang),
-    cover: coverOf(post),
-  }
-})
-
-const perLine = currentLang === 'zh' ? 18 : 26
-const maxLines = 6
-
-/** A plain-text excerpt of the latest post, wrapped to the sheet. */
-function excerptLines(body: string, width: number, rows: number): string[] {
-  const text = body
-    .replace(/```[\s\S]*?```/g, ' ')
-    .replace(/!\[[^\]]*\]\([^)]*\)/g, ' ')
-    .replace(/\[([^\]]*)\]\([^)]*\)/g, '$1')
-    .replace(/<[^>]+>/g, ' ')
-    .replace(/^#{1,6}\s+/gm, '')
-    .replace(/[>*_`~]/g, '')
-    .replace(/\s+/g, ' ')
-    .trim()
-  const chars = [...text]
-  const lines: string[] = []
-  let cursor = 0
-  while (cursor < chars.length && lines.length < rows) {
-    let take = Math.min(width, chars.length - cursor)
-    if (chars[cursor + take] && /\S/.test(chars[cursor + take - 1] ?? ' ') && /\S/.test(chars[cursor + take])) {
-      let back = take
-      while (back > width * 0.5 && chars[cursor + back - 1] !== ' ') back--
-      if (chars[cursor + back - 1] === ' ') take = back - 1
-    }
-    if (take <= 0) take = Math.min(width, chars.length - cursor)
-    lines.push(chars.slice(cursor, cursor + take).join('').trim())
-    cursor += take
-    while (chars[cursor] === ' ') cursor++
-  }
-  if (cursor < chars.length && lines.length) {
-    const last = lines[lines.length - 1]
-    lines[lines.length - 1] = `${[...last].slice(0, width - 1).join('')}…`
-  }
-  return lines.filter(Boolean)
-}
-
-const typedLines = excerptLines(latest?.body ?? '', perLine, maxLines)
-
-const paperHref = latest
-  ? getPostPath(latest.data.abbrlink || latest.id, currentLang)
-  : getLocalizedPath('/posts/', currentLang)
-
-const toolboxLabels = currentLang === 'zh'
-  ? ['工具', '学习', '作者']
-  : ['TOOLS', 'LEARN', 'PEOPLE']
-
-const modules = ids.map((id, index) => {
-  const caption = labels[index]
-  const body = index === 0
-    ? buildTypewriter(P, {
-        lines: typedLines,
-        paperHref,
-        paperLabel: currentLang === 'zh' ? `阅读最新一篇：${latest?.data.title ?? ''}` : `Read the latest: ${latest?.data.title ?? ''}`,
-      })
-    : index === 1
-      ? buildCinema(P, { caption })
-      : index === 2
-        ? buildNewsrack(P, { issues })
-        : index === 3
-          ? buildToolbox(P, { labels: toolboxLabels })
-          : buildLabels(P, { tags, caption })
-  return `<g class="home-module${index === 0 ? ' is-active' : ''}" data-index="${index}" data-module="${id}" data-position="0">${body}</g>`
-}).join('')
+const data = await stageData(currentLang)
 
 const svg = `<svg class="iso-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" role="group" aria-label="CGArtLab：一台控制台，面板上有五个栏目按键，当前展示的装置立在升降台上。">
-${chassisDefs(P)}
-${buildChassis(P, { labels, labelSize: currentLang === 'zh' ? 9 : 8 })}
-<g class="home-modules" clip-path="url(#home-deck-clip)">${modules}</g>
-<g role="navigation" aria-label="${currentLang === 'zh' ? '站内导航' : 'Site sections'}">${buildChannelLinks(P, { labels, hrefs, active: 0 })}</g>
+${chassisDefs(data.P)}
+${buildChassis(data.P, { labels: data.labels, labelSize: currentLang === 'zh' ? 9 : 8 })}
+<g class="home-modules" clip-path="url(#home-deck-clip)">${data.modules[0]}</g>
+<g role="navigation" aria-label="${currentLang === 'zh' ? '站内导航' : 'Site sections'}">${buildChannelLinks(data.P, { labels: data.labels, hrefs: data.hrefs, active: 0 })}</g>
 </svg>`
 
-// the mouth of the well, in stage units: the machines rise out of it, so the
-// deck mask and every module's rise hang off this point
-const [wellX, wellY] = k.iso([0, 0, TOP], P)
+// The four machines that are not inlined: they are fetched after the page has
+// painted, so the first screen is the console and one machine rather than five.
+const late = [1, 2, 3, 4].map(i => lateModulePath(currentLang, i)).join(',')
 
 const isDefault = currentLang === defaultLocale
 ---
 
 <div
   class="home-stage"
-  style={`--well-x:${wellX.toFixed(1)}px;--well-y:${wellY.toFixed(1)}px`}
+  style={`--well-x:${data.wellX.toFixed(1)}px;--well-y:${data.wellY.toFixed(1)}px`}
   data-home-stage
-  data-typed={JSON.stringify(typedLines)}
+  data-typed={JSON.stringify(data.typedLines)}
+  data-late={late}
   data-lang={currentLang}
   data-is-default={isDefault ? '' : undefined}
 >
