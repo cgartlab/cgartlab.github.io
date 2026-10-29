@@ -15,6 +15,9 @@
 }
 .heti:is(:lang(zh), :lang(ja), :lang(ko)) {
 	letter-spacing: 0.025em;
+	/* R1：中文与拉丁/数字之间由排版引擎留出 1/8 em，不必用 pangu.js 改写文案。
+	   不支持该属性的浏览器直接忽略，回退到现状。见 issue #459。 */
+	text-autospace: normal;
 }
 
 /* Customized Post Title */
