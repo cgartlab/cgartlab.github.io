@@ -600,6 +600,9 @@ html.reduce-motion .home-key { animation: none; transition: none; }
   .home-nav {
     display: flex;
     flex-wrap: wrap;
+    /* the links stretch to the grid row otherwise, and their underline is left
+       floating a line below the label it belongs to */
+    align-items: baseline;
     gap: 0.35rem 1.1rem;
     font-family: var(--un-preset-theme-font-family-sans);
     font-size: 0.78rem;

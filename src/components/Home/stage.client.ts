@@ -28,6 +28,12 @@ const BOOT_TOTAL = 4000
 const SCREEN_DELAY = 2950
 /** the frame's rect is cached; layout is re-read at most this often */
 const RECT_TTL = 250
+/** tablet and phone: there is no hover, so the machine turns itself over */
+const COMPACT = '(max-width: 899px), (hover: none)'
+/** one machine per turn, long enough for the swap and a beat of stillness */
+const AUTO_SWAP = 6000
+
+const isCompact = (): boolean => window.matchMedia(COMPACT).matches
 
 interface State {
   stage: HTMLElement
@@ -44,6 +50,7 @@ interface State {
   timer: number
   resume: number
   swapTimer: number
+  autoTimer: number
   bootTimer: number
   bootEnd: number
   /** a key chosen while the chassis is still building, seated at 1200 ms */
@@ -484,6 +491,33 @@ function scheduleExit(m: SVGGElement, svg: SVGSVGElement): number {
 }
 
 /**
+ * The turn, for screens without a pointer.
+ *
+ * Hover is not a thing on a phone, and tapping a key leaves the page, so the
+ * platform turns itself over: one machine every AUTO_SWAP, in the order the
+ * keys are printed. It stands still while the tab is hidden or the stage is
+ * scrolled away, and it stops for good the moment the reader takes over.
+ */
+function startCycle(s: State): void {
+  if (!isCompact() || s.autoTimer)
+    return
+  s.autoTimer = window.setInterval(() => {
+    if (document.hidden || s.stage.dataset.idle)
+      return
+    if (!isCompact())
+      return
+    setModule(s, (s.active + 1) % s.modules.length)
+  }, AUTO_SWAP)
+}
+
+function stopCycle(s: State): void {
+  if (!s.autoTimer)
+    return
+  window.clearInterval(s.autoTimer)
+  s.autoTimer = 0
+}
+
+/**
  * Swap choreography: the outgoing machine is taken apart top down — each part
  * comes off its seat along its own axis and falls into the well — and only
  * once the last of it has gone through the deck does the incoming one ride up
@@ -609,6 +643,7 @@ function mount(): void {
     timer: 0,
     resume: 0,
     swapTimer: 0,
+    autoTimer: 0,
     bootTimer: 0,
     bootEnd: 0,
     pending: -1,
@@ -711,18 +746,26 @@ function mount(): void {
   }
 
   const onOver = (event: Event) => {
+    // no hover on a touch screen: the keys navigate, they do not preview
+    if (isCompact())
+      return
     const target = event.target instanceof Element ? event.target : null
     const link = target?.closest('.home-channel')
     if (!link)
       return
+    stopCycle(s)
     setModule(s, Number(link.getAttribute('data-index')))
   }
 
   const onFocus = (event: Event) => {
+    if (isCompact())
+      return
     const target = event.target instanceof Element ? event.target : null
     const link = target?.closest('.home-channel')
-    if (link)
+    if (link) {
+      stopCycle(s)
       setModule(s, Number(link.getAttribute('data-index')))
+    }
   }
 
   const onVisibility = () => {
@@ -763,6 +806,7 @@ function mount(): void {
 
   s.cleanup = () => {
     detachProjection()
+    stopCycle(s)
     window.removeEventListener('keydown', onKey)
     stage.removeEventListener('pointermove', onPointerMove)
     stage.removeEventListener('pointerdown', onPointerDown)
@@ -780,6 +824,7 @@ function mount(): void {
     // every control is already live
     s.ready = true
     setModule(s, 0)
+    startCycle(s)
     return
   }
 
@@ -797,6 +842,7 @@ function mount(): void {
     startTour(s)
     // and the machines measure their fall while nothing else is happening
     precomputeDrops(s)
+    startCycle(s)
   }, BOOT_TOTAL)
 }
 
