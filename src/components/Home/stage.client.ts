@@ -65,6 +65,7 @@ interface State {
   resume: number
   swapTimer: number
   zoomTimer: number
+  zoomMaskTimer: number
   autoTimer: number
   bootTimer: number
   bootEnd: number
@@ -443,6 +444,9 @@ function zoomIn(s: State, index: number): void {
   const y = oy + (fy - vb.y) * scale
   s.svg.style.setProperty('--zoom-x', `${x.toFixed(1)}px`)
   s.svg.style.setProperty('--zoom-y', `${y.toFixed(1)}px`)
+  // the feathered edge goes on with the push: what runs past the stage is
+  // faded out, not cut
+  s.stage.classList.add('is-zoomed')
   s.svg.style.setProperty('--zoom', String(ZOOM))
   window.clearTimeout(s.zoomTimer)
   s.zoomTimer = window.setTimeout(() => zoomOut(s), ZOOM_HOLD)
@@ -453,6 +457,10 @@ function zoomOut(s: State): void {
   window.clearTimeout(s.zoomTimer)
   s.zoomTimer = 0
   s.svg.style.setProperty('--zoom', '1')
+  // the feather stays until the pull-back has finished; at rest the drawing sits
+  // inside the stage's padding and there is nothing near the edges to fade
+  window.clearTimeout(s.zoomMaskTimer)
+  s.zoomMaskTimer = window.setTimeout(() => s.stage.classList.remove('is-zoomed'), 950)
 }
 
 /**
@@ -886,6 +894,7 @@ function mount(): void {
     resume: 0,
     swapTimer: 0,
     zoomTimer: 0,
+    zoomMaskTimer: 0,
     autoTimer: 0,
     bootTimer: 0,
     bootEnd: 0,
@@ -1053,6 +1062,7 @@ function mount(): void {
     detachProjection()
     stopCycle(s)
     window.clearTimeout(s.zoomTimer)
+    window.clearTimeout(s.zoomMaskTimer)
     window.removeEventListener('keydown', onKey)
     stage.removeEventListener('pointermove', onPointerMove)
     stage.removeEventListener('pointerdown', onPointerDown)
