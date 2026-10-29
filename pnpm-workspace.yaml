@@ -33,7 +33,8 @@ overrides:
   # 安全修复：DOMPurify IN_PLACE 模式下 afterSanitize 钩子移除节点后，
   # 游离子树的事件处理器仍然存活，可导致 DOM XSS (GHSA-p98j-92pf-mc4p)
   # 受影响范围 >=3.4.13 <=3.4.15，3.4.16 起修复；mermaid 自身依赖 ^3.3.3，无需连带升级
-  dompurify@3: ^3.4.16
+  # 2026-10 新 advisory（SAFE_FOR_TEMPLATES bypass / IN_PLACE 钩子）将修补线推至 3.4.17，升一档补丁
+  dompurify@3: ^3.4.17
   esbuild: '>=0.28.1'
   # 安全修复：fast-uri authority 注入 (GHSA-qw65-cvwx-89v3) + 未闭合括号主机混淆 (GHSA-58mr-gqgx-xq4g)
   # ajv 依赖 fast-uri ^3.0.1，3.1.8 为同 minor 补丁；前两项告警均在 3.1.7 起修复
@@ -67,6 +68,11 @@ overrides:
   # 安全修复：undici WebSocket permessage-deflate 解压 DoS (GHSA-3wwx-pv8p-q78v)
   # 仅约束 7.x（miniflare 精确钉 7.29.0）；astro 链上的 undici 8.x 不受影响
   undici@7: ^7.29.1
+  # 2026-10 新 advisory：undici 8.x 未处理异常导致 DoS (GHSA 多则，<8.12.2)，astro 链经 unifont 引入 8.11.2
+  undici@8: ^8.12.2
+  # 2026-10 新 advisory：zod 校验超大约束集合时内存耗尽 (GHSA-mrhx-c7xc-m3w5，<4.6.6)
+  # @astrojs/sitemap 仍引入 zod 4.6.1，astro 链其他处已解析到 4.6.6+，统一定级收口
+  zod: ^4.6.6
   # 安全修复：@vue/server-renderer 属性名黑名单缺 CR 导致 XSS (GHSA-g2v6-rqmx-r4w6)
   # 受影响 <3.5.42（或 3.6.0-rc.0 ~ 3.6.0-rc.6）；@vue/server-renderer 与 vue 同版本发布，
   # 故整体钉 vue 到同 minor 补丁 3.5.42，避免子包与 vue 核心版本错位
