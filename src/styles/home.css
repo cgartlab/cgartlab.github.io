@@ -832,11 +832,13 @@ html[data-home-section='works'][data-screening='on'] .home-projection { opacity:
 .home-projection-frame {
   position: absolute;
   left: 0;
-  top: 0;
   /* the picture fills the page width and hangs from the top edge, the way a
-     throw from the machine would land on the wall behind the page */
+     throw from the machine would land on the wall behind the page. On a phone
+     the page is a column and the top edge is the headline, so the script
+     measures the stage and puts the frame behind the machine instead. */
+  top: var(--projection-top, 0);
   width: 100vw;
-  height: min(62vh, 56.25vw);
+  height: var(--projection-height, min(62vh, 56.25vw));
   overflow: hidden;
   /* a projected picture is never sharp. The blur is a real gaussian (CSS blur
      is one); the edge is the part that used to read as a band, so it is a

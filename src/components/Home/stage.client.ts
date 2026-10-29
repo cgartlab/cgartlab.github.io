@@ -32,6 +32,8 @@ const RECT_TTL = 250
 const COMPACT = '(max-width: 899px), (hover: none)'
 /** one machine per turn, long enough for the swap and a beat of stillness */
 const AUTO_SWAP = 6000
+/** 作品 holds: its reel is the reason to stop there, so it gets the time to play */
+const AUTO_SWAP_WORKS = 30000
 
 const isCompact = (): boolean => window.matchMedia(COMPACT).matches
 
@@ -219,6 +221,27 @@ function projectionVideo(): HTMLVideoElement | null {
 
 function projectionFrame(): HTMLElement | null {
   return document.querySelector<HTMLElement>(FRAME)
+}
+
+/**
+ * Where the picture hangs.
+ *
+ * On a wide screen it is the wall behind the page: full width, pinned to the
+ * top edge, with the machine standing in front of its lower half. On a phone
+ * the page is a column — copy, machine, foot — and a band pinned to the top
+ * would land across the headline, so the frame is put behind the machine
+ * instead, on the blank ground the stage sits on.
+ */
+function placeProjection(s: State): void {
+  const root = document.documentElement
+  if (!isCompact()) {
+    root.style.removeProperty('--projection-top')
+    root.style.removeProperty('--projection-height')
+    return
+  }
+  const rect = s.stage.getBoundingClientRect()
+  root.style.setProperty('--projection-top', `${Math.round(rect.top)}px`)
+  root.style.setProperty('--projection-height', `${Math.round(rect.height)}px`)
 }
 
 /** The layer is fixed and static, so its rect only moves on resize — cache it. */
@@ -501,19 +524,25 @@ function scheduleExit(m: SVGGElement, svg: SVGSVGElement): number {
 function startCycle(s: State): void {
   if (!isCompact() || s.autoTimer)
     return
-  s.autoTimer = window.setInterval(() => {
-    if (document.hidden || s.stage.dataset.idle)
+  const current = s.modules.find(m => Number(m.dataset.index) === s.active)
+  const hold = current?.dataset.module === 'works' ? AUTO_SWAP_WORKS : AUTO_SWAP
+  s.autoTimer = window.setTimeout(() => {
+    s.autoTimer = 0
+    // a hidden tab or a stage that has been scrolled away does not get a turn;
+    // try again after the same hold
+    if (document.hidden || s.stage.dataset.idle || !isCompact()) {
+      startCycle(s)
       return
-    if (!isCompact())
-      return
+    }
     setModule(s, (s.active + 1) % s.modules.length)
-  }, AUTO_SWAP)
+    startCycle(s)
+  }, hold)
 }
 
 function stopCycle(s: State): void {
   if (!s.autoTimer)
     return
-  window.clearInterval(s.autoTimer)
+  window.clearTimeout(s.autoTimer)
   s.autoTimer = 0
 }
 
@@ -663,6 +692,7 @@ function mount(): void {
     syncHover()
   }
   const onProjectionResize = () => {
+    placeProjection(s)
     refreshFrame()
     syncHover()
   }
@@ -825,6 +855,7 @@ function mount(): void {
     s.ready = true
     setModule(s, 0)
     startCycle(s)
+    placeProjection(s)
     return
   }
 
@@ -843,6 +874,7 @@ function mount(): void {
     // and the machines measure their fall while nothing else is happening
     precomputeDrops(s)
     startCycle(s)
+    placeProjection(s)
   }, BOOT_TOTAL)
 }
 
