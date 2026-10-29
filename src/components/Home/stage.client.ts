@@ -905,10 +905,16 @@ function drawLeader(s: State, index = s.active): void {
   // chassis' own part would be a different box on every switch.
   const x0 = tag.left + tag.width / 2 - box.left
   const y0 = tag.top - box.top - 8
-  const keyBottom = k.bottom - box.top
-  const y1 = keyBottom + 4
-  const rail = keyBottom + 18
-  if (rail >= y0 || y1 >= rail)
+  // Everything the line does happens in the band under the machine: the rail
+  // and the elbow sit below its feet, so the fold never crosses the base. The
+  // tick rises from the rail to point up at the key's column.
+  const rail = y0 - 22
+  // the tick rises to just under the model's feet (its contact shadow), so it
+  // points at the key without touching the base
+  const foot = s.svg.querySelector<SVGGraphicsElement>('.home-chassis .home-part[data-part="shadow"]')
+  const floor = foot ? foot.getBoundingClientRect().bottom - box.top : rail - 12
+  const y1 = Math.min(floor + 2, rail - 10)
+  if (y1 >= rail || y1 <= k.bottom - box.top)
     return
 
   const x1 = k.left + k.width / 2 - box.left
