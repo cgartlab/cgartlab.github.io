@@ -28,6 +28,9 @@ const BOOT_TOTAL = 4000
 const SCREEN_DELAY = 2950
 /** the frame's rect is cached; layout is re-read at most this often */
 const RECT_TTL = 250
+/** how far the camera pushes in on a switch, and how long it stays there */
+const ZOOM = 1.75
+const ZOOM_HOLD = 3200
 /** tablet and phone: there is no hover, so the machine turns itself over */
 const COMPACT = '(max-width: 899px), (hover: none)'
 /** one machine per turn, long enough for the swap and a beat of stillness */
@@ -61,6 +64,7 @@ interface State {
   timer: number
   resume: number
   swapTimer: number
+  zoomTimer: number
   autoTimer: number
   bootTimer: number
   bootEnd: number
@@ -351,6 +355,46 @@ function projectSection(section: string): void {
 }
 
 /**
+ * Push the picture in on the machine's upper half.
+ *
+ * The mechanism is up there — the platen and the sheet, the reels, the roll, the
+ * lid — and at the sheet's scale it is too small to read. The drawing itself is
+ * scaled about a point over the machine, so the move is one transform rather
+ * than a re-layout, and it is aimed with the machine's own bounding box rather
+ * than a hand-tuned point per device.
+ */
+function zoomIn(s: State, index: number): void {
+  const m = s.modules.find(x => Number(x.dataset.index) === index)
+  if (!m || prefersReducedMotion())
+    return
+  const rect = s.svg.getBoundingClientRect()
+  const vb = s.svg.viewBox.baseVal
+  if (!rect.width || !vb.width)
+    return
+  // the aim was measured at rest (see precomputeDrops); mid-assembly the
+  // module's own box is swollen by parts still in flight
+  const fx = Number(m.dataset.focusX) || 380
+  const fy = Number(m.dataset.focusY) || 300
+  const scale = Math.min(rect.width / vb.width, rect.height / vb.height)
+  const ox = (rect.width - vb.width * scale) / 2
+  const oy = (rect.height - vb.height * scale) / 2
+  const x = ox + (fx - vb.x) * scale
+  const y = oy + (fy - vb.y) * scale
+  s.svg.style.setProperty('--zoom-x', `${x.toFixed(1)}px`)
+  s.svg.style.setProperty('--zoom-y', `${y.toFixed(1)}px`)
+  s.svg.style.setProperty('--zoom', String(ZOOM))
+  window.clearTimeout(s.zoomTimer)
+  s.zoomTimer = window.setTimeout(() => zoomOut(s), ZOOM_HOLD)
+}
+
+/** Back to the whole sheet. */
+function zoomOut(s: State): void {
+  window.clearTimeout(s.zoomTimer)
+  s.zoomTimer = 0
+  s.svg.style.setProperty('--zoom', '1')
+}
+
+/**
  * Which machine is on the platform. Hovering a key swaps it, and it stays
  * swapped until another key is chosen — the reader's selection is not undone
  * by moving the pointer away.
@@ -386,6 +430,10 @@ function applyModule(s: State, index: number): void {
 
   document.documentElement.dataset.homeSection = section
   projectSection(section)
+  // the camera moves in as the machine comes up; the first seat (the boot) is
+  // left wide, it is the page arriving rather than a switch
+  if (s.ready)
+    zoomIn(s, index)
 }
 
 /**
@@ -642,6 +690,8 @@ function setModule(s: State, index: number): void {
   }
   // a switch always plays, even if the stage was holding still off screen
   s.stage.removeAttribute('data-idle')
+  // and it is taken apart in the wide view
+  zoomOut(s)
   // the sheet stops feeding the moment the machine starts to come apart, or the
   // rewind distance measured a frame ago is already stale
   stopTour(s)
@@ -696,8 +746,30 @@ function seatDevice(s: State): void {
  */
 function precomputeDrops(s: State): void {
   const run = () => {
-    for (const m of s.modules)
+    for (const m of s.modules) {
       measureDrops(s.svg, m)
+      // and the point the camera aims at: the union of the machine's own parts,
+      // read while it is off the platform (no transforms on it). The whole
+      // module's box is no use — the projector's beam and the tag wall are
+      // parts of it, and they reach far past the machine.
+      let x0 = Number.POSITIVE_INFINITY
+      let x1 = Number.NEGATIVE_INFINITY
+      let y0 = Number.POSITIVE_INFINITY
+      let y1 = Number.NEGATIVE_INFINITY
+      for (const p of m.querySelectorAll<SVGGElement>('.home-part')) {
+        const b = p.getBBox()
+        if (!b.width || !b.height || b.width > 420 || b.height > 420)
+          continue
+        x0 = Math.min(x0, b.x)
+        x1 = Math.max(x1, b.x + b.width)
+        y0 = Math.min(y0, b.y)
+        y1 = Math.max(y1, b.y + b.height)
+      }
+      if (x1 > x0 && y1 > y0) {
+        m.dataset.focusX = String(Math.round((x0 + x1) / 2))
+        m.dataset.focusY = String(Math.round(y0 + (y1 - y0) * 0.28))
+      }
+    }
   }
   if (typeof window.requestIdleCallback === 'function')
     window.requestIdleCallback(run, { timeout: 1500 })
@@ -752,6 +824,7 @@ function mount(): void {
     timer: 0,
     resume: 0,
     swapTimer: 0,
+    zoomTimer: 0,
     autoTimer: 0,
     bootTimer: 0,
     bootEnd: 0,
@@ -917,6 +990,7 @@ function mount(): void {
   s.cleanup = () => {
     detachProjection()
     stopCycle(s)
+    window.clearTimeout(s.zoomTimer)
     window.removeEventListener('keydown', onKey)
     stage.removeEventListener('pointermove', onPointerMove)
     stage.removeEventListener('pointerdown', onPointerDown)
