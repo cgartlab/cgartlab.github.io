@@ -59,7 +59,8 @@ cgartlab.github.io/
 | `src/content/` | 内容唯一来源（文章/专栏/作品/图） | 写作目标，构建时采集 |
 | `src/plugins/` | Markdown 管线插件（管线共 6 remark + 8 rehype，其中本地 9 个：4 remark + 5 rehype，其余为 npm 包） | **顺序敏感**，插入须确认依赖 |
 | `src/styles/` | 纯 CSS 层，不经 UnoCSS transform | 必须用 CSS 变量引用颜色 |
-| `src/lib/` + `src/worker.mjs` | 服务端逻辑（RSS→TG 推送、缓存头、安全头） | 改动需 `wrangler` 部署验证 |
+| `src/lib/` + `src/worker.mjs` | 服务端逻辑（RSS→TG 推送、缓存头、安全头）+ 首页装置的构建期 SVG 生成器（`home/`）与 vendored anatomy kit（`anatomy/`） | 改动需 `wrangler` 部署验证；装置改动见「首页装置」 |
+| `src/components/Home/` | 首页舞台：`HomeStage.astro`（构建期拼 SVG）+ `stage.client.ts`（装配/拆解/轮换/放大/打字）+ `copy.client.ts` | 运行时只动类名与 CSS 变量，几何在构建期定死 |
 | `public/` | 静态资源，直映射站点根 | 文件名 = 线上 URL |
 | `scripts/` | 构建/运维脚本 | 见 COMMANDS |
 | `.github/` | CI、模板、Dependabot | 仓库已转 **public**；`protect-main` ruleset 虽存在，但 `rules/branches/main` 返回 `[]` → main **实际无强制保护**，合并前须自行确认 CI 全绿与评审结论 |
@@ -155,6 +156,34 @@ pnpm update-gh-contributions  # 更新贡献热力图数据 → src/data/github-
 | 样式分层 | `src/config.ts` + `uno.config.ts` + `src/styles/*.css` | 配置→UnoCSS 变量→纯 CSS，三层解耦，纯 CSS 不经过 UnoCSS transform |
 | 暗色模式 | `uno.config.ts` + `src/styles/*.css` | unocss-preset-theme 生成 `:root`/`.dark` 两套 CSS 变量覆盖 |
 | 字体系统 | `src/styles/font.css` + `uno.config.ts` fontFamily | 四组字体族（title/navbar/time/serif），Vite 插件在构建时重写 URL |
+| 首页装置 | `src/lib/home/*.mjs` + `src/components/Home/` + `src/styles/home*.css` | 五台等距装置 + 控制台，构建期生成 SVG、运行期只装配/拆解/切换，见下节 |
+
+## 首页装置（Home Stage）
+
+一屏首页就是一台可换装的等距仪器：控制台固定在下方，五台装置（打字机 = 文章、放映机 = 作品、
+报架 = 专栏、工具箱 = 资源、标签机 = 标签）轮流从井里升起、现场装配，悬停栏目键切换（触屏自动轮换）。
+
+| 件 | 位置 | 职责 |
+|---|---|---|
+| 构建期几何 | `src/lib/home/{typewriter,cinema,newsrack,toolbox,labels,chassis}.mjs` | 每台装置返回 `part()` 序列（SVG 片段 + 入场轴 + 名次），坐标全在构建期定死 |
+| 几何工具 | `src/lib/home/frame.mjs` | 相机与 `axisStyle(P, from, to, travel)`：产出 `--axis-*` / `--travel` / `--pivot-*`，六份 CSS 共用 |
+| 等距 kit | `src/lib/anatomy/` | vendored anatomy kit（`iso-kit` / `lathe` / `tube` / `gl`），带 LICENSE，勿改上游语义 |
+| 组装 | `src/components/Home/HomeStage.astro` | 调上述模块拼成一张 `<svg class="iso-svg">`，含 `well` 井口坐标 |
+| 运行时 | `src/components/Home/stage.client.ts` | 装配/退场/轮换/放大/打字，只写类名与 CSS 变量，不生成几何 |
+| 样式 | `src/styles/home.css` + `src/styles/home-devices/*.css` | 舞台、装配关键帧、放大羽化、标签墙；装置各自一份 CSS |
+| 预览 | `scripts/home-stage/build.mjs` + `shot.mjs` | 生成独立预览页与截图，**禁用 `.home-module` 动画** → 整机 rise 与盖板开合只能在真实页面验证 |
+
+不可违反的几条：
+
+- **相机固定** azimuth 90 / elevation 18 / focal 1200 / center `[0,0,55]`；要「推近」是缩放 `.iso-svg`，不是改相机
+- **入场必须是机械动作**（滑入 / 落入 / 铰链 / 旋入 / 螺纹），**禁止 `opacity` 淡入**；每台 ≥ 2 秒
+- **入场运动由几何轴心决定**：零件沿自己被装上的那根轴平移、绕自己的几何轴心缩放（用 `axisStyle`，别手写 `translate`）
+- **退场按建机逆序逐件下落**进井，不是整体被吸走
+- **放大时边缘不得硬切**：`zoomIn()` 给 `.home-stage` 加 `is-zoomed`，由 `home.css` 下发 6 段高斯肩部 `mask`（与视频画面同一套）。mask 必须挂在 `.home-stage` 上——挂在 `.iso-svg` 上会把 SVG 内容整体裁掉
+- **标签墙整体缩放**（`fitWall()`，≤ 2.2 倍、占舞台宽 92%），每张票的 `--fly-*` / `--out-*` 要按新比例重算，原始值存 `data-*` 避免二次缩放
+- **触屏判定** `(max-width: 899px), (hover: none)`：自动轮换，点键直接跳页；DWELL = posts 4s / works 30s / column 14s / resource 8s / tags 12s，且先等入场动画放完
+- **文案**：标题逐字打字（强调色光标），纸带打完后多走一行留白；`最新发布：` 整行统一字号
+- 文章列表已迁到 `/posts/`，`/search` 由 Worker 301 到首页搜索浮层
 
 ## CONTENT CONVENTIONS
 

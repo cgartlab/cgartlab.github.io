@@ -36,8 +36,24 @@ export function isHomePage(path: string) {
 	return matchPageType(path);
 }
 
+/**
+ * 文章列表页（/posts/）。与文章详情页（/posts/<slug>/）区分开：
+ * 列表页沿用首页的排版，详情页才用文章排版。
+ */
+export function isPostsListPage(path: string) {
+	const pathWithoutBase =
+		base && path.startsWith(base) ? path.slice(base.length) : path;
+	const normalizedPath = pathWithoutBase.replace(/^\/|\/$/g, "");
+	return (
+		normalizedPath === "posts" ||
+		(moreLocales as readonly string[]).some(
+			(lang) => normalizedPath === `${lang}/posts`,
+		)
+	);
+}
+
 export function isPostPage(path: string) {
-	return matchPageType(path, "posts");
+	return matchPageType(path, "posts") && !isPostsListPage(path);
 }
 
 export function isTagPage(path: string) {
@@ -76,6 +92,7 @@ export function isContactPage(path: string) {
 export function getPageInfo(path: string) {
 	const currentLang = getLangFromPath(path);
 	const isHome = isHomePage(path);
+	const isPostsList = isPostsListPage(path);
 	const isPost = isPostPage(path);
 	const isTag = isTagPage(path);
 	const isAbout = isAboutPage(path);
@@ -89,6 +106,7 @@ export function getPageInfo(path: string) {
 	return {
 		currentLang,
 		isHome,
+		isPostsList,
 		isPost,
 		isTag,
 		isAbout,

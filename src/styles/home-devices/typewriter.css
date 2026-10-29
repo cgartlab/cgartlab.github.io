@@ -1,0 +1,609 @@
+/* ==========================================================================
+   01 — 文章: the typewriter
+   The machine is built in sixteen passes, in the order a typewriter is actually
+   assembled, and every pass is a sub-assembly of its own:
+
+     feet → case → keyboard decks → key rows → typebar basket → ribbon fork →
+     margin bell → carriage rails → platen → knobs → return lever → paper bail →
+     ribbon threaded → side covers → nameplate → sheet → first run
+
+   No part fades in. Each one is solid from the first frame and arrives by the
+   motion its own mechanism would make — and along its own axis, read off the
+   drawing rather than picked in screen space (`axisStyle` in frame.mjs writes
+   `--axis-x/--axis-y/--travel` and the pivot from two world points): the feet
+   rise out of the ground they stand on, the case is lowered onto them, the
+   decks and their keys travel up the key stroke and land on the face they are
+   bolted to, the basket swings open out of the segment, the fork and the bell
+   turn down their own screws, the rails slide in along their own length, the
+   platen comes up square to the roller and rolls as it settles, the knobs are
+   pressed on along the axle and twisted, the lever slides on and hinges at its
+   real root, the bail flips down about the line it clamps on, the covers close
+   along their own normals, the plate is stuck on and screwed square to the
+   case, and the sheet is fed up through the roller along the page's own axis.
+
+   Delays are relative to the module picking up `.is-active`; the last
+   sub-assembly lands at 2380 ms and the machine is run for the first time at
+   2420 ms. Every animation ends on `transform: none`, so the assembled machine
+   is exactly the static drawing — which is why every entry carries
+   `backwards` and never `both`: only the pre-state (the part still off its
+   seat, before its delay is up) has to be held, and holding the *end* state
+   instead would leave forty-odd finished animations on the machine for the
+   life of the page, each one owning the `transform` of the part it was
+   written for. The one animation that does end somewhere other than its rest
+   position — the sheet being wound back into the roller on the way out —
+   keeps `both`, and says so where it is declared.
+   ========================================================================== */
+
+/* 01 the feet: they rise out of the platform and take the case's weight ------ */
+/* The axis is the ground they stand on, so the pivot is the sole plane: the
+   little scale grows them up off the platform instead of swelling them. */
+.home-module.is-active .home-part[data-part='tw-feet'] {
+  transform-box: view-box;
+  transform-origin: var(--pivot-x, 50%) var(--pivot-y, 50%);
+  animation: tw-feet-seat 300ms cubic-bezier(0.2, 0.85, 0.3, 1) 0ms backwards;
+}
+
+/* 02 the case: lowered onto the four feet, a touch too far, then back up ----- */
+.home-module.is-active .home-part[data-part='base'] {
+  transform-box: view-box;
+  transform-origin: var(--pivot-x, 50%) var(--pivot-y, 50%);
+  animation: tw-base-seat 440ms cubic-bezier(0.22, 0.9, 0.24, 1) 80ms backwards;
+}
+
+/* 03 the four stepped decks: each rises up its own step of the keyboard ------ */
+.home-module.is-active .home-part[data-part='deck'] {
+  transform-box: view-box;
+  transform-origin: var(--pivot-x, 50%) var(--pivot-y, 50%);
+  animation: tw-deck-rise 260ms cubic-bezier(0.22, 0.9, 0.24, 1) calc(220ms + var(--step) * 80ms) backwards;
+}
+
+/* 04 the keys: up with their deck, then pressed home a beat behind it -------- */
+/* A key's axis is its travel, so each row lands on the deck it belongs to. */
+.home-module.is-active .home-part[data-part='keys'] {
+  transform-box: view-box;
+  transform-origin: var(--pivot-x, 50%) var(--pivot-y, 50%);
+  animation: tw-key-rise 300ms cubic-bezier(0.22, 0.9, 0.24, 1) calc(310ms + var(--step) * 80ms) backwards;
+}
+
+/* 05 the typebar basket: the fan swings open out of the segment ------------- */
+/* The nine bars are parallel in the drawing and only splay apart in x, so the
+   fold cannot be an in-plane rotation: it is a squeeze about the segment, which
+   is the top of the group's box because the segment sits behind and above the
+   basket. The small rotation is the basket being swung up into the segment. */
+.home-module.is-active .home-part[data-part='mechanism'] {
+  transform-box: fill-box;
+  transform-origin: 50% 0%;
+  animation: tw-basket-open 330ms cubic-bezier(0.22, 0.9, 0.24, 1) 900ms backwards;
+}
+
+/* 06 the ribbon fork: screwed down into the gap between the two ribbon runs -- */
+/* It turns down its own screw, so its axis is vertical and its pivot is the
+   deck the two prongs stand on. */
+.home-module.is-active .home-part[data-part='tw-fork'] {
+  transform-box: view-box;
+  transform-origin: var(--pivot-x, 50%) var(--pivot-y, 50%);
+  animation: tw-fork-screw 240ms cubic-bezier(0.22, 0.9, 0.24, 1) 1000ms backwards;
+}
+
+/* 07 the margin bell: turned down onto its post at the left of the segment --- */
+.home-module.is-active .home-part[data-part='tw-bell'] {
+  transform-box: view-box;
+  transform-origin: var(--pivot-x, 50%) var(--pivot-y, 50%);
+  animation: tw-bell-screw 260ms cubic-bezier(0.3, 1.15, 0.4, 1) 1080ms backwards;
+}
+
+/* 08 the rails: they slide in along the line the carriage will travel -------- */
+/* The only parts whose axis is their own length: the rail is the line. */
+.home-module.is-active .home-part[data-part='carriage'] {
+  transform-box: view-box;
+  transform-origin: var(--pivot-x, 50%) var(--pivot-y, 50%);
+  animation: tw-carriage-slide 320ms cubic-bezier(0.22, 0.9, 0.24, 1) calc(1200ms + var(--step) * 60ms) backwards;
+}
+
+/* 09 the platen: dropped into its bearings, once, with one bounce ----------- */
+/* Its own axis is the roller, but it is fitted square to that axis, so the
+   travel is vertical through the roller's middle and the small turn is the
+   roller rolling as it settles. */
+.home-module.is-active .home-part[data-part='platen'] {
+  transform-box: view-box;
+  transform-origin: var(--pivot-x, 50%) var(--pivot-y, 50%);
+  animation:
+    tw-platen-seat 340ms cubic-bezier(0.3, 0.9, 0.4, 1) 1420ms backwards,
+    tw-travel 360ms cubic-bezier(0.4, 0, 0.25, 1) 2420ms;
+}
+
+/* 10 the knobs: each pressed on along the roller's axis and twisted home ----- */
+/* `--step` is 0 on the left knob and 1 on the right, but the side is in the
+   axis now: the left knob's axis points in, the right knob's points in from the
+   other side, so the same keyframes close the pair on the roller. */
+.home-module.is-active .home-part[data-part='tw-knob'] {
+  transform-box: view-box;
+  transform-origin: var(--pivot-x, 50%) var(--pivot-y, 50%);
+  animation:
+    tw-knob-press 300ms cubic-bezier(0.22, 0.9, 0.24, 1) calc(1500ms + var(--step) * 70ms) backwards,
+    tw-travel 360ms cubic-bezier(0.4, 0, 0.25, 1) 2420ms;
+}
+
+/* 11 the return lever: the collar slides on, the arm swings down onto it ----- */
+/* The collar is clamped on the platen's axle and must not move once it is on;
+   only the arm is hinged, and its hinge is written into the markup at the arm's
+   root. The group's own axis is that axle, so the pivot is the hinge itself. */
+.home-module.is-active .home-part[data-part='tw-lever'] {
+  transform-box: view-box;
+  transform-origin: var(--pivot-x, 50%) var(--pivot-y, 50%);
+  animation:
+    tw-lever-seat 300ms cubic-bezier(0.3, 0.9, 0.35, 1) 1640ms backwards,
+    tw-travel 360ms cubic-bezier(0.4, 0, 0.25, 1) 2420ms;
+}
+
+.home-stage .tw-lever-arm {
+  transform-box: view-box;
+}
+
+.home-module.is-active .home-part[data-part='tw-lever'] .tw-lever-arm {
+  animation: tw-lever-hinge 300ms cubic-bezier(0.3, 0.9, 0.35, 1) 1640ms backwards;
+}
+
+/* 12 the paper bail: it flips down onto the front of the roller ------------- */
+/* A hinged part too: its axis is the line its two arms clamp on, and the pivot
+   is that line's middle, so the flip is about the real hinge. */
+.home-module.is-active .home-part[data-part='tw-bail'] {
+  transform-box: view-box;
+  transform-origin: var(--pivot-x, 50%) var(--pivot-y, 50%);
+  animation:
+    tw-bail-hinge 300ms cubic-bezier(0.3, 0.9, 0.35, 1) 1700ms backwards,
+    tw-travel 360ms cubic-bezier(0.4, 0, 0.25, 1) 2420ms;
+}
+
+/* 13 the ribbon: it is drawn out of the left spool and through the fork ------ */
+.home-module.is-active .home-part[data-part='tw-ribbon'] {
+  animation: none;
+}
+
+.home-module.is-active .home-part[data-part='tw-ribbon'] .tw-ribbon {
+  animation: tw-ribbon-thread 420ms cubic-bezier(0.3, 0.7, 0.3, 1) 1760ms backwards;
+}
+
+/* 14 the side covers: each slides shut from its own side of the case -------- */
+/* Each panel carries the normal of its own face, so the pair closes inward
+   without a hand-written sign: the axis already knows which side it is on. */
+.home-module.is-active .home-part[data-part='tw-hood'] {
+  animation: none;
+}
+
+.home-module.is-active .home-part[data-part='tw-hood'] .tw-hood-panel {
+  transform-box: view-box;
+  transform-origin: var(--pivot-x, 50%) var(--pivot-y, 50%);
+  animation: tw-hood-shut 320ms cubic-bezier(0.3, 1.15, 0.35, 1) 1860ms backwards;
+}
+
+/* 15 the nameplate: stuck on the case, then its two screws driven in -------- */
+/* The plate arrives along the normal of the face it is stuck to; the screws
+   inherit that same axis, so they go in square to the plate. */
+.home-module.is-active .home-part[data-part='tw-plate'] {
+  transform-box: view-box;
+  transform-origin: var(--pivot-x, 50%) var(--pivot-y, 50%);
+  animation: tw-plate-stick 280ms cubic-bezier(0.22, 0.9, 0.24, 1) 1960ms backwards;
+}
+
+.home-module.is-active .home-part[data-part='tw-plate'] .tw-plate-screws {
+  transform-box: view-box;
+  transform-origin: var(--pivot-x, 50%) var(--pivot-y, 50%);
+  animation: tw-plate-screw 130ms cubic-bezier(0.4, 1.5, 0.5, 1) 2190ms backwards;
+}
+
+/* 16 the sheet: fed up through the roller, last ----------------------------- */
+/* The feed happens inside the clip, in the sheet's own units: the strip starts
+   far enough down that the window at the roller line is empty, so the paper is
+   not on the machine until it is drawn up out of it. */
+.home-module.is-active .home-part[data-part='tw-sheet'] {
+  animation: tw-travel 360ms cubic-bezier(0.4, 0, 0.25, 1) 2420ms;
+}
+
+.home-module.is-active .home-part[data-part='tw-sheet'] .home-sheet-feed {
+  animation: tw-sheet-feed 330ms cubic-bezier(0.22, 0.9, 0.24, 1) 2050ms backwards;
+}
+
+/* The line feed itself: the client writes an inline `translateY` on the paper
+   group and home.css transitions it. That transition and its `will-change` are
+   declared unconditionally there, but the client's key handler lives on
+   `window`, so it goes on typing into the sheet even when another machine is on
+   the platform: an off-screen sheet was still being given a 520 ms composited
+   transform per line, and the group was kept promoted (a layer holding the
+   sheet, its shadow blur and every typed line) for the whole life of the page.
+   Scoped here instead — the feed is animated exactly while this machine is the
+   one standing, and an off-screen sheet just takes its new offset. Specificity
+   is kept at the same weight as home.css's rule so its reduced-motion override
+   still wins over this one. */
+.home-stage .home-module .home-paper-group {
+  transition: none;
+  will-change: auto;
+}
+
+.home-module.is-active .home-paper-group,
+.home-module.is-leaving .home-paper-group {
+  transition: transform 520ms cubic-bezier(0.33, 0.9, 0.24, 1);
+  will-change: transform;
+}
+
+/* When the machine is taken apart the sheet is not dropped through it: a sheet
+   in the machine is wound on the platen, so it goes back the way it came — down
+   its own paper axis until the clip at the roller line swallows it. The generic
+   exit would slide the whole holder down the stage, and because the sheet's
+   clip lives in the same matrix it would travel with it: the paper would be
+   seen lying across the keys instead of disappearing into the roller. */
+.home-module.is-leaving .home-part[data-part='tw-sheet'] {
+  animation: none;
+}
+
+.home-module.is-leaving .home-part[data-part='tw-sheet'] .home-sheet-feed {
+  /* `both`, not `backwards`: the rewind ends *inside* the roller, which is not
+     the sheet's resting position, so the last frame has to be held. */
+  animation: home-sheet-rewind 260ms cubic-bezier(0.45, 0, 0.7, 0.4) var(--exit-delay, 0ms) both;
+}
+
+/* Only the strip above the roller line is ever on screen; how far it has to
+   travel to be swallowed depends on how many lines it has been fed, so the
+   module measures that at the switch and passes --sheet-rewind. */
+@keyframes home-sheet-rewind {
+  from { transform: none; }
+  to { transform: translateY(var(--sheet-rewind, 26px)); }
+}
+
+/* and the roller waits for it: a sheet cannot be wound out of a platen that has
+   already been lifted away, so it holds its seat until the paper is inside */
+.home-module.is-leaving .home-part[data-part='platen'] {
+  animation-delay: calc(var(--exit-delay, 0ms) + 190ms);
+}
+
+/* the paper table is bolted to the frame: it slides in from behind the roller */
+.home-module.is-active .home-part[data-part='tw-table'] {
+  animation: tw-table-slide 300ms cubic-bezier(0.22, 0.9, 0.24, 1) 1180ms backwards;
+}
+
+/* first run: the middle bar strikes once, on its own ----------------------- */
+.home-module.is-active .home-part[data-part='mechanism'] .tw-bar {
+  animation: tw-bar-strike 320ms cubic-bezier(0.3, 0.9, 0.3, 1) 2540ms;
+}
+
+/* first run: the roller takes one turn under the operator's hand ----------- */
+/* The seating twist and the first run are two separate animations on the same
+   knurling: the twist ends before the run starts, so the second one simply
+   takes over. `rotate` interpolates as an angle, which is what makes two full
+   turns actually turn instead of collapsing to the shortest arc. */
+.home-module.is-active .home-part[data-part='tw-knob'] .tw-knob-spin {
+  transform-box: fill-box;
+  transform-origin: 50% 50%;
+  animation:
+    tw-knob-twist 300ms cubic-bezier(0.3, 0.9, 0.3, 1) calc(1500ms + var(--step) * 70ms) backwards,
+    tw-spin 480ms linear 2420ms;
+}
+
+/* Every entry below starts at -1 × the part's own axis, so the direction comes
+   off the drawing (`--axis-x` / `--axis-y`, written by `axisStyle` in
+   frame.mjs) and the pivot is the point on the part the motion turns about
+   (`--pivot-x` / `--pivot-y`). The overshoot beats are +1 × the axis: past the
+   seat, then back onto it. */
+
+@keyframes tw-feet-seat {
+  0% {
+    transform:
+      translate(calc(var(--axis-x, 0) * var(--travel, 34px) * -1),
+                calc(var(--axis-y, -1) * var(--travel, 34px) * -1))
+      scale(0.94);
+  }
+  62% { transform: translate(calc(var(--axis-x, 0) * 2.6px), calc(var(--axis-y, -1) * 2.6px)); }
+  82% { transform: translate(calc(var(--axis-x, 0) * -1px), calc(var(--axis-y, -1) * -1px)); }
+  100% { transform: none; }
+}
+
+@keyframes tw-base-seat {
+  0% {
+    transform:
+      translate(calc(var(--axis-x, 0) * var(--travel, 26px) * -1),
+                calc(var(--axis-y, 1) * var(--travel, 26px) * -1))
+      scale(0.96);
+  }
+  62% { transform: translate(calc(var(--axis-x, 0) * 2.8px), calc(var(--axis-y, 1) * 2.8px)); }
+  82% { transform: translate(calc(var(--axis-x, 0) * -0.8px), calc(var(--axis-y, 1) * -0.8px)); }
+  100% { transform: none; }
+}
+
+@keyframes tw-deck-rise {
+  0% {
+    transform:
+      translate(calc(var(--axis-x, 0) * var(--travel, 30px) * -1),
+                calc(var(--axis-y, -1) * var(--travel, 30px) * -1))
+      scale(0.94);
+  }
+  58% { transform: translate(calc(var(--axis-x, 0) * 2px), calc(var(--axis-y, -1) * 2px)); }
+  78% { transform: translate(calc(var(--axis-x, 0) * -1.6px), calc(var(--axis-y, -1) * -1.6px)); }
+  100% { transform: none; }
+}
+
+@keyframes tw-key-rise {
+  0% {
+    transform:
+      translate(calc(var(--axis-x, 0) * var(--travel, 26px) * -1),
+                calc(var(--axis-y, -1) * var(--travel, 26px) * -1))
+      scale(0.9);
+  }
+  54% { transform: translate(calc(var(--axis-x, 0) * 2.2px), calc(var(--axis-y, -1) * 2.2px)); }
+  74% { transform: translate(calc(var(--axis-x, 0) * -1.8px), calc(var(--axis-y, -1) * -1.8px)); }
+  88% { transform: translate(calc(var(--axis-x, 0) * 0.4px), calc(var(--axis-y, -1) * 0.4px)); }
+  100% { transform: none; }
+}
+
+/* the basket is the one part with no travel at all: it opens as a fan about the
+   segment, so its from-state is a squeeze and a tilt, not an offset. */
+@keyframes tw-basket-open {
+  0% { transform: rotate(-10deg) scaleX(0.55); }
+  58% { transform: rotate(1.6deg) scaleX(1.04); }
+  100% { transform: none; }
+}
+
+@keyframes tw-fork-screw {
+  0% {
+    transform:
+      translate(calc(var(--axis-x, 0) * var(--travel, 30px) * -1),
+                calc(var(--axis-y, -1) * var(--travel, 30px) * -1))
+      scale(0.8);
+    rotate: -360deg;
+  }
+  100% { transform: none; rotate: 0deg; }
+}
+
+@keyframes tw-bell-screw {
+  0% {
+    transform:
+      translate(calc(var(--axis-x, 0) * var(--travel, 18px) * -1),
+                calc(var(--axis-y, 1) * var(--travel, 18px) * -1))
+      scale(0.75);
+    rotate: -360deg;
+  }
+  64% {
+    transform: translate(calc(var(--axis-x, 0) * 1px), calc(var(--axis-y, 1) * 1px));
+    rotate: 8deg;
+  }
+  100% { transform: none; rotate: 0deg; }
+}
+
+@keyframes tw-carriage-slide {
+  0% {
+    transform:
+      translate(calc(var(--axis-x, 1) * var(--travel, 64px) * -1),
+                calc(var(--axis-y, 0) * var(--travel, 64px) * -1))
+      scale(0.94);
+  }
+  60% { transform: translate(calc(var(--axis-x, 1) * 3.4px), calc(var(--axis-y, 0) * 3.4px)); }
+  80% { transform: translate(calc(var(--axis-x, 1) * -0.9px), calc(var(--axis-y, 0) * -0.9px)); }
+  100% { transform: none; }
+}
+
+@keyframes tw-platen-seat {
+  0% {
+    transform:
+      translate(calc(var(--axis-x, 0) * var(--travel, 16px) * -1),
+                calc(var(--axis-y, -1) * var(--travel, 16px) * -1))
+      rotate(-2.5deg)
+      scale(0.92);
+  }
+  58% { transform: translate(calc(var(--axis-x, 0) * 1.8px), calc(var(--axis-y, -1) * 1.8px)) rotate(0.4deg); }
+  78% { transform: translate(calc(var(--axis-x, 0) * -0.7px), calc(var(--axis-y, -1) * -0.7px)) rotate(-0.15deg); }
+  100% { transform: none; }
+}
+
+@keyframes tw-knob-press {
+  0% {
+    transform:
+      translate(calc(var(--axis-x, 1) * var(--travel, 30px) * -1),
+                calc(var(--axis-y, 0) * var(--travel, 30px) * -1))
+      scale(0.85);
+  }
+  62% { transform: translate(calc(var(--axis-x, 1) * 1.6px), calc(var(--axis-y, 0) * 1.6px)); }
+  100% { transform: none; }
+}
+
+@keyframes tw-knob-twist {
+  0% { rotate: -720deg; }
+  100% { rotate: 0deg; }
+}
+
+@keyframes tw-lever-seat {
+  0% {
+    transform:
+      translate(calc(var(--axis-x, -1) * var(--travel, 24px) * -1),
+                calc(var(--axis-y, 0) * var(--travel, 24px) * -1))
+      scale(0.9);
+  }
+  60% { transform: translate(calc(var(--axis-x, -1) * 2.4px), calc(var(--axis-y, 0) * 2.4px)); }
+  100% { transform: none; }
+}
+
+@keyframes tw-lever-hinge {
+  0% { transform: rotate(-44deg); }
+  62% { transform: rotate(3.4deg); }
+  82% { transform: rotate(-0.8deg); }
+  100% { transform: none; }
+}
+
+@keyframes tw-bail-hinge {
+  0% { transform: rotate(-9deg) scale(0.94); }
+  62% { transform: rotate(1.2deg); }
+  100% { transform: none; }
+}
+
+@keyframes tw-ribbon-thread {
+  0% { stroke-dasharray: 0 1.6; }
+  100% { stroke-dasharray: 1.6 1.6; }
+}
+
+@keyframes tw-hood-shut {
+  0% {
+    transform:
+      translate(calc(var(--axis-x, 1) * var(--travel, 34px) * -1),
+                calc(var(--axis-y, 0) * var(--travel, 34px) * -1))
+      scale(0.92);
+  }
+  62% { transform: translate(calc(var(--axis-x, 1) * 3px), calc(var(--axis-y, 0) * 3px)); }
+  100% { transform: none; }
+}
+
+@keyframes tw-plate-stick {
+  0% {
+    transform:
+      translate(calc(var(--axis-x, 0) * var(--travel, 24px) * -1),
+                calc(var(--axis-y, -1) * var(--travel, 24px) * -1))
+      scale(0.9);
+  }
+  64% { transform: translate(calc(var(--axis-x, 0) * 1.6px), calc(var(--axis-y, -1) * 1.6px)); }
+  100% { transform: none; }
+}
+
+/* the screws inherit the plate's axis, so they are driven square to the plate */
+@keyframes tw-plate-screw {
+  0% { transform: translate(calc(var(--axis-x, 0) * 7px), calc(var(--axis-y, -1) * 7px)); }
+  100% { transform: none; }
+}
+
+@keyframes tw-table-slide {
+  0% {
+    transform:
+      translate(calc(var(--axis-x, 0) * var(--travel, 26px) * -1),
+                calc(var(--axis-y, 1) * var(--travel, 26px) * -1))
+      scale(0.94);
+  }
+  62% { transform: translate(calc(var(--axis-x, 0) * 2px), calc(var(--axis-y, 1) * 2px)); }
+  100% { transform: none; }
+}
+
+/* the sheet comes up out of the roller: the numbers are paper units, because the
+   strip lives inside the page's own matrix. Twenty units is just past the clip's
+   lower edge, so the sheet stays behind the roller until the feed begins.
+   This is the paper's own `v` axis (PAPER_DOWN reversed), not a stage axis: the
+   clip that hides the sheet is written in that same space, so moving the sheet
+   in stage px would carry the clip off the roller with it. */
+@keyframes tw-sheet-feed {
+  0% { transform: translateY(80px); }
+  62% { transform: translateY(-1.8px); }
+  100% { transform: none; }
+}
+
+/* The carriage takes a line's worth of travel and comes back to the margin.
+   It rides every part bolted to the carriage — platen, both knobs, the return
+   lever, the bail and the sheet with its clip — so they move as one and the
+   clip stays on the roller. It ends on `translateX(0)`, so it carries no fill:
+   a `forwards` here would leave six elements with a transform owned by a
+   finished animation for the life of the page, which is both a permanent
+   animation effect and a trap for any later rule that wants to move them. */
+@keyframes tw-travel {
+  0% { transform: translateX(0); }
+  46% { transform: translateX(30px); }
+  62% { transform: translateX(30px); }
+  100% { transform: translateX(0); }
+}
+
+@keyframes tw-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes tw-bar-strike {
+  0% { transform: none; }
+  28% { transform: translateY(-11px); }
+  55% { transform: translateY(-2px); }
+  100% { transform: none; }
+}
+
+/* the sheet's stock ------------------------------------------------------- */
+/* The page is a warm off-white, so the sheet cannot borrow it: paper reads as
+   paper by being a shade brighter and cooler than the surface it lies on, never
+   white. At night the sheet keeps its dark stock and the accent ink carries it.
+   No edge stroke — the fill and the soft shadow alone hold the silhouette. */
+.home-stage .home-paper-holder {
+  --home-sheet: oklch(99.2% 0.004 96);
+}
+
+.dark .home-stage .home-paper-holder {
+  --home-sheet: color-mix(in oklch, oklch(var(--un-preset-theme-colors-primary)) 24%, oklch(var(--un-preset-theme-colors-background)) 76%);
+}
+
+.home-stage .home-paper-holder .home-paper {
+  fill: var(--home-sheet);
+}
+
+.home-stage .home-paper-link:hover .home-paper,
+.home-stage .home-paper-link:focus-visible .home-paper {
+  fill: color-mix(in oklch, var(--home-sheet) 82%, oklch(var(--un-preset-theme-colors-highlight)) 18%);
+}
+
+/* reduced motion: the machine is simply there ------------------------------ */
+
+html.reduce-motion .home-module.is-active .home-part[data-part],
+html.reduce-motion .home-module.is-active .tw-lever-arm,
+html.reduce-motion .home-module.is-leaving .home-part[data-part='tw-sheet'] .home-sheet-feed,
+html.reduce-motion .home-module.is-active .home-sheet-feed,
+html.reduce-motion .home-module.is-active .tw-ribbon,
+html.reduce-motion .home-module.is-active .tw-bar,
+html.reduce-motion .home-module.is-active .tw-knob-spin,
+html.reduce-motion .home-module.is-active .tw-hood-panel,
+html.reduce-motion .home-module.is-active .tw-plate-screws {
+  animation: none !important;
+  animation-delay: 0ms !important;
+}
+
+/* the line feed above is a transition, not an animation, so it needs its own
+   stop: the sheet steps to the new line instead of sliding to it */
+html.reduce-motion .home-stage .home-paper-group {
+  transition: none !important;
+  will-change: auto !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-module.is-active .home-part[data-part],
+  .home-module.is-active .tw-lever-arm,
+  .home-module.is-leaving .home-part[data-part='tw-sheet'] .home-sheet-feed,
+  .home-module.is-active .home-sheet-feed,
+  .home-module.is-active .tw-ribbon,
+  .home-module.is-active .tw-bar,
+  .home-module.is-active .tw-knob-spin,
+  .home-module.is-active .tw-hood-panel,
+  .home-module.is-active .tw-plate-screws {
+    animation: none !important;
+    animation-delay: 0ms !important;
+  }
+
+  .home-stage .home-paper-group {
+    transition: none !important;
+    will-change: auto !important;
+  }
+}
+
+
+/* the carriage return lever: a short throw to the right and back, the way a
+   platen is knocked over to start a new line. The client adds .is-returning
+   whenever the sheet feeds a line. */
+.home-stage .home-return-lever {
+  transform-box: view-box;
+}
+
+/* The carriage return throws the arm down on its own root — the lever is
+   pushed forward and down, which in this projection is a vertical drop, not a
+   sideways swing. The collar and the assembly's hinge are untouched. */
+.home-stage .home-module.is-active .home-return-lever.is-returning .tw-lever-throw {
+  animation: tw-return 430ms cubic-bezier(0.3, 0.9, 0.3, 1);
+}
+
+@keyframes tw-return {
+  0% { transform: rotate(0deg); }
+  24% { transform: rotate(31deg); }
+  42% { transform: rotate(27deg); }
+  72% { transform: rotate(-3deg); }
+  100% { transform: rotate(0deg); }
+}
+
+html.reduce-motion .home-stage .home-return-lever.is-returning .tw-lever-throw { animation: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .home-stage .home-return-lever.is-returning .tw-lever-throw { animation: none; }
+}

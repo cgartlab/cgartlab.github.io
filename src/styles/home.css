@@ -1,0 +1,1006 @@
+@import './home-devices/chassis.css';
+@import './home-devices/typewriter.css';
+@import './home-devices/cinema.css';
+@import './home-devices/newsrack.css';
+@import './home-devices/toolbox.css';
+@import './home-devices/labels.css';
+
+/* ==========================================================================
+   Home stage — isometric instrument
+   Tokens are derived from the site palette; no literal colours except the
+   physical shadow alpha allowed by AGENTS.md.
+   ========================================================================== */
+
+.home-stage {
+  /* paper / four-tone shading -------------------------------------------- */
+  --anatomy-paper: oklch(var(--un-preset-theme-colors-background));
+  --anatomy-face: color-mix(in oklch, oklch(var(--un-preset-theme-colors-background)) 93%, oklch(var(--un-preset-theme-colors-primary)) 7%);
+  --anatomy-top: oklch(var(--un-preset-theme-colors-background));
+  --anatomy-shade-0: color-mix(in oklch, oklch(var(--un-preset-theme-colors-background)) 76%, oklch(var(--un-preset-theme-colors-primary)) 24%);
+  --anatomy-shade-1: color-mix(in oklch, oklch(var(--un-preset-theme-colors-background)) 82%, oklch(var(--un-preset-theme-colors-primary)) 18%);
+  --anatomy-shade-2: color-mix(in oklch, oklch(var(--un-preset-theme-colors-background)) 88%, oklch(var(--un-preset-theme-colors-primary)) 12%);
+  --anatomy-shade-3: color-mix(in oklch, oklch(var(--un-preset-theme-colors-background)) 94%, oklch(var(--un-preset-theme-colors-primary)) 6%);
+
+  /* the one lit part ------------------------------------------------------ */
+  --anatomy-lit: oklch(var(--un-preset-theme-colors-highlight));
+  --anatomy-lit-top: color-mix(in oklch, oklch(var(--un-preset-theme-colors-highlight)) 82%, oklch(var(--un-preset-theme-colors-background)) 18%);
+  --anatomy-lit-shade: color-mix(in oklch, oklch(var(--un-preset-theme-colors-highlight)) 70%, oklch(var(--un-preset-theme-colors-primary)) 30%);
+
+  /* line tones ------------------------------------------------------------ */
+  --anatomy-hi: oklch(var(--un-preset-theme-colors-primary));
+  --anatomy-mid: color-mix(in oklch, oklch(var(--un-preset-theme-colors-primary)) 55%, oklch(var(--un-preset-theme-colors-background)) 45%);
+  --anatomy-lo: color-mix(in oklch, oklch(var(--un-preset-theme-colors-primary)) 35%, oklch(var(--un-preset-theme-colors-background)) 65%);
+  --anatomy-faint: color-mix(in oklch, oklch(var(--un-preset-theme-colors-primary)) 18%, oklch(var(--un-preset-theme-colors-background)) 82%);
+  --anatomy-dot: oklch(var(--un-preset-theme-colors-primary));
+  --anatomy-halo: rgb(0 0 0);
+  --anatomy-halo-opacity: 0.10;
+  --home-paper: oklch(var(--un-preset-theme-colors-background));
+  --home-ink: oklch(var(--un-preset-theme-colors-highlight));
+  --home-metal: color-mix(in oklch, oklch(var(--un-preset-theme-colors-primary)) 52%, oklch(var(--un-preset-theme-colors-background)) 48%);
+
+  /* machine-specific ------------------------------------------------------ */
+  --home-cavity: color-mix(in oklch, oklch(var(--un-preset-theme-colors-primary)) 56%, oklch(var(--un-preset-theme-colors-background)) 44%);
+  --home-brass: oklch(72% 0.052 74);
+  --home-brass-deep: oklch(58% 0.062 64);
+
+  --anatomy-weight: 0.6px;
+  --anatomy-ease: cubic-bezier(0.32, 0.72, 0, 1);
+  --anatomy-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+}
+
+.dark .home-stage {
+  --anatomy-paper: oklch(var(--un-preset-theme-colors-background));
+  --anatomy-face: color-mix(in oklch, oklch(var(--un-preset-theme-colors-background)) 88%, oklch(var(--un-preset-theme-colors-primary)) 12%);
+  --anatomy-top: color-mix(in oklch, oklch(var(--un-preset-theme-colors-background)) 78%, oklch(var(--un-preset-theme-colors-primary)) 22%);
+  --anatomy-shade-0: color-mix(in oklch, oklch(var(--un-preset-theme-colors-background)) 96%, oklch(var(--un-preset-theme-colors-primary)) 4%);
+  --anatomy-shade-1: color-mix(in oklch, oklch(var(--un-preset-theme-colors-background)) 92%, oklch(var(--un-preset-theme-colors-primary)) 8%);
+  --anatomy-shade-2: color-mix(in oklch, oklch(var(--un-preset-theme-colors-background)) 88%, oklch(var(--un-preset-theme-colors-primary)) 12%);
+  --anatomy-shade-3: color-mix(in oklch, oklch(var(--un-preset-theme-colors-background)) 84%, oklch(var(--un-preset-theme-colors-primary)) 16%);
+  --home-paper: color-mix(in oklch, oklch(var(--un-preset-theme-colors-primary)) 62%, oklch(var(--un-preset-theme-colors-background)) 38%);
+  --home-ink: oklch(var(--un-preset-theme-colors-highlight));
+  --home-metal: color-mix(in oklch, oklch(var(--un-preset-theme-colors-primary)) 26%, oklch(var(--un-preset-theme-colors-background)) 74%);
+
+  --anatomy-lit-top: color-mix(in oklch, oklch(var(--un-preset-theme-colors-highlight)) 70%, oklch(var(--un-preset-theme-colors-background)) 30%);
+  --anatomy-lit-shade: color-mix(in oklch, oklch(var(--un-preset-theme-colors-highlight)) 52%, oklch(var(--un-preset-theme-colors-primary)) 48%);
+
+  --anatomy-halo-opacity: 0.62;
+  --home-cavity: oklch(var(--un-preset-theme-colors-background));
+  --home-brass: oklch(68% 0.058 74);
+  --home-brass-deep: oklch(54% 0.07 64);
+}
+
+/* --------------------------------------------------------------------------
+   Structural rules adapted from the anatomy kit (MIT). Only the selectors the
+   figure actually emits are kept.
+   -------------------------------------------------------------------------- */
+
+.home-stage .iso-svg { display: block; width: 100%; height: auto; overflow: visible; }
+.home-stage .iso-svg path,
+.home-stage .iso-svg circle { vector-effect: non-scaling-stroke; }
+
+.home-stage .iso-fill { fill: var(--anatomy-paper); stroke: none; }
+.home-stage .iso-solid[data-lit] > .iso-fill { fill: var(--anatomy-face); }
+.home-stage .iso-shade,
+.home-stage .iso-top { stroke: none; }
+.home-stage .iso-shade[data-shade="0"] { fill: var(--anatomy-shade-0); }
+.home-stage .iso-shade[data-shade="1"] { fill: var(--anatomy-shade-1); }
+.home-stage .iso-shade[data-shade="2"] { fill: var(--anatomy-shade-2); }
+.home-stage .iso-shade[data-shade="3"] { fill: var(--anatomy-shade-3); }
+.home-stage .iso-top { fill: var(--anatomy-top); }
+.home-stage .iso-solid[data-lit] > .iso-top { fill: var(--anatomy-lit-top); }
+.home-stage .iso-solid[data-lit] > .iso-shade { fill: var(--anatomy-lit-shade); }
+.home-stage .iso-solid[data-lit] > .iso-edge { stroke: var(--anatomy-lit); }
+
+.home-stage .iso-solid[data-seamless] > .iso-shade,
+.home-stage .iso-solid[data-seamless] > .iso-top { stroke-width: 0.4; stroke-linejoin: round; }
+.home-stage .iso-solid[data-seamless] > .iso-shade[data-shade="0"] { stroke: var(--anatomy-shade-0); }
+.home-stage .iso-solid[data-seamless] > .iso-shade[data-shade="1"] { stroke: var(--anatomy-shade-1); }
+.home-stage .iso-solid[data-seamless] > .iso-shade[data-shade="2"] { stroke: var(--anatomy-shade-2); }
+.home-stage .iso-solid[data-seamless] > .iso-shade[data-shade="3"] { stroke: var(--anatomy-shade-3); }
+.home-stage .iso-solid[data-seamless] > .iso-top { stroke: var(--anatomy-top); }
+
+.home-stage .iso-halo { fill: var(--anatomy-halo); stroke: none; filter: blur(9px); opacity: var(--anatomy-halo-opacity); transform: translateY(3px); }
+
+.home-stage .iso-line { fill: none; stroke: var(--anatomy-lo); stroke-width: var(--anatomy-weight); stroke-linecap: round; stroke-linejoin: round; }
+.home-stage .iso-line[data-tone="hi"] { stroke: var(--anatomy-hi); }
+.home-stage .iso-line[data-tone="mid"] { stroke: var(--anatomy-mid); }
+.home-stage .iso-line[data-tone="lo"] { stroke: var(--anatomy-lo); }
+.home-stage .iso-line[data-tone="faint"] { stroke: var(--anatomy-faint); }
+.home-stage .iso-line[data-tone="lit"] { stroke: var(--anatomy-lit); }
+
+.home-stage .iso-dots circle { fill: var(--anatomy-dot); stroke: none; opacity: 0.32; }
+.home-stage .iso-dots[data-tone="hi"] circle { opacity: 0.85; }
+.home-stage .iso-dots[data-tone="mid"] circle { opacity: 0.45; }
+.home-stage .iso-dots[data-tone="lo"] circle { opacity: 0.22; }
+.home-stage .iso-dots[data-tone="faint"] circle { opacity: 0.12; }
+
+.home-stage .iso-face-text { fill: var(--anatomy-mid); font-family: var(--anatomy-mono); letter-spacing: 0.04em; }
+.home-stage .iso-face-text[data-tone="hi"] { fill: var(--anatomy-hi); }
+.home-stage .iso-face-text[data-tone="lo"] { fill: var(--anatomy-lo); }
+.home-stage .iso-face-text[data-tone="faint"] { fill: var(--anatomy-faint); }
+.home-stage .iso-face-text[data-tone="lit"] { fill: var(--home-ink); }
+
+/* tubes */
+.home-stage .tb-body { fill: var(--anatomy-shade-2); stroke: none; }
+.home-stage .tb-shine { fill: var(--anatomy-top); stroke: none; }
+.home-stage .tb-shade { fill: var(--anatomy-shade-0); stroke: none; }
+.home-stage .tb-ring { fill: none; stroke: var(--anatomy-lo); stroke-width: 0.45; stroke-linecap: butt; stroke-linejoin: round; }
+.home-stage .tb-ring[data-tone="mid"] { stroke: var(--anatomy-mid); }
+.home-stage .tb-ring[data-tone="faint"] { stroke: var(--anatomy-faint); }
+.home-stage .tb-ring[data-tone="hi"] { stroke: var(--anatomy-hi); }
+
+/* machine-specific */
+.home-stage .home-cavity { fill: var(--home-cavity); stroke: var(--anatomy-lo); stroke-width: var(--anatomy-weight); }
+.home-stage .home-brass { fill: var(--home-brass); stroke: none; }
+.home-stage .home-brass-edge { fill: none; stroke: var(--home-brass-deep); stroke-width: var(--anatomy-weight); }
+
+/* --------------------------------------------------------------------------
+   Home shell
+   -------------------------------------------------------------------------- */
+
+.home-shell {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  gap: clamp(0.75rem, 2vh, 1.75rem);
+  min-height: 100dvh;
+  max-width: 1560px;
+  margin: 0 auto;
+  padding: clamp(1.1rem, 3vh, 2.25rem) clamp(1.25rem, 4vw, 3.5rem);
+}
+
+.home-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.home-mark {
+  font-family: var(--un-preset-theme-font-family-title);
+  font-size: clamp(1.2rem, 2.1vw, 1.7rem);
+  line-height: 1;
+  color: oklch(var(--un-preset-theme-colors-primary));
+  text-decoration: none;
+}
+
+.home-tools {
+  display: flex;
+  align-items: center;
+  gap: 1.15rem;
+}
+
+.home-about {
+  font-family: var(--un-preset-theme-font-family-sans);
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+  color: oklch(var(--un-preset-theme-colors-secondary));
+  text-decoration: none;
+  transition: color 180ms ease;
+}
+
+.home-about:hover,
+.home-about:focus-visible {
+  color: oklch(var(--un-preset-theme-colors-highlight));
+}
+
+.home-search {
+  display: block;
+  width: 1rem;
+  aspect-ratio: 1;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  color: oklch(var(--un-preset-theme-colors-secondary));
+  transition: color 180ms ease, transform 180ms ease;
+}
+
+.home-search:hover,
+.home-search:focus-visible {
+  color: oklch(var(--un-preset-theme-colors-primary));
+  transform: scale(1.08);
+}
+
+.home-main {
+  display: grid;
+  grid-template-columns: minmax(0, 0.82fr) minmax(0, 1.18fr);
+  align-items: center;
+  gap: clamp(0.75rem, 2.6vw, 3rem);
+  min-height: 0;
+}
+
+.home-copy { max-width: 34rem; }
+
+.home-title {
+  position: relative;
+  margin: 0;
+  font-family: var(--un-preset-theme-font-family-title);
+  font-size: clamp(1.7rem, 3.3vw, 2.9rem);
+  font-weight: 700;
+  line-height: 1.08;
+  color: oklch(var(--un-preset-theme-colors-primary));
+  text-wrap: balance;
+}
+
+/* The headline is typed, not pasted: the characters come in one at a time and
+   a caret in the accent marks where the next one will land. The caret is a
+   zero-width box — a border on an empty inline-block, cancelled by a negative
+   margin — so it never nudges the line as it advances. It blinks while it
+   types and goes out with the last character. */
+.home-caret {
+  display: inline-block;
+  width: 0;
+  height: 0.84em;
+  margin-right: -0.1em;
+  border-right: 0.1em solid oklch(var(--un-preset-theme-colors-highlight));
+  vertical-align: -0.05em;
+  animation: home-caret-blink 1s steps(1, end) infinite;
+}
+
+@keyframes home-caret-blink {
+  0%, 54% { opacity: 1; }
+  55%, 100% { opacity: 0; }
+}
+
+html.reduce-motion .home-caret { animation: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .home-caret { animation: none; }
+}
+
+/* the page hides the copy until the script owns it, so nothing is read settled
+   before it is typed or scrambled */
+html.copy-arming .home-title,
+html.copy-arming .home-sub {
+  visibility: hidden;
+}
+
+.home-glyph {
+  display: inline-block;
+}
+
+/* a Latin noise glyph can be wider than the letter it replaces: keep it in the
+   box it was given, or the line reads as a pile rather than a line */
+[data-scramble='latin'] .home-glyph {
+  overflow: hidden;
+  text-align: center;
+}
+
+.home-glyph.is-noise {
+  color: oklch(var(--un-preset-theme-colors-highlight));
+  text-shadow: 0 0 0.45em color-mix(in oklch, oklch(var(--un-preset-theme-colors-highlight)) 38%, transparent);
+}
+
+/* The header rides down a hair; the section list on narrow screens follows one
+   link a beat; the latest line is wiped in the way a line of type is set; the
+   foot slides up under its own edge. All of it is CSS, so it still arrives if
+   the script above never runs — the scramble is the only part that needs it. */
+/* the logotype settles its tracking as it comes down, like type being set */
+.home-mark {
+  animation: home-mark-in 760ms cubic-bezier(0.2, 0.9, 0.22, 1) both;
+}
+
+@keyframes home-mark-in {
+  from { transform: translateY(-8px); letter-spacing: 0.16em; clip-path: inset(-20% 0 100% 0); }
+  to { transform: none; letter-spacing: normal; clip-path: inset(-20% 0 -20% 0); }
+}
+
+/* the tools drop in one after another, a beat apart */
+.home-tools > * {
+  animation: home-tool-in 600ms cubic-bezier(0.22, 0.9, 0.24, 1) both;
+}
+
+.home-tools > *:nth-child(1) { animation-delay: 180ms; }
+.home-tools > *:nth-child(2) { animation-delay: 250ms; }
+.home-tools > *:nth-child(3) { animation-delay: 320ms; }
+
+@keyframes home-tool-in {
+  from { transform: translateY(-10px); clip-path: inset(-20% 0 100% 0); }
+  to { transform: none; clip-path: inset(-20% 0 -20% 0); }
+}
+
+.home-latest {
+  animation: home-copy-wipe 720ms cubic-bezier(0.24, 0.9, 0.26, 1) 900ms both;
+}
+
+@keyframes home-copy-wipe {
+  from { clip-path: inset(-30% 100% -30% 0); }
+  to { clip-path: inset(-30% 0 -30% 0); }
+}
+
+html.reduce-motion .home-mark,
+html.reduce-motion .home-tools > *,
+html.reduce-motion .home-latest {
+  animation: none !important;
+  clip-path: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-mark,
+  .home-tools > *,
+  .home-latest {
+    animation: none !important;
+    clip-path: none !important;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   The sheet on the picture
+   -------------------------------------------------------------------------- */
+
+/* On the narrow layout the throw is the wall the whole sheet hangs on, so the
+   copy stands on the picture rather than beside it. While the reel runs the
+   ink turns to the screen's own white — the palette's paper at full lightness,
+   so it stays inside the drawing — and the accent keeps the underline. */
+html[data-compact='1'][data-home-section='works'][data-screening='on'] {
+  --home-screen-ink: oklch(from oklch(var(--un-preset-theme-colors-background)) 0.97 c h);
+  --home-screen-dim: oklch(from oklch(var(--un-preset-theme-colors-background)) 0.9 c h);
+}
+
+/* the copy only: the header sits on the picture's feathered top edge, which is
+   as light as the page, so its ink stays as it was */
+html[data-compact='1'][data-home-section='works'][data-screening='on'] .home-title,
+html[data-compact='1'][data-home-section='works'][data-screening='on'] .home-latest a {
+  color: var(--home-screen-ink);
+}
+
+html[data-compact='1'][data-home-section='works'][data-screening='on'] .home-sub,
+html[data-compact='1'][data-home-section='works'][data-screening='on'] .home-latest-label {
+  color: var(--home-screen-dim);
+}
+
+/* the picture is feathered to the page at its edges, and the copy starts in
+   that feather: a shadow under the light ink keeps the first characters legible
+   where the throw is thin */
+html[data-compact='1'][data-home-section='works'][data-screening='on'] .home-title,
+html[data-compact='1'][data-home-section='works'][data-screening='on'] .home-sub,
+html[data-compact='1'][data-home-section='works'][data-screening='on'] .home-latest {
+  text-shadow: 0 0.06em 0.5em rgba(0, 0, 0, 0.38);
+}
+
+html[data-compact='1'][data-home-section='works'][data-screening='on'] .home-latest a {
+  border-bottom-color: color-mix(in oklch, oklch(var(--un-preset-theme-colors-highlight)) 80%, transparent);
+}
+
+/* The shared footer, sat in the sheet's bottom row.
+   Every other page floats it as a column at the left; on the sheet it belongs
+   to the grid, under the machine, so it is un-fixed and allowed its own height. */
+.home-footer > footer {
+  position: static;
+  inset: auto;
+  width: auto;
+  height: auto;
+  margin: 0;
+}
+
+.home-sub {
+  margin: 0.9rem 0 0;
+  font-family: var(--un-preset-theme-font-family-sans);
+  font-size: clamp(0.8rem, 1.05vw, 0.95rem);
+  letter-spacing: 0.06em;
+  color: oklch(var(--un-preset-theme-colors-secondary));
+}
+
+/* the machine ------------------------------------------------------------- */
+
+.home-stage {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  /* the camera pushes in on a switch: what it brings past the edges is clipped
+     by the stage, not spilled over the page */
+  overflow: hidden;
+}
+
+/* The camera. On every switch the picture pushes in on the upper half of the
+   machine — the mechanism, the reels, the roll — holds there while it is built,
+   and comes back out to the whole sheet. A transform on the drawing itself, so
+   it is one composited move rather than a re-layout, and the strokes keep their
+   weight (vector-effect: non-scaling-stroke). */
+.home-stage .iso-svg {
+  transform-origin: var(--zoom-x, 50%) var(--zoom-y, 50%);
+  transform: scale(var(--zoom, 1));
+  transition: transform 900ms cubic-bezier(0.33, 0.9, 0.24, 1);
+}
+
+.home-stage.is-zoomed {
+  /* pushed in, the drawing runs past the stage: the edges are feathered the way
+     the projection's are — a six-stop gaussian shoulder on all four sides,
+     intersected — so nothing is cut with a straight line */
+  --zoom-feather: clamp(44px, 5.5vw, 88px);
+  -webkit-mask-image:
+    linear-gradient(to right,
+      transparent 0,
+      rgba(0, 0, 0, 0.04) calc(var(--zoom-feather) * 0.14),
+      rgba(0, 0, 0, 0.16) calc(var(--zoom-feather) * 0.3),
+      rgba(0, 0, 0, 0.38) calc(var(--zoom-feather) * 0.46),
+      rgba(0, 0, 0, 0.64) calc(var(--zoom-feather) * 0.62),
+      rgba(0, 0, 0, 0.86) calc(var(--zoom-feather) * 0.8),
+      #000 var(--zoom-feather),
+      #000 calc(100% - var(--zoom-feather)),
+      rgba(0, 0, 0, 0.86) calc(100% - var(--zoom-feather) * 0.8),
+      rgba(0, 0, 0, 0.64) calc(100% - var(--zoom-feather) * 0.62),
+      rgba(0, 0, 0, 0.38) calc(100% - var(--zoom-feather) * 0.46),
+      rgba(0, 0, 0, 0.16) calc(100% - var(--zoom-feather) * 0.3),
+      rgba(0, 0, 0, 0.04) calc(100% - var(--zoom-feather) * 0.14),
+      transparent 100%),
+    linear-gradient(to bottom,
+      transparent 0,
+      rgba(0, 0, 0, 0.04) calc(var(--zoom-feather) * 0.14),
+      rgba(0, 0, 0, 0.16) calc(var(--zoom-feather) * 0.3),
+      rgba(0, 0, 0, 0.38) calc(var(--zoom-feather) * 0.46),
+      rgba(0, 0, 0, 0.64) calc(var(--zoom-feather) * 0.62),
+      rgba(0, 0, 0, 0.86) calc(var(--zoom-feather) * 0.8),
+      #000 var(--zoom-feather),
+      #000 calc(100% - var(--zoom-feather)),
+      rgba(0, 0, 0, 0.86) calc(100% - var(--zoom-feather) * 0.8),
+      rgba(0, 0, 0, 0.64) calc(100% - var(--zoom-feather) * 0.62),
+      rgba(0, 0, 0, 0.38) calc(100% - var(--zoom-feather) * 0.46),
+      rgba(0, 0, 0, 0.16) calc(100% - var(--zoom-feather) * 0.3),
+      rgba(0, 0, 0, 0.04) calc(100% - var(--zoom-feather) * 0.14),
+      transparent 100%);
+  -webkit-mask-composite: source-in;
+  mask-image:
+    linear-gradient(to right,
+      transparent 0,
+      rgba(0, 0, 0, 0.04) calc(var(--zoom-feather) * 0.14),
+      rgba(0, 0, 0, 0.16) calc(var(--zoom-feather) * 0.3),
+      rgba(0, 0, 0, 0.38) calc(var(--zoom-feather) * 0.46),
+      rgba(0, 0, 0, 0.64) calc(var(--zoom-feather) * 0.62),
+      rgba(0, 0, 0, 0.86) calc(var(--zoom-feather) * 0.8),
+      #000 var(--zoom-feather),
+      #000 calc(100% - var(--zoom-feather)),
+      rgba(0, 0, 0, 0.86) calc(100% - var(--zoom-feather) * 0.8),
+      rgba(0, 0, 0, 0.64) calc(100% - var(--zoom-feather) * 0.62),
+      rgba(0, 0, 0, 0.38) calc(100% - var(--zoom-feather) * 0.46),
+      rgba(0, 0, 0, 0.16) calc(100% - var(--zoom-feather) * 0.3),
+      rgba(0, 0, 0, 0.04) calc(100% - var(--zoom-feather) * 0.14),
+      transparent 100%),
+    linear-gradient(to bottom,
+      transparent 0,
+      rgba(0, 0, 0, 0.04) calc(var(--zoom-feather) * 0.14),
+      rgba(0, 0, 0, 0.16) calc(var(--zoom-feather) * 0.3),
+      rgba(0, 0, 0, 0.38) calc(var(--zoom-feather) * 0.46),
+      rgba(0, 0, 0, 0.64) calc(var(--zoom-feather) * 0.62),
+      rgba(0, 0, 0, 0.86) calc(var(--zoom-feather) * 0.8),
+      #000 var(--zoom-feather),
+      #000 calc(100% - var(--zoom-feather)),
+      rgba(0, 0, 0, 0.86) calc(100% - var(--zoom-feather) * 0.8),
+      rgba(0, 0, 0, 0.64) calc(100% - var(--zoom-feather) * 0.62),
+      rgba(0, 0, 0, 0.38) calc(100% - var(--zoom-feather) * 0.46),
+      rgba(0, 0, 0, 0.16) calc(100% - var(--zoom-feather) * 0.3),
+      rgba(0, 0, 0, 0.04) calc(100% - var(--zoom-feather) * 0.14),
+      transparent 100%);
+  mask-composite: intersect;
+}
+
+html.reduce-motion .home-stage .iso-svg {
+  transition: none;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-stage .iso-svg {
+    transition: none;
+    transform: none;
+  }
+}
+
+.home-stage .iso-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  max-height: 100%;
+}
+
+/* --------------------------------------------------------------------------
+   The swap: the lift dips, the old machine drops away, the new one rides up
+   on the platform and its sub-assemblies settle into place one after another.
+   Timings are choreographed with setModule() in stage.client.ts.
+   -------------------------------------------------------------------------- */
+
+.home-module {
+  opacity: 0;
+  pointer-events: none;
+  /* the rise is a real one: the machine comes up out of the well, so it turns
+     about the mouth of the well, not about its own middle */
+  transform-origin: var(--well-x, 380px) var(--well-y, 300px);
+}
+
+.home-module.is-active {
+  opacity: 1;
+  pointer-events: auto;
+  /* a second to clear the rim: the lift takes the weight, runs up, and sets the
+     machine down a hair past its seat. The parts start landing while it is
+     still coming up, so the machine arrives already building. */
+  animation: home-module-rise 1000ms cubic-bezier(0.42, 0, 0.18, 1) both;
+}
+
+/* The outgoing machine is taken apart, top down.
+   It is not sunk as one rigid body — that read as the drawing being pulled
+   under the desk. Each part comes off its seat the way it went on (back along
+   its own axis, capped so a long-travel part does not fly), then falls under
+   its own weight into the well, and the deck's front rim swallows it. The
+   order is the build run backwards — read off each part's own entry timing —
+   so the last part fitted is the first to go and the machine comes down from
+   the top.
+
+   --drop is measured per part in stage units by measureDrops() — the distance
+   from that part's top to the rim — and --exit-delay is its rank in the build,
+   turned round by scheduleExit() when the switch is made. A part that is
+   further from the hole has further to fall, and falls for longer: duration
+   follows distance, so nothing is yanked down. */
+.home-module.is-leaving {
+  opacity: 1;
+  pointer-events: none;
+  /* the rise is over; the module itself never moves again */
+  animation: none;
+}
+
+.home-module.is-leaving .home-part {
+  animation: home-part-drop both;
+  animation-delay: var(--exit-delay, 0ms);
+  animation-duration: clamp(150ms, calc(90ms + var(--drop, 60) * 0.7ms), 300ms);
+  animation-timing-function: cubic-bezier(0.4, 0, 0.95, 0.62);
+}
+
+@keyframes home-module-rise {
+  0% { transform: translateY(132px) scale(0.88); }
+  72% { transform: translateY(-3.5px) scale(1.003); }
+  88% { transform: translateY(1px) scale(1); }
+  100% { transform: none; }
+}
+
+@keyframes home-part-drop {
+  0% { transform: none; }
+  /* off its own seat first: the reverse of the line it was fitted along */
+  16% {
+    transform: translate(calc(var(--axis-x, 0) * min(var(--travel, 24px), 20px)),
+                         calc(var(--axis-y, 1) * min(var(--travel, 24px), 20px)));
+  }
+  100% {
+    transform: translate(calc(var(--axis-x, 0) * min(var(--travel, 24px), 20px)),
+                         calc(var(--axis-y, 1) * min(var(--travel, 24px), 20px) + var(--drop, 60) * 1px));
+  }
+}
+
+/* the platform under the machine cycles with it */
+/* the lift carries the swap: down with the old machine on it, back up with
+   the new one, over 1200ms — long enough to read as weight, short enough that
+   the incoming machine's own assembly is still the main event */
+.home-stage.is-swapping .home-lift {
+  animation: home-lift-cycle calc(var(--swap-ms, 420ms) + 320ms) cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+/* it waits until the machine has come apart and the last parts are going down,
+   then gives under their weight and comes back up with the next one */
+@keyframes home-lift-cycle {
+  0%, 58% { transform: translateY(0); }
+  80% { transform: translateY(12px); }
+  100% { transform: translateY(0); }
+}
+
+/* every machine splits itself into sub-assemblies; each settles in turn */
+.home-part {
+  transform-box: fill-box;
+}
+
+.home-module.is-active .home-part {
+  animation: home-part-settle 520ms cubic-bezier(0.22, 0.9, 0.24, 1) both;
+  animation-delay: calc(130ms + var(--step, 0) * 55ms);
+}
+
+/* the shared fallback for a part with no rule of its own: it drops onto its
+   seat. No fade — a part either moves into place or is not there yet. */
+@keyframes home-part-settle {
+  from { transform: translateY(16px) scale(0.97); }
+  to { transform: none; }
+}
+
+html.reduce-motion .home-module,
+html.reduce-motion .home-module.is-active,
+html.reduce-motion .home-module.is-leaving,
+html.reduce-motion .home-part,
+html.reduce-motion .home-lift { animation: none !important; }
+html.reduce-motion .home-module { opacity: 0; }
+html.reduce-motion .home-module.is-active { opacity: 1; }
+
+@media (prefers-reduced-motion: reduce) {
+  .home-module,
+  .home-module.is-active,
+  .home-module.is-leaving,
+  .home-part,
+  .home-lift { animation: none !important; }
+  .home-module { opacity: 0; }
+  .home-module.is-active { opacity: 1; }
+}
+
+.home-key {
+  transition: transform 90ms cubic-bezier(0.32, 0.72, 0, 1);
+}
+.home-key.is-down { transform: translateY(2.4px); }
+
+.home-channel-hit { fill: transparent; stroke: none; }
+.home-channel { outline: none; }
+.home-channel:hover .home-channel-hit,
+.home-channel:focus-visible .home-channel-hit {
+  fill: oklch(var(--un-preset-theme-colors-highlight));
+  fill-opacity: 0.14;
+  stroke: oklch(var(--un-preset-theme-colors-highlight));
+  stroke-width: 1.4px;
+  stroke-opacity: 0.55;
+}
+
+html.reduce-motion .home-module,
+html.reduce-motion .home-key { animation: none; transition: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .home-module { animation: none; }
+  .home-key { transition: none; }
+}
+
+@media (max-width: 899px) {
+  .home-shell { grid-template-rows: auto auto auto; }
+  .home-main { grid-template-columns: minmax(0, 1fr); gap: 0.5rem; }
+  .home-copy { max-width: none; }
+  .home-stage { min-height: 44dvh; height: 44dvh; }
+}
+
+.home-stage .iso-svg { max-width: 100%; }
+.home-paper { fill: var(--home-paper); stroke: none; }
+/* at night the sheet is dark stock so the accent ink carries the page */
+.dark .home-stage .home-paper { fill: color-mix(in oklch, oklch(var(--un-preset-theme-colors-primary)) 24%, oklch(var(--un-preset-theme-colors-background)) 76%); }
+.home-main > * { min-width: 0; }
+
+.home-paper-link { outline: none; }
+.home-paper-link .home-paper { transition: fill 220ms ease; }
+.home-paper-link:hover .home-paper,
+.home-paper-link:focus-visible .home-paper {
+  fill: color-mix(in oklch, var(--home-paper) 82%, oklch(var(--un-preset-theme-colors-highlight)) 18%);
+}
+
+.home-latest {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  /* the label carries its own colon (and its own space in English), so the two
+     parts read as one sentence with nothing wedged between them */
+  gap: 0;
+  margin: 1.6rem 0 0;
+  max-width: 30rem;
+  font-family: var(--un-preset-theme-font-family-sans);
+  font-size: 0.82rem;
+  line-height: 1.5;
+}
+/* same size as the title it introduces: one line, one voice */
+.home-latest-label {
+  font-size: inherit;
+  letter-spacing: 0.02em;
+  color: color-mix(in oklch, oklch(var(--un-preset-theme-colors-secondary)) 86%, transparent);
+}
+.home-latest a {
+  color: oklch(var(--un-preset-theme-colors-primary));
+  text-decoration: none;
+  border-bottom: 1px solid color-mix(in oklch, oklch(var(--un-preset-theme-colors-highlight)) 45%, transparent);
+  transition: color 180ms ease, border-color 180ms ease;
+}
+.home-latest a:hover,
+.home-latest a:focus-visible {
+  color: oklch(var(--un-preset-theme-colors-highlight));
+  border-bottom-color: oklch(var(--un-preset-theme-colors-highlight));
+}
+
+.home-paper-shadow {
+  fill: var(--anatomy-halo);
+  opacity: calc(var(--anatomy-halo-opacity) * 1.6);
+  filter: blur(4px);
+}
+
+.home-lift {
+  transition: none;
+}
+
+/* the whole sheet — paper and typing together — feeds up a line at a time */
+.home-stage .home-paper-group {
+  transition: transform 520ms cubic-bezier(0.33, 0.9, 0.24, 1);
+}
+
+/* the sheet only feeds while its machine is on the platform; outside that the
+   hint would pin a compositor layer for nothing */
+.home-module.is-active .home-paper-group {
+  will-change: transform;
+}
+
+html.reduce-motion .home-stage .home-paper-group { transition: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .home-stage .home-paper-group { transition: none; }
+}
+
+.home-stage .home-panel-plate .iso-fill { fill: var(--anatomy-shade-2); }
+.home-stage .home-panel-plate .iso-shade { fill: var(--anatomy-shade-1); }
+.home-stage .home-key-cap .iso-fill { fill: var(--anatomy-top); }
+.home-stage .home-key-cap .iso-shade { fill: var(--anatomy-shade-3); }
+.home-stage .home-top-plate .iso-fill { fill: var(--anatomy-shade-3); }
+.home-stage .home-plinth .iso-fill { fill: var(--anatomy-shade-1); }
+.home-stage .home-plinth .iso-shade { fill: var(--anatomy-shade-0); }
+.home-stage .home-shadow {
+  fill: var(--anatomy-halo);
+  opacity: 0.16;
+  filter: blur(5px);
+}
+
+.home-stage .home-table {
+  fill: var(--anatomy-shade-3);
+  stroke: none;
+}
+
+
+/* Off screen, the stage holds still. The narrow layout puts the machine below
+   the copy, and a reader who never scrolls to it should not pay for loops they
+   cannot see. */
+.home-stage[data-idle='1'] * {
+  animation-play-state: paused !important;
+}
+
+/* the key of the machine that is on the platform breathes */
+@keyframes key-breathe {
+  0%, 100% { fill: var(--anatomy-top); }
+  50% { fill: color-mix(in oklch, var(--anatomy-top) 34%, oklch(var(--un-preset-theme-colors-highlight)) 66%); }
+}
+
+/* The rim breathes by brightening, not by thickening. stroke-width is a
+   geometry property: animating it made Chrome lay the SVG out again on every
+   frame of a loop that never ends — measured at ~300 layouts and a third of a
+   second of main-thread time per six seconds, for one keycap. The width stays
+   at the peak; only the opacity moves, which repaints and nothing else. */
+@keyframes key-edge-breathe {
+  0%, 100% { stroke-opacity: 0.18; }
+  50% { stroke-opacity: 1; }
+}
+
+/* its own layer: the breath repaints the cap every frame, and without a layer
+   Chrome repaints the machine under it as well (measured 0.84 s → 0.63 s of
+   main-thread time per six idle seconds) */
+.home-stage .home-keycap.is-active {
+  will-change: transform;
+}
+
+.home-stage .home-keycap.is-active .iso-fill {
+  animation: key-breathe 2s ease-in-out infinite;
+}
+.home-stage .home-keycap.is-active .iso-edge {
+  stroke: var(--anatomy-lit);
+  stroke-width: 2.4px;
+  animation: key-edge-breathe 2s ease-in-out infinite;
+}
+.home-stage .home-card .iso-fill { fill: var(--anatomy-top); }
+
+html.reduce-motion .home-keycap.is-active .iso-fill,
+html.reduce-motion .home-keycap.is-active .iso-edge { animation: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .home-keycap.is-active .iso-fill,
+  .home-keycap.is-active .iso-edge { animation: none; }
+}
+
+
+/* projector: a lathe disc seen face-on paints its cap with the paper tone,
+   so the reels need their own ink or they disappear */
+.home-stage .home-reel .iso-fill { fill: var(--home-metal); }
+.home-stage .home-reel .iso-shade { fill: var(--home-metal); }
+.home-stage .home-reel .iso-top { fill: var(--home-metal); }
+.home-stage .home-proj-body .iso-fill { fill: var(--anatomy-shade-1); }
+.home-stage .home-proj-body .iso-shade { fill: var(--anatomy-shade-1); }
+.home-stage .home-proj-body .iso-top { fill: var(--anatomy-shade-2); }
+
+.home-stage .home-issue-sheet { fill: var(--home-paper); stroke: none; }
+.home-stage .home-issue-mast { fill: var(--anatomy-shade-0); }
+.home-stage .home-issue-cover {
+  fill: var(--anatomy-shade-2);
+  transition: fill 220ms ease;
+}
+.home-stage .home-issue-photo {
+  filter: grayscale(1) contrast(0.92);
+  transition: filter 260ms ease;
+}
+.home-stage .home-issue {
+  transition: transform 240ms cubic-bezier(0.32, 0.72, 0, 1);
+}
+.home-stage .home-issue:hover,
+.home-stage .home-issue:focus-visible {
+  transform: translateY(-5px);
+}
+.home-stage .home-issue:hover .home-issue-photo,
+.home-stage .home-issue:focus-visible .home-issue-photo {
+  filter: none;
+}
+.home-stage .home-issue:hover .home-issue-cover,
+.home-stage .home-issue:focus-visible .home-issue-cover {
+  fill: color-mix(in oklch, oklch(var(--un-preset-theme-colors-highlight)) 58%, oklch(var(--un-preset-theme-colors-background)) 42%);
+}
+.home-stage .home-issue { outline: none; }
+
+.home-stage .home-issue-number text { fill: var(--anatomy-top); }
+
+/* 03 — the newspaper rack: a hanging sheet swings on its clips ------------ */
+
+.home-stage .home-issue-sheet-group {
+  transform-box: fill-box;
+  transform-origin: 50% 0%;
+  transition: transform 320ms cubic-bezier(0.32, 0.72, 0, 1);
+}
+.home-stage .home-issue:hover .home-issue-sheet-group,
+.home-stage .home-issue:focus-visible .home-issue-sheet-group {
+  transform: rotate(-3.4deg);
+}
+
+html.reduce-motion .home-stage .home-issue-sheet-group { transition: none; }
+@media (prefers-reduced-motion: reduce) {
+  .home-stage .home-issue-sheet-group { transition: none; }
+}
+
+/* --------------------------------------------------------------------------
+   The projected reel (02 作品)
+   A fixed layer behind the whole page: the machine throws its picture at the
+   room, not at a screen of its own. It sits outside .home-stage on purpose —
+   .home-stage is a transformed/perspective candidate, which would capture a
+   position:fixed descendant; keeping the layer outside it is the safe choice.
+
+   The throw is a rectangle of light, not an ellipse: two perpendicular
+   linear-gradient mask layers intersected give a hard-edged rectangle with a
+   soft border on all four sides (the corners simply feather twice). Its centre
+   sits a quarter of the way down the viewport, so the picture owns the upper
+   half and the headline keeps the room below it.
+   -------------------------------------------------------------------------- */
+
+.home-projection {
+  /* the soft border of the rectangle — 40–70px band, scaling with the frame */
+  --projection-feather: clamp(64px, 7vw, 96px);
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  overflow: hidden;
+  opacity: 0;
+  transition: opacity 680ms ease;
+}
+
+/* nothing is thrown — and nothing plays — until the projector has threaded */
+html[data-home-section='works'][data-screening='on'] .home-projection { opacity: 1; }
+
+.home-projection-frame {
+  position: absolute;
+  left: 0;
+  /* the picture fills the page width and hangs from the top edge, the way a
+     throw from the machine would land on the wall behind the page. On a phone
+     the page is a column and the top edge is the headline, so the script
+     measures the stage and puts the frame behind the machine instead. */
+  top: var(--projection-top, 0);
+  width: 100vw;
+  height: var(--projection-height, min(62vh, 56.25vw));
+  overflow: hidden;
+  /* a projected picture is never sharp. The blur is a real gaussian (CSS blur
+     is one); the edge is the part that used to read as a band, so it is a
+     six-stop falloff instead of a straight ramp — the alpha follows a gaussian's
+     shoulder, which is what light on a wall actually does */
+  filter: blur(3.2px) saturate(1) contrast(1.02);
+  -webkit-mask-image:
+    linear-gradient(to right,
+      transparent 0,
+      rgba(0, 0, 0, 0.04) calc(var(--projection-feather) * 0.14),
+      rgba(0, 0, 0, 0.16) calc(var(--projection-feather) * 0.3),
+      rgba(0, 0, 0, 0.38) calc(var(--projection-feather) * 0.46),
+      rgba(0, 0, 0, 0.64) calc(var(--projection-feather) * 0.62),
+      rgba(0, 0, 0, 0.86) calc(var(--projection-feather) * 0.8),
+      #000 var(--projection-feather),
+      #000 calc(100% - var(--projection-feather)),
+      rgba(0, 0, 0, 0.86) calc(100% - var(--projection-feather) * 0.8),
+      rgba(0, 0, 0, 0.64) calc(100% - var(--projection-feather) * 0.62),
+      rgba(0, 0, 0, 0.38) calc(100% - var(--projection-feather) * 0.46),
+      rgba(0, 0, 0, 0.16) calc(100% - var(--projection-feather) * 0.3),
+      rgba(0, 0, 0, 0.04) calc(100% - var(--projection-feather) * 0.14),
+      transparent 100%),
+    linear-gradient(to bottom,
+      transparent 0,
+      rgba(0, 0, 0, 0.04) calc(var(--projection-feather) * 0.14),
+      rgba(0, 0, 0, 0.16) calc(var(--projection-feather) * 0.3),
+      rgba(0, 0, 0, 0.38) calc(var(--projection-feather) * 0.46),
+      rgba(0, 0, 0, 0.64) calc(var(--projection-feather) * 0.62),
+      rgba(0, 0, 0, 0.86) calc(var(--projection-feather) * 0.8),
+      #000 var(--projection-feather),
+      #000 calc(100% - var(--projection-feather)),
+      rgba(0, 0, 0, 0.86) calc(100% - var(--projection-feather) * 0.8),
+      rgba(0, 0, 0, 0.64) calc(100% - var(--projection-feather) * 0.62),
+      rgba(0, 0, 0, 0.38) calc(100% - var(--projection-feather) * 0.46),
+      rgba(0, 0, 0, 0.16) calc(100% - var(--projection-feather) * 0.3),
+      rgba(0, 0, 0, 0.04) calc(100% - var(--projection-feather) * 0.14),
+      transparent 100%);
+  -webkit-mask-composite: source-in;
+  mask-image:
+    linear-gradient(to right,
+      transparent 0,
+      rgba(0, 0, 0, 0.04) calc(var(--projection-feather) * 0.14),
+      rgba(0, 0, 0, 0.16) calc(var(--projection-feather) * 0.3),
+      rgba(0, 0, 0, 0.38) calc(var(--projection-feather) * 0.46),
+      rgba(0, 0, 0, 0.64) calc(var(--projection-feather) * 0.62),
+      rgba(0, 0, 0, 0.86) calc(var(--projection-feather) * 0.8),
+      #000 var(--projection-feather),
+      #000 calc(100% - var(--projection-feather)),
+      rgba(0, 0, 0, 0.86) calc(100% - var(--projection-feather) * 0.8),
+      rgba(0, 0, 0, 0.64) calc(100% - var(--projection-feather) * 0.62),
+      rgba(0, 0, 0, 0.38) calc(100% - var(--projection-feather) * 0.46),
+      rgba(0, 0, 0, 0.16) calc(100% - var(--projection-feather) * 0.3),
+      rgba(0, 0, 0, 0.04) calc(100% - var(--projection-feather) * 0.14),
+      transparent 100%),
+    linear-gradient(to bottom,
+      transparent 0,
+      rgba(0, 0, 0, 0.04) calc(var(--projection-feather) * 0.14),
+      rgba(0, 0, 0, 0.16) calc(var(--projection-feather) * 0.3),
+      rgba(0, 0, 0, 0.38) calc(var(--projection-feather) * 0.46),
+      rgba(0, 0, 0, 0.64) calc(var(--projection-feather) * 0.62),
+      rgba(0, 0, 0, 0.86) calc(var(--projection-feather) * 0.8),
+      #000 var(--projection-feather),
+      #000 calc(100% - var(--projection-feather)),
+      rgba(0, 0, 0, 0.86) calc(100% - var(--projection-feather) * 0.8),
+      rgba(0, 0, 0, 0.64) calc(100% - var(--projection-feather) * 0.62),
+      rgba(0, 0, 0, 0.38) calc(100% - var(--projection-feather) * 0.46),
+      rgba(0, 0, 0, 0.16) calc(100% - var(--projection-feather) * 0.3),
+      rgba(0, 0, 0, 0.04) calc(100% - var(--projection-feather) * 0.14),
+      transparent 100%);
+  mask-composite: intersect;
+  opacity: 0.62;
+}
+
+.home-projection-frame video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* keep the upper band of the frame: the band is much wider than 16:9 */
+  object-position: 50% 38%;
+  /* silent loop, screened in black and white with a light warm wash */
+  filter: grayscale(1) sepia(0.28) saturate(0.9) contrast(1.04);
+  transition: filter 700ms ease;
+}
+
+/* the pointer brings the colour back. The frame itself can never be hovered —
+   z-index:-1 puts the whole layer under .home-shell, which hit-tests first — so
+   the live trigger is a flag the stage can set on <html>:
+     document.documentElement.dataset.projection = 'hover'
+   while the pointer sits inside the frame's rect (cleared on leave). :hover is
+   kept as the honest selector for the day the layer becomes reachable. */
+html[data-home-section='works'][data-screening='on'] .home-projection-frame:hover video,
+html[data-home-section='works'][data-screening='on'][data-projection='hover'] .home-projection-frame video {
+  filter: grayscale(0) sepia(0) saturate(1) contrast(1.04);
+}
+
+/* the room around the throw, only at night: a neutral falloff, no colour */
+.home-projection-wash {
+  display: none;
+}
+
+.dark .home-projection-frame { opacity: 0.55; }
+
+.dark .home-projection-wash {
+  display: block;
+  position: absolute;
+  inset: 0;
+  /* the room falls away from the throw. Neutral on purpose: the reel carries
+     its own warm B/W wash, and the old olive glow at 74%/42% sat off the
+     frame's new centre and tinted the picture green. Vignette re-centred on
+     the frame (50%/25%) so the falloff follows the rectangle. */
+  background:
+    radial-gradient(118% 96% at 50% 25%, transparent 38%, color-mix(in srgb, oklch(var(--un-preset-theme-colors-background)) 84%, transparent) 100%);
+}
+
+html.reduce-motion .home-projection { transition: none; }
+html.reduce-motion .home-projection-frame video { transition: none; }
+@media (prefers-reduced-motion: reduce) {
+  .home-projection { transition: none; }
+  .home-projection-frame video { transition: none; }
+}

@@ -1,0 +1,383 @@
+/* ==========================================================================
+   03 — 专栏: the newspaper rack
+   The rack is drawn as eleven sub-assemblies, in paint order: the backboard,
+   the plinth, its two levelling feet, the two posts (each with its knurled
+   cap), the cross member over their heads, a knee plate at each foot, one rail
+   per tier, the hung issues (each with its own clips), the front lip with the
+   two bolts that pin it down, the maker's plate, the stack of back issues, the
+   two drive blocks with their cap plates, the crank, and the reading magnifier.
+
+   The number of tiers and of papers is the module's business, not this file's:
+   newsrack.mjs lays out one paper per issue and hands each part a `--step`
+   within its own wave, plus `--lag` for the papers, which shrinks as the rack
+   fills — a full wall hangs in one sweep rather than in five seconds.
+
+   home.css gives every `.home-part` the same generic settle. Here the rack is
+   actually built, in the order a fitter would build it: the feet are jacked up
+   off the deck, the plinth is set down on them, the posts telescope up out of
+   it, the cross member is fed in between their heads and the knee plates are
+   swung up against them, the rails slide into their notches, the backboard comes
+   in along the wall behind them, and the issues are hung one after another, each
+   dropping onto its clips and swinging itself still. Then the front lip is
+   pressed into the plinth's edge and its bolts are run home, the maker's plate is
+   pressed on, the drive is slid in end by end, each block is closed with its cap
+   plate, the crank is slipped onto the right-hand axle, and the reader slides
+   onto the rail.
+
+   Nothing fades, and nothing is placed by eye. Every part is slid, dropped or
+   pressed along the axis it is actually fitted on: newsrack.mjs reads that axis
+   off the drawing — two world points on it — and hands the CSS a projected unit
+   vector, a distance and a pivot. So a rail comes in along the lip, a paper
+   falls down its own clip line, a bolt runs in along its own thread, and no
+   keyframe below has to invent a screen vector. The distances stay inside the
+   132px band the well mouth swallows.
+
+   Beat map (delay → end), 2380ms from the module taking `.is-active`:
+     feet     40ms → 270ms    (per foot: 40 / 70)
+     plinth  300ms → 580ms
+     posts   620ms → 950ms    (per post: 620 / 680)
+     brace   900ms → 1130ms
+     gussets 960ms → 1220ms   (per plate: 960 / 1000)
+     rails  1000ms → 1380ms   (per tier: +50ms each)
+     back   1150ms → 1420ms
+     sheets 1300ms → ~1850ms  (per paper, one `--lag` apart: 24 papers at 14ms)
+     lip    1780ms → 1990ms
+     bolts  2000ms → 2230ms   (per bolt: 2000 / 2030, each turning as it seats)
+     drive  2020ms → 2270ms   (per end: 2020 / 2060)
+     plates 2110ms → 2305ms   (per cap: 2110 / 2135)
+     archive 1900ms → 2150ms
+     crank  2150ms → 2340ms
+     badge  2070ms → 2250ms
+     reader 2170ms → 2380ms
+
+   Fill mode is `backwards`, not `both`: every keyframe ends on
+   `transform: none`, which is exactly the resting style, so the backwards fill
+   holds a part at its start pose until its beat and then lets go once it lands.
+   Holding the fill would keep each group composited after it has landed, and
+   the issue numbers inside the sheets would re-rasterise without subpixel AA.
+   ========================================================================== */
+
+/* ---- the entry every part shares ------------------------------------------
+   The direction, the distance and the pivot are not in this file. newsrack.mjs
+   gives each part `--axis-x/--axis-y` (the projected unit vector of the axis it
+   is fitted along), `--travel`, and `--pivot-x/--pivot-y` (a point in the
+   stage's own viewBox), all of them read off two world points on that axis.
+   `--from-scale` is opt-in: a part pressed on from outside its face starts a
+   hair large, everything else starts at its own size.
+   The step at 64% is along the same axis — a part that goes a hair past its
+   seat and is drawn back — never a second, invented direction. */
+@keyframes nr-axis-in {
+  from {
+    transform:
+      translate(calc(var(--axis-x, 0) * var(--travel, 28px) * -1),
+                calc(var(--axis-y, 1) * var(--travel, 28px) * -1))
+      scale(var(--from-scale, 1));
+  }
+  64% {
+    transform:
+      translate(calc(var(--axis-x, 0) * var(--travel, 28px) * 0.08),
+                calc(var(--axis-y, 1) * var(--travel, 28px) * 0.08));
+  }
+  to { transform: none; }
+}
+
+/* the backboard: slid along the wall it hangs on, in from behind the left post */
+.home-module.is-active .home-part[data-part='back'] {
+  transform-box: view-box;
+  transform-origin: var(--pivot-x, 50%) var(--pivot-y, 50%);
+  animation: nr-axis-in 270ms cubic-bezier(0.24, 0.82, 0.26, 1) backwards;
+  animation-delay: 1150ms;
+}
+
+/* the plinth: set down the plumb line onto the feet that already carry it -----
+   `plinth`, not `base`: typewriter.css already styles `[data-part='base']` and
+   these selectors are module-agnostic — the name is the only namespace. */
+.home-module.is-active .home-part[data-part='plinth'] {
+  transform-box: view-box;
+  transform-origin: var(--pivot-x, 50%) var(--pivot-y, 50%);
+  animation: nr-axis-in 280ms cubic-bezier(0.22, 0.9, 0.24, 1) backwards;
+  animation-delay: 300ms;
+}
+
+/* the levelling feet: each pad is jacked up its own plumb line off the deck ---
+   They are painted after the plinth (they stand proud of its face) but they
+   land before it, so the base is set down on feet that are already there. */
+.home-module.is-active .home-part[data-part='nr-feet'] {
+  transform-box: view-box;
+  transform-origin: var(--pivot-x, 50%) var(--pivot-y, 50%);
+  animation: nr-axis-in 200ms cubic-bezier(0.26, 0.88, 0.28, 1) backwards;
+  animation-delay: calc(40ms + var(--step) * 30ms);
+}
+
+/* the posts: each telescopes up out of its own foot -------------------------- */
+.home-module.is-active .home-part[data-part='posts'] {
+  transform-box: view-box;
+  transform-origin: var(--pivot-x, 50%) var(--pivot-y, 50%);
+  animation: nr-post-stand 270ms cubic-bezier(0.2, 0.86, 0.24, 1) backwards;
+  /* --step is the post: left first, then right */
+  animation-delay: calc(620ms + var(--step) * 60ms);
+}
+
+/* the cross member: fed in between the heads along its own length ----------- */
+.home-module.is-active .home-part[data-part='nr-brace'] {
+  transform-box: view-box;
+  transform-origin: var(--pivot-x, 50%) var(--pivot-y, 50%);
+  animation: nr-axis-in 230ms cubic-bezier(0.26, 0.9, 0.24, 1) backwards;
+  animation-delay: 900ms;
+}
+
+/* the knee plates: each swings up about the hinge it actually has ------------
+   The pivot is the plate's bottom edge on the plinth, handed over by the axis,
+   so the plate tips up against its post instead of turning about its middle.
+   The pair is mirror-handed: the angle comes out of `--step` (0 left, 1 right)
+   so one keyframe swings each plate's apex toward its own post. */
+.home-module.is-active .home-part[data-part='nr-gusset'] {
+  transform-box: view-box;
+  transform-origin: var(--pivot-x, 50%) var(--pivot-y, 50%);
+  animation: nr-gusset-swing 220ms cubic-bezier(0.24, 0.86, 0.26, 1) backwards;
+  /* --step is the plate: left first, then right */
+  animation-delay: calc(960ms + var(--step) * 40ms);
+}
+
+/* the rails: each slid in along the lip it is bolted to ---------------------- */
+.home-module.is-active .home-part[data-part='rails'] {
+  transform-box: view-box;
+  transform-origin: var(--pivot-x, 50%) var(--pivot-y, 50%);
+  animation: nr-axis-in 230ms cubic-bezier(0.3, 0.9, 0.24, 1) backwards;
+  /* --step is the rail: top tier first, then down the rack */
+  animation-delay: calc(1000ms + var(--step) * 50ms);
+}
+
+/* the sheets: each falls down its own clip line and swings about it ---------- */
+.home-module.is-active .home-part[data-part='sheets'] {
+  transform-box: view-box;
+  transform-origin: var(--pivot-x, 50%) var(--pivot-y, 50%);
+  animation: nr-sheet-hang 230ms cubic-bezier(0.24, 0.86, 0.26, 1) backwards;
+  /* --step is the load order (newest first, far to near) and --lag the stagger
+     the module picks for this rack: 44ms while the rack is nearly empty, down
+     to a dozen ms when it is full, so the wave never outlasts the page */
+  animation-delay: calc(1300ms + var(--step) * var(--lag, 44ms));
+}
+
+/* the front lip: pressed onto the plinth's front edge along its own normal ---- */
+.home-module.is-active .home-part[data-part='nr-lip'] {
+  --from-scale: 1.03;
+  transform-box: view-box;
+  transform-origin: var(--pivot-x, 50%) var(--pivot-y, 50%);
+  animation: nr-axis-in 210ms cubic-bezier(0.22, 0.9, 0.24, 1) backwards;
+  animation-delay: 1780ms;
+}
+
+/* the bolts: each offered up along its own thread and run home while it seats -
+   The washer is part of the bolt; only the head turns, so the slot winds round
+   against a plate that stays put. */
+.home-module.is-active .home-part[data-part='nr-bolt'] {
+  transform-box: view-box;
+  transform-origin: var(--pivot-x, 50%) var(--pivot-y, 50%);
+  animation: nr-axis-in 200ms cubic-bezier(0.26, 0.86, 0.28, 1) backwards;
+  /* --step is the bolt: left first, then right */
+  animation-delay: calc(2000ms + var(--step) * 30ms);
+}
+
+.home-module.is-active .home-part[data-part='nr-bolt'] .home-bolt-head {
+  transform-box: view-box;
+  animation: nr-bolt-turn 200ms cubic-bezier(0.34, 0.66, 0.3, 1) backwards;
+  animation-delay: calc(2000ms + var(--step) * 30ms);
+}
+
+/* the maker's plate: pressed onto the plinth's face along its own normal ------ */
+.home-module.is-active .home-part[data-part='nr-badge'] {
+  --from-scale: 1.05;
+  transform-box: view-box;
+  transform-origin: var(--pivot-x, 50%) var(--pivot-y, 50%);
+  animation: nr-axis-in 180ms cubic-bezier(0.24, 0.86, 0.26, 1) backwards;
+  animation-delay: 2070ms;
+}
+
+/* a post stands up: collapsed into the plinth about its own foot, and a few
+   pixels below its seat, so it telescopes out of the base rather than growing
+   in mid-air ---------------------------------------------------------------- */
+@keyframes nr-post-stand {
+  from {
+    transform:
+      translate(calc(var(--axis-x, 0) * var(--travel, 6px) * -1),
+                calc(var(--axis-y, 1) * var(--travel, 6px) * -1))
+      scaleY(0.06);
+  }
+  58% { transform: scaleY(1.04); }
+  78% { transform: scaleY(0.988); }
+  to { transform: none; }
+}
+
+/* a knee plate swings up about its foot and settles flat against the post ----
+   Mirrored pair: `--step` 0 starts the left plate tipped outward (20° the other
+   way from its post), 1 the right, so each swings up toward its own post and
+   overshoots it a hair before seating. The pivot is the hinge, not the plate's
+   middle, which is what makes it a swing rather than a spin. */
+@keyframes nr-gusset-swing {
+  from { transform: rotate(calc((var(--step) * 2 - 1) * 20deg)); }
+  68% { transform: rotate(calc((1 - var(--step) * 2) * 2.4deg)); }
+  to { transform: none; }
+}
+
+/* a sheet is hung: it falls down its own clip line and is left to swing still -
+   It falls further than a rail travels (26px to 16), so the paper is seen to
+   land on clips that are already seated rather than riding in with them. */
+@keyframes nr-sheet-hang {
+  from {
+    transform:
+      translate(calc(var(--axis-x, 0) * var(--travel, 26px) * -1),
+                calc(var(--axis-y, 1) * var(--travel, 26px) * -1))
+      rotate(-2.2deg);
+  }
+  64% {
+    transform:
+      translate(calc(var(--axis-x, 0) * var(--travel, 26px) * 0.06),
+                calc(var(--axis-y, 1) * var(--travel, 26px) * 0.06))
+      rotate(0.9deg);
+  }
+  84% { transform: rotate(-0.3deg); }
+  to { transform: none; }
+}
+
+/* a bolt run home: the head winds round two thirds of a turn as it lands ----- */
+@keyframes nr-bolt-turn {
+  from { transform: rotate(-210deg); }
+  to { transform: none; }
+}
+
+/* ---- the reading rail ----------------------------------------------------
+   Five more parts join the rack once the issues are up: the pile of back issues
+   is set down on the deck at the front left, a block is slid in from each end of
+   the lip with the rail riding in on the left one, each block is closed with its
+   cap plate, the crank is slipped onto the right-hand axle, and the reader
+   slides onto the rail from the left. Only then does the loop start: the reader
+   runs out to the far end, rests a beat over the last issue, and comes back,
+   with the idler, the crank and the cable all turning together.
+   ------------------------------------------------------------------------- */
+
+/* the pile of back issues: set down on the deck along its own plumb line ------ */
+.home-module.is-active .home-part[data-part='archive'] {
+  transform-box: view-box;
+  transform-origin: var(--pivot-x, 50%) var(--pivot-y, 50%);
+  animation: nr-axis-in 250ms cubic-bezier(0.22, 0.9, 0.24, 1) backwards;
+  animation-delay: 1900ms;
+}
+
+/* each block is slid in from its own end of the lip, along the lip, so the rail
+   rides in with the left one and the right block clamps over its end. The two
+   directions are not mirrored here: each block's axis was read off the lip, so
+   one is +u and the other -u, and `--step` is only the beat. */
+.home-module.is-active .home-part[data-part='drive'] {
+  transform-box: view-box;
+  transform-origin: var(--pivot-x, 50%) var(--pivot-y, 50%);
+  animation: nr-axis-in 210ms cubic-bezier(0.22, 0.9, 0.24, 1) backwards;
+  /* --step is the end: the left block (with the rail) first, then the right */
+  animation-delay: calc(2020ms + var(--step) * 40ms);
+}
+
+/* the cap plates: each is lowered onto its block along its own normal --------- */
+.home-module.is-active .home-part[data-part='nr-plate'] {
+  transform-box: view-box;
+  transform-origin: var(--pivot-x, 50%) var(--pivot-y, 50%);
+  animation: nr-axis-in 170ms cubic-bezier(0.26, 0.88, 0.26, 1) backwards;
+  /* --step is the block it closes */
+  animation-delay: calc(2110ms + var(--step) * 25ms);
+}
+
+/* the crank: slipped onto the right-hand axle along the axle it turns about --- */
+.home-module.is-active .home-part[data-part='nr-crank'] {
+  transform-box: view-box;
+  transform-origin: var(--pivot-x, 50%) var(--pivot-y, 50%);
+  animation: nr-axis-in 190ms cubic-bezier(0.24, 0.86, 0.26, 1) backwards;
+  animation-delay: 2150ms;
+}
+
+/* the reader rides in along the rail it will run on -------------------------- */
+.home-module.is-active .home-part[data-part='reader'] {
+  transform-box: view-box;
+  transform-origin: var(--pivot-x, 50%) var(--pivot-y, 50%);
+  animation: nr-axis-in 210ms cubic-bezier(0.24, 0.86, 0.26, 1) backwards;
+  animation-delay: 2170ms;
+}
+
+/* the loop. 14s: hold, run out over 5s, read for 2s, run back over 5s, hold.
+   It is held off until 2.5s, a beat after the reader lands at 2380ms, so the
+   machine is seen to be finished before it is seen to work. The easing is the
+   same on the reader, on both wheels and on the crank, so the cable never looks
+   like it is slipping.
+
+   `is-leaving` is in every selector below on purpose. The swap drops
+   `is-active` on the frame the exit starts; a rule that only matched the
+   standing machine would cancel the loop right there, and the reader would
+   jump from wherever it had got to back to the left end of its rail — up to
+   173px — with the wheels snapping to 0deg, all in one frame, as the parts
+   start to fall. Matching the leaving machine keeps the same animation-name in
+   force across the swap, so the animation is not restarted (CSS keys a running
+   animation by its name) and the reader carries on from the phase it reached
+   until the module is dropped a moment later. */
+.home-stage .home-module.is-active .home-reader,
+.home-stage .home-module.is-leaving .home-reader {
+  animation: nr-reader-run 14s cubic-bezier(0.45, 0.05, 0.25, 1) 2.5s infinite;
+}
+
+.home-stage .home-module.is-active .home-pulley,
+.home-stage .home-module.is-leaving .home-pulley {
+  transform-box: view-box;
+  animation: nr-pulley-turn 14s cubic-bezier(0.45, 0.05, 0.25, 1) 2.5s infinite;
+}
+
+/* the crank is its own group so it can be fitted after the drive is bolted
+   down; it still turns with the wheel it is pinned to */
+.home-stage .home-module.is-active .home-crank,
+.home-stage .home-module.is-leaving .home-crank {
+  transform-box: view-box;
+  animation: nr-pulley-turn 14s cubic-bezier(0.45, 0.05, 0.25, 1) 2.5s infinite;
+}
+
+@keyframes nr-reader-run {
+  0%, 7% { transform: translate(0, 0); }
+  43%, 57% { transform: translate(var(--run-x, 0px), var(--run-y, 0px)); }
+  93%, 100% { transform: translate(0, 0); }
+}
+
+@keyframes nr-pulley-turn {
+  0%, 7% { transform: rotate(0deg); }
+  43%, 57% { transform: rotate(460deg); }
+  93%, 100% { transform: rotate(0deg); }
+}
+
+/* the magnifier's glass: a light tint, never a white disc */
+.home-stage .home-reader-glass { fill: rgba(255, 255, 255, 0.24); }
+.dark .home-stage .home-reader-glass { fill: rgba(255, 255, 255, 0.12); }
+
+/* reduced motion: the rack is simply there ---------------------------------- */
+
+html.reduce-motion .home-module.is-active .home-part[data-part] {
+  animation: none !important;
+  animation-delay: 0ms !important;
+  opacity: 1;
+  transform: none;
+}
+
+/* the kill is stated without a state, so it also covers the leaving machine:
+   the loop rules above match `.is-leaving` too, and a reader must never be left
+   turning because the OS setting was flipped mid-swap */
+html.reduce-motion .home-module .home-reader,
+html.reduce-motion .home-module .home-pulley,
+html.reduce-motion .home-module .home-crank,
+html.reduce-motion .home-module .home-bolt-head { animation: none !important; }
+
+@media (prefers-reduced-motion: reduce) {
+  .home-module.is-active .home-part[data-part] {
+    animation: none !important;
+    animation-delay: 0ms !important;
+    opacity: 1;
+    transform: none;
+  }
+
+  .home-module .home-reader,
+  .home-module .home-pulley,
+  .home-module .home-crank,
+  .home-module .home-bolt-head { animation: none !important; }
+}

@@ -1,0 +1,895 @@
+/* ==========================================================================
+   04 — 资源: the tool case
+   The lid is a real hinged group in the SVG. A rotation about a horizontal
+   hinge parallel to the picture plane projects to a vertical squash about the
+   hinge line, so the opening is animated as scaleY on the lid group, with the
+   closed lid slab underneath handing over once the case has been built.
+
+   The build runs to 2400 ms, and its order is the order a case is actually
+   assembled in: four pads are laid on the deck, the plinth is lowered onto
+   them, the walls go up back → left → right, the near wall closes the body,
+   the partitions drop into their slots, the hinge is pinned, the hardware and
+   the legend go on, and the slab is lowered shut. Only then does the lid swing
+   up — and its face is not printed, it is populated: sixteen app chips are
+   pinned on one at a time, then eight name plates, while the three interiors
+   are set down in the well. The knob is turned to its first detent last, and
+   that is the machine running.
+
+   After that the case stops being a tool box and becomes a drawer with three
+   floors: the rotary knob on the front-right indexes them. The knob only reads
+   `data-position` — stage.client.ts sets it on the enclosing `.home-module`,
+   and everything below keys off that one attribute, so there is no second
+   source of truth and nothing here needs script.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   The lid board — the index of the resource page.
+
+   The lid's face projects one-to-one (see the module comment), so every mark
+   on it is drawn at its true type size: the board is 156 units across and the
+   creator names sit at 5, which is what makes them readable at homepage scale.
+   The board is one step darker than the lid's inner face, the app tiles are
+   paper, and every mark is cut out of them in the ink tone — the same trade
+   the four-tone shading makes everywhere else, so it holds in both themes.
+   -------------------------------------------------------------------------- */
+
+.home-stage .home-lid-board {
+  fill: var(--anatomy-shade-1);
+  stroke: none;
+}
+
+/* an app chip: a printed tile, its glyph knocked out of it */
+.home-stage .home-lid-tile {
+  fill: var(--anatomy-top);
+  stroke: none;
+}
+
+.home-stage .home-lid-ink {
+  fill: var(--anatomy-hi);
+  stroke: none;
+}
+
+/* a carve is the tile's own tone, so it reads as a hole in the mark */
+.home-stage .home-lid-carve {
+  fill: var(--anatomy-top);
+  stroke: none;
+}
+
+/* the stroke glyphs keep a fixed screen weight: at eleven units across a
+   hairline inside a tile would disappear */
+.home-stage .home-lid-trace {
+  fill: none;
+  stroke: var(--anatomy-hi);
+  stroke-width: 1.05;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* a creator's name plate: a hairline chip, a step off the board */
+.home-stage .home-lid-chip-face {
+  fill: var(--anatomy-shade-3);
+  stroke: none;
+}
+
+/* the maker's plate on the near panel: bright stock, so the engraving reads */
+.home-stage .home-tb-plate {
+  fill: var(--anatomy-shade-3);
+  stroke: none;
+}
+
+/* --------------------------------------------------------------------------
+   The rotary knob — three detents, one per section of the resource page.
+
+   The pointer is emitted as its own group with the dial's centre as its
+   transform origin (inline, in user units), so rotating it turns it about the
+   knob's axis rather than about the group's own bounding box. The detent snap
+   overshoots: a real knob is spring-loaded and lands a touch past the mark.
+   -------------------------------------------------------------------------- */
+
+.home-stage .home-dial {
+  outline: none;
+}
+
+/* the dial is a real button, so it must not be tabbable while its module is
+   off the platform */
+.home-stage .home-module:not(.is-active) .home-dial {
+  visibility: hidden;
+}
+
+/* the printed arrow on the dial: the accent, because it is the one thing on
+   the case that says which seat the knob has selected */
+.home-stage .home-dial-mark {
+  fill: var(--anatomy-lit);
+  stroke: none;
+}
+
+/* The pointer's three resting marks, and the trial turn that carries it to the
+   first one. The angles live in custom properties rather than in the keyframes
+   so that the detent rule below can be written on `.is-active` alone: a rule
+   that also tests `data-position` starts matching again every time the knob is
+   turned back to the first seat, and an animation that starts matching again
+   starts over — with its 2130 ms delay, which left the pointer on the wrong
+   mark for two seconds while the interior had already changed. */
+.home-stage .home-dial-pointer {
+  --tb-from: 55deg; /* the mark the pointer is drawn on before the trial turn */
+  --tb-mid: -63deg; /* the overshoot past the first detent */
+  --tb-to: -55deg;
+  rotate: -55deg;
+  transition: rotate 520ms cubic-bezier(0.34, 1.56, 0.5, 1);
+}
+
+/* On the other two seats there is no turn to watch — the pointer is already
+   where it belongs, so its start, its overshoot and its end are all its own
+   resting angle and the run is a no-op. */
+.home-stage .home-module[data-position='1'] .home-dial-pointer {
+  --tb-from: 0deg;
+  --tb-mid: 0deg;
+  --tb-to: 0deg;
+  rotate: 0deg;
+}
+
+.home-stage .home-module[data-position='2'] .home-dial-pointer {
+  --tb-from: 55deg;
+  --tb-mid: 55deg;
+  --tb-to: 55deg;
+  rotate: 55deg;
+}
+
+/* the seat the knob is on lights its lamp and its label on the front panel, so
+   the switch has a legend: the plate says which section the interior shows */
+.home-stage .home-dial,
+.home-stage .home-seat {
+  --tb-knob: color-mix(in oklch, var(--anatomy-shade-0) 45%, var(--anatomy-hi) 55%);
+}
+
+.home-stage .home-seat-lamp {
+  fill: var(--anatomy-shade-1);
+  stroke: none;
+}
+
+.home-stage .home-module:not([data-position='1']):not([data-position='2']) .home-seat[data-seat='0'] .home-seat-lamp,
+.home-stage .home-module[data-position='0'] .home-seat[data-seat='0'] .home-seat-lamp,
+.home-stage .home-module[data-position='1'] .home-seat[data-seat='1'] .home-seat-lamp,
+.home-stage .home-module[data-position='2'] .home-seat[data-seat='2'] .home-seat-lamp {
+  fill: var(--anatomy-lit);
+}
+
+.home-stage .home-module:not([data-position='1']):not([data-position='2']) .home-seat[data-seat='0'] .home-seat-label text,
+.home-stage .home-module[data-position='0'] .home-seat[data-seat='0'] .home-seat-label text,
+.home-stage .home-module[data-position='1'] .home-seat[data-seat='1'] .home-seat-label text,
+.home-stage .home-module[data-position='2'] .home-seat[data-seat='2'] .home-seat-label text {
+  fill: var(--anatomy-lit);
+}
+
+/* the knob itself: a dark detent collar with light index marks round a lit
+   dial, and the accent arrow on it. At nine units across the tones have to do
+   the reading — a single step of the palette would vanish at this size. These
+   rules carry an extra class because the shading rules in home.css come after
+   the device sheet and would otherwise win on source order. */
+.home-stage .home-dial .home-dial-collar .iso-fill,
+.home-stage .home-dial .home-dial-collar .iso-shade,
+.home-stage .home-dial .home-dial-collar .iso-top {
+  fill: var(--tb-knob);
+}
+
+.home-stage .home-dial .home-dial-collar .iso-edge {
+  stroke: var(--anatomy-top);
+  stroke-opacity: 0.5;
+}
+
+/* the pawl reads as part of the same mechanism */
+.home-stage .home-dial .home-dial-pawl {
+  fill: var(--tb-knob);
+}
+
+/* the three index marks are cut out of the dark collar, not drawn on it — a
+   hairline would vanish at nine units across, so they keep a screen weight */
+.home-stage .home-dial .iso-line.home-dial-tick {
+  stroke: var(--anatomy-top);
+  stroke-opacity: 0.8;
+  stroke-width: 1.4px;
+}
+
+/* the collar takes the accent while the knob is hovered or focused, so the
+   switch says it can be turned */
+.home-stage .home-dial:focus-visible .home-dial-collar .iso-edge {
+  stroke: var(--anatomy-lit);
+  stroke-width: 1.6px;
+}
+
+.home-stage .home-dial:hover .home-dial-collar .iso-edge {
+  stroke: var(--anatomy-mid);
+}
+
+/* --------------------------------------------------------------------------
+   The three interior sets.
+
+   Only the set matching the module's position is live. The changeover is a
+   drawer indexing: the outgoing set drops and fades, the incoming one rises
+   item by item — `--in` is the switch (0 out, 1 in) and every item carries its
+   own `--i`, so the rise cascades instead of arriving as one block. The
+   `visibility` delay keeps the outgoing set out of hit-testing while it is
+   still fading, and keeps the incoming one unhoverable until it has landed.
+   -------------------------------------------------------------------------- */
+
+.home-stage .home-tray-set {
+  --in: 0;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 160ms ease, visibility 0s linear 360ms;
+}
+
+.home-stage .home-module:not([data-position='1']):not([data-position='2']) .home-tray-set[data-set='0'],
+.home-stage .home-module[data-position='0'] .home-tray-set[data-set='0'],
+.home-stage .home-module[data-position='1'] .home-tray-set[data-set='1'],
+.home-stage .home-module[data-position='2'] .home-tray-set[data-set='2'] {
+  --in: 1;
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 140ms ease, visibility 0s;
+}
+
+/* one item of a set: the wrapper the changeover staggers. Its own transform is
+   the only thing here — the playful motion lives on the group inside it, so
+   the two never fight over the same property. */
+.home-stage .home-set-item {
+  opacity: calc(0.3 + var(--in, 0) * 0.7);
+  transform: translateY(calc((1 - var(--in, 0)) * 9px));
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+  transition: transform 300ms cubic-bezier(0.24, 0.86, 0.26, 1), opacity 200ms ease;
+  transition-delay: calc(var(--in, 0) * 60ms + var(--i, 0) * 26ms);
+}
+
+/* an invisible pad over a thin object, so a pencil can still be pointed at */
+.home-stage .home-set-hit {
+  fill: transparent;
+  stroke: none;
+}
+
+/* the stationery's own tones. Flat marks take the four-step scale directly:
+   on the paper of a solid's top face every step reads darker, on the well
+   floor every step reads lighter, and `ink` is the high-contrast one in both
+   themes — dark on light, light on dark. */
+.home-stage .home-set-s0,
+.home-stage .home-set-floor { fill: var(--anatomy-shade-0); }
+.home-stage .home-set-s1 { fill: var(--anatomy-shade-1); }
+.home-stage .home-set-s2 { fill: var(--anatomy-shade-2); }
+.home-stage .home-set-s3 { fill: var(--anatomy-shade-3); }
+.home-stage .home-set-paper { fill: var(--anatomy-top); }
+.home-stage .home-set-ink { fill: var(--anatomy-hi); }
+
+/* a print on a card, and the wire of a paper clip */
+.home-stage .home-photo { fill: var(--anatomy-shade-0); }
+
+/* the magnifier's rim: a line, not a tone — at five units across the palette
+   steps are too close to separate the glass from its frame */
+.home-stage .iso-line.home-lens-rim {
+  stroke: var(--anatomy-hi);
+  stroke-width: 2.2px;
+}
+
+/* a frame on the film: a step off the base, never a window — at this size a
+   bright frame turns the strip into a row of keys */
+.home-stage .home-film-frame {
+  fill: color-mix(in oklch, var(--anatomy-hi) 72%, var(--anatomy-top) 28%);
+  stroke: none;
+}
+.home-stage .home-clip-wire {
+  fill: none;
+  stroke: var(--anatomy-hi);
+  stroke-width: 0.9;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* --------------------------------------------------------------------------
+   The play. One or two small motions per set, and nothing else moves: the
+   pointer is the only other moving part on the case.
+
+   Every one of them is a gesture the object could actually make — a pencil
+   rolls against its neighbour, a clip hops when it is flicked, a compass leg
+   swings on its hinge, a magnifier slides along its handle, a stamp is
+   pressed, a strip of film is pulled.
+   -------------------------------------------------------------------------- */
+
+.home-stage .home-pencil,
+.home-stage .home-magnifier,
+.home-stage .home-film,
+.home-stage .home-stamp {
+  transition: transform 340ms cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+.home-stage .home-compass-arm {
+  transition: rotate 420ms cubic-bezier(0.34, 1.4, 0.5, 1);
+}
+
+.home-stage .home-pencil:hover {
+  transform: translate(0, 2.6px) rotate(-1.1deg);
+}
+
+.home-stage .home-compass:hover .home-compass-arm {
+  rotate: -7deg;
+}
+
+.home-stage .home-magnifier:hover {
+  transform: translate(3.4px, 1.2px);
+}
+
+.home-stage .home-clip:hover {
+  animation: home-clip-hop 560ms cubic-bezier(0.3, 0.9, 0.3, 1);
+}
+
+.home-stage .home-film:hover {
+  transform: translate(3.2px, 1.1px);
+}
+
+.home-stage .home-stamp:hover {
+  transform: translateY(2.4px);
+}
+
+@keyframes home-clip-hop {
+  0%, 100% { transform: translateY(0); }
+  28% { transform: translateY(-5px); }
+  52% { transform: translateY(0.8px); }
+  72% { transform: translateY(-1.8px); }
+  88% { transform: translateY(0.3px); }
+}
+
+/* the closed lid: a flat slab lying on the case, visible only while shut */
+.home-stage .home-case-closed {
+  opacity: 1;
+  transition: opacity 200ms ease;
+}
+
+/* the hinged lid: shut (nearly edge-on) to open */
+.home-stage .home-case-lid {
+  /* the swing is written as translate/scale/translate about the hinge line the
+     module passes in, so it never depends on where a bbox happens to end */
+  transform: translateY(var(--hinge, 0px)) scaleY(0.04) translateY(calc(-1 * var(--hinge, 0px)));
+  transition: transform 500ms cubic-bezier(0.45, 0.05, 0.25, 1);
+}
+
+/* the board on the lid's face is not faded in as a block any more: every chip
+   and every name plate on it is its own run, held back by the clock below, so
+   the panel resolves by being populated rather than by appearing */
+
+/* the prop arm that holds the lid up swings out last. Its origin is the foot
+   pivot on the back rim, which sits a hair above the group's bounding box
+   (the bracket's front corner is the lowest point), hence 95% and not 100%. */
+.home-stage .home-case-prop {
+  transform-box: fill-box;
+  transform-origin: 50% 95%;
+  transform: scaleY(0.1);
+  transition: transform 260ms ease;
+}
+
+/* The lid is one piece: its swing is the transition above, and on the way out
+   it drops with the case. Its cargo rides with it, so the board and the chips
+   on it must not drop on their own — they would fall twice as far. */
+.home-module.is-active .home-part[data-part='tb-lid'] {
+  animation: none;
+}
+
+.home-module.is-leaving .home-part[data-part='tb-lid'] .home-part {
+  animation: none;
+}
+
+/* The handover. The delays sit on the active state only, so the way out — the
+   module leaving the stage — still lets go immediately instead of waiting
+   1210 ms first. The stay follows the lid by 440 ms, which is where it reads as
+   catching the lid at the top of its swing. */
+.home-stage .home-module.is-active .home-case-closed {
+  opacity: 0;
+  transition-delay: 1210ms;
+}
+.home-stage .home-module.is-active .home-case-lid {
+  transform: translateY(var(--hinge, 0px)) scaleY(1) translateY(calc(-1 * var(--hinge, 0px)));
+  transition-delay: 1210ms;
+}
+.home-stage .home-module.is-active .home-case-prop {
+  transform: scaleY(1);
+  transition-delay: 1650ms;
+}
+
+/* Taken apart open: the lid and its prop hold their fitted pose while the case
+   comes off, instead of folding shut the moment the module lets go of
+   .is-active — a lid closing under a falling part reads as a glitch. */
+.home-stage .home-module.is-leaving .home-case-lid {
+  transform: translateY(var(--hinge, 0px)) scaleY(1) translateY(calc(-1 * var(--hinge, 0px)));
+  transition: none;
+}
+
+.home-stage .home-module.is-leaving .home-case-prop {
+  transform: scaleY(1);
+  transition: none;
+}
+
+/* The shut slab is the same handover in the other direction: it is hidden for
+   as long as the case is open, so it has to stay hidden while the open case is
+   taken apart. Without this its base rule — opacity 1 — brings it back over the
+   well on the first frame of the exit: a solid lid fades in over an open case
+   and then falls with the rest of it. */
+.home-stage .home-module.is-leaving .home-case-closed {
+  opacity: 0;
+  transition: none;
+}
+
+/* --------------------------------------------------------------------------
+   The assembly. No part of it fades in: the case is built, so every run is a
+   motion the object could actually make — pads pressed up out of the deck, a
+   plinth lowered onto them, walls raised out of their rebates, the near wall
+   swung shut on its hinge, a latch folded down, partitions dropped into their
+   slots, a pin driven through the knuckles, a slab set on the rim, a knob
+   screwed into its boss, a board pressed into the lid, chips and name plates
+   pressed on one at a time. Everything is solid from the first frame; the
+   build is read from the movement, never from a dissolve.
+
+   Every rule here overrides the generic `.home-part` settle in home.css
+   (higher specificity: the extra `[data-part]` attribute) and states both
+   `animation` and `animation-delay`, so the beats stay legible:
+
+     run        part         delay           dur   lands
+     pads       tb-foot      20 + 52·step    200   220 … 376
+     plinth     shell         40             300   340
+     walls      tb-wall      170 + 95·step    320   490 / 585 / 680
+     near       front        540             330   870
+     latch      tb-hardware  700             300  1000
+     legend     tb-seat      810 + 55·step    280  1090 / 1145 / 1200
+     plate      tb-plate     890             250  1140
+     rivets     tb-rivet    1140 + 55·step    160  1300 … 1465
+     parts      tb-divider   830 + 95·step    270  1100 / 1195
+     hinge      tb-hinge     900             300  1200
+     pin        tb-pin       960             260  1220
+     shut       closed       880             320  1200
+     switch     tb-dial      980             260  1240
+     open       .home-case-lid      (a transition, 1210 → 1710)
+     panel      tb-board    1370             300  1670
+     interiors  trays       1600 + 70·step    220  1820 / 1890 / 1960
+     rail       tb-bead     1600             260  1860
+     chips      tb-badge    1700 + 30·step    210  1910 … 2360
+     names      tb-link     1930 + 22·step    200  2130 … 2284
+     detent     .home-dial-pointer      240  2130 → 2370
+
+   The case arrives shut, so the slab is lowered on after the body is built and
+   hands over to the hinged lid only when it is home — the reader sees the
+   inside of the case for the first time through a lid that actually opened.
+
+   Four runs — a partition, the hinge knuckles, the shut slab, the interiors —
+   are placed from above their own seat, so their start pose clears the rim.
+   They carry a `visibility` beat as well: without it they would hover over an
+   open case for the whole build. The gate closes in the first frames of the
+   run, before anything has moved, so what the reader sees is still the part
+   being set down. Everything else starts inside the object it belongs to (a
+   wall flat in its rebate, a pin inside its left cap, a pad below the deck,
+   a plate off the face) and needs no gate.
+
+   Fill mode is `backwards`, not `both`: every keyframe ends on `transform:
+   none`, which is exactly the resting style, so the backwards fill holds a run
+   at its start pose during its delay and lets go once it lands. Holding the
+   fill instead would keep fifty groups composited for the rest of the page's
+   life, and the engraved nameplates would re-rasterise without subpixel AA
+   (the same trade measured on 02 in cinema.css).
+
+   Every displacement below is read off the part's own assembly axis. The module
+   passes the two ends of that axis in world coordinates through `axisStyle`,
+   which lands here as `--axis-x`/`--axis-y` (the unit vector it travels along),
+   `--travel` (how far back its start pose sits) and `--pivot-x`/`--pivot-y` (the
+   seat it folds about, in stage px). So a pad rises out of the deck it stands
+   on, a wall out of its own base line, the near wall about its left standing
+   edge, a chip square onto the board — the direction and the pivot are both
+   properties of the drawing, and no rule here picks a screen direction by eye.
+   -------------------------------------------------------------------------- */
+
+/* The one place the axis becomes a transform. Every run backs off along its own
+   axis for its start pose and folds about its own seat; the keyframes then only
+   say how far along that axis the overshoot lands. */
+.home-module.is-active .home-part[data-part] {
+  transform-box: view-box;
+  transform-origin: var(--pivot-x, 50%) var(--pivot-y, 50%);
+  --entry-x: calc(var(--axis-x, 0) * var(--travel, 28px) * -1);
+  --entry-y: calc(var(--axis-y, 1) * var(--travel, 28px) * -1);
+}
+
+/* the four rubber pads are pressed up out of the deck and the case lands on
+   them. The axis is the vertical through each pad's own seat on the deck, so
+   the fold is about the deck itself: a pad grows out of the deck instead of
+   swelling in place, and the deck clip swallows the pose it starts in. */
+.home-module.is-active .home-part[data-part='tb-foot'] {
+  animation: home-tb-pad 200ms cubic-bezier(0.3, 0.72, 0.4, 1) backwards;
+  animation-delay: calc(20ms + var(--step) * 52ms);
+}
+
+/* the plinth takes the weight. It comes down the vertical through its own
+   underside, so the run is a drop onto the pads and not a slide across them. */
+.home-module.is-active .home-part[data-part='shell'] {
+  animation: home-tb-plinth 300ms cubic-bezier(0.42, 0, 0.58, 1) backwards;
+  animation-delay: 40ms;
+}
+
+/* the three far walls are raised out of their rebates in the order a case is
+   built: back, left, right. Each axis is the vertical through its own base
+   line, so the wall is extruded up out of the plinth rather than sliding
+   through it. */
+.home-module.is-active .home-part[data-part='tb-wall'] {
+  animation: home-tb-wall 320ms cubic-bezier(0.3, 0.72, 0.4, 1) backwards;
+  animation-delay: calc(170ms + var(--step) * 95ms);
+}
+
+/* the near wall is the last panel: it swings shut on its left hinge. Its axis
+   is that hinge — the standing edge itself — so the panel folds about the edge
+   it actually turns on, and the last few pixels of its travel drop it into the
+   rebate. A panel swung toward the camera projects to a horizontal squash about
+   that edge, the same trade the lid's swing makes on the other axis. */
+.home-module.is-active .home-part[data-part='front'] {
+  animation: home-tb-front 330ms cubic-bezier(0.42, 0, 0.58, 1) backwards;
+  animation-delay: 540ms;
+}
+
+/* the latch and the carry handle are hinged along the top of the near panel:
+   their axis runs out of the panel at the rim, so both unfold down onto it */
+.home-module.is-active .home-part[data-part='tb-hardware'] {
+  animation: home-tb-fitted 300ms cubic-bezier(0.42, 0, 0.58, 1) backwards;
+  animation-delay: 700ms;
+}
+
+/* the legend goes on one bay at a time, in the order the knob indexes it. Each
+   plate arrives square to the near panel, through its own centre. */
+.home-module.is-active .home-part[data-part='tb-seat'] {
+  animation: home-tb-stamp 280ms cubic-bezier(0.3, 0.72, 0.4, 1) backwards;
+  animation-delay: calc(810ms + var(--step) * 55ms);
+}
+
+/* the maker's plate is slid up the panel into its recess, square to the face */
+.home-module.is-active .home-part[data-part='tb-plate'] {
+  animation: home-tb-plate 250ms cubic-bezier(0.3, 0.72, 0.4, 1) backwards;
+  animation-delay: 890ms;
+}
+
+/* and riveted: each head swells out of the plate a hair past its seat and
+   presses back flush, one corner at a time */
+.home-module.is-active .home-part[data-part='tb-rivet'] {
+  animation: home-tb-rivet 160ms cubic-bezier(0.3, 0.72, 0.4, 1) backwards;
+  animation-delay: calc(1140ms + var(--step) * 55ms);
+}
+
+/* a partition is dropped down the vertical through its slot; its rail settles
+   on top of it */
+.home-module.is-active .home-part[data-part='tb-divider'] {
+  animation: home-tb-divider 270ms cubic-bezier(0.42, 0, 0.58, 1) backwards;
+  animation-delay: calc(830ms + var(--step) * 95ms);
+}
+
+/* the knuckles are dropped onto the back rim, down the vertical through it */
+.home-module.is-active .home-part[data-part='tb-hinge'] {
+  animation: home-tb-hinge 300ms cubic-bezier(0.42, 0, 0.58, 1) backwards;
+  animation-delay: 900ms;
+}
+
+/* then the pin is driven through them along its own axis. The axis is the
+   barrel's centre line, so the run is a stretch out of the hinge's middle with
+   the whole pin sliding after it — the direction is the pin's, not the page's. */
+.home-module.is-active .home-part[data-part='tb-pin'] {
+  animation: home-tb-pin 260ms cubic-bezier(0.35, 0.05, 0.55, 1) backwards;
+  animation-delay: 960ms;
+}
+
+/* the slab the reader meets is lowered onto the rim, and only then hands over */
+.home-module.is-active .home-part[data-part='closed'] {
+  animation: home-tb-closed 320ms cubic-bezier(0.42, 0, 0.58, 1) backwards;
+  animation-delay: 880ms;
+}
+
+/* the switch is screwed down its own shaft — the boss's centre line, square to
+   the panel; the pointer is turned to its seat later */
+.home-module.is-active .home-part[data-part='tb-dial'] {
+  animation: home-tb-dial 260ms cubic-bezier(0.3, 0.72, 0.4, 1) backwards;
+  animation-delay: 980ms;
+}
+
+/* the index panel is pressed into the lid's recess, square to the board */
+.home-module.is-active .home-part[data-part='tb-board'] {
+  animation: home-tb-board 300ms cubic-bezier(0.3, 0.72, 0.4, 1) backwards;
+  animation-delay: 1370ms;
+}
+
+/* the clamp rail is tightened down over the panel's top edge, square to it */
+.home-module.is-active .home-part[data-part='tb-bead'] {
+  animation: home-tb-bead 260ms cubic-bezier(0.3, 0.72, 0.4, 1) backwards;
+  animation-delay: 1600ms;
+}
+
+/* Sixteen chips, pinned one at a time: 30 ms apart and 210 ms each, so about
+   seven are in the air at once and the board fills as a wave instead of a
+   block. This is the run the whole build is for — the board is the index of the
+   resource page, so it is populated, not printed. Each chip comes in square to
+   the board, about its own centre. */
+.home-module.is-active .home-part[data-part='tb-badge'] {
+  animation: home-tb-badge 210ms cubic-bezier(0.3, 0.72, 0.4, 1) backwards;
+  animation-delay: calc(1700ms + var(--step) * 30ms);
+}
+
+/* eight name plates follow, a touch faster, so both columns finish together */
+.home-module.is-active .home-part[data-part='tb-link'] {
+  animation: home-tb-link 200ms cubic-bezier(0.3, 0.72, 0.4, 1) backwards;
+  animation-delay: calc(1930ms + var(--step) * 22ms);
+}
+
+/* the three interiors are set down in the well, one bay at a time. The group
+   itself carries no animation: each tray does, so they arrive in sequence. */
+.home-module.is-active .home-part[data-part='trays'] {
+  animation: none;
+}
+
+/* each tray is its own group and carries its own axis — the vertical through
+   the middle of the bay it drops into — so the three land in their own slots
+   rather than as one block. */
+.home-module.is-active .home-part[data-part='trays'] .home-case-tray {
+  transform-box: view-box;
+  transform-origin: var(--pivot-x, 50%) var(--pivot-y, 50%);
+  --entry-x: calc(var(--axis-x, 0) * var(--travel, 20px) * -1);
+  --entry-y: calc(var(--axis-y, 1) * var(--travel, 20px) * -1);
+}
+
+.home-module.is-active .home-part[data-part='trays'] .home-case-tray[data-index='0'] {
+  animation: home-tb-tray 220ms cubic-bezier(0.42, 0, 0.58, 1) backwards;
+  animation-delay: 1600ms;
+}
+
+.home-module.is-active .home-part[data-part='trays'] .home-case-tray[data-index='1'] {
+  animation: home-tb-tray 220ms cubic-bezier(0.42, 0, 0.58, 1) backwards;
+  animation-delay: 1670ms;
+}
+
+.home-module.is-active .home-part[data-part='trays'] .home-case-tray[data-index='2'] {
+  animation: home-tb-tray 220ms cubic-bezier(0.42, 0, 0.58, 1) backwards;
+  animation-delay: 1740ms;
+}
+
+/* The trial run: the knob is turned to its first detent, the seat the page opens
+   on. Written on `.is-active` alone — not on `data-position` — so turning the
+   knob back to the first seat mid-life does not restart it; what changes per
+   seat is the angle carried in `--tb-*` above, and on the other two seats that
+   angle is the pointer's own resting angle, so the run is a no-op there. */
+.home-module.is-active .home-dial-pointer {
+  animation: home-tb-detent 240ms cubic-bezier(0.34, 1.45, 0.5, 1) backwards;
+  animation-delay: 2130ms;
+}
+
+/* On the other two seats there is no turn to watch, so the run is a no-op and
+   is over before the build has anything to show. Keeping it early also keeps
+   the switch's place in the build's order where it was: stage.client.ts ranks a
+   part's exit by the moment its own rules land, and a 2130 ms delay there would
+   make the knob the first thing to fall off a case that was left on seat two. */
+.home-module.is-active[data-position='1'] .home-dial-pointer,
+.home-module.is-active[data-position='2'] .home-dial-pointer {
+  animation-delay: 0ms;
+}
+
+/* a pad is pressed up out of the deck and seats a hair proud */
+@keyframes home-tb-pad {
+  from { transform: translate(var(--entry-x, 0px), var(--entry-y, 0px)) scaleY(0.45); }
+  62% { transform: translate(calc(var(--entry-x, 0px) * -0.07), calc(var(--entry-y, 0px) * -0.07)) scaleY(1.06); }
+  to { transform: none; }
+}
+
+/* the plinth is lowered onto the pads and settles under its own weight */
+@keyframes home-tb-plinth {
+  from { transform: translate(var(--entry-x, 0px), var(--entry-y, 0px)); }
+  54% { transform: translate(calc(var(--entry-x, 0px) * -0.057), calc(var(--entry-y, 0px) * -0.057)); }
+  78% { transform: translate(calc(var(--entry-x, 0px) * 0.022), calc(var(--entry-y, 0px) * 0.022)); }
+  to { transform: none; }
+}
+
+/* a wall is extruded up out of its rebate, starting flat on the base line */
+@keyframes home-tb-wall {
+  from { transform: translate(var(--entry-x, 0px), var(--entry-y, 0px)) scaleY(0.05); }
+  72% { transform: translate(calc(var(--entry-x, 0px) * -0.08), calc(var(--entry-y, 0px) * -0.08)) scaleY(1.03); }
+  88% { transform: translate(calc(var(--entry-x, 0px) * 0.02), calc(var(--entry-y, 0px) * 0.02)) scaleY(0.994); }
+  to { transform: none; }
+}
+
+/* the near wall swings shut about its standing edge and closes over the rebate */
+@keyframes home-tb-front {
+  from { transform: translate(var(--entry-x, 0px), var(--entry-y, 0px)) scaleX(0.03); }
+  70% { transform: translate(calc(var(--entry-x, 0px) * -0.1), calc(var(--entry-y, 0px) * -0.1)) scaleX(1.014); }
+  88% { transform: translate(calc(var(--entry-x, 0px) * 0.04), calc(var(--entry-y, 0px) * 0.04)) scaleX(0.997); }
+  to { transform: none; }
+}
+
+/* the latch folds down onto the panel and hooks */
+@keyframes home-tb-fitted {
+  from { transform: translate(var(--entry-x, 0px), var(--entry-y, 0px)) scaleY(0.02); }
+  64% { transform: translate(calc(var(--entry-x, 0px) * -0.09), calc(var(--entry-y, 0px) * -0.09)) scaleY(1.045); }
+  86% { transform: translate(calc(var(--entry-x, 0px) * 0.02), calc(var(--entry-y, 0px) * 0.02)) scaleY(0.99); }
+  to { transform: none; }
+}
+
+/* a plate is pressed onto the panel: it comes off the face and flattens */
+@keyframes home-tb-stamp {
+  from { transform: translate(var(--entry-x, 0px), var(--entry-y, 0px)) scale(1.06); }
+  58% { transform: translate(calc(var(--entry-x, 0px) * -0.09), calc(var(--entry-y, 0px) * -0.09)) scale(0.985); }
+  82% { transform: translate(calc(var(--entry-x, 0px) * 0.03), calc(var(--entry-y, 0px) * 0.03)) scale(1.004); }
+  to { transform: none; }
+}
+
+/* the maker's plate is slid into its recess, square to the panel, and seats */
+@keyframes home-tb-plate {
+  from { transform: translate(var(--entry-x, 0px), var(--entry-y, 0px)) scale(1.03); }
+  62% { transform: translate(calc(var(--entry-x, 0px) * -0.08), calc(var(--entry-y, 0px) * -0.08)) scale(0.994); }
+  84% { transform: translate(calc(var(--entry-x, 0px) * 0.03), calc(var(--entry-y, 0px) * 0.03)) scale(1.002); }
+  to { transform: none; }
+}
+
+/* a rivet head is set: it swells out of the plate and presses back flush */
+@keyframes home-tb-rivet {
+  from { transform: translate(var(--entry-x, 0px), var(--entry-y, 0px)) scale(0.18); }
+  60% { transform: translate(calc(var(--entry-x, 0px) * -0.3), calc(var(--entry-y, 0px) * -0.3)) scale(1.35); }
+  82% { transform: translate(calc(var(--entry-x, 0px) * 0.08), calc(var(--entry-y, 0px) * 0.08)) scale(0.94); }
+  to { transform: none; }
+}
+
+/* a partition drops down its slot and its rail settles on top */
+@keyframes home-tb-divider {
+  0% { visibility: hidden; transform: translate(var(--entry-x, 0px), var(--entry-y, 0px)); }
+  1% { visibility: visible; transform: translate(var(--entry-x, 0px), var(--entry-y, 0px)); }
+  52% { transform: translate(calc(var(--entry-x, 0px) * -0.07), calc(var(--entry-y, 0px) * -0.07)); }
+  80% { transform: translate(calc(var(--entry-x, 0px) * 0.03), calc(var(--entry-y, 0px) * 0.03)); }
+  100% { transform: none; }
+}
+
+/* the knuckles are dropped onto the back rim, overshoot, and seat */
+@keyframes home-tb-hinge {
+  0% { visibility: hidden; transform: translate(var(--entry-x, 0px), var(--entry-y, 0px)); }
+  1% { visibility: visible; transform: translate(var(--entry-x, 0px), var(--entry-y, 0px)); }
+  60% { transform: translate(calc(var(--entry-x, 0px) * -0.075), calc(var(--entry-y, 0px) * -0.075)); }
+  84% { transform: translate(calc(var(--entry-x, 0px) * 0.03), calc(var(--entry-y, 0px) * 0.03)); }
+  100% { transform: none; }
+}
+
+/* the pin runs in through both knuckles along its own centre line */
+@keyframes home-tb-pin {
+  from { transform: translate(var(--entry-x, 0px), var(--entry-y, 0px)) scaleX(0.015); }
+  74% { transform: translate(calc(var(--entry-x, 0px) * -0.08), calc(var(--entry-y, 0px) * -0.08)) scaleX(1.012); }
+  to { transform: none; }
+}
+
+/* the shut slab is set down on the rim */
+@keyframes home-tb-closed {
+  0% { visibility: hidden; transform: translate(var(--entry-x, 0px), var(--entry-y, 0px)); }
+  1% { visibility: visible; transform: translate(var(--entry-x, 0px), var(--entry-y, 0px)); }
+  54% { transform: translate(calc(var(--entry-x, 0px) * -0.065), calc(var(--entry-y, 0px) * -0.065)); }
+  80% { transform: translate(calc(var(--entry-x, 0px) * 0.026), calc(var(--entry-y, 0px) * 0.026)); }
+  100% { transform: none; }
+}
+
+/* The switch is screwed down its shaft: it stands a third off the panel (a
+   third larger, being nearer the camera), winds back onto its axis and seats on
+   the collar. The wind is capped at a third of a turn — a full one would carry
+   the ratchet pawl and its spring around with it, and at nine units across it
+   would read as a blur rather than as a turn. */
+@keyframes home-tb-dial {
+  from { transform: translate(var(--entry-x, 0px), var(--entry-y, 0px)) scale(1.35) rotate(-36deg); }
+  62% { transform: translate(calc(var(--entry-x, 0px) * -0.09), calc(var(--entry-y, 0px) * -0.09)) scale(0.965) rotate(4deg); }
+  84% { transform: translate(calc(var(--entry-x, 0px) * 0.03), calc(var(--entry-y, 0px) * 0.03)) scale(1.012) rotate(-1deg); }
+  to { transform: none; }
+}
+
+/* the index panel is pressed into the lid's recess */
+@keyframes home-tb-board {
+  from { transform: translate(var(--entry-x, 0px), var(--entry-y, 0px)) scale(1.04); }
+  64% { transform: translate(calc(var(--entry-x, 0px) * -0.09), calc(var(--entry-y, 0px) * -0.09)) scale(0.994); }
+  to { transform: none; }
+}
+
+/* the clamp rail is tightened down over the panel's top edge */
+@keyframes home-tb-bead {
+  from { transform: translate(var(--entry-x, 0px), var(--entry-y, 0px)) rotate(1.6deg); }
+  68% { transform: translate(calc(var(--entry-x, 0px) * -0.1), calc(var(--entry-y, 0px) * -0.1)) rotate(-0.3deg); }
+  to { transform: none; }
+}
+
+/* a chip is pressed onto the board: it comes off the face a hair large and
+   flattens under the thumb */
+@keyframes home-tb-badge {
+  from { transform: translate(var(--entry-x, 0px), var(--entry-y, 0px)) scale(1.06); }
+  55% { transform: translate(calc(var(--entry-x, 0px) * -0.11), calc(var(--entry-y, 0px) * -0.11)) scale(0.975); }
+  78% { transform: translate(calc(var(--entry-x, 0px) * 0.04), calc(var(--entry-y, 0px) * 0.04)) scale(1.004); }
+  to { transform: none; }
+}
+
+/* a name plate is pressed on square to the board and seats flat */
+@keyframes home-tb-link {
+  from { transform: translate(var(--entry-x, 0px), var(--entry-y, 0px)) scale(1.05); }
+  58% { transform: translate(calc(var(--entry-x, 0px) * -0.11), calc(var(--entry-y, 0px) * -0.11)) scale(0.988); }
+  80% { transform: translate(calc(var(--entry-x, 0px) * 0.04), calc(var(--entry-y, 0px) * 0.04)) scale(1.003); }
+  to { transform: none; }
+}
+
+/* a set is lowered down the vertical through the middle of its bay */
+@keyframes home-tb-tray {
+  0% { visibility: hidden; transform: translate(var(--entry-x, 0px), var(--entry-y, 0px)); }
+  1% { visibility: visible; transform: translate(var(--entry-x, 0px), var(--entry-y, 0px)); }
+  58% { transform: translate(calc(var(--entry-x, 0px) * -0.09), calc(var(--entry-y, 0px) * -0.09)); }
+  82% { transform: translate(calc(var(--entry-x, 0px) * 0.035), calc(var(--entry-y, 0px) * 0.035)); }
+  100% { transform: none; }
+}
+
+/* the detent snap: it overshoots the mark the way a spring-loaded knob does */
+@keyframes home-tb-detent {
+  from { rotate: var(--tb-from, 55deg); }
+  58% { rotate: var(--tb-mid, -63deg); }
+  to { rotate: var(--tb-to, -55deg); }
+}
+
+/* reduced motion: the case is simply open, in place, with nothing to settle -- */
+
+html.reduce-motion .home-stage .home-case-lid,
+html.reduce-motion .home-stage .home-case-prop { transform: none; transition: none; }
+/* `transition: none` matters as much as `display: none`: the shut slab's fade
+   is delayed 1210 ms by the active rule, and a display:none element produces no
+   frames, so that transition would sit in `getAnimations()` for good. */
+html.reduce-motion .home-stage .home-case-closed { display: none; transition: none; }
+/* the switch's own fade is written on a selector that names both attributes
+   (`.home-module[data-position] … .home-tray-set[data-set]`), so it outranks
+   these on specificity: without `!important` a seat change still cross-faded
+   under reduced motion while everything else stood still. */
+html.reduce-motion .home-stage .home-tray-set,
+html.reduce-motion .home-stage .home-set-item,
+html.reduce-motion .home-stage .home-dial-pointer { transition: none !important; }
+html.reduce-motion .home-stage .home-set-item { transform: none; }
+html.reduce-motion .home-stage .home-pencil,
+html.reduce-motion .home-stage .home-compass-arm,
+html.reduce-motion .home-stage .home-magnifier,
+html.reduce-motion .home-stage .home-film,
+html.reduce-motion .home-stage .home-stamp { transition: none; }
+html.reduce-motion .home-stage .home-pencil:hover,
+html.reduce-motion .home-stage .home-compass:hover .home-compass-arm,
+html.reduce-motion .home-stage .home-magnifier:hover,
+html.reduce-motion .home-stage .home-film:hover,
+html.reduce-motion .home-stage .home-stamp:hover { transform: none; rotate: 0deg; }
+html.reduce-motion .home-stage .home-clip:hover { animation: none; }
+
+html.reduce-motion .home-module.is-active .home-part[data-part],
+html.reduce-motion .home-module.is-active .home-case-tray {
+  animation: none !important;
+  animation-delay: 0ms !important;
+  opacity: 1;
+  transform: none;
+}
+
+/* the knob is where the markup says it is; there is no turn to watch */
+html.reduce-motion .home-module.is-active .home-dial-pointer { animation: none !important; }
+
+@media (prefers-reduced-motion: reduce) {
+  .home-stage .home-case-lid,
+  .home-stage .home-case-prop { transform: none; transition: none; }
+  .home-stage .home-case-closed { display: none; transition: none; }
+
+  /* forced for the same reason as the `.reduce-motion` block above */
+  .home-stage .home-tray-set,
+  .home-stage .home-set-item,
+  .home-stage .home-dial-pointer { transition: none !important; }
+  .home-stage .home-set-item { transform: none; }
+  .home-stage .home-pencil,
+  .home-stage .home-compass-arm,
+  .home-stage .home-magnifier,
+  .home-stage .home-film,
+  .home-stage .home-stamp { transition: none; }
+  .home-stage .home-pencil:hover,
+  .home-stage .home-compass:hover .home-compass-arm,
+  .home-stage .home-magnifier:hover,
+  .home-stage .home-film:hover,
+  .home-stage .home-stamp:hover { transform: none; rotate: 0deg; }
+  .home-stage .home-clip:hover { animation: none; }
+
+  .home-module.is-active .home-part[data-part],
+  .home-module.is-active .home-case-tray {
+    animation: none !important;
+    animation-delay: 0ms !important;
+    opacity: 1;
+    transform: none;
+  }
+
+  .home-module.is-active .home-dial-pointer { animation: none !important; }
+}

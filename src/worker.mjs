@@ -177,6 +177,12 @@ export default {
 				);
 			}
 
+			// 1c. the search page is gone — its overlay lives on every page now,
+			// so old links land on the homepage with the trigger in reach
+			if (pathname === "/search" || pathname === "/search/") {
+				return applySecurityHeaders(Response.redirect(new URL("/", url), 301));
+			}
+
 			// 1c. 旧列表页路径：/weekly → /column（2026-10 周刊改名专栏，保留旧链接）
 			if (
 				pathname === "/weekly" ||

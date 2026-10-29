@@ -1,0 +1,701 @@
+/* ==========================================================================
+   05 — 标签: the ticket printer
+   Each ticket is drawn at its stuck position on the wall above the machine and
+   carries two screen-space deltas: --fly-x / --fly-y back to the slot mouth,
+   where it appears, and --out-x / --out-y to a point just clear of the front
+   face at slot height. Those two are distances between points the module
+   projects, not offsets picked by eye; the last few units of the emerge — the
+   step out of the lip — run along the slot's own normal, which arrives as the
+   ticket's axis. The keyframes run the mechanism: emerge at the slot, slide out,
+   get cut, then rise to the wall and be pressed onto it.
+
+   The wall is paper stuck up by hand: the module deals the sheets into cells
+   and then nudges, turns and sizes each one, so nothing lines up. All this file
+   adds is the last beat — the sheet arrives square to the flight and settles
+   into its own crooked angle, with a shadow under it and a strip of tape over
+   one corner.
+
+   The assembly. home.css gives every `.home-part` the same generic settle; here
+   the machine builds itself in the order a ticket printer is put together. The
+   feet come up out of the well and take the weight, the body settles onto them,
+   the window frame hinges down on its back edge, the stock roll drops into the
+   cradle and rocks once, the front bar clamps over it on its top edge, the blade
+   bar drops into its seat on the panel's top edge, and the face plate is pushed
+   in from the front carrying the slot, the transport pair, the carriage, the
+   rocker and the lamp. Then the fittings are bolted on one at a time — the chute
+   hinged over the lid's lip, the pinch roller pushed out of the mouth, the badge
+   pressed on, the lid latch swung down, the waste drawer slid home — and only
+   then does the machine run itself for a beat: the transport wheel turns a full
+   revolution and the blade snaps at nothing before the first ticket is printed.
+   The last fitting lands at ~2.3s and the printing starts at 3s, so the wall is
+   fed by a machine that works.
+
+   Nothing here fades. Every part is solid from its first frame and arrives by
+   moving — up out of the well, down onto its seat, on a hinge, or in along the
+   axis it is fitted on — because the machine rises out of the deck clipped by
+   the well mouth, and a part that is merely transparent has nothing to hide
+   behind. The starts are kept within a part's own throw (≤ ~25 stage units), so
+   an exploded part stays inside the 132 units of well it has to hide in.
+
+   The direction of every entry is read off the drawing, not chosen on screen.
+   The module hands each part its fit axis as `--axis-x` / `--axis-y` (a unit
+   vector in stage px), `--travel`, and `--pivot-x` / `--pivot-y` (the chord's
+   midpoint: the seat, or the centre the part turns about), and each rule below
+   folds that into one start offset. A part therefore rises, drops, slides or
+   presses in exactly along the line it is fitted on, and grows out of its own
+   seat rather than out of the middle of its bounding box.
+
+   The printing keeps its own cycle: the beat between sheets is not fixed here
+   but computed from the tag count in the module, which hands each ticket its
+   `--fly-delay` — one ticket per tag, so 26 sheets print in the same handful of
+   seconds as 8 rather than a minute.
+
+   Every animation ends on `transform: none`, so the assembled machine is exactly
+   the static drawing.
+   ========================================================================== */
+
+/* ---- the assembly ------------------------------------------------------- */
+
+/* the feet: jacked up out of the well until they meet the body's underside.
+   They start below the deck line, so the well mouth clips them and they rise
+   into the drawing rather than sliding across it. The pivot is the middle of the
+   feet on the deck's centre line, so the base grows out of the ground -------- */
+.home-stage .home-module.is-active .home-part[data-part='feet'] {
+  transform-box: view-box;
+  transform-origin: var(--pivot-x, 50%) var(--pivot-y, 50%);
+  animation: labels-feet-rise 260ms cubic-bezier(0.22, 0.9, 0.24, 1) both;
+  animation-delay: 0ms;
+}
+
+/* the body: down onto the seated feet along the vertical, a touch too far, then
+   back up. The pivot is just above its underside — the face that lands — so the
+   overshoot reads as the shell bedding onto the feet ------------------------ */
+.home-stage .home-module.is-active .home-part[data-part='body'] {
+  transform-box: view-box;
+  transform-origin: var(--pivot-x, 50%) var(--pivot-y, 50%);
+  animation: labels-body-seat 280ms cubic-bezier(0.22, 0.9, 0.24, 1) both;
+  animation-delay: 200ms;
+}
+
+/* A note on the two hinges, because they do not use the same transform. The
+   front face is square to the camera — X is horizontal, Z is vertical — so a
+   lever on the panel turns with a plain `rotate`. The lid is not: from 18°
+   above, a rotation about the back edge collapses almost entirely into vertical
+   foreshortening, and a screen-space `rotate` on it would read as the part
+   sliding sideways off the machine. So the lid's hinges — the window frame, the
+   cradle bar, the paper guide — squash toward the hinge line itself, which is
+   the pivot the module reads off that edge. They carry no entry offset: the fold
+   is the motion. */
+
+/* the window frame: hinged on its back edge, it stands up off the lid and then
+   falls forward until the tray is flat ------------------------------------ */
+.home-stage .home-module.is-active .home-part[data-part='window'] {
+  transform-box: view-box;
+  transform-origin: var(--pivot-x, 50%) var(--pivot-y, 50%);
+  animation: labels-window-swing 260ms cubic-bezier(0.22, 0.9, 0.24, 1) both;
+  animation-delay: 420ms;
+}
+
+/* the stock roll: it drops onto the cradle along the vertical through its own
+   wound centre, and rocks once about that centre as it finds the seat ------- */
+.home-stage .home-module.is-active .home-part[data-part='roll'] {
+  transform-box: view-box;
+  transform-origin: var(--pivot-x, 50%) var(--pivot-y, 50%);
+  animation: labels-roll-drop 300ms cubic-bezier(0.3, 0.7, 0.3, 1) both;
+  animation-delay: 620ms;
+}
+
+/* the cradle's front bar: hinged on its top edge, it folds down and clamps over
+   the roll --------------------------------------------------------------- */
+.home-stage .home-module.is-active .home-part[data-part='cradle'] {
+  transform-box: view-box;
+  transform-origin: var(--pivot-x, 50%) var(--pivot-y, 50%);
+  animation: labels-cradle-close 220ms cubic-bezier(0.22, 0.9, 0.24, 1) both;
+  animation-delay: 860ms;
+}
+
+/* the blade bar: it drops square onto the seat on the panel's top edge, so the
+   slot below it is already framed when the plate arrives ------------------- */
+.home-stage .home-module.is-active .home-part[data-part='lb-cutter'] {
+  transform-box: view-box;
+  transform-origin: var(--pivot-x, 50%) var(--pivot-y, 50%);
+  animation: labels-cutter-seat 220ms cubic-bezier(0.22, 0.9, 0.24, 1) both;
+  animation-delay: 1020ms;
+}
+
+/* the face plate: pushed in square to the panel — the slot, the platen and
+   wheel, the carriage, the rocker and the lamp all ride in together, and it beds
+   square a hair past the face. Its throw is only the panel's own depth: the
+   mechanism runs edge to edge on the front, so any more travel would slide the
+   vent grille off the body onto the deck ------------------------------- */
+.home-stage .home-module.is-active .home-part[data-part='face'] {
+  transform-box: view-box;
+  transform-origin: var(--pivot-x, 50%) var(--pivot-y, 50%);
+  animation: labels-face-close 300ms cubic-bezier(0.22, 0.9, 0.24, 1) both;
+  animation-delay: 1160ms;
+}
+
+/* the paper guide: hinged on the lid seam, it falls forward and beds on the
+   seam, so the strip has somewhere to run ------------------------------- */
+.home-stage .home-module.is-active .home-part[data-part='lb-guide'] {
+  transform-box: view-box;
+  transform-origin: var(--pivot-x, 50%) var(--pivot-y, 50%);
+  animation: labels-guide-seat 260ms cubic-bezier(0.22, 0.9, 0.24, 1) both;
+  animation-delay: 1380ms;
+}
+
+/* the pinch roller: pushed out of the mouth along its own lip until it beds
+   against the platen. It starts inside the slot, where the mouth's clip hides
+   it ------------------------------------------------------------------- */
+.home-stage .home-module.is-active .home-part[data-part='lb-pinch'] {
+  transform-box: view-box;
+  transform-origin: var(--pivot-x, 50%) var(--pivot-y, 50%);
+  animation: labels-pinch-seat 240ms cubic-bezier(0.24, 0.9, 0.26, 1) both;
+  animation-delay: 1560ms;
+}
+
+/* the badge: pressed on square to the face it sits on, a shade too large, then
+   flat ------------------------------------------------------------------- */
+.home-stage .home-module.is-active .home-part[data-part='lb-plate'] {
+  transform-box: view-box;
+  transform-origin: var(--pivot-x, 50%) var(--pivot-y, 50%);
+  animation: labels-plate-press 220ms cubic-bezier(0.26, 1.1, 0.4, 1) both;
+  animation-delay: 1720ms;
+}
+
+/* the lid latch: it swings down about its own boss and hooks the seam. The axis
+   only supplies the pivot — the boss is the hinge, so there is nothing to slide */
+.home-stage .home-module.is-active .home-part[data-part='lb-latch'] {
+  transform-box: view-box;
+  transform-origin: var(--pivot-x, 50%) var(--pivot-y, 50%);
+  animation: labels-latch-swing 240ms cubic-bezier(0.3, 0.9, 0.3, 1) both;
+  animation-delay: 1860ms;
+}
+
+/* the waste drawer: slid home down its runners, under the switch ------------- */
+.home-stage .home-module.is-active .home-part[data-part='lb-bin'] {
+  transform-box: view-box;
+  transform-origin: var(--pivot-x, 50%) var(--pivot-y, 50%);
+  animation: labels-bin-slide 260ms cubic-bezier(0.22, 0.9, 0.24, 1) both;
+  animation-delay: 2020ms;
+}
+
+/* Every offset below is `var(--axis-x) * var(--travel)`: the axis the part was
+   measured along, times how far it comes in. The fractions are the overshoots —
+   positive still coming in, negative settling back past the seat — so the whole
+   entry stays on one line, and 100% is `transform: none`. The `travel` fallbacks
+   are each part's own, so a keyframe still reads on its own. */
+
+@keyframes labels-feet-rise {
+  0% {
+    transform:
+      translate(calc(var(--axis-x, 0) * var(--travel, 16px) * -1),
+                calc(var(--axis-y, -1) * var(--travel, 16px) * -1));
+  }
+  68% {
+    transform:
+      translate(calc(var(--axis-x, 0) * var(--travel, 16px) * 0.1),
+                calc(var(--axis-y, -1) * var(--travel, 16px) * 0.1));
+  }
+  86% {
+    transform:
+      translate(calc(var(--axis-x, 0) * var(--travel, 16px) * -0.03),
+                calc(var(--axis-y, -1) * var(--travel, 16px) * -0.03));
+  }
+  100% { transform: none; }
+}
+
+@keyframes labels-body-seat {
+  0% {
+    transform:
+      translate(calc(var(--axis-x, 0) * var(--travel, 26px) * -1),
+                calc(var(--axis-y, 1) * var(--travel, 26px) * -1));
+  }
+  56% {
+    transform:
+      translate(calc(var(--axis-x, 0) * var(--travel, 26px) * 0.1),
+                calc(var(--axis-y, 1) * var(--travel, 26px) * 0.1));
+  }
+  78% {
+    transform:
+      translate(calc(var(--axis-x, 0) * var(--travel, 26px) * -0.04),
+                calc(var(--axis-y, 1) * var(--travel, 26px) * -0.04));
+  }
+  100% { transform: none; }
+}
+
+@keyframes labels-window-swing {
+  0% { transform: scaleY(0.66); }
+  62% { transform: scaleY(1.03); }
+  84% { transform: scaleY(0.995); }
+  100% { transform: none; }
+}
+
+/* one rock about the wound centre: it lands past the seat, rolls back, and
+   comes to rest ------------------------------------------------------------ */
+@keyframes labels-roll-drop {
+  0% {
+    transform:
+      translate(calc(var(--axis-x, 0) * var(--travel, 30px) * -1),
+                calc(var(--axis-y, 1) * var(--travel, 30px) * -1))
+      rotate(-7deg);
+  }
+  52% {
+    transform:
+      translate(calc(var(--axis-x, 0) * var(--travel, 30px) * 0.09),
+                calc(var(--axis-y, 1) * var(--travel, 30px) * 0.09))
+      rotate(5deg);
+  }
+  72% {
+    transform:
+      translate(calc(var(--axis-x, 0) * var(--travel, 30px) * -0.05),
+                calc(var(--axis-y, 1) * var(--travel, 30px) * -0.05))
+      rotate(-2.6deg);
+  }
+  88% {
+    transform:
+      translate(calc(var(--axis-x, 0) * var(--travel, 30px) * 0.02),
+                calc(var(--axis-y, 1) * var(--travel, 30px) * 0.02))
+      rotate(1deg);
+  }
+  100% { transform: none; }
+}
+
+@keyframes labels-cradle-close {
+  0% { transform: scaleY(0.6); }
+  62% { transform: scaleY(1.06); }
+  100% { transform: none; }
+}
+
+@keyframes labels-cutter-seat {
+  0% {
+    transform:
+      translate(calc(var(--axis-x, 0) * var(--travel, 22px) * -1),
+                calc(var(--axis-y, 1) * var(--travel, 22px) * -1));
+  }
+  56% {
+    transform:
+      translate(calc(var(--axis-x, 0) * var(--travel, 22px) * 0.07),
+                calc(var(--axis-y, 1) * var(--travel, 22px) * 0.07));
+  }
+  80% {
+    transform:
+      translate(calc(var(--axis-x, 0) * var(--travel, 22px) * -0.03),
+                calc(var(--axis-y, 1) * var(--travel, 22px) * -0.03));
+  }
+  100% { transform: none; }
+}
+
+@keyframes labels-face-close {
+  0% {
+    transform:
+      translate(calc(var(--axis-x, 0) * var(--travel, 9px) * -1),
+                calc(var(--axis-y, -1) * var(--travel, 9px) * -1))
+      rotate(-1.4deg);
+  }
+  62% {
+    transform:
+      translate(calc(var(--axis-x, 0) * var(--travel, 9px) * 0.22),
+                calc(var(--axis-y, -1) * var(--travel, 9px) * 0.22))
+      rotate(0.3deg);
+  }
+  100% { transform: none; }
+}
+
+@keyframes labels-guide-seat {
+  0% { transform: scaleY(0.55); }
+  64% { transform: scaleY(1.04); }
+  100% { transform: none; }
+}
+
+/* it comes out short, presses a hair further, and lets go ------------------- */
+@keyframes labels-pinch-seat {
+  0% {
+    transform:
+      translate(calc(var(--axis-x, 0) * var(--travel, 7px) * -1),
+                calc(var(--axis-y, 1) * var(--travel, 7px) * -1))
+      scale(0.9);
+  }
+  58% {
+    transform:
+      translate(calc(var(--axis-x, 0) * var(--travel, 7px) * 0.2),
+                calc(var(--axis-y, 1) * var(--travel, 7px) * 0.2))
+      scale(1);
+  }
+  100% { transform: none; }
+}
+
+@keyframes labels-plate-press {
+  0% {
+    transform:
+      translate(calc(var(--axis-x, 0) * var(--travel, 8px) * -1),
+                calc(var(--axis-y, -1) * var(--travel, 8px) * -1))
+      scale(1.06);
+  }
+  56% {
+    transform:
+      translate(calc(var(--axis-x, 0) * var(--travel, 8px) * 0.08),
+                calc(var(--axis-y, -1) * var(--travel, 8px) * 0.08))
+      scale(0.99);
+  }
+  100% { transform: none; }
+}
+
+@keyframes labels-latch-swing {
+  0% { transform: rotate(-34deg); }
+  60% { transform: rotate(4deg); }
+  82% { transform: rotate(-1.4deg); }
+  100% { transform: none; }
+}
+
+@keyframes labels-bin-slide {
+  0% {
+    transform:
+      translate(calc(var(--axis-x, 0) * var(--travel, 11px) * -1),
+                calc(var(--axis-y, -1) * var(--travel, 11px) * -1));
+  }
+  62% {
+    transform:
+      translate(calc(var(--axis-x, 0) * var(--travel, 11px) * 0.11),
+                calc(var(--axis-y, -1) * var(--travel, 11px) * 0.11));
+  }
+  100% { transform: none; }
+}
+
+/* ---- the mechanism ------------------------------------------------------ */
+
+/* The wall as one piece. On a phone the stage has a lot of empty ground above
+   the machine and the sheets are too small to read there; the script scales the
+   whole wall about its foot to fill that ground (and re-aims each sheet's
+   flight, so they still leave the slot). */
+.home-stage .home-tag-wall {
+  transform-box: view-box;
+  transform-origin: var(--wall-x, 50%) var(--wall-y, 100%);
+  transform: scale(var(--wall-scale, 1));
+}
+
+.home-stage .home-ticket {
+  /* not on the wall yet: the gate below is a visibility beat, not a fade, so a
+     sheet is either there or it is not — it never sits half-printed on a
+     composited layer, and its paper keeps the exact tone it has today */
+  visibility: hidden;
+  transform-box: view-box;
+  /* the sheet grows about its own centre, which is the pivot the module reads
+     off the card's seat */
+  transform-origin: var(--pivot-x, 50%) var(--pivot-y, 50%);
+  /* each sheet hangs crooked: the module hands it its own angle, and it keeps
+     that angle once it is up */
+  rotate: var(--tilt, 0deg);
+  /* a wall of paper, not a wall of holes: the same bright stock the typewriter
+     feeds, so the sheets sit a shade above the page and the shadow can be the
+     only thing holding them */
+  --home-sheet: oklch(99.2% 0.004 96);
+}
+
+.dark .home-stage .home-ticket {
+  --home-sheet: color-mix(in oklch, oklch(var(--un-preset-theme-colors-primary)) 24%, oklch(var(--un-preset-theme-colors-background)) 76%);
+}
+
+.home-stage .home-ticket-paper { fill: var(--home-sheet, var(--home-paper)); }
+
+/* the contact shadow: a flat offset copy of the sheet, drawn under it. Cheaper
+   than a filter per sheet, and it stays crisp while the sheet flies */
+.home-stage .home-ticket-shadow { fill: rgba(0, 0, 0, 0.13); }
+.dark .home-stage .home-ticket-shadow { fill: rgba(0, 0, 0, 0.38); }
+
+/* the mechanism only moves while the machine is running. The gate is a
+   visibility step timed to the sheet's own beat, not a fade: the first frame of
+   the emerge is already a solid ticket standing in the mouth, so there is
+   nothing to cross-fade and no flash of a sheet waiting at the slot.
+
+   The rule keeps matching while the module is leaving, because the gate is also
+   what says *which* sheets are printed: cancelling it the instant .is-active
+   goes made all twenty-six vanish in a single frame instead of falling through
+   the deck with the wall they are stuck to. The gate and the press therefore
+   keep `both` (their fill is the state), while the emerge is filled backwards
+   only — it ends on the drawing's own pose, so letting go of it after 1500 ms
+   changes nothing on screen and takes a finished animation off every sheet. */
+.home-stage .home-module:is(.is-active, .is-leaving) .home-ticket {
+  animation:
+    home-ticket-gate 1ms linear var(--fly-delay, 0ms) both,
+    home-ticket-emerge 1500ms cubic-bezier(0.34, 0.9, 0.28, 1) var(--fly-delay, 0ms) backwards,
+    home-ticket-stick 300ms cubic-bezier(0.3, 1.2, 0.4, 1) calc(var(--fly-delay, 0ms) + 1420ms) both;
+}
+
+@keyframes home-ticket-gate {
+  0% { visibility: hidden; }
+  100% { visibility: visible; }
+}
+
+/* the sheet is spat out of the slot: it starts a slot-depth behind the lip,
+   inside the mouth, and is pushed forward along the mouth's normal — the axis
+   the module reads off the slot — growing as it clears the lip, then it keeps
+   its size and rises to the wall. Nothing fades: the paper is solid from the
+   instant it leaves the slot, and the size is what sells the nearness */
+@keyframes home-ticket-emerge {
+  0% {
+    transform:
+      translate(var(--fly-x, 0px), var(--fly-y, 0px))
+      translate(calc(var(--axis-x, 0) * var(--travel, 8px) * -1), calc(var(--axis-y, 1) * var(--travel, 8px) * -1))
+      scale(0.6);
+  }
+  9% {
+    transform: translate(var(--fly-x, 0px), var(--fly-y, 0px)) scale(0.66);
+  }
+  26% {
+    transform: translate(var(--out-x, 0px), var(--out-y, 0px)) scale(0.78);
+  }
+  40% {
+    transform:
+      translate(var(--out-x, 0px), var(--out-y, 0px))
+      translate(calc(var(--axis-x, 0) * var(--travel, 8px) * -0.45), calc(var(--axis-y, 1) * var(--travel, 8px) * -0.45))
+      scale(0.84);
+  }
+  100% {
+    transform: none;
+  }
+}
+
+/* the last few units: the sheet is pressed onto the wall, so it overshoots its
+   angle a touch and settles back into it */
+@keyframes home-ticket-stick {
+  0% { scale: 1.06; rotate: calc(var(--tilt, 0deg) - 3deg); }
+  58% { scale: 0.985; rotate: calc(var(--tilt, 0deg) + 0.7deg); }
+  100% { scale: 1; rotate: var(--tilt, 0deg); }
+}
+
+/* ---- the trial run ------------------------------------------------------
+   The machine is closed at ~2.3s but does not print yet: it runs itself once
+   first. The transport wheel turns a full revolution and the blade snaps at
+   nothing; the trial reuses the steady keyframes with a short duration, so the
+   hand-off at 2960ms is seamless — one turn ends exactly where the loop starts,
+   and the blade's first empty cut is the one the trial made. Only after that
+   does the machine start feeding sheets.
+
+   These loops are gated on `.is-leaving` as well as `.is-active`: the machine is
+   still on screen while it comes apart, and cutting the animation at the moment
+   the swap starts would snap the wheel back to 0°, the seam back a whole pitch
+   and the lamp back to full brightness in the first frame of the drop. They stop
+   when the module is retired, which is when it is invisible anyway. */
+
+.home-stage .home-module:is(.is-active, .is-leaving) .home-feed-roller {
+  animation:
+    home-feed-roller 660ms cubic-bezier(0.32, 0.6, 0.2, 1) 2300ms both,
+    home-feed-roller 2400ms linear 2960ms infinite;
+}
+.home-stage .home-module:is(.is-active, .is-leaving) .home-cutter {
+  animation:
+    home-cutter 620ms cubic-bezier(0.34, 0.9, 0.28, 1) 2340ms both,
+    home-cutter 1500ms cubic-bezier(0.34, 0.9, 0.28, 1) 2960ms infinite;
+}
+/* the carriage and the lamp come alive with the trial: the lamp is already lit
+   when the panel goes on, and starts blinking once the machine is running */
+.home-stage .home-module:is(.is-active, .is-leaving) .home-print-head {
+  animation: home-print-head 1500ms cubic-bezier(0.34, 0.9, 0.28, 1) 2960ms infinite;
+}
+.home-stage .home-module:is(.is-active, .is-leaving) .home-label-led {
+  animation: home-label-led 1500ms steps(1, end) 2960ms infinite;
+}
+
+/* the roller spins about its own centre, given in page px on the group. The hint
+   is scoped to a machine that is on the platform: left on the bare rule it was
+   held by all five modules, four of them at opacity 0 */
+.home-stage .home-feed-roller {
+  transform-box: view-box;
+}
+.home-stage .home-module:is(.is-active, .is-leaving) .home-feed-roller {
+  will-change: transform;
+}
+
+/* the stock roll turns as well, and it only starts on the trial beat. Its seam
+   is a helix, so sliding it one pitch along the axis is exactly what a turning
+   cylinder looks like; the module draws the coil a pitch past each end and clips
+   it, so the loop has no seam */
+.home-stage .home-module:is(.is-active, .is-leaving) .home-stock-roll {
+  animation: home-stock-roll 4200ms linear 2960ms infinite;
+}
+
+@keyframes home-stock-roll {
+  from { transform: translateX(0); }
+  to { transform: translateX(var(--roll-shift, 0px)); }
+}
+
+/* the transport wheel is machined metal, so its knurl reads against the panel */
+.home-stage .home-wheel .iso-fill,
+.home-stage .home-wheel .iso-top,
+.home-stage .home-wheel .iso-shade,
+.home-stage .home-platen .iso-fill,
+.home-stage .home-platen .iso-top,
+.home-stage .home-platen .iso-shade { fill: var(--home-metal); }
+.home-stage .home-wheel .iso-edge { stroke: var(--anatomy-mid); }
+
+/* the pinch wheels are the same steel as the platen they press, which is what
+   separates them from the pale panel around the mouth */
+.home-stage .home-lb-pinch .iso-fill,
+.home-stage .home-lb-pinch .iso-top,
+.home-stage .home-lb-pinch .iso-shade { fill: var(--home-metal); }
+.home-stage .home-lb-pinch .iso-edge { stroke: var(--anatomy-mid); }
+
+/* the indicator lamp is the one lit thing on the panel, so it carries the
+   accent — the same green the machine prints its labels in. The shading rules
+   in home.css carry a `[data-shade]` and land later in the cascade, so the
+   sides have to be named with the attribute to out-weigh them.
+   A lamp, not a green dot: the accent alone is a dark olive — right for type,
+   wrong for something that is supposed to be burning — so the faces are the
+   accent with only their lightness lifted, and the breath swings that
+   lightness. The disc is seen from above, so its side band is most of what the
+   eye gets: both walls move, or the lamp pulses on the sliver of top face and
+   the dot itself never changes. */
+.home-stage .home-led-lamp {
+  --led-face: oklch(from var(--anatomy-lit) 0.9 c h);
+  --led-face-dim: oklch(from var(--anatomy-lit) 0.72 c h);
+  --led-side: oklch(from var(--anatomy-lit) 0.66 c h);
+  --led-side-dim: oklch(from var(--anatomy-lit) 0.46 c h);
+  filter: drop-shadow(0 0 4px oklch(from var(--anatomy-lit) 0.7 c h / 0.6));
+}
+
+.dark .home-stage .home-led-lamp {
+  --led-face: var(--anatomy-lit);
+  --led-side: var(--anatomy-lit);
+}
+
+.home-stage .home-led-lamp .iso-fill,
+.home-stage .home-led-lamp .iso-top { fill: var(--led-face); }
+
+/* Daylight: the lamp breathes. A hard on/off reads as a fault light, and this
+   one is a pilot light — it only has to say the machine is alive — so the face
+   swings between two stops of the same accent, differing in lightness alone,
+   and the halo follows on the same clock so the rim never sits lit while the
+   face is out. The blink is the night-time cue and is left to run after dark.
+
+   Both loops are gated on the machine being on the platform. Ungated they were
+   the only animations in the module that survived .is-active going away: seven
+   infinite animations — the halo among them, re-rasterising a drop-shadow every
+   frame — kept running on four machines at opacity 0, and on the labels machine
+   itself every time the reader looked at another channel. */
+html:not(.dark) .home-stage .home-module:is(.is-active, .is-leaving) .home-led-lamp {
+  animation: home-led-halo 3.2s ease-in-out infinite;
+}
+
+/* the disc is seen from above, so its side band is most of what the eye gets:
+   the breath has to swing both walls, or the lamp pulses only on the sliver of
+   top face and the dot itself never changes */
+html:not(.dark) .home-stage .home-module:is(.is-active, .is-leaving) .home-led-lamp .iso-fill,
+html:not(.dark) .home-stage .home-module:is(.is-active, .is-leaving) .home-led-lamp .iso-top {
+  animation: home-led-breathe 3.2s ease-in-out infinite;
+}
+
+html:not(.dark) .home-stage .home-module:is(.is-active, .is-leaving) .home-led-lamp .iso-shade {
+  animation: home-led-breathe-side 3.2s ease-in-out infinite;
+}
+
+html:not(.dark) .home-stage .home-module:is(.is-active, .is-leaving) .home-label-led { animation: none; }
+
+@keyframes home-led-breathe {
+  0%, 100% { fill: var(--led-face-dim); }
+  50% { fill: var(--led-face); }
+}
+
+@keyframes home-led-breathe-side {
+  0%, 100% { fill: var(--led-side-dim); }
+  50% { fill: var(--led-side); }
+}
+
+@keyframes home-led-halo {
+  0%, 100% { filter: drop-shadow(0 0 1.4px oklch(from var(--anatomy-lit) 0.62 c h / 0.22)); }
+  50% { filter: drop-shadow(0 0 4.4px oklch(from var(--anatomy-lit) 0.72 c h / 0.62)); }
+}
+
+.home-stage .home-led-lamp .iso-shade[data-shade] { fill: var(--led-side); }
+.home-stage .home-led-lamp .iso-edge { stroke: var(--anatomy-lit-shade); }
+
+/* the carriage shuttles across the rail while the machine runs. It starts and
+   ends at rest, so the loop picks up from the drawing's own pose: the old
+   keyframe opened on -2.4px and the carriage ticked 2.4 units sideways in the
+   frame the trial run began. Same amplitude, same speed, same four turns of the
+   period — it is only phased to leave from where the part was standing. */
+@keyframes home-print-head {
+  0%, 100% { transform: none; }
+  12.5% { transform: translateX(-2.4px); }
+  37.5% { transform: translateX(2.4px); }
+  62.5% { transform: translateX(-2.4px); }
+  87.5% { transform: translateX(2.4px); }
+}
+
+@keyframes home-feed-roller {
+  to { transform: rotate(360deg); }
+}
+
+/* the blade strikes as the ticket leaves the slot, then withdraws */
+@keyframes home-cutter {
+  0%, 34%, 100% { transform: translateY(0); }
+  39% { transform: translateY(1.6px); }
+  44% { transform: translateY(1.6px); }
+  50% { transform: translateY(0); }
+}
+
+/* the lamp blinks by losing light, not by fading out: brightness keeps the
+   drawing solid while it is off, and no keyframe in this file carries an
+   opacity at all */
+@keyframes home-label-led {
+  0%, 100% { filter: none; }
+  50% { filter: brightness(0.34); }
+}
+
+/* ---- reduced motion: the machine is simply there ------------------------ */
+
+html.reduce-motion .home-stage .home-module.is-active .home-part[data-part],
+html.reduce-motion .home-stage .home-part[data-part='tickets'] {
+  animation: none !important;
+  animation-delay: 0ms !important;
+  opacity: 1;
+}
+
+/* The mechanism's own rules out-specify the plain reduce-motion block, so this
+   one has to be explicit: with motion reduced the machine simply stands there. */
+html.reduce-motion .home-stage .home-module.is-active .home-ticket,
+html.reduce-motion .home-stage .home-module.is-active .home-print-head,
+html.reduce-motion .home-stage .home-module.is-active .home-feed-roller,
+html.reduce-motion .home-stage .home-module.is-active .home-stock-roll,
+html.reduce-motion .home-stage .home-module.is-active .home-cutter,
+html.reduce-motion .home-stage .home-module.is-active .home-label-led,
+html.reduce-motion .home-stage .home-led-lamp,
+html.reduce-motion .home-stage .home-led-lamp .iso-fill,
+html.reduce-motion .home-stage .home-led-lamp .iso-top,
+html.reduce-motion .home-stage .home-led-lamp .iso-shade { animation: none !important; }
+html.reduce-motion .home-stage .home-ticket { visibility: visible; }
+
+@media (prefers-reduced-motion: reduce) {
+  .home-stage .home-module.is-active .home-part[data-part] {
+    animation: none !important;
+    animation-delay: 0ms !important;
+    opacity: 1;
+  }
+
+  .home-stage .home-module.is-active .home-ticket,
+  .home-stage .home-module.is-active .home-print-head,
+  .home-stage .home-module.is-active .home-feed-roller,
+  .home-stage .home-module.is-active .home-stock-roll,
+  .home-stage .home-module.is-active .home-cutter,
+  .home-stage .home-module.is-active .home-label-led,
+  .home-stage .home-led-lamp,
+  .home-stage .home-led-lamp .iso-fill,
+  .home-stage .home-led-lamp .iso-top,
+  .home-stage .home-led-lamp .iso-shade { animation: none !important; }
+  .home-stage .home-ticket { visibility: visible; }
+}
+
+
+/* the tape: a frosted strip over one corner, half on the paper and half on the
+   wall behind it — the thing that makes a sheet read as stuck rather than
+   floating */
+.home-stage .home-ticket-tape {
+  fill: rgba(0, 0, 0, 0.085);
+  stroke: rgba(0, 0, 0, 0.09);
+  stroke-width: 0.5;
+}
+
+.dark .home-stage .home-ticket-tape {
+  fill: rgba(255, 255, 255, 0.15);
+  stroke: rgba(255, 255, 255, 0.17);
+}

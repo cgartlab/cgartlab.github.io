@@ -1,9 +1,12 @@
 ---
-import PostList from '@/components/PostList.astro'
+import Footer from '@/components/Footer.astro'
+import HomeStage from '@/components/Home/HomeStage.astro'
 import { allLocales } from '@/config'
 import { getLangFromLocale, getLangRouteParam } from '@/i18n/lang'
-import Layout from '@/layouts/Layout.astro'
-import { getPinnedPosts, getPostsByYear } from '@/utils/content'
+import { getLocalizedPath, getPostPath } from '@/i18n/path'
+import { ui } from '@/i18n/ui'
+import HomeLayout from '@/layouts/HomeLayout.astro'
+import { getRegularPosts } from '@/utils/content'
 
 export async function getStaticPaths() {
   return allLocales.map(lang => ({
@@ -12,24 +15,69 @@ export async function getStaticPaths() {
 }
 
 const currentLang = getLangFromLocale(Astro.currentLocale)
-const pinnedPosts = await getPinnedPosts(currentLang)
-const postsByYear = await getPostsByYear(currentLang)
+const t = ui[currentLang as keyof typeof ui] ?? ui.zh
+
+const posts = await getRegularPosts(currentLang)
+
+const positioning = currentLang === 'zh'
+  ? '动态视觉设计 · 数字艺术 · 知识管理'
+  : 'Motion design · Digital art · Knowledge management'
+
+const latest = posts[0]
+const latestHref = latest
+  ? getPostPath(latest.data.abbrlink || latest.id, currentLang)
+  : getLocalizedPath('/posts/', currentLang)
 ---
 
-<Layout ogImage={currentLang === 'en' ? '/og/home.png' : undefined}>
-  <!-- Pinned Posts -->
-  {pinnedPosts.length > 0 && (
-    <section class="mb-6 w-full lg:mb-7.5">
-      <div class="uno-decorative-line" />
-      <PostList posts={pinnedPosts} lang={currentLang} pinned={true} />
-    </section>
-  )}
+<HomeLayout>
+  <script is:inline>
+    // The headline is scrambled the first time it is seen in a session, so it
+    // must not be painted settled beforehand. Later visits get the settled copy
+    // straight away; if the client module never arrives, this lets it go too.
+    ;(function () {
+      try {
+        if (sessionStorage.getItem('cgartlab-copy-seen') === '1') return
+        document.documentElement.classList.add('copy-arming')
+        setTimeout(function () {
+          if (!document.documentElement.classList.contains('copy-ready'))
+            document.documentElement.classList.remove('copy-arming')
+        }, 1800)
+      } catch (e) {}
+    })()
+  </script>
+  <div class="home-projection" aria-hidden="true">
+    <div class="home-projection-frame">
+      <video
+        src="/videos/works-loop.webm"
+        poster="/videos/works-loop-poster.jpg"
+        muted
+        loop
+        playsinline
+        preload="none"
+      ></video>
+    </div>
+    <div class="home-projection-wash"></div>
+  </div>
 
-  <!-- Regular Posts -->
-  {Array.from(postsByYear.entries(), ([_year, posts]) => (
-    <section class="mb-7.5 w-full">
-      <div class="uno-decorative-line" />
-      <PostList posts={posts} lang={currentLang} />
-    </section>
-  ))}
-</Layout>
+  <main class="home-main" id="home-main">
+    <div class="home-copy">
+      <h1 class="home-title">{t.subtitle}</h1>
+      <p class="home-sub">{positioning}</p>
+      {latest && (
+        <p class="home-latest">
+          <span class="home-latest-label">{currentLang === 'zh' ? '最新发布：' : 'Latest: '}</span>
+          <a href={latestHref}>{latest.data.title}</a>
+        </p>
+      )}
+    </div>
+    <HomeStage lang={currentLang} />
+  </main>
+
+  <div class="home-footer">
+    <Footer />
+  </div>
+</HomeLayout>
+
+<script>
+  import '@/components/Home/copy.client'
+</script>

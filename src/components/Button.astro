@@ -8,6 +8,7 @@ import { getNextGlobalLangPath, getNextSupportedLangPath } from '@/i18n/path'
 
 interface Props {
   supportedLangs: Language[]
+  variant?: 'default' | 'home'
 }
 
 const {
@@ -15,7 +16,7 @@ const {
   dark: { background: darkMode },
 } = themeConfig.color
 
-const { supportedLangs } = Astro.props
+const { supportedLangs, variant = 'default' } = Astro.props
 const currentPath = Astro.url.pathname
 
 const showLanguageSwitcher = moreLocales.length > 0
@@ -28,20 +29,26 @@ const nextUrl = supportedLangs.length > 0
 
 <div
   class:list={[
-    'absolute right-7.25vw top-14.6 flex gap-6 min-[823px]:max-lg:right-[calc(50vw-22rem)]',
-    'lg:(fixed bottom-16.5rem left-[min(calc(100vw-19rem),calc(50vw+21rem))] right-auto top-auto w-14rem)',
+    variant === 'home'
+      ? 'flex items-center gap-5'
+      : [
+          'absolute right-7.25vw top-14.6 flex gap-6 min-[823px]:max-lg:right-[calc(50vw-22rem)]',
+          'lg:(fixed bottom-16.5rem left-[min(calc(100vw-19rem),calc(50vw+21rem))] right-auto top-auto w-14rem)',
+        ],
   ]}
 >
-  <button
-    id="search-trigger-mobile"
-    class="aspect-square w-4 c-secondary lg:hidden active:scale-90 hover:c-primary"
-    aria-label="Search"
-  >
-    <SearchIcon
-      aria-hidden="true"
-      fill="currentColor"
-    />
-  </button>
+  {variant !== 'home' && (
+    <button
+      id="search-trigger-mobile"
+      class="aspect-square w-4 c-secondary lg:hidden active:scale-90 hover:c-primary"
+      aria-label="Search"
+    >
+      <SearchIcon
+        aria-hidden="true"
+        fill="currentColor"
+      />
+    </button>
+  )}
 
   {showLanguageSwitcher && (
     <a

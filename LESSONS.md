@@ -80,3 +80,9 @@
 
 ### 无障碍属性不能省
 - 失误：画廊组件缺 `role="img"` / `aria-label` 与焦点样式 → 规则：可交互/图像类组件必须补 ARIA 与 `focus-visible`（commit 42f9540f）
+
+## 客户端脚本
+
+### `astro:page-load` 可能在脚本执行前就已触发
+- 失误：首页 stage 的客户端脚本只注册 `astro:page-load`，但该事件在模块脚本执行前就派发完了 → 首屏动画/交互全部不启动，且没有任何报错（SSR 出来的静态文字看起来"正常"，掩盖了问题）
+- 规则：任何依赖 `astro:page-load` 的脚本，必须在注册监听之外**再直接调用一次 boot**；用 `element.dataset.xxxReady` 做幂等守卫，`boot()` 里先查该标记再 `unmount()+mount()`，否则第二次 boot 会把刚挂载的实例拆掉

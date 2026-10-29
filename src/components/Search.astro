@@ -49,8 +49,8 @@ const currentUI = ui[currentLang as keyof typeof ui] ?? {}
 
   const searchIndexCache = new Map()
   const CACHE_TTL = 60 * 60 * 1000
-  // 搜索行为参数：两边都是 is:inline 脚本，无法 import 共享模块，故在此显式命名。
-  // SYNC: 改动需同步 src/pages/[...lang]/search.astro 中的同名常量。
+  // 搜索行为参数：浮层是搜索的唯一入口（/search 页面已删除，Worker 301 回首页），
+  // 这些常量不再有第二个副本需要同步。
   const DEBOUNCE_MS = 150
   const MAX_RESULTS = 20
   const EXCERPT_LENGTH = 150

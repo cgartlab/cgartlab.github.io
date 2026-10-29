@@ -252,14 +252,11 @@ const softwareApp = postSchemaType === 'SoftwareApplication' ? softwareAppMeta[p
       ],
     },
     'inLanguage': currentLang,
-    'potentialAction': {
-      '@type': 'SearchAction',
-      'target': {
-        '@type': 'EntryPoint',
-        'urlTemplate': `${Astro.url.origin}${base}/search?q={search_term_string}`,
-      },
-      'query-input': 'required name=search_term_string',
-    },
+    // No `potentialAction` / SearchAction: the search box is an overlay on every
+    // page now, so there is no URL that accepts `?q=`. The old template pointed at
+    // /search?q=…, which the Worker 301s back to the homepage — structured data
+    // that promises a search endpoint has to have one. (Google retired the
+    // sitelinks search box in 2024, so nothing is lost by dropping it.)
   })}
   />
 )}
