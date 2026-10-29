@@ -1,11 +1,12 @@
 ---
+import Footer from '@/components/Footer.astro'
 import HomeStage from '@/components/Home/HomeStage.astro'
 import { allLocales } from '@/config'
 import { getLangFromLocale, getLangRouteParam } from '@/i18n/lang'
 import { getLocalizedPath, getPostPath } from '@/i18n/path'
 import { ui } from '@/i18n/ui'
 import HomeLayout from '@/layouts/HomeLayout.astro'
-import { getRegularPosts, getTotalWordCount } from '@/utils/content'
+import { getRegularPosts } from '@/utils/content'
 
 export async function getStaticPaths() {
   return allLocales.map(lang => ({
@@ -17,15 +18,10 @@ const currentLang = getLangFromLocale(Astro.currentLocale)
 const t = ui[currentLang as keyof typeof ui] ?? ui.zh
 
 const posts = await getRegularPosts(currentLang)
-const words = await getTotalWordCount(currentLang)
 
 const positioning = currentLang === 'zh'
   ? '动态视觉设计 · 数字艺术 · 知识管理'
   : 'Motion design · Digital art · Knowledge management'
-
-const readout = currentLang === 'zh'
-  ? `${posts.length} 篇 · ${words.toLocaleString('zh-CN')} 字`
-  : `${posts.length} posts · ${words.toLocaleString('en-US')} words`
 
 const latest = posts[0]
 const latestHref = latest
@@ -77,9 +73,9 @@ const latestHref = latest
     <HomeStage lang={currentLang} />
   </main>
 
-  <footer class="home-foot">
-    <span class="home-readout">{readout}</span>
-  </footer>
+  <div class="home-footer">
+    <Footer />
+  </div>
 </HomeLayout>
 
 <script>

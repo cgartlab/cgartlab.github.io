@@ -143,43 +143,6 @@ function scramble(el: HTMLElement, { begin, hold, beat, rate }: ScrambleOptions)
   requestAnimationFrame(tick)
 }
 
-/**
- * The readout in the foot counts up to its own numbers, then stops being a
- * counter: the text is put back exactly as the server drew it.
- */
-function countUp(el: HTMLElement, delay: number, duration: number): void {
-  const source = el.textContent ?? ''
-  const numbers = [...source.matchAll(/\d[\d,]*/g)]
-  if (!numbers.length)
-    return
-  const parts = numbers.map(match => ({
-    at: match.index ?? 0,
-    raw: match[0],
-    value: Number(match[0].replace(/,/g, '')),
-    grouped: match[0].includes(','),
-  }))
-  const started = performance.now() + delay
-  const render = (now: number): void => {
-    const p = Math.min(1, Math.max(0, (now - started) / duration))
-    if (p >= 1) {
-      el.textContent = source
-      return
-    }
-    const eased = 1 - (1 - p) ** 3
-    let out = ''
-    let cursor = 0
-    for (const part of parts) {
-      const value = Math.round(part.value * eased)
-      out += source.slice(cursor, part.at)
-      out += part.grouped ? value.toLocaleString('en-US') : String(value)
-      cursor = part.at + part.raw.length
-    }
-    el.textContent = out + source.slice(cursor)
-    requestAnimationFrame(render)
-  }
-  requestAnimationFrame(render)
-}
-
 let slipTimer = 0
 let slipOut = 0
 
@@ -232,7 +195,6 @@ function bootCopy(): void {
 
   const title = copy.querySelector<HTMLElement>('.home-title')
   const sub = copy.querySelector<HTMLElement>('.home-sub')
-  const readout = document.querySelector<HTMLElement>('.home-readout')
 
   // straight away: the line is under the reader's eye from the first frame, so
   // it is scrambled from the first frame too. The advances are re-measured when
@@ -241,8 +203,6 @@ function bootCopy(): void {
     scramble(title, { begin: 140, hold: 0, beat: 620, rate: 44 })
   if (sub)
     scramble(sub, { begin: 600, hold: 160, beat: 700, rate: 34 })
-  if (readout)
-    countUp(readout, 900, 1100)
 }
 
 document.addEventListener('astro:page-load', bootCopy)
