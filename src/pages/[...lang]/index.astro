@@ -23,21 +23,9 @@ const positioning = currentLang === 'zh'
   ? '动态视觉设计 · 数字艺术 · 知识管理'
   : 'Motion design · Digital art · Knowledge management'
 
-const hint = currentLang === 'zh'
-  ? '敲击键盘，纸上会一行行打出最新一篇的摘要；点击纸张阅读全文。'
-  : 'Type and the sheet prints the latest excerpt line by line; click it to read the whole piece.'
-
 const readout = currentLang === 'zh'
   ? `${posts.length} 篇 · ${words.toLocaleString('zh-CN')} 字`
   : `${posts.length} posts · ${words.toLocaleString('en-US')} words`
-
-const navLinks = [
-  { path: '/posts/', label: t.posts },
-  { path: '/works/', label: t.works },
-  { path: '/column/', label: t.column },
-  { path: '/resource/', label: t.links },
-  { path: '/tags/', label: t.tags },
-].map(item => ({ ...item, href: getLocalizedPath(item.path, currentLang) }))
 
 const latest = posts[0]
 const latestHref = latest
@@ -89,14 +77,7 @@ const latestHref = latest
     <HomeStage lang={currentLang} />
   </main>
 
-  <nav class="home-nav" aria-label={currentLang === 'zh' ? '站内导航' : 'Site sections'}>
-    {navLinks.map(item => (
-      <a href={item.href}>{item.label}</a>
-    ))}
-  </nav>
-
   <footer class="home-foot">
-    <span>{hint}</span>
     <span class="home-readout">{readout}</span>
   </footer>
 </HomeLayout>

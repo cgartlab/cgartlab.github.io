@@ -327,21 +327,6 @@ html.copy-arming .home-sub {
   to { transform: none; clip-path: inset(-20% 0 -20% 0); }
 }
 
-.home-nav a {
-  animation: home-nav-in 560ms cubic-bezier(0.22, 0.9, 0.24, 1) both;
-}
-
-.home-nav a:nth-child(1) { animation-delay: 140ms; }
-.home-nav a:nth-child(2) { animation-delay: 205ms; }
-.home-nav a:nth-child(3) { animation-delay: 270ms; }
-.home-nav a:nth-child(4) { animation-delay: 335ms; }
-.home-nav a:nth-child(5) { animation-delay: 400ms; }
-
-@keyframes home-nav-in {
-  from { transform: translateY(9px); clip-path: inset(-30% 0 100% 0); }
-  to { transform: none; clip-path: inset(-30% 0 -30% 0); }
-}
-
 .home-latest {
   animation: home-copy-wipe 720ms cubic-bezier(0.24, 0.9, 0.26, 1) 900ms both;
 }
@@ -355,8 +340,8 @@ html.copy-arming .home-sub {
   animation: home-foot-in 620ms cubic-bezier(0.22, 0.9, 0.24, 1) both;
 }
 
-.home-foot > span:nth-child(1) { animation-delay: 1120ms; }
-.home-foot > span:nth-child(2) { animation-delay: 1260ms; }
+/* one item now, and it arrives with its own count */
+.home-foot > span { animation-delay: 900ms; }
 
 @keyframes home-foot-in {
   from { transform: translateY(10px); clip-path: inset(-20% 0 100% 0); }
@@ -365,7 +350,6 @@ html.copy-arming .home-sub {
 
 html.reduce-motion .home-mark,
 html.reduce-motion .home-tools > *,
-html.reduce-motion .home-nav a,
 html.reduce-motion .home-latest,
 html.reduce-motion .home-foot > span {
   animation: none !important;
@@ -375,7 +359,6 @@ html.reduce-motion .home-foot > span {
 @media (prefers-reduced-motion: reduce) {
   .home-mark,
   .home-tools > *,
-  .home-nav a,
   .home-latest,
   .home-foot > span {
     animation: none !important;
@@ -395,7 +378,7 @@ html.reduce-motion .home-foot > span {
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
-  justify-content: space-between;
+  justify-content: flex-end;
   gap: 0.5rem 1.5rem;
   font-family: var(--un-preset-theme-font-family-sans);
   font-size: 0.72rem;
@@ -592,33 +575,6 @@ html.reduce-motion .home-key { animation: none; transition: none; }
 .home-paper-link:hover .home-paper,
 .home-paper-link:focus-visible .home-paper {
   fill: color-mix(in oklch, var(--home-paper) 82%, oklch(var(--un-preset-theme-colors-highlight)) 18%);
-}
-
-.home-nav { display: none; }
-
-@media (max-width: 899px) {
-  .home-nav {
-    display: flex;
-    flex-wrap: wrap;
-    /* the links stretch to the grid row otherwise, and their underline is left
-       floating a line below the label it belongs to */
-    align-items: baseline;
-    gap: 0.35rem 1.1rem;
-    font-family: var(--un-preset-theme-font-family-sans);
-    font-size: 0.78rem;
-    letter-spacing: 0.04em;
-  }
-  .home-nav a {
-    color: oklch(var(--un-preset-theme-colors-secondary));
-    text-decoration: none;
-    border-bottom: 1px solid color-mix(in oklch, oklch(var(--un-preset-theme-colors-secondary)) 30%, transparent);
-    padding-bottom: 0.1rem;
-  }
-  .home-nav a:hover,
-  .home-nav a:focus-visible {
-    color: oklch(var(--un-preset-theme-colors-highlight));
-    border-bottom-color: oklch(var(--un-preset-theme-colors-highlight));
-  }
 }
 
 .home-latest {
