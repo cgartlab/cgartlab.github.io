@@ -179,6 +179,7 @@ pnpm update-gh-contributions  # 更新贡献热力图数据 → src/data/github-
 - **入场必须是机械动作**（滑入 / 落入 / 铰链 / 旋入 / 螺纹），**禁止 `opacity` 淡入**；每台 ≥ 2 秒
 - **入场运动由几何轴心决定**：零件沿自己被装上的那根轴平移、绕自己的几何轴心缩放（用 `axisStyle`，别手写 `translate`）
 - **退场按建机逆序逐件下落**进井，不是整体被吸走
+- **软阴影必须是 SVG 滤镜**（`<filter><feGaussianBlur>` + `filter: url(#home-soft-N)`），**不能用 CSS `filter: blur()`**：WebKit 会直接忽略作用在 SVG 元素上的 CSS 滤镜，Safari 里阴影就变成硬边
 - **放大时边缘不得硬切**：`zoomIn()` 给 `.home-stage` 加 `is-zoomed`，由 `home.css` 下发 6 段高斯肩部 `mask`（与视频画面同一套）。mask 必须挂在 `.home-stage` 上——挂在 `.iso-svg` 上会把 SVG 内容整体裁掉
 - **标签墙整体缩放**（`fitWall()`，≤ 2.2 倍、占舞台宽 92%），每张票的 `--fly-*` / `--out-*` 要按新比例重算，原始值存 `data-*` 避免二次缩放
 - **触屏判定** `(max-width: 899px), (hover: none)`：自动轮换，点键直接跳页；DWELL = posts 4s / works 30s / column 14s / resource 8s / tags 12s，且先等入场动画放完
