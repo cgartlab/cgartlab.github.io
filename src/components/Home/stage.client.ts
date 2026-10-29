@@ -165,6 +165,11 @@ function feed(s: State, count: number): void {
     left -= s.lines[i].length
     line = i
   }
+  // a last carriage return: once the piece is typed the sheet feeds one more
+  // line, so a blank line stands under the text — the page is finished, not
+  // stopped mid-sentence
+  if (count >= s.total && s.total > 0)
+    line += 1
   group.style.transform = `translateY(${(-line * leading).toFixed(2)}px)`
   if (line > s.line)
     swingLever(s)
