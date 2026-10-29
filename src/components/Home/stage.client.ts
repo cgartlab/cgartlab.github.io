@@ -22,6 +22,10 @@ const BOOT_DEVICE = 1200
 /** chassis (0 → 1.2 s) + the device's own assembly (2.2–2.6 s): the page is
  *  whole at four, and the sheet only starts printing on a finished machine */
 const BOOT_TOTAL = 4000
+/** how long the intro will wait for the four fetched machines before playing anyway */
+const PRELOAD_DEADLINE = 2500
+/** a single fragment may not hold the whole stage hostage */
+const PRELOAD_TIMEOUT = 8000
 /** the projector threads the film and strikes the lamp before the reel rolls:
  *  the machine is whole at 2.6 s, the arc catches at 2.68 s, and the picture on
  *  the wall opens 270 ms after that */
@@ -69,6 +73,7 @@ interface State {
   autoTimer: number
   bootTimer: number
   bootEnd: number
+  preloadTimer: number
   /** a key chosen while the chassis is still building, seated at 1200 ms */
   pending: number
   /** false until the boot is over: the tour waits for a whole page */
@@ -809,6 +814,23 @@ function seatDevice(s: State): void {
   void s.stage.offsetWidth
   s.stage.classList.add('is-swapping')
   applyModule(s, index)
+  // the intro runs its own length from the lift, not from the page load, so a
+  // preload wait never eats into the assembly
+  s.bootEnd = window.setTimeout(() => {
+    s.bootEnd = 0
+    bootActive = false
+    s.ready = true
+    startTour(s)
+    // prepare() has already measured every machine off the platform and fitted
+    // the wall; doing it again over the whole 4467-path set was a ~600 ms block
+    // on the last frame of the intro. Only the one-machine fallback needs it.
+    if (!s.whole) {
+      precomputeDrops(s)
+      fitWall(s)
+    }
+    startCycle(s)
+    placeProjection(s)
+  }, BOOT_TOTAL - BOOT_DEVICE)
 }
 
 /**
@@ -866,38 +888,69 @@ function adoptModules(s: State): void {
 }
 
 /**
- * Fetch the four machines that were left out of the page.
+ * Fetch the four machines the page left out, then put them in the document in
+ * one batch.
  *
- * They are 80% of the document and none of them is on screen at boot, so they
- * are not worth the first paint. Until they land the keys still navigate (they
- * are links) and a hover is ignored — a switch to a machine that is not in the
- * document has nothing to play.
+ * Three things matter here, and all three were wrong in the first version:
+ *
+ * - it starts at mount, not on `window.load` — `load` waits for every resource,
+ *   and the body font comes from a third-party CDN that can hold it for tens of
+ *   seconds, which left four channels unreachable for that whole time;
+ * - the four requests go out together, so the wait is one round trip rather than
+ *   four;
+ * - the markup is inserted in one go, before the intro starts. Inserting a
+ *   machine mid-animation blocked the main thread for 80–380 ms each and that
+ *   was the stutter on a first visit.
  */
-async function loadLate(s: State): Promise<void> {
+async function prepare(s: State): Promise<void> {
   const urls = (s.stage.dataset.late || '').split(',').filter(Boolean)
   const group = s.svg.querySelector('.home-modules')
   if (!urls.length || !group)
     return
-  const parser = new DOMParser()
-  for (const url of urls) {
-    if (!s.stage.isConnected)
-      return
+  // the machine already in the document counts as the first of five
+  const total = urls.length + 1
+  let done = 1
+  s.stage.style.setProperty('--load', (done / total).toFixed(3))
+
+  const texts = await Promise.all(urls.map(async (url) => {
     try {
-      const text = await (await fetch(url)).text()
-      const doc = parser.parseFromString(`<svg xmlns="http://www.w3.org/2000/svg">${text}</svg>`, 'image/svg+xml')
-      for (const node of [...doc.documentElement.childNodes])
-        group.appendChild(document.importNode(node, true))
+      const res = await fetch(url, { signal: AbortSignal.timeout(PRELOAD_TIMEOUT) })
+      if (!res.ok)
+        return ''
+      const text = await res.text()
+      done += 1
+      s.stage.style.setProperty('--load', (done / total).toFixed(3))
+      return text
     }
     catch {
       // one missing machine leaves one channel without its device; the keys are
       // still links, so the page degrades to navigation rather than to nothing
+      return ''
     }
+  }))
+
+  // a View Transition may have torn the stage down while they were in flight
+  if (!s.stage.isConnected)
+    return
+
+  const parser = new DOMParser()
+  for (const text of texts) {
+    if (!text)
+      continue
+    const doc = parser.parseFromString(`<svg xmlns="http://www.w3.org/2000/svg">${text}</svg>`, 'image/svg+xml')
+    for (const node of [...doc.documentElement.childNodes])
+      group.appendChild(document.importNode(node, true))
   }
+
   adoptModules(s)
   // the machines that just arrived are measured now, off the platform, the way
   // the boot measures the first one
   precomputeDrops(s)
   fitWall(s)
+  // the reel is not part of the intro; starting it here keeps its decode out of
+  // the assembly (it was an ~800 ms block at the end of the intro)
+  projectSection(document.documentElement.dataset.homeSection || '')
+  s.stage.classList.add('is-prepared')
   startCycle(s)
   if (s.pending >= 0) {
     const index = s.pending
@@ -961,6 +1014,7 @@ function mount(): void {
     autoTimer: 0,
     bootTimer: 0,
     bootEnd: 0,
+    preloadTimer: 0,
     pending: -1,
     ready: false,
     whole: !stage.dataset.late,
@@ -1127,6 +1181,7 @@ function mount(): void {
     stopCycle(s)
     window.clearTimeout(s.zoomTimer)
     window.clearTimeout(s.zoomMaskTimer)
+    window.clearTimeout(s.preloadTimer)
     window.removeEventListener('keydown', onKey)
     stage.removeEventListener('pointermove', onPointerMove)
     stage.removeEventListener('pointerdown', onPointerDown)
@@ -1139,15 +1194,6 @@ function mount(): void {
 
   state = s
 
-  // the rest of the machines are fetched once the page has painted: they cost
-  // more than everything else on it and none of them is on screen at boot
-  if (stage.dataset.late) {
-    if (document.readyState === 'complete')
-      void loadLate(s)
-    else
-      window.addEventListener('load', () => void loadLate(s), { once: true })
-  }
-
   if (reduced) {
     // nothing assembles and nothing types: the machine is simply there, and
     // every control is already live
@@ -1159,24 +1205,29 @@ function mount(): void {
     return
   }
 
-  s.bootTimer = window.setTimeout(() => {
-    s.bootTimer = 0
-    seatDevice(s)
-  }, BOOT_DEVICE)
+  // The intro waits for the four fetched machines — injecting them while the
+  // machine is already rising is what made a first visit stutter. The wait is
+  // capped, so a slow or dead request can delay the intro but never cancel it.
+  const mountedAt = performance.now()
+  const preload = stage.dataset.late
+    ? Promise.race([
+        prepare(s),
+        new Promise<void>((resolve) => {
+          s.preloadTimer = window.setTimeout(resolve, PRELOAD_DEADLINE)
+        }),
+      ])
+    : Promise.resolve()
 
-  s.bootEnd = window.setTimeout(() => {
-    s.bootEnd = 0
-    bootActive = false
-    s.ready = true
-    // the reel may have been asked for while the console was still building
-    projectSection(document.documentElement.dataset.homeSection || '')
-    startTour(s)
-    // and the machines measure their fall while nothing else is happening
-    precomputeDrops(s)
-    startCycle(s)
-    placeProjection(s)
-    fitWall(s)
-  }, BOOT_TOTAL)
+  preload.then(() => {
+    window.clearTimeout(s.preloadTimer)
+    s.preloadTimer = 0
+    // the console is allowed its own beat before the lift moves
+    const wait = Math.max(0, BOOT_DEVICE - (performance.now() - mountedAt))
+    s.bootTimer = window.setTimeout(() => {
+      s.bootTimer = 0
+      seatDevice(s)
+    }, wait)
+  })
 }
 
 function unmount(): void {
