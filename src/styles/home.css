@@ -94,16 +94,62 @@
   grid-template-rows: minmax(0, 1fr) auto;
   height: 100%;
   min-width: 0;
+  /* the leader line is drawn over the whole column */
+  position: relative;
 }
+
+/* The leader line: from the line of copy up under the base, along it, and up
+   into the key it explains. Drawn in the machine's own column so it follows the
+   console at any width; it is an annotation, so it is hairline and quiet. */
+.home-leader {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 220ms ease-out;
+}
+
+.home-leader.is-on { opacity: 1; }
+
+/* the camera pushes in and the keys move with it: the line would lag behind */
+.home-stage.is-zoomed + .home-leader { opacity: 0; }
+
+.home-leader-path {
+  fill: none;
+  stroke: color-mix(in srgb, oklch(var(--un-preset-theme-colors-secondary)) 50%, transparent);
+  stroke-width: 1;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  transition: stroke-dashoffset 380ms cubic-bezier(0.33, 0.9, 0.24, 1);
+}
+
+.home-leader.is-on .home-leader-path { stroke-dashoffset: 0; }
+
+.home-leader-tip,
+.home-leader-anchor {
+  fill: oklch(var(--un-preset-theme-colors-secondary));
+  opacity: 0.5;
+}
+
+.reduce-motion .home-leader,
+.reduce-motion .home-leader-path { transition: none; }
 
 .home-tagline {
   position: relative;
   min-height: 1.6em;
   margin: 0.55rem 0 0;
-  font-size: 0.8125rem;
+  /* the same step and tracking as .home-sub: the line belongs to the page's
+     copy, not to the drawing */
+  font-size: clamp(0.8rem, 1.05vw, 0.95rem);
+  letter-spacing: 0.06em;
   line-height: 1.5;
   text-align: center;
-  color: oklch(var(--un-preset-theme-colors-secondary));
+  color: color-mix(in oklch, oklch(var(--un-preset-theme-colors-secondary)) 88%, transparent);
 }
 
 .home-tagline > span {

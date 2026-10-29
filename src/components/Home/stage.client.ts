@@ -505,6 +505,7 @@ function applyModule(s: State, index: number): void {
     stopTour(s)
 
   document.documentElement.dataset.homeSection = section
+  drawLeader(s, index)
   projectSection(section)
   // the camera moves in as the machine comes up; the first seat (the boot) is
   // left wide, it is the page arriving rather than a switch
@@ -874,6 +875,55 @@ function precomputeDrops(s: State): void {
 }
 
 /**
+ * The line from the copy up to the key it explains.
+ *
+ * The keys sit on the console's front face and the copy sits under the base, so
+ * a straight diagonal would cut across the machine. This leaves the text, runs
+ * up to just under the base, travels along that edge to the key's column and
+ * turns up into the key — the way a drawing annotates a part.
+ *
+ * Redrawn on every switch and on resize; hidden while the camera is pushed in,
+ * because the keys move with it and the line would lag behind.
+ */
+function drawLeader(s: State, index = s.active): void {
+  const machine = s.stage.closest<HTMLElement>('.home-machine')
+  const leader = machine?.querySelector<SVGSVGElement>('.home-leader')
+  const tagline = machine?.querySelector<HTMLElement>('.home-tagline')
+  const key = s.channels.find(a => Number(a.dataset.index) === index)
+  if (!machine || !leader || !tagline || !key)
+    return
+
+  const box = machine.getBoundingClientRect()
+  const tag = tagline.getBoundingClientRect()
+  const k = key.getBoundingClientRect()
+  if (!tag.width || !k.width)
+    return
+
+  // the line leaves the copy, runs up to just under the key row, travels along
+  // it to the key's column and turns up into the key. The rail is measured off
+  // the key itself: every machine carries its own `data-part="base"`, so the
+  // chassis' own part would be a different box on every switch.
+  const x0 = tag.left + tag.width / 2 - box.left
+  const y0 = tag.top - box.top - 8
+  const keyBottom = k.bottom - box.top
+  const y1 = keyBottom + 4
+  const rail = keyBottom + 18
+  if (rail >= y0 || y1 >= rail)
+    return
+
+  const x1 = k.left + k.width / 2 - box.left
+  const d = `M${x0.toFixed(1)} ${y0.toFixed(1)}V${rail.toFixed(1)}H${x1.toFixed(1)}V${y1.toFixed(1)}`
+  leader.querySelector('.home-leader-path')?.setAttribute('d', d)
+  const anchor = leader.querySelector('.home-leader-anchor')
+  anchor?.setAttribute('cx', x0.toFixed(1))
+  anchor?.setAttribute('cy', y0.toFixed(1))
+  const tip = leader.querySelector('.home-leader-tip')
+  tip?.setAttribute('cx', x1.toFixed(1))
+  tip?.setAttribute('cy', y1.toFixed(1))
+  leader.classList.add('is-on')
+}
+
+/**
  * Take in the machines that arrived after the page painted.
  *
  * The stage is built for five and only ships one, so every query that walks the
@@ -1035,6 +1085,7 @@ function mount(): void {
   const onProjectionResize = () => {
     placeProjection(s)
     fitWall(s)
+    drawLeader(s)
     refreshFrame()
     syncHover()
   }
