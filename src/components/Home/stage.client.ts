@@ -947,15 +947,19 @@ function taglineType(s: State, index: number, instant = false): void {
  *
  * A fixed beat, not a poll on settled(): some machines carry a long finite
  * animation (the reel), so settled() stayed false for seconds after the assembly
- * was over and the copy only arrived six seconds into the switch. The entry and
- * its sub-assemblies take ~2.2 s from the moment the incoming machine is seated.
+ * was over and the copy only arrived six seconds into the switch.
+ *
+ * The camera has the last word: the push-in holds 3.2 s and pulls back over
+ * 0.9 s, so the wide view is only back ~4.2 s after the machine is seated. The
+ * copy waits for that — appearing while the camera is still in close-up reads as
+ * a caption floating over a different picture.
  */
 function taglineLater(s: State, index: number): void {
   window.clearTimeout(s.tagTimer)
   s.tagTimer = window.setTimeout(() => {
     s.tagTimer = 0
     taglineType(s, index)
-  }, 2200)
+  }, 4300)
 }
 
 /**
