@@ -908,17 +908,19 @@ function drawLeader(s: State, index = s.active): void {
   // Everything the line does happens in the band under the machine: the rail
   // and the elbow sit below its feet, so the fold never crosses the base. The
   // tick rises from the rail to point up at the key's column.
-  const rail = y0 - 22
-  // the tick rises to just under the model's feet (its contact shadow), so it
-  // points at the key without touching the base
+  // The end sits just under the model's feet (its contact shadow), so the curve
+  // points at the key without ever touching the base.
   const foot = s.svg.querySelector<SVGGraphicsElement>('.home-chassis .home-part[data-part="shadow"]')
-  const floor = foot ? foot.getBoundingClientRect().bottom - box.top : rail - 12
-  const y1 = Math.min(floor + 2, rail - 10)
-  if (y1 >= rail || y1 <= k.bottom - box.top)
+  const floor = foot ? foot.getBoundingClientRect().bottom - box.top : y0 - 34
+  const y1 = Math.min(floor + 2, y0 - 28)
+  if (y1 >= y0 - 20 || y1 <= k.bottom - box.top)
     return
 
   const x1 = k.left + k.width / 2 - box.left
-  const d = `M${x0.toFixed(1)} ${y0.toFixed(1)}V${rail.toFixed(1)}H${x1.toFixed(1)}V${y1.toFixed(1)}`
+  // A cubic, not an elbow: it leaves the copy upward, bends across to the key's
+  // column and arrives pointing up, so there is no corner sitting on the model.
+  const bend = (y0 - y1) * 0.45
+  const d = `M${x0.toFixed(1)} ${y0.toFixed(1)}C${x0.toFixed(1)} ${(y0 - bend).toFixed(1)} ${x1.toFixed(1)} ${(y1 + bend).toFixed(1)} ${x1.toFixed(1)} ${y1.toFixed(1)}`
   leader.querySelector('.home-leader-path')?.setAttribute('d', d)
   const anchor = leader.querySelector('.home-leader-anchor')
   anchor?.setAttribute('cx', x0.toFixed(1))
