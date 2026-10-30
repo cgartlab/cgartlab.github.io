@@ -29,14 +29,14 @@ import { getAllTags, getPostsByTag, getRegularPosts } from '@/utils/content'
 export const TAGLINES = {
   zh: {
     posts: '分享终身学习所沉淀的第一手经验。',
-    works: '面向个人创作者的实用工具。',
+    works: '我的作品以及你也可以用的实用工具。',
     column: '分享给你定期更新的记录和思考。',
     resource: '我用过和看到的好东西。',
     tags: '穿越多个领域打造的知识网络。',
   },
   en: {
     posts: 'First-hand lessons from a lifetime of learning.',
-    works: 'Practical tools for independent creators.',
+    works: 'My work, and practical tools you can use too.',
     column: 'Notes and reflections, updated on a schedule.',
     resource: 'Good things I have used and come across.',
     tags: 'A knowledge network built across many fields.',
