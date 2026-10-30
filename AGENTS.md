@@ -185,6 +185,9 @@ pnpm update-gh-contributions  # 更新贡献热力图数据 → src/data/github-
 - **触屏判定** `(max-width: 899px), (hover: none)`：自动轮换，点键直接跳页；DWELL = posts 4s / works 30s / column 14s / resource 8s / tags 12s，且先等入场动画放完
 - **文案**：标题逐字打字（强调色光标），纸带打完后多走一行留白；`最新发布：` 整行统一字号
 - 文章列表已迁到 `/posts/`，`/search` 由 Worker 301 到首页搜索浮层
+- **不要为了省布局把闲置装置移出布局**（`display: none`）——实测无收益（#484）：`--drop` 靠
+  `getBBox()` 测量，闲置装置也必须**先量再藏**，而那次测量本身（5 台约 700 ms）就是开场窗口的主要长任务；
+  `display:none` 只是把布局工作推到每次激活（切换侧实测同样无净收益）。真要优化得走构建期 `--drop`
 
 ## CONTENT CONVENTIONS
 
