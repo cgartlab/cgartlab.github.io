@@ -80,6 +80,8 @@ interface State {
   ready: boolean
   /** true once every machine is in the document — the ones fetched after paint */
   whole: boolean
+  tagline: HTMLElement | null
+  tagTimer: number
   modules: SVGGElement[]
   caps: SVGGElement[]
   channels: SVGAElement[]
@@ -505,6 +507,8 @@ function applyModule(s: State, index: number): void {
     stopTour(s)
 
   document.documentElement.dataset.homeSection = section
+  placeTagline(s)
+  taglineLater(s, index)
   projectSection(section)
   // the camera moves in as the machine comes up; the first seat (the boot) is
   // left wide, it is the page arriving rather than a switch
@@ -767,6 +771,8 @@ function setModule(s: State, index: number): void {
     s.pending = index
     return
   }
+  // the copy has nothing to say over a disassembly
+  taglineOut(s)
   // a switch always plays, even if the stage was holding still off screen
   s.stage.removeAttribute('data-idle')
   // and it is taken apart in the wide view
@@ -874,6 +880,89 @@ function precomputeDrops(s: State): void {
 }
 
 /**
+ * Put the line of copy just under the machine's feet.
+ *
+ * It used to hang off the stage's bottom edge, so on a taller window the stage
+ * grew, the drawing letterboxed more, and the copy drifted away from the base.
+ * The feet are measured instead: the contact shadow is the last thing the model
+ * draws, so the copy sits a fixed 14 px below it at any viewport.
+ */
+function placeTagline(s: State): void {
+  const machine = s.stage.closest<HTMLElement>('.home-machine')
+  const foot = s.svg.querySelector<SVGGraphicsElement>('.home-chassis .home-part[data-part="shadow"]')
+  if (!machine || !foot)
+    return
+  const box = machine.getBoundingClientRect()
+  const y = foot.getBoundingClientRect().bottom - box.top + 14
+  machine.style.setProperty('--tag-y', `${Math.round(y)}px`)
+}
+
+/**
+ * The line of copy under the machine.
+ *
+ * It is not part of the machine: it has nothing to say while a device is being
+ * assembled or taken apart, so it leaves on the first frame of a switch and only
+ * comes back once the stage has settled. Coming back is a typewriter — one
+ * second, character by character — and leaving is a one second fade.
+ */
+function taglineOut(s: State): void {
+  window.clearTimeout(s.tagTimer)
+  s.tagTimer = 0
+  s.tagline?.classList.add('is-out')
+}
+
+function taglineType(s: State, index: number, instant = false): void {
+  const el = s.tagline
+  if (!el)
+    return
+  const module = s.modules.find(m => Number(m.dataset.index) === index)?.dataset.module || ''
+  const span = el.querySelector<HTMLElement>(`[data-for="${module}"]`)
+  if (!span)
+    return
+  for (const other of el.querySelectorAll<HTMLElement>('[data-for]'))
+    other.classList.toggle('is-on', other === span)
+  el.classList.remove('is-out')
+
+  if (!span.dataset.text)
+    span.dataset.text = span.textContent || ''
+  const full = span.dataset.text
+  if (instant || prefersReducedMotion()) {
+    span.textContent = full
+    return
+  }
+  span.textContent = ''
+  const step = Math.max(16, 1000 / Math.max(1, full.length))
+  let at = 0
+  const tick = (): void => {
+    at += 1
+    span.textContent = full.slice(0, at)
+    if (at < full.length)
+      s.tagTimer = window.setTimeout(tick, step)
+  }
+  tick()
+}
+
+/**
+ * Wait for the entry to finish, then type the line.
+ *
+ * A fixed beat, not a poll on settled(): some machines carry a long finite
+ * animation (the reel), so settled() stayed false for seconds after the assembly
+ * was over and the copy only arrived six seconds into the switch.
+ *
+ * The camera has the last word: the push-in holds 3.2 s and pulls back over
+ * 0.9 s, so the wide view is only back ~4.2 s after the machine is seated. The
+ * copy waits for that — appearing while the camera is still in close-up reads as
+ * a caption floating over a different picture.
+ */
+function taglineLater(s: State, index: number): void {
+  window.clearTimeout(s.tagTimer)
+  s.tagTimer = window.setTimeout(() => {
+    s.tagTimer = 0
+    taglineType(s, index)
+  }, 4300)
+}
+
+/**
  * Take in the machines that arrived after the page painted.
  *
  * The stage is built for five and only ships one, so every query that walks the
@@ -909,8 +998,6 @@ async function prepare(s: State): Promise<void> {
     return
   // the machine already in the document counts as the first of five
   const total = urls.length + 1
-  let done = 1
-  s.stage.style.setProperty('--load', (done / total).toFixed(3))
 
   const texts = await Promise.all(urls.map(async (url) => {
     try {
@@ -918,8 +1005,6 @@ async function prepare(s: State): Promise<void> {
       if (!res.ok)
         return ''
       const text = await res.text()
-      done += 1
-      s.stage.style.setProperty('--load', (done / total).toFixed(3))
       return text
     }
     catch {
@@ -1018,6 +1103,8 @@ function mount(): void {
     pending: -1,
     ready: false,
     whole: !stage.dataset.late,
+    tagline: document.querySelector<HTMLElement>('.home-tagline'),
+    tagTimer: 0,
     modules,
     caps,
     channels,
@@ -1035,6 +1122,7 @@ function mount(): void {
   const onProjectionResize = () => {
     placeProjection(s)
     fitWall(s)
+    placeTagline(s)
     refreshFrame()
     syncHover()
   }
@@ -1199,6 +1287,7 @@ function mount(): void {
     // every control is already live
     s.ready = true
     setModule(s, 0)
+    taglineType(s, 0, true)
     startCycle(s)
     placeProjection(s)
     fitWall(s)

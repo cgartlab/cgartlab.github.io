@@ -1,4 +1,4 @@
-@import './home-devices/chassis.css';
+﻿@import './home-devices/chassis.css';
 @import './home-devices/typewriter.css';
 @import './home-devices/cinema.css';
 @import './home-devices/newsrack.css';
@@ -77,94 +77,60 @@
    -------------------------------------------------------------------------- */
 
 
-/* The preload bar.
-   The intro waits for the four fetched machines; this is what the wait looks
-   like. It sits under the machine, fills as each fragment lands (--load is the
-   fraction of the five machines that are in the document), and leaves with the
-   intro rather than snapping away. */
 /* The line under the machine.
    One line per channel, in the machine's own column and below its base. Only
    the line for the channel on the platform is shown, keyed off the section the
    stage writes on <html> — no second source of truth for which machine is up. */
-/* The stage is a 100%-height box whose drawing is absolutely positioned, so it
-   only has height when its parent does: the wrapper takes the grid row's height
-   and gives the stage everything the tagline does not need. */
+/* The stage keeps the whole row; the line of copy sits in the empty band the
+   drawing leaves under the machine's feet, so moving it does not shrink the
+   machine. */
 .home-machine {
-  display: grid;
-  grid-template-rows: minmax(0, 1fr) auto;
+  position: relative;
   height: 100%;
   min-width: 0;
 }
 
 .home-tagline {
-  position: relative;
-  min-height: 1.6em;
-  margin: 0.55rem 0 0;
-  font-size: 0.8125rem;
+  position: absolute;
+  left: 0;
+  right: 0;
+  /* just under the feet, measured at runtime (placeTagline) */
+  top: var(--tag-y, 90%);
+  height: 1.6em;
+  margin: 0;
+  /* the same step and tracking as .home-sub: the line belongs to the page's
+     copy, not to the drawing */
+  font-size: clamp(0.8rem, 1.05vw, 0.95rem);
+  letter-spacing: 0.06em;
   line-height: 1.5;
   text-align: center;
-  color: oklch(var(--un-preset-theme-colors-secondary));
+  color: color-mix(in oklch, oklch(var(--un-preset-theme-colors-secondary)) 88%, transparent);
 }
 
 .home-tagline > span {
   position: absolute;
   inset: 0;
-  opacity: 0;
   visibility: hidden;
-  transform: translateY(0.35em);
-  transition:
-    opacity 200ms ease-out,
-    transform 200ms ease-out,
-    visibility 0s linear 200ms;
 }
 
-/* the line arrives a beat after the machine settles, not with it */
-html[data-home-section="posts"] .home-tagline > [data-for="posts"],
-html[data-home-section="works"] .home-tagline > [data-for="works"],
-html[data-home-section="column"] .home-tagline > [data-for="column"],
-html[data-home-section="resource"] .home-tagline > [data-for="resource"],
-html[data-home-section="tags"] .home-tagline > [data-for="tags"] {
-  opacity: 1;
-  visibility: visible;
-  transform: none;
-  transition:
-    opacity 300ms ease-out 140ms,
-    transform 300ms ease-out 140ms,
-    visibility 0s linear 140ms;
+.home-tagline > span.is-on { visibility: visible; }
+
+/* one second out, whatever is being typed */
+.home-tagline {
+  transition: opacity 1s ease-out;
 }
 
-.reduce-motion .home-tagline > span {
-  transform: none;
-  transition: none;
-}
+.home-tagline.is-out { opacity: 0; }
 
-.home-stage .home-preload {
-  position: absolute;
-  left: 12%;
-  right: 12%;
-  bottom: 1.5%;
-  height: 2px;
-  overflow: hidden;
-  background: color-mix(in srgb, oklch(var(--un-preset-theme-colors-secondary)) 16%, transparent);
-  opacity: 0;
-  transition: opacity 240ms ease-out;
-}
+
+.reduce-motion .home-tagline { transition: none; }
+
 
 /* only a stage that actually has fragments to fetch shows it */
-.home-stage[data-late] .home-preload { opacity: 1; }
 
-.home-stage .home-preload > i {
-  display: block;
-  width: calc(var(--load, 0.2) * 100%);
-  height: 100%;
-  background: oklch(var(--un-preset-theme-colors-primary));
-  transition: width 320ms cubic-bezier(0.33, 0.9, 0.24, 1);
-}
 
-.home-stage.is-prepared .home-preload { opacity: 0; }
 
 .reduce-motion .home-stage .home-preload,
-.reduce-motion .home-stage .home-preload > i { transition: none; }
 
 .home-stage .iso-svg { display: block; width: 100%; height: auto; overflow: visible; }
 .home-stage .iso-svg path,
@@ -191,7 +157,7 @@ html[data-home-section="tags"] .home-tagline > [data-for="tags"] {
 .home-stage .iso-solid[data-seamless] > .iso-shade[data-shade="3"] { stroke: var(--anatomy-shade-3); }
 .home-stage .iso-solid[data-seamless] > .iso-top { stroke: var(--anatomy-top); }
 
-.home-stage .iso-halo { fill: var(--anatomy-halo); stroke: none; filter: blur(9px); opacity: var(--anatomy-halo-opacity); transform: translateY(3px); }
+.home-stage .iso-halo { fill: var(--anatomy-halo); stroke: none; filter: url(#home-soft-9); opacity: var(--anatomy-halo-opacity); transform: translateY(3px); }
 
 .home-stage .iso-line { fill: none; stroke: var(--anatomy-lo); stroke-width: var(--anatomy-weight); stroke-linecap: round; stroke-linejoin: round; }
 .home-stage .iso-line[data-tone="hi"] { stroke: var(--anatomy-hi); }
@@ -789,7 +755,7 @@ html.reduce-motion .home-key { animation: none; transition: none; }
 .home-paper-shadow {
   fill: var(--anatomy-halo);
   opacity: calc(var(--anatomy-halo-opacity) * 1.6);
-  filter: blur(4px);
+  filter: url(#home-soft-4);
 }
 
 .home-lift {
@@ -823,7 +789,7 @@ html.reduce-motion .home-stage .home-paper-group { transition: none; }
 .home-stage .home-shadow {
   fill: var(--anatomy-halo);
   opacity: 0.16;
-  filter: blur(5px);
+  filter: url(#home-soft-5);
 }
 
 .home-stage .home-table {

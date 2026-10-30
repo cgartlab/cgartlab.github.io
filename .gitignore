@@ -85,3 +85,4 @@ src/assets/lqip/
 # Argus 评审机器人会把每个 PR 的报告 commit 到仓库根，那是 PR 产物，不该进版本库
 Argus_Review_*.md
 ARGUS_REVIEW*.md
+/argus-review-*.md

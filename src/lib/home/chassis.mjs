@@ -106,8 +106,16 @@ export function chassisDefs(P) {
   // clears the rim instead of sliding across the cabinet's front.
   const [, cy] = k.iso([0, HATCH.y + HATCH.d, TOP], P)
   const edge = (cy + 3).toFixed(1)
+  // Soft shadows are SVG filters, not CSS `filter: blur()`: WebKit ignores the
+  // CSS form on SVG elements (the shadow comes out as a hard shape in Safari),
+  // while feGaussianBlur is what the platform is built for. Radii are in stage
+  // units, the same space the CSS blur used to resolve in.
+  const soft = (id, r) =>
+    `<filter id="${id}" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="${r}"/></filter>`
   return `<defs><clipPath id="${WELL_ID}"><path d="${k.pathOf(ring, true)}"/></clipPath>`
-    + `<clipPath id="home-deck-clip"><path d="M-400 -200L1200 -200L1200 ${edge}L-400 ${edge}Z"/></clipPath></defs>`
+    + `<clipPath id="home-deck-clip"><path d="M-400 -200L1200 -200L1200 ${edge}L-400 ${edge}Z"/></clipPath>`
+    + soft('home-soft-9', 9) + soft('home-soft-5', 5) + soft('home-soft-4', 4) + soft('home-soft-3', 3)
+    + `</defs>`
 }
 
 /** A cross-head screw sitting on the front face. */
