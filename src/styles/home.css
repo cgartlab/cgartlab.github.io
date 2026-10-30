@@ -99,8 +99,8 @@
   position: absolute;
   left: 0;
   right: 0;
-  /* in the band under the feet, not in the flow */
-  bottom: 1.6rem;
+  /* just under the feet, measured at runtime (placeTagline) */
+  top: var(--tag-y, 90%);
   height: 1.6em;
   margin: 0;
   /* the same step and tracking as .home-sub: the line belongs to the page's

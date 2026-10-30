@@ -507,6 +507,7 @@ function applyModule(s: State, index: number): void {
     stopTour(s)
 
   document.documentElement.dataset.homeSection = section
+  placeTagline(s)
   taglineLater(s, index)
   projectSection(section)
   // the camera moves in as the machine comes up; the first seat (the boot) is
@@ -880,6 +881,24 @@ function precomputeDrops(s: State): void {
 }
 
 /**
+ * Put the line of copy just under the machine's feet.
+ *
+ * It used to hang off the stage's bottom edge, so on a taller window the stage
+ * grew, the drawing letterboxed more, and the copy drifted away from the base.
+ * The feet are measured instead: the contact shadow is the last thing the model
+ * draws, so the copy sits a fixed 14 px below it at any viewport.
+ */
+function placeTagline(s: State): void {
+  const machine = s.stage.closest<HTMLElement>('.home-machine')
+  const foot = s.svg.querySelector<SVGGraphicsElement>('.home-chassis .home-part[data-part="shadow"]')
+  if (!machine || !foot)
+    return
+  const box = machine.getBoundingClientRect()
+  const y = foot.getBoundingClientRect().bottom - box.top + 14
+  machine.style.setProperty('--tag-y', `${Math.round(y)}px`)
+}
+
+/**
  * The line of copy under the machine.
  *
  * It is not part of the machine: it has nothing to say while a device is being
@@ -1103,6 +1122,7 @@ function mount(): void {
   const onProjectionResize = () => {
     placeProjection(s)
     fitWall(s)
+    placeTagline(s)
     refreshFrame()
     syncHover()
   }
