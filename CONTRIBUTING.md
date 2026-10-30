@@ -149,6 +149,22 @@ PR title should mirror the commit message format (it becomes the squash commit m
 | `lang` | `''` \| `'en'` | No | `''` | Only enabled locales. `'zh-tw'` is **rejected** by the schema (build-breaking) |
 | `abbrlink` | string | No | `''` | Lowercase letters, digits, hyphens only |
 
+## 中文排版约定
+
+中文正文的排版交给 CSS，**不要在 Markdown 里手工加空格、`&nbsp;` 或硬断行**。
+
+| 需求 | 做法 | 依据 |
+|---|---|---|
+| 中英 / 中数之间的空距 | 什么都不写 | `.heti` 的 `text-autospace: normal`（`src/styles/markdown.css`） |
+| 段尾孤字 | 什么都不写 | 段落 `text-wrap: pretty`、标题 `text-wrap: balance` |
+| 产品名 / 型号被拆行 | `米家扫地机器人&nbsp;M30`、`Keychron&nbsp;K3&nbsp;Max` | 只在名词**内部**用 `&nbsp;`，不要在整句里用 |
+| 标题断行 | 交给 `text-wrap`，不要写 `<br>` | 断点随宽度变化，硬断在某个宽度下必然出错 |
+
+不引入 pangu.js 一类的运行时空格转换：它要在渲染前区分正文与 Markdown 语法 / 代码 / URL / 图片 alt，
+而 `text-autospace` 由排版引擎做同一件事，原文一个字不动，不支持的浏览器直接忽略。
+
+标点悬挂（`hanging-punctuation`）Chromium 至今未实现，不做处理；中英字号的视觉差异也不擅自替换字体栈。
+
 ## TypeScript Type Safety
 
 The project uses `@ts-expect-error` in exactly **1 place** (AGENTS.md-enforced):
