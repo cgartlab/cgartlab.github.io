@@ -77,6 +77,61 @@
    -------------------------------------------------------------------------- */
 
 
+/* The line under the machine.
+   One line per channel, in the machine's own column and below its base. Only
+   the line for the channel on the platform is shown, keyed off the section the
+   stage writes on <html> — no second source of truth for which machine is up. */
+/* The stage keeps the whole row; the line of copy sits in the empty band the
+   drawing leaves under the machine's feet, so moving it does not shrink the
+   machine. */
+.home-machine {
+  position: relative;
+  height: 100%;
+  min-width: 0;
+}
+
+.home-tagline {
+  position: absolute;
+  left: 0;
+  right: 0;
+  /* just under the feet, measured at runtime (placeTagline) */
+  top: var(--tag-y, 90%);
+  height: 1.6em;
+  margin: 0;
+  /* the same step and tracking as .home-sub: the line belongs to the page's
+     copy, not to the drawing */
+  font-size: clamp(0.8rem, 1.05vw, 0.95rem);
+  letter-spacing: 0.06em;
+  line-height: 1.5;
+  text-align: center;
+  color: color-mix(in oklch, oklch(var(--un-preset-theme-colors-secondary)) 88%, transparent);
+}
+
+.home-tagline > span {
+  position: absolute;
+  inset: 0;
+  visibility: hidden;
+}
+
+.home-tagline > span.is-on { visibility: visible; }
+
+/* one second out, whatever is being typed */
+.home-tagline {
+  transition: opacity 1s ease-out;
+}
+
+.home-tagline.is-out { opacity: 0; }
+
+
+.reduce-motion .home-tagline { transition: none; }
+
+
+/* only a stage that actually has fragments to fetch shows it */
+
+
+
+.reduce-motion .home-stage .home-preload,
+
 .home-stage .iso-svg { display: block; width: 100%; height: auto; overflow: visible; }
 .home-stage .iso-svg path,
 .home-stage .iso-svg circle { vector-effect: non-scaling-stroke; }
