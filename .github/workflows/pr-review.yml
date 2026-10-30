@@ -29,6 +29,6 @@ jobs:
           private-key: ${{ secrets.ARGUS_FLASH_PRIVATE_KEY }}
 
       # 固定 commit SHA 保证行为可重现；升级时更新为 cgartlab/argus main 最新 SHA
-      - uses: cgartlab/argus/.github/actions/argus-review@3fc6be218012467607c085f4ef959b3f4cbff16c
+      - uses: cgartlab/argus/.github/actions/argus-review@c9a22d407f91f70fc94823bcd30a8c07b2b62851
         with:
           github-token: ${{ steps.app-token.outputs.token }}
