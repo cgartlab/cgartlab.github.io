@@ -671,7 +671,9 @@ export function buildLabels(P, options = {}) {
   // the wall is wrapped as one piece: on a phone it is scaled up to fill the
   // ground above the machine, and that scale belongs to the wall, not to each
   // sheet (the part's own transform is the assembly's)
-  out.push(part('tickets', 12, '', ['<g class="home-tag-wall">', `<g class="home-tag-web">${web.join('')}</g>`, ...tickets, '</g>']))
+  const nodes = centres.map(([x, y]) => `<circle class="home-tag-node" cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="2.4"/>`).join('')
+  const netDelay = webDelay + edges.length * 55 + 260
+  out.push(part('tickets', 12, '', ['<g class="home-tag-wall">', ...tickets, `<g class="home-tag-net" style="--net-delay:${netDelay}ms">${web.join('')}${nodes}</g>`, '</g>']))
 
   return out.join('')
 }
