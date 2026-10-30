@@ -836,7 +836,6 @@ function seatDevice(s: State): void {
     }
     startCycle(s)
     placeProjection(s)
-    taglineLater(s, s.active)
   }, BOOT_TOTAL - BOOT_DEVICE)
 }
 
@@ -943,19 +942,20 @@ function taglineType(s: State, index: number, instant = false): void {
   tick()
 }
 
-/** Wait for the entry to finish, then type the line. */
+/**
+ * Wait for the entry to finish, then type the line.
+ *
+ * A fixed beat, not a poll on settled(): some machines carry a long finite
+ * animation (the reel), so settled() stayed false for seconds after the assembly
+ * was over and the copy only arrived six seconds into the switch. The entry is
+ * ~1.4 s from the moment the incoming machine is seated.
+ */
 function taglineLater(s: State, index: number): void {
-  const m = s.modules.find(x => Number(x.dataset.index) === index)
-  const started = performance.now()
-  const poll = (): void => {
-    if (!m || settled(m) || performance.now() - started > 5200) {
-      taglineType(s, index)
-      return
-    }
-    s.tagTimer = window.setTimeout(poll, 200)
-  }
   window.clearTimeout(s.tagTimer)
-  s.tagTimer = window.setTimeout(poll, 200)
+  s.tagTimer = window.setTimeout(() => {
+    s.tagTimer = 0
+    taglineType(s, index)
+  }, 1400)
 }
 
 /**
