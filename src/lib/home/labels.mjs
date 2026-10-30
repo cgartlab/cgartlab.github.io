@@ -641,10 +641,37 @@ export function buildLabels(P, options = {}) {
       if (seat.tape) tickets.push(tapeOn(F, card, seat.corner, seat.tapeAngle, P))
       tickets.push('</g>')
     })
+  // The knowledge network: once the sheets are stuck up they are the nodes, and
+  // each one reaches for its two nearest neighbours. Built here, where the seats
+  // are known, so the graph never disagrees with where the paper landed.
+  const centres = seats.map(seat => k.iso(cardAt(seat).at(0, 0, 0), P))
+  const pairs = new Set()
+  const edges = []
+  centres.forEach(([x0, y0], i) => {
+    const near = centres
+      .map(([x1, y1], j) => ({ j, d: (x1 - x0) ** 2 + (y1 - y0) ** 2 }))
+      .filter(n => n.j !== i)
+      .sort((a, b) => a.d - b.d)
+      .slice(0, 2)
+    for (const { j } of near) {
+      const key = i < j ? `${i}-${j}` : `${j}-${i}`
+      if (pairs.has(key))
+        continue
+      pairs.add(key)
+      edges.push([i, j])
+    }
+  })
+  const webDelay = BUILD + seats.length * beat + 1500
+  const web = edges.map(([a, b], n) => {
+    const [x0, y0] = centres[a]
+    const [x1, y1] = centres[b]
+    return `<path class="home-tag-edge" pathLength="1" style="--edge-delay:${webDelay + n * 55}ms" d="M${x0.toFixed(1)} ${y0.toFixed(1)}L${x1.toFixed(1)} ${y1.toFixed(1)}"/>`
+  })
+
   // the wall is wrapped as one piece: on a phone it is scaled up to fill the
   // ground above the machine, and that scale belongs to the wall, not to each
   // sheet (the part's own transform is the assembly's)
-  out.push(part('tickets', 12, '', ['<g class="home-tag-wall">', ...tickets, '</g>']))
+  out.push(part('tickets', 12, '', ['<g class="home-tag-wall">', `<g class="home-tag-web">${web.join('')}</g>`, ...tickets, '</g>']))
 
   return out.join('')
 }
