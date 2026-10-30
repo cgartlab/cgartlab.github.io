@@ -80,6 +80,8 @@ interface State {
   ready: boolean
   /** true once every machine is in the document — the ones fetched after paint */
   whole: boolean
+  tagline: HTMLElement | null
+  tagTimer: number
   modules: SVGGElement[]
   caps: SVGGElement[]
   channels: SVGAElement[]
@@ -505,7 +507,7 @@ function applyModule(s: State, index: number): void {
     stopTour(s)
 
   document.documentElement.dataset.homeSection = section
-  drawLeader(s, index)
+  taglineLater(s, index)
   projectSection(section)
   // the camera moves in as the machine comes up; the first seat (the boot) is
   // left wide, it is the page arriving rather than a switch
@@ -768,6 +770,8 @@ function setModule(s: State, index: number): void {
     s.pending = index
     return
   }
+  // the copy has nothing to say over a disassembly
+  taglineOut(s)
   // a switch always plays, even if the stage was holding still off screen
   s.stage.removeAttribute('data-idle')
   // and it is taken apart in the wide view
@@ -831,6 +835,7 @@ function seatDevice(s: State): void {
     }
     startCycle(s)
     placeProjection(s)
+    taglineLater(s, s.active)
   }, BOOT_TOTAL - BOOT_DEVICE)
 }
 
@@ -875,60 +880,63 @@ function precomputeDrops(s: State): void {
 }
 
 /**
- * The line from the copy up to the key it explains.
+ * The line of copy under the machine.
  *
- * The keys sit on the console's front face and the copy sits under the base, so
- * a straight diagonal would cut across the machine. This leaves the text, runs
- * up to just under the base, travels along that edge to the key's column and
- * turns up into the key — the way a drawing annotates a part.
- *
- * Redrawn on every switch and on resize; hidden while the camera is pushed in,
- * because the keys move with it and the line would lag behind.
+ * It is not part of the machine: it has nothing to say while a device is being
+ * assembled or taken apart, so it leaves on the first frame of a switch and only
+ * comes back once the stage has settled. Coming back is a typewriter — one
+ * second, character by character — and leaving is a one second fade.
  */
-function drawLeader(s: State, index = s.active): void {
-  const machine = s.stage.closest<HTMLElement>('.home-machine')
-  const leader = machine?.querySelector<SVGSVGElement>('.home-leader')
-  const tagline = machine?.querySelector<HTMLElement>('.home-tagline')
-  const key = s.channels.find(a => Number(a.dataset.index) === index)
-  if (!machine || !leader || !tagline || !key)
-    return
+function taglineOut(s: State): void {
+  window.clearTimeout(s.tagTimer)
+  s.tagTimer = 0
+  s.tagline?.classList.add('is-out')
+}
 
-  const box = machine.getBoundingClientRect()
-  const tag = tagline.getBoundingClientRect()
-  const k = key.getBoundingClientRect()
-  if (!tag.width || !k.width)
+function taglineType(s: State, index: number, instant = false): void {
+  const el = s.tagline
+  if (!el)
     return
-
-  // the line leaves the copy, runs up to just under the key row, travels along
-  // it to the key's column and turns up into the key. The rail is measured off
-  // the key itself: every machine carries its own `data-part="base"`, so the
-  // chassis' own part would be a different box on every switch.
-  const x0 = tag.left + tag.width / 2 - box.left
-  const y0 = tag.top - box.top - 8
-  // Everything the line does happens in the band under the machine: the rail
-  // and the elbow sit below its feet, so the fold never crosses the base. The
-  // tick rises from the rail to point up at the key's column.
-  // The end sits just under the model's feet (its contact shadow), so the curve
-  // points at the key without ever touching the base.
-  const foot = s.svg.querySelector<SVGGraphicsElement>('.home-chassis .home-part[data-part="shadow"]')
-  const floor = foot ? foot.getBoundingClientRect().bottom - box.top : y0 - 34
-  const y1 = Math.min(floor + 2, y0 - 28)
-  if (y1 >= y0 - 20 || y1 <= k.bottom - box.top)
+  const module = s.modules.find(m => Number(m.dataset.index) === index)?.dataset.module || ''
+  const span = el.querySelector<HTMLElement>(`[data-for="${module}"]`)
+  if (!span)
     return
+  for (const other of el.querySelectorAll<HTMLElement>('[data-for]'))
+    other.classList.toggle('is-on', other === span)
+  el.classList.remove('is-out')
 
-  const x1 = k.left + k.width / 2 - box.left
-  // A cubic, not an elbow: it leaves the copy upward, bends across to the key's
-  // column and arrives pointing up, so there is no corner sitting on the model.
-  const bend = (y0 - y1) * 0.45
-  const d = `M${x0.toFixed(1)} ${y0.toFixed(1)}C${x0.toFixed(1)} ${(y0 - bend).toFixed(1)} ${x1.toFixed(1)} ${(y1 + bend).toFixed(1)} ${x1.toFixed(1)} ${y1.toFixed(1)}`
-  leader.querySelector('.home-leader-path')?.setAttribute('d', d)
-  const anchor = leader.querySelector('.home-leader-anchor')
-  anchor?.setAttribute('cx', x0.toFixed(1))
-  anchor?.setAttribute('cy', y0.toFixed(1))
-  const tip = leader.querySelector('.home-leader-tip')
-  tip?.setAttribute('cx', x1.toFixed(1))
-  tip?.setAttribute('cy', y1.toFixed(1))
-  leader.classList.add('is-on')
+  if (!span.dataset.text)
+    span.dataset.text = span.textContent || ''
+  const full = span.dataset.text
+  if (instant || prefersReducedMotion()) {
+    span.textContent = full
+    return
+  }
+  span.textContent = ''
+  const step = Math.max(16, 1000 / Math.max(1, full.length))
+  let at = 0
+  const tick = (): void => {
+    at += 1
+    span.textContent = full.slice(0, at)
+    if (at < full.length)
+      s.tagTimer = window.setTimeout(tick, step)
+  }
+  tick()
+}
+
+/** Wait for the entry to finish, then type the line. */
+function taglineLater(s: State, index: number): void {
+  const m = s.modules.find(x => Number(x.dataset.index) === index)
+  const started = performance.now()
+  const poll = (): void => {
+    if (!m || settled(m) || performance.now() - started > 5200) {
+      taglineType(s, index)
+      return
+    }
+    s.tagTimer = window.setTimeout(poll, 200)
+  }
+  window.clearTimeout(s.tagTimer)
+  s.tagTimer = window.setTimeout(poll, 200)
 }
 
 /**
@@ -1076,6 +1084,8 @@ function mount(): void {
     pending: -1,
     ready: false,
     whole: !stage.dataset.late,
+    tagline: document.querySelector<HTMLElement>('.home-tagline'),
+    tagTimer: 0,
     modules,
     caps,
     channels,
@@ -1093,7 +1103,6 @@ function mount(): void {
   const onProjectionResize = () => {
     placeProjection(s)
     fitWall(s)
-    drawLeader(s)
     refreshFrame()
     syncHover()
   }
@@ -1258,6 +1267,7 @@ function mount(): void {
     // every control is already live
     s.ready = true
     setModule(s, 0)
+    taglineType(s, 0, true)
     startCycle(s)
     placeProjection(s)
     fitWall(s)

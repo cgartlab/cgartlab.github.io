@@ -46,12 +46,6 @@ const isDefault = currentLang === defaultLocale
     <div class="home-preload" aria-hidden="true"><i /></div>
   </div>
 
-  <svg class="home-leader" aria-hidden="true" focusable="false">
-    <path class="home-leader-path" pathLength="1" d="" />
-    <circle class="home-leader-anchor" r="1.8" cx="-10" cy="-10" />
-    <circle class="home-leader-tip" r="2.5" cx="-10" cy="-10" />
-  </svg>
-
   <p class="home-tagline">
     {Object.entries(taglines).map(([id, text]) => (
       <span data-for={id}>{text}</span>
