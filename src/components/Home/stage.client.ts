@@ -994,8 +994,6 @@ async function prepare(s: State): Promise<void> {
     return
   // the machine already in the document counts as the first of five
   const total = urls.length + 1
-  let done = 1
-  s.stage.style.setProperty('--load', (done / total).toFixed(3))
 
   const texts = await Promise.all(urls.map(async (url) => {
     try {
@@ -1003,8 +1001,6 @@ async function prepare(s: State): Promise<void> {
       if (!res.ok)
         return ''
       const text = await res.text()
-      done += 1
-      s.stage.style.setProperty('--load', (done / total).toFixed(3))
       return text
     }
     catch {
