@@ -21,6 +21,25 @@ compare 链接可指。
 
 ## 2026-Q4
 
+### 2026-11-01 — 依赖安全告警清零（fast-uri 3.1.9 / katex 0.18.10）
+
+**Security**
+
+- `fast-uri` override 由 `^3.1.7` 提到 `^3.1.9`，收口 2026-10 的 4 条新通告（scheme 伪造、相对引用
+  路径等价、主机混淆、首段冒号 scheme 注入）。引入路径仅为 `@astrojs/check` 的语言服务链，属 dev 依赖
+- `katex` 由 `0.16.47` 升到 `0.18.10`，并新增 `overrides` 强制全树单一版本，修复
+  GHSA-238p-pmpm-9mq7（原型污染可绕过 trust 限制）。此前该通告被 `auditConfig.ignoreGhsas` 临时忽略，
+  但 GitHub Dependabot 不读取该配置，告警因此长期挂着；现已删除忽略项，恢复真实门禁
+  - 0.18 起 KaTeX 的 CSS 类名统一加 `katex-` 前缀（`.base` → `.katex-base`）。因为 HTML 生成与
+    页面加载的 CSS 都来自同一个 0.18.10，前缀变更天然对齐，不会破版
+  - 未选 0.18.11：该版本被上游标记 deprecated（误发且含破坏性变更）；未选 0.19：它把「缺失字形
+    度量」并入 `strict` 语义，留待后续独立评估
+
+**Fixed**
+
+- GitHub 安全页的 6 条 Dependabot 告警（fast-uri ×4、katex ×2）全部清除
+- AGENTS.md 的 `overrides` 条数由过时的 14 条更正为实际 22 条
+
 ### 2026-10-30 — 首页成为一屏可换装的等距仪器 (#476 / #478 / #479)
 
 **Added**

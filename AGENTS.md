@@ -345,7 +345,7 @@ Vite 加载 `astro.config.ts` 时会把配置导入图里的依赖全部内联�
 |------|--------|------|
 | `allowBuilds` | `esbuild` / `sharp` / `simple-git-hooks` / `workerd` 均 `false` | 显式禁用这 4 个包的安装期构建脚本（引入自 commit `195059c`「配置 pnpm 禁用部分包的自动构建」）。**不要顺手删**，删掉等于恢复构建脚本执行 |
 | `trustPolicy` | `no-downgrade`；`trustPolicyExclude` 与 `onlyTrustedDependencies` 同为 rollup 插件 / chokidar / semver | 这 3 个包必须执行构建脚本，故在例外名单里成对出现。其余包走 pnpm 默认信任策略 |
-| `overrides` | 14 条安全与兼容钉版 | 见下节 |
+| `overrides` | 22 条安全与兼容钉版 | 见下节 |
 
 ### `overrides` 是漏洞处理的主战场
 
@@ -357,10 +357,10 @@ Vite 加载 `astro.config.ts` 时会把配置导入图里的依赖全部内联�
 | `undici@7` | `miniflare`（精确钉 `7.29.0`）| `^7.29.1`（GHSA-3wwx-pv8p-q78v 解压 DoS），**只约束 7.x**，astro 链上的 8.x 不受影响 |
 | `svgo@4` / `sharp` | `astro-compress` | `^4.1.0` / `^0.35.4` |
 | `js-yaml@4` | `@astrojs/internal-helpers`（astro 链）| `^4.3.2`（maxTotalMergeKeys 空 merge 源 CPU DoS）|
-| `fast-uri` | `ajv`（`^3.0.1`）| `^3.1.7`（authority 注入 + 主机混淆）|
+| `fast-uri` | `ajv`（`^3.0.1`）| `^3.1.9`（authority 注入 + 主机混淆 + scheme 伪造 / 路径等价 / 首段冒号 scheme 注入）|
 
 **处理流程：`pnpm audit --prod` 报错 → 确认引入方与受影响版本区间 → 在 `overrides` 钉同 minor 补丁 →
-每条 override 必须带注释写明「谁引入 / 哪个版本修 / 是否同 minor」**（现有 14 条中，安全类均已按此格式）。
+每条 override 必须带注释写明「谁引入 / 哪个版本修 / 是否同 minor」**（现有 22 条中，安全类均已按此格式）。
 优先钉补丁版本而不是升级直接依赖，可避免把不相关的大版本一起拖进来。
 
 历史上因此反复红过 CI：#402、#406、#431、#438 —— 每次修复都只动 `pnpm-lock.yaml` +
@@ -404,7 +404,7 @@ Vite 加载 `astro.config.ts` 时会把配置导入图里的依赖全部内联�
   （**注意：CI 不跑 `pnpm lint`**，见 KEY QUIRKS 的 lint 基线条目）
 - **`pnpm audit --prod` 是硬门禁**：报出的多为传递依赖漏洞，修复路径是在 `pnpm-workspace.yaml` 的
   `overrides` 里钉补丁版本（只动 lockfile + workspace 文件），而不是升级直接依赖。
-  完整处理流程与现有 14 条钉版见「设备与文件系统约束 → `overrides` 是漏洞处理的主战场」
+  完整处理流程与现有 22 条钉版见「设备与文件系统约束 → `overrides` 是漏洞处理的主战场」
 - 其他 workflow：PR 审查（`pr-review.yml`）、PR 分类（`pr-triage.yml`）、定时维护（`maintenance.yml`）、贡献数据更新（`update-contributions.yml`，每周日 cron）
 - 域名：cgartlab.com
 
@@ -891,13 +891,18 @@ pnpm lint → pnpm build → pnpm build && pnpm preview（实测：暗色/双语
 
 ### 当前版本约束（决策记录）
 
-- **katex 锁定 `^0.16.47`** — rehype-katex@7.0.1 依赖 `katex: ^0.16.0`，升 0.17+/0.18 会产生双 katex
-  实例；且 0.18 起 CSS 类名加 `katex-` 前缀（`.base` → `.katex-base`），渲染 HTML 与加载 CSS 类名
-  不匹配会导致公式破版。待 rehype-katex 发布兼容版本后再升
-  - 因此 `katex` 的 low 通告 GHSA-238p-pmpm-9mq7 已加入 `pnpm-workspace.yaml` 的
-    `auditConfig.ignoreGhsas`（临时忽略，附移除条件）；CI 的 `pnpm audit --prod` 门禁会因未忽略的
-    新通告直接失败，升级依赖后需用 `pnpm --config.registry=https://registry.npmjs.org/ audit --prod`
-    本地复现（本机 registry 是 npmmirror，缺 audit 端点）
+- **katex 精确钉 `0.18.10`（override 单实例）** — rehype-katex@7.0.1 至今仍依赖 `katex: ^0.16.0`，
+  2026-11 起改用 `overrides` 强制全树单一版本（`katex: 0.18.10`）：生成 HTML 的 katex 与页面加载的
+  CSS 来自同一版本，0.18 起的 `katex-` 类名前缀变更（`.base` → `.katex-base`）天然对齐，不会破版。
+  - **为什么不用 0.18.11**：该版本被上游标记 deprecated（"误发且含破坏性变更，请用 0.19.0"），
+    故停在 0.18 线最后一个未被弃用的版本
+  - **为什么暂不升 0.19**：0.19 把「缺失字形度量」并入 `strict` 语义（`strict: "error"` 下会变成
+    构建错误）。当前全站无 LaTeX 内容，风险低，但升级时机交由后续独立 PR 决定
+  - 升级后 `GHSA-238p-pmpm-9mq7` 已从 `auditConfig.ignoreGhsas` 移除，`pnpm audit --prod` 恢复真实门禁；
+    本地复现需 `pnpm --config.registry=https://registry.npmjs.org/ audit --prod`（本机 registry 是
+    npmmirror，缺 audit 端点）
+  - 验证方式：全站无公式，构建不会触发 katex 渲染；必须临时加一篇 `$$...$$` 文章构建，核对生成 HTML
+    的类名与 CSS 选择器一致后再删除（否则等于没验证）
 - **Astro 7 + astro-og-canvas 升级已完成** — 当前 `astro@^7.3.3` + `astro-og-canvas@^0.13.2`。配套改动：
   1. `astro-og-canvas` 的 `param` 选项已移除（改由 endpoint 文件名自动推导），`OGImageRoute()` 改为 `await`
   2. Astro 7 默认 Markdown 处理器切换，已迁移到 `markdown.processor: unified({...})`（commit `3d18638e`），`markdown.remarkPlugins` / `rehypePlugins` 顶层配置已弃用
