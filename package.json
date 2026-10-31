@@ -15,6 +15,7 @@
     "apply-lqip": "tsx scripts/apply-lqip.ts",
     "format-posts": "tsx scripts/format-posts.ts",
     "verify-feed": "tsx scripts/verify-feed.ts",
+  "check-columns": "tsx scripts/check-columns.ts",
     "audit-glossary": "tsx scripts/audit-glossary.ts",
     "sync-docs": "tsx scripts/sync-doc-facts.ts --write",
     "sync-docs:check": "tsx scripts/sync-doc-facts.ts --check",

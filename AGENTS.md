@@ -77,6 +77,7 @@ pnpm new-post "标题"       # 创建 MD 文章 (src/content/posts/)，专栏自
 pnpm format-posts         # CJK 文本规范化 (autocorrect)
 pnpm apply-lqip           # 生成 LQIP 占位图 (写入 src/assets/)
 pnpm verify-feed          # 验证 RSS/Atom feed 输出 (CI 中使用)
+pnpm check-columns        # 校验专栏 tag 与期号（缺 tag / 期号解析不出 / 重复）(CI 中使用)
 pnpm audit-glossary       # 审计术语表引用完整性
 pnpm sync-docs            # 同步核心文档自动生成数据块 (版本/统计/管线，勿手改)
 pnpm sync-docs:check      # 校验数据块是否最新 (CI 中使用，stale 则退出码 1)
@@ -93,7 +94,7 @@ pnpm update-gh-contributions  # 更新贡献热力图数据 → src/data/github-
 > 技术栈：Astro 7.4.0 · TypeScript 6.0.3 · UnoCSS 66.12.0 · pnpm 11.10.0 · Node 24
 > 内容：169 个文章文件（85 中文 + 84 英文），专栏 25 期
 > Markdown 管线：6 remark + 8 rehype 插件
-> 脚本：15 个（apply-lqip / astro / audit-glossary / build / dev / fetch-github-repos / format-posts / lint / lint:fix / new-post / preview / sync-docs / sync-docs:check / update-gh-contributions / verify-feed）
+> 脚本：16 个（apply-lqip / astro / audit-glossary / build / check-columns / dev / fetch-github-repos / format-posts / lint / lint:fix / new-post / preview / sync-docs / sync-docs:check / update-gh-contributions / verify-feed）
 <!-- DOC-FACTS:END -->
 
 ## KEY QUIRKS
@@ -206,6 +207,11 @@ pnpm update-gh-contributions  # 更新贡献热力图数据 → src/data/github-
   配对生成 hreflang 互指，`ColumnGallery` 靠它提取期号（`weekly-16` → `16`）。中英两版必须写同一个值
 - 中英结构应保持对应（`##` / `###` 层级与数量一致），便于对照维护
 - 专栏/专栏放 `src/content/posts/column/`，正文标题里的 `No.xx` 与 `abbrlink` 的期号要一致
+- **专栏文章必须带 `专栏`（英文 `Journal`）tag，且 `abbrlink` 能解析出期号**（`weekly-25` 与
+  `column-25` 两种前缀都认，见 `src/utils/issue.ts`）。首页报架与 `/column/` 靠这两个字段列出这一期，
+  漏掉任何一个都是「构建通过、CI 通过、页面上静默少一期」——2026-11-01 的 No.25 就是这么漏的。
+  现在有三道防线：`getColumnPosts()` 目录或标签双判据、`pnpm new-post` 给 column/ 自动填 tag 与期号、
+  CI 的 `pnpm check-columns` 校验（缺 tag / 解析不出期号 / 同语言期号重复都会红）
 
 ## BRANCH STRATEGY
 

@@ -259,6 +259,29 @@ async function _getPostsByTag(tag: string, lang?: Language) {
 export const getPostsByTag = memoize(_getPostsByTag);
 
 /**
+ * 获取所有专栏文章
+ *
+ * 判据是「文件在 column/ 目录下」**或**「带专栏标签」—— 两种都算。只用标签会静默
+ * 漏掉忘写标签的文章（2026-11-01 的 No.25 就是这样从首页报架和 /column/ 一起消失
+ * 的，构建与 CI 全都正常）；只用目录会漏掉放在别处、但确实属于专栏的文章。这与
+ * Obsidian 里 0-文章数据库.base 的「专栏」视图是同一套双判据。
+ *
+ * @param lang 需要筛选的语言代码，默认为站点默认语言
+ * @returns 专栏文章数组，按发布日期降序
+ */
+async function _getColumnPosts(lang?: Language) {
+	const posts = await getPosts(lang);
+	const columnTags = ["专栏", "Journal"];
+	return posts.filter(
+		(post) =>
+			post.id.startsWith("column/")
+			|| columnTags.some((tag) => post.data.tags?.includes(tag)),
+	);
+}
+
+export const getColumnPosts = memoize(_getColumnPosts);
+
+/**
  * 获取包含多个标签中任意一个的所有文章（去重）
  *
  * @param tags 需要筛选文章的标签名称数组

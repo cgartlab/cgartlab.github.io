@@ -3,6 +3,7 @@ import type { ImageMetadata } from 'astro'
 import type { Language } from '@/i18n/config'
 import type { Post } from '@/types'
 import { getPostPath } from '@/i18n/path'
+import { issueNumberOf } from '@/utils/issue'
 
 interface Props {
   posts: Post[]
@@ -29,11 +30,9 @@ postsByYear.set(year, [])
 const sortedYears = [...postsByYear.keys()].sort((a, b) => b - a)
 
 // 从 abbrlink 提取期号。abbrlink 保留历史前缀 weekly-XX 以维持文章 URL 稳定
-// （栏目已改名 column，但 abbrlink/URL 不变），如 "weekly-16" → "16"
+// （栏目已改名 column，新写的也可能用 column-XX），两种前缀都认 —— 见 src/utils/issue.ts
 function getIssueNumber(post: Post): string {
-  const abbr = post.data.abbrlink || ''
-  const m = abbr.match(/weekly-(\d+)/)
-  return m ? m[1] : ''
+  return issueNumberOf(post.data.abbrlink)
 }
 
 // Dynamic import for thumbnails
