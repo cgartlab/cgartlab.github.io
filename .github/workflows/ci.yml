@@ -43,6 +43,11 @@ jobs:
           # fetch-github-repos 构建时调用 GitHub API：注入只读 token 规避未认证 60 req/h 限流
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Check column metadata (tag + issue number)
+        run: pnpm check-columns
+        env:
+          FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
       - run: pnpm verify-feed
         env:
           FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true

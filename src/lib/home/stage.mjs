@@ -19,7 +19,8 @@ import { buildLabels, labelsBounds } from '@/lib/home/labels.mjs'
 import { buildNewsrack, newsrackBounds } from '@/lib/home/newsrack.mjs'
 import { buildToolbox, toolboxBounds } from '@/lib/home/toolbox.mjs'
 import { buildTypewriter, typewriterBounds } from '@/lib/home/typewriter.mjs'
-import { getAllTags, getPostsByTag, getRegularPosts } from '@/utils/content'
+import { getAllTags, getColumnPosts, getRegularPosts } from '@/utils/content'
+import { issueNumberOf } from '@/utils/issue'
 
 /**
  * One line per channel, shown under the machine when that channel is on the
@@ -137,13 +138,14 @@ export async function stageData(lang) {
     center: [0, 0, 55],
   })
 
-  const columnTag = lang === 'zh' || lang === 'zh-tw' ? '专栏' : 'Journal'
-  // every column issue hangs on the rack — the count follows the content
-  const columns = await getPostsByTag(columnTag, lang)
+  // Every column issue hangs on the rack — the count follows the content.
+  // The list comes from the column folder *or* the column tag (getColumnPosts):
+  // an issue dropped into column/ without its tag used to disappear from both
+  // the rack and /column/ with nothing failing, which is how No.25 went unseen.
+  const columns = await getColumnPosts(lang)
   const issues = columns.map((post) => {
     const abbr = post.data.abbrlink || ''
-    const m = abbr.match(/weekly-(\d+)/)
-    const n = m ? m[1] : ''
+    const n = issueNumberOf(abbr)
     return {
       number: n ? `No.${n}` : '',
       label: post.data.title,

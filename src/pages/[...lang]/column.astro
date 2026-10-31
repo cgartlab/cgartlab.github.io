@@ -3,7 +3,7 @@ import ColumnGallery from '@/components/ColumnGallery.astro'
 import { allLocales } from '@/config'
 import { getLangFromLocale, getLangRouteParam } from '@/i18n/lang'
 import Layout from '@/layouts/Layout.astro'
-import { getPostsByTag, getTagSupportedLangs } from '@/utils/content'
+import { getColumnPosts, getTagSupportedLangs } from '@/utils/content'
 
 export async function getStaticPaths() {
   return allLocales.map(lang => ({
@@ -14,7 +14,8 @@ export async function getStaticPaths() {
 const currentLang = getLangFromLocale(Astro.currentLocale)
 // 根据语言选择正确的标签（专栏/Journal）
 const columnTag = currentLang === 'zh' || currentLang === 'zh-tw' ? '专栏' : 'Journal'
-const posts = await getPostsByTag(columnTag, currentLang)
+// 目录或标签命中都算专栏，见 getColumnPosts
+const posts = await getColumnPosts(currentLang)
 const supportedLangs = await getTagSupportedLangs(columnTag)
 // 专栏页面内容较薄，noindex 由 src/worker.mjs 按 src/lib/noindex.mjs 清单统一设置
 // （output: 'static' 下 Astro.response.headers.set 不产出任何响应头，此前为静默失效代码）

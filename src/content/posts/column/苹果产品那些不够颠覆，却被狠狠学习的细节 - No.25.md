@@ -3,7 +3,8 @@ title: 苹果产品那些不够颠覆，却被狠狠学习的细节 - No.25
 published: 2026-11-01
 description: Apple 那些没被发布会当重点讲的招数，反而被全行业学了十几年。分四组拆开看，它们都不发明新东西，只把已有的事定成一个不用再解释的默认值。
 updated: 2026-11-01
-tags: []
+tags:
+    - 专栏
 draft: false
 pin: 0
 toc: true
