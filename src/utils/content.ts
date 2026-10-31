@@ -138,10 +138,16 @@ async function _getRegularPosts(lang?: Language) {
 	return posts.filter((post) => {
 		if (post.data.pin) return false;
 		const tags = post.data.tags || [];
-		return !tags.some(
-			(tag) =>
-				tag.toLowerCase() === "专栏" || tag.toLowerCase() === "journal",
-		);
+		// 与 getColumnPosts() 同一套判据，两者互补：专栏不会同时出现在打字机的
+		// 「最新发布」里，也不会因为漏写标签而从两边一起消失
+		const isColumn =
+			post.id.startsWith("column/")
+			|| tags.some(
+				(tag) =>
+					tag.toLowerCase() === "专栏"
+					|| tag.toLowerCase() === "journal",
+			);
+		return !isColumn;
 	});
 }
 
