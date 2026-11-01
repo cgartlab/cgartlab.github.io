@@ -351,7 +351,7 @@ Vite 加载 `astro.config.ts` 时会把配置导入图里的依赖全部内联�
 |------|--------|------|
 | `allowBuilds` | `esbuild` / `sharp` / `simple-git-hooks` / `workerd` 均 `false` | 显式禁用这 4 个包的安装期构建脚本（引入自 commit `195059c`「配置 pnpm 禁用部分包的自动构建」）。**不要顺手删**，删掉等于恢复构建脚本执行 |
 | `trustPolicy` | `no-downgrade`；`trustPolicyExclude` 与 `onlyTrustedDependencies` 同为 rollup 插件 / chokidar / semver | 这 3 个包必须执行构建脚本，故在例外名单里成对出现。其余包走 pnpm 默认信任策略 |
-| `overrides` | 22 条安全与兼容钉版 | 见下节 |
+| `overrides` | 23 条安全与兼容钉版 | 见下节 |
 
 ### `overrides` 是漏洞处理的主战场
 
@@ -364,9 +364,10 @@ Vite 加载 `astro.config.ts` 时会把配置导入图里的依赖全部内联�
 | `svgo@4` / `sharp` | `astro-compress` | `^4.1.0` / `^0.35.4` |
 | `js-yaml@4` | `@astrojs/internal-helpers`（astro 链）| `^4.3.2`（maxTotalMergeKeys 空 merge 源 CPU DoS）|
 | `fast-uri` | `ajv`（`^3.0.1`）| `^3.1.9`（authority 注入 + 主机混淆 + scheme 伪造 / 路径等价 / 首段冒号 scheme 注入）|
+| `minimatch` | `eslint` → `@eslint/config-array`、`@typescript-eslint/typescript-estree` | `^11.0.1`（GHSA-g3hv-75wg-m249 globparts 放大 DoS）；10.x 无修补版，补丁线直接跳到 11.x |
 
 **处理流程：`pnpm audit --prod` 报错 → 确认引入方与受影响版本区间 → 在 `overrides` 钉同 minor 补丁 →
-每条 override 必须带注释写明「谁引入 / 哪个版本修 / 是否同 minor」**（现有 22 条中，安全类均已按此格式）。
+每条 override 必须带注释写明「谁引入 / 哪个版本修 / 是否同 minor」**（现有 23 条中，安全类均已按此格式）。
 优先钉补丁版本而不是升级直接依赖，可避免把不相关的大版本一起拖进来。
 
 历史上因此反复红过 CI：#402、#406、#431、#438 —— 每次修复都只动 `pnpm-lock.yaml` +
@@ -410,7 +411,7 @@ Vite 加载 `astro.config.ts` 时会把配置导入图里的依赖全部内联�
   （**注意：CI 不跑 `pnpm lint`**，见 KEY QUIRKS 的 lint 基线条目）
 - **`pnpm audit --prod` 是硬门禁**：报出的多为传递依赖漏洞，修复路径是在 `pnpm-workspace.yaml` 的
   `overrides` 里钉补丁版本（只动 lockfile + workspace 文件），而不是升级直接依赖。
-  完整处理流程与现有 22 条钉版见「设备与文件系统约束 → `overrides` 是漏洞处理的主战场」
+  完整处理流程与现有 23 条钉版见「设备与文件系统约束 → `overrides` 是漏洞处理的主战场」
 - 其他 workflow：PR 审查（`pr-review.yml`）、PR 分类（`pr-triage.yml`）、定时维护（`maintenance.yml`）、贡献数据更新（`update-contributions.yml`，每周日 cron）
 - 域名：cgartlab.com
 

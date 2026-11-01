@@ -54,6 +54,11 @@ overrides:
   # 而 0.19 起把「缺失字形度量」并入 strict 语义；先停在 0.18 线最后一版未被弃用的版本。
   katex: 0.18.10
   mermaid@10: ^10.9.8
+  # 安全修复：minimatch globparts 放大导致二次复杂度 DoS (GHSA-g3hv-75wg-m249)
+  # eslint@10 → @eslint/config-array 依赖 minimatch ^10.2.4，而 10.x 无修补版（修补线直接跳到 11.0.1）；
+  # @typescript-eslint/typescript-estree 同样依赖。11.x 保留 Minimatch 类与全部选项，
+  # 全链路均为 dev 依赖（构建期/本地 lint），站点运行期不可达
+  minimatch: ^11.0.1
   nanoid@3: ^3.3.17
   # 安全修复：sharp 整数溢出 (GHSA-rgj7-g3m4-5g8c)
   # astro-compress 依赖 sharp ^0.35，0.35.4 为同 minor 补丁

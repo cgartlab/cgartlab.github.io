@@ -21,7 +21,7 @@ compare 链接可指。
 
 ## 2026-Q4
 
-### 2026-11-01 — 依赖安全告警清零（fast-uri 3.1.9 / katex 0.18.10）
+### 2026-11-01 — 依赖安全告警清零（fast-uri 3.1.9 / katex 0.18.10 / minimatch 11.0.3）
 
 **Security**
 
@@ -34,11 +34,17 @@ compare 链接可指。
     页面加载的 CSS 都来自同一个 0.18.10，前缀变更天然对齐，不会破版
   - 未选 0.18.11：该版本被上游标记 deprecated（误发且含破坏性变更）；未选 0.19：它把「缺失字形
     度量」并入 `strict` 语义，留待后续独立评估
+- `minimatch` override 到 `^11.0.1`，修复 GHSA-g3hv-75wg-m249（globparts 放大导致二次复杂度 DoS）。
+  `eslint@10` 经 `@eslint/config-array` 依赖 `minimatch ^10.2.4`，而 10.x 没有修补版——补丁线直接
+  跳到 11.0.1，只能跨 major 收口；全链路（eslint / typescript-eslint）都是 dev 依赖，站点运行期不可达
+  - 风险验证：改动前后各跑一次 `pnpm lint`，问题数**完全一致**（15201 problems，15185 errors），
+    说明 minimatch 11 的 glob 匹配行为没有改变 eslint 实际检查的文件集合
 
 **Fixed**
 
-- GitHub 安全页的 6 条 Dependabot 告警（fast-uri ×4、katex ×2）全部清除
-- AGENTS.md 的 `overrides` 条数由过时的 14 条更正为实际 22 条
+- GitHub 安全页的 6 条 Dependabot 告警（fast-uri ×4、katex ×2）全部清除；随后新增的 1 条
+  `minimatch` 告警也在同一轮修复，`pnpm audit`（含 dev）恢复为 0
+- AGENTS.md 的 `overrides` 条数由过时的 14 条更正为实际 23 条
 
 ### 2026-10-30 — 首页成为一屏可换装的等距仪器 (#476 / #478 / #479)
 
