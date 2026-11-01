@@ -740,12 +740,17 @@ CJK 文本间距和断词优化。
 - **UnoCSS 变量生成** — dev 下动态注入，可能覆盖缺失；build 下仅 safelist + 源码扫描
 - **astro-compress**（CSS/HTML/JS）只在 `astro build` 阶段运行，dev 无压缩
 - **LQIP 占位图** — `apply-lqip.ts` 只在 `pnpm build` 运行，dev 下图片没有 `--lqip:` 渐变背景，属正常现象
-- **本机 Node 与 CI 不一致** — 本机 `node -v` = **v26.7.0**，CI 用 **Node 24**（`actions/setup-node`）。
-  2026-09-28 实测两者都能跑通 `astro check`（0 errors）与 `pnpm build`（308 页）
+- **本机 Node 与 CI 不一致** — 本机 `node -v` = **v26.2.0**，CI 用 **Node 24**（`actions/setup-node`）。
+  2026-11-01 实测两者都能跑通 `astro check`（0 errors）与 `pnpm build`（317 页）
 - **受限文件沙箱会制造「假构建失败」** — 在受限沙箱下运行验证命令时，`tsx` 的 esbuild 子进程会
   `spawn EPERM`，Astro 加载 `astro.config.ts` 会报 `module is not defined`
   （`node_modules/extend/index.js`）。**两者都不是仓库问题**：同一条命令换到完整文件权限下即 exit 0。
   排查时先确认权限模式，再去查代码（见 `DEPENDENCY UPGRADE` 末条同名症状的真正成因）
+- **受限沙箱下 pnpm 连 `pnpm -v` 都失败** — 报 `unable to open database file`（SQLite 打不开 store）。
+  根因同上：受限令牌是低完整性级别，只能写工作区**根目录**，`src/`、`dist/`、`node_modules/` 实测一律
+  `UnauthorizedAccessException`，而 pnpm 的 store 在 `D:\.pnpm-store`（工作区外）。**不是 pnpm 坏了**：
+  完整权限下 `pnpm -v` = 11.10.0、`pnpm install --frozen-lockfile` 285 ms 报 up to date。
+  构建/审计类验证一律先切完整权限（2026-11-01 实测）
 
 ### 双模式验证顺序
 
