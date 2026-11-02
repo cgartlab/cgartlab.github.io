@@ -32,6 +32,32 @@ const late = [1, 2, 3, 4].map(i => lateModulePath(currentLang, i)).join(',')
 const isDefault = currentLang === defaultLocale
 ---
 
+<script is:inline>
+  // The entrance belongs to stage.client.ts: the console builds itself, then the
+  // first machine rides up onto the lift. The markup ships that machine already
+  // `.is-active` so a reader whose module never arrives still gets a drawing —
+  // but that class also starts the rise on its own, at first paint, and the
+  // module then removed it mid-air and seated the machine again. That is what
+  // played the entrance twice on a cold visit (measured: rise at 149 ms, cut at
+  // ~640 ms, rise again at 1901 ms).
+  //
+  // `home-pre` means "before the module has taken the stage": while it is on,
+  // nothing in the incoming machine may animate, so the module alone plays the
+  // entrance. The module removes it in mount(), and only puts it back on the way
+  // to another page.
+  //
+  // `home-hold` is only about visibility, and it is lifted either by the module
+  // or, if the module never arrives, by the timer — a reader without the module
+  // then gets the drawing, settled, instead of an empty stage.
+  ;(() => {
+    const root = document.documentElement
+    root.classList.add('home-pre', 'home-hold')
+    setTimeout(() => {
+      root.classList.remove('home-hold')
+    }, 3500)
+  })()
+</script>
+
 <div class="home-machine">
   <div
     class="home-stage"

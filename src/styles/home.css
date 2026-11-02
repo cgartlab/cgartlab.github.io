@@ -1,4 +1,4 @@
-﻿@import './home-devices/chassis.css';
+@import './home-devices/chassis.css';
 @import './home-devices/typewriter.css';
 @import './home-devices/cinema.css';
 @import './home-devices/newsrack.css';
@@ -553,6 +553,45 @@ html.reduce-motion .home-stage .iso-svg {
   height: 100%;
   max-width: 100%;
   max-height: 100%;
+}
+
+/* --------------------------------------------------------------------------
+   Who owns the entrance.
+
+   The first machine ships `.is-active` in the markup, and that class owns the
+   rise — so on a cold visit the rise started at first paint, on its own, and the
+   module then took the class away mid-air and seated the machine again. The
+   entrance played twice (measured: rise at 149 ms, cut at ~640 ms, rise again at
+   1901 ms).
+
+   Two guards fix it, both set by the inline script in HomeStage.astro before the
+   first paint:
+     `home-pre`  — "the module has not taken the stage yet". Nothing in the
+                   incoming machine may animate while it is on, so the rise can
+                   only be started by stage.client.ts, in seatDevice(). mount()
+                   removes it, so a machine that arrives late cannot find a rise
+                   already half-played — and because it is not put back until the
+                   page is left, a swap later on is never suppressed (the stage
+                   drops `is-swapping` for a frame on every switch).
+     `home-hold` — visibility only, lifted by the module (or by its own timer if
+                   the module never runs, so the drawing still arrives).
+
+   `visibility` rather than `display`/`opacity`: the stage keeps its box, so
+   nothing below it moves when the hold is lifted.
+   -------------------------------------------------------------------------- */
+
+html.home-hold .home-machine {
+  visibility: hidden;
+}
+
+/* `!important` on purpose: the per-device rules that assemble a machine
+   (`.home-module.is-active .home-part[data-part='…']` in home-devices/*.css)
+   outrank any pre-boot selector we can write here, and they all hang off the
+   markup's own `.is-active`. The class is gone the moment mount() runs, so this
+   rules out the CSS head start without ever touching a live entrance. */
+html.home-pre .home-module.is-active,
+html.home-pre .home-module.is-active * {
+  animation: none !important;
 }
 
 /* --------------------------------------------------------------------------

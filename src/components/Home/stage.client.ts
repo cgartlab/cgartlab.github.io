@@ -1282,6 +1282,12 @@ function mount(): void {
 
   state = s
 
+  // The stage was held back until now (HomeStage.astro). Nothing in the incoming
+  // machine was allowed to animate while `home-pre` was on: the entrance starts
+  // here, once, after the console has taken over — and for reduced motion there
+  // is nothing to wait for.
+  document.documentElement.classList.remove('home-pre', 'home-hold')
+
   if (reduced) {
     // nothing assembles and nothing types: the machine is simply there, and
     // every control is already live
@@ -1319,12 +1325,21 @@ function mount(): void {
   })
 }
 
-function unmount(): void {
+function unmount(event?: Event): void {
   // the projection is page-level, so it must stop even when the reduced-motion
   // bail-out left no state behind
   stopScreening()
   bootActive = false
   document.documentElement.removeAttribute('data-home-section')
+
+  // `astro:before-swap` runs before the incoming markup is in the document, so
+  // the hold is back on the stage before it can paint. Without this, arriving at
+  // the home page through the client router played the entrance twice for the
+  // same reason a cold load did: the new markup painted itself `.is-active`.
+  const next = (event as (Event & { newDocument?: Document }) | undefined)?.newDocument
+  if (next?.querySelector(STAGE))
+    document.documentElement.classList.add('home-pre', 'home-hold')
+
   if (!state)
     return
   stopTour(state)
