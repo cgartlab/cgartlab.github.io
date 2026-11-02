@@ -185,6 +185,13 @@ pnpm update-gh-contributions  # 更新贡献热力图数据 → src/data/github-
 - **标签墙整体缩放**（`fitWall()`，≤ 2.2 倍、占舞台宽 92%），每张票的 `--fly-*` / `--out-*` 要按新比例重算，原始值存 `data-*` 避免二次缩放
 - **触屏判定** `(max-width: 899px), (hover: none)`：自动轮换，点键直接跳页；DWELL = posts 4s / works 30s / column 14s / resource 8s / tags 12s，且先等入场动画放完
 - **文案**：标题逐字打字（强调色光标），纸带打完后多走一行留白；`最新发布：` 整行统一字号
+- **入场只能播一次，且只由模块起播**：首台机器在 HTML 里就带 `.is-active`（给没有 JS 的读者一张静态图），
+  而这个类自己就挂着 `home-module-rise`——所以 CSS 会在首帧起播、模块随后删类再播。2026-11-03 实测：
+  149 ms 起播 → ~640 ms 被掐断 → 1901 ms 重播，正是「首次访问动画播两次」的成因。现在由
+  `HomeStage.astro` 的内联脚本下发两个类：`home-arming`（常驻，只要浏览器会跑脚本就不许 CSS 起播）与
+  `home-hold`（可见性守卫，模块接管或 3.5 s 超时后解除，无 JS 时退回静态图）；`stage.client.ts` 在
+  mount 尾部解除 hold，并在 `astro:before-swap` 按新文档是否带舞台重新上 hold（客户端路由进首页同样只播一次）。
+  改这三处任何一处都必须重验：rise 起播次数 = 1
 - 文章列表已迁到 `/posts/`，`/search` 由 Worker 301 到首页搜索浮层
 - **不要为了省布局把闲置装置移出布局**（`display: none`）——实测无收益（#484）：`--drop` 靠
   `getBBox()` 测量，闲置装置也必须**先量再藏**，而那次测量本身（5 台约 700 ms）就是开场窗口的主要长任务；

@@ -1,4 +1,4 @@
-﻿@import './home-devices/chassis.css';
+@import './home-devices/chassis.css';
 @import './home-devices/typewriter.css';
 @import './home-devices/cinema.css';
 @import './home-devices/newsrack.css';
@@ -553,6 +553,41 @@ html.reduce-motion .home-stage .iso-svg {
   height: 100%;
   max-width: 100%;
   max-height: 100%;
+}
+
+/* --------------------------------------------------------------------------
+   Who owns the entrance.
+
+   The first machine ships `.is-active` in the markup, and that class owns the
+   rise — so on a cold visit the rise started at first paint, on its own, and the
+   module then took the class away mid-air and seated the machine again. The
+   entrance played twice (measured: rise at 149 ms, cut at ~640 ms, rise again at
+   1901 ms).
+
+   Two guards fix it:
+     `home-arming`  — set by the inline script in HomeStage.astro before the first
+                      paint, and never removed. While it is on, the CSS entrance is
+                      not allowed to start: only stage.client.ts may play it, when
+                      the console has taken over. It stays on for the life of the
+                      document, so a module that arrives late cannot find a rise
+                      already half-played.
+     `home-hold`    — visibility only, lifted by the module (or by its own timer if
+                      the module never runs, so the drawing still arrives).
+
+   `visibility` rather than `display`/`opacity`: the stage keeps its box, so
+   nothing below it moves when the hold is lifted.
+   -------------------------------------------------------------------------- */
+
+html.home-hold .home-machine {
+  visibility: hidden;
+}
+
+/* before the module drives the stage, the markup's own `.is-active` must not
+   animate — the moment the lift starts (`is-swapping`, or the machines are in
+   and measured: `is-prepared`) the rule steps aside and the module's rise is
+   the one that plays */
+html.home-arming .home-stage:not(.is-swapping):not(.is-prepared) .home-module.is-active {
+  animation: none;
 }
 
 /* --------------------------------------------------------------------------
