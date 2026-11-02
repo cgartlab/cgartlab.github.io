@@ -41,14 +41,17 @@ const isDefault = currentLang === defaultLocale
   // played the entrance twice on a cold visit (measured: rise at 149 ms, cut at
   // ~640 ms, rise again at 1901 ms).
   //
-  // `home-arming` is permanent: it says "this browser runs scripts", so the CSS
-  // entrance never starts on its own and the module alone can play it. `home-hold`
-  // is the visibility guard and it is lifted either by the module or, if the
-  // module never arrives, by the timer — a reader without the module then gets the
-  // drawing, settled, instead of an empty stage.
+  // `home-pre` means "before the module has taken the stage": while it is on,
+  // nothing in the incoming machine may animate, so the module alone plays the
+  // entrance. The module removes it in mount(), and only puts it back on the way
+  // to another page.
+  //
+  // `home-hold` is only about visibility, and it is lifted either by the module
+  // or, if the module never arrives, by the timer — a reader without the module
+  // then gets the drawing, settled, instead of an empty stage.
   ;(() => {
     const root = document.documentElement
-    root.classList.add('home-arming', 'home-hold')
+    root.classList.add('home-pre', 'home-hold')
     setTimeout(() => {
       root.classList.remove('home-hold')
     }, 3500)

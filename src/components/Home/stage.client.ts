@@ -1282,10 +1282,11 @@ function mount(): void {
 
   state = s
 
-  // The stage was held back until now (HomeStage.astro). The rise the markup
-  // ships with never plays on its own: it starts here, once, after the console
-  // has taken over — and for reduced motion there is nothing to wait for.
-  document.documentElement.classList.remove('home-hold')
+  // The stage was held back until now (HomeStage.astro). Nothing in the incoming
+  // machine was allowed to animate while `home-pre` was on: the entrance starts
+  // here, once, after the console has taken over — and for reduced motion there
+  // is nothing to wait for.
+  document.documentElement.classList.remove('home-pre', 'home-hold')
 
   if (reduced) {
     // nothing assembles and nothing types: the machine is simply there, and
@@ -1337,7 +1338,7 @@ function unmount(event?: Event): void {
   // same reason a cold load did: the new markup painted itself `.is-active`.
   const next = (event as (Event & { newDocument?: Document }) | undefined)?.newDocument
   if (next?.querySelector(STAGE))
-    document.documentElement.classList.add('home-hold')
+    document.documentElement.classList.add('home-pre', 'home-hold')
 
   if (!state)
     return
