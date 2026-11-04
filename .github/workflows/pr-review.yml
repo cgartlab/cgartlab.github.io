@@ -36,6 +36,10 @@ jobs:
       - uses: cgartlab/argus/.github/actions/argus-review@c7c54872189fe94c4ad7c9e130323ad8d580b98a
         with:
           github-token: ${{ steps.app-token.outputs.token }}
+          # 模型侧的钥匙。本仓目前**没有** OPENCODE_API_KEY，action 因此打印
+          # `[argus] OpenCode API key: unset`，三个模型各挂满 600 s 后整轮失败
+          # （2026-11-04 实测）。补上 secret 即生效；不补则本 check 只能一直红。
+          api-key: ${{ secrets.OPENCODE_API_KEY }}
           # 显式钉住预算，避免上游改默认值时本仓的 job 时限算式悄悄失效
           timeout: 600
           max-attempts: 3
