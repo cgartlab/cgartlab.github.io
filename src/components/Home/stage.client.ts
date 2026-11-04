@@ -11,7 +11,23 @@
  * Everything degrades to the server-rendered state when motion is reduced.
  */
 
+import type { TagGraph } from './tag-graph.client'
+import { startTagGraph } from './tag-graph.client'
+
 const STAGE = '[data-home-stage]'
+
+/**
+ * Opt-in timing. ?perf=1 leaves marks that a probe or the DevTools timeline can
+ *  read; without it every call is a regex test and a branch. Used to find what
+ *  actually costs a second of main thread when a machine is swapped in.
+ */
+const PERF = /[?&]perf\b/.test(location.search)
+/** the stage box the tagline was measured against, see placeTagline() */
+let taglineFit = ''
+function mark(name: string): void {
+  if (PERF)
+    performance.mark(name)
+}
 const PROJECTION = '.home-projection'
 const FRAME = '.home-projection-frame'
 const TOUR_DELAY = 600
@@ -42,13 +58,17 @@ const AUTO_SWAP = 6000
 /** what each machine is given once it is whole, so its own performance plays
  *  out: the sheet types its excerpt, the reel runs, the papers swing, the
  *  tickets are printed. 作品 is the longest because its reel is the reason to
- *  stop there at all. */
+ *  stop there at all. 标签 is the second longest because its wall has to be
+ *  papered before it can gather into the net (#488): with 29 tags the last sheet
+ *  is pressed on ~10.5 s in, so a 12 s turn would move on before the net had
+ *  drifted once — on a touch screen, where rotation is the only way in, that
+ *  meant the feature was never seen at all. */
 const DWELL: Record<string, number> = {
   posts: 4000,
   works: 30000,
   column: 14000,
   resource: 8000,
-  tags: 12000,
+  tags: 18000,
 }
 
 const isCompact = (): boolean => window.matchMedia(COMPACT).matches
@@ -85,6 +105,8 @@ interface State {
   modules: SVGGElement[]
   caps: SVGGElement[]
   channels: SVGAElement[]
+  /** the tag wall's net, while that machine is the one on the platform */
+  graph: TagGraph | null
   active: number
   cleanup: () => void
 }
@@ -339,6 +361,24 @@ function stopScreening(): void {
     video.pause()
 }
 
+/** The wall, once papered, gathers its sheets into a drifting net. Starting is
+ *  idempotent: the machine can be re-seated by a resize without restating. */
+function startGraph(s: State): void {
+  mark('graph:in')
+  if (s.graph)
+    return
+  s.graph = startTagGraph(s.svg, prefersReducedMotion())
+}
+
+/** Stopping takes the net off the wall as well, so the next visit starts from
+ *  the papered wall rather than from a net nobody watched being printed. */
+function stopGraph(s: State): void {
+  if (!s.graph)
+    return
+  s.graph.dispose()
+  s.graph = null
+}
+
 /** Only the 作品 section projects; everything else keeps the page quiet. */
 function projectSection(section: string): void {
   if (section !== 'works') {
@@ -380,6 +420,7 @@ function projectSection(section: string): void {
  * divided by the scale and corrected for the seat's own displacement.
  */
 function fitWall(s: State): void {
+  mark('fit:in')
   const wall = s.svg.querySelector<SVGGElement>('.home-tag-wall')
   if (!wall)
     return
@@ -391,14 +432,22 @@ function fitWall(s: State): void {
   const box = wall.getBBox()
   if (!box.width)
     return
+  // One read, and the width is the paper's: the canvas the net lays over the wall
+  // is narrower than the sheets (0.92x) and shares their foot, so the group's box
+  // still has the paper's width and bottom. Measuring each sheet here cost one
+  // layout flush per sheet on every device swap (#488 follow-up, 2026-11-05).
+  const paperW = box.width
   // the same rule on every screen: the wall takes the ground it is given, up to
   // a point where the sheets would read as bigger than the machine they hang
   // behind
-  const scale = Math.min(2.2, Math.max(1, (stage.width * 0.92) / (box.width * px)))
+  const scale = Math.min(2.2, Math.max(1, (stage.width * 0.92) / (paperW * px)))
   const foot = { x: box.x + box.width / 2, y: box.y + box.height }
   wall.style.setProperty('--wall-x', `${foot.x.toFixed(1)}px`)
   wall.style.setProperty('--wall-y', `${foot.y.toFixed(1)}px`)
   wall.style.setProperty('--wall-scale', scale.toFixed(3))
+  // the net is a bitmap laid over the wall: its density follows this scale, so
+  // it has to be told when the scale moved
+  s.graph?.resize()
   if (Math.abs(scale - 1) < 0.01)
     return
   for (const t of wall.querySelectorAll<SVGGElement>('.home-ticket')) {
@@ -478,14 +527,20 @@ function zoomOut(s: State): void {
  * by moving the pointer away.
  */
 function applyModule(s: State, index: number): void {
+  mark('apply:in')
   let section = ''
   for (const m of s.modules) {
     const on = Number(m.dataset.index) === index
     m.classList.remove('is-leaving')
     // a lever left mid-swing by the previous visit would replay its throw on
     // the first frame of the next assembly
-    if (on)
+    if (on) {
       m.querySelector('.home-return-lever')?.classList.remove('is-returning')
+      // a machine that was taken out of layout has to be back in it before the
+      // class that starts its entrance goes on
+      if (m.style.display === 'none')
+        m.style.display = ''
+    }
     m.classList.toggle('is-active', on)
     if (on)
       section = m.dataset.module || ''
@@ -506,14 +561,39 @@ function applyModule(s: State, index: number): void {
   else
     stopTour(s)
 
+  mark('apply:section')
+  mark('apply:tagline')
   document.documentElement.dataset.homeSection = section
+  mark('sec:dataset')
   placeTagline(s)
   taglineLater(s, index)
+  mark('sec:tagline')
   projectSection(section)
+  mark('sec:project')
+  // the wall only becomes a net while it is the machine on the platform; the
+  // client waits for the last sheet to be pressed on before it starts
+  mark('graph:before')
+  if (section === 'tags')
+    startGraph(s)
+  else
+    stopGraph(s)
+  mark('graph:done')
   // the camera moves in as the machine comes up; the first seat (the boot) is
   // left wide, it is the page arriving rather than a switch
   if (s.ready)
     zoomIn(s, index)
+  // Off the platform a machine has nothing to draw but still costs a box: the
+  // stage is 5,820 nodes in one SVG and a swap re-styles and re-flows all of them
+  // (774–900 ms of main thread on a 4x-throttled phone, measured 2026-11-05).
+  // Only the machine that is up needs to be in layout — the one that just fell is
+  // `.is-leaving` and its fall finished before this ran. Desktop keeps the whole
+  // bench laid out: it has the budget, and a hidden machine would make the next
+  // swap pay a second layout pass when it comes back.
+  if (s.ready && s.whole && isCompact()) {
+    for (const m of s.modules)
+      m.style.display = Number(m.dataset.index) === index ? '' : 'none'
+  }
+  mark('apply:out')
 }
 
 /**
@@ -790,6 +870,8 @@ function setModule(s: State, index: number): void {
   // the exit is timed off the entry rules still in force, so it has to be read
   // before the machine lets go of .is-active; .is-leaving keeps it on screen
   const exit = scheduleExit(prev, s.svg)
+  // it is going on screen for its fall: it has to have a box
+  prev.style.display = ''
   prev.classList.remove('is-active')
   prev.classList.add('is-leaving')
   s.stage.classList.remove('is-swapping')
@@ -810,6 +892,7 @@ function setModule(s: State, index: number): void {
  * the machine settles on it and its sub-assemblies seat in sequence.
  */
 function seatDevice(s: State): void {
+  mark('seat:in')
   s.stage.classList.remove('is-booting')
   const index = s.pending >= 0 ? s.pending : 0
   s.pending = -1
@@ -892,6 +975,17 @@ function placeTagline(s: State): void {
   const foot = s.svg.querySelector<SVGGraphicsElement>('.home-chassis .home-part[data-part="shadow"]')
   if (!machine || !foot)
     return
+  // The foot does not move between swaps: it is fixed in the viewBox, so the same
+  // stage box always gives the same answer. Measuring it anyway meant two
+  // `getBoundingClientRect()` calls — one of them on a part that is mid-animation —
+  // and therefore a full layout flush of the whole drawing on every device swap:
+  // 774 ms of frozen main thread on a 4x-throttled phone, the single largest block
+  // in the swap (2026-11-05). The cache is keyed on the stage box and dropped on
+  // resize.
+  const key = `${s.stage.clientWidth}x${s.stage.clientHeight}`
+  if (key === taglineFit)
+    return
+  taglineFit = key
   const box = machine.getBoundingClientRect()
   const y = foot.getBoundingClientRect().bottom - box.top + 14
   machine.style.setProperty('--tag-y', `${Math.round(y)}px`)
@@ -992,6 +1086,7 @@ function adoptModules(s: State): void {
  *   was the stutter on a first visit.
  */
 async function prepare(s: State): Promise<void> {
+  mark('prepare:in')
   const urls = (s.stage.dataset.late || '').split(',').filter(Boolean)
   const group = s.svg.querySelector('.home-modules')
   if (!urls.length || !group)
@@ -1108,6 +1203,7 @@ function mount(): void {
     modules,
     caps,
     channels,
+    graph: null,
     active: -1,
     cleanup: () => {},
   }
@@ -1120,6 +1216,8 @@ function mount(): void {
     syncHover()
   }
   const onProjectionResize = () => {
+    // the stage box is about to change, so the tagline's cached foot is stale
+    taglineFit = ''
     placeProjection(s)
     fitWall(s)
     placeTagline(s)
@@ -1297,6 +1395,18 @@ function mount(): void {
     startCycle(s)
     placeProjection(s)
     fitWall(s)
+    // The four fetched machines are what the keys switch between, and this
+    // branch used to return before `prepare()` ever ran — so with motion
+    // reduced the other four were never in the document and every key except
+    // the first was a dead end (found while verifying #488, which needs the
+    // tag machine to exist at all). There is no intro to wait for here, so the
+    // fragments are simply fetched and the wall is re-fitted when they land.
+    void prepare(s).then(() => {
+      if (state !== s)
+        return
+      fitWall(s)
+      applyModule(s, Math.max(0, s.active))
+    })
     return
   }
 
@@ -1326,6 +1436,7 @@ function mount(): void {
 }
 
 function unmount(event?: Event): void {
+  mark('unmount:in')
   // the projection is page-level, so it must stop even when the reduced-motion
   // bail-out left no state behind
   stopScreening()
@@ -1360,6 +1471,7 @@ function unmount(event?: Event): void {
   state.bootEnd = 0
   state.stage.classList.remove('is-swapping')
   state.stage.classList.remove('is-booting')
+  stopGraph(state)
   state.cleanup()
   state = null
 }

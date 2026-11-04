@@ -19,7 +19,7 @@ import { buildLabels, labelsBounds } from '@/lib/home/labels.mjs'
 import { buildNewsrack, newsrackBounds } from '@/lib/home/newsrack.mjs'
 import { buildToolbox, toolboxBounds } from '@/lib/home/toolbox.mjs'
 import { buildTypewriter, typewriterBounds } from '@/lib/home/typewriter.mjs'
-import { getAllTags, getColumnPosts, getRegularPosts } from '@/utils/content'
+import { getAllTags, getColumnPosts, getPostsGroupByTags, getRegularPosts } from '@/utils/content'
 import { issueNumberOf } from '@/utils/issue'
 
 /**
@@ -166,6 +166,17 @@ export async function stageData(lang) {
     ? ['工具', '学习', '作者']
     : ['TOOLS', 'LEARN', 'PEOPLE']
 
+  // Every sheet on the wall is one tag, and once the wall is papered the stage
+  // gathers those sheets into a net whose nodes are sized by how much the site
+  // leans on each tag. That weight comes from `getPostsGroupByTags` — the very
+  // map `getAllTags()` is built from — rather than from the lists above: those
+  // are the *regular* lists, and `getRegularPosts()` drops pinned posts, so a tag
+  // carried by a pin would be ranked on the wall but under-weighted as a node.
+  const tagMap = await getPostsGroupByTags(lang)
+  const carriers = new Map()
+  for (const [tag, tagged] of tagMap)
+    carriers.set(tag, tagged.length)
+
   const modules = IDS.map((id, index) => {
     const caption = labels[index]
     const body = index === 0
@@ -180,7 +191,7 @@ export async function stageData(lang) {
           ? buildNewsrack(P, { issues })
           : index === 3
             ? buildToolbox(P, { labels: toolboxLabels })
-            : buildLabels(P, { tags, caption })
+            : buildLabels(P, { tags, caption, uses: tags.map(tag => carriers.get(tag) ?? 0) })
     return `<g class="home-module${index === 0 ? ' is-active' : ''}" data-index="${index}" data-module="${id}" data-position="0">${body}</g>`
   })
 

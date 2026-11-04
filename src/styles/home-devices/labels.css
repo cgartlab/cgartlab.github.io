@@ -464,6 +464,64 @@
   100% { scale: 1; rotate: var(--tilt, 0deg); }
 }
 
+/* ---- the wall gathers into a net ----------------------------------------
+   Once every sheet is pressed on, the paper stops being paper: each sheet
+   shrinks into the node it becomes, and the canvas laid over the wall (see
+   tag-graph.client.ts) takes it from there. The scale is the whole motion — no
+   opacity — because a sheet fading out would look printed over; a sheet
+   shrinking to a point reads as the drawing changing subject.
+
+   The shorthand is replaced rather than appended on purpose. By the time the
+   class goes on, every sheet has finished its own flight (`--fly-delay` plus
+   emerge and press), so the transform is back to the drawing's own pose and
+   dropping the entry animations changes nothing that is still moving. The
+   explicit `visibility` is what the gate animation used to provide. */
+.home-stage .home-module.is-gathered .home-ticket {
+  visibility: visible;
+  animation: home-ticket-gather 480ms cubic-bezier(0.4, 0, 0.24, 1) both;
+}
+
+@keyframes home-ticket-gather {
+  0% { scale: 1; }
+  100% { scale: 0; }
+}
+
+/* Once the wall is a net, the printer's own show is over. Its roller, cutter,
+   carriage, stock roll and lamp are still running their infinite loops behind
+   the net — seven animations plus a drop-shadow halo re-rasterising every frame —
+   and on a mid-range phone that is most of the budget the net itself needs. They
+   keep their last frame rather than being switched off: `paused`, not `none`, or
+   every one of them would snap back to its base pose in the frame the wall
+   gathers. */
+.home-stage .home-module.is-gathered :is(
+  .home-feed-roller,
+  .home-cutter,
+  .home-print-head,
+  .home-label-led,
+  .home-stock-roll,
+  .home-led-lamp,
+  .home-led-lamp *
+) {
+  animation-play-state: paused;
+}
+
+/* the net that replaces them: an HTML canvas inside the wall's own user space,
+   so it shares the wall's scale, the stage's feather mask and the zoom */
+.home-stage .home-tag-graph {
+  overflow: visible;
+  pointer-events: none;
+}
+
+.home-stage .home-tag-graph canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  /* the dots are the only thing on the wall worth pointing at: the canvas takes
+     the pointer so a node can name its tag, and nothing else in the wall
+     competes for it */
+  pointer-events: auto;
+}
+
 /* ---- the trial run ------------------------------------------------------
    The machine is closed at ~2.3s but does not print yet: it runs itself once
    first. The transport wheel turns a full revolution and the blade snaps at
@@ -665,6 +723,13 @@ html.reduce-motion .home-stage .home-led-lamp .iso-top,
 html.reduce-motion .home-stage .home-led-lamp .iso-shade { animation: none !important; }
 html.reduce-motion .home-stage .home-ticket { visibility: visible; }
 
+/* with motion reduced there is no shrink to watch: the papered wall simply is
+   the net, so the sheets are already gone when the canvas is drawn */
+html.reduce-motion .home-stage .home-module.is-gathered .home-ticket {
+  visibility: hidden;
+  scale: 0;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .home-stage .home-module.is-active .home-part[data-part] {
     animation: none !important;
@@ -683,6 +748,10 @@ html.reduce-motion .home-stage .home-ticket { visibility: visible; }
   .home-stage .home-led-lamp .iso-top,
   .home-stage .home-led-lamp .iso-shade { animation: none !important; }
   .home-stage .home-ticket { visibility: visible; }
+  .home-stage .home-module.is-gathered .home-ticket {
+    visibility: hidden;
+    scale: 0;
+  }
 }
 
 

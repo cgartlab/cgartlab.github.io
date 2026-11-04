@@ -262,6 +262,15 @@ function printed(text, card) {
   return `${chars.slice(0, keep).join('')}…`
 }
 
+/** An attribute-safe copy of a tag: the net reads these back as the label it
+ *  shows on hover, so the printed sheet can stay clipped while the label keeps
+ *  the whole word. */
+const attr = text => String(text)
+  .replace(/&/g, '&amp;')
+  .replace(/</g, '&lt;')
+  .replace(/>/g, '&gt;')
+  .replace(/"/g, '&quot;')
+
 /** A rounded rectangle in card space: u across, w up the card. */
 function cardRing({ w, h, r }) {
   const corners = [[w / 2 - r, -h / 2 + r, -90], [w / 2 - r, h / 2 - r, 0], [-w / 2 + r, h / 2 - r, 90], [-w / 2 + r, -h / 2 + r, 180]]
@@ -458,6 +467,10 @@ export function buildLabels(P, options = {}) {
   // sheet — the same envelope, so the machine does not change size.
   const MAX_TAGS = 40
   const tags = (options.tags || []).slice(0, MAX_TAGS)
+  // How many posts carry each tag, aligned to `tags` by index. The wall already
+  // prints in that order, so a sheet can carry its own weight and the net the
+  // stage draws after the papering can size its nodes without a second payload.
+  const uses = (options.uses || []).slice(0, MAX_TAGS)
   const caption = options.caption || '标签'
   const out = []
 
@@ -628,9 +641,17 @@ export function buildLabels(P, options = {}) {
       // its own centre: the chord straddles that centre by half a slot height,
       // so the pivot lands exactly on the card.
       const axis = axisStyle(P, F.at(0, -SLOT.h / 2, 0), F.at(0, SLOT.h / 2, 0), 8)
-      tickets.push(`<g class="home-ticket" style="--tilt:${seat.tilt.toFixed(2)}deg;--fly-x:${fly[0].toFixed(1)}px;--fly-y:${fly[1].toFixed(1)}px;--out-x:${exit[0].toFixed(1)}px;--out-y:${exit[1].toFixed(1)}px;--fly-delay:${BUILD + index * beat}ms;${axis}">`)
+      // `data-uses` is read back by tag-graph.client.ts: the sheet is the tag,
+      // and its weight is what makes a hub a hub once the sheets gather.
+      // `data-tag` goes with it so the node can name itself on hover even when
+      // the printed text had to be clipped with an ellipsis.
+      tickets.push(`<g class="home-ticket" data-uses="${uses[index] || 0}" data-tag="${attr(tags[index] || '')}" style="--tilt:${seat.tilt.toFixed(2)}deg;--fly-x:${fly[0].toFixed(1)}px;--fly-y:${fly[1].toFixed(1)}px;--out-x:${exit[0].toFixed(1)}px;--out-y:${exit[1].toFixed(1)}px;--fly-delay:${BUILD + index * beat}ms;${axis}">`)
       // the shadow is drawn, not filtered: one flat offset copy of the sheet, so
       // ninety of them can fly at once without a filter pass per sheet
+      // the printed text may have been clipped with an ellipsis, so the sheet
+      // carries its whole name as a title: a native tooltip on the paper, and the
+      // accessible name of the group once it becomes a node
+      tickets.push(`<title>${attr(tags[index] || '')}</title>`)
       tickets.push(`<path class="home-ticket-shadow" d="${paper}" transform="translate(1.2 1.6)"/>`)
       tickets.push(`<path class="home-ticket-paper" fill="var(--home-paper)" d="${paper}"/>`)
       // the perforated edge down the left margin
