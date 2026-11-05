@@ -186,9 +186,11 @@ function tone(name: string, alpha: number): string {
  * SVG subtree. Twenty-nine of them twice per device swap was most of the second
  * of frozen main thread a mid-range phone showed when the tag machine came up.
  *
- * The caller passes `.home-tag-paper`, never `.home-tag-wall`: the net's own
+ * Callers pass `.home-tag-paper`, not `.home-tag-wall`: the net's own
  * `<foreignObject>` is mounted beside it inside the wall, so measuring the wall
- * would fold the canvas into the box the canvas is about to be drawn in.
+ * would fold the canvas into the box the canvas is about to be drawn in. The
+ * one place that falls back to the wall is when the group is missing entirely
+ * (older markup) — there is nothing else to measure then.
  */
 function sheetBox(paper: SVGGElement): { x: number, y: number, w: number, h: number } {
   const b = paper.getBBox()
@@ -717,10 +719,10 @@ export function startTagGraph(
   }
 
   /**
-   * Take the wall's frame again and project the net onto it. Only worth a
-   * `getBBox()` when the wall has actually been papered — which is the gather,
-   * the moment the last sheet is pressed on and the gather animation has not yet
-   * moved it. Called once per visit, so the cost is one layout flush.
+   * Take the papered sheets' frame again and project the net onto it. Only worth
+   * a `getBBox()` once they have stopped moving — which is the gather, the moment
+   * the last sheet is pressed on and the gather animation has not yet stirred
+   * them. Called once per visit, so the cost is one layout flush.
    */
   const remeasure = (): void => {
     const measured = sheetBox(paperGroup)

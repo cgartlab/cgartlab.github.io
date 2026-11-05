@@ -670,13 +670,18 @@ export function buildLabels(P, options = {}) {
   // then include the net's own canvas — the next measurement would grow with
   // what it was measuring (2026-11-05). `sheetBox()` and `fitWall()` both read
   // this group instead.
-  out.push(part('tickets', 12, '', [
-    '<g class="home-tag-wall">',
-    '<g class="home-tag-paper">',
-    ...tickets,
-    '</g>',
-    '</g>',
-  ]))
+  // `part()` takes its children variadically (`...items` then `items.join('')`),
+  // so the wrapper groups and the tickets are spread into it, never passed as one
+  // array — that would stringify the array with commas between every child.
+  out.push(
+    part('tickets', 12, '',
+      '<g class="home-tag-wall">',
+      '<g class="home-tag-paper">',
+      ...tickets,
+      '</g>',
+      '</g>',
+    ),
+  )
 
   return out.join('')
 }

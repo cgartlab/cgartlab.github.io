@@ -433,9 +433,6 @@ function projectSection(section: string): void {
  * foot + k·(seat + fly − foot) and the slot does not move, so the offset is
  * divided by the scale and corrected for the seat's own displacement.
  */
-/** how far the stage may change size and still count as the same fit, in px */
-const FIT_EPSILON = 0.5
-
 function fitWall(s: State): void {
   mark('fit:in')
   const wall = s.svg.querySelector<SVGGElement>('.home-tag-wall')
@@ -494,6 +491,9 @@ function fitWall(s: State): void {
     }
   }
 }
+
+/** how far the stage may change size and still count as the same fit, in px */
+const FIT_EPSILON = 0.5
 
 /**
  * Push the picture in on the machine's upper half.
