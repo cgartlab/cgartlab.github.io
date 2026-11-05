@@ -12,21 +12,23 @@
  * they are the reasons for the shape of the code rather than incidental
  * detail:
  *
- * 1. **The canvas is a `<foreignObject>` inside `.home-tag-wall`.** It then
- *    shares the wall's user space and the wall's own CSS scale, which
- *    `fitWall()` writes for a phone (up to 2.2x about the foot). A canvas
- *    positioned in the page would have to re-derive all of that on every
- *    resize, rotation and swap; here it is free, and it inherits the stage's
- *    feather mask and the zoom for the same reason.
- * 2. **The sheets give the net its box, not its seats.** `getBBox()` over the
- *    `.home-ticket`s is measured once to learn where the wall's paper sits and
- *    how big it is; the nodes themselves are then laid on a sunflower spiral
- *    inside an ellipse drawn over that box, which is what makes the net a shape
- *    instead of the rectangle the sheets were dealt into. What the build does
- *    give the net is the *weights* (how many posts carry each tag) as
- *    `data-uses`, and the full tag name as `data-tag` for the hover label.
- * 3. **Nothing is drawn per node per frame beyond a circle.** The net is 90
- *    nodes and ~280 links; the loop is capped at 30 fps and stops on its own
+ * 1. **The canvas is a `<foreignObject>` inside `.home-tag-wall`, beside the
+ *    `.home-tag-paper` group.** It then shares the wall's user space and the
+ *    wall's own CSS scale, which `fitWall()` writes for a phone (up to 2.2x
+ *    about the foot). A canvas positioned in the page would have to re-derive
+ *    all of that on every resize, rotation and swap; here it is free, and it
+ *    inherits the stage's feather mask and the zoom for the same reason.
+ * 2. **The sheets give the net its box, not its seats.** `getBBox()` over
+ *    `.home-tag-paper` is measured twice: once when the net is created, and
+ *    again at the gather, because the wall is still being papered over the
+ *    first ~10 s and the sheets in flight are not where they land. The nodes
+ *    are laid on a sunflower spiral inside an ellipse drawn over that box,
+ *    which is what makes the net a shape instead of the rectangle the sheets
+ *    were dealt into. What the build does give the net is the *weights* (how
+ *    many posts carry each tag) as `data-uses`, and the full tag name as
+ *    `data-tag` for the hover label.
+ * 3. **Nothing is drawn per node per frame beyond a circle.** The net is 38
+ *    nodes and ~68 links; the loop is capped at 30 fps and stops on its own
  *    when the stage scrolls away or the tab is hidden, because a decorative
  *    net that keeps a phone awake is a bug, not a feature.
  *
@@ -134,6 +136,12 @@ interface Node {
  */
 const RIM_X = 0.97
 const RIM_Y = 0.97
+/**
+ * How far the wall's frame may move and still be the frame we already laid out
+ * against, in stage units. Below this the dots would not visibly shift; the
+ * value only has to absorb sub-pixel layout noise between two `getBBox()` calls.
+ */
+const FRAME_EPSILON = 0.5
 const NET_GROW_X = 0.92
 const NET_RAISE = 0.34
 const NET_GROW_Y = 1.34
@@ -171,18 +179,19 @@ function tone(name: string, alpha: number): string {
 }
 
 /**
- * The box the sheets occupy, in the wall's own user space.
+ * The box the papered sheets occupy, in the wall's own user space.
  *
- * One `getBBox()` on the wall, not one per sheet: `.home-tag-wall` contains the
- *  tickets and nothing else, and every `getBBox()` flushes layout for the whole
- *  SVG subtree. Twenty-nine of them twice per device swap was most of the second
- *  of frozen main thread a mid-range phone showed when the tag machine came up.
+ * One `getBBox()` on the group, not one per sheet: `.home-tag-paper` holds the
+ * tickets and nothing else, and every `getBBox()` flushes layout for the whole
+ * SVG subtree. Twenty-nine of them twice per device swap was most of the second
+ * of frozen main thread a mid-range phone showed when the tag machine came up.
  *
- * The canvas the net appends later is narrower than the paper (0.92x) and shares
- *  its foot, so it cannot move this box either.
+ * The caller passes `.home-tag-paper`, never `.home-tag-wall`: the net's own
+ * `<foreignObject>` is mounted beside it inside the wall, so measuring the wall
+ * would fold the canvas into the box the canvas is about to be drawn in.
  */
-function sheetBox(wall: SVGGElement): { x: number, y: number, w: number, h: number } {
-  const b = wall.getBBox()
+function sheetBox(paper: SVGGElement): { x: number, y: number, w: number, h: number } {
+  const b = paper.getBBox()
   return { x: b.x, y: b.y, w: b.width, h: b.height }
 }
 
@@ -442,10 +451,6 @@ export function startTagGraph(
   canvas.height = Math.max(1, Math.round(box.h * ratio))
   const holder = document.createElementNS(SVG_NS, 'foreignObject')
   holder.setAttribute('class', GRAPH)
-  holder.setAttribute('x', box.x.toFixed(2))
-  holder.setAttribute('y', box.y.toFixed(2))
-  holder.setAttribute('width', box.w.toFixed(2))
-  holder.setAttribute('height', box.h.toFixed(2))
   holder.setAttribute('aria-hidden', 'true')
   holder.appendChild(canvas)
   wall.appendChild(holder)
@@ -456,6 +461,7 @@ export function startTagGraph(
     holder.setAttribute('width', box.w.toFixed(2))
     holder.setAttribute('height', box.h.toFixed(2))
   }
+  fitHolder()
   // the counts are on the element so a reader of the page can see what the wall
   // became, and so the acceptance criteria of the issue are checkable without
   // reaching into the module (see the verification table in the PR)
@@ -489,7 +495,6 @@ export function startTagGraph(
   let inkPillFill = tone('background', 0.97)
   let inkPillBorder = tone('secondary', 0.4)
   let inkPillText = tone('primary', 0.95)
-
 
   // The links are the expensive half of a frame — 250 segments is a lot of
   // stroking for lines drawn at 10% — and the nodes drift at most a couple of
@@ -719,8 +724,8 @@ export function startTagGraph(
    */
   const remeasure = (): void => {
     const measured = sheetBox(paperGroup)
-    if (Math.abs(measured.x - paperBox.x) < 0.5 && Math.abs(measured.y - paperBox.y) < 0.5
-      && Math.abs(measured.w - paperBox.w) < 0.5 && Math.abs(measured.h - paperBox.h) < 0.5) {
+    if (Math.abs(measured.x - paperBox.x) < FRAME_EPSILON && Math.abs(measured.y - paperBox.y) < FRAME_EPSILON
+      && Math.abs(measured.w - paperBox.w) < FRAME_EPSILON && Math.abs(measured.h - paperBox.h) < FRAME_EPSILON) {
       return
     }
     paperBox = measured

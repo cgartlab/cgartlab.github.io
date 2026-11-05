@@ -377,7 +377,9 @@ function startGraph(s: State): void {
     // against 92.4 at rest, measured 2026-11-05) — so it happens here, once they
     // have stopped and before the gather moves them again.
     const stage = s.stage.getBoundingClientRect()
-    if (s.fitSize && (Math.abs(stage.width - s.fitSize.w) > 0.5 || Math.abs(stage.height - s.fitSize.h) > 0.5))
+    const moved = s.fitSize
+      && (Math.abs(stage.width - s.fitSize.w) > FIT_EPSILON || Math.abs(stage.height - s.fitSize.h) > FIT_EPSILON)
+    if (moved)
       fitWall(s)
   })
 }
@@ -431,6 +433,9 @@ function projectSection(section: string): void {
  * foot + k·(seat + fly − foot) and the slot does not move, so the offset is
  * divided by the scale and corrected for the seat's own displacement.
  */
+/** how far the stage may change size and still count as the same fit, in px */
+const FIT_EPSILON = 0.5
+
 function fitWall(s: State): void {
   mark('fit:in')
   const wall = s.svg.querySelector<SVGGElement>('.home-tag-wall')
