@@ -506,8 +506,15 @@ export function startTagGraph(
     .getPropertyValue('--un-preset-theme-font-family-sans')
     .trim() || 'OPPOSans, ui-sans-serif, system-ui, sans-serif'
   const labelFont = (size: number): string => `500 ${size}px ${sansStack}`
-  /** the pill's type size, in screen pixels */
+  /**
+   * The pill's type size, in screen pixels: 13 px is what the page's small print
+   * (captions, the article's meta line) already uses, so a tag reads as part of
+   * the same type scale instead of as an annotation of its own.
+   */
   const LABEL_PX = 13
+  /** the screen-space window that size may be nudged into */
+  const LABEL_PX_MIN = 11
+  const LABEL_PX_MAX = 18
 
   /**
    * The hovered tag: a ring so the node is findable among ninety others, then
@@ -527,7 +534,7 @@ export function startTagGraph(
     // the pill's type is asked for in screen pixels; the clamp therefore happens
     // in screen space too — clamping stage units would mean two different label
     // sizes at two different wall scales
-    const size = clamp(LABEL_PX, 11, 18) / unitPx()
+    const size = clamp(LABEL_PX, LABEL_PX_MIN, LABEL_PX_MAX) / unitPx()
     ctx.font = labelFont(size)
     const pad = size * 0.55
     const w = ctx.measureText(node.label).width + pad * 2
