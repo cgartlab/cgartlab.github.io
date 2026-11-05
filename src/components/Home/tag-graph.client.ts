@@ -86,8 +86,8 @@ const LINKS_NODE = 6
 const EDGE_TARGET = 68
 /**
  * The wall's node budget. A knowledge net, not a star field: the previous ninety
- * read as visual noise on a 645×305 wall (a reader called it 密集恐惧 on
- * 2026-11-05). Every tag still gets its own node — what moves is the filler.
+ * read as visual noise on the wall (a reader called it 密集恐惧 on 2026-11-05).
+ * Every tag still gets its own node — what moves is the filler.
  */
 const NODE_TARGET = 38
 const SEED = 0x9E3779B9
@@ -259,11 +259,11 @@ export function startTagGraph(
     h: sheet.h * NET_GROW_Y,
   })
   // The wall is still being papered when the net is created — 29 sheets are stuck
-  // on over the first ~10 s — so `getBBox()` over `.home-tag-paper` reports the
-  // sheets in flight (132 × 127 px of flight against the 622 × 177 px paper they
-  // become, on a 1440×900 window, measured 2026-11-05) and the net would be drawn
-  // into one corner of the wall. The frame is therefore taken again once they
-  // land, at the gather below.
+  // on over the first ~10 s — so `getBBox()` over `.home-tag-paper` (which returns
+  // the wall's own user units, before its CSS scale) reports a small cluster of
+  // sheets still near the slot instead of the wall's full spread. Laid out over
+  // that cluster the net would be drawn into one corner of the wall, so the frame
+  // is taken again once the sheets land, at the gather below.
   let paperBox = paper
   let box = frame(paperBox)
 
