@@ -202,6 +202,14 @@ pnpm update-gh-contributions  # 更新贡献热力图数据 → src/data/github-
   舞台离屏或页签隐藏即停 rAF；`reduce-motion` 只画一帧静止图，但悬停仍会重绘。
   收网后标签机自身的 7 个无限循环动画（滚轮/切刀/打印头/指示灯/纸卷/灯晕）用
   `animation-play-state: paused` 停在最后一帧——它们叠在网后面持续重绘，是中端手机掉帧的主因。
+  **量墙要量 `.home-tag-paper`，不能量 `.home-tag-wall`**：网自己的 `<foreignObject>` 就挂在
+  `.home-tag-wall` 里，直接量墙会把画布算进 bbox —— 每画一次网，下一次测量就跟着长大一次
+  （`fitWall()` 的 `paperW` 也同理，2026-11-05）。票在构建期（`labels.mjs`）被包进这层分组，
+  再加元素时要么放进分组里，要么另起分组。
+  **网的框只能在票贴满那一刻量**：贴票的 ~10 s 里 `getBBox()` 读到的是还在飞的票
+  （实测 132×127，而墙是 625×370），量早了整张网点云会缩在墙的一角。所以
+  `startTagGraph()` 先用当期框建网，到收网前一刻（`gathered` 置位、加 `.is-gathered` 之前）
+  再 `remeasure()` 一次并重投影（布局是归一化螺旋，重投影只做算术）。
   **改票的入场时序必须同步 `STICK_END`**，否则网的起点会踩在还没贴完的墙上
 - **触屏判定** `(max-width: 899px), (hover: none)`：自动轮换，点键直接跳页；DWELL = posts 4s / works 30s / column 14s / resource 8s / tags 18s，且先等入场动画放完
   （tags 由 12s 提到 18s：#488 的图谱要等 29 张票贴满墙才开始收拢，最后一张在 ~10.5s，
