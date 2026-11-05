@@ -260,9 +260,10 @@ export function startTagGraph(
   })
   // The wall is still being papered when the net is created — 29 sheets are stuck
   // on over the first ~10 s — so `getBBox()` over `.home-tag-paper` reports the
-  // sheets in flight (132 × 127 against the 625 × 370 wall they become, measured
-  // 2026-11-05) and the net would be drawn into one corner of the wall. The frame
-  // is therefore taken again once they land, at the gather below.
+  // sheets in flight (132 × 127 px of flight against the 622 × 177 px paper they
+  // become, on a 1440×900 window, measured 2026-11-05) and the net would be drawn
+  // into one corner of the wall. The frame is therefore taken again once they
+  // land, at the gather below.
   let paperBox = paper
   let box = frame(paperBox)
 
@@ -894,8 +895,6 @@ export function startTagGraph(
     else
       holder.removeAttribute('data-hover')
     canvas.style.cursor = 'default'
-    // with motion reduced the loop is not running, so the change has to be
-    // painted here or the label would never appear at all
     // with motion reduced, or once the floor budget froze the net, the loop is
     // not running — paint here or the label never appears (and a ring could stay
     // on screen after the pointer leaves)
