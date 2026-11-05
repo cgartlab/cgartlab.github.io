@@ -188,11 +188,10 @@ function tone(name: string, alpha: number): string {
  * SVG subtree. Twenty-nine of them twice per device swap was most of the second
  * of frozen main thread a mid-range phone showed when the tag machine came up.
  *
- * Callers pass `.home-tag-paper`, not `.home-tag-wall`: the net's own
- * `<foreignObject>` is mounted beside it inside the wall, so measuring the wall
- * would fold the canvas into the box the canvas is about to be drawn in. The
- * one place that falls back to the wall is when the group is missing entirely
- * (older markup) — there is nothing else to measure then.
+ * Callers pass `.home-tag-paper`, never `.home-tag-wall`: the net's own
+ * `<foreignObject>` becomes a sibling of that group inside the wall, so measuring
+ * the wall would fold the canvas into the box the canvas is about to be drawn in.
+ * `startTagGraph()` therefore refuses to run without the group.
  */
 function sheetBox(paper: SVGGElement): { x: number, y: number, w: number, h: number } {
   const b = paper.getBBox()
@@ -242,7 +241,13 @@ export function startTagGraph(
   const sheets = [...wall.querySelectorAll<SVGGElement>(TICKET)]
   if (!sheets.length)
     return null
-  const paperGroup = wall.querySelector<SVGGElement>(PAPER) ?? wall
+  const paperGroup = wall.querySelector<SVGGElement>(PAPER)
+  // No paper group means the markup predates the split. Bail rather than measure
+  // the wall: by the time `remeasure()` runs, the wall also contains the canvas
+  // this function appended, so measuring it would fold the canvas into the frame
+  // the canvas is drawn in — the very bug this split fixed (see the header).
+  if (!paperGroup)
+    return null
   const paper = sheetBox(paperGroup)
   if (!(paper.w > 0 && paper.h > 0))
     return null
