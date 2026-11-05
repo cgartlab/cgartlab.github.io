@@ -81,9 +81,12 @@ const LINKS = 3
 const LINKS_HUB = 8
 const LINKS_NODE = 6
 /** the issue asks for a net, not a constellation: ~250 links at 90 nodes */
-const EDGE_TARGET = 250
+const EDGE_TARGET = 68
 /** nodes when the site is quiet: below this the net reads as a sketch */
-const NODE_TARGET = 90
+// A knowledge net, not a star field: ninety dots on a 645×305 wall reads as
+// visual noise (a reader called it 密集恐惧 on 2026-11-05). Every tag still gets
+// its own node — the count that moves is the filler, not the labels.
+const NODE_TARGET = 38
 const SEED = 0x9E3779B9
 
 interface Node {
@@ -280,7 +283,9 @@ export function startTagGraph(
   // so the tags the site leans on most end up nearest the middle and the quiet
   // ones toward the rim; every point then keeps an equal share of the disc. No
   // rows, no columns, no string of beads along the bottom.
-  const bridges = Math.max(24, NODE_TARGET - sheets.length)
+  // enough filler to give the spiral a shape and the links somewhere to pass,
+  // never so many that the wall turns into dots
+  const bridges = Math.max(9, NODE_TARGET - sheets.length)
   const total = sheets.length + bridges
   const onSpiral = (index: number): { nx: number, ny: number } => {
     const spread = Math.sqrt((index + 0.5) / total)
