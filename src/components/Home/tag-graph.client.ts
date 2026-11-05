@@ -325,6 +325,8 @@ export function startTagGraph(
     const hub = weight >= 0.5
     nodes.push({
       ...onSpiral(tagSlots[index]),
+      x: 0,
+      y: 0,
       r: 0,
       hub,
       bridge: false,
@@ -356,6 +358,8 @@ export function startTagGraph(
     taken.add(slot)
     nodes.push({
       ...onSpiral(slot),
+      x: 0,
+      y: 0,
       r: 0,
       hub: false,
       bridge: true,
