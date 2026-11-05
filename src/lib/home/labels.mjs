@@ -647,7 +647,7 @@ export function buildLabels(P, options = {}) {
       // the printed text had to be clipped with an ellipsis.
       tickets.push(`<g class="home-ticket" data-uses="${uses[index] || 0}" data-tag="${attr(tags[index] || '')}" style="--tilt:${seat.tilt.toFixed(2)}deg;--fly-x:${fly[0].toFixed(1)}px;--fly-y:${fly[1].toFixed(1)}px;--out-x:${exit[0].toFixed(1)}px;--out-y:${exit[1].toFixed(1)}px;--fly-delay:${BUILD + index * beat}ms;${axis}">`)
       // the shadow is drawn, not filtered: one flat offset copy of the sheet, so
-      // ninety of them can fly at once without a filter pass per sheet
+      // every sheet can fly at once without a filter pass per sheet
       // the printed text may have been clipped with an ellipsis, so the sheet
       // carries its whole name as a title: a native tooltip on the paper, and the
       // accessible name of the group once it becomes a node

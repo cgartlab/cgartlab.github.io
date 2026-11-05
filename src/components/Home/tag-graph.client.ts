@@ -85,9 +85,9 @@ const LINKS_NODE = 6
 /** a net, not a constellation: ~68 links over 38 nodes, ~3–4 per node */
 const EDGE_TARGET = 68
 /**
- * The wall's node budget. A knowledge net, not a star field: ninety dots on a
- * 645×305 wall read as visual noise (a reader called it 密集恐惧 on 2026-11-05).
- * Every tag still gets its own node — what moves is the filler, not the labels.
+ * The wall's node budget. A knowledge net, not a star field: the previous ninety
+ * read as visual noise on a 645×305 wall (a reader called it 密集恐惧 on
+ * 2026-11-05). Every tag still gets its own node — what moves is the filler.
  */
 const NODE_TARGET = 38
 const SEED = 0x9E3779B9
@@ -259,10 +259,10 @@ export function startTagGraph(
     h: sheet.h * NET_GROW_Y,
   })
   // The wall is still being papered when the net is created — 29 sheets are stuck
-  // on over the first ~10 s — so its `getBBox()` reports the sheets in flight
-  // (132 × 127 against the 625 × 370 wall it becomes, measured 2026-11-05) and the
-  // net would be drawn into one corner of the wall. The frame is therefore taken
-  // again once the sheets land, at the gather below.
+  // on over the first ~10 s — so `getBBox()` over `.home-tag-paper` reports the
+  // sheets in flight (132 × 127 against the 625 × 370 wall they become, measured
+  // 2026-11-05) and the net would be drawn into one corner of the wall. The frame
+  // is therefore taken again once they land, at the gather below.
   let paperBox = paper
   let box = frame(paperBox)
 
@@ -590,8 +590,8 @@ export function startTagGraph(
   const LABEL_PX_MAX = 18
 
   /**
-   * The hovered tag: a ring so the node is findable among ninety others, then
-   *  the tag itself in a pill that flips sides rather than leaving the wall.
+   * The hovered tag: a ring so the node is findable among the net's other dots,
+   *  then the tag itself in a pill that flips sides rather than leaving the wall.
    */
   const drawHover = (): void => {
     const node = nodes[hovered]
@@ -645,10 +645,10 @@ export function startTagGraph(
       ctx.drawImage(layer, box.x, box.y, box.w, box.h)
       ctx.globalAlpha = 1
     }
-    // Ninety separate fills is the frame's real cost on a slow phone (each fill
-    // is a path submission of its own). Once every node has finished its entry
-    // ramp they all share one alpha, so they collapse into one path per ink —
-    // two fills instead of ninety. During the ramp they still need their own.
+    // One fill per node is the frame's real cost on a slow phone (each fill is a
+    // path submission of its own). Once every node has finished its entry ramp
+    // they all share one alpha, so they collapse into one path per ink — two
+    // fills instead of one per node. During the ramp they still need their own.
 
     if (elapsed >= settledAt) {
       for (const [ink, hubs] of [[nodeInk, false], [hubInk, true]] as const) {
