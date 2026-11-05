@@ -10,7 +10,7 @@ import TagList from '@/components/TagList.astro'
 import BackButton from '@/components/Widgets/BackButton.astro'
 import RelatedPosts from '@/components/Widgets/RelatedPosts.astro'
 import TOC from '@/components/Widgets/TOC.astro'
-import { allLocales } from '@/config'
+import { allLocales, defaultLocale } from '@/config'
 import { getLangFromLocale, getLangRouteParam } from '@/i18n/lang'
 import Layout from '@/layouts/Layout.astro'
 import { checkPostSlugDuplication } from '@/utils/content'
@@ -88,6 +88,14 @@ const schemaType: 'SoftwareApplication' | 'Product' | undefined
       ? 'Product'
       : undefined
 const { Content, headings, remarkPluginFrontmatter } = await render(post)
+
+// The switch has no twin to point at when this article exists in one language
+// only, but hiding it made those articles look broken; the other language's post
+// list is where a reader who wants that language should land.
+const otherLocale = allLocales.find(locale => locale !== currentLang)
+const langFallback = otherLocale
+  ? otherLocale === defaultLocale ? '/posts/' : `/${otherLocale}/posts/`
+  : ''
 ---
 
 <Layout
@@ -99,6 +107,7 @@ const { Content, headings, remarkPluginFrontmatter } = await render(post)
   postKatex={post.data.katex}
   postSchemaType={schemaType}
   supportedLangs={supportedLangs}
+  langFallback={langFallback}
 >
   <article class="heti">
     <div class="relative">
