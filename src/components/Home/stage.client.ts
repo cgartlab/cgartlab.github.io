@@ -501,10 +501,21 @@ function applyModule(s: State, index: number): void {
   // only the typewriter prints, and only while it is the machine on the
   // platform: feeding a sheet on a hidden device is work nobody can see (and
   // it used to swing the return lever while the machine was off stage)
-  if (section === 'posts' && s.ready)
+  if (section === 'posts' && s.ready) {
+    // A printed sheet never retypes by itself: `startTour()` refuses once the
+    // sheet is full, and nothing rewinds it except a hover-out. Arriving again —
+    // by tap, or by the phone's automatic rotation — therefore showed a machine
+    // that had already finished, which a reader reports as "the typing sometimes
+    // does not play" (2026-11-05). Every arrival starts from an empty sheet.
+    if (s.shown >= s.total) {
+      s.shown = 0
+      paint(s, 0)
+    }
     startTour(s)
-  else
+  }
+  else {
     stopTour(s)
+  }
 
   document.documentElement.dataset.homeSection = section
   placeTagline(s)
