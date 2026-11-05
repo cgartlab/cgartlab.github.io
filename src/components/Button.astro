@@ -9,6 +9,13 @@ import { getNextGlobalLangPath, getNextSupportedLangPath } from '@/i18n/path'
 interface Props {
   supportedLangs: Language[]
   variant?: 'default' | 'home'
+  /**
+   * Where the language switch goes when this page has no counterpart in the other
+   * language. Article pages pass the other language's post list: hiding the switch
+   * there made a single-language article look broken (2026-11-05), and the list is
+   * the honest destination for a translation that does not exist.
+   */
+  langFallback?: string
 }
 
 const {
@@ -16,15 +23,19 @@ const {
   dark: { background: darkMode },
 } = themeConfig.color
 
-const { supportedLangs, variant = 'default' } = Astro.props
+const { supportedLangs, variant = 'default', langFallback = '' } = Astro.props
 const currentPath = Astro.url.pathname
+const hasCounterpart = supportedLangs.length !== 1
 
 const showLanguageSwitcher = moreLocales.length > 0
-  // 当前页只支持一种语言时（如 en-only 标签页），切换按钮会解析为自我链接，隐藏之
-  && supportedLangs.length !== 1
-const nextUrl = supportedLangs.length > 0
-  ? getNextSupportedLangPath(currentPath, supportedLangs)
-  : getNextGlobalLangPath(currentPath)
+  // 当前页只支持一种语言时（如 en-only 标签页），切换按钮会解析为自我链接；
+  // 文章页给了 fallback（另一语言的文章列表），那就照常显示
+  && (hasCounterpart || langFallback.length > 0)
+const nextUrl = !hasCounterpart
+  ? langFallback
+  : supportedLangs.length > 0
+    ? getNextSupportedLangPath(currentPath, supportedLangs)
+    : getNextGlobalLangPath(currentPath)
 ---
 
 <div
