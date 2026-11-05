@@ -183,6 +183,10 @@ pnpm update-gh-contributions  # 更新贡献热力图数据 → src/data/github-
 - **软阴影必须是 SVG 滤镜**（`<filter><feGaussianBlur>` + `filter: url(#home-soft-N)`），**不能用 CSS `filter: blur()`**：WebKit 会直接忽略作用在 SVG 元素上的 CSS 滤镜，Safari 里阴影就变成硬边
 - **放大时边缘不得硬切**：`zoomIn()` 给 `.home-stage` 加 `is-zoomed`，由 `home.css` 下发 6 段高斯肩部 `mask`（与视频画面同一套）。mask 必须挂在 `.home-stage` 上——挂在 `.iso-svg` 上会把 SVG 内容整体裁掉
 - **标签墙整体缩放**（`fitWall()`，≤ 2.2 倍、占舞台宽 92%），每张票的 `--fly-*` / `--out-*` 要按新比例重算，原始值存 `data-*` 避免二次缩放
+- **打字机每次上台都从空白纸开始**：`applyModule()` 在 `posts` 上台时，若 `s.shown >= s.total`
+  会先回卷（`s.shown = 0; paint(s, 0)`）再 `startTour()`。`startTour()` 在纸打满后拒绝启动，
+  而回卷原本只有「鼠标移出舞台」这一条路——手机靠自动轮换回来时纸永远是打满的，表现为
+  「打字动画有时不播放」。2026-11-05 实测：修复前第二次轮换纸面停在 97 个字不动，修复后从 0 重打。
 - **标签墙贴满后收成图谱**（#488）：`tag-graph.client.ts` 在 `.home-tag-wall` 里放一个
   `<foreignObject><canvas>`，与墙共享坐标系和 `fitWall()` 写的 `--wall-scale`（也因此自动吃
   `.home-stage` 的羽化 mask 与放大）。**网是椭圆**：所有节点（29 个标签 + 桥点）沿黄金角螺旋铺在

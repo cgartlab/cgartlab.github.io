@@ -28,7 +28,18 @@ jobs:
           app-id: ${{ secrets.ARGUS_FLASH_APP_ID }}
           private-key: ${{ secrets.ARGUS_FLASH_PRIVATE_KEY }}
 
-      # 固定 commit SHA 保证行为可重现；升级时更新为 cgartlab/argus main 最新 SHA
-      - uses: cgartlab/argus/.github/actions/argus-review@c9a22d407f91f70fc94823bcd30a8c07b2b62851
+      # 固定 commit SHA 保证行为可重现。当前 v0.6.8（2026-11-01，tag 对应的合并提交）：
+      #   1) 单次模型超时 480s（一个从未声明的死开关）→ 600s 默认，且 `timeout` 真正可配
+      #   2) 超时不再被误判为「没评审过」，按 run ID 查已发评论 → 不再重复烧第二个模型
+      #   3) 主模型遇不可重试错误也进备用队列；`timeout -k 30` 的 137 与 124 一并视为挂起
+      # 升级时改成 cgartlab/argus 新发布 tag 对应的提交，并同步下方 timeout 算式
+      - uses: cgartlab/argus/.github/actions/argus-review@c7c54872189fe94c4ad7c9e130323ad8d580b98a
         with:
           github-token: ${{ steps.app-token.outputs.token }}
+          # 模型侧的钥匙。本仓目前**没有** OPENCODE_API_KEY，action 因此打印
+          # `[argus] OpenCode API key: unset`，三个模型各挂满 600 s 后整轮失败
+          # （2026-11-04 实测）。补上 secret 即生效；不补则本 check 只能一直红。
+          api-key: ${{ secrets.OPENCODE_API_KEY }}
+          # 显式钉住预算，避免上游改默认值时本仓的 job 时限算式悄悄失效
+          timeout: 600
+          max-attempts: 3
