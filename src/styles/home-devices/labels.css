@@ -516,9 +516,14 @@
   display: block;
   width: 100%;
   height: 100%;
-  /* the dots are the only thing on the wall worth pointing at: the canvas takes
-     the pointer so a node can name its tag, and nothing else in the wall
-     competes for it */
+  /* before the gather there is nothing to point at, and the canvas sits over
+     every ticket: taking the pointer here would swallow the native <title>
+     tooltip (the full tag name) for the whole ~10 s papering */
+  pointer-events: none;
+}
+
+.home-stage .home-module.is-gathered .home-tag-graph canvas {
+  /* after the gather the dots are the only thing worth pointing at */
   pointer-events: auto;
 }
 

@@ -201,7 +201,12 @@ function nearestFirst(nodes: Node[]): number[][] {
   })
 }
 
-export function startTagGraph(svg: SVGSVGElement, reduceMotion: boolean): TagGraph | null {
+export function startTagGraph(
+  svg: SVGSVGElement,
+  reduceMotion: boolean,
+  /** called once, when the sheets are finally at rest (just before gathering) */
+  onSettled?: () => void,
+): TagGraph | null {
   const wall = svg.querySelector<SVGGElement>(WALL)
   const module = svg.querySelector<SVGGElement>(MODULE)
   if (!wall || !module)
@@ -454,6 +459,12 @@ export function startTagGraph(svg: SVGSVGElement, reduceMotion: boolean): TagGra
     return Math.max(max, delay)
   }, 0)
   const gatherAt = lastFlight + STICK_END + GATHER_AFTER
+  // Bridge points enter on `260 + random() * 240`, so the last one is up to
+  // 500 ms late. The settled fill drops per-node alpha, so it has to wait for
+  // the slowest node — a fixed 320 ms let the late dots jump to full opacity
+  // ~180 ms early: a twinkle in the middle of the net.
+  const maxLag = nodes.reduce((most, node) => Math.max(most, node.lag), 0)
+  const settledAt = gatherAt + NODE_AFTER + NODE_RAMP + maxLag
 
   let elapsed = 0
   let raf = 0
@@ -482,7 +493,13 @@ export function startTagGraph(svg: SVGSVGElement, reduceMotion: boolean): TagGra
    * Text has to read at the same size whatever the wall was scaled to, so the
    *  type is asked for in screen pixels and converted back into stage units.
    */
-  const unitPx = (): number => clamp(wall.getScreenCTM()?.a ?? 1, 0.2, 6)
+  const unitPx = (): number => {
+    // a measurement, not a budget: clamping it here reintroduces the bug the
+    // screen-space `clamp(LABEL_PX, 11, 18)` fixes — above 6 stage px the pill
+    // would render larger than its intended screen size
+    const scale = wall.getScreenCTM()?.a ?? 1
+    return scale > 0 ? scale : 1
+  }
   // canvas cannot read var(), so the family is resolved once from the token that
   // uno.config.ts's preflight publishes — one source of truth for the page's type
   const sansStack = getComputedStyle(document.documentElement)
@@ -552,7 +569,7 @@ export function startTagGraph(svg: SVGSVGElement, reduceMotion: boolean): TagGra
     // is a path submission of its own). Once every node has finished its entry
     // ramp they all share one alpha, so they collapse into one path per ink —
     // two fills instead of ninety. During the ramp they still need their own.
-    const settledAt = gatherAt + NODE_AFTER + NODE_RAMP + 320
+
     if (elapsed >= settledAt) {
       for (const [ink, hubs] of [[nodeInk, false], [hubInk, true]] as const) {
         ctx.fillStyle = ink
@@ -712,6 +729,9 @@ export function startTagGraph(svg: SVGSVGElement, reduceMotion: boolean): TagGra
       holder.setAttribute('data-frames', String(frames))
     if (!gathered && elapsed >= gatherAt) {
       gathered = true
+      // the sheets have stopped moving and the gather has not started: the only
+      // instant a re-fit measures their real seats rather than the entry's
+      onSettled?.()
       if (!reduceMotion)
         module.classList.add(GATHERED)
     }
@@ -720,7 +740,10 @@ export function startTagGraph(svg: SVGSVGElement, reduceMotion: boolean): TagGra
   }
 
   const wake = (): void => {
-    if (awake || disposed || reduceMotion)
+    // a frozen net is final for this visit: waking it would resume exactly the
+    // loop the floor budget could not afford, and `step()` only re-freezes while
+    // `downgraded && !frozen`, so it would then run forever
+    if (awake || disposed || reduceMotion || frozen)
       return
     if (document.hidden)
       return
@@ -772,8 +795,14 @@ export function startTagGraph(svg: SVGSVGElement, reduceMotion: boolean): TagGra
     canvas.style.cursor = 'default'
     // with motion reduced the loop is not running, so the change has to be
     // painted here or the label would never appear at all
+    // with motion reduced, or once the floor budget froze the net, the loop is
+    // not running — paint here or the label never appears (and a ring could stay
+    // on screen after the pointer leaves)
     if (reduceMotion) {
       place(0)
+      draw()
+    }
+    else if (frozen) {
       draw()
     }
   }
@@ -828,6 +857,8 @@ export function startTagGraph(svg: SVGSVGElement, reduceMotion: boolean): TagGra
   if (reduceMotion) {
     // the settled picture: gathered sheets, links at their final strength
     gathered = true
+    // no entry animation under reduced motion, so the sheets are already at rest
+    onSettled?.()
     module.classList.add(GATHERED)
     place(0)
     elapsed = gatherAt + EDGE_AFTER + EDGE_RAMP + NODE_AFTER + NODE_RAMP

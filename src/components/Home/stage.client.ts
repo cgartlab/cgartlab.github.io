@@ -96,6 +96,8 @@ interface State {
   preloadTimer: number
   /** a key chosen while the chassis is still building, seated at 1200 ms */
   pending: number
+  /** the stage size the tag wall was last fitted for */
+  fitSize?: { w: number, h: number }
   /** false until the boot is over: the tour waits for a whole page */
   ready: boolean
   /** true once every machine is in the document — the ones fetched after paint */
@@ -367,7 +369,17 @@ function startGraph(s: State): void {
   mark('graph:in')
   if (s.graph)
     return
-  s.graph = startTagGraph(s.svg, prefersReducedMotion())
+  s.graph = startTagGraph(s.svg, prefersReducedMotion(), () => {
+    // The wall only needs a re-fit if the stage changed size while it was out of
+    // layout: on compact an idle machine is `display: none`, so `fitWall()`'s own
+    // `getBBox()` read zero and the resize skipped it. Re-fitting at arrival is
+    // not an option — the sheets are still being pressed on (451.7 units at 0 ms
+    // against 92.4 at rest, measured 2026-11-05) — so it happens here, once they
+    // have stopped and before the gather moves them again.
+    const stage = s.stage.getBoundingClientRect()
+    if (s.fitSize && (Math.abs(stage.width - s.fitSize.w) > 0.5 || Math.abs(stage.height - s.fitSize.h) > 0.5))
+      fitWall(s)
+  })
 }
 
 /** Stopping takes the net off the wall as well, so the next visit starts from
@@ -442,6 +454,7 @@ function fitWall(s: State): void {
   // behind
   const scale = Math.min(2.2, Math.max(1, (stage.width * 0.92) / (paperW * px)))
   const foot = { x: box.x + box.width / 2, y: box.y + box.height }
+  s.fitSize = { w: stage.width, h: stage.height }
   wall.style.setProperty('--wall-x', `${foot.x.toFixed(1)}px`)
   wall.style.setProperty('--wall-y', `${foot.y.toFixed(1)}px`)
   wall.style.setProperty('--wall-scale', scale.toFixed(3))
@@ -581,14 +594,6 @@ function applyModule(s: State, index: number): void {
   mark('sec:tagline')
   projectSection(section)
   mark('sec:project')
-  // the wall only becomes a net while it is the machine on the platform; the
-  // client waits for the last sheet to be pressed on before it starts
-  mark('graph:before')
-  if (section === 'tags')
-    startGraph(s)
-  else
-    stopGraph(s)
-  mark('graph:done')
   // the camera moves in as the machine comes up; the first seat (the boot) is
   // left wide, it is the page arriving rather than a switch
   if (s.ready)
@@ -604,6 +609,18 @@ function applyModule(s: State, index: number): void {
     for (const m of s.modules)
       m.style.display = Number(m.dataset.index) === index ? '' : 'none'
   }
+  // The wall only becomes a net while it is the machine on the platform, and it
+  // has to be measured while it is *in* layout: on compact the incoming machine
+  // was `display: none` until the line above, so `fitWall()` would find a zero box
+  // and skip the wall (its own guard) — a resize made while another machine was
+  // up then left `--wall-scale` and the tickets' `--fly-*` at the old viewport.
+  mark('graph:before')
+  if (section === 'tags')
+    startGraph(s)
+  else {
+    stopGraph(s)
+  }
+  mark('graph:done')
   mark('apply:out')
 }
 
