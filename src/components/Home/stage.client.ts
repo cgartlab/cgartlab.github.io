@@ -494,7 +494,6 @@ function fitWall(s: State): void {
   }
 }
 
-
 /**
  * Push the picture in on the machine's upper half.
  *

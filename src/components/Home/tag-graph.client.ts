@@ -82,12 +82,13 @@ const RATIO_CAP_COMPACT = 2
 const LINKS = 3
 const LINKS_HUB = 8
 const LINKS_NODE = 6
-/** the issue asks for a net, not a constellation: ~250 links at 90 nodes */
+/** a net, not a constellation: ~68 links over 38 nodes, ~3–4 per node */
 const EDGE_TARGET = 68
-/** nodes when the site is quiet: below this the net reads as a sketch */
-// A knowledge net, not a star field: ninety dots on a 645×305 wall reads as
-// visual noise (a reader called it 密集恐惧 on 2026-11-05). Every tag still gets
-// its own node — the count that moves is the filler, not the labels.
+/**
+ * The wall's node budget. A knowledge net, not a star field: ninety dots on a
+ * 645×305 wall read as visual noise (a reader called it 密集恐惧 on 2026-11-05).
+ * Every tag still gets its own node — what moves is the filler, not the labels.
+ */
 const NODE_TARGET = 38
 const SEED = 0x9E3779B9
 
@@ -399,9 +400,9 @@ export function startTagGraph(
   }
 
   /**
-   * Project the normalized spiral onto the wall's frame and size the dots from
-   * it. The frame moves exactly once per visit — re-measured when the sheets have
-   * landed — so this runs again there and no other part of the net has to know.
+   * Project the normalized spiral onto the papered sheets' frame and size the dots
+   * from it. That frame moves exactly once per visit — re-measured when the sheets
+   * have landed — so this runs again there and no other part of the net has to know.
    */
   const applyLayout = (): void => {
     midX = box.x + box.w / 2
@@ -499,7 +500,7 @@ export function startTagGraph(
   let inkPillBorder = tone('secondary', 0.4)
   let inkPillText = tone('primary', 0.95)
 
-  // The links are the expensive half of a frame — 250 segments is a lot of
+  // The links are the expensive half of a frame — 68 segments is a lot of
   // stroking for lines drawn at 10% — and the nodes drift at most a couple of
   // units a second, so an edge that is three frames stale is off by a tenth of
   // a pixel. They are therefore baked into an off-screen layer every third
