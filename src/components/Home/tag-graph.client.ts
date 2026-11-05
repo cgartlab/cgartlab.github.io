@@ -137,9 +137,10 @@ interface Node {
 const RIM_X = 0.97
 const RIM_Y = 0.97
 /**
- * How far the wall's frame may move and still be the frame we already laid out
- * against, in stage units. Below this the dots would not visibly shift; the
- * value only has to absorb sub-pixel layout noise between two `getBBox()` calls.
+ * How far the papered sheets' frame may move and still be the frame the net was
+ * already laid out against, in stage units. Below this the dots would not
+ * visibly shift; the value only has to absorb sub-pixel layout noise between two
+ * `sheetBox()` calls.
  */
 const FRAME_EPSILON = 0.5
 const NET_GROW_X = 0.92

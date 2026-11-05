@@ -40,6 +40,8 @@ const BOOT_DEVICE = 1200
 const BOOT_TOTAL = 4000
 /** how long the intro will wait for the four fetched machines before playing anyway */
 const PRELOAD_DEADLINE = 2500
+/** how far the stage may change size and still count as the same fit, in px */
+const FIT_EPSILON = 0.5
 /** a single fragment may not hold the whole stage hostage */
 const PRELOAD_TIMEOUT = 8000
 /** the projector threads the film and strikes the lamp before the reel rolls:
@@ -492,8 +494,6 @@ function fitWall(s: State): void {
   }
 }
 
-/** how far the stage may change size and still count as the same fit, in px */
-const FIT_EPSILON = 0.5
 
 /**
  * Push the picture in on the machine's upper half.
