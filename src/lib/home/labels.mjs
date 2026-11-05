@@ -665,7 +665,11 @@ export function buildLabels(P, options = {}) {
   // the wall is wrapped as one piece: on a phone it is scaled up to fill the
   // ground above the machine, and that scale belongs to the wall, not to each
   // sheet (the part's own transform is the assembly's)
-  out.push(part('tickets', 12, '', ['<g class="home-tag-wall">', ...tickets, '</g>']))
+  // The papers get their own group inside the wall: the net mounts a <foreignObject>
+// into the wall as well, and `getBBox()` on the wall would then include the net's
+// own canvas — the next measurement would grow with what it was measuring
+// (2026-11-05). `sheetBox()` and `fitWall()` both read this group instead.
+out.push(part('tickets', 12, '', ['<g class="home-tag-wall"><g class="home-tag-paper">', ...tickets, '</g></g>']))
 
   return out.join('')
 }

@@ -38,6 +38,9 @@ const SVG_NS = 'http://www.w3.org/2000/svg'
 const XHTML_NS = 'http://www.w3.org/1999/xhtml'
 
 const WALL = '.home-tag-wall'
+// the sheets alone: the net's own canvas is a sibling inside the wall, so
+// measuring the wall would count what it is about to draw
+const PAPER = '.home-tag-paper'
 const TICKET = '.home-ticket'
 const MODULE = '.home-module[data-module="tags"]'
 const GATHERED = 'is-gathered'
@@ -89,6 +92,15 @@ interface Node {
   r: number
   hub: boolean
   cap: number
+  /** the spiral slot's position, normalized to the net's frame (-1 … 1) */
+  nx: number
+  ny: number
+  /** how much the site leans on this tag, 0 … 1 (bridges are 0) */
+  weight: number
+  /** a bridge point stands for nothing: it is only somewhere for links to pass */
+  bridge: boolean
+  /** bridge points carry their own size jitter, so they are not one flat tier */
+  jitter: number
   /** the tag this node stands for, or null for a bridge point */
   label: string | null
   /**
@@ -214,7 +226,8 @@ export function startTagGraph(
   const sheets = [...wall.querySelectorAll<SVGGElement>(TICKET)]
   if (!sheets.length)
     return null
-  const paper = sheetBox(wall)
+  const paperGroup = wall.querySelector<SVGGElement>(PAPER) ?? wall
+  const paper = sheetBox(paperGroup)
   if (!(paper.w > 0 && paper.h > 0))
     return null
 
@@ -223,12 +236,19 @@ export function startTagGraph(
   // it keeps the paper's foot where it was. `fitWall()` measures the paper
   // alone (stage.client.ts), so a taller canvas cannot rescale the wall it is
   // drawn on.
-  const box = {
-    x: paper.x - (paper.w * (NET_GROW_X - 1)) / 2,
-    y: paper.y - paper.h * NET_RAISE,
-    w: paper.w * NET_GROW_X,
-    h: paper.h * NET_GROW_Y,
-  }
+  const frame = (sheet: { x: number, y: number, w: number, h: number }) => ({
+    x: sheet.x - (sheet.w * (NET_GROW_X - 1)) / 2,
+    y: sheet.y - sheet.h * NET_RAISE,
+    w: sheet.w * NET_GROW_X,
+    h: sheet.h * NET_GROW_Y,
+  })
+  // The wall is still being papered when the net is created — 29 sheets are stuck
+  // on over the first ~10 s — so its `getBBox()` reports the sheets in flight
+  // (132 × 127 against the 625 × 370 wall it becomes, measured 2026-11-05) and the
+  // net would be drawn into one corner of the wall. The frame is therefore taken
+  // again once the sheets land, at the gather below.
+  let paperBox = paper
+  let box = frame(paperBox)
 
   // The net is decorative, so it takes the budget its device can pay: a phone
   // gets fewer pixels and fewer frames than a desktop, and a phone that still
@@ -247,10 +267,14 @@ export function startTagGraph(
   const random = seeded(SEED)
   const uses = sheets.map(sheet => Number(sheet.dataset.uses) || 0)
   const heaviest = Math.max(1, ...uses)
-  const hubR = clamp(box.w / 52, 2.6, 6.4)
+  let hubR = clamp(box.w / 52, 2.6, 6.4)
+  let lineWidth = clamp(box.w / 700, 0.35, 1.2)
+  let midX = box.x + box.w / 2
+  let midY = box.y + box.h / 2
+  /** half the frame: the spiral is kept normalized and projected onto it */
+  let halfW = box.w / 2
+  let halfH = box.h / 2
   const nodes: Node[] = []
-  const midX = box.x + box.w / 2
-  const midY = box.y + box.h / 2
 
   // One sunflower spiral for the whole net. Sheets come first, heaviest first,
   // so the tags the site leans on most end up nearest the middle and the quiet
@@ -258,13 +282,10 @@ export function startTagGraph(
   // rows, no columns, no string of beads along the bottom.
   const bridges = Math.max(24, NODE_TARGET - sheets.length)
   const total = sheets.length + bridges
-  const onSpiral = (index: number): { x: number, y: number } => {
+  const onSpiral = (index: number): { nx: number, ny: number } => {
     const spread = Math.sqrt((index + 0.5) / total)
     const angle = index * GOLDEN
-    return {
-      x: midX + Math.cos(angle) * spread * (box.w / 2) * RIM_X,
-      y: midY + Math.sin(angle) * spread * (box.h / 2) * RIM_Y,
-    }
+    return { nx: Math.cos(angle) * spread * RIM_X, ny: Math.sin(angle) * spread * RIM_Y }
   }
 
   const ranked = sheets
@@ -302,11 +323,15 @@ export function startTagGraph(
   ranked.forEach(({ sheet, uses: carried }, index) => {
     const weight = carried / heaviest
     const hub = weight >= 0.5
-    const r = hub ? hubR * (0.7 + weight * 0.32) : hubR * (0.4 + weight * 0.28)
     nodes.push({
       ...onSpiral(tagSlots[index]),
-      r,
+      x: 0,
+      y: 0,
+      r: 0,
       hub,
+      bridge: false,
+      weight,
+      jitter: 0,
       cap: hub ? LINKS_HUB : LINKS_NODE,
       label: sheet.dataset.tag || sheet.textContent?.trim() || null,
       lag: index * 7,
@@ -333,8 +358,13 @@ export function startTagGraph(
     taken.add(slot)
     nodes.push({
       ...onSpiral(slot),
-      r: hubR * (0.26 + random() * 0.12),
+      x: 0,
+      y: 0,
+      r: 0,
       hub: false,
+      bridge: true,
+      weight: 0,
+      jitter: random() * 0.12,
       cap: LINKS_NODE,
       label: null,
       lag: 260 + random() * 240,
@@ -350,6 +380,28 @@ export function startTagGraph(
       cy: 0,
     })
   }
+
+  /**
+   * Project the normalized spiral onto the wall's frame and size the dots from
+   * it. The frame moves exactly once per visit — re-measured when the sheets have
+   * landed — so this runs again there and no other part of the net has to know.
+   */
+  const applyLayout = (): void => {
+    midX = box.x + box.w / 2
+    midY = box.y + box.h / 2
+    halfW = box.w / 2
+    halfH = box.h / 2
+    hubR = clamp(box.w / 52, 2.6, 6.4)
+    lineWidth = clamp(box.w / 700, 0.35, 1.2)
+    for (const node of nodes) {
+      node.x = midX + node.nx * halfW
+      node.y = midY + node.ny * halfH
+      node.r = node.bridge
+        ? hubR * (0.26 + node.jitter)
+        : hubR * (node.hub ? 0.7 + node.weight * 0.32 : 0.4 + node.weight * 0.28)
+    }
+  }
+  applyLayout()
 
   mark('net:nodes')
   // links: three nearest each, so no point floats alone, then out to the target
@@ -392,6 +444,13 @@ export function startTagGraph(
   holder.setAttribute('aria-hidden', 'true')
   holder.appendChild(canvas)
   wall.appendChild(holder)
+  /** keep the canvas's window in the wall's own space, whatever the frame is */
+  const fitHolder = (): void => {
+    holder.setAttribute('x', box.x.toFixed(2))
+    holder.setAttribute('y', box.y.toFixed(2))
+    holder.setAttribute('width', box.w.toFixed(2))
+    holder.setAttribute('height', box.h.toFixed(2))
+  }
   // the counts are on the element so a reader of the page can see what the wall
   // became, and so the acceptance criteria of the issue are checkable without
   // reaching into the module (see the verification table in the PR)
@@ -425,7 +484,7 @@ export function startTagGraph(
   let inkPillFill = tone('background', 0.97)
   let inkPillBorder = tone('secondary', 0.4)
   let inkPillText = tone('primary', 0.95)
-  const lineWidth = clamp(box.w / 700, 0.35, 1.2)
+
 
   // The links are the expensive half of a frame — 250 segments is a lot of
   // stroking for lines drawn at 10% — and the nodes drift at most a couple of
@@ -647,6 +706,25 @@ export function startTagGraph(
     draw()
   }
 
+  /**
+   * Take the wall's frame again and project the net onto it. Only worth a
+   * `getBBox()` when the wall has actually been papered — which is the gather,
+   * the moment the last sheet is pressed on and the gather animation has not yet
+   * moved it. Called once per visit, so the cost is one layout flush.
+   */
+  const remeasure = (): void => {
+    const measured = sheetBox(paperGroup)
+    if (Math.abs(measured.x - paperBox.x) < 0.5 && Math.abs(measured.y - paperBox.y) < 0.5
+      && Math.abs(measured.w - paperBox.w) < 0.5 && Math.abs(measured.h - paperBox.h) < 0.5) {
+      return
+    }
+    paperBox = measured
+    box = frame(paperBox)
+    applyLayout()
+    fitHolder()
+    resize(true)
+  }
+
   // The drift: two harmonics per node, on periods that share no neat ratio, so
   // no node retraces its own path and the net never settles into a pattern you
   // can predict by watching it. The second harmonic is the faster, smaller one —
@@ -736,8 +814,10 @@ export function startTagGraph(
       holder.setAttribute('data-frames', String(frames))
     if (!gathered && elapsed >= gatherAt) {
       gathered = true
-      // the sheets have stopped moving and the gather has not started: the only
-      // instant a re-fit measures their real seats rather than the entry's
+      // the wall is only papered now, and the net was laid out over a frame taken
+      // while the sheets were still in flight: take it again before the net shows
+      remeasure()
+      // the sheets are at rest here, which is also the right beat for a re-fit
       onSettled?.()
       if (!reduceMotion)
         module.classList.add(GATHERED)
@@ -864,7 +944,8 @@ export function startTagGraph(
   if (reduceMotion) {
     // the settled picture: gathered sheets, links at their final strength
     gathered = true
-    // no entry animation under reduced motion, so the sheets are already at rest
+    // nothing flies under reduced motion, but confirming the frame is one read
+    remeasure()
     onSettled?.()
     module.classList.add(GATHERED)
     place(0)

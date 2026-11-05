@@ -441,7 +441,10 @@ function fitWall(s: State): void {
   if (!stage.width || !vb.width)
     return
   const px = Math.min(stage.width / vb.width, stage.height / vb.height)
-  const box = wall.getBBox()
+  // the sheets, not the wall: the net's canvas is a sibling inside the wall, so a
+  // wall measurement would grow every time the net was drawn over it
+  const paperGroup = wall.querySelector<SVGGElement>('.home-tag-paper') ?? wall
+  const box = paperGroup.getBBox()
   if (!box.width)
     return
   // One read, and the width is the paper's: the canvas the net lays over the wall
