@@ -12,21 +12,23 @@
  * they are the reasons for the shape of the code rather than incidental
  * detail:
  *
- * 1. **The canvas is a `<foreignObject>` inside `.home-tag-wall`.** It then
- *    shares the wall's user space and the wall's own CSS scale, which
- *    `fitWall()` writes for a phone (up to 2.2x about the foot). A canvas
- *    positioned in the page would have to re-derive all of that on every
- *    resize, rotation and swap; here it is free, and it inherits the stage's
- *    feather mask and the zoom for the same reason.
- * 2. **The sheets give the net its box, not its seats.** `getBBox()` over the
- *    `.home-ticket`s is measured once to learn where the wall's paper sits and
- *    how big it is; the nodes themselves are then laid on a sunflower spiral
- *    inside an ellipse drawn over that box, which is what makes the net a shape
- *    instead of the rectangle the sheets were dealt into. What the build does
- *    give the net is the *weights* (how many posts carry each tag) as
- *    `data-uses`, and the full tag name as `data-tag` for the hover label.
- * 3. **Nothing is drawn per node per frame beyond a circle.** The net is 90
- *    nodes and ~280 links; the loop is capped at 30 fps and stops on its own
+ * 1. **The canvas is a `<foreignObject>` inside `.home-tag-wall`, beside the
+ *    `.home-tag-paper` group.** It then shares the wall's user space and the
+ *    wall's own CSS scale, which `fitWall()` writes for a phone (up to 2.2x
+ *    about the foot). A canvas positioned in the page would have to re-derive
+ *    all of that on every resize, rotation and swap; here it is free, and it
+ *    inherits the stage's feather mask and the zoom for the same reason.
+ * 2. **The sheets give the net its box, not its seats.** `getBBox()` over
+ *    `.home-tag-paper` is measured twice: once when the net is created, and
+ *    again at the gather, because the wall is still being papered over the
+ *    first ~10 s and the sheets in flight are not where they land. The nodes
+ *    are laid on a sunflower spiral inside an ellipse drawn over that box,
+ *    which is what makes the net a shape instead of the rectangle the sheets
+ *    were dealt into. What the build does give the net is the *weights* (how
+ *    many posts carry each tag) as `data-uses`, and the full tag name as
+ *    `data-tag` for the hover label.
+ * 3. **Nothing is drawn per node per frame beyond a circle.** The net is 38
+ *    nodes and ~68 links; the loop is capped at 30 fps and stops on its own
  *    when the stage scrolls away or the tab is hidden, because a decorative
  *    net that keeps a phone awake is a bug, not a feature.
  *
@@ -80,12 +82,13 @@ const RATIO_CAP_COMPACT = 2
 const LINKS = 3
 const LINKS_HUB = 8
 const LINKS_NODE = 6
-/** the issue asks for a net, not a constellation: ~250 links at 90 nodes */
+/** a net, not a constellation: ~68 links over 38 nodes, ~3–4 per node */
 const EDGE_TARGET = 68
-/** nodes when the site is quiet: below this the net reads as a sketch */
-// A knowledge net, not a star field: ninety dots on a 645×305 wall reads as
-// visual noise (a reader called it 密集恐惧 on 2026-11-05). Every tag still gets
-// its own node — the count that moves is the filler, not the labels.
+/**
+ * The wall's node budget. A knowledge net, not a star field: the previous ninety
+ * read as visual noise on the wall (a reader called it 密集恐惧 on 2026-11-05).
+ * Every tag still gets its own node — what moves is the filler.
+ */
 const NODE_TARGET = 38
 const SEED = 0x9E3779B9
 
@@ -134,6 +137,13 @@ interface Node {
  */
 const RIM_X = 0.97
 const RIM_Y = 0.97
+/**
+ * How far the papered sheets' frame may move and still be the frame the net was
+ * already laid out against, in stage units. Below this the dots would not
+ * visibly shift; the value only has to absorb sub-pixel layout noise between two
+ * `sheetBox()` calls.
+ */
+const FRAME_EPSILON = 0.5
 const NET_GROW_X = 0.92
 const NET_RAISE = 0.34
 const NET_GROW_Y = 1.34
@@ -171,18 +181,20 @@ function tone(name: string, alpha: number): string {
 }
 
 /**
- * The box the sheets occupy, in the wall's own user space.
+ * The box the papered sheets occupy, in the wall's own user space.
  *
- * One `getBBox()` on the wall, not one per sheet: `.home-tag-wall` contains the
- *  tickets and nothing else, and every `getBBox()` flushes layout for the whole
- *  SVG subtree. Twenty-nine of them twice per device swap was most of the second
- *  of frozen main thread a mid-range phone showed when the tag machine came up.
+ * One `getBBox()` on the group, not one per sheet: `.home-tag-paper` holds the
+ * tickets and nothing else, and every `getBBox()` flushes layout for the whole
+ * SVG subtree. Twenty-nine of them twice per device swap was most of the second
+ * of frozen main thread a mid-range phone showed when the tag machine came up.
  *
- * The canvas the net appends later is narrower than the paper (0.92x) and shares
- *  its foot, so it cannot move this box either.
+ * Callers pass `.home-tag-paper`, never `.home-tag-wall`: the net's own
+ * `<foreignObject>` becomes a sibling of that group inside the wall, so measuring
+ * the wall would fold the canvas into the box the canvas is about to be drawn in.
+ * `startTagGraph()` therefore refuses to run without the group.
  */
-function sheetBox(wall: SVGGElement): { x: number, y: number, w: number, h: number } {
-  const b = wall.getBBox()
+function sheetBox(paper: SVGGElement): { x: number, y: number, w: number, h: number } {
+  const b = paper.getBBox()
   return { x: b.x, y: b.y, w: b.width, h: b.height }
 }
 
@@ -229,7 +241,13 @@ export function startTagGraph(
   const sheets = [...wall.querySelectorAll<SVGGElement>(TICKET)]
   if (!sheets.length)
     return null
-  const paperGroup = wall.querySelector<SVGGElement>(PAPER) ?? wall
+  const paperGroup = wall.querySelector<SVGGElement>(PAPER)
+  // No paper group means the markup predates the split. Bail rather than measure
+  // the wall: by the time `remeasure()` runs, the wall also contains the canvas
+  // this function appended, so measuring it would fold the canvas into the frame
+  // the canvas is drawn in — the very bug this split fixed (see the header).
+  if (!paperGroup)
+    return null
   const paper = sheetBox(paperGroup)
   if (!(paper.w > 0 && paper.h > 0))
     return null
@@ -246,10 +264,11 @@ export function startTagGraph(
     h: sheet.h * NET_GROW_Y,
   })
   // The wall is still being papered when the net is created — 29 sheets are stuck
-  // on over the first ~10 s — so its `getBBox()` reports the sheets in flight
-  // (132 × 127 against the 625 × 370 wall it becomes, measured 2026-11-05) and the
-  // net would be drawn into one corner of the wall. The frame is therefore taken
-  // again once the sheets land, at the gather below.
+  // on over the first ~10 s — so `getBBox()` over `.home-tag-paper` (which returns
+  // the wall's own user units, before its CSS scale) reports a small cluster of
+  // sheets still near the slot instead of the wall's full spread. Laid out over
+  // that cluster the net would be drawn into one corner of the wall, so the frame
+  // is taken again once the sheets land, at the gather below.
   let paperBox = paper
   let box = frame(paperBox)
 
@@ -387,9 +406,9 @@ export function startTagGraph(
   }
 
   /**
-   * Project the normalized spiral onto the wall's frame and size the dots from
-   * it. The frame moves exactly once per visit — re-measured when the sheets have
-   * landed — so this runs again there and no other part of the net has to know.
+   * Project the normalized spiral onto the papered sheets' frame and size the dots
+   * from it. That frame moves exactly once per visit — re-measured when the sheets
+   * have landed — so this runs again there and no other part of the net has to know.
    */
   const applyLayout = (): void => {
     midX = box.x + box.w / 2
@@ -442,10 +461,6 @@ export function startTagGraph(
   canvas.height = Math.max(1, Math.round(box.h * ratio))
   const holder = document.createElementNS(SVG_NS, 'foreignObject')
   holder.setAttribute('class', GRAPH)
-  holder.setAttribute('x', box.x.toFixed(2))
-  holder.setAttribute('y', box.y.toFixed(2))
-  holder.setAttribute('width', box.w.toFixed(2))
-  holder.setAttribute('height', box.h.toFixed(2))
   holder.setAttribute('aria-hidden', 'true')
   holder.appendChild(canvas)
   wall.appendChild(holder)
@@ -456,6 +471,7 @@ export function startTagGraph(
     holder.setAttribute('width', box.w.toFixed(2))
     holder.setAttribute('height', box.h.toFixed(2))
   }
+  fitHolder()
   // the counts are on the element so a reader of the page can see what the wall
   // became, and so the acceptance criteria of the issue are checkable without
   // reaching into the module (see the verification table in the PR)
@@ -490,8 +506,7 @@ export function startTagGraph(
   let inkPillBorder = tone('secondary', 0.4)
   let inkPillText = tone('primary', 0.95)
 
-
-  // The links are the expensive half of a frame — 250 segments is a lot of
+  // The links are the expensive half of a frame — 68 segments is a lot of
   // stroking for lines drawn at 10% — and the nodes drift at most a couple of
   // units a second, so an edge that is three frames stale is off by a tenth of
   // a pixel. They are therefore baked into an off-screen layer every third
@@ -581,8 +596,8 @@ export function startTagGraph(
   const LABEL_PX_MAX = 18
 
   /**
-   * The hovered tag: a ring so the node is findable among ninety others, then
-   *  the tag itself in a pill that flips sides rather than leaving the wall.
+   * The hovered tag: a ring so the node is findable among the net's other dots,
+   *  then the tag itself in a pill that flips sides rather than leaving the wall.
    */
   const drawHover = (): void => {
     const node = nodes[hovered]
@@ -636,10 +651,10 @@ export function startTagGraph(
       ctx.drawImage(layer, box.x, box.y, box.w, box.h)
       ctx.globalAlpha = 1
     }
-    // Ninety separate fills is the frame's real cost on a slow phone (each fill
-    // is a path submission of its own). Once every node has finished its entry
-    // ramp they all share one alpha, so they collapse into one path per ink —
-    // two fills instead of ninety. During the ramp they still need their own.
+    // One fill per node is the frame's real cost on a slow phone (each fill is a
+    // path submission of its own). Once every node has finished its entry ramp
+    // they all share one alpha, so they collapse into one path per ink — two
+    // fills instead of one per node. During the ramp they still need their own.
 
     if (elapsed >= settledAt) {
       for (const [ink, hubs] of [[nodeInk, false], [hubInk, true]] as const) {
@@ -712,15 +727,15 @@ export function startTagGraph(
   }
 
   /**
-   * Take the wall's frame again and project the net onto it. Only worth a
-   * `getBBox()` when the wall has actually been papered — which is the gather,
-   * the moment the last sheet is pressed on and the gather animation has not yet
-   * moved it. Called once per visit, so the cost is one layout flush.
+   * Take the papered sheets' frame again and project the net onto it. Only worth
+   * a `getBBox()` once they have stopped moving — which is the gather, the moment
+   * the last sheet is pressed on and the gather animation has not yet stirred
+   * them. Called once per visit, so the cost is one layout flush.
    */
   const remeasure = (): void => {
     const measured = sheetBox(paperGroup)
-    if (Math.abs(measured.x - paperBox.x) < 0.5 && Math.abs(measured.y - paperBox.y) < 0.5
-      && Math.abs(measured.w - paperBox.w) < 0.5 && Math.abs(measured.h - paperBox.h) < 0.5) {
+    if (Math.abs(measured.x - paperBox.x) < FRAME_EPSILON && Math.abs(measured.y - paperBox.y) < FRAME_EPSILON
+      && Math.abs(measured.w - paperBox.w) < FRAME_EPSILON && Math.abs(measured.h - paperBox.h) < FRAME_EPSILON) {
       return
     }
     paperBox = measured
@@ -885,8 +900,6 @@ export function startTagGraph(
     else
       holder.removeAttribute('data-hover')
     canvas.style.cursor = 'default'
-    // with motion reduced the loop is not running, so the change has to be
-    // painted here or the label would never appear at all
     // with motion reduced, or once the floor budget froze the net, the loop is
     // not running — paint here or the label never appears (and a ring could stay
     // on screen after the pointer leaves)

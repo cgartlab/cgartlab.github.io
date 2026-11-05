@@ -40,6 +40,8 @@ const BOOT_DEVICE = 1200
 const BOOT_TOTAL = 4000
 /** how long the intro will wait for the four fetched machines before playing anyway */
 const PRELOAD_DEADLINE = 2500
+/** how far the stage may change size and still count as the same fit, in px */
+const FIT_EPSILON = 0.5
 /** a single fragment may not hold the whole stage hostage */
 const PRELOAD_TIMEOUT = 8000
 /** the projector threads the film and strikes the lamp before the reel rolls:
@@ -377,7 +379,9 @@ function startGraph(s: State): void {
     // against 92.4 at rest, measured 2026-11-05) — so it happens here, once they
     // have stopped and before the gather moves them again.
     const stage = s.stage.getBoundingClientRect()
-    if (s.fitSize && (Math.abs(stage.width - s.fitSize.w) > 0.5 || Math.abs(stage.height - s.fitSize.h) > 0.5))
+    const moved = s.fitSize
+      && (Math.abs(stage.width - s.fitSize.w) > FIT_EPSILON || Math.abs(stage.height - s.fitSize.h) > FIT_EPSILON)
+    if (moved)
       fitWall(s)
   })
 }
@@ -443,7 +447,9 @@ function fitWall(s: State): void {
   const px = Math.min(stage.width / vb.width, stage.height / vb.height)
   // the sheets, not the wall: the net's canvas is a sibling inside the wall, so a
   // wall measurement would grow every time the net was drawn over it
-  const paperGroup = wall.querySelector<SVGGElement>('.home-tag-paper') ?? wall
+  const paperGroup = wall.querySelector<SVGGElement>('.home-tag-paper')
+  if (!paperGroup)
+    return
   const box = paperGroup.getBBox()
   if (!box.width)
     return
