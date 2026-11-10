@@ -38,7 +38,7 @@ jobs:
           assignees: ${{ github.event.pull_request.user.login }}
 
       - name: Add to project
-        uses: actions/add-to-project@v2.0.0
+        uses: actions/add-to-project@v2.0.1
         with:
           project-url: https://github.com/users/cgartlab/projects/3
           github-token: ${{ secrets.GH_PROJECT_PAT }}
