@@ -16,9 +16,9 @@ lang: zh
 ![CGArtLab FUI Data 插件封面](../_images/CGArtLab-FUI-Data-1794413956618.png)
 
 > **公测版下载**（Windows · After Effects 2023+ · v0.2.0）
->
-> [下载 CGArtLab FUI Data 0.2.0 公测版](/downloads/CGArtLab-FUI-Data-0.2.0-beta-win.zip)
->
+
+<a class="fui-download-btn" href="/downloads/CGArtLab-FUI-Data-0.2.0-beta-win.zip">下载 CGArtLab FUI Data 0.2.0 公测版</a>
+
 > 安装：完全退出 After Effects → 解压后双击 `install.cmd` → 重启 AE → 菜单「窗口 > 扩展 > CGArtLab FUI Data」打开。
 >
 > 试用：安装后 **14 天内全功能免费**（34 类数据 / 173 单位 / 批量应用）；到期后自动收回为免费 4 类（纯文本、通用数字、温度、百分比）。

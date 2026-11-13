@@ -292,6 +292,29 @@ lite-youtube > .lty-playbtn {
 	aspect-ratio: 16 / 9;
 	width: 100%;
 }
+
+/* 公测版下载按钮（主题自适应，亮/暗通用） */
+.fui-download-btn {
+	display: inline-block;
+	margin: 0.2em 0 0.7em;
+	padding: 0.62em 1.35em;
+	border-radius: 10px;
+	background: oklch(var(--un-preset-theme-colors-primary));
+	color: oklch(var(--un-preset-theme-colors-background));
+	font-weight: 700;
+	font-size: 1.02rem;
+	line-height: 1.4;
+	text-decoration: none;
+	border: 1px solid color-mix(in srgb, oklch(var(--un-preset-theme-colors-primary)) 60%, transparent);
+	box-shadow: 0 2px 10px color-mix(in srgb, oklch(var(--un-preset-theme-colors-primary)) 22%, transparent);
+	transition: transform 0.15s ease, filter 0.15s ease, box-shadow 0.15s ease;
+}
+.fui-download-btn:hover {
+	transform: translateY(-1px);
+	filter: brightness(1.06);
+	box-shadow: 0 4px 16px color-mix(in srgb, oklch(var(--un-preset-theme-colors-primary)) 30%, transparent);
+}
+.fui-download-btn:active { transform: translateY(0); }
 .spotify-embed {
 	width: 100%;
 	border-radius: 0.75rem;

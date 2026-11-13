@@ -16,9 +16,9 @@ lang: en
 ![CGArtLab FUI Data plugin cover](../_images/CGArtLab-FUI-Data-1794413956618.png)
 
 > **Public beta** (Windows · After Effects 2023+ · v0.2.0)
->
-> [Download CGArtLab FUI Data 0.2.0 beta](/downloads/CGArtLab-FUI-Data-0.2.0-beta-win.zip)
->
+
+<a class="fui-download-btn" href="/downloads/CGArtLab-FUI-Data-0.2.0-beta-win.zip">Download CGArtLab FUI Data 0.2.0 beta</a>
+
 > Install: quit After Effects, unzip and run `install.cmd`, restart AE, then open Window > Extensions > CGArtLab FUI Data.
 >
 > Trial: all features are free for **14 days** (34 types / 173 units / batch apply); after that it falls back to the free 4 types (Plain Text, Number, Temperature, Percentage).
