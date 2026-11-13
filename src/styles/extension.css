@@ -293,27 +293,32 @@ lite-youtube > .lty-playbtn {
 	width: 100%;
 }
 
-/* 公测版下载按钮：橄榄绿（highlight 强调色）+ 亮色黑字 / 暗色白字 */
+/* 公测版下载按钮：橄榄绿；亮色=较亮橄榄+黑字，暗色=较深橄榄+白字（都保证可读） */
 .fui-download-btn {
 	display: inline-block;
 	margin: 0.2em 0 0.7em;
 	padding: 0.62em 1.35em;
 	border-radius: 10px;
-	background: oklch(var(--un-preset-theme-colors-highlight));
+	background: oklch(80% 0.16 138);
 	color: oklch(0% 0 0);
 	font-weight: 700;
 	font-size: 1.02rem;
 	line-height: 1.4;
 	text-decoration: none;
-	border: 1px solid color-mix(in srgb, oklch(var(--un-preset-theme-colors-highlight)) 72%, oklch(0% 0 0));
-	box-shadow: 0 2px 10px color-mix(in srgb, oklch(var(--un-preset-theme-colors-highlight)) 28%, transparent);
+	border: 1px solid color-mix(in srgb, oklch(80% 0.16 138) 70%, oklch(0% 0 0));
+	box-shadow: 0 2px 10px color-mix(in srgb, oklch(63% 0.14 138) 32%, transparent);
 	transition: transform 0.15s ease, filter 0.15s ease, box-shadow 0.15s ease;
 }
-.dark .fui-download-btn { color: oklch(100% 0 0); }
+.dark .fui-download-btn {
+	background: oklch(45% 0.10 138);
+	color: oklch(100% 0 0);
+	border-color: color-mix(in srgb, oklch(45% 0.10 138) 60%, oklch(100% 0 0));
+	box-shadow: 0 2px 10px color-mix(in srgb, oklch(0% 0 0) 40%, transparent);
+}
 .fui-download-btn:hover {
 	transform: translateY(-1px);
 	filter: brightness(1.05);
-	box-shadow: 0 4px 16px color-mix(in srgb, oklch(var(--un-preset-theme-colors-highlight)) 36%, transparent);
+	box-shadow: 0 4px 16px color-mix(in srgb, oklch(63% 0.14 138) 40%, transparent);
 }
 .fui-download-btn:active { transform: translateY(0); }
 .spotify-embed {
