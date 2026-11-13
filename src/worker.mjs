@@ -48,7 +48,7 @@ function applySecurityHeaders(resp) {
 			"img-src 'self' https: data:",
 			"font-src 'self' https: data:",
 			"connect-src 'self' https://giscus.app https://*.giscus.app https://www.google-analytics.com https://analytics.google.com https://cloud.umami.is https://*.umami.is https://api.web3forms.com https://api.github.com",
-			"frame-src 'self' https://giscus.app https://*.giscus.app",
+			"frame-src 'self' https://giscus.app https://*.giscus.app https://player.bilibili.com https://www.youtube.com https://www.youtube-nocookie.com https://open.spotify.com https://codepen.io https://platform.twitter.com",
 			"base-uri 'self'",
 			"form-action 'self' https://api.web3forms.com https://giscus.app",
 		].join('; '),
