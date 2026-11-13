@@ -321,6 +321,13 @@ lite-youtube > .lty-playbtn {
 	box-shadow: 0 4px 16px color-mix(in srgb, oklch(63% 0.14 138) 40%, transparent);
 }
 .fui-download-btn:active { transform: translateY(0); }
+
+/* 覆盖正文（.heti）链接默认下划线，按钮不加下划线 */
+.heti a.fui-download-btn,
+.heti a.fui-download-btn:hover,
+.heti a.fui-download-btn:focus {
+	text-decoration: none;
+}
 .spotify-embed {
 	width: 100%;
 	border-radius: 0.75rem;
