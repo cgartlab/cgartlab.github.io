@@ -328,6 +328,32 @@ lite-youtube > .lty-playbtn {
 .heti a.fui-download-btn:focus {
 	text-decoration: none;
 }
+
+/* 购买授权码按钮：次级描边样式（橄榄绿） */
+.fui-buy-btn {
+	display: inline-block;
+	margin: 0.2em 0 0.7em 0.6em;
+	padding: 0.62em 1.35em;
+	border-radius: 10px;
+	background: transparent;
+	color: oklch(var(--un-preset-theme-colors-highlight));
+	font-weight: 700;
+	font-size: 1.02rem;
+	line-height: 1.4;
+	text-decoration: none;
+	border: 1px solid oklch(var(--un-preset-theme-colors-highlight));
+	transition: transform 0.15s ease, background 0.15s ease;
+}
+.fui-buy-btn:hover {
+	transform: translateY(-1px);
+	background: color-mix(in srgb, oklch(var(--un-preset-theme-colors-highlight)) 14%, transparent);
+}
+.fui-buy-btn:active { transform: translateY(0); }
+.heti a.fui-buy-btn,
+.heti a.fui-buy-btn:hover,
+.heti a.fui-buy-btn:focus {
+	text-decoration: none;
+}
 .spotify-embed {
 	width: 100%;
 	border-radius: 0.75rem;
