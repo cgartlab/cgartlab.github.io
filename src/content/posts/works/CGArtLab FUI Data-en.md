@@ -15,9 +15,9 @@ lang: en
 
 ![CGArtLab FUI Data plugin cover](../_images/CGArtLab-FUI-Data-1794413956618.png)
 
-> **Download** (Windows · After Effects 2023+ · v0.3.0)
+> **Download** (Windows · After Effects 2023+ · latest stable)
 
-<a class="fui-download-btn" href="/downloads/CGArtLab-FUI-Data-0.3.0-win.zip">Download CGArtLab FUI Data 0.3.0 (Windows)</a> <a class="fui-buy-btn" href="https://item.taobao.com/item.htm?abbucket=13&id=1100985164400&mi_id=0000znNlw8x027Sj1K4d307mVGzTIceBKtLjqyJaFJqblRE&ns=1&skuId=6321972039787&spm=a21n57.1.hoverItem.10&utparam=%7B%22aplus_abtest%22%3A%2218a5645d819b3882b5a982030f95860e%22%7D&xxc=taobaoSearch">Buy license</a>
+<a class="fui-download-btn" href="/downloads/CGArtLab-FUI-Data-win.zip">Download CGArtLab FUI Data (Windows · latest stable)</a> <a class="fui-buy-btn" href="https://item.taobao.com/item.htm?abbucket=13&id=1100985164400&mi_id=0000znNlw8x027Sj1K4d307mVGzTIceBKtLjqyJaFJqblRE&ns=1&skuId=6321972039787&spm=a21n57.1.hoverItem.10&utparam=%7B%22aplus_abtest%22%3A%2218a5645d819b3882b5a982030f95860e%22%7D&xxc=taobaoSearch">Buy license</a>
 
 > Install: fully quit After Effects → unzip and double-click `install.cmd` → restart AE → open it from Window > Extensions > CGArtLab FUI Data.
 >

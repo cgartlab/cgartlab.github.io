@@ -203,6 +203,27 @@ export default {
 				return serveNotFound(env, request);
 			}
 
+
+			// 1e. FUI 下载链接统一指向最新稳定版：
+			//     历史/未来版本化 zip（0.2.0-beta、0.3.0…）一律 302 到固定文件名，
+			//     这样任何已经公开出去的旧链接都不会停留在旧版本。
+			if (
+				pathname.startsWith("/downloads/CGArtLab-FUI-Data-") &&
+				pathname.endsWith(".zip") &&
+				pathname !== "/downloads/CGArtLab-FUI-Data-win.zip"
+			) {
+				const target = new URL(
+					"/downloads/CGArtLab-FUI-Data-win.zip",
+					url,
+				);
+				const redirect = Response.redirect(target.toString(), 302);
+				const headers = new Headers(redirect.headers);
+				headers.set("Cache-Control", "public, max-age=300");
+				return applySecurityHeaders(
+					new Response(null, { status: 302, headers }),
+				);
+			}
+
 			// 2. Trailing slash enforcement: redirect paths without trailing slash (301)
 			//    Skip file-like paths (containing a dot in the last segment)
 			if (
@@ -295,6 +316,18 @@ export default {
 					"public, max-age=86400, stale-while-revalidate=3600",
 				);
 			}
+
+			// 稳定版下载别名与版本清单 → 5 分钟，保证发版后尽快生效
+			else if (
+				assetPath === "/downloads/CGArtLab-FUI-Data-win.zip" ||
+				assetPath === "/downloads/CGArtLab-FUI-Data.json"
+			) {
+				response.headers.set(
+					"Cache-Control",
+					"public, max-age=300, must-revalidate",
+				);
+			}
+
 			// HTML → 浏览器 1h 新鲜 + 10min SWR，边缘 1h 新鲜 + 10min SWR
 			// 目录页（/、/en/、/about/ 等）的 assetPath 以 / 结尾，需同时匹配 .html 和 /
 			else if (assetPath.endsWith(".html") || assetPath.endsWith("/")) {

@@ -1,0 +1,10 @@
+{
+  "product": "CGArtLab FUI Data",
+  "channel": "stable",
+  "version": "0.3.0",
+  "file": "/downloads/CGArtLab-FUI-Data-win.zip",
+  "size": 138604,
+  "sha256": "9e8301eab61fe34fb3c5fa38d19843f284d4275fffec23beba1fa6774307b659",
+  "publishedAt": "2026-11-14T17:55:44.139+00:00",
+  "notes": "所有对外下载链接都应使用 file 字段；版本化文件名仅作归档，访问会被重定向到最新稳定版。"
+}

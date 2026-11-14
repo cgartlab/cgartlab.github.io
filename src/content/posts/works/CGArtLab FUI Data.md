@@ -15,9 +15,9 @@ lang: zh
 
 ![CGArtLab FUI Data 插件封面](../_images/CGArtLab-FUI-Data-1794413956618.png)
 
-> **下载**（Windows · After Effects 2023+ · v0.3.0）
+> **下载**（Windows · After Effects 2023+ · 最新稳定版）
 
-<a class="fui-download-btn" href="/downloads/CGArtLab-FUI-Data-0.3.0-win.zip">下载 CGArtLab FUI Data 0.3.0（Windows）</a> <a class="fui-buy-btn" href="https://item.taobao.com/item.htm?abbucket=13&id=1100985164400&mi_id=0000znNlw8x027Sj1K4d307mVGzTIceBKtLjqyJaFJqblRE&ns=1&skuId=6321972039787&spm=a21n57.1.hoverItem.10&utparam=%7B%22aplus_abtest%22%3A%2218a5645d819b3882b5a982030f95860e%22%7D&xxc=taobaoSearch">购买授权码</a>
+<a class="fui-download-btn" href="/downloads/CGArtLab-FUI-Data-win.zip">下载 CGArtLab FUI Data（Windows · 最新稳定版）</a> <a class="fui-buy-btn" href="https://item.taobao.com/item.htm?abbucket=13&id=1100985164400&mi_id=0000znNlw8x027Sj1K4d307mVGzTIceBKtLjqyJaFJqblRE&ns=1&skuId=6321972039787&spm=a21n57.1.hoverItem.10&utparam=%7B%22aplus_abtest%22%3A%2218a5645d819b3882b5a982030f95860e%22%7D&xxc=taobaoSearch">购买授权码</a>
 
 > 安装：完全退出 After Effects → 解压后双击 `install.cmd` → 重启 AE → 菜单「窗口 > 扩展 > CGArtLab FUI Data」打开。
 >
