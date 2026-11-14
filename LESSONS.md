@@ -55,6 +55,24 @@
 
 ## 构建与部署
 
+### CI 连红先看失败的是哪一步，audit 失败不等于构建坏了
+
+- 失误：main 自 2026-11-14 起连续 7 次 CI 失败，全都是 `pnpm audit --prod` 因新披露的 astro 漏洞
+  （GHSA-r3h5-4585-7x3w，受影响 <=7.4.6，修补 7.4.7）把后面的 `pnpm build` / `check-columns` /
+  `verify-feed` / `sync-docs:check` 全部跳过，看上去像构建坏了 → 规则：先读失败步骤名，
+  `Audit dependencies` 红就是依赖钉版问题（改 `package.json` 或 `overrides` + lockfile）；
+  并且**被跳过的步骤等于没验过**，修完 audit 必须自己把 build、verify-feed、sync-docs:check 跑一遍
+  （这次正是靠补跑才发现 DOC-FACTS 已经过时，合了 audit 还会再红一次）
+
+### 安全修补自己精确钉版，别让 dependabot 重算 lockfile
+
+- 失误：dependabot 的 astro 7.4.5→7.4.7 PR 自己 CI 也红：它重算的 lockfile 带进
+  `postcss@8.5.33`、`mdast-util-to-hast@13.2.2`，发布不足 24 小时，被 pnpm 的
+  `minimumReleaseAge`（默认 1440 分钟）判为 `ERR_PNPM_MINIMUM_RELEASE_AGE_VIOLATION`；
+  而 `^7.4.7` 又会解析到 7.4.12（换掉编译器与 Vite 插件绑定，lockfile +700 行）
+  → 规则：安全修补写**精确版本**（`"astro": "7.4.7"`）并本机 `pnpm install`——本机同样受
+  24 小时策略约束，生成的 lockfile 天然合规；一次 PR 只做一件事，工具链换代另开 PR 验证
+
 ### `trailingSlash: 'always'` 不可改
 - 失误：改动 trailingSlash 导致路由 404/重定向混乱 → 规则：`astro.config.ts` 的 `trailingSlash: 'always'` 属硬约束（见 AGENTS.md）
 
