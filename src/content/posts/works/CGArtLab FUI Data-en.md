@@ -122,6 +122,8 @@ Note: the plugin doesn't save the project, and Ctrl+Z can't undo a batch change 
 
 The current build gives you a 7-day full-feature trial: 34 data types, 173 units, and everything shown in the video; when it ends it falls back to the free 4 types (Plain Text, Number, Temperature, Percentage).
 
+For exactly what the licensing flow uploads, see the "Authorization Data of CGArtLab FUI Data" section of the [Privacy Policy](/en/privacy/); the license and refund summary is on the same page.
+
 The commercial version is available now — [buy here](https://item.taobao.com/item.htm?abbucket=13&id=1100985164400&mi_id=0000znNlw8x027Sj1K4d307mVGzTIceBKtLjqyJaFJqblRE&ns=1&skuId=6321972039787&spm=a21n57.1.hoverItem.10&utparam=%7B%22aplus_abtest%22%3A%2218a5645d819b3882b5a982030f95860e%22%7D&xxc=taobaoSearch) for a lifetime license, usable on up to two computers, with lifetime updates; the early-bird price for the first 100 is ¥59, then ¥99.
 
 ## Some limits and known issues

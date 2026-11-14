@@ -471,18 +471,22 @@ Vite 加载 `astro.config.ts` 时会把配置导入图里的依赖全部内联�
 | 兼容日期 | `2026-05-02` + `nodejs_compat` |
 | 可观测性 | 已启用 |
 | 路由 | `cgartlab.com`, `www.cgartlab.com` (custom_domain) |
-| Cron 触发 | `*/15 * * * *` (Telegram 推送) ※ |
+| Cron 触发 | `*/15 * * * *` (Telegram 推送) · `*/5 * * * *` (可用性监控) ※ |
 | KV 绑定 | `TG_STATE` (Telegram 推送去重状态) ※ |
 | 创建 / 最后修改 | 2026-07-12 / 2026-07-13 |
 
 ※ 定义于 `wrangler.jsonc`：KV namespace `TG_STATE` id 为 `5826fda6e7d94b64afd31d73cbff6c65`。
 Worker Secret（`TG_BOT_TOKEN` / `TG_CHANNEL_ID` / `TG_NOTIFY_SECRET`）需 `wrangler secret put` 配置。
+可用性监控（`*/5` cron）的告警频道走可选 secret `TG_ALERT_CHAT_ID`：**未配置时只 console.warn，
+绝不回落到 `TG_CHANNEL_ID`**（那是读者频道）。状态存 KV `health:status`，由 `GET /api/health-watch` 只读暴露。
 
 ### Worker 行为
 
 按顺序执行（`src/worker.mjs`）：
 
 0. **`/api/tg-notify` POST 手动触发** — 校验 `x-tg-secret` 头后推送，401 未授权
+0b. **`/api/health-watch` GET** — 只读返回 KV `health:status`（无数据时 `{ok:true,pending:true}`），`Cache-Control: no-store`
+0c. **`/downloads/CGArtLab-FUI-Data.json` 的 CORS** — 仅该路径下发 `Access-Control-Allow-Origin: *`，OPTIONS 返回 204（给 CEP 面板读清单）
 1. www → non-www 301
 2. `/feed` 与 `/feed/` → `https://cgartlab.com/rss.xml` 301
 3. **404 页面别名拦截** — `/404`、`/404/`、`/404.html` 直接返回 404 正文

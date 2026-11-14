@@ -297,4 +297,43 @@ This Privacy Policy is governed by, executed, and interpreted in accordance with
 
 ---
 
+## 12. Authorization Data of CGArtLab FUI Data
+
+CGArtLab FUI Data (the "Plugin") is an After Effects extension whose license verification requires a network connection. This section explains what data it processes during licensing.
+
+### 12.1 Data we upload
+
+Only in **activation, renewal, and specification** requests:
+
+- **Machine-code hash**: a hash computed from this machine's hardware characteristics, used to distinguish devices and count license seats. What is uploaded is the hash, **not the raw machine code** — we cannot recover your device identifier from it
+- **Activation code**: the license key you purchased, used to verify license status and the number of bound devices
+- **Client version and request context**: plugin version, IP address, User-Agent, used to diagnose activation failures and to detect misuse or licence abuse
+
+### 12.2 Data we never collect
+
+- **No project content**: AE project files, composition structure, layer names and layer text are never uploaded
+- **No render output**: pre-renders, exports and frame content never leave your computer
+- No clipboard reading, no file-system scanning, no screenshots
+
+### 12.3 Network scope and purpose
+
+- Only license verification goes online; **rendering and export stay fully offline**, and an activated license keeps working within the allowed offline window when the network is unavailable
+- The data above is used solely for license verification, device binding and after-sales support (such as unbinding on a new machine or recovering a license); it is not used for advertising profiles
+- We keep **audit records** of licenses and activations to handle abuse such as sharing or resale, and refund disputes
+
+---
+
+## 13. License and Refunds (Summary)
+
+This is a summary of the CGArtLab FUI Data license terms; the purchase page and the bundled license agreement govern in full:
+
+- **One code, two machines**: 1 activation code can be bound to **2 computers** at the same time; to move to a new machine, contact support to unbind it first
+- **7-day trial**: full features are free for 7 days after installation; afterwards it falls back to the free 4 types (Plain Text, Number, Temperature, Percentage), and projects already using it are unaffected
+- **Refunds**: handled per the refund rules of the purchase channel; once refunded, the activation code is deactivated, but **projects that already had the Plugin's data applied still open and render normally**
+- **No sharing or resale**: activation codes are for the purchaser's own use only; public sharing, resale, or commercial redistribution is prohibited, and violating codes may be deactivated
+
+If you have questions about licensing or refunds, please contact us through the channels below.
+
+---
+
 _This Privacy Policy is effective as of May 28, 2026._

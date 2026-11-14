@@ -1,5 +1,14 @@
 import { pushNewPosts } from "./lib/tg.mjs";
+import { checkHealth, readHealthState } from "./lib/health.mjs";
 import { isNoindexPath } from "./lib/noindex.mjs";
+
+/**
+ * cron 表达式分工（定义于 `wrangler.jsonc` 的 `triggers.crons`）：
+ * - `*\/15 * * * *` → 博客 RSS → Telegram 推送（原有逻辑，勿破坏）
+ * - `*\/5  * * * *` → 授权 API + 版本清单可用性监控
+ * 两条规则各自独立触发，整点（0/15/30/45 分）会有两次调用，靠 `event.cron` 分流。
+ */
+const CRON_HEALTH = "*/5 * * * *";
 
 /** 恒时字符串比较：长度不匹配直接返回，等长时逐字符 XOR，避免 timing side-channel */
 function timingSafeEqual(a, b) {
@@ -113,7 +122,33 @@ async function serveNotFound(env, request) {
 }
 
 export default {
-	async scheduled(_event, env, ctx) {
+	/**
+	 * cron 分流：每 5 分钟那条只跑可用性监控，其余（每 15 分钟的博客推送、本地手动触发时
+	 * cron 为空）保持原有推送逻辑不动。健康检查包在自己的 try/catch 里，
+	 * 任何失败都不会影响推送分支，也不会让整个 scheduled 调用抛错。
+	 */
+	async scheduled(event, env, ctx) {
+		if (event.cron === CRON_HEALTH) {
+			ctx.waitUntil(
+				checkHealth(env)
+					.then((state) => {
+						if (state.consecutiveFail > 0) {
+							console.warn(
+								`[Health] failing ×${state.consecutiveFail} (api=${state.api.status ?? "err"}, dl=${state.dl.status ?? "err"})`,
+							);
+						} else {
+							console.warn(
+								`[Health] ok (api=${state.api.ms}ms, dl=${state.dl.ms}ms)`,
+							);
+						}
+					})
+					.catch((err) => {
+						console.error("[Health] check failed:", err);
+					}),
+			);
+			return;
+		}
+
 		ctx.waitUntil(
 			pushNewPosts(env)
 				.then(({ pushed, skippedPermanent, baseline, skipped }) => {
@@ -162,6 +197,29 @@ export default {
 						),
 					);
 				}
+			}
+
+			// 0b. 只读健康状态：返回 KV 里最近一次 */5 健康检查的结果。
+			//     只读不触发检查（探活在 cron 里跑），无数据时返回 pending。
+			//     必须 no-store：这是运维视图，缓存会让故障看着像恢复了。
+			if (
+				(pathname === "/api/health-watch" ||
+					pathname === "/api/health-watch/") &&
+				request.method === "GET"
+			) {
+				const state = await readHealthState(env);
+				return applySecurityHeaders(
+					new Response(
+						JSON.stringify(state ?? { ok: true, pending: true }),
+						{
+							status: 200,
+							headers: {
+								"Content-Type": "application/json; charset=utf-8",
+								"Cache-Control": "no-store",
+							},
+						},
+					),
+				);
 			}
 
 			// 1. Force www → non-www canonical redirect (301 permanent)
@@ -224,6 +282,26 @@ export default {
 				);
 			}
 
+			// 1f. CORS 预检：CEP 扩展面板从 file:// 读版本清单，会先发 OPTIONS。
+			//     只放开版本清单这一个路径，不扩大到其他 /downloads/ 资源。
+			if (
+				pathname === "/downloads/CGArtLab-FUI-Data.json" &&
+				request.method === "OPTIONS"
+			) {
+				return applySecurityHeaders(
+					new Response(null, {
+						status: 204,
+						headers: {
+							"Access-Control-Allow-Origin": "*",
+							"Access-Control-Allow-Methods": "GET, OPTIONS",
+							"Access-Control-Allow-Headers": "Content-Type",
+							"Access-Control-Max-Age": "86400",
+							"Cache-Control": "public, max-age=86400",
+						},
+					}),
+				);
+			}
+
 			// 2. Trailing slash enforcement: redirect paths without trailing slash (301)
 			//    Skip file-like paths (containing a dot in the last segment)
 			if (
@@ -256,6 +334,12 @@ export default {
 
 			// 6b. CORS: Allow giscus.app iframe to load CSS files
 			if (/\.css$/.test(assetPath)) {
+				response.headers.set('Access-Control-Allow-Origin', '*');
+			}
+
+			// 6c. CORS: CEP 面板（After Effects 扩展，Origin 可能是 null/file://）
+			//     读取 FUI 版本清单。只放开这一个路径，别扩大到整个 /downloads/。
+			if (assetPath === "/downloads/CGArtLab-FUI-Data.json") {
 				response.headers.set('Access-Control-Allow-Origin', '*');
 			}
 

@@ -122,6 +122,8 @@ CGArtLab FUI Data 是 Adobe After Effects（简称 AE）里的一个独立面板
 
 装完有 7 天全功能试用，总共包含 34 类数据、173 个单位，以及视频里讲述的所有功能；到期会自动回落到 4 项免费档（纯文本、通用数字、温度、百分比）。购买后在面板右上角粘贴激活码即可解锁全部 34 类；1 个激活码可绑 2 台电脑，换电脑联系客服解绑。首次打开需要联网校验授权，渲染和出片不联网。
 
+授权流程具体会上传哪些数据，见[隐私政策](/privacy/)的「CGArtLab FUI Data 的授权数据」一节；许可与退款摘要见同页「许可与退款（摘要）」。
+
 正式商用版目前可直接[在此购买](https://item.taobao.com/item.htm?abbucket=13&id=1100985164400&mi_id=0000znNlw8x027Sj1K4d307mVGzTIceBKtLjqyJaFJqblRE&ns=1&skuId=6321972039787&spm=a21n57.1.hoverItem.10&utparam=%7B%22aplus_abtest%22%3A%2218a5645d819b3882b5a982030f95860e%22%7D&xxc=taobaoSearch)永久授权码，支持最多两台电脑同时使用，终身版本更新，前 100 名早鸟价格为 59 元，之后恢复为 99 元。
 
 ## 一些边界和已知问题

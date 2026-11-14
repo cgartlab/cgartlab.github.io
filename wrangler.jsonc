@@ -11,7 +11,7 @@
   "compatibility_date": "2026-05-02",
   "compatibility_flags": ["nodejs_compat"],
   "triggers": {
-    "crons": ["*/15 * * * *"]
+    "crons": ["*/15 * * * *", "*/5 * * * *"]
   },
   "kv_namespaces": [
     { "binding": "TG_STATE", "id": "5826fda6e7d94b64afd31d73cbff6c65" }
