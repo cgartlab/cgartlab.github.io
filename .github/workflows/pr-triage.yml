@@ -45,7 +45,7 @@ jobs:
       # 不该把 PR 标红，故非阻断：PAT 轮换后自动恢复。
       - name: Add to project
         continue-on-error: true
-        uses: actions/add-to-project@v2.0.0
+        uses: actions/add-to-project@v2.0.1
         with:
           project-url: https://github.com/users/cgartlab/projects/3
           github-token: ${{ secrets.GH_PROJECT_PAT }}
