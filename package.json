@@ -23,14 +23,14 @@
     "fetch-github-repos": "tsx scripts/fetch-github-repos.ts"
   },
   "dependencies": {
-    "@astrojs/markdown-remark": "^7.3.5",
+    "@astrojs/markdown-remark": "^7.3.8",
     "@astrojs/mdx": "^7.0.8",
     "@astrojs/partytown": "^2.1.9",
     "@astrojs/sitemap": "^3.7.4",
-    "@waline/client": "^3.16.1",
-    "astro": "7.4.7",
+    "@waline/client": "^3.16.2",
+    "astro": "7.4.11",
     "astro-compress": "^2.4.3",
-    "astro-og-canvas": "^0.13.2",
+    "astro-og-canvas": "^0.13.3",
     "canvaskit-wasm": "^0.42.0",
     "feed": "^5.2.1",
     "katex": "0.18.10",
@@ -45,7 +45,7 @@
     "rehype-slug": "^6.0.0",
     "remark-directive": "^4.0.0",
     "remark-math": "^6.0.0",
-    "sanitize-html": "^2.18.1",
+    "sanitize-html": "^2.18.2",
     "sharp": "^0.35.4",
     "twikoo": "^1.7.24",
     "unist-util-visit": "^5.2.0"
