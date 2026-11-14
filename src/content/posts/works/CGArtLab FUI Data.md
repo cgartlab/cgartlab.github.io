@@ -15,13 +15,13 @@ lang: zh
 
 ![CGArtLab FUI Data 插件封面](../_images/CGArtLab-FUI-Data-1794413956618.png)
 
-> **公测版下载**（Windows · After Effects 2023+ · v0.2.0）
+> **下载**（Windows · After Effects 2023+ · v0.3.0）
 
-<a class="fui-download-btn" href="/downloads/CGArtLab-FUI-Data-0.2.0-beta-win.zip">下载 CGArtLab FUI Data 0.2.0 公测版</a> <a class="fui-buy-btn" href="https://item.taobao.com/item.htm?abbucket=13&id=1100985164400&mi_id=0000znNlw8x027Sj1K4d307mVGzTIceBKtLjqyJaFJqblRE&ns=1&skuId=6321972039787&spm=a21n57.1.hoverItem.10&utparam=%7B%22aplus_abtest%22%3A%2218a5645d819b3882b5a982030f95860e%22%7D&xxc=taobaoSearch">购买授权码</a>
+<a class="fui-download-btn" href="/downloads/CGArtLab-FUI-Data-0.3.0-win.zip">下载 CGArtLab FUI Data 0.3.0（Windows）</a> <a class="fui-buy-btn" href="https://item.taobao.com/item.htm?abbucket=13&id=1100985164400&mi_id=0000znNlw8x027Sj1K4d307mVGzTIceBKtLjqyJaFJqblRE&ns=1&skuId=6321972039787&spm=a21n57.1.hoverItem.10&utparam=%7B%22aplus_abtest%22%3A%2218a5645d819b3882b5a982030f95860e%22%7D&xxc=taobaoSearch">购买授权码</a>
 
 > 安装：完全退出 After Effects → 解压后双击 `install.cmd` → 重启 AE → 菜单「窗口 > 扩展 > CGArtLab FUI Data」打开。
 >
-> 试用：安装后 **14 天内全功能免费**（34 类数据 / 173 单位 / 批量应用）；到期后自动收回为免费 4 类（纯文本、通用数字、温度、百分比）。
+> 试用：安装后 **7 天内全功能免费**（34 类数据 / 173 单位 / 批量应用）；到期后自动收回为免费 4 类（纯文本、通用数字、温度、百分比）。购买后把淘宝发来的激活码粘贴到面板右上角，即可解锁全部 34 类（1 个激活码可绑 2 台电脑）。
 >
 > 用法：在 AE 里选中文字图层 → 选好类型和单位 → 点【应用】→ 给「数值」打关键帧。
 
@@ -120,7 +120,7 @@ CGArtLab FUI Data 是 Adobe After Effects（简称 AE）里的一个独立面板
 
 注意：插件并不保存工程，Ctrl + Z 目前并不能一次撤回批量的修改，注意提前备份。
 
-公测版装完有 14 天全功能试用，总共包含 34 类数据、173 个单位，以及视频里讲述的所有功能；到期会自动回落到 4 项免费档（纯文本、通用数字、温度、百分比）。
+装完有 7 天全功能试用，总共包含 34 类数据、173 个单位，以及视频里讲述的所有功能；到期会自动回落到 4 项免费档（纯文本、通用数字、温度、百分比）。购买后在面板右上角粘贴激活码即可解锁全部 34 类；1 个激活码可绑 2 台电脑，换电脑联系客服解绑。首次打开需要联网校验授权，渲染和出片不联网。
 
 正式商用版目前可直接[在此购买](https://item.taobao.com/item.htm?abbucket=13&id=1100985164400&mi_id=0000znNlw8x027Sj1K4d307mVGzTIceBKtLjqyJaFJqblRE&ns=1&skuId=6321972039787&spm=a21n57.1.hoverItem.10&utparam=%7B%22aplus_abtest%22%3A%2218a5645d819b3882b5a982030f95860e%22%7D&xxc=taobaoSearch)永久授权码，支持最多两台电脑同时使用，终身版本更新，前 100 名早鸟价格为 59 元，之后恢复为 99 元。
 

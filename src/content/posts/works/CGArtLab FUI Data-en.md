@@ -15,13 +15,13 @@ lang: en
 
 ![CGArtLab FUI Data plugin cover](../_images/CGArtLab-FUI-Data-1794413956618.png)
 
-> **Public beta** (Windows · After Effects 2023+ · v0.2.0)
+> **Download** (Windows · After Effects 2023+ · v0.3.0)
 
-<a class="fui-download-btn" href="/downloads/CGArtLab-FUI-Data-0.2.0-beta-win.zip">Download CGArtLab FUI Data 0.2.0 beta</a> <a class="fui-buy-btn" href="https://item.taobao.com/item.htm?abbucket=13&id=1100985164400&mi_id=0000znNlw8x027Sj1K4d307mVGzTIceBKtLjqyJaFJqblRE&ns=1&skuId=6321972039787&spm=a21n57.1.hoverItem.10&utparam=%7B%22aplus_abtest%22%3A%2218a5645d819b3882b5a982030f95860e%22%7D&xxc=taobaoSearch">Buy license</a>
+<a class="fui-download-btn" href="/downloads/CGArtLab-FUI-Data-0.3.0-win.zip">Download CGArtLab FUI Data 0.3.0 (Windows)</a> <a class="fui-buy-btn" href="https://item.taobao.com/item.htm?abbucket=13&id=1100985164400&mi_id=0000znNlw8x027Sj1K4d307mVGzTIceBKtLjqyJaFJqblRE&ns=1&skuId=6321972039787&spm=a21n57.1.hoverItem.10&utparam=%7B%22aplus_abtest%22%3A%2218a5645d819b3882b5a982030f95860e%22%7D&xxc=taobaoSearch">Buy license</a>
 
 > Install: fully quit After Effects → unzip and double-click `install.cmd` → restart AE → open it from Window > Extensions > CGArtLab FUI Data.
 >
-> Trial: **14 days of full features, free** (34 data types / 173 units / batch apply); after that it falls back to the free 4 types (Plain Text, Number, Temperature, Percentage).
+> Trial: **7 days of full features, free** (34 data types / 173 units / batch apply); after that it falls back to the free 4 types (Plain Text, Number, Temperature, Percentage). After purchase, paste your activation code into the panel (top-right) to unlock all 34 types; one code covers 2 computers. A network check is required when the panel opens; rendering and export stay offline.
 >
 > Usage: select a text layer, pick a type and unit, click Apply, then keyframe Value.
 
@@ -53,7 +53,7 @@ The manual way is retyping, copying formats, keyframing layer by layer — and t
 
 I wanted to get this pile of busywork — the part a program could handle — out of the workflow, so a designer only has to think about composition, pacing and ideas; [tools end up shaping how we create](/en/posts/weekly-15/), which was part of the motivation. This plugin grew out of that frustration; with AI I turned it into a complete tool (I also wrote about [AI and creative tools](/en/posts/weekly-16/) here), and today I can finally hand it to you.
 
-If you'd like to try it, or happen to have a project that needs this, you can download the public beta right at the top of this page, or buy the commercial version.
+If you'd like to try it, or happen to have a project that needs this, you can download the current build right at the top of this page, or buy the commercial version.
 
 ## What it is
 
@@ -120,7 +120,7 @@ For first use, try it in a fresh project rather than a live one. Create a text l
 
 Note: the plugin doesn't save the project, and Ctrl+Z can't undo a batch change in one step — back up first.
 
-The public beta gives you 14 days of full features: 34 data types, 173 units, and everything shown in the video; when it ends it falls back to the free 4 types (Plain Text, Number, Temperature, Percentage).
+The current build gives you a 7-day full-feature trial: 34 data types, 173 units, and everything shown in the video; when it ends it falls back to the free 4 types (Plain Text, Number, Temperature, Percentage).
 
 The commercial version is available now — [buy here](https://item.taobao.com/item.htm?abbucket=13&id=1100985164400&mi_id=0000znNlw8x027Sj1K4d307mVGzTIceBKtLjqyJaFJqblRE&ns=1&skuId=6321972039787&spm=a21n57.1.hoverItem.10&utparam=%7B%22aplus_abtest%22%3A%2218a5645d819b3882b5a982030f95860e%22%7D&xxc=taobaoSearch) for a lifetime license, usable on up to two computers, with lifetime updates; the early-bird price for the first 100 is ¥59, then ¥99.
 
