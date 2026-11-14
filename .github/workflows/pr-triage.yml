@@ -23,8 +23,12 @@ jobs:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           sync-labels: true
 
+  # Assign is handled here rather than in a separate `pull_request` workflow: this
+  # event runs with a write token even for fork PRs, and one place doing it cannot
+  # race itself into "Assignee has already been taken" (which is how the old
+  # auto-assign.yml kept failing once PR Triage also assigned on `opened`).
   triage:
-    if: github.event.action == 'opened'
+    if: github.event.action == 'opened' || github.event.action == 'reopened'
     permissions:
       pull-requests: write
     runs-on: ubuntu-latest
@@ -37,7 +41,10 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           assignees: ${{ github.event.pull_request.user.login }}
 
+      # GH_PROJECT_PAT 过期后这里会报 "Bad credentials"。归档到 Project 是锦上添花，
+      # 不该把 PR 标红，故非阻断：PAT 轮换后自动恢复。
       - name: Add to project
+        continue-on-error: true
         uses: actions/add-to-project@v2.0.0
         with:
           project-url: https://github.com/users/cgartlab/projects/3
