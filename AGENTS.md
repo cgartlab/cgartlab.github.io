@@ -19,7 +19,7 @@ cgartlab.github.io/
 ├── tsconfig.json · eslint.config.mjs
 ├── package.json             # 脚本入口，packageManager 锁 pnpm@11.10.0
 ├── AGENTS.md · README.md · CONTRIBUTING.md · CHANGELOG.md
-├── .github/                 # CI、PR/Issue 模板、Dependabot、labeler、release-drafter
+├── .github/                 # CI、PR/Issue 模板、Dependabot、labeler
 ├── public/                  # 静态资源，直映射站点根，不经构建处理
 │   ├── fonts/ giscus/ images/ feeds/ icons/ sounds/ posts/
 │   ├── llms.txt · github-repos.json   # 构建生成
