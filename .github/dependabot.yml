@@ -7,15 +7,34 @@ updates:
     open-pull-requests-limit: 3
     pull-request-branch-name:
       separator: '-'
+    # astro 与其官方插件单独一组：它们是同一条工具链（编译器 + Vite 插件 + Markdown 管线），
+    # 混在 patch 组里会连带重构整套构建（2026-11-15 的 7.4.11 就是这么把 `astro check` 弄崩的），
+    # 必须一起评审、一起验证。
     groups:
+      astro-core:
+        patterns:
+          - 'astro'
+          - '@astrojs/*'
+          - 'astro-compress'
+          - 'astro-og-canvas'
       patch-updates:
         patterns:
           - '*'
+        exclude-patterns:
+          - 'astro'
+          - '@astrojs/*'
+          - 'astro-compress'
+          - 'astro-og-canvas'
         update-types:
           - patch
       minor-updates:
         patterns:
           - '*'
+        exclude-patterns:
+          - 'astro'
+          - '@astrojs/*'
+          - 'astro-compress'
+          - 'astro-og-canvas'
         update-types:
           - minor
     ignore:

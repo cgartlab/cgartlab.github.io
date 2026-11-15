@@ -63,7 +63,7 @@ cgartlab.github.io/
 | `src/components/Home/` | 首页舞台：`HomeStage.astro`（构建期拼 SVG）+ `stage.client.ts`（装配/拆解/轮换/放大/打字）+ `copy.client.ts` | 运行时只动类名与 CSS 变量，几何在构建期定死 |
 | `public/` | 静态资源，直映射站点根 | 文件名 = 线上 URL |
 | `scripts/` | 构建/运维脚本 | 见 COMMANDS |
-| `.github/` | CI、模板、Dependabot | 仓库已转 **public**；`protect-main` ruleset 虽存在，但 `rules/branches/main` 返回 `[]` → main **实际无强制保护**，合并前须自行确认 CI 全绿与评审结论 |
+| `.github/` | CI、模板、Dependabot | 仓库已转 **public**；`protect-main` ruleset 只有「禁止删除分支 / 禁止强推」两条规则（2026-11-15 实测 2 条、无 required checks）→ **不阻止不合规合并**，合并前仍须自行确认 CI 全绿与评审结论 |
 
 ## COMMANDS
 
@@ -258,10 +258,12 @@ pnpm update-gh-contributions  # 更新贡献热力图数据 → src/data/github-
 
 - **`dev-{kebab}`** — 代码/功能/样式开发
 - **`write-{kebab}`** — 文章/专栏创作
-- `main` 必须通过 PR 合并，合并后删除分支。⚠️ **不要假设有服务端强制保护**：仓库已转 public，
-  ruleset `protect-main` 名为 active，但 `gh api repos/cgartlab/cgartlab.github.io/rules/branches/main`
-  实测返回 `[]`（条件未命中任何分支），且 `allow_merge_commit / allow_rebase_merge` 均为 true——
-  合并前必须人工确认 CI 全绿与评审结论（2026-09-28 实测）
+- `main` 必须通过 PR 合并，合并后删除分支（仓库已开 `delete_branch_on_merge`）。
+  ⚠️ **不要假设有服务端强制保护**：`gh api repos/cgartlab/cgartlab.github.io/rules/branches/main`
+  实测返回 2 条规则，但只是 `deletion` 与 `non_fast_forward`（禁止删分支 / 禁止强推），
+  **没有 required status checks，也没有 required reviews**；`allow_merge_commit` /
+  `allow_rebase_merge` 均为 true。也就是说，CI 红着也能合、无评审也能合 —— 合并前必须人工确认
+  CI 全绿与评审结论（2026-11-15 实测）
 
 ## COMMIT MESSAGE
 

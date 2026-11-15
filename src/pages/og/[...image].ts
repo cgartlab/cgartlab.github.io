@@ -55,9 +55,13 @@ async function initOGRouter() {
 					lineHeight: 1.5,
 				},
 			},
+			// Build-only fonts: `astro-og-canvas` reads them from disk at build time,
+			// so they live outside `public/` — anything under public/ is copied into
+			// `dist/` and shipped, which cost 16.5 MB per deploy for two files the
+			// browser never requests (2026-11-15).
 			fonts: [
-				"./public/fonts/NotoSansSC-Bold.otf",
-				"./public/fonts/NotoSansSC-Regular.otf",
+				"./src/assets/fonts/NotoSansSC-Bold.otf",
+				"./src/assets/fonts/NotoSansSC-Regular.otf",
 			],
 			bgGradient: [[242, 241, 245]],
 		}),
