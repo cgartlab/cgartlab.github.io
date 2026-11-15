@@ -16,6 +16,9 @@ permissions:
 
 jobs:
   update_release_draft:
+    # dependabot 的分支上这个 action 取不到配置（404），每个 bot PR 都会挂一个红叉；
+    # 草稿只需要在 main 的 push 与手动触发时维护。
+    if: github.event_name != 'pull_request' || github.event.pull_request.user.type != 'Bot'
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
