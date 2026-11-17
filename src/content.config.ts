@@ -45,8 +45,10 @@ const about = defineCollection({
   }),
 })
 
-const privacy = defineCollection({
-  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/privacy' }),
+// 《用户协议》—— 2026-11-17 把原先的《服务条款》《隐私政策》《免责声明》合并为一份文档。
+// 旧集合 privacy 已删除；如需追溯旧文本，查 git 历史里的 src/content/privacy/。
+const agreement = defineCollection({
+  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/agreement' }),
   schema: z.object({
     lang: z
       .enum(['', ...allLocales])
@@ -55,4 +57,4 @@ const privacy = defineCollection({
   }),
 })
 
-export const collections = { posts, about, privacy }
+export const collections = { posts, about, agreement }

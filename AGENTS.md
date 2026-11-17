@@ -30,13 +30,13 @@ cgartlab.github.io/
 └── src/                     # 全部源码；本机同时是 Obsidian vault 根
     ├── worker.mjs           # Worker 入口：重定向 / 缓存头 / 安全头 / TG 推送
     ├── config.ts            # 站点元数据、导航、颜色、评论、SEO 单一声明源
-    ├── content.config.ts    # 内容集合定义（posts / about / privacy）
+    ├── content.config.ts    # 内容集合定义（posts / about / agreement）
     ├── content/             # 内容唯一来源
     │   ├── posts/           # 文章（*.md）、专栏（column/）、作品（works/）
     │   ├── posts/_images/   # 文章配图（403 张）
     │   ├── posts/_files/    # 文章附件
     │   ├── posts/0-文章数据库.base   # Obsidian Bases：草稿/专栏/已发布文章/已发布专栏 四视图
-    │   └── about/ privacy/  # 独立集合
+    │   └── about/ agreement/  # 独立集合（《用户协议》，2026-11-17 由三份旧文档合并）
     ├── assets/              # icons/ templates/ lqip/ lqip-map.json
     ├── components/          # Astro 组件（含 Widgets/）
     ├── layouts/             # Layout.astro · Head.astro
@@ -135,7 +135,7 @@ pnpm update-gh-contributions  # 更新贡献热力图数据 → src/data/github-
 
 | Area | Path | Notes |
 |------|------|-------|
-| 内容集合 | `src/content.config.ts` | `posts`, `about`, `privacy` 三个集合 |
+| 内容集合 | `src/content.config.ts` | `posts`, `about`, `agreement` 三个集合 |
 | i18n | `src/i18n/config.ts` | zh 默认, /en/ 路由前缀；zh-tw 基础设施（locale/UI/数据/文案）存在但**未启用**——`config.ts` 的 `moreLocales` 仅含 `en`，内容 schema 的 `lang` 字段不接受 `zh-tw` |
 | 主题配置 | `src/config.ts` | 站点元数据、导航、颜色、评论、SEO |
 | UnoCSS | `uno.config.ts` | Wind3 + Attributify + theme preset, 非 Tailwind |
@@ -491,6 +491,8 @@ Worker Secret（`TG_BOT_TOKEN` / `TG_CHANNEL_ID` / `TG_NOTIFY_SECRET`）需 `wra
 0c. **`/downloads/CGArtLab-FUI-Data.json` 的 CORS** — 仅该路径下发 `Access-Control-Allow-Origin: *`，OPTIONS 返回 204（给 CEP 面板读清单）
 1. www → non-www 301
 2. `/feed` 与 `/feed/` → `https://cgartlab.com/rss.xml` 301
+2b. **旧法律页 301** — `/terms`、`/privacy`、`/disclaimer`（含 `/en/` 前缀）→ `/agreement/`
+   （2026-11-17 三份文档合并为《用户协议》，规则表见 `LEGAL_ALIASES`；只匹配「语言前缀 + 旧名」一层，避免误伤内容路径）
 3. **404 页面别名拦截** — `/404`、`/404/`、`/404.html` 直接返回 404 正文
 4. 尾斜杠强制 301（跳过含 `.` 的文件路径）
 5. 目录 → index.html
@@ -645,7 +647,7 @@ safelist 通过列出源码中并不存在的 utility（如 `bg-background` 从�
 
 - `posts` — 文章/专栏/作品 MDX/MD 内容
 - `about` — 关于页面
-- `privacy` — 隐私政策
+- `agreement` — 用户协议（合并后的服务条款 + 隐私政策 + 免责声明）
 
 Frontmatter 类型安全由 Astro 自动推断：
 

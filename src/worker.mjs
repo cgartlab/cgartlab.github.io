@@ -81,6 +81,13 @@ function applySecurityHeaders(resp) {
 const NOT_FOUND_ALIASES = new Set(["/404", "/404/", "/404.html"]);
 
 /**
+ * 已合并的旧法律页面（2026-11-17）。
+ * 《服务条款》《隐私政策》《免责声明》三份文档合并为一份《用户协议》/agreement/，
+ * 但旧路径散落在文章、关于页与搜索结果里，全部 301 过去，避免变成 404。
+ */
+const LEGAL_ALIASES = new Set(["terms", "privacy", "disclaimer"]);
+
+/**
  * 以 404 状态返回 404 页面正文。
  *
  * 同样受上述规范化影响：直接 fetch `/404.html` 拿到的是**空 body 的 307**
@@ -252,6 +259,19 @@ export default {
 					? "https://cgartlab.com/en/column/"
 					: "https://cgartlab.com/column/";
 				return applySecurityHeaders(Response.redirect(target, 301));
+			}
+
+			// 1c2. 旧法律页面 → 用户协议（见 LEGAL_ALIASES）。只匹配「语言前缀 + 旧名」
+			//      这一层，避免误伤 /posts/privacy/ 之类的真实内容路径。
+			{
+				const segs = pathname.split("/").filter(Boolean);
+				const last = (segs.at(-1) ?? "").toLowerCase();
+				if (segs.length <= 2 && LEGAL_ALIASES.has(last)) {
+					const prefix = segs.length === 2 ? `/${segs[0]}` : "";
+					return applySecurityHeaders(
+						Response.redirect(new URL(`${prefix}/agreement/`, url), 301),
+					);
+				}
 			}
 
 			// 1d. 404 页面别名：直接返回 404 正文。

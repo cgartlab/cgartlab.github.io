@@ -1,0 +1,33 @@
+---
+import { getCollection, render } from 'astro:content'
+import { allLocales } from '@/config'
+import { getLangFromLocale, getLangRouteParam } from '@/i18n/lang'
+import Layout from '@/layouts/Layout.astro'
+
+export async function getStaticPaths() {
+  return allLocales.map(lang => ({
+    params: { lang: getLangRouteParam(lang) },
+  }))
+}
+
+const currentLang = getLangFromLocale(Astro.currentLocale)
+// 《用户协议》：2026-11-17 起取代原先分开的 /terms/、/privacy/、/disclaimer/
+// 三份文档；旧路径由 src/worker.mjs 301 到这里，别在页面层做重定向。
+const allAgreementEntries = await getCollection('agreement')
+const agreementEntry = allAgreementEntries.find(entry => entry.data.lang === currentLang)
+  ?? allAgreementEntries.find(entry => entry.data.lang === '')
+const { Content } = agreementEntry ? await render(agreementEntry) : { Content: null }
+---
+
+<Layout
+  postTitle={currentLang === 'zh'
+    ? '用户协议 - 服务条款与隐私保护'
+    : 'User Agreement - Terms and Privacy'}
+>
+  <!-- Decorative Line -->
+  <div class="uno-decorative-line" />
+  <!-- User Agreement Page Content -->
+  <div class="heti">
+    {Content && <Content />}
+  </div>
+</Layout>

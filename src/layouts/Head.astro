@@ -448,52 +448,67 @@ const softwareApp = postSchemaType === 'SoftwareApplication' ? softwareAppMeta[p
 })()
 </script>
 
-<!-- Google Analytics -->
-{googleAnalyticsID && (
+<!-- Analytics（GA / Umami）—— 只有用户选择「全部接受」后才创建脚本。
+     2026-11-17：此前这两个脚本无条件注入，Cookie 横幅的「拒绝 / 仅功能」形同虚设；
+     现在 Gating 在主线程读取 localStorage('consent-preference')，同意了才把
+     type="text/partytown" 的脚本插进 head，Partytown 照旧接管转发。 -->
+{(googleAnalyticsID || umamiAnalyticsID) && (
   <script
     is:inline
-    type="text/partytown"
     define:vars={{
       googleAnalyticsID,
       customGoogleAnalyticsJS,
-    }}
-  >
- window.dataLayer = window.dataLayer || []
- window.gtag = function (...args) {
-   dataLayer.push(...args)
- }
- window.gtag('js', new Date())
- if (customGoogleAnalyticsJS) {
-   window.gtag('config', googleAnalyticsID, {
-     transport_url: new URL(customGoogleAnalyticsJS).origin,
-   })
- }
- else {
-   window.gtag('config', googleAnalyticsID)
- }
- const gaScript = document.createElement('script')
- gaScript.src = customGoogleAnalyticsJS || `https://www.googletagmanager.com/gtag/js?id=${googleAnalyticsID}`
- gaScript.type = 'text/partytown'
- document.head.appendChild(gaScript)
- </script>
-)}
-
-<!-- Umami Analytics -->
-{umamiAnalyticsID && (
-  <script
-    is:inline
-    type="text/partytown"
-    define:vars={{
       umamiAnalyticsID,
       customUmamiAnalyticsJS,
     }}
   >
-  const umamiScript = document.createElement('script')
-  umamiScript.src = customUmamiAnalyticsJS || 'https://cloud.umami.is/script.js'
-  umamiScript.setAttribute('data-website-id', umamiAnalyticsID)
-  umamiScript.type = 'text/partytown'
-  document.head.appendChild(umamiScript)
+(function () {
+  var CONSENT_KEY = 'consent-preference'
+  var started = false
+  function readConsent() {
+    try { return localStorage.getItem(CONSENT_KEY) } catch (e) { return null }
+  }
+  // GA Consent Mode：默认拒绝，先建 dataLayer，同意了再 update 成 granted
+  if (googleAnalyticsID) {
+    window.dataLayer = window.dataLayer || []
+    window.gtag = window.gtag || function () { window.dataLayer.push(arguments) }
+    window.gtag('consent', 'default', { analytics_storage: 'denied', ad_storage: 'denied' })
+  }
+  function start() {
+    if (started) return
+    started = true
+    if (googleAnalyticsID) {
+      window.gtag('js', new Date())
+      window.gtag('consent', 'update', { analytics_storage: 'granted' })
+      if (customGoogleAnalyticsJS)
+        window.gtag('config', googleAnalyticsID, { transport_url: new URL(customGoogleAnalyticsJS).origin })
+      else
+        window.gtag('config', googleAnalyticsID)
+      var ga = document.createElement('script')
+      ga.src = customGoogleAnalyticsJS || ('https://www.googletagmanager.com/gtag/js?id=' + googleAnalyticsID)
+      ga.type = 'text/partytown'
+      document.head.appendChild(ga)
+    }
+    if (umamiAnalyticsID) {
+      var um = document.createElement('script')
+      um.src = customUmamiAnalyticsJS || 'https://cloud.umami.is/script.js'
+      um.setAttribute('data-website-id', umamiAnalyticsID)
+      um.type = 'text/partytown'
+      document.head.appendChild(um)
+    }
+  }
+  function stop() {
+    // 已注入的脚本无法卸载，但 GA 收到 denied 后立刻停写 cookie；
+    // Umami 没有运行时开关，撤销后下次刷新不再加载。
+    if (googleAnalyticsID && typeof window.gtag === 'function')
+      window.gtag('consent', 'update', { analytics_storage: 'denied' })
+  }
+  if (readConsent() === 'accepted') start()
+  window.addEventListener('consent:change', function (e) {
+    if (e.detail === 'accepted') start()
+    else stop()
+  })
+})()
   </script>
 )}
-
 </head>

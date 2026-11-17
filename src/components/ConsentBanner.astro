@@ -284,6 +284,11 @@ const currentUI = ui[currentLang as keyof typeof ui] ?? {}
     savePref(pref)
     window.__CONSENT_STATUS = pref
     hideBanner(getBanner())
+    // 通知 Head.astro 的 analytics gating：只有 accepted 才创建 GA / Umami 脚本
+    try {
+      window.dispatchEvent(new CustomEvent('consent:change', { detail: pref }))
+    }
+    catch { /* very old browsers */ }
   }
 
   function bindButtons() {
