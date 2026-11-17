@@ -91,20 +91,31 @@ const css = readFileSync(join(ROOT, 'src', 'styles', 'home.css'), 'utf8')
   .replace(/@import '\.\/home-devices\/([\w-]+)\.css';\n?/g, (_, name) =>
     readFileSync(join(ROOT, 'src', 'styles', 'home-devices', `${name}.css`), 'utf8'))
 
+// ⚠️ 手抄自 src/config.ts 的 color 调色板（预览页是独立 HTML，拿不到 UnoCSS 产物）。
+// 新增或修改主题色时必须同步这里，否则 oklch(var(--un-preset-theme-colors-x)) 解析失败，
+// SVG fill 会回落成纯黑（2026-11-17 加 stage/brass 时踩过，整台装置变黑剪影）。
 const SITE_TOKENS = `
 :root {
   --un-preset-theme-colors-background: 98% 0.012 85;
   --un-preset-theme-colors-primary: 25% 0.005 298;
   --un-preset-theme-colors-secondary: 40% 0.005 298;
   --un-preset-theme-colors-highlight: 41% 0.12 138;
+  --un-preset-theme-colors-stage: 25% 0.005 298;
+  --un-preset-theme-colors-stage-dim: 40% 0.005 298;
+  --un-preset-theme-colors-brass: 72% 0.052 74;
+  --un-preset-theme-colors-paper: 99.2% 0.004 96;
   --un-preset-theme-font-family-sans: OPPOSans, ui-sans-serif, system-ui, sans-serif;
   --un-preset-theme-font-family-serif: STIX, EarlySummer, ui-serif, Georgia, serif;
 }
 html.dark {
   --un-preset-theme-colors-background: 22% 0.005 298;
-  --un-preset-theme-colors-primary: 92% 0.005 298;
-  --un-preset-theme-colors-secondary: 77% 0.005 298;
+  --un-preset-theme-colors-primary: 79.4% 0.0623 72.4;
+  --un-preset-theme-colors-secondary: 79.4% 0.0623 72.4;
   --un-preset-theme-colors-highlight: 72% 0.14 138;
+  --un-preset-theme-colors-stage: 92% 0.005 298;
+  --un-preset-theme-colors-stage-dim: 77% 0.005 298;
+  --un-preset-theme-colors-brass: 68% 0.058 74;
+  --un-preset-theme-colors-paper: 99.2% 0.004 96;
 }
 * { box-sizing: border-box; }
 body {

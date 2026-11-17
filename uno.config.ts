@@ -96,6 +96,10 @@ export default defineConfig({
   // global.css resolves to an invalid color and the browser discards it entirely.
   safelist: [
     'bg-background',
+    'bg-stage',
+    'bg-stage-dim',
+    'bg-brass',
+    'bg-paper',
     'bg-highlight',
     'bg-note',
     'bg-tip',

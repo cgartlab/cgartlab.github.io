@@ -63,7 +63,7 @@
 
 /* the back of the bay: a step darker than the opening, so the hole reads deep */
 .home-stage .home-bay-wall {
-  fill: color-mix(in oklch, var(--home-cavity) 80%, oklch(var(--un-preset-theme-colors-primary)) 20%);
+  fill: color-mix(in oklch, var(--home-cavity) 80%, oklch(var(--un-preset-theme-colors-stage)) 20%);
   stroke: none;
 }
 

@@ -494,17 +494,19 @@ export function startTagGraph(
   // The net is drawn in the page's own ink, not in an accent: the stage is an
   // engraved instrument and a green constellation on it reads as a chart from
   // another product. Hierarchy is carried by size and by how dark the dot is —
-  // hubs take the primary ink, everything else the secondary — the same two
-  // tones the machine's caption and its dial already use.
-  let nodeInk = tone('secondary', 0.5)
-  let hubInk = tone('primary', 0.86)
-  let edgeInk = tone('secondary', EDGE_ALPHA)
+  // Hubs take `stage` (the device-body ink), everything else `stage-dim` — the
+  // pair mirrors the two tones the machine's caption and dial use. Both are
+  // device tokens rather than primary/secondary, so a change to the body-text
+  // palette moves neither the machine nor the net.
+  let nodeInk = tone('stage-dim', 0.5)
+  let hubInk = tone('stage', 0.86)
+  let edgeInk = tone('stage-dim', EDGE_ALPHA)
   // the hover furniture is drawn whenever the pointer rests on a dot, so its
   // four inks are resolved with the rest — not re-read from the CSSOM per frame
-  let inkRing = tone('primary', 0.45)
+  let inkRing = tone('stage', 0.45)
   let inkPillFill = tone('background', 0.97)
-  let inkPillBorder = tone('secondary', 0.4)
-  let inkPillText = tone('primary', 0.95)
+  let inkPillBorder = tone('stage-dim', 0.4)
+  let inkPillText = tone('stage', 0.95)
 
   // The links are the expensive half of a frame — 68 segments is a lot of
   // stroking for lines drawn at 10% — and the nodes drift at most a couple of
@@ -691,13 +693,13 @@ export function startTagGraph(
    * wall is up would keep the light-theme greys on a dark page.
    */
   const retint = (): void => {
-    nodeInk = tone('secondary', 0.5)
-    hubInk = tone('primary', 0.86)
-    edgeInk = tone('secondary', EDGE_ALPHA)
-    inkRing = tone('primary', 0.45)
+    nodeInk = tone('stage-dim', 0.5)
+    hubInk = tone('stage', 0.86)
+    edgeInk = tone('stage-dim', EDGE_ALPHA)
+    inkRing = tone('stage', 0.45)
     inkPillFill = tone('background', 0.97)
-    inkPillBorder = tone('secondary', 0.4)
-    inkPillText = tone('primary', 0.95)
+    inkPillBorder = tone('stage-dim', 0.4)
+    inkPillText = tone('stage', 0.95)
     if (lctx) {
       bakeLinks()
       draw()

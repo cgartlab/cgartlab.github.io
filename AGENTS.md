@@ -601,6 +601,7 @@ src/styles/*.css → 使用 oklch(var(--un-preset-theme-colors-*))
 
 - 所有颜色必须用 `oklch(var(--un-preset-theme-colors-*))` 格式，避免 `#xxx` / `rgb()`
 - **暗色模式正文与标题统一为 `#d5b690`**（`oklch(79.4% 0.0623 72.4)`，2026-11-17 用户指定）：`primary` 与 `secondary` 同色，层级只靠字号/字重；`highlight`（橄榄绿）保持不变，链接、`<strong>`、导航高亮仍用它。改这两个 token 前先确认对比度（对 `oklch(22% 0.005 298)` 背景实测 7.4:1）
+- **首页装置的墨色与正文色解耦**：装置几何统一用主题 token `stage`（主墨）与 `stage-dim`（次要墨，标签网的节点/连线用它；亮色 40% / 暗色 77%，即旧的 secondary 值），两者都在 `src/config.ts` 的 `color.light/dark` 里，暗色分别钉死 `oklch(92% 0.005 298)` / `oklch(77% 0.005 298)`（改造前的中性冷墨）。改 `primary/secondary` 不会让装置发紫；新增这类「固定装饰色」也走 config → `uno.config.ts` safelist（`bg-stage`）这条链，别在 `home.css` 里写死分量 —— 主题 token 存的是 **oklch 分量**，`oklch(var(--...))` 才是颜色；定义里写成完整 `oklch(…)` 会变成 `oklch(oklch(…))` → 无效 → SVG `fill` 回落成纯黑（2026-11-17 踩过：整台机器变黑剪影）。
 - 物理透明度（毛玻璃/阴影/按钮悬停等）允许 `rgba(0,0,0,α)` 或 `color-mix(in srgb, oklch(...), transparent)`
 - 新增语义色时必须同步更新：`uno.config.ts` 的 `theme.colors` → `presetTheme` 的 dark → `safelist`
 

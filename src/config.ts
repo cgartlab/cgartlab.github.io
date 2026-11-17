@@ -43,6 +43,15 @@ export const themeConfig: ThemeConfig = {
 			// used for navbar underline, selected text bg, etc
 			// 3.10:1 contrast against light background
 			highlight: "oklch(41% 0.12 138)",
+			// stage color - 首页装置的墨色
+			// 与 primary 同色即可：装置在亮色下本来就该和正文同调
+			stage: "oklch(25% 0.005 298)",
+			// brass color - 装置（打字机压纸杆等）的黄铜件
+			brass: "oklch(72% 0.052 74)",
+			// paper color - 装置里纸张的固有色（亮色即票据/纸带的底色）
+			paper: "oklch(99.2% 0.004 96)",
+			// stage-dim - 标签网的次要墨（节点/连线），取自旧的 secondary 值
+			"stage-dim": "oklch(40% 0.005 298)",
 		},
 		dark: {
 			// primary color（标题、链接、悬停态）
@@ -58,6 +67,17 @@ export const themeConfig: ThemeConfig = {
 			// used for navbar underline, selected text bg, etc
 			// 4.52:1 contrast against dark background
 			highlight: "oklch(72% 0.14 138)",
+			// stage color - 首页装置的墨色
+			// 2026-11-17：暗色正文改成暖茶 #d5b690 后，装置不能跟着变紫，
+			// 所以这里钉住改造前的中性冷墨（hue 298）。装置几何全部走这个 token。
+			stage: "oklch(92% 0.005 298)",
+			// brass color - 同上的暗色版本（略暗、略暖）
+			brass: "oklch(68% 0.058 74)",
+			// paper color - 暗色下不直接用，靠与 background 混合压暗
+			// （labels.css 的票据、typewriter.css 的纸带都用这个 mix）
+			paper: "oklch(99.2% 0.004 96)",
+			// stage-dim - 同上的暗色版本（旧 secondary 值，保持网与装置同调）
+			"stage-dim": "oklch(77% 0.005 298)",
 		},
 	},
 	// COLOR SETTINGS >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> END
