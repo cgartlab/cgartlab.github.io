@@ -389,11 +389,11 @@
   /* a wall of paper, not a wall of holes: the same bright stock the typewriter
      feeds, so the sheets sit a shade above the page and the shadow can be the
      only thing holding them */
-  --home-sheet: oklch(99.2% 0.004 96);
+  --home-sheet: oklch(var(--un-preset-theme-colors-paper));
 }
 
 .dark .home-stage .home-ticket {
-  --home-sheet: color-mix(in oklch, oklch(var(--un-preset-theme-colors-stage)) 24%, oklch(var(--un-preset-theme-colors-background)) 76%);
+  --home-sheet: color-mix(in oklch, oklch(var(--un-preset-theme-colors-paper)) 24%, oklch(var(--un-preset-theme-colors-background)) 76%);
 }
 
 .home-stage .home-ticket-paper { fill: var(--home-sheet, var(--home-paper)); }

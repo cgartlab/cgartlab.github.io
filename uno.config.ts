@@ -99,6 +99,7 @@ export default defineConfig({
     'bg-stage',
     'bg-brass',
     'bg-brass-deep',
+    'bg-paper',
     'bg-highlight',
     'bg-note',
     'bg-tip',

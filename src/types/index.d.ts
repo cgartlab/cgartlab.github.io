@@ -43,6 +43,7 @@ export interface ThemeConfig {
 			// 装置上的黄铜配件色
 			brass: string;
 			"brass-deep": string;
+			paper: string;
 		};
 		dark: {
 			// 主色调
@@ -58,6 +59,7 @@ export interface ThemeConfig {
 			// 装置上的黄铜配件色
 			brass: string;
 			"brass-deep": string;
+			paper: string;
 		};
 	};
 	global: {

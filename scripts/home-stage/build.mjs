@@ -105,8 +105,8 @@ const SITE_TOKENS = `
 }
 html.dark {
   --un-preset-theme-colors-background: 22% 0.005 298;
-  --un-preset-theme-colors-primary: 92% 0.005 298;
-  --un-preset-theme-colors-secondary: 77% 0.005 298;
+  --un-preset-theme-colors-primary: 79.4% 0.0623 72.4;
+  --un-preset-theme-colors-secondary: 79.4% 0.0623 72.4;
   --un-preset-theme-colors-highlight: 72% 0.14 138;
   --un-preset-theme-colors-stage: 92% 0.005 298;
   --un-preset-theme-colors-brass: 68% 0.058 74;
