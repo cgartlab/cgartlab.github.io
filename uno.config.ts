@@ -97,6 +97,7 @@ export default defineConfig({
   safelist: [
     'bg-background',
     'bg-stage',
+    'bg-stage-dim',
     'bg-brass',
     'bg-paper',
     'bg-highlight',

@@ -50,6 +50,8 @@ export const themeConfig: ThemeConfig = {
 			brass: "oklch(72% 0.052 74)",
 			// paper color - 装置里纸张的固有色（亮色即票据/纸带的底色）
 			paper: "oklch(99.2% 0.004 96)",
+			// stage-dim - 标签网的次要墨（节点/连线），取自旧的 secondary 值
+			"stage-dim": "oklch(40% 0.005 298)",
 		},
 		dark: {
 			// primary color（标题、链接、悬停态）
@@ -74,6 +76,8 @@ export const themeConfig: ThemeConfig = {
 			// paper color - 暗色下不直接用，靠与 background 混合压暗
 			// （labels.css 的票据、typewriter.css 的纸带都用这个 mix）
 			paper: "oklch(99.2% 0.004 96)",
+			// stage-dim - 同上的暗色版本（旧 secondary 值，保持网与装置同调）
+			"stage-dim": "oklch(77% 0.005 298)",
 		},
 	},
 	// COLOR SETTINGS >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> END

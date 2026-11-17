@@ -498,14 +498,14 @@ export function startTagGraph(
   // alphas of the same token the device bodies are inked from. Using `stage`
   // rather than primary/secondary keeps the net in step with the machine when
   // the body text palette changes — the machine does not follow the text.
-  let nodeInk = tone('stage', 0.5)
+  let nodeInk = tone('stage-dim', 0.5)
   let hubInk = tone('stage', 0.86)
-  let edgeInk = tone('stage', EDGE_ALPHA)
+  let edgeInk = tone('stage-dim', EDGE_ALPHA)
   // the hover furniture is drawn whenever the pointer rests on a dot, so its
   // four inks are resolved with the rest — not re-read from the CSSOM per frame
   let inkRing = tone('stage', 0.45)
   let inkPillFill = tone('background', 0.97)
-  let inkPillBorder = tone('stage', 0.4)
+  let inkPillBorder = tone('stage-dim', 0.4)
   let inkPillText = tone('stage', 0.95)
 
   // The links are the expensive half of a frame — 68 segments is a lot of
@@ -693,12 +693,12 @@ export function startTagGraph(
    * wall is up would keep the light-theme greys on a dark page.
    */
   const retint = (): void => {
-    nodeInk = tone('stage', 0.5)
+    nodeInk = tone('stage-dim', 0.5)
     hubInk = tone('stage', 0.86)
-    edgeInk = tone('stage', EDGE_ALPHA)
+    edgeInk = tone('stage-dim', EDGE_ALPHA)
     inkRing = tone('stage', 0.45)
     inkPillFill = tone('background', 0.97)
-    inkPillBorder = tone('stage', 0.4)
+    inkPillBorder = tone('stage-dim', 0.4)
     inkPillText = tone('stage', 0.95)
     if (lctx) {
       bakeLinks()

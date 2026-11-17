@@ -40,8 +40,11 @@ export interface ThemeConfig {
 			highlight: string;
 			// 首页装置的墨色（与正文色解耦，见 home.css）
 			stage: string;
+			// 标签网的次要墨
+			"stage-dim": string;
 			// 装置上的黄铜配件色
 			brass: string;
+			// 装置的纸张固有色（纸带 / 票据）
 			paper: string;
 		};
 		dark: {
@@ -55,8 +58,11 @@ export interface ThemeConfig {
 			highlight: string;
 			// 首页装置的墨色（与正文色解耦，见 home.css）
 			stage: string;
+			// 标签网的次要墨
+			"stage-dim": string;
 			// 装置上的黄铜配件色
 			brass: string;
+			// 装置的纸张固有色（纸带 / 票据）
 			paper: string;
 		};
 	};

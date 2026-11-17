@@ -101,6 +101,7 @@ const SITE_TOKENS = `
   --un-preset-theme-colors-secondary: 40% 0.005 298;
   --un-preset-theme-colors-highlight: 41% 0.12 138;
   --un-preset-theme-colors-stage: 25% 0.005 298;
+  --un-preset-theme-colors-stage-dim: 40% 0.005 298;
   --un-preset-theme-colors-brass: 72% 0.052 74;
   --un-preset-theme-colors-paper: 99.2% 0.004 96;
   --un-preset-theme-font-family-sans: OPPOSans, ui-sans-serif, system-ui, sans-serif;
@@ -112,6 +113,7 @@ html.dark {
   --un-preset-theme-colors-secondary: 79.4% 0.0623 72.4;
   --un-preset-theme-colors-highlight: 72% 0.14 138;
   --un-preset-theme-colors-stage: 92% 0.005 298;
+  --un-preset-theme-colors-stage-dim: 77% 0.005 298;
   --un-preset-theme-colors-brass: 68% 0.058 74;
   --un-preset-theme-colors-paper: 99.2% 0.004 96;
 }

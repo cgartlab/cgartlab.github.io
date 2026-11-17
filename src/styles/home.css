@@ -745,8 +745,9 @@ html.reduce-motion .home-key { animation: none; transition: none; }
 
 .home-stage .iso-svg { max-width: 100%; }
 .home-paper { fill: var(--home-paper); stroke: none; }
-/* at night the sheet is dark stock so the accent ink carries the page */
-.dark .home-stage .home-paper { fill: color-mix(in oklch, oklch(var(--un-preset-theme-colors-stage)) 24%, oklch(var(--un-preset-theme-colors-background)) 76%); }
+/* at night the sheet is dark stock so the accent ink carries the page —
+   that mix now lives on --home-sheet in typewriter.css, so the paper token
+   governs both the strip and the tickets */
 .home-main > * { min-width: 0; }
 
 .home-paper-link { outline: none; }
