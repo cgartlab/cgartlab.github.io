@@ -91,6 +91,9 @@ const css = readFileSync(join(ROOT, 'src', 'styles', 'home.css'), 'utf8')
   .replace(/@import '\.\/home-devices\/([\w-]+)\.css';\n?/g, (_, name) =>
     readFileSync(join(ROOT, 'src', 'styles', 'home-devices', `${name}.css`), 'utf8'))
 
+// ⚠️ 手抄自 src/config.ts 的 color 调色板（预览页是独立 HTML，拿不到 UnoCSS 产物）。
+// 新增或修改主题色时必须同步这里，否则 oklch(var(--un-preset-theme-colors-x)) 解析失败，
+// SVG fill 会回落成纯黑（2026-11-17 加 stage/brass 时踩过，整台装置变黑剪影）。
 const SITE_TOKENS = `
 :root {
   --un-preset-theme-colors-background: 98% 0.012 85;

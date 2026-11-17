@@ -71,7 +71,8 @@ export const themeConfig: ThemeConfig = {
 			stage: "oklch(92% 0.005 298)",
 			// brass color - 同上的暗色版本（略暗、略暖）
 			brass: "oklch(68% 0.058 74)",
-			// paper color - 暗色下不直接用，靠与 background 混合压暗（见 labels.css）
+			// paper color - 暗色下不直接用，靠与 background 混合压暗
+			// （labels.css 的票据、typewriter.css 的纸带都用这个 mix）
 			paper: "oklch(99.2% 0.004 96)",
 		},
 	},
