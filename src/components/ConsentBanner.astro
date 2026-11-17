@@ -297,8 +297,10 @@ const currentUI = ui[currentLang as keyof typeof ui] ?? {}
     const vals = ['rejected', 'functional', 'accepted']
     for (let i = 0; i < 3; i++) {
       const btn = document.getElementById(ids[i])
-      if (btn)
-        btn.addEventListener('click', setPreference.bind(null, vals[i]))
+      if (!btn || btn.dataset.consentBound === '1')
+        continue
+      btn.dataset.consentBound = '1'
+      btn.addEventListener('click', setPreference.bind(null, vals[i]))
     }
   }
 
@@ -337,7 +339,9 @@ const currentUI = ui[currentLang as keyof typeof ui] ?? {}
     showBanner(b)
   }
   // Head.astro 的 analytics gating 读同一个键，别在两处各写一遍字面量
-  window.__CONSENT_KEY = STORAGE_KEY
+  // View Transitions 换页会换掉整份横幅 DOM：每次 page-load 重新绑定按钮、
+  // 必要时重新显示。bindButtons() 自带 dataset 去重，重复调用不会叠监听器。
+  document.addEventListener('astro:page-load', initBanner)
 
   initBanner()
 })()

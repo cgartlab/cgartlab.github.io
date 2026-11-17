@@ -16,7 +16,9 @@ const currentLang = getLangFromLocale(Astro.currentLocale)
 const allAgreementEntries = await getCollection('agreement')
 const agreementEntry = allAgreementEntries.find(entry => entry.data.lang === currentLang)
   ?? allAgreementEntries.find(entry => entry.data.lang === '')
-const { Content } = agreementEntry ? await render(agreementEntry) : { Content: null }
+if (!agreementEntry)
+  throw new Error('[agreement] 没有匹配当前语言的内容，检查 src/content/agreement/agreement-*.md 的 lang 前置字段')
+const { Content } = await render(agreementEntry)
 ---
 
 <Layout

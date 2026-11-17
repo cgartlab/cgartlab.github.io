@@ -211,6 +211,7 @@ Umami 不使用 Cookie，也不采集可识别到个人的信息。
 | YouTube | Google LLC | 视频嵌入 | 播放行为、Cookie | [YouTube](https://www.youtube.com/t/terms) |
 | Bilibili | 上海宽娱数码科技有限公司 | 视频嵌入 | 播放行为、Cookie | [Bilibili](https://www.bilibili.com/blackboard/privacy-pc.html) |
 | Telegram | Telegram FZ-LLC | 新文章推送频道 | 频道内容（不含你的个人信息） | [Telegram](https://telegram.org/privacy) |
+| X (Twitter) | X Corp. | 推文卡片嵌入 | 浏览行为、Cookie | [X](https://x.com/privacy) |
 
 嵌入内容的加载方式并不一样：**YouTube** 只放一个封面占位（lite-youtube），点播放才请求播放器；**Bilibili** 是 `loading="lazy"` 的 iframe，滚动到可见区域就会与 bilibili 建立连接；页面里出现 **X（Twitter）** 卡片时会加载 `platform.twitter.com/widgets.js`（已带 `data-dnt="true"`，即要求 X 不据此做个性化推荐）。这些连接由对应平台按各自的隐私政策处理。
 
@@ -222,7 +223,7 @@ Umami 不使用 Cookie，也不采集可识别到个人的信息。
 
 | 数据 | 期限 |
 | --- | --- |
-| 分析数据 | Google Analytics 默认 26 个月；Umami 按账号套餐的保留期 |
+| 分析数据 | Google Analytics 默认 2 个月（可在 GA 后台调整到最长 14 个月）；Umami 按套餐的保留期 |
 | 评论 | 存于 GitHub Discussions，遵循 GitHub 的保留政策 |
 | 咨询邮件与表单 | 处理完并留档必要期限后删除，通常不超过 24 个月 |
 | 本地存储 | 由你自行管理，可随时清除 |
