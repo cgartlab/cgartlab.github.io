@@ -494,10 +494,10 @@ export function startTagGraph(
   // The net is drawn in the page's own ink, not in an accent: the stage is an
   // engraved instrument and a green constellation on it reads as a chart from
   // another product. Hierarchy is carried by size and by how dark the dot is —
-  // Hubs take the brighter stage ink, everything else the dimmer one, at two
-  // alphas of the same token the device bodies are inked from. Using `stage`
-  // rather than primary/secondary keeps the net in step with the machine when
-  // the body text palette changes — the machine does not follow the text.
+  // Hubs take `stage` (the device-body ink), everything else `stage-dim` — the
+  // pair mirrors the two tones the machine's caption and dial use. Both are
+  // device tokens rather than primary/secondary, so a change to the body-text
+  // palette moves neither the machine nor the net.
   let nodeInk = tone('stage-dim', 0.5)
   let hubInk = tone('stage', 0.86)
   let edgeInk = tone('stage-dim', EDGE_ALPHA)
