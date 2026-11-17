@@ -43,6 +43,9 @@ export const themeConfig: ThemeConfig = {
 			// used for navbar underline, selected text bg, etc
 			// 3.10:1 contrast against light background
 			highlight: "oklch(41% 0.12 138)",
+			// stage color - 首页装置的墨色
+			// 与 primary 同色即可：装置在亮色下本来就该和正文同调
+			stage: "oklch(25% 0.005 298)",
 		},
 		dark: {
 			// primary color（标题、链接、悬停态）
@@ -58,6 +61,10 @@ export const themeConfig: ThemeConfig = {
 			// used for navbar underline, selected text bg, etc
 			// 4.52:1 contrast against dark background
 			highlight: "oklch(72% 0.14 138)",
+			// stage color - 首页装置的墨色
+			// 2026-11-17：暗色正文改成暖茶 #d5b690 后，装置不能跟着变紫，
+			// 所以这里钉住改造前的中性冷墨（hue 298）。装置几何全部走这个 token。
+			stage: "oklch(92% 0.005 298)",
 		},
 	},
 	// COLOR SETTINGS >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> END

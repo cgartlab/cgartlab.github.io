@@ -12,41 +12,38 @@
    ========================================================================== */
 
 .home-stage {
-  /* 装置墨色：与正文色解耦。2026-11-17 暗色正文改为 #d5b690 后，
-     装置若继续取 primary/secondary 会与紫色调的暗背景混成脏紫色 —— 这里钉回原色。 */
-  --device-primary: var(--un-preset-theme-colors-primary);
-  --device-secondary: var(--un-preset-theme-colors-secondary);
+  /* 装置墨色：与正文色解耦，取自主题 token stage（见 src/config.ts） */
 
   /* the preload bar is positioned against the stage */
   position: relative;
   /* paper / four-tone shading -------------------------------------------- */
   --anatomy-paper: oklch(var(--un-preset-theme-colors-background));
-  --anatomy-face: color-mix(in oklch, oklch(var(--un-preset-theme-colors-background)) 93%, oklch(var(--device-primary)) 7%);
+  --anatomy-face: color-mix(in oklch, oklch(var(--un-preset-theme-colors-background)) 93%, oklch(var(--un-preset-theme-colors-stage)) 7%);
   --anatomy-top: oklch(var(--un-preset-theme-colors-background));
-  --anatomy-shade-0: color-mix(in oklch, oklch(var(--un-preset-theme-colors-background)) 76%, oklch(var(--device-primary)) 24%);
-  --anatomy-shade-1: color-mix(in oklch, oklch(var(--un-preset-theme-colors-background)) 82%, oklch(var(--device-primary)) 18%);
-  --anatomy-shade-2: color-mix(in oklch, oklch(var(--un-preset-theme-colors-background)) 88%, oklch(var(--device-primary)) 12%);
-  --anatomy-shade-3: color-mix(in oklch, oklch(var(--un-preset-theme-colors-background)) 94%, oklch(var(--device-primary)) 6%);
+  --anatomy-shade-0: color-mix(in oklch, oklch(var(--un-preset-theme-colors-background)) 76%, oklch(var(--un-preset-theme-colors-stage)) 24%);
+  --anatomy-shade-1: color-mix(in oklch, oklch(var(--un-preset-theme-colors-background)) 82%, oklch(var(--un-preset-theme-colors-stage)) 18%);
+  --anatomy-shade-2: color-mix(in oklch, oklch(var(--un-preset-theme-colors-background)) 88%, oklch(var(--un-preset-theme-colors-stage)) 12%);
+  --anatomy-shade-3: color-mix(in oklch, oklch(var(--un-preset-theme-colors-background)) 94%, oklch(var(--un-preset-theme-colors-stage)) 6%);
 
   /* the one lit part ------------------------------------------------------ */
   --anatomy-lit: oklch(var(--un-preset-theme-colors-highlight));
   --anatomy-lit-top: color-mix(in oklch, oklch(var(--un-preset-theme-colors-highlight)) 82%, oklch(var(--un-preset-theme-colors-background)) 18%);
-  --anatomy-lit-shade: color-mix(in oklch, oklch(var(--un-preset-theme-colors-highlight)) 70%, oklch(var(--device-primary)) 30%);
+  --anatomy-lit-shade: color-mix(in oklch, oklch(var(--un-preset-theme-colors-highlight)) 70%, oklch(var(--un-preset-theme-colors-stage)) 30%);
 
   /* line tones ------------------------------------------------------------ */
-  --anatomy-hi: oklch(var(--device-primary));
-  --anatomy-mid: color-mix(in oklch, oklch(var(--device-primary)) 55%, oklch(var(--un-preset-theme-colors-background)) 45%);
-  --anatomy-lo: color-mix(in oklch, oklch(var(--device-primary)) 35%, oklch(var(--un-preset-theme-colors-background)) 65%);
-  --anatomy-faint: color-mix(in oklch, oklch(var(--device-primary)) 18%, oklch(var(--un-preset-theme-colors-background)) 82%);
-  --anatomy-dot: oklch(var(--device-primary));
+  --anatomy-hi: oklch(var(--un-preset-theme-colors-stage));
+  --anatomy-mid: color-mix(in oklch, oklch(var(--un-preset-theme-colors-stage)) 55%, oklch(var(--un-preset-theme-colors-background)) 45%);
+  --anatomy-lo: color-mix(in oklch, oklch(var(--un-preset-theme-colors-stage)) 35%, oklch(var(--un-preset-theme-colors-background)) 65%);
+  --anatomy-faint: color-mix(in oklch, oklch(var(--un-preset-theme-colors-stage)) 18%, oklch(var(--un-preset-theme-colors-background)) 82%);
+  --anatomy-dot: oklch(var(--un-preset-theme-colors-stage));
   --anatomy-halo: rgb(0 0 0);
   --anatomy-halo-opacity: 0.10;
   --home-paper: oklch(var(--un-preset-theme-colors-background));
   --home-ink: oklch(var(--un-preset-theme-colors-highlight));
-  --home-metal: color-mix(in oklch, oklch(var(--device-primary)) 52%, oklch(var(--un-preset-theme-colors-background)) 48%);
+  --home-metal: color-mix(in oklch, oklch(var(--un-preset-theme-colors-stage)) 52%, oklch(var(--un-preset-theme-colors-background)) 48%);
 
   /* machine-specific ------------------------------------------------------ */
-  --home-cavity: color-mix(in oklch, oklch(var(--device-primary)) 56%, oklch(var(--un-preset-theme-colors-background)) 44%);
+  --home-cavity: color-mix(in oklch, oklch(var(--un-preset-theme-colors-stage)) 56%, oklch(var(--un-preset-theme-colors-background)) 44%);
   --home-brass: oklch(72% 0.052 74);
   --home-brass-deep: oklch(58% 0.062 64);
 
@@ -56,23 +53,20 @@
 }
 
 .dark .home-stage {
-  /* 暗色下钉死为改造前的调色板（中性冷白，hue 298），装置外观不再随正文色漂移 */
-  --device-primary: 92% 0.005 298;
-  --device-secondary: 77% 0.005 298;
 
   --anatomy-paper: oklch(var(--un-preset-theme-colors-background));
-  --anatomy-face: color-mix(in oklch, oklch(var(--un-preset-theme-colors-background)) 88%, oklch(var(--device-primary)) 12%);
-  --anatomy-top: color-mix(in oklch, oklch(var(--un-preset-theme-colors-background)) 78%, oklch(var(--device-primary)) 22%);
-  --anatomy-shade-0: color-mix(in oklch, oklch(var(--un-preset-theme-colors-background)) 96%, oklch(var(--device-primary)) 4%);
-  --anatomy-shade-1: color-mix(in oklch, oklch(var(--un-preset-theme-colors-background)) 92%, oklch(var(--device-primary)) 8%);
-  --anatomy-shade-2: color-mix(in oklch, oklch(var(--un-preset-theme-colors-background)) 88%, oklch(var(--device-primary)) 12%);
-  --anatomy-shade-3: color-mix(in oklch, oklch(var(--un-preset-theme-colors-background)) 84%, oklch(var(--device-primary)) 16%);
-  --home-paper: color-mix(in oklch, oklch(var(--device-primary)) 62%, oklch(var(--un-preset-theme-colors-background)) 38%);
+  --anatomy-face: color-mix(in oklch, oklch(var(--un-preset-theme-colors-background)) 88%, oklch(var(--un-preset-theme-colors-stage)) 12%);
+  --anatomy-top: color-mix(in oklch, oklch(var(--un-preset-theme-colors-background)) 78%, oklch(var(--un-preset-theme-colors-stage)) 22%);
+  --anatomy-shade-0: color-mix(in oklch, oklch(var(--un-preset-theme-colors-background)) 96%, oklch(var(--un-preset-theme-colors-stage)) 4%);
+  --anatomy-shade-1: color-mix(in oklch, oklch(var(--un-preset-theme-colors-background)) 92%, oklch(var(--un-preset-theme-colors-stage)) 8%);
+  --anatomy-shade-2: color-mix(in oklch, oklch(var(--un-preset-theme-colors-background)) 88%, oklch(var(--un-preset-theme-colors-stage)) 12%);
+  --anatomy-shade-3: color-mix(in oklch, oklch(var(--un-preset-theme-colors-background)) 84%, oklch(var(--un-preset-theme-colors-stage)) 16%);
+  --home-paper: color-mix(in oklch, oklch(var(--un-preset-theme-colors-stage)) 62%, oklch(var(--un-preset-theme-colors-background)) 38%);
   --home-ink: oklch(var(--un-preset-theme-colors-highlight));
-  --home-metal: color-mix(in oklch, oklch(var(--device-primary)) 26%, oklch(var(--un-preset-theme-colors-background)) 74%);
+  --home-metal: color-mix(in oklch, oklch(var(--un-preset-theme-colors-stage)) 26%, oklch(var(--un-preset-theme-colors-background)) 74%);
 
   --anatomy-lit-top: color-mix(in oklch, oklch(var(--un-preset-theme-colors-highlight)) 70%, oklch(var(--un-preset-theme-colors-background)) 30%);
-  --anatomy-lit-shade: color-mix(in oklch, oklch(var(--un-preset-theme-colors-highlight)) 52%, oklch(var(--device-primary)) 48%);
+  --anatomy-lit-shade: color-mix(in oklch, oklch(var(--un-preset-theme-colors-highlight)) 52%, oklch(var(--un-preset-theme-colors-stage)) 48%);
 
   --anatomy-halo-opacity: 0.62;
   --home-cavity: oklch(var(--un-preset-theme-colors-background));
@@ -759,7 +753,7 @@ html.reduce-motion .home-key { animation: none; transition: none; }
 .home-stage .iso-svg { max-width: 100%; }
 .home-paper { fill: var(--home-paper); stroke: none; }
 /* at night the sheet is dark stock so the accent ink carries the page */
-.dark .home-stage .home-paper { fill: color-mix(in oklch, oklch(var(--device-primary)) 24%, oklch(var(--un-preset-theme-colors-background)) 76%); }
+.dark .home-stage .home-paper { fill: color-mix(in oklch, oklch(var(--un-preset-theme-colors-stage)) 24%, oklch(var(--un-preset-theme-colors-background)) 76%); }
 .home-main > * { min-width: 0; }
 
 .home-paper-link { outline: none; }

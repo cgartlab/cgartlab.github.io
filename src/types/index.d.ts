@@ -38,6 +38,8 @@ export interface ThemeConfig {
 			background: string;
 			// 高亮色
 			highlight: string;
+			// 首页装置的墨色（与正文色解耦，见 home.css）
+			stage: string;
 		};
 		dark: {
 			// 主色调
@@ -48,6 +50,8 @@ export interface ThemeConfig {
 			background: string;
 			// 高亮色
 			highlight: string;
+			// 首页装置的墨色（与正文色解耦，见 home.css）
+			stage: string;
 		};
 	};
 	global: {

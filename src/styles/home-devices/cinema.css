@@ -13,51 +13,51 @@
    machine stops being one object. */
 
 /* the boiler: the machine's own metal, a step lighter than the cast iron */
-.home-stage .home-cine-body.iso-solid > .iso-fill { fill: color-mix(in oklch, oklch(var(--device-primary)) 40%, oklch(var(--un-preset-theme-colors-background)) 60%); }
-.home-stage .home-cine-body.iso-solid > .iso-shade { fill: color-mix(in oklch, oklch(var(--device-primary)) 36%, oklch(var(--un-preset-theme-colors-background)) 64%); }
-.home-stage .home-cine-body.iso-solid > .iso-top { fill: color-mix(in oklch, oklch(var(--device-primary)) 30%, oklch(var(--un-preset-theme-colors-background)) 70%); }
+.home-stage .home-cine-body.iso-solid > .iso-fill { fill: color-mix(in oklch, oklch(var(--un-preset-theme-colors-stage)) 40%, oklch(var(--un-preset-theme-colors-background)) 60%); }
+.home-stage .home-cine-body.iso-solid > .iso-shade { fill: color-mix(in oklch, oklch(var(--un-preset-theme-colors-stage)) 36%, oklch(var(--un-preset-theme-colors-background)) 64%); }
+.home-stage .home-cine-body.iso-solid > .iso-top { fill: color-mix(in oklch, oklch(var(--un-preset-theme-colors-stage)) 30%, oklch(var(--un-preset-theme-colors-background)) 70%); }
 
 /* cast iron: the gantry, the spindles, the brake shoe — darker and heavier */
-.home-stage .home-cine-cast.iso-solid > .iso-fill { fill: color-mix(in oklch, oklch(var(--device-primary)) 64%, oklch(var(--un-preset-theme-colors-background)) 36%); }
-.home-stage .home-cine-cast.iso-solid > .iso-shade { fill: color-mix(in oklch, oklch(var(--device-primary)) 58%, oklch(var(--un-preset-theme-colors-background)) 42%); }
-.home-stage .home-cine-cast.iso-solid > .iso-top { fill: color-mix(in oklch, oklch(var(--device-primary)) 50%, oklch(var(--un-preset-theme-colors-background)) 50%); }
+.home-stage .home-cine-cast.iso-solid > .iso-fill { fill: color-mix(in oklch, oklch(var(--un-preset-theme-colors-stage)) 64%, oklch(var(--un-preset-theme-colors-background)) 36%); }
+.home-stage .home-cine-cast.iso-solid > .iso-shade { fill: color-mix(in oklch, oklch(var(--un-preset-theme-colors-stage)) 58%, oklch(var(--un-preset-theme-colors-background)) 42%); }
+.home-stage .home-cine-cast.iso-solid > .iso-top { fill: color-mix(in oklch, oklch(var(--un-preset-theme-colors-stage)) 50%, oklch(var(--un-preset-theme-colors-background)) 50%); }
 
-.home-stage .home-cine-reel .iso-fill { fill: color-mix(in oklch, oklch(var(--device-primary)) 50%, oklch(var(--un-preset-theme-colors-background)) 50%); }
-.home-stage .home-cine-reel .iso-shade { fill: color-mix(in oklch, oklch(var(--device-primary)) 26%, oklch(var(--un-preset-theme-colors-background)) 74%); }
-.home-stage .home-cine-reel .iso-top { fill: color-mix(in oklch, oklch(var(--device-primary)) 58%, oklch(var(--un-preset-theme-colors-background)) 42%); }
+.home-stage .home-cine-reel .iso-fill { fill: color-mix(in oklch, oklch(var(--un-preset-theme-colors-stage)) 50%, oklch(var(--un-preset-theme-colors-background)) 50%); }
+.home-stage .home-cine-reel .iso-shade { fill: color-mix(in oklch, oklch(var(--un-preset-theme-colors-stage)) 26%, oklch(var(--un-preset-theme-colors-background)) 74%); }
+.home-stage .home-cine-reel .iso-top { fill: color-mix(in oklch, oklch(var(--un-preset-theme-colors-stage)) 58%, oklch(var(--un-preset-theme-colors-background)) 42%); }
 /* the wound film: a step darker than the flange, never a hole in the drawing */
-.home-stage .home-cine-coil { fill: color-mix(in oklch, oklch(var(--device-primary)) 44%, oklch(var(--un-preset-theme-colors-background)) 56%); }
+.home-stage .home-cine-coil { fill: color-mix(in oklch, oklch(var(--un-preset-theme-colors-stage)) 44%, oklch(var(--un-preset-theme-colors-background)) 56%); }
 
 /* the barrel and the gauge's bezel: the machine's brass, warmed toward the ink
    so it reads as aged metal rather than as a painted-on stripe */
 .home-stage .home-cine-brass.iso-solid > .iso-fill { fill: var(--home-brass); }
-.home-stage .home-cine-brass.iso-solid > .iso-shade { fill: color-mix(in oklch, var(--home-brass) 76%, oklch(var(--device-primary)) 24%); }
+.home-stage .home-cine-brass.iso-solid > .iso-shade { fill: color-mix(in oklch, var(--home-brass) 76%, oklch(var(--un-preset-theme-colors-stage)) 24%); }
 .home-stage .home-cine-brass.iso-solid > .iso-top { fill: color-mix(in oklch, var(--home-brass) 58%, oklch(var(--un-preset-theme-colors-background)) 42%); }
 
 /* the gauge: a dial that contrasts with its brass bezel in either theme, with
    the ticks and the needle cut back out of it */
-.home-stage .home-cine-dial { fill: color-mix(in oklch, oklch(var(--device-primary)) 72%, oklch(var(--un-preset-theme-colors-background)) 28%); stroke: none; }
+.home-stage .home-cine-dial { fill: color-mix(in oklch, oklch(var(--un-preset-theme-colors-stage)) 72%, oklch(var(--un-preset-theme-colors-background)) 28%); stroke: none; }
 .home-stage .home-cine-tick { fill: none; stroke: var(--anatomy-top); stroke-width: 0.62px; stroke-linecap: round; }
 .home-stage .home-cine-tick[data-major] { stroke-width: 1.1px; }
 .home-stage .home-cine-needle { fill: none; stroke: var(--anatomy-top); stroke-width: 1.15px; stroke-linecap: round; }
 
 /* the lens glass: the one dark hole in the drawing */
-.home-stage .home-cine-glass { fill: color-mix(in oklch, oklch(var(--device-primary)) 88%, oklch(var(--un-preset-theme-colors-background)) 12%); stroke: none; }
+.home-stage .home-cine-glass { fill: color-mix(in oklch, oklch(var(--un-preset-theme-colors-stage)) 88%, oklch(var(--un-preset-theme-colors-background)) 12%); stroke: none; }
 
 /* the flue and the jumper are the same brass as the bands */
-.home-stage .home-cine-pipe .tb-body { fill: color-mix(in oklch, var(--home-brass) 46%, oklch(var(--device-primary)) 54%); }
-.home-stage .home-cine-pipe .tb-shine { fill: color-mix(in oklch, var(--home-brass) 78%, oklch(var(--device-primary)) 22%); }
-.home-stage .home-cine-pipe .tb-shade { fill: color-mix(in oklch, var(--home-brass) 18%, oklch(var(--device-primary)) 82%); }
+.home-stage .home-cine-pipe .tb-body { fill: color-mix(in oklch, var(--home-brass) 46%, oklch(var(--un-preset-theme-colors-stage)) 54%); }
+.home-stage .home-cine-pipe .tb-shine { fill: color-mix(in oklch, var(--home-brass) 78%, oklch(var(--un-preset-theme-colors-stage)) 22%); }
+.home-stage .home-cine-pipe .tb-shade { fill: color-mix(in oklch, var(--home-brass) 18%, oklch(var(--un-preset-theme-colors-stage)) 82%); }
 .home-stage .home-cine-pipe .tb-edge { stroke: var(--anatomy-lo); }
 
 /* the four spokes of the hand-wheel: heavier than a drawing line */
-.home-stage .home-cine-spoke { fill: none; stroke: color-mix(in oklch, oklch(var(--device-primary)) 46%, oklch(var(--un-preset-theme-colors-background)) 54%); stroke-width: 1.7px; stroke-linecap: round; }
+.home-stage .home-cine-spoke { fill: none; stroke: color-mix(in oklch, oklch(var(--un-preset-theme-colors-stage)) 46%, oklch(var(--un-preset-theme-colors-background)) 54%); stroke-width: 1.7px; stroke-linecap: round; }
 
 /* the flat belt, and the slots it and the film disappear into */
-.home-stage .home-cine-belt.iso-solid > .iso-fill { fill: color-mix(in oklch, oklch(var(--device-primary)) 70%, oklch(var(--un-preset-theme-colors-background)) 30%); }
-.home-stage .home-cine-belt.iso-solid > .iso-shade { fill: color-mix(in oklch, oklch(var(--device-primary)) 64%, oklch(var(--un-preset-theme-colors-background)) 36%); }
-.home-stage .home-cine-belt.iso-solid > .iso-top { fill: color-mix(in oklch, oklch(var(--device-primary)) 58%, oklch(var(--un-preset-theme-colors-background)) 42%); }
-.home-stage .home-cine-slot { fill: color-mix(in oklch, oklch(var(--device-primary)) 82%, oklch(var(--un-preset-theme-colors-background)) 18%); stroke: none; }
+.home-stage .home-cine-belt.iso-solid > .iso-fill { fill: color-mix(in oklch, oklch(var(--un-preset-theme-colors-stage)) 70%, oklch(var(--un-preset-theme-colors-background)) 30%); }
+.home-stage .home-cine-belt.iso-solid > .iso-shade { fill: color-mix(in oklch, oklch(var(--un-preset-theme-colors-stage)) 64%, oklch(var(--un-preset-theme-colors-background)) 36%); }
+.home-stage .home-cine-belt.iso-solid > .iso-top { fill: color-mix(in oklch, oklch(var(--un-preset-theme-colors-stage)) 58%, oklch(var(--un-preset-theme-colors-background)) 42%); }
+.home-stage .home-cine-slot { fill: color-mix(in oklch, oklch(var(--un-preset-theme-colors-stage)) 82%, oklch(var(--un-preset-theme-colors-background)) 18%); stroke: none; }
 
 /* the cone: white light, no accent tint. A soft gradient from the hood (bright)
    to the far end (nothing), with the CSS blur doing the rest.
@@ -86,7 +86,7 @@
    the tail of the strip off. Here the width is in user units like the dash. */
 .home-stage .home-part .iso-line.home-cine-film {
   fill: none;
-  stroke: color-mix(in oklch, oklch(var(--device-primary)) 72%, oklch(var(--un-preset-theme-colors-background)) 28%);
+  stroke: color-mix(in oklch, oklch(var(--un-preset-theme-colors-stage)) 72%, oklch(var(--un-preset-theme-colors-background)) 28%);
   stroke-width: 3.6;
   stroke-linecap: round;
   stroke-linejoin: round;
@@ -96,7 +96,7 @@
 /* the perforations ride the band's edge; each one is timed to the moment the
    threading head reaches it (see the `--at` written by cinema.mjs) */
 .home-stage .home-cine-film-perf circle {
-  fill: color-mix(in oklch, oklch(var(--un-preset-theme-colors-background)) 72%, oklch(var(--device-primary)) 28%);
+  fill: color-mix(in oklch, oklch(var(--un-preset-theme-colors-background)) 72%, oklch(var(--un-preset-theme-colors-stage)) 28%);
   stroke: none;
   opacity: 1;
   /* each hole is punched in place, so it scales about its own centre */
@@ -106,16 +106,16 @@
 
 /* the gate the strip runs through: a block a step darker than the head, with
    the aperture cut out of it as a slot (see `.home-cine-slot`) */
-.home-stage .home-cine-gate.iso-solid > .iso-fill { fill: color-mix(in oklch, oklch(var(--device-primary)) 54%, oklch(var(--un-preset-theme-colors-background)) 46%); }
-.home-stage .home-cine-gate.iso-solid > .iso-shade { fill: color-mix(in oklch, oklch(var(--device-primary)) 50%, oklch(var(--un-preset-theme-colors-background)) 50%); }
-.home-stage .home-cine-gate.iso-solid > .iso-top { fill: color-mix(in oklch, oklch(var(--device-primary)) 44%, oklch(var(--un-preset-theme-colors-background)) 56%); }
+.home-stage .home-cine-gate.iso-solid > .iso-fill { fill: color-mix(in oklch, oklch(var(--un-preset-theme-colors-stage)) 54%, oklch(var(--un-preset-theme-colors-background)) 46%); }
+.home-stage .home-cine-gate.iso-solid > .iso-shade { fill: color-mix(in oklch, oklch(var(--un-preset-theme-colors-stage)) 50%, oklch(var(--un-preset-theme-colors-background)) 50%); }
+.home-stage .home-cine-gate.iso-solid > .iso-top { fill: color-mix(in oklch, oklch(var(--un-preset-theme-colors-stage)) 44%, oklch(var(--un-preset-theme-colors-background)) 56%); }
 
 /* the shutter, seen through the lamphouse port: two blades on a disc */
-.home-stage .home-cine-port.iso-solid > .iso-fill { fill: color-mix(in oklch, oklch(var(--device-primary)) 84%, oklch(var(--un-preset-theme-colors-background)) 16%); }
-.home-stage .home-cine-port.iso-solid > .iso-shade { fill: color-mix(in oklch, oklch(var(--device-primary)) 80%, oklch(var(--un-preset-theme-colors-background)) 20%); }
-.home-stage .home-cine-blade.iso-solid > .iso-fill { fill: color-mix(in oklch, oklch(var(--device-primary)) 52%, oklch(var(--un-preset-theme-colors-background)) 48%); }
-.home-stage .home-cine-blade.iso-solid > .iso-shade { fill: color-mix(in oklch, oklch(var(--device-primary)) 46%, oklch(var(--un-preset-theme-colors-background)) 54%); }
-.home-stage .home-cine-blade-light { fill: color-mix(in oklch, oklch(var(--un-preset-theme-colors-background)) 84%, oklch(var(--device-primary)) 16%); stroke: none; }
+.home-stage .home-cine-port.iso-solid > .iso-fill { fill: color-mix(in oklch, oklch(var(--un-preset-theme-colors-stage)) 84%, oklch(var(--un-preset-theme-colors-background)) 16%); }
+.home-stage .home-cine-port.iso-solid > .iso-shade { fill: color-mix(in oklch, oklch(var(--un-preset-theme-colors-stage)) 80%, oklch(var(--un-preset-theme-colors-background)) 20%); }
+.home-stage .home-cine-blade.iso-solid > .iso-fill { fill: color-mix(in oklch, oklch(var(--un-preset-theme-colors-stage)) 52%, oklch(var(--un-preset-theme-colors-background)) 48%); }
+.home-stage .home-cine-blade.iso-solid > .iso-shade { fill: color-mix(in oklch, oklch(var(--un-preset-theme-colors-stage)) 46%, oklch(var(--un-preset-theme-colors-background)) 54%); }
+.home-stage .home-cine-blade-light { fill: color-mix(in oklch, oklch(var(--un-preset-theme-colors-background)) 84%, oklch(var(--un-preset-theme-colors-stage)) 16%); stroke: none; }
 
 /* --------------------------------------------------------------------------
    The assembly — 2.6 s, eighteen beats.

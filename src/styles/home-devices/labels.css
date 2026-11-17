@@ -393,7 +393,7 @@
 }
 
 .dark .home-stage .home-ticket {
-  --home-sheet: color-mix(in oklch, oklch(var(--device-primary)) 24%, oklch(var(--un-preset-theme-colors-background)) 76%);
+  --home-sheet: color-mix(in oklch, oklch(var(--un-preset-theme-colors-stage)) 24%, oklch(var(--un-preset-theme-colors-background)) 76%);
 }
 
 .home-stage .home-ticket-paper { fill: var(--home-sheet, var(--home-paper)); }
