@@ -45,10 +45,13 @@ export const themeConfig: ThemeConfig = {
 			highlight: "oklch(41% 0.12 138)",
 		},
 		dark: {
-			// primary color
-			primary: "oklch(92% 0.005 298)",
-			// secondary color
-			secondary: "oklch(77% 0.005 298)",
+			// primary color（标题、链接、悬停态）
+			// 2026-11-17：暗色模式的标题与正文统一为暖茶色 #d5b690（用户指定），
+			// 强调色 highlight 保持不变；oklch 由 #d5b690 换算而来。
+			primary: "oklch(79.4% 0.0623 72.4)",
+			// secondary color（正文）
+			// 与 primary 同色：层级改由字号/字重承担，不再靠明度差
+			secondary: "oklch(79.4% 0.0623 72.4)",
 			// background color
 			background: "oklch(22% 0.005 298)",
 			// highlight color - olive green
