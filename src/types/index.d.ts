@@ -40,6 +40,9 @@ export interface ThemeConfig {
 			highlight: string;
 			// 首页装置的墨色（与正文色解耦，见 home.css）
 			stage: string;
+			// 装置上的黄铜配件色
+			brass: string;
+			"brass-deep": string;
 		};
 		dark: {
 			// 主色调
@@ -52,6 +55,9 @@ export interface ThemeConfig {
 			highlight: string;
 			// 首页装置的墨色（与正文色解耦，见 home.css）
 			stage: string;
+			// 装置上的黄铜配件色
+			brass: string;
+			"brass-deep": string;
 		};
 	};
 	global: {

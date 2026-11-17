@@ -44,8 +44,8 @@
 
   /* machine-specific ------------------------------------------------------ */
   --home-cavity: color-mix(in oklch, oklch(var(--un-preset-theme-colors-stage)) 56%, oklch(var(--un-preset-theme-colors-background)) 44%);
-  --home-brass: oklch(72% 0.052 74);
-  --home-brass-deep: oklch(58% 0.062 64);
+  --home-brass: oklch(var(--un-preset-theme-colors-brass));
+  --home-brass-deep: oklch(var(--un-preset-theme-colors-brass-deep));
 
   --anatomy-weight: 0.6px;
   --anatomy-ease: cubic-bezier(0.32, 0.72, 0, 1);
@@ -53,7 +53,6 @@
 }
 
 .dark .home-stage {
-
   --anatomy-paper: oklch(var(--un-preset-theme-colors-background));
   --anatomy-face: color-mix(in oklch, oklch(var(--un-preset-theme-colors-background)) 88%, oklch(var(--un-preset-theme-colors-stage)) 12%);
   --anatomy-top: color-mix(in oklch, oklch(var(--un-preset-theme-colors-background)) 78%, oklch(var(--un-preset-theme-colors-stage)) 22%);
@@ -64,14 +63,12 @@
   --home-paper: color-mix(in oklch, oklch(var(--un-preset-theme-colors-stage)) 62%, oklch(var(--un-preset-theme-colors-background)) 38%);
   --home-ink: oklch(var(--un-preset-theme-colors-highlight));
   --home-metal: color-mix(in oklch, oklch(var(--un-preset-theme-colors-stage)) 26%, oklch(var(--un-preset-theme-colors-background)) 74%);
-
   --anatomy-lit-top: color-mix(in oklch, oklch(var(--un-preset-theme-colors-highlight)) 70%, oklch(var(--un-preset-theme-colors-background)) 30%);
   --anatomy-lit-shade: color-mix(in oklch, oklch(var(--un-preset-theme-colors-highlight)) 52%, oklch(var(--un-preset-theme-colors-stage)) 48%);
-
   --anatomy-halo-opacity: 0.62;
   --home-cavity: oklch(var(--un-preset-theme-colors-background));
-  --home-brass: oklch(68% 0.058 74);
-  --home-brass-deep: oklch(54% 0.07 64);
+  --home-brass: oklch(var(--un-preset-theme-colors-brass));
+  --home-brass-deep: oklch(var(--un-preset-theme-colors-brass-deep));
 }
 
 /* --------------------------------------------------------------------------
