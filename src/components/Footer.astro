@@ -34,21 +34,21 @@ const wordCountText = {
   'zh-tw': '累計發表字數：',
 }[currentLang] || '累计发表字数：'
 
-const termsPath = currentLang === defaultLocale ? '/terms/' : `/${currentLang}/terms/`
-// 免责声明页面路径
-const disclaimerPath = currentLang === defaultLocale ? '/disclaimer/' : `/${currentLang}/disclaimer/`
-const termsText = {
-  'zh': '服务条款',
-  'en': 'Terms',
-  'zh-tw': '服務條款',
-}[currentLang] || '服务条款'
+// 用户协议：2026-11-17 起《服务条款》《隐私政策》《免责声明》合并为一份文档，
+// 页脚只保留这一个入口；旧路径由 src/worker.mjs 301 过来。
+const agreementPath = currentLang === defaultLocale ? '/agreement/' : `/${currentLang}/agreement/`
+const agreementText = {
+  'zh': '用户协议',
+  'en': 'User Agreement',
+  'zh-tw': '使用者協議',
+}[currentLang] || '用户协议'
 
-// 免责声明文本
-const disclaimerText = {
-  'zh': '免责声明',
-  'en': 'Disclaimer',
-  'zh-tw': '免責聲明',
-}[currentLang] || '免责声明'
+// Cookie 设置：重新打开同意横幅（ConsentBanner 暴露的 window.__openConsentBanner）
+const cookieText = {
+  'zh': 'Cookie 设置',
+  'en': 'Cookie settings',
+  'zh-tw': 'Cookie 設定',
+}[currentLang] || 'Cookie 设置'
 // 许可协议文本
 const licenseText = {
   'zh': '内容统一采用',
@@ -79,8 +79,12 @@ const licenseText = {
 
   <!-- 第3行：法律信息 -->
   <p class="m-0 text-footer font-navbar">
-    <a class={footerLinkClass} href={termsPath}>{termsText}</a>
-    &nbsp; / &nbsp;<a class={footerLinkClass} href={disclaimerPath}>{disclaimerText}</a>
+    <a class={footerLinkClass} href={agreementPath}>{agreementText}</a>
+    &nbsp; / &nbsp;<button
+      type="button"
+      class={`${footerLinkClass} cursor-pointer border-0 bg-transparent p-0 text-footer font-navbar`}
+      data-consent-open
+    >{cookieText}</button>
   </p>
 
   <!-- 第4行：版权 -->
@@ -101,3 +105,22 @@ const licenseText = {
     </a>
   </p>
 </footer>
+
+<script is:inline>
+  (function () {
+    // 用户随时可以改同意状态：页脚入口重新打开横幅（PIPL / GDPR 要求的撤回路径）。
+    // 必须用 document 级委托：View Transitions 换页会替换页脚 DOM，直接绑在按钮上
+    // 第二次客户端导航后就失效了（评审 #522 P1）。
+    if (window.__consentOpenBound)
+      return
+    window.__consentOpenBound = true
+    document.addEventListener('click', function (e) {
+      var el = e.target && e.target.closest ? e.target.closest('[data-consent-open]') : null
+      if (!el)
+        return
+      e.preventDefault()
+      if (typeof window.__openConsentBanner === 'function')
+        window.__openConsentBanner()
+    })
+  })()
+</script>

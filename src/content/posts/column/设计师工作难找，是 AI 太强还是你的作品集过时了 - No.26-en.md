@@ -3,7 +3,10 @@ title: "Designers Can't Find Work — Is AI Too Strong, or Is Your Portfolio Out
 published: 2026-11-16
 description: "Jobs are hard to find, but blaming the environment fixes nothing. What a designer can actually control is the portfolio — not a static PDF, but a living website that keeps updating. An employer's-eye view of why a live site proves what you can solve better than any static portfolio."
 updated: 2026-11-16
-tags: []
+tags:
+    - Journal
+    - Portfolio
+    - Design
 draft: false
 pin: 0
 toc: true

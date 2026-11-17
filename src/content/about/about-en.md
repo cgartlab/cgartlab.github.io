@@ -91,4 +91,4 @@ In compliance with the MIT License, the theme code portion of this site, as a de
 - **Opinion Expression**: Views expressed represent my personal stance only, not any organization or company, and do not constitute professional advice.
 - **Technical Content**: Code, tutorials, and technical articles are for learning reference only. The author is not responsible for any losses incurred from their use.
 - **External Links**: This site may link to third-party websites but is not responsible for their content.
-- **Privacy Protection**: This site respects your privacy. See the full [Privacy Policy](/en/privacy/). Comment features use third-party services (like Giscus)—please refer to their respective privacy policies.
+- **Privacy Protection**: This site respects your privacy. See the [User Agreement](/en/agreement/), which now consolidates the former Terms, Privacy Policy and Disclaimer. Comment features use third-party services (like Giscus)—please refer to their respective privacy policies.

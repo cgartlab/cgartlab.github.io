@@ -3,6 +3,7 @@ import type { Language } from '@/i18n/config'
 import Button from '@/components/Button.astro'
 import SearchIcon from '@/assets/icons/search-icon.svg'
 import { themeConfig } from '@/config'
+import ConsentBanner from '@/components/ConsentBanner.astro'
 import Head from '@/layouts/Head.astro'
 import Search from '@/components/Search.astro'
 import { ui } from '@/i18n/ui'
@@ -56,5 +57,6 @@ const siteTitle = themeConfig.site.i18nTitle ? t.title : themeConfig.site.title
       <slot />
     </div>
     <Search />
+    <ConsentBanner />
   </body>
 </html>

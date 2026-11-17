@@ -76,14 +76,6 @@ export function isResourcePage(path: string) {
 	return matchPageType(path, "resource");
 }
 
-export function isPrivacyPage(path: string) {
-	return matchPageType(path, "privacy");
-}
-
-export function isTermsPage(path: string) {
-	return matchPageType(path, "terms");
-}
-
 export function isContactPage(path: string) {
 	return matchPageType(path, "contact");
 }
@@ -99,8 +91,6 @@ export function getPageInfo(path: string) {
 	const isWorks = isWorksPage(path);
 	const isColumn = isColumnPage(path);
 	const isResource = isResourcePage(path);
-	const isPrivacy = isPrivacyPage(path);
-	const isTerms = isTermsPage(path);
 	const isContact = isContactPage(path);
 
 	return {
@@ -113,8 +103,6 @@ export function getPageInfo(path: string) {
 		isWorks,
 		isColumn,
 		isResource,
-		isPrivacy,
-		isTerms,
 		isContact,
 		getLocalizedPath: (targetPath: string) =>
 			getLocalizedPath(targetPath, currentLang),

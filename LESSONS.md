@@ -85,6 +85,16 @@
 ### 依赖审计门禁不可绕过
 - 失误：`pnpm audit` 门禁因新通告变红 → 规则：新增依赖先跑 `pnpm audit`；临时豁免须写理由并在通告修复后立刻移除（commit 34e5f84b、dc5c9bfa）
 
+## 法律页与合规
+
+### 三份法律文档合并成一份，旧路径必须 301
+
+- 失误：2026-11-17 把《服务条款》《隐私政策》《免责声明》合并为《用户协议》，旧 URL 散落在文章、关于页、页脚与搜索结果里 → 规则：合并法律页要一次改完「页脚入口 + 内容内链 + Worker 301」三处，并用 `wrangler dev --local` 实测 `/terms`、`/privacy`、`/disclaimer` 及 `/en/` 变体返回 301 而非 404（`src/worker.mjs` 的 `LEGAL_ALIASES`）
+
+### Cookie 横幅必须真的门控分析脚本
+
+- 失误：`ConsentBanner.astro` 只把选择写进 `consent-preference`，却没有任何代码读它，GA / Umami 照样无条件加载，点「拒绝」形同虚设 → 规则：动同意相关 UI 必须验证「拒绝」后 DevTools 网络面板里没有 `googletagmanager` 与 `umami` 请求；GA 走 Consent Mode（`default: denied`），Umami 直接不注入脚本
+
 ## 构建产物与性能
 
 ### 移除 PWA 要清干净

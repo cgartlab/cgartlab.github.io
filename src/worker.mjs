@@ -1,6 +1,7 @@
 import { pushNewPosts } from "./lib/tg.mjs";
 import { checkHealth, readHealthState } from "./lib/health.mjs";
 import { isNoindexPath } from "./lib/noindex.mjs";
+import { LANG_PREFIXES } from "./lib/lang-prefix.mjs";
 
 /**
  * cron 表达式分工（定义于 `wrangler.jsonc` 的 `triggers.crons`）：
@@ -56,7 +57,7 @@ function applySecurityHeaders(resp) {
 			"style-src 'self' 'unsafe-inline' https://giscus.app https://*.giscus.app https://cdn.jsdelivr.net",
 			"img-src 'self' https: data:",
 			"font-src 'self' https: data:",
-			"connect-src 'self' https://giscus.app https://*.giscus.app https://www.google-analytics.com https://analytics.google.com https://cloud.umami.is https://*.umami.is https://api.web3forms.com https://api.github.com",
+			"connect-src 'self' https://giscus.app https://*.giscus.app https://www.google-analytics.com https://*.google-analytics.com https://analytics.google.com https://*.analytics.google.com https://cloud.umami.is https://*.umami.is https://api.web3forms.com https://api.github.com",
 			"frame-src 'self' https://giscus.app https://*.giscus.app https://player.bilibili.com https://www.youtube.com https://www.youtube-nocookie.com https://open.spotify.com https://codepen.io https://platform.twitter.com",
 			"base-uri 'self'",
 			"form-action 'self' https://api.web3forms.com https://giscus.app",
@@ -79,6 +80,18 @@ function applySecurityHeaders(resp) {
  * ERR_TOO_MANY_REDIRECTS。故在进 assets 之前统一拦截，直接返回 404 正文。
  */
 const NOT_FOUND_ALIASES = new Set(["/404", "/404/", "/404.html"]);
+
+/**
+ * 已合并的旧法律页面（2026-11-17）。
+ * 《服务条款》《隐私政策》《免责声明》三份文档合并为一份《用户协议》/agreement/，
+ * 但旧路径散落在文章、关于页与搜索结果里，全部 301 过去，避免变成 404。
+ */
+const LEGAL_ALIASES = new Set(["terms", "privacy", "disclaimer"]);
+/**
+ * 「语言前缀 + 旧名」与「栏目 + 同名 slug」（如 /posts/privacy/）必须能区分开，
+ * 所以这里要求第一段是真正的语言前缀 —— 直接复用 noindex 那份单一来源。
+ */
+const LEGAL_LOCALES = new Set(LANG_PREFIXES);
 
 /**
  * 以 404 状态返回 404 页面正文。
@@ -252,6 +265,26 @@ export default {
 					? "https://cgartlab.com/en/column/"
 					: "https://cgartlab.com/column/";
 				return applySecurityHeaders(Response.redirect(target, 301));
+			}
+
+			// 1c2. 旧法律页面 → 用户协议（见 LEGAL_ALIASES）。只匹配「语言前缀 + 旧名」
+			//      这一层，避免误伤 /posts/privacy/ 之类的真实内容路径。
+			{
+				const segs = pathname.split("/").filter(Boolean);
+				const last = (segs.at(-1) ?? "").toLowerCase();
+				// 只认两种形状：/<旧名>/ 与 /<语言前缀>/<旧名>/。
+				// 必须带语言白名单，否则 /posts/privacy/ 这类「栏目 + 同名 slug」会被误吞。
+				if (LEGAL_ALIASES.has(last)) {
+					const isBare = segs.length === 1;
+					const isLocalized
+						= segs.length === 2 && LEGAL_LOCALES.has(segs[0].toLowerCase());
+					if (isBare || isLocalized) {
+						const prefix = isLocalized ? `/${segs[0]}` : "";
+						return applySecurityHeaders(
+							Response.redirect(new URL(`${prefix}/agreement/`, url), 301),
+						);
+					}
+				}
 			}
 
 			// 1d. 404 页面别名：直接返回 404 正文。

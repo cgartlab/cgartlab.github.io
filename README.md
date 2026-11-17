@@ -29,7 +29,7 @@ src/
 ├── content/         # 内容唯一来源
 │   ├── posts/       # 文章，含 works/、column/、_images/、_files/
 │   ├── about/       # 关于页集合
-│   └── privacy/     # 隐私政策集合
+│   └── agreement/   # 用户协议（合并后的服务条款 + 隐私政策 + 免责声明）
 ├── data/            # 站点数据：links.ts 友链、glossary.ts 术语表、github-contributions.json
 ├── i18n/            # 国际化（zh / en；zh-tw 基础设施就绪但未启用）
 ├── layouts/         # Layout.astro、Head.astro
