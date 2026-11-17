@@ -600,6 +600,7 @@ src/styles/*.css → 使用 oklch(var(--un-preset-theme-colors-*))
 **关键约束**：
 
 - 所有颜色必须用 `oklch(var(--un-preset-theme-colors-*))` 格式，避免 `#xxx` / `rgb()`
+- **暗色模式正文与标题统一为 `#d5b690`**（`oklch(79.4% 0.0623 72.4)`，2026-11-17 用户指定）：`primary` 与 `secondary` 同色，层级只靠字号/字重；`highlight`（橄榄绿）保持不变，链接、`<strong>`、导航高亮仍用它。改这两个 token 前先确认对比度（对 `oklch(22% 0.005 298)` 背景实测 7.4:1）
 - 物理透明度（毛玻璃/阴影/按钮悬停等）允许 `rgba(0,0,0,α)` 或 `color-mix(in srgb, oklch(...), transparent)`
 - 新增语义色时必须同步更新：`uno.config.ts` 的 `theme.colors` → `presetTheme` 的 dark → `safelist`
 
