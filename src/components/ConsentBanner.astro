@@ -250,6 +250,8 @@ const currentUI = ui[currentLang as keyof typeof ui] ?? {}
   'use strict'
 
   const STORAGE_KEY = CONSENT_STORAGE_KEY
+  // Esc / 「先不看」只在本会话内不再打扰，不写入同意偏好（写 rejected 等于替用户做决定）
+  const DISMISS_KEY = 'consent-dismissed'
 
   function loadPref() {
     try { return localStorage.getItem(STORAGE_KEY) }
@@ -266,12 +268,28 @@ const currentUI = ui[currentLang as keyof typeof ui] ?? {}
   // 关闭时把焦点还给打开它的元素（页脚「Cookie 设置」），否则键盘用户会掉到 body
   let restoreFocusTo = null
 
-  function showBanner(banner) {
+  function wasDismissed() {
+    try { return sessionStorage.getItem(DISMISS_KEY) === '1' } catch { return false }
+  }
+
+  function markDismissed() {
+    try { sessionStorage.setItem(DISMISS_KEY, '1') } catch { /* private mode */ }
+  }
+
+  function clearDismissed() {
+    try { sessionStorage.removeItem(DISMISS_KEY) } catch { /* private mode */ }
+  }
+
+  function showBanner(banner, opts) {
     if (!banner || banner.classList.contains('visible'))
       return
-    restoreFocusTo = document.activeElement
+    // 自动弹出（首屏、客户端导航）不抢焦点；只有用户主动点「Cookie 设置」才把焦点送进横幅
+    const shouldFocus = !opts || opts.focus !== false
+    restoreFocusTo = shouldFocus ? document.activeElement : null
     banner.classList.add('visible')
     banner.setAttribute('aria-hidden', 'false')
+    if (!shouldFocus)
+      return
     // Move focus to the first button for keyboard users (WCAG 2.4.3)
     const firstBtn = document.getElementById('consent-reject')
     if (firstBtn)
@@ -290,6 +308,7 @@ const currentUI = ui[currentLang as keyof typeof ui] ?? {}
 
   function setPreference(pref) {
     savePref(pref)
+    clearDismissed()
     hideBanner(getBanner())
     // 通知 Head.astro 的 analytics gating：只有 accepted 才创建 GA / Umami 脚本
     try {
@@ -316,8 +335,8 @@ const currentUI = ui[currentLang as keyof typeof ui] ?? {}
       return
 
     const pref = loadPref()
-    if (!pref)
-      showBanner(banner)
+    if (!pref && !wasDismissed())
+      showBanner(banner, { focus: false })
     bindButtons()
   }
 
@@ -326,14 +345,17 @@ const currentUI = ui[currentLang as keyof typeof ui] ?? {}
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') {
         const b = getBanner()
-        if (b && b.classList.contains('visible'))
-          setPreference('rejected')
+        if (b && b.classList.contains('visible')) {
+          markDismissed()
+          hideBanner(b)
+        }
       }
     })
   }
 
   // 页脚「Cookie 设置」用：重新打开横幅（不改变已保存的选择，选完照常生效）
   window.__openConsentBanner = function () {
+    clearDismissed()
     const b = getBanner()
     if (!b)
       return

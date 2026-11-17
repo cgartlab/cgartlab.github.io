@@ -210,9 +210,8 @@ One caveat: an analytics script that has already loaded cannot be unloaded. Afte
 | YouTube | Google LLC | Embedded video | Playback behaviour, cookies | [YouTube](https://www.youtube.com/t/terms) |
 | Bilibili | Shanghai Kuan Yu Digital Technology | Embedded video | Playback behaviour, cookies | [Bilibili](https://www.bilibili.com/blackboard/privacy-pc.html) |
 | Telegram | Telegram FZ-LLC | New-article channel | Channel posts (no personal data about you) | [Telegram](https://telegram.org/privacy) |
-| X (Twitter) | X Corp. | Embedded tweet cards | Browsing behaviour, cookies | [X](https://x.com/privacy) |
 
-Embeds do not all behave the same way: **YouTube** renders a lightweight poster (lite-youtube) and only requests the player when you press play; **Bilibili** is a `loading="lazy"` iframe that connects to bilibili as soon as it scrolls into view; a page containing an **X (Twitter)** card loads `platform.twitter.com/widgets.js` (with `data-dnt="true"`, asking X not to personalise recommendations from it). Those connections are handled by each platform under its own privacy policy.
+Embeds do not all behave the same way: **YouTube** renders a lightweight poster (lite-youtube) and only requests the player when you press play; **Bilibili** is a `loading="lazy"` iframe that connects to bilibili as soon as it scrolls into view. Those connections are handled by each platform under its own privacy policy.
 
 ### 5.6 Sharing
 

@@ -453,8 +453,8 @@ const softwareApp = postSchemaType === 'SoftwareApplication' ? softwareAppMeta[p
 
 <!-- Analytics（GA / Umami）—— 只有用户选择「全部接受」后才创建脚本。
      2026-11-17：此前这两个脚本无条件注入，Cookie 横幅的「拒绝 / 仅功能」形同虚设；
-     现在 Gating 在主线程读取 localStorage('consent-preference')，同意了才把
-     type="text/partytown" 的脚本插进 head，Partytown 照旧接管转发。 -->
+     现在 Gating 在主线程读取 localStorage('consent-preference')，同意了才把普通
+     async 脚本插进 head（不再走 Partytown）。 -->
 {(googleAnalyticsID || umamiAnalyticsID) && (
   <script
     is:inline
