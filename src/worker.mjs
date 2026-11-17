@@ -86,6 +86,11 @@ const NOT_FOUND_ALIASES = new Set(["/404", "/404/", "/404.html"]);
  * 但旧路径散落在文章、关于页与搜索结果里，全部 301 过去，避免变成 404。
  */
 const LEGAL_ALIASES = new Set(["terms", "privacy", "disclaimer"]);
+/**
+ * 带 URL 前缀的语言（与 src/lib/noindex.mjs 的 LANG_PREFIXES 同义：默认语言 zh 无前缀）。
+ * 加它是为了把「语言前缀 + 旧名」与「栏目 + 同名 slug」（如 /posts/privacy/）区分开。
+ */
+const LEGAL_LOCALES = new Set(["en"]);
 
 /**
  * 以 404 状态返回 404 页面正文。
@@ -266,11 +271,18 @@ export default {
 			{
 				const segs = pathname.split("/").filter(Boolean);
 				const last = (segs.at(-1) ?? "").toLowerCase();
-				if (segs.length <= 2 && LEGAL_ALIASES.has(last)) {
-					const prefix = segs.length === 2 ? `/${segs[0]}` : "";
-					return applySecurityHeaders(
-						Response.redirect(new URL(`${prefix}/agreement/`, url), 301),
-					);
+				// 只认两种形状：/<旧名>/ 与 /<语言前缀>/<旧名>/。
+				// 必须带语言白名单，否则 /posts/privacy/ 这类「栏目 + 同名 slug」会被误吞。
+				if (LEGAL_ALIASES.has(last)) {
+					const isBare = segs.length === 1;
+					const isLocalized
+						= segs.length === 2 && LEGAL_LOCALES.has(segs[0].toLowerCase());
+					if (isBare || isLocalized) {
+						const prefix = isLocalized ? `/${segs[0]}` : "";
+						return applySecurityHeaders(
+							Response.redirect(new URL(`${prefix}/agreement/`, url), 301),
+						);
+					}
 				}
 			}
 

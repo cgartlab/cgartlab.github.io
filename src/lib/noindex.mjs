@@ -7,7 +7,7 @@
  * 语言前缀：默认语言（zh）无 URL 前缀，en 带 /en/ 前缀；若未来启用更多带前缀的
  * 语言（如 zh-tw），需同步扩展 LANG_PREFIXES。
  */
-export const NOINDEX_PATH_FAMILIES = ['column', 'tags', 'disclaimer', 'search']
+export const NOINDEX_PATH_FAMILIES = ['column', 'tags', 'search']
 
 // 带 URL 前缀的语言；defaultLocale（zh）无前缀，不在其中
 const LANG_PREFIXES = ['en']

@@ -463,7 +463,7 @@ const softwareApp = postSchemaType === 'SoftwareApplication' ? softwareAppMeta[p
     }}
   >
 (function () {
-  var CONSENT_KEY = 'consent-preference'
+  var CONSENT_KEY = window.__CONSENT_KEY || 'consent-preference'
   var started = false
   function readConsent() {
     try { return localStorage.getItem(CONSENT_KEY) } catch (e) { return null }
@@ -475,11 +475,13 @@ const softwareApp = postSchemaType === 'SoftwareApplication' ? softwareAppMeta[p
     window.gtag('consent', 'default', { analytics_storage: 'denied', ad_storage: 'denied' })
   }
   function start() {
+    // 先恢复同意状态（撤销过再点接受时 started 已经是 true，脚本不重建但必须改回 granted）
+    if (googleAnalyticsID && typeof window.gtag === 'function')
+      window.gtag('consent', 'update', { analytics_storage: 'granted' })
     if (started) return
     started = true
     if (googleAnalyticsID) {
       window.gtag('js', new Date())
-      window.gtag('consent', 'update', { analytics_storage: 'granted' })
       if (customGoogleAnalyticsJS)
         window.gtag('config', googleAnalyticsID, { transport_url: new URL(customGoogleAnalyticsJS).origin })
       else

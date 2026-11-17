@@ -327,6 +327,17 @@ const currentUI = ui[currentLang as keyof typeof ui] ?? {}
     })
   }
 
+  // 页脚「Cookie 设置」用：重新打开横幅（不改变已保存的选择，选完照常生效）
+  window.__openConsentBanner = function () {
+    const b = getBanner()
+    if (!b)
+      return
+    b.setAttribute('aria-hidden', 'false')
+    showBanner(b)
+  }
+  // Head.astro 的 analytics gating 读同一个键，别在两处各写一遍字面量
+  window.__CONSENT_KEY = STORAGE_KEY
+
   initBanner()
 })()
 </script>

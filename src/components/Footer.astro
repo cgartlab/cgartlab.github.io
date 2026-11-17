@@ -42,6 +42,13 @@ const agreementText = {
   'en': 'User Agreement',
   'zh-tw': '使用者協議',
 }[currentLang] || '用户协议'
+
+// Cookie 设置：重新打开同意横幅（ConsentBanner 暴露的 window.__openConsentBanner）
+const cookieText = {
+  'zh': 'Cookie 设置',
+  'en': 'Cookie settings',
+  'zh-tw': 'Cookie 設定',
+}[currentLang] || 'Cookie 设置'
 // 许可协议文本
 const licenseText = {
   'zh': '内容统一采用',
@@ -73,6 +80,11 @@ const licenseText = {
   <!-- 第3行：法律信息 -->
   <p class="m-0 text-footer font-navbar">
     <a class={footerLinkClass} href={agreementPath}>{agreementText}</a>
+    &nbsp; / &nbsp;<button
+      type="button"
+      class={`${footerLinkClass} cursor-pointer border-0 bg-transparent p-0 text-footer font-navbar`}
+      data-consent-open
+    >{cookieText}</button>
   </p>
 
   <!-- 第4行：版权 -->
@@ -93,3 +105,16 @@ const licenseText = {
     </a>
   </p>
 </footer>
+
+<script is:inline>
+  (function () {
+    // 用户随时可以改同意状态：页脚入口重新打开横幅（WCAG/PIPL 要求的撤回路径）
+    var btns = document.querySelectorAll('[data-consent-open]')
+    for (var i = 0; i < btns.length; i++) {
+      btns[i].addEventListener('click', function () {
+        if (typeof window.__openConsentBanner === 'function')
+          window.__openConsentBanner()
+      })
+    }
+  })()
+</script>

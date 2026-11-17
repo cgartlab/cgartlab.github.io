@@ -185,7 +185,7 @@ Umami sets no cookies and collects nothing that identifies an individual.
 
 ### 5.4 Your consent choices
 
-The cookie banner shown on your first visit offers three options; you can change your mind at any time via the site footer or by clearing local storage:
+The cookie banner shown on your first visit offers three options. To change your mind, use the "Cookie settings" entry in the footer, which reopens the banner at any time; clearing local storage also resets you to the un-chosen state.
 
 | Choice | Effect |
 | --- | --- |
