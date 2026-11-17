@@ -521,11 +521,11 @@
    white. At night the sheet keeps its dark stock and the accent ink carries it.
    No edge stroke — the fill and the soft shadow alone hold the silhouette. */
 .home-stage .home-paper-holder {
-  --home-sheet: oklch(99.2% 0.004 96);
+  --home-sheet: oklch(var(--un-preset-theme-colors-paper));
 }
 
 .dark .home-stage .home-paper-holder {
-  --home-sheet: color-mix(in oklch, oklch(var(--un-preset-theme-colors-stage)) 24%, oklch(var(--un-preset-theme-colors-background)) 76%);
+  --home-sheet: color-mix(in oklch, oklch(var(--un-preset-theme-colors-paper)) 24%, oklch(var(--un-preset-theme-colors-background)) 76%);
 }
 
 .home-stage .home-paper-holder .home-paper {

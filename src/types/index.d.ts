@@ -42,7 +42,6 @@ export interface ThemeConfig {
 			stage: string;
 			// 装置上的黄铜配件色
 			brass: string;
-			"brass-deep": string;
 			paper: string;
 		};
 		dark: {
@@ -58,7 +57,6 @@ export interface ThemeConfig {
 			stage: string;
 			// 装置上的黄铜配件色
 			brass: string;
-			"brass-deep": string;
 			paper: string;
 		};
 	};

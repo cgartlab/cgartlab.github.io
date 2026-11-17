@@ -98,7 +98,6 @@ export default defineConfig({
     'bg-background',
     'bg-stage',
     'bg-brass',
-    'bg-brass-deep',
     'bg-paper',
     'bg-highlight',
     'bg-note',

@@ -99,7 +99,7 @@ const SITE_TOKENS = `
   --un-preset-theme-colors-highlight: 41% 0.12 138;
   --un-preset-theme-colors-stage: 25% 0.005 298;
   --un-preset-theme-colors-brass: 72% 0.052 74;
-  --un-preset-theme-colors-brass-deep: 58% 0.062 64;
+  --un-preset-theme-colors-paper: 99.2% 0.004 96;
   --un-preset-theme-font-family-sans: OPPOSans, ui-sans-serif, system-ui, sans-serif;
   --un-preset-theme-font-family-serif: STIX, EarlySummer, ui-serif, Georgia, serif;
 }
@@ -110,7 +110,7 @@ html.dark {
   --un-preset-theme-colors-highlight: 72% 0.14 138;
   --un-preset-theme-colors-stage: 92% 0.005 298;
   --un-preset-theme-colors-brass: 68% 0.058 74;
-  --un-preset-theme-colors-brass-deep: 54% 0.07 64;
+  --un-preset-theme-colors-paper: 99.2% 0.004 96;
 }
 * { box-sizing: border-box; }
 body {

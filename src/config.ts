@@ -48,7 +48,6 @@ export const themeConfig: ThemeConfig = {
 			stage: "oklch(25% 0.005 298)",
 			// brass color - 装置（打字机压纸杆等）的黄铜件
 			brass: "oklch(72% 0.052 74)",
-			"brass-deep": "oklch(58% 0.062 64)",
 			// paper color - 装置里纸张的固有色（亮色即票据/纸带的底色）
 			paper: "oklch(99.2% 0.004 96)",
 		},
@@ -72,7 +71,6 @@ export const themeConfig: ThemeConfig = {
 			stage: "oklch(92% 0.005 298)",
 			// brass color - 同上的暗色版本（略暗、略暖）
 			brass: "oklch(68% 0.058 74)",
-			"brass-deep": "oklch(54% 0.07 64)",
 			// paper color - 暗色下不直接用，靠与 background 混合压暗（见 labels.css）
 			paper: "oklch(99.2% 0.004 96)",
 		},

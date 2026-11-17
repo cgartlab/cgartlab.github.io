@@ -45,7 +45,6 @@
   /* machine-specific ------------------------------------------------------ */
   --home-cavity: color-mix(in oklch, oklch(var(--un-preset-theme-colors-stage)) 56%, oklch(var(--un-preset-theme-colors-background)) 44%);
   --home-brass: oklch(var(--un-preset-theme-colors-brass));
-  --home-brass-deep: oklch(var(--un-preset-theme-colors-brass-deep));
 
   --anatomy-weight: 0.6px;
   --anatomy-ease: cubic-bezier(0.32, 0.72, 0, 1);
@@ -188,7 +187,6 @@
 /* machine-specific */
 .home-stage .home-cavity { fill: var(--home-cavity); stroke: var(--anatomy-lo); stroke-width: var(--anatomy-weight); }
 .home-stage .home-brass { fill: var(--home-brass); stroke: none; }
-.home-stage .home-brass-edge { fill: none; stroke: var(--home-brass-deep); stroke-width: var(--anatomy-weight); }
 
 /* --------------------------------------------------------------------------
    Home shell
