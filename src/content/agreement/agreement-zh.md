@@ -88,7 +88,8 @@ lang: zh
 本站的访问策略公开写在 [`robots.txt`](/robots.txt) 中，并随本协议一并构成对自动化访问的约定：
 
 - **搜索与引用型爬虫**（如 Googlebot、Bingbot、Baiduspider，以及 OAI-SearchBot、PerplexityBot、Claude-SearchBot 等"为回答问题并注明来源"而抓取的爬虫）：**允许**访问，但不允许访问 `/api/` 下的接口；
-- **模型训练型爬虫**（如 GPTBot、Google-Extended、CCBot、ClaudeBot、anthropic-ai 等）：**不允许**抓取本站内容；
+- **模型训练型爬虫**（如 GPTBot、Google-Extended、CCBot、ClaudeBot、anthropic-ai 等）：**不允许**抓取本站内容。
+  这份名单以 `robots.txt` 为准，其中也包含少数暂未拦截的训练型爬虫（如 Bytespider）——若两者不一致，以 `robots.txt` 的实际内容为准；
 - 本站提供 [`llms.txt`](/llms.txt)，用于给"引用型"AI 系统一份可引用的内容索引。它不构成对训练用途的授权。
 
 ### 3.5 AI 生成内容与 AI 处理本站内容

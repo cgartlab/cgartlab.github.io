@@ -89,6 +89,7 @@ Our crawler policy is published in [`robots.txt`](/robots.txt) and forms part of
 
 - **Search and citation crawlers** (Googlebot, Bingbot, Baiduspider, and answer-with-attribution crawlers such as OAI-SearchBot, PerplexityBot and Claude-SearchBot): **allowed**, except under `/api/`.
 - **Model-training crawlers** (GPTBot, Google-Extended, CCBot, ClaudeBot, anthropic-ai, and similar): **not allowed** to crawl this site.
+  That list follows `robots.txt`, which also still allows a few training crawlers (such as Bytespider). Where the two differ, the actual contents of `robots.txt` govern.
 - [`llms.txt`](/llms.txt) exists to give citation-oriented AI systems a clean map of citable content. It is not a licence for training use.
 
 ### 3.5 AI-generated content, and AI processing our content

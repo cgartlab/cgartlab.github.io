@@ -263,9 +263,13 @@ const currentUI = ui[currentLang as keyof typeof ui] ?? {}
 
   function getBanner() { return document.getElementById('consent-banner') }
 
+  // 关闭时把焦点还给打开它的元素（页脚「Cookie 设置」），否则键盘用户会掉到 body
+  let restoreFocusTo = null
+
   function showBanner(banner) {
     if (!banner || banner.classList.contains('visible'))
       return
+    restoreFocusTo = document.activeElement
     banner.classList.add('visible')
     banner.setAttribute('aria-hidden', 'false')
     // Move focus to the first button for keyboard users (WCAG 2.4.3)
@@ -279,11 +283,13 @@ const currentUI = ui[currentLang as keyof typeof ui] ?? {}
       return
     banner.classList.remove('visible')
     banner.setAttribute('aria-hidden', 'true')
+    if (restoreFocusTo && typeof restoreFocusTo.focus === 'function' && restoreFocusTo.isConnected)
+      restoreFocusTo.focus()
+    restoreFocusTo = null
   }
 
   function setPreference(pref) {
     savePref(pref)
-    window.__CONSENT_STATUS = pref
     hideBanner(getBanner())
     // 通知 Head.astro 的 analytics gating：只有 accepted 才创建 GA / Umami 脚本
     try {
@@ -310,12 +316,8 @@ const currentUI = ui[currentLang as keyof typeof ui] ?? {}
       return
 
     const pref = loadPref()
-    if (!pref) {
+    if (!pref)
       showBanner(banner)
-    }
-    else {
-      window.__CONSENT_STATUS = pref
-    }
     bindButtons()
   }
 

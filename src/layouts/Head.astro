@@ -496,14 +496,18 @@ const softwareApp = postSchemaType === 'SoftwareApplication' ? softwareAppMeta[p
         window.gtag('config', googleAnalyticsID)
       var ga = document.createElement('script')
       ga.src = customGoogleAnalyticsJS || ('https://www.googletagmanager.com/gtag/js?id=' + googleAnalyticsID)
-      ga.type = 'text/partytown'
+      // 不再挂 text/partytown：同意判断在主线程，而 Partytown 会把这个脚本搬进
+      // worker，worker 里有自己的 dataLayer —— 主线程的 consent / config 调用
+      // 就永远到不了真正跑 gtag.js 的那一侧（评审 #522 P1）。改为普通异步脚本，
+      // 这样 dataLayer / gtag / gtag.js 都在同一线程，行为可预期。
+      ga.async = true
       document.head.appendChild(ga)
     }
     if (umamiAnalyticsID) {
       var um = document.createElement('script')
       um.src = customUmamiAnalyticsJS || 'https://cloud.umami.is/script.js'
       um.setAttribute('data-website-id', umamiAnalyticsID)
-      um.type = 'text/partytown'
+      um.defer = true
       document.head.appendChild(um)
     }
   }
