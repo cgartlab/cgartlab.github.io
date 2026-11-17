@@ -601,6 +601,7 @@ src/styles/*.css → 使用 oklch(var(--un-preset-theme-colors-*))
 
 - 所有颜色必须用 `oklch(var(--un-preset-theme-colors-*))` 格式，避免 `#xxx` / `rgb()`
 - **暗色模式正文与标题统一为 `#d5b690`**（`oklch(79.4% 0.0623 72.4)`，2026-11-17 用户指定）：`primary` 与 `secondary` 同色，层级只靠字号/字重；`highlight`（橄榄绿）保持不变，链接、`<strong>`、导航高亮仍用它。改这两个 token 前先确认对比度（对 `oklch(22% 0.005 298)` 背景实测 7.4:1）
+- **首页装置的墨色与正文色解耦**：`home.css` 的装置几何用 `--device-primary` / `--device-secondary`（暗色下钉死为 `92% 0.005 298` / `77% 0.005 298`，即改造前的中性冷墨）。这两个变量存的是 **oklch 分量**、不是完整颜色 —— 主题 token 本来就是分量，用法是 `oklch(var(--device-primary))`；若把定义写成完整的 `oklch(92% …)`，外面再包一层就变成 `oklch(oklch(…))` → 无效 → SVG `fill` 回落成纯黑（2026-11-17 实际踩过：整台机器变黑色剪影）。
 - 物理透明度（毛玻璃/阴影/按钮悬停等）允许 `rgba(0,0,0,α)` 或 `color-mix(in srgb, oklch(...), transparent)`
 - 新增语义色时必须同步更新：`uno.config.ts` 的 `theme.colors` → `presetTheme` 的 dark → `safelist`
 
