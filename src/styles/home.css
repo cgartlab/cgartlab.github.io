@@ -12,8 +12,8 @@
    ========================================================================== */
 
 .home-stage {
-  /* 装置墨色：与正文色解耦，取自主题 token stage（见 src/config.ts） */
-
+  /* stage ink is decoupled from body text: it comes from the `stage` token
+     in src/config.ts, so changing primary/secondary never re-tints the machine */
   /* the preload bar is positioned against the stage */
   position: relative;
   /* paper / four-tone shading -------------------------------------------- */
@@ -67,8 +67,6 @@
   --anatomy-lit-shade: color-mix(in oklch, oklch(var(--un-preset-theme-colors-highlight)) 52%, oklch(var(--un-preset-theme-colors-stage)) 48%);
   --anatomy-halo-opacity: 0.62;
   --home-cavity: oklch(var(--un-preset-theme-colors-background));
-  --home-brass: oklch(var(--un-preset-theme-colors-brass));
-  --home-brass-deep: oklch(var(--un-preset-theme-colors-brass-deep));
 }
 
 /* --------------------------------------------------------------------------
