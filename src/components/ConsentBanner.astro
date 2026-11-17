@@ -1,4 +1,5 @@
 ---
+import { CONSENT_STORAGE_KEY } from '@/lib/consent.mjs'
 import { ui } from '@/i18n/ui'
 import { getPageInfo } from '@/utils/page'
 
@@ -244,11 +245,11 @@ const currentUI = ui[currentLang as keyof typeof ui] ?? {}
   }
 </style>
 
-<script is:inline>
+<script is:inline define:vars={{ CONSENT_STORAGE_KEY }}>
 (function () {
   'use strict'
 
-  const STORAGE_KEY = 'consent-preference'
+  const STORAGE_KEY = CONSENT_STORAGE_KEY
 
   function loadPref() {
     try { return localStorage.getItem(STORAGE_KEY) }

@@ -1,6 +1,7 @@
 import { pushNewPosts } from "./lib/tg.mjs";
 import { checkHealth, readHealthState } from "./lib/health.mjs";
 import { isNoindexPath } from "./lib/noindex.mjs";
+import { LANG_PREFIXES } from "./lib/lang-prefix.mjs";
 
 /**
  * cron 表达式分工（定义于 `wrangler.jsonc` 的 `triggers.crons`）：
@@ -87,10 +88,10 @@ const NOT_FOUND_ALIASES = new Set(["/404", "/404/", "/404.html"]);
  */
 const LEGAL_ALIASES = new Set(["terms", "privacy", "disclaimer"]);
 /**
- * 带 URL 前缀的语言（与 src/lib/noindex.mjs 的 LANG_PREFIXES 同义：默认语言 zh 无前缀）。
- * 加它是为了把「语言前缀 + 旧名」与「栏目 + 同名 slug」（如 /posts/privacy/）区分开。
+ * 「语言前缀 + 旧名」与「栏目 + 同名 slug」（如 /posts/privacy/）必须能区分开，
+ * 所以这里要求第一段是真正的语言前缀 —— 直接复用 noindex 那份单一来源。
  */
-const LEGAL_LOCALES = new Set(["en"]);
+const LEGAL_LOCALES = new Set(LANG_PREFIXES);
 
 /**
  * 以 404 状态返回 404 页面正文。

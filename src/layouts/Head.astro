@@ -3,6 +3,7 @@ import type { Language } from '@/i18n/config'
 import { ClientRouter } from 'astro:transitions'
 import katexCSS from 'katex/dist/katex.min.css?url'
 import { allLocales, base, defaultLocale, themeConfig } from '@/config'
+import { CONSENT_STORAGE_KEY } from '@/lib/consent.mjs'
 import { ui } from '@/i18n/ui'
 import { getPageInfo } from '@/utils/page'
 
@@ -30,6 +31,8 @@ const { katex: katexGlobal, reduceMotion } = themeConfig.global
 const { verification = {}, twitterID = '', googleAnalyticsID = '', umamiAnalyticsID = '' } = themeConfig.seo ?? {}
 const { google = '', bing = '', yandex = '', baidu = '' } = verification
 const { customGoogleAnalyticsJS = '', customUmamiAnalyticsJS = '' } = themeConfig.preload ?? {}
+// Cookie 同意存储键：与 ConsentBanner 共用同一份常量
+const consentKey = CONSENT_STORAGE_KEY
 
 
 // Site Metadata
@@ -460,10 +463,15 @@ const softwareApp = postSchemaType === 'SoftwareApplication' ? softwareAppMeta[p
       customGoogleAnalyticsJS,
       umamiAnalyticsID,
       customUmamiAnalyticsJS,
+      consentKey,
     }}
   >
 (function () {
-  var CONSENT_KEY = window.__CONSENT_KEY || 'consent-preference'
+  // 客户端导航重放 head 脚本时不要重复注入（评审 #522 P2）
+  if (window.__ANALYTICS_GATED)
+    return
+  window.__ANALYTICS_GATED = true
+  var CONSENT_KEY = consentKey
   var started = false
   function readConsent() {
     try { return localStorage.getItem(CONSENT_KEY) } catch (e) { return null }

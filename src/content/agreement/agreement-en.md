@@ -88,7 +88,7 @@ Comments run on Giscus and GitHub Discussions, so your comments are also subject
 Our crawler policy is published in [`robots.txt`](/robots.txt) and forms part of this Agreement:
 
 - **Search and citation crawlers** (Googlebot, Bingbot, Baiduspider, and answer-with-attribution crawlers such as OAI-SearchBot, PerplexityBot and Claude-SearchBot): **allowed**, except under `/api/`.
-- **Model-training crawlers** (GPTBot, Google-Extended, CCBot, ClaudeBot, anthropic-ai, Bytespider, and similar): **not allowed** to crawl this site.
+- **Model-training crawlers** (GPTBot, Google-Extended, CCBot, ClaudeBot, anthropic-ai, and similar): **not allowed** to crawl this site.
 - [`llms.txt`](/llms.txt) exists to give citation-oriented AI systems a clean map of citable content. It is not a licence for training use.
 
 ### 3.5 AI-generated content, and AI processing our content
@@ -157,7 +157,7 @@ We collect as little as possible: there are no accounts, no profiling, and no se
 | --- | --- |
 | Access logs | Cloudflare edge nodes log request data (IP, user agent, time, status) for security and performance |
 | Analytics | **Only if you choose "Accept all"**, Google Analytics and Umami record anonymised page views and events |
-| Language and region | Your browser language, used to pick the site's language version |
+
 
 **We do not collect**: real names, ID numbers, home addresses or phone numbers; site passwords (there are no accounts); payment or card details (we do not process payments directly); your browsing on other websites.
 
@@ -210,7 +210,7 @@ One caveat: an analytics script that has already loaded cannot be unloaded. Afte
 | Bilibili | Shanghai Kuan Yu Digital Technology | Embedded video | Playback behaviour, cookies | [Bilibili](https://www.bilibili.com/blackboard/privacy-pc.html) |
 | Telegram | Telegram FZ-LLC | New-article channel | Channel posts (no personal data about you) | [Telegram](https://telegram.org/privacy) |
 
-Embeds (YouTube, Bilibili) connect to those platforms **only after you press play**; no script loads before that.
+Embeds do not all behave the same way: **YouTube** renders a lightweight poster (lite-youtube) and only requests the player when you press play; **Bilibili** is a `loading="lazy"` iframe that connects to bilibili as soon as it scrolls into view; a page containing an **X (Twitter)** card loads `platform.twitter.com/widgets.js` (with `data-dnt="true"`, asking X not to personalise recommendations from it). Those connections are handled by each platform under its own privacy policy.
 
 ### 5.6 Sharing
 
