@@ -108,6 +108,17 @@ minimumReleaseAgeExclude:
 #     2. astro-compress 仅在 astro.config.ts 构建期使用，依赖链不进构建产物；
 #        触发该漏洞需攻击者可控的 glob 模式，站点运行期不可达
 #   移除条件：braces 3.0.4 一经发布，改用 overrides 钉版并删除本段
+#
+# GHSA-fc5q-39xc-vjpf —— picomatch 单分支重复 extglob 的 ReDoS（high）
+#   引入路径（58 条，全部来自 astro 链）：
+#     @astrojs/markdown-remark / @astrojs/mdx > @astrojs/internal-helpers > picomatch
+#   为何现在不修：
+#     1. 修复版 4.0.8 截至 2026-11-18 仍未发布（npm latest 为 4.0.7），
+#        无可钉版本，overrides 写 >=4.0.8 会让 pnpm install 直接失败
+#     2. picomatch 只在 astro 构建期做 glob 匹配，不进 dist 产物；
+#        触发需攻击者可控的 glob 模式，站点运行期不可达
+#   移除条件：picomatch 4.0.8 一经发布，改用 overrides 钉版并删除本条
 auditConfig:
   ignoreGhsas:
     - GHSA-vfj7-8cjw-p6xm
+    - GHSA-fc5q-39xc-vjpf
