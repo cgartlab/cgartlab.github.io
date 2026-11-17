@@ -180,6 +180,10 @@ export default defineConfig({
     mdx(),
     partytown({
       config: {
+        // ⚠️ 2026-11-17 起站内已没有 type="text/partytown" 的脚本：
+        // GA / Umami 改成普通 async 脚本了（主线程读同意，dataLayer 必须同线程）。
+        // 集成与 patches/@qwik.dev__partytown 目前是空转，移除需要动 lockfile，
+        // 单独开 PR 处理，别在这里顺手删。
         forward: ['dataLayer.push', 'gtag'],
       },
     }),

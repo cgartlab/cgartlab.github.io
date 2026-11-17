@@ -76,11 +76,6 @@ export function isResourcePage(path: string) {
 	return matchPageType(path, "resource");
 }
 
-// /agreement/：2026-11-17 起合并后的《用户协议》（旧 privacy / terms 已 301 过来）
-export function isAgreementPage(path: string) {
-	return matchPageType(path, "agreement");
-}
-
 export function isContactPage(path: string) {
 	return matchPageType(path, "contact");
 }
@@ -96,7 +91,6 @@ export function getPageInfo(path: string) {
 	const isWorks = isWorksPage(path);
 	const isColumn = isColumnPage(path);
 	const isResource = isResourcePage(path);
-	const isAgreement = isAgreementPage(path);
 	const isContact = isContactPage(path);
 
 	return {
@@ -109,7 +103,6 @@ export function getPageInfo(path: string) {
 		isWorks,
 		isColumn,
 		isResource,
-		isAgreement,
 		isContact,
 		getLocalizedPath: (targetPath: string) =>
 			getLocalizedPath(targetPath, currentLang),

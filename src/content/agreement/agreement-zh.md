@@ -180,6 +180,7 @@ lang: zh
 | `theme-mode` | localStorage | 亮色 / 暗色 / 跟随系统 | 持久，直到你清除 |
 | `consent-preference` | localStorage | 记录你的 Cookie 同意选择 | 持久，直到你清除 |
 | `cgartlab-copy-seen` | sessionStorage | 首页文案入场动画只播放一次 | 关闭标签页即失效 |
+| `consent-dismissed` | sessionStorage | 你用 Esc 关掉同意横幅后，本会话内不再弹 | 关闭标签页即失效 |
 | `_ga`, `_ga_*` | Cookie | Google Analytics 区分独立访客 | 最长 2 年，**仅在你选择"全部接受"后写入** |
 
 Umami 不使用 Cookie，也不采集可识别到个人的信息。

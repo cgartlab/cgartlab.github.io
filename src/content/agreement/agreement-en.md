@@ -180,6 +180,7 @@ We set no first-party cookies for login or tracking. The following may be stored
 | `theme-mode` | localStorage | Light / dark / follow system | Until you clear it |
 | `consent-preference` | localStorage | Remembers your cookie choice | Until you clear it |
 | `cgartlab-copy-seen` | sessionStorage | Plays the home-page intro copy only once | Until the tab closes |
+| `consent-dismissed` | sessionStorage | Stops the cookie banner reappearing in this session after you dismiss it with Esc | Until the tab closes |
 | `_ga`, `_ga_*` | Cookie | Google Analytics visitor distinction | Up to 2 years, **only after you choose "Accept all"** |
 
 Umami sets no cookies and collects nothing that identifies an individual.
